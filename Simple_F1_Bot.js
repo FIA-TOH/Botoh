@@ -119,17 +119,17 @@ function checkPlayerLaps(){
 function endRaceSession(){
     var players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
     var id = _Circuits.findIndex(c => c.Name == _Circuit.Name);
-    var next = _Circuits[id+1];
+    var next = Circuits[id+1];
 
     if(room.getScores() != null){
 	if(players.length == 0){
 	    room.stopGame();
 	    setTimeout(function(){
-		if(id < _Circuits.length){
+		if(id < Circuits.length){
 		    room.setCustomStadium(next);
 		}
 		else{
-		    room.setCustomStadium(_Circuits[0]);
+		    room.setCustomStadium(Circuits[0]);
 		}
 	    },gameEndTimeout);
 	}
@@ -335,6 +335,6 @@ room.onStadiumChange = function(newStadiumName,byPlayer){
     }
     else{
 	room.sendAnnouncement("You don't have authorization to change maps in this room!",byPlayer.id,colors.mapChangeDeny,fonts.mapChangeDeny,sounds.mapChangeDeny);
-	room.setCustomStadium(Circuit1);
+	room.setCustomStadium(Circuits[0]);
     }
 }
