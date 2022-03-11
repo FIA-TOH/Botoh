@@ -269,7 +269,8 @@ room.onPlayerJoin = function(player){
     console.log(`${player.name} has joined`);
     var players = room.getPlayerList();
 
-    playerList[player.name] = {name: player.name, id: player.id, currentLap: 0, lapChanged: false, lapTimes: [0,0,0], speedEnabled: false, isInTheRoom: true};
+    if(playerList[player.name] == undefined)
+	playerList[player.name] = {name: player.name, id: player.id, currentLap: 0, lapChanged: false, lapTimes: [0,0,0], speedEnabled: false, isInTheRoom: true};
 
     if(room.getScores() == null && players.length == 1){
 	if(_Circuit.Team != 0)
