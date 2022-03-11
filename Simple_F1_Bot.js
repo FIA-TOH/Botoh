@@ -163,7 +163,9 @@ room.onGameStart = function(byPlayer){
     players.forEach(p => {
 	playerList[p.name].currentLap = 0;
 	playerList[p.name].lapChanged = false;
-	playerList[p.name].lapTimes = [0,0,0];
+	for(var l=0; l<playerList[p.name].lapTimes.length; l++){
+	    playerList[p.name].lapTimes[l] = 0;
+	}
     });
 }
 
@@ -174,7 +176,9 @@ room.onGameStop = function(byPlayer){
     players.forEach(p => {
 	playerList[p.name].currentLap = 0;
 	playerList[p.name].lapChanged = false;
-	playerList[p.name].lapTimes = [0,0,0];
+	for(var l=0; l<playerList[p.name].lapTimes.length; l++){
+	    playerList[p.name].lapTimes[l] = 0;
+	}
     });
 }
 
@@ -269,8 +273,13 @@ room.onPlayerJoin = function(player){
     console.log(`${player.name} has joined`);
     var players = room.getPlayerList();
 
+    var lapTimes = [];
+    for(var i=0; i<limit; i++){
+	lapTimes.push(0);
+    }
+
     if(playerList[player.name] == undefined)
-	playerList[player.name] = {name: player.name, id: player.id, currentLap: 0, lapChanged: false, lapTimes: [0,0,0], speedEnabled: false, isInTheRoom: true};
+	playerList[player.name] = {name: player.name, id: player.id, currentLap: 0, lapChanged: false, lapTimes: lapTimes, speedEnabled: false, isInTheRoom: true};
 
     if(room.getScores() == null && players.length == 1){
 	if(_Circuit.Team != 0)
@@ -305,7 +314,9 @@ room.onPositionsReset = function(){
     players.forEach(p => {
 	playerList[p.name].currentLap = 0;
 	playerList[p.name].lapChanged = false;
-	playerList[p.name].lapTimes = [0,0,0];
+	for(var l=0; l<playerList[p.name].lapTimes.length; l++){
+	    playerList[p.name].lapTimes[l] = 0;
+	}
     });
 }
 
