@@ -23,9 +23,11 @@ Image 2.1 (Lap informations of a player is being displayed)
 ![2 1](https://user-images.githubusercontent.com/68077608/158161683-9217266c-1717-4fe1-b390-4460c6ec05da.PNG)
 
 Image 2.2 (A players being moved to spectators after completing their laps)
+
 ![2 2](https://user-images.githubusercontent.com/68077608/158161688-6f5b7811-5083-4b74-936d-818e9ae55f22.PNG)
 
 Image 2.3 (Uniform in Vilnius)
+
 ![2 3](https://user-images.githubusercontent.com/68077608/158163167-ff2f29e1-b1b3-41d4-976f-70123632bb44.PNG)
 
 Image 2.4 (Uniform in Sucre)
@@ -41,9 +43,11 @@ Of course we manage our rooms with some commands. For example, map changing, spe
 * !speed: Turns the speed on/off. When **ON**, player can see their speed during the race.
 
 Image 3.1 (Commands are being displayed)
+
 ![3 1](https://user-images.githubusercontent.com/68077608/158167650-8cadbbc9-8dc4-4743-9528-bde4e816fb78.PNG)
 
 Image 3.2 (Map list is being displayed)
+
 ![3 2](https://user-images.githubusercontent.com/68077608/158167652-f5a118a5-816a-4ff4-b0d3-ac28bbe95982.PNG)
 
 ### Notes
