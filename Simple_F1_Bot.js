@@ -44,12 +44,12 @@ function checkIfTrolling(){
     players.forEach(p => {
 	if(_Circuit.StartDirection == "X"){
 	    if(Math.sign(room.getPlayerDiscProperties(p.id).xspeed) == -1 * _Circuit.DriveDirection){
-		room.kickPlayer(player.id,"Trolling detected!",false);
+		room.kickPlayer(p.id,"Trolling detected!",false);
 	    }
 	}
 	else if(_Circuit.StartDirection == "Y"){
 	    if(Math.sign(room.getPlayerDiscProperties(p.id).yspeed) == -1 * _Circuit.DriveDirection){
-		room.kickPlayer(player.id,"Trolling detected!",false);
+		room.kickPlayer(p.id,"Trolling detected!",false);
 	    }
 	}
     });
