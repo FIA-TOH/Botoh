@@ -265,7 +265,7 @@ room.onPlayerChat = function(player,message){
     }
 }
 
-room.onPlayerKicked = function(kickedPlayer,ban,reason,byPlayer){
+room.onPlayerKicked = function(kickedPlayer,reason,ban,byPlayer){
     byPlayer == null ? console.log(`${kickedPlayer.name} ${playerKicked[Number(ban)]} (${reason})`) : console.log(`${kickedPlayer.name} ${playerKicked[Number(ban)]} by ${byPlayer.name} (${reason})`);
 }
 
