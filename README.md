@@ -20,6 +20,7 @@ To let players know the timing during the races, we have added some functionalit
 * Automatic map change: After all the players complete their laps, the circuit will be changed automatically.
 
 Image 2.1 (Lap informations of a player is being displayed)
+
 ![2 1](https://user-images.githubusercontent.com/68077608/158161683-9217266c-1717-4fe1-b390-4460c6ec05da.PNG)
 
 Image 2.2 (A players being moved to spectators after completing their laps)
@@ -31,6 +32,7 @@ Image 2.3 (Uniform in Vilnius)
 ![2 3](https://user-images.githubusercontent.com/68077608/158163167-ff2f29e1-b1b3-41d4-976f-70123632bb44.PNG)
 
 Image 2.4 (Uniform in Sucre)
+
 ![2 4](https://user-images.githubusercontent.com/68077608/158163169-3dcb2a8b-804b-4cac-ab70-66c754af14c6.PNG)
 
 ### Commands
