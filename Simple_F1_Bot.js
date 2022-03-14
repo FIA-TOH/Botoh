@@ -62,40 +62,19 @@ function checkPlayerLaps(){
 	if(playerList[p.name].currentLap <= limit){
 	    playerList[p.name].lapTimes[playerList[p.name].currentLap-1] += 1/60;
 	}
+	if(!ifInLapChangeZone(p) && playerList[p.name].lapChanged == true){
+	    playerList[p.name].lapChanged = false;
+	}
 	if(ifInLapChangeZone(p) && playerList[p.name].lapChanged == false){
 	    if(playerList[p.name].currentLap < limit){
 		playerList[p.name].currentLap++;
 		playerList[p.name].lapChanged = true;
 		var name = p.name;
 		var id = p.id;
+		var _p = p;
 		var index = _Circuits.findIndex(c => c.Name == _Circuit.Name);
 		setTimeout(p => {
-		    if(playerList[name].lapChanged == true){
-			if(playerList[name].currentLap > 1){
-			    var lapTime = parseFloat(playerList[name].lapTimes[playerList[name].currentLap-2]);
-			    room.sendAnnouncement(`⏱ Lap ${playerList[name].currentLap-1}: ${serialize(lapTime)} seconds`,id,colors.lapTime,fonts.lapTime,sounds.lapTime);
-			    if(lapTime < _Circuit.BestTime[0]){
-				room.sendAnnouncement(`🆕 Track record! ${name} - ${serialize(lapTime)} seconds`,null,colors.trackRecord,fonts.trackRecord.trackRecord);
-				_Circuit.BestTime = [lapTime,name];
-				_Circuits[index].BestTime = [lapTime,name];
-			    }
-			    if(playerList[name].lapTimes[playerList[name].currentLap-2] != 0){
-				playerList[name].lapTimes[playerList[name].currentLap-2] = 0;
-			    }
-			}
-			room.sendAnnouncement(`Lap ${playerList[name].currentLap}/${limit}`,id,colors.lapChanged,fonts.lapChanged,sounds.lapChanged);
-			playerList[name].lapChanged = false;
-		    }
-		},lapChangeAnnouncementTimeout);
-	    }
-	    else{
-		playerList[p.name].currentLap++;
-		playerList[p.name].lapChanged = true;
-		var name = p.name;
-		var id = p.id;
-		var index = _Circuits.findIndex(c => c.Name == _Circuit.Name);
-		setTimeout(p => {
-		    if(playerList[name].lapChanged == true){
+		    if(playerList[name].currentLap > 1){
 			var lapTime = parseFloat(playerList[name].lapTimes[playerList[name].currentLap-2]);
 			room.sendAnnouncement(`⏱ Lap ${playerList[name].currentLap-1}: ${serialize(lapTime)} seconds`,id,colors.lapTime,fonts.lapTime,sounds.lapTime);
 			if(lapTime < _Circuit.BestTime[0]){
@@ -106,9 +85,29 @@ function checkPlayerLaps(){
 			if(playerList[name].lapTimes[playerList[name].currentLap-2] != 0){
 			    playerList[name].lapTimes[playerList[name].currentLap-2] = 0;
 			}
-			room.sendAnnouncement(`You have completed your laps!`,id,colors.lapChanged,fonts.lapChanged,sounds.lapChanged);
-			playerList[name].lapChanged = false;
 		    }
+		    room.sendAnnouncement(`Lap ${playerList[name].currentLap}/${limit}`,id,colors.lapChanged,fonts.lapChanged,sounds.lapChanged);
+		},lapChangeAnnouncementTimeout);
+	    }
+	    else{
+		playerList[p.name].currentLap++;
+		playerList[p.name].lapChanged = true;
+		var name = p.name;
+		var id = p.id;
+		var _p = p;
+		var index = _Circuits.findIndex(c => c.Name == _Circuit.Name);
+		setTimeout(p => {
+		    var lapTime = parseFloat(playerList[name].lapTimes[playerList[name].currentLap-2]);
+		    room.sendAnnouncement(`⏱ Lap ${playerList[name].currentLap-1}: ${serialize(lapTime)} seconds`,id,colors.lapTime,fonts.lapTime,sounds.lapTime);
+		    if(lapTime < _Circuit.BestTime[0]){
+			room.sendAnnouncement(`🆕 Track record! ${name} - ${serialize(lapTime)} seconds`,null,colors.trackRecord,fonts.trackRecord.trackRecord);
+			_Circuit.BestTime = [lapTime,name];
+			_Circuits[index].BestTime = [lapTime,name];
+		    }
+		    if(playerList[name].lapTimes[playerList[name].currentLap-2] != 0){
+			playerList[name].lapTimes[playerList[name].currentLap-2] = 0;
+		    }
+		    room.sendAnnouncement(`You have completed your laps!`,id,colors.lapChanged,fonts.lapChanged,sounds.lapChanged);
 		    room.setPlayerTeam(id,0);
 		},lapChangeAnnouncementTimeout);
 	    }
