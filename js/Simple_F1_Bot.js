@@ -126,9 +126,11 @@ function endRaceSession(){
 	    setTimeout(function(){
 		if(id < Circuits.length){
 		    room.setCustomStadium(next);
+		    room.startGame();
 		}
 		else{
 		    room.setCustomStadium(Circuits[0]);
+		    room.startGame();
 		}
 	    },gameEndTimeout);
 	}
