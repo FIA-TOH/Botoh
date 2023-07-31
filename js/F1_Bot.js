@@ -1262,6 +1262,23 @@ room.setTimeLimit(0);
 room.setTeamsLock(true);
 room.setCustomStadium(Circuit1);
 
+function checkIfTrolling(){
+    var players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && ifInLapChangeZone(p) == true);
+
+    players.forEach(p => {
+	if(_Circuit.StartDirection == "X"){
+	    if(Math.sign(room.getPlayerDiscProperties(p.id).xspeed) == -1 * _Circuit.DriveDirection){
+		room.kickPlayer(p.id,"Trolling detected!",false);
+	    }
+	}
+	else if(_Circuit.StartDirection == "Y"){
+	    if(Math.sign(room.getPlayerDiscProperties(p.id).yspeed) == -1 * _Circuit.DriveDirection){
+		room.kickPlayer(p.id,"Trolling detected!",false);
+	    }
+	}
+    });
+}
+
 function checkPlayerLaps(){
     var players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
 
@@ -1383,6 +1400,7 @@ room.onGameStop = function(byPlayer){
 }
 
 room.onGameTick = function(){
+    checkIfTrolling();
     checkPlayerLaps();
     endRaceSession();
 }
