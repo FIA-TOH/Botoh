@@ -1365,6 +1365,14 @@ function ifInLapChangeZone(player){
     return room.getScores().time > 0 && _Circuit && _Circuit.MinX <= room.getPlayerDiscProperties(player.id).x && room.getPlayerDiscProperties(player.id).x <= _Circuit.MaxX && _Circuit.MinY <= room.getPlayerDiscProperties(player.id).y && room.getPlayerDiscProperties(player.id).y <= _Circuit.MaxY;
 }
 
+function logPlayerSpeed(){
+    var players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && playerList[p.name].speedEnabled == true);
+
+    players.forEach(p => {
+	room.setPlayerAvatar(p.id,(Math.floor(10*Math.hypot(room.getPlayerDiscProperties(p.id).xspeed,room.getPlayerDiscProperties(p.id).yspeed))).toString());
+    });
+}
+
 function serialize(number){
     return number.toFixed(3);
 }
@@ -1403,6 +1411,7 @@ room.onGameTick = function(){
     checkIfTrolling();
     checkPlayerLaps();
     endRaceSession();
+    logPlayerSpeed();
 }
 
 room.onGameUnpaused = function(byPlayer){
