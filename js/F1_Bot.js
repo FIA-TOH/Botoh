@@ -1232,7 +1232,7 @@ var _Circuit11 = {MinX: 2, MaxX: 32, MinY: -183, MaxY: -21, DriveDirection: 1, S
 
 //Same structure goes...
 
-var limit = 8;
+var limit = 15;
 var lapChangeAnnouncementTimeout = 0;
 var gameEndTimeout = 2000;
 
@@ -1255,7 +1255,7 @@ var teams = ["spectators","red","blue"];
 
 var isRoomSet = false;
 
-var room = HBInit({roomName:"Corrida F1",noPlayer:true,public:true,maxPlayers:20});
+var room = HBInit({roomName:"FTOH - Sessão 1",noPlayer:true,public:true,maxPlayers:20,password:"domingo"});
 
 room.setScoreLimit(0);
 room.setTimeLimit(0);
