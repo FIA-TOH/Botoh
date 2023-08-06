@@ -1232,7 +1232,7 @@ var _Circuit11 = {MinX: 2, MaxX: 32, MinY: -183, MaxY: -21, DriveDirection: -1, 
 
 //Same structure goes...
 
-var limit = 17;
+var limit = 12;
 var lapChangeAnnouncementTimeout = 0;
 var gameEndTimeout = 2000;
 
