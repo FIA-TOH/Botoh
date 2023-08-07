@@ -1263,7 +1263,7 @@ room.setTeamsLock(true);
 room.setCustomStadium(Circuit1);
 
 function checkPlayerLaps(){
-    var players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
+    let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
 
     players.forEach(p => {
 	if(playerList[p.name].currentLap <= limit){
@@ -1275,10 +1275,10 @@ function checkPlayerLaps(){
 	if(ifInLapChangeZone(p) && playerList[p.name].lapChanged == false){
 	    if(playerList[p.name].currentLap < limit){
 		playerList[p.name].lapChanged = true;
-		var name = p.name;
-		var id = p.id;
-		var _p = p;
-		var index = _Circuits.findIndex(c => c.Name == _Circuit.Name);
+		let name = p.name;
+		let id = p.id;
+		let _p = p;
+		let index = _Circuits.findIndex(c => c.Name == _Circuit.Name);
 		setTimeout(p => {
 		if(_Circuit.StartDirection == "X"){
 		    if(Math.sign(room.getPlayerDiscProperties(id).xspeed) == -1 * _Circuit.DriveDirection){
@@ -1297,7 +1297,7 @@ function checkPlayerLaps(){
 		    }
 		}
 	    },lapChangeAnnouncementTimeout);
-		var crossing = setTimeout(p => {
+		let crossing = setTimeout(p => {
 		if(!playerList[name].inSafetyCar){
 		    playerList[name].currentLap++;
 		    if(playerList[name].currentLap > 1){
@@ -1322,10 +1322,10 @@ function checkPlayerLaps(){
 	    }
 	    else{
 		playerList[p.name].lapChanged = true;
-		var name = p.name;
-		var id = p.id;
-		var _p = p;
-		var index = _Circuits.findIndex(c => c.Name == _Circuit.Name);
+		let name = p.name;
+		let id = p.id;
+		let _p = p;
+		let index = _Circuits.findIndex(c => c.Name == _Circuit.Name);
 		setTimeout(p => {
 		if(_Circuit.StartDirection == "X"){
 		    if(Math.sign(room.getPlayerDiscProperties(id).xspeed) == -1 * _Circuit.DriveDirection){
@@ -1344,7 +1344,7 @@ function checkPlayerLaps(){
 		    }
 		}
 	    },lapChangeAnnouncementTimeout);
-		var crossing = setTimeout(p => {
+		let crossing = setTimeout(p => {
 		if(!playerList[name].inSafetyCar){
 		    playerList[name].currentLap++;
 		    var lapTime = parseFloat(playerList[name].lapTimes[playerList[name].currentLap-2]);
@@ -1371,9 +1371,9 @@ function checkPlayerLaps(){
 }
 
 function endRaceSession(){
-    var players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
-    var id = _Circuits.findIndex(c => c.Name == _Circuit.Name);
-    var next = Circuits[id+1];
+    let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
+    let id = _Circuits.findIndex(c => c.Name == _Circuit.Name);
+    let next = Circuits[id+1];
 
     if(room.getScores() != null){
 	if(players.length == 0){
@@ -1397,7 +1397,7 @@ function ifInLapChangeZone(player){
 }
 
 function logPlayerSpeed(){
-    var players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && playerList[p.name].speedEnabled == true);
+    let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && playerList[p.name].speedEnabled == true);
 
     players.forEach(p => {
 	room.setPlayerAvatar(p.id,(Math.floor(10*Math.hypot(room.getPlayerDiscProperties(p.id).xspeed,room.getPlayerDiscProperties(p.id).yspeed))).toString());
@@ -1428,7 +1428,7 @@ room.onGameStart = function(byPlayer){
 room.onGameStop = function(byPlayer){
     byPlayer == null ? console.log(`Game stopped`) : console.log(`Game stopped by ${byPlayer.name}`);
 
-    var players = room.getPlayerList();
+    let players = room.getPlayerList();
     players.forEach(p => {
 	playerList[p.name].currentLap = 0;
 	playerList[p.name].lapChanged = false;
@@ -1530,10 +1530,10 @@ room.onPlayerKicked = function(kickedPlayer,reason,ban,byPlayer){
 
 room.onPlayerJoin = function(player){
     console.log(`${player.name} has joined`);
-    var players = room.getPlayerList();
+    let players = room.getPlayerList();
 
-    var lapTimes = [];
-    for(var i=0; i<limit; i++){
+    let lapTimes = [];
+    for(let i=0; i<limit; i++){
 	lapTimes.push(0);
     }
 
@@ -1550,7 +1550,7 @@ room.onPlayerJoin = function(player){
 
 room.onPlayerLeave = function(player){
     console.log(`${player.name} has left`);
-    var players = room.getPlayerList();
+    let players = room.getPlayerList();
 
     playerList[player.name].currentLap = 0;
     playerList[player.name].lapChanged = false;
@@ -1569,7 +1569,7 @@ room.onPlayerTeamChange = function(changedPlayer,byPlayer){
 }
 
 room.onPositionsReset = function(){
-    var players = room.getPlayerList();
+    let players = room.getPlayerList();
     players.forEach(p => {
 	playerList[p.name].currentLap = 0;
 	playerList[p.name].lapChanged = false;
@@ -1589,9 +1589,9 @@ room.onRoomLink = function(url){
 room.onStadiumChange = function(newStadiumName,byPlayer){
     byPlayer == null ? console.log(`${newStadiumName} was loaded`) : console.log(`${newStadiumName} was loaded by ${byPlayer.name}`);
 
-    var c = _Circuits.find(x => x.Name == newStadiumName);
-    var players = room.getPlayerList();
-    var admins = room.getPlayerList().filter(p => p.admin == true);
+    let c = _Circuits.find(x => x.Name == newStadiumName);
+    let players = room.getPlayerList();
+    let admins = room.getPlayerList().filter(p => p.admin == true);
 
     players.forEach(p => room.setPlayerTeam(p.id,c.Team));
 
