@@ -1568,7 +1568,7 @@ room.onStadiumChange = function(newStadiumName,byPlayer){
     if(byPlayer == null){
 	if(c){
 	    _Circuit = {MinX: c.MinX, MaxX: c.MaxX, MinY: c.MinY, MaxY: c.MaxY, DriveDirection: c.DriveDirection, StartDirection: c.StartDirection, Name: c.Name, BestTime: [c.BestTime[0],c.BestTime[1]], MainColor: c.MainColor, AvatarColor: c.AvatarColor, Angle: c.Angle, Team: c.Team, Limit: c.Limit, ID: c.ID};
-	    var limit = c.Limit ? c.Limit : 10; 
+	    limit = c.Limit ? c.Limit : 10;
 	    room.setTeamColors(c.Team,c.Angle,c.AvatarColor,c.MainColor);
 	}
 	else{
