@@ -1262,32 +1262,6 @@ room.setTimeLimit(0);
 room.setTeamsLock(true);
 room.setCustomStadium(Circuit1);
 
-function checkIfTrolling(){
-    var players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && ifInLapChangeZone(p) == true);
-    var warnings = 0;
-	
-    players.forEach(p => {
-	if(_Circuit.StartDirection == "X"){
-	    if(Math.sign(room.getPlayerDiscProperties(p.id).xspeed) == -1 * _Circuit.DriveDirection){
-		warnings = warnings++;
-		room.sendAnnouncement(``, null, colors.safety, "bold", sounds.safety);
-		room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, colors.safety, "bold", sounds.safety);
-		room.sendAnnouncement(`❗ Aviso para: ${p.name} ❗`, null, colors.safety, "bold", sounds.safety);
-		room.sendAnnouncement(`Infração número: ${warnings}`, null, colors.safety, "bold", sounds.safety);
-	    }
-	}
-	else if(_Circuit.StartDirection == "Y"){
-	    if(Math.sign(room.getPlayerDiscProperties(p.id).yspeed) == -1 * _Circuit.DriveDirection){
-		warnings = warnings++;
-		room.sendAnnouncement(``, null, colors.safety, "bold", sounds.safety);
-		room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, colors.safety, "bold", sounds.safety);
-		room.sendAnnouncement(`❗ Aviso para: ${p.name} ❗`, null, colors.safety, "bold", sounds.safety);
-		room.sendAnnouncement(`Infração número: ${warnings}`, null, colors.safety, "bold", sounds.safety);
-	    }
-	}
-    });
-}
-
 function checkPlayerLaps(){
     var players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
 
