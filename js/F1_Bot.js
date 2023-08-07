@@ -1241,9 +1241,9 @@ var _Circuits = [_Circuit1,_Circuit2,_Circuit3,_Circuit4,_Circuit5,_Circuit6,_Ci
 var _Circuit = {MinX: 0, MaxX: 0, MinY: 0, MaxY: 0, DriveDirection: 0, StartDirection: undefined, Name: undefined, BestTime: [999.99,undefined], MainColor: [0x000000,0x000000,0x000000], AvatarColor: 0x000000, Angle: 0, Team: 0, ID: 0};
 var limit = _Circuit.Limit;
 
-var colors = {commands: 0xFFFFFF, info: 0xFFFFFF, lapChanged: 0xFFFFFF, lapTime: 0x2DF73B, mapChangeWrongName: 0xFFFF00, mapChangeDeny: 0xFF0000, mapLoad: 0x80FF00, mapLoadDeny: 0xFFFF00, speed: 0x2DF73B, trackRecord: 0xFF33D0};
+var colors = {commands: 0xFFFFFF, info: 0xFFFFFF, lapChanged: 0xFFFFFF, lapTime: 0x2DF73B, mapChangeWrongName: 0xFFFF00, mapChangeDeny: 0xFF0000, mapLoad: 0x80FF00, mapLoadDeny: 0xFFFF00, safety: 0xFF0000, speed: 0x2DF73B, trackRecord: 0xFF33D0};
 var fonts = {commands: "normal", info: "normal", lapChanged: "normal", lapTime: "normal", mapChangeWrongName: "normal", mapChangeDeny: "bold", mapLoad: "normal", mapLoadDeny: "normal", speed: "small", trackRecord: "bold"};
-var sounds = {commands: 1, info: 0, lapChanged: 1, lapTime: 1, mapChangeWrongName: 1, mapChangeDeny: 2, mapLoad: 1, mapLoadDeny: 1, speed: 0, trackRecord: 1};
+var sounds = {commands: 1, info: 0, lapChanged: 1, lapTime: 1, mapChangeWrongName: 1, mapChangeDeny: 2, mapLoad: 1, mapLoadDeny: 1, safety: 1, speed: 0, trackRecord: 1};
 
 var playerList = {};
 var commands = {admin: "!admkarp", commands: "!commands", mapInfo:"!map", mapLoad: "!circuit", maps: "!maps", speed: "!speed"};
@@ -1264,16 +1264,25 @@ room.setCustomStadium(Circuit1);
 
 function checkIfTrolling(){
     var players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && ifInLapChangeZone(p) == true);
-
+    var warnings = 0;
+	
     players.forEach(p => {
 	if(_Circuit.StartDirection == "X"){
 	    if(Math.sign(room.getPlayerDiscProperties(p.id).xspeed) == -1 * _Circuit.DriveDirection){
-		room.kickPlayer(p.id,"Trolling detected!",false);
+		warnings = warnings++;
+		room.sendAnnouncement(``, null, colors.safety, "bold", sounds.safety);
+		room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, colors.safety, "bold", sounds.safety);
+		room.sendAnnouncement(`❗ Aviso para: ${p.name} ❗`, null, colors.safety, "bold", sounds.safety);
+		room.sendAnnouncement(`Infração número: ${warnings}`, null, colors.safety, "bold", sounds.safety);
 	    }
 	}
 	else if(_Circuit.StartDirection == "Y"){
 	    if(Math.sign(room.getPlayerDiscProperties(p.id).yspeed) == -1 * _Circuit.DriveDirection){
-		room.kickPlayer(p.id,"Trolling detected!",false);
+		warnings = warnings++;
+		room.sendAnnouncement(``, null, colors.safety, "bold", sounds.safety);
+		room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, colors.safety, "bold", sounds.safety);
+		room.sendAnnouncement(`❗ Aviso para: ${p.name} ❗`, null, colors.safety, "bold", sounds.safety);
+		room.sendAnnouncement(`Infração número: ${warnings}`, null, colors.safety, "bold", sounds.safety);
 	    }
 	}
     });
@@ -1298,6 +1307,22 @@ function checkPlayerLaps(){
 		var _p = p;
 		var index = _Circuits.findIndex(c => c.Name == _Circuit.Name);
 		setTimeout(p => {
+		if(_Circuit.StartDirection == "X"){
+		    if(Math.sign(room.getPlayerDiscProperties(id).xspeed) == -1 * _Circuit.DriveDirection){
+			room.sendAnnouncement(``, null, colors.safety, "bold", sounds.safety);
+			room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, colors.safety, "bold", sounds.safety);
+			room.sendAnnouncement(`❗ Aviso para: ${name} ❗`, null, colors.safety, "bold", sounds.safety);
+		    }
+		}
+		else if(_Circuit.StartDirection == "Y"){
+		    if(Math.sign(room.getPlayerDiscProperties(id).yspeed) == -1 * _Circuit.DriveDirection){
+			room.sendAnnouncement(``, null, colors.safety, "bold", sounds.safety);
+			room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, colors.safety, "bold", sounds.safety);
+			room.sendAnnouncement(`❗ Aviso para: ${name} ❗`, null, colors.safety, "bold", sounds.safety);
+		    }
+		}
+	    },lapChangeAnnouncementTimeout);
+		setTimeout(p => {
 		    if(playerList[name].currentLap > 1){
 			var lapTime = parseFloat(playerList[name].lapTimes[playerList[name].currentLap-2]);
 			room.sendAnnouncement(`⏱ Volta ${playerList[name].currentLap-1} de ${name}: ${serialize(lapTime)} segundos`,null,colors.lapTime,fonts.lapTime,sounds.lapTime);
@@ -1320,6 +1345,22 @@ function checkPlayerLaps(){
 		var id = p.id;
 		var _p = p;
 		var index = _Circuits.findIndex(c => c.Name == _Circuit.Name);
+		setTimeout(p => {
+		if(_Circuit.StartDirection == "X"){
+		    if(Math.sign(room.getPlayerDiscProperties(id).xspeed) == -1 * _Circuit.DriveDirection){
+			room.sendAnnouncement(``, null, colors.safety, "bold", sounds.safety);
+			room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, colors.safety, "bold", sounds.safety);
+			room.sendAnnouncement(`❗ Aviso para: ${name} ❗`, null, colors.safety, "bold", sounds.safety);
+		    }
+		}
+		else if(_Circuit.StartDirection == "Y"){
+		    if(Math.sign(room.getPlayerDiscProperties(id).yspeed) == -1 * _Circuit.DriveDirection){
+			room.sendAnnouncement(``, null, colors.safety, "bold", sounds.safety);
+			room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, colors.safety, "bold", sounds.safety);
+			room.sendAnnouncement(`❗ Aviso para: ${name} ❗`, null, colors.safety, "bold", sounds.safety);
+		    }
+		}
+	    },lapChangeAnnouncementTimeout);
 		setTimeout(p => {
 		    var lapTime = parseFloat(playerList[name].lapTimes[playerList[name].currentLap-2]);
 		    room.sendAnnouncement(`⏱ Lap ${playerList[name].currentLap-1}: ${serialize(lapTime)} seconds`,id,colors.lapTime,fonts.lapTime,sounds.lapTime);
@@ -1408,7 +1449,6 @@ room.onGameStop = function(byPlayer){
 }
 
 room.onGameTick = function(){
-    checkIfTrolling();
     checkPlayerLaps();
     endRaceSession();
     logPlayerSpeed();
