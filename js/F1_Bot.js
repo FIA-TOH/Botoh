@@ -1300,7 +1300,6 @@ function checkPlayerLaps(){
 	}
 	if(ifInLapChangeZone(p) && playerList[p.name].lapChanged == false){
 	    if(playerList[p.name].currentLap < limit){
-		playerList[p.name].currentLap++;
 		playerList[p.name].lapChanged = true;
 		var name = p.name;
 		var id = p.id;
@@ -1309,20 +1308,24 @@ function checkPlayerLaps(){
 		setTimeout(p => {
 		if(_Circuit.StartDirection == "X"){
 		    if(Math.sign(room.getPlayerDiscProperties(id).xspeed) == -1 * _Circuit.DriveDirection){
-			room.sendAnnouncement(``, null, colors.safety, "bold", sounds.safety);
 			room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, colors.safety, "bold", sounds.safety);
 			room.sendAnnouncement(`❗ Aviso para: ${name} ❗`, null, colors.safety, "bold", sounds.safety);
+			playerList[name].inSafetyCar = true;
+			clearTimeout(crossing);
 		    }
 		}
 		else if(_Circuit.StartDirection == "Y"){
 		    if(Math.sign(room.getPlayerDiscProperties(id).yspeed) == -1 * _Circuit.DriveDirection){
-			room.sendAnnouncement(``, null, colors.safety, "bold", sounds.safety);
 			room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, colors.safety, "bold", sounds.safety);
 			room.sendAnnouncement(`❗ Aviso para: ${name} ❗`, null, colors.safety, "bold", sounds.safety);
+			playerList[name].inSafetyCar = true;
+			clearTimeout(crossing);
 		    }
 		}
 	    },lapChangeAnnouncementTimeout);
-		setTimeout(p => {
+		var crossing = setTimeout(p => {
+		if(!playerList[name].inSafetyCar){
+		    playerList[name].currentLap++;
 		    if(playerList[name].currentLap > 1){
 			var lapTime = parseFloat(playerList[name].lapTimes[playerList[name].currentLap-2]);
 			room.sendAnnouncement(`⏱ Volta ${playerList[name].currentLap-1} de ${name}: ${serialize(lapTime)} segundos`,null,colors.lapTime,fonts.lapTime,sounds.lapTime);
@@ -1336,10 +1339,14 @@ function checkPlayerLaps(){
 			}
 		    }
 		    room.sendAnnouncement(`Lap ${playerList[name].currentLap}/${limit}`,id,colors.lapChanged,fonts.lapChanged,sounds.lapChanged);
+		}
+		else{
+			playerList[name].inSafetyCar = false;
+			room.sendAnnouncement(`Lap ${playerList[name].currentLap}/${limit}`,id,colors.lapChanged,fonts.lapChanged,sounds.lapChanged);
+		}
 		},lapChangeAnnouncementTimeout);
 	    }
 	    else{
-		playerList[p.name].currentLap++;
 		playerList[p.name].lapChanged = true;
 		var name = p.name;
 		var id = p.id;
@@ -1348,20 +1355,24 @@ function checkPlayerLaps(){
 		setTimeout(p => {
 		if(_Circuit.StartDirection == "X"){
 		    if(Math.sign(room.getPlayerDiscProperties(id).xspeed) == -1 * _Circuit.DriveDirection){
-			room.sendAnnouncement(``, null, colors.safety, "bold", sounds.safety);
 			room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, colors.safety, "bold", sounds.safety);
 			room.sendAnnouncement(`❗ Aviso para: ${name} ❗`, null, colors.safety, "bold", sounds.safety);
+			playerList[name].inSafetyCar = true;
+			clearTimeout(crossing);
 		    }
 		}
 		else if(_Circuit.StartDirection == "Y"){
 		    if(Math.sign(room.getPlayerDiscProperties(id).yspeed) == -1 * _Circuit.DriveDirection){
-			room.sendAnnouncement(``, null, colors.safety, "bold", sounds.safety);
 			room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, colors.safety, "bold", sounds.safety);
 			room.sendAnnouncement(`❗ Aviso para: ${name} ❗`, null, colors.safety, "bold", sounds.safety);
+			playerList[name].inSafetyCar = true;
+			clearTimeout(crossing);
 		    }
 		}
 	    },lapChangeAnnouncementTimeout);
-		setTimeout(p => {
+		var crossing = setTimeout(p => {
+		if(!playerList[name].inSafetyCar){
+		    playerList[name].currentLap++;
 		    var lapTime = parseFloat(playerList[name].lapTimes[playerList[name].currentLap-2]);
 		    room.sendAnnouncement(`⏱ Lap ${playerList[name].currentLap-1}: ${serialize(lapTime)} seconds`,id,colors.lapTime,fonts.lapTime,sounds.lapTime);
 		    if(lapTime < _Circuit.BestTime[0]){
@@ -1374,6 +1385,11 @@ function checkPlayerLaps(){
 		    }
 		    room.sendAnnouncement(`You have completed your laps!`,id,colors.lapChanged,fonts.lapChanged,sounds.lapChanged);
 		    room.setPlayerTeam(id,0);
+		}
+		else{
+			playerList[name].inSafetyCar = false;
+			room.sendAnnouncement(`Lap ${playerList[name].currentLap}/${limit}`,id,colors.lapChanged,fonts.lapChanged,sounds.lapChanged);
+		}
 		},lapChangeAnnouncementTimeout);
 	    }
 	}
@@ -1548,7 +1564,7 @@ room.onPlayerJoin = function(player){
     }
 
     if(playerList[player.name] == undefined)
-	playerList[player.name] = {name: player.name, id: player.id, currentLap: 0, lapChanged: false, lapTimes: lapTimes, speedEnabled: false, isInTheRoom: true};
+	playerList[player.name] = {name: player.name, id: player.id, currentLap: 0, lapChanged: false, lapTimes: lapTimes, speedEnabled: false, inSafetyCar: false, isInTheRoom: true};
 
     if(room.getScores() == null && players.length == 1){
 	if(_Circuit.Team != 0)
