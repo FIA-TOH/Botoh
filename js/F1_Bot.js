@@ -305,7 +305,7 @@ room.onPlayerChat = function(player,message){
 	    room.sendAnnouncement(`Map list below:\n${_Circuits.map(c => c.Name + " [" + c.ID + "]").join('\n')}`,player.id,colors.info,fonts.info,sounds.info);
 	    return false;
 	}
-	else if(message.toLowerCase().split(" ")[0] == commands.safetyoff){
+	else if(message.toLowerCase() == commands.safetyoff){
 	    room.getPlayerList().forEach(p => {
 		playerList[p.name].inSafetyCar = false;
 	    });
@@ -314,7 +314,7 @@ room.onPlayerChat = function(player,message){
 
 	    return false;
 	}
-	else if(message.toLowerCase().split(" ")[0] == commands.safetyon){
+	else if(message.toLowerCase() == commands.safetyon){
 	    room.getPlayerList().forEach(p => {
 		playerList[p.name].inSafetyCar = true;
 	    });
