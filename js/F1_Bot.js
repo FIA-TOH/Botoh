@@ -68,6 +68,7 @@ const adminChanges = ["'s admin rights were taken away"," was given admin rights
 const playerKicked = [" was kicked"," was banned"];
 const speedEnableChanges = ["OFF","ON"];
 const teams = ["spectators","red","blue"];
+var generalSafetyCar = false;
 
 var isRoomSet = false;
 
@@ -114,7 +115,7 @@ function checkPlayerLaps(){
 		}
 	    },lapChangeAnnouncementTimeout);
 		let crossing = setTimeout(p => {
-		if(!playerList[name].inSafetyCar){
+		if(!playerList[name].inSafetyCar && !generalSafetyCar){
 		    playerList[name].currentLap++;
 		    if(playerList[name].currentLap > 1){
 			var lapTime = parseFloat(playerList[name].lapTimes[playerList[name].currentLap-2]);
@@ -161,7 +162,7 @@ function checkPlayerLaps(){
 		}
 	    },lapChangeAnnouncementTimeout);
 		let crossing = setTimeout(p => {
-		if(!playerList[name].inSafetyCar){
+		if(!playerList[name].inSafetyCar && !generalSafetyCar){
 		    playerList[name].currentLap++;
 		    var lapTime = parseFloat(playerList[name].lapTimes[playerList[name].currentLap-2]);
 		    room.sendAnnouncement(`⏱ Lap ${playerList[name].currentLap-1}: ${serialize(lapTime)} seconds`,id,colors.lapTime,fonts.lapTime,sounds.lapTime);
@@ -248,7 +249,7 @@ room.onGameStop = function(byPlayer){
     players.forEach(p => {
 	playerList[p.name].currentLap = 0;
 	playerList[p.name].lapChanged = false;
-	for(var l=0; l<playerList[p.name].lapTimes.length; l++){
+	for(let l=0; l<playerList[p.name].lapTimes.length; l++){
 	    playerList[p.name].lapTimes[l] = 0;
 	}
     });
@@ -306,18 +307,14 @@ room.onPlayerChat = function(player,message){
 	    return false;
 	}
 	else if(message.toLowerCase() == commands.safetyoff){
-	    room.getPlayerList().forEach(p => {
-		playerList[p.name].inSafetyCar = false;
-	    });
+	    generalSafetyCar = false;
 	    room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, 0x00FF00, "bold", sounds.safety);
 	    room.sendAnnouncement(`🚨 O Safety Car está DESLIGADO 🚨`, null, 0x00FF00, "bold", sounds.safety);
 
 	    return false;
 	}
 	else if(message.toLowerCase() == commands.safetyon){
-	    room.getPlayerList().forEach(p => {
-		playerList[p.name].inSafetyCar = true;
-	    });
+	    generalSafetycar = true;
 	    room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, 0xFFFF00, "bold", sounds.safety);
 	    room.sendAnnouncement(`🚨 O Safety Car está LIGADO 🚨`, null, 0xFFFF00, "bold", sounds.safety);
 
@@ -407,7 +404,7 @@ room.onPositionsReset = function(){
     players.forEach(p => {
 	playerList[p.name].currentLap = 0;
 	playerList[p.name].lapChanged = false;
-	for(var l=0; l<playerList[p.name].lapTimes.length; l++){
+	for(let l=0; l<playerList[p.name].lapTimes.length; l++){
 	    playerList[p.name].lapTimes[l] = 0;
 	}
     });
