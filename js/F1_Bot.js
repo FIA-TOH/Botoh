@@ -62,7 +62,7 @@ const fonts = {commands: "normal", info: "normal", lapChanged: "normal", lapTime
 const sounds = {commands: 1, info: 0, lapChanged: 1, lapTime: 1, mapChangeWrongName: 1, mapChangeDeny: 2, mapLoad: 1, mapLoadDeny: 1, safety: 1, speed: 0, trackRecord: 1};
 
 var playerList = {};
-const commands = {admin: "!admkarp", commands: "!commands", mapInfo:"!map", mapLoad: "!circuit", maps: "!maps", speed: "!speed"};
+const commands = {admin: "!admkarp", commands: "!commands", mapInfo:"!map", mapLoad: "!circuit", maps: "!maps", safetyon: "!sc on", safetyoff: "!sc off", speed: "!speed"};
 
 const adminChanges = ["'s admin rights were taken away"," was given admin rights"];
 const playerKicked = [" was kicked"," was banned"];
@@ -303,6 +303,24 @@ room.onPlayerChat = function(player,message){
 	}
 	else if(message.toLowerCase().split(" ")[0] == commands.maps){
 	    room.sendAnnouncement(`Map list below:\n${_Circuits.map(c => c.Name + " [" + c.ID + "]").join('\n')}`,player.id,colors.info,fonts.info,sounds.info);
+	    return false;
+	}
+	else if(message.toLowerCase().split(" ")[0] == commands.safetyoff){
+	    room.getPlayerList().forEach(p => {
+		playerList[p.name].inSafetyCar = false;
+	    });
+	    room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, 0x00FF00, "bold", sounds.safety);
+	    room.sendAnnouncement(`🚨 O Safety Car está DESLIGADO 🚨`, null, 0x00FF00, "bold", sounds.safety);
+
+	    return false;
+	}
+	else if(message.toLowerCase().split(" ")[0] == commands.safetyon){
+	    room.getPlayerList().forEach(p => {
+		playerList[p.name].inSafetyCar = true;
+	    });
+	    room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, 0xFFFF00, "bold", sounds.safety);
+	    room.sendAnnouncement(`🚨 O Safety Car está LIGADO 🚨`, null, 0xFFFF00, "bold", sounds.safety);
+
 	    return false;
 	}
 	else if(message.toLowerCase().split(" ")[0] == commands.speed){
