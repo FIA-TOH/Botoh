@@ -314,7 +314,7 @@ room.onPlayerChat = function(player,message){
 	    return false;
 	}
 	else if(message.toLowerCase() == commands.safetyon){
-	    generalSafetycar = true;
+	    generalSafetyCar = true;
 	    room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, 0xFFFF00, "bold", sounds.safety);
 	    room.sendAnnouncement(`🚨 O Safety Car está LIGADO 🚨`, null, 0xFFFF00, "bold", sounds.safety);
 
