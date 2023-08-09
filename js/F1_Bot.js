@@ -344,6 +344,11 @@ room.onPlayerChat = function(player,message){
 	    room.sendAnnouncement("Available commands: !admin, !commands, !map, !speed",player.id,colors.commands,fonts.commands,sounds.commands);
 	    return false;
 	}
+	else if(message.toLowerCase().split(" ")[0] == commands.discord){
+	    room.sendAnnouncement("Entre no nosso Discord e venha participar da Fórmula TOH!",player.id,colors.info,"bold",sounds.info);
+	    room.sendAnnouncement("Link: https://discord.gg/sCfhQWpbE",player.id,colors.info,"normal",sounds.info);
+	    return false;
+	}
 	else if(message.toLowerCase().split(" ")[0] == commands.mapInfo){
 	    room.sendAnnouncement(`${_Circuit.Name} best lap: ${serialize(_Circuit.BestTime[0])} seconds by ${_Circuit.BestTime[1]}`,player.id,colors.mapInfo,fonts.mapInfo,sounds.mapInfo);
 	    return false;
