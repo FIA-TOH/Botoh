@@ -225,13 +225,6 @@ function serialize(number){
     return number.toFixed(3);
 }
 
-function discord(){
-    setTimeout(() => {
-	room.sendAnnouncement("Entre no nosso Discord e venha participar da Fórmula TOH!",null,colors.info,"bold",sounds.info);
-	room.sendAnnouncement("Link: https://discord.gg/sCfhQWpbE",null,colors.info,"normal",sounds.info);
-    }, 300000);
-}
-
 room.onGamePaused = function(byPlayer){
     byPlayer == null ? console.log(`Game paused`) : console.log(`Game paused by ${byPlayer.name}`);
 }
@@ -266,7 +259,6 @@ room.onGameTick = function(){
     checkPlayerLaps();
     endRaceSession();
     logPlayerSpeed();
-    discord();
 }
 
 room.onGameUnpaused = function(byPlayer){
