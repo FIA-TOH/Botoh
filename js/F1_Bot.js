@@ -226,7 +226,7 @@ function serialize(number){
 }
 
 function discord(){
-    setInterval(() => {
+    setTimeout(() => {
 	room.sendAnnouncement("Entre no nosso Discord e venha participar da Fórmula TOH!",null,colors.info,"bold",sounds.info);
 	room.sendAnnouncement("Link: https://discord.gg/sCfhQWpbE",null,colors.info,"normal",sounds.info);
     }, 300000);
