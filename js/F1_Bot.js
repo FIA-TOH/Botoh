@@ -259,6 +259,10 @@ room.onGameTick = function(){
     checkPlayerLaps();
     endRaceSession();
     logPlayerSpeed();
+    setInterval(() => {
+	room.sendAnnouncement("Entre no nosso Discord e venha participar da Fórmula TOH!",null,colors.info,bold,sounds.info);
+	room.sendAnnouncement("Link: https://discord.gg/sCfhQWpbE",null,colors.info,normal,sounds.info);
+    }, 300000);
 }
 
 room.onGameUnpaused = function(byPlayer){
@@ -441,8 +445,3 @@ room.onStadiumChange = function(newStadiumName,byPlayer){
 	room.setCustomStadium(Circuits[0]);
     }
 }
-
-setInterval(() => {
-	room.sendAnnouncement("Entre no nosso Discord e venha participar da Fórmula TOH!",null,colors.info,bold,sounds.info);
-	room.sendAnnouncement("Link: https://discord.gg/sCfhQWpbE",null,colors.info,normal,sounds.info);
-}, 300000);
