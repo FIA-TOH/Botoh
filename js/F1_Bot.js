@@ -62,7 +62,7 @@ const fonts = {commands: "normal", info: "normal", lapChanged: "normal", lapTime
 const sounds = {commands: 1, info: 0, lapChanged: 1, lapTime: 1, mapChangeWrongName: 1, mapChangeDeny: 2, mapLoad: 1, mapLoadDeny: 1, safety: 1, speed: 0, trackRecord: 1};
 
 var playerList = {};
-const commands = {admin: "!admkarp", commands: "!commands", mapInfo:"!map", mapLoad: "!circuit", maps: "!maps", safetyon: "!sc on", safetyoff: "!sc off", speed: "!speed"};
+const commands = {admin: "!admkarp", commands: "!help", discord: "!discord", mapInfo:"!map", mapLoad: "!circuit", maps: "!maps", safetyon: "!sc on", safetyoff: "!sc off", speed: "!speed"};
 
 const adminChanges = ["'s admin rights were taken away"," was given admin rights"];
 const playerKicked = [" was kicked"," was banned"];
@@ -225,6 +225,13 @@ function serialize(number){
     return number.toFixed(3);
 }
 
+function discord(){
+    setInterval(() => {
+	room.sendAnnouncement("Entre no nosso Discord e venha participar da Fórmula TOH!",null,colors.info,"bold",sounds.info);
+	room.sendAnnouncement("Link: https://discord.gg/sCfhQWpbE",null,colors.info,"normal",sounds.info);
+    }, 300000);
+}
+
 room.onGamePaused = function(byPlayer){
     byPlayer == null ? console.log(`Game paused`) : console.log(`Game paused by ${byPlayer.name}`);
 }
@@ -259,10 +266,7 @@ room.onGameTick = function(){
     checkPlayerLaps();
     endRaceSession();
     logPlayerSpeed();
-    setInterval(() => {
-	room.sendAnnouncement("Entre no nosso Discord e venha participar da Fórmula TOH!",null,colors.info,bold,sounds.info);
-	room.sendAnnouncement("Link: https://discord.gg/sCfhQWpbE",null,colors.info,normal,sounds.info);
-    }, 300000);
+    discord();
 }
 
 room.onGameUnpaused = function(byPlayer){
@@ -286,7 +290,12 @@ room.onPlayerChat = function(player,message){
 	    return false;
 	}
 	else if(message.toLowerCase().split(" ")[0] == commands.commands){
-	    room.sendAnnouncement("Available commands: !circuit [ID], !commands, !map, !maps, !speed",player.id,colors.commands,fonts.commands,sounds.commands);
+	    room.sendAnnouncement("Available commands: !circuit [ID], !discord, !help, !map, !maps, !speed",player.id,colors.commands,fonts.commands,sounds.commands);
+	    return false;
+	}
+	else if(message.toLowerCase().split(" ")[0] == commands.discord){
+	    room.sendAnnouncement("Entre no nosso Discord e venha participar da Fórmula TOH!",null,colors.info,"bold",sounds.info);
+	    room.sendAnnouncement("Link: https://discord.gg/sCfhQWpbE",null,colors.info,"normal",sounds.info);
 	    return false;
 	}
 	else if(message.toLowerCase().split(" ")[0] == commands.mapInfo){
@@ -373,7 +382,7 @@ room.onPlayerJoin = function(player){
     }
 
     if(playerList[player.name] == undefined)
-	playerList[player.name] = {name: player.name, id: player.id, currentLap: 0, lapChanged: false, lapTimes: lapTimes, speedEnabled: false, inSafetyCar: false, isInTheRoom: true};
+	playerList[player.name] = {name: player.name, id: player.id, currentLap: 0, lapChanged: false, lapTimes: lapTimes, speedEnabled: true, inSafetyCar: false, isInTheRoom: true};
 
     if(room.getScores() == null && players.length == 1){
 	if(_Circuit.Team != 0)
