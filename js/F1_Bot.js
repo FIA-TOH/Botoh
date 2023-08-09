@@ -217,7 +217,7 @@ function logPlayerSpeed(){
     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && playerList[p.name].speedEnabled == true);
 
     players.forEach(p => {
-	room.setPlayerAvatar(p.id,(Math.floor(10*Math.hypot(room.getPlayerDiscProperties(p.id).xspeed,room.getPlayerDiscProperties(p.id).yspeed))).toString());
+	// room.setPlayerAvatar(p.id,(Math.floor(10*Math.hypot(room.getPlayerDiscProperties(p.id).xspeed,room.getPlayerDiscProperties(p.id).yspeed))).toString());
         if(generalSafetyCar){
 		// setTimeout(() => {
 		room.setPlayerDiscProperties(p.id,{xspeed: room.getPlayerDiscProperties(p.id).xspeed*(75/100)});
@@ -331,15 +331,15 @@ room.onPlayerChat = function(player,message){
 
 	    return false;
 	}
-	else if(message.toLowerCase().split(" ")[0] == commands.speed){
-	    playerList[player.name].speedEnabled = !playerList[player.name].speedEnabled;
-	    room.sendAnnouncement(`Speed is turned ${speedEnableChanges[Number(playerList[player.name].speedEnabled)]}`,player.id,colors.speed,fonts.speed,sounds.speed);
+	// else if(message.toLowerCase().split(" ")[0] == commands.speed){
+	//     playerList[player.name].speedEnabled = !playerList[player.name].speedEnabled;
+	//     room.sendAnnouncement(`Speed is turned ${speedEnableChanges[Number(playerList[player.name].speedEnabled)]}`,player.id,colors.speed,fonts.speed,sounds.speed);
 
-	    if(playerList[player.name].speedEnabled == true)
-		room.setPlayerAvatar(player.id);
+	//     if(playerList[player.name].speedEnabled == true)
+	// 	room.setPlayerAvatar(player.id);
 
-	    return false;
-	}
+	//     return false;
+	// }
     }
     else{
 	if(message.toLowerCase().split(" ")[0] == commands.admin){
