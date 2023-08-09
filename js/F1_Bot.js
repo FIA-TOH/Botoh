@@ -72,7 +72,7 @@ var generalSafetyCar = false;
 
 var isRoomSet = false;
 
-var room = HBInit({roomName:"FTOH - Sessão 1",noPlayer:true,public:true,maxPlayers:20,password:"domingo"});
+var room = HBInit({roomName:"Fórmula 1 - Sessão Livre",noPlayer:true,public:true,maxPlayers:20});
 
 room.setScoreLimit(0);
 room.setTimeLimit(0);
@@ -440,4 +440,9 @@ room.onStadiumChange = function(newStadiumName,byPlayer){
 	room.sendAnnouncement("You don't have authorization to change maps in this room!",byPlayer.id,colors.mapChangeDeny,fonts.mapChangeDeny,sounds.mapChangeDeny);
 	room.setCustomStadium(Circuits[0]);
     }
-}       
+}
+
+setInterval(() => {
+	room.sendAnnouncement("Entre no nosso Discord e venha participar da Fórmula TOH!",null,colors.info,bold,sounds.info);
+	room.sendAnnouncement("Link: https://discord.gg/sCfhQWpbE",null,colors.info,normal,sounds.info);
+}, 300000);
