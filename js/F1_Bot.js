@@ -232,7 +232,7 @@ function serialize(number){
 }
 
 room.onGamePaused = function(byPlayer){
-    byPlayer == null ? console.log(`Game paused`) : console.log(`Game paused by ${byPlayer.name}`);
+    // byPlayer == null ? console.log(`Game paused`) : console.log(`Game paused by ${byPlayer.name}`);
 }
 
 room.onGameStart = function(byPlayer){
@@ -268,8 +268,7 @@ room.onGameTick = function(){
 }
 
 room.onGameUnpaused = function(byPlayer){
-    byPlayer == null ? console.log(`Game unpaused`) : console.log(`Game unpaused by ${byPlayer.name}`);
-    room.sendAnnouncement(`Game unpaused by ${byPlayer.name}`,null,colors.info,fonts.info,sounds.info);
+    // byPlayer == null ? console.log(`Game unpaused`) : console.log(`Game unpaused by ${byPlayer.name}`);
 }
 
 room.onKickRateLimitSet = function(min,rate,burst,byPlayer){
