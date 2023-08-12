@@ -264,7 +264,6 @@ room.onGameStop = function(byPlayer){
 room.onGameTick = function(){
     checkPlayerLaps();
     endRaceSession();
-    logPlayerSpeed();
 }
 
 room.onGameUnpaused = function(byPlayer){
