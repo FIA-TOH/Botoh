@@ -215,16 +215,6 @@ function ifInLapChangeZone(player){
 
 function logPlayerSpeed(){
     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && playerList[p.name].speedEnabled == true);
-
-    players.forEach(p => {
-	// room.setPlayerAvatar(p.id,(Math.floor(10*Math.hypot(room.getPlayerDiscProperties(p.id).xspeed,room.getPlayerDiscProperties(p.id).yspeed))).toString());
-        if(generalSafetyCar){
-		// setTimeout(() => {
-		room.setPlayerDiscProperties(p.id,{xspeed: room.getPlayerDiscProperties(p.id).xspeed*(75/100)});
-		room.setPlayerDiscProperties(p.id, {yspeed: room.getPlayerDiscProperties(p.id).yspeed*(75/100)});
-		// });
-	}
-    });
 }
 
 function serialize(number){
@@ -232,7 +222,7 @@ function serialize(number){
 }
 
 room.onGamePaused = function(byPlayer){
-    // byPlayer == null ? console.log(`Game paused`) : console.log(`Game paused by ${byPlayer.name}`);
+	
 }
 
 room.onGameStart = function(byPlayer){
@@ -267,7 +257,7 @@ room.onGameTick = function(){
 }
 
 room.onGameUnpaused = function(byPlayer){
-    // byPlayer == null ? console.log(`Game unpaused`) : console.log(`Game unpaused by ${byPlayer.name}`);
+	
 }
 
 room.onKickRateLimitSet = function(min,rate,burst,byPlayer){
