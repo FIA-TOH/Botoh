@@ -186,7 +186,7 @@ function checkPlayerLaps(){
 			return a - b;
 		    });
 		    actualPosition = positions.indexOf(timeSum) + 1;
-		    room.sendAnnouncement(`P${actualPosition}. ${name} - ${secondsToTime(serialize(timeSum))}`,null,colors.finish,fonts.lapChanged,sounds.lapChanged);
+		    room.sendAnnouncement(`P${actualPosition}. ${name} - ${serialize(secondsToTime(timeSum))}`,null,colors.finish,fonts.lapChanged,sounds.lapChanged);
 		    room.setPlayerTeam(id,0);
 		}
 		else{
