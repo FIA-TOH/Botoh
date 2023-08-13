@@ -69,6 +69,7 @@ const playerKicked = [" was kicked"," was banned"];
 const speedEnableChanges = ["OFF","ON"];
 const teams = ["spectators","red","blue"];
 var generalSafetyCar = false;
+var positions = [];
 
 var isRoomSet = false;
 
@@ -195,7 +196,6 @@ function checkPlayerLaps(){
 
 function getPositions(){
     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
-    let positions = [];
     players.forEach(p => {
 	let name = p.name;
 	let id = p.id;
@@ -216,7 +216,7 @@ function endRaceSession(){
 
     if(room.getScores() != null){
 	if(players.length == 0){
-	    getPositions();
+	    // getPositions();
 	    room.stopGame();
 	    setTimeout(function(){
 		if(id < Circuits.length){
@@ -250,7 +250,8 @@ room.onGamePaused = function(byPlayer){
 
 room.onGameStart = function(byPlayer){
     byPlayer == null ? console.log(`Game started`) : console.log(`Game started by ${byPlayer.name}`);
-
+    positions = [];
+	
     var players = room.getPlayerList();
     players.forEach(p => {
 	playerList[p.name].currentLap = 0;
@@ -263,7 +264,7 @@ room.onGameStart = function(byPlayer){
 
 room.onGameStop = function(byPlayer){
     byPlayer == null ? console.log(`Game stopped`) : console.log(`Game stopped by ${byPlayer.name}`);
-
+    setTimeout(getPositions, 0);
     let players = room.getPlayerList();
     players.forEach(p => {
 	playerList[p.name].currentLap = 0;
