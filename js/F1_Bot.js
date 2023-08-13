@@ -69,7 +69,6 @@ const playerKicked = [" was kicked"," was banned"];
 const speedEnableChanges = ["OFF","ON"];
 const teams = ["spectators","red","blue"];
 var generalSafetyCar = false;
-var positions = [];
 
 var isRoomSet = false;
 
@@ -181,7 +180,7 @@ function checkPlayerLaps(){
 		    }
 		    room.sendAnnouncement(`Você completou suas voltas!`,id,colors.lapChanged,fonts.lapChanged,sounds.lapChanged);
 		    let timeSum = parseFloat(playerList[name].lapTimes.reduce((a, b) => a + b, 0));
-		    room.sendAnnouncement(`Tempo total de ${name}: ${secondsToTime(serialize(timeSum))}`,null,colors.finish,fonts.lapChanged,sounds.lapChanged);
+		    room.sendAnnouncement(`Tempo total de ${name} - ${secondsToTime(serialize(timeSum))}`,id,colors.finish,fonts.lapChanged,sounds.lapChanged);
 		    room.setPlayerTeam(id,0);
 		}
 		else{
@@ -194,6 +193,22 @@ function checkPlayerLaps(){
     });
 }
 
+function getPositions(){
+    let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
+    let positions = {};
+    players.forEach(p => {
+	let name = p.name;
+	let id = p.id;
+	let timeSum = parseFloat(playerList[name].lapTimes.reduce((a, b) => a + b, 0));
+	positions.push(timeSum);
+	positions = positions.sort(function(a, b) {
+	  return a - b;
+	});
+	actualPosition = positions.indexOf(timeSum) + 1;
+	room.sendAnnouncement(`P${actualPosition}. ${name} - ${secondsToTime(serialize(timeSum))}`,null,colors.finish,fonts.lapChanged,sounds.lapChanged);    
+    });
+}
+
 function endRaceSession(){
     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
     let id = _Circuits.findIndex(c => c.Name == _Circuit.Name);
@@ -202,6 +217,7 @@ function endRaceSession(){
     if(room.getScores() != null){
 	if(players.length == 0){
 	    room.stopGame();
+	    getPositions();
 	    setTimeout(function(){
 		if(id < Circuits.length){
 		    room.setCustomStadium(next);
