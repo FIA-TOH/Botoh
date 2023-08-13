@@ -269,7 +269,6 @@ room.onGameStart = function(byPlayer){
 
 room.onGameStop = function(byPlayer){
     byPlayer == null ? console.log(`Game stopped`) : console.log(`Game stopped by ${byPlayer.name}`);
-    setTimeout(getPositions, 0);
     let players = room.getPlayerList();
     players.forEach(p => {
 	playerList[p.name].currentLap = 0;
