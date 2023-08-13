@@ -195,7 +195,7 @@ function checkPlayerLaps(){
 
 function getPositions(){
     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
-    let positions = {};
+    let positions = [];
     players.forEach(p => {
 	let name = p.name;
 	let id = p.id;
@@ -216,8 +216,8 @@ function endRaceSession(){
 
     if(room.getScores() != null){
 	if(players.length == 0){
-	    room.stopGame();
 	    getPositions();
+	    room.stopGame();
 	    setTimeout(function(){
 		if(id < Circuits.length){
 		    room.setCustomStadium(next);
