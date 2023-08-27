@@ -59,7 +59,7 @@ const _Circuit14 = {MinX: -114, MaxX: -86, MinY: -215, MaxY: -95, DriveDirection
 const lapChangeAnnouncementTimeout = 0;
 const gameEndTimeout = 2000;
 
-const Circuits = [Circuit1,Circuit2,Circuit3,Circuit4,Circuit5,Circuit6,Circuit7,Circuit8,Circuit9,Circuit10,Circuit11,Circuit12]; //...
+const Circuits = [Circuit1,Circuit2,Circuit3,Circuit4,Circuit5,Circuit6,Circuit7,Circuit8,Circuit9,Circuit10,Circuit11,Circuit12,Circuit13,Circuit14]; //...
 
 const _Circuits = [_Circuit1,_Circuit2,_Circuit3,_Circuit4,_Circuit5,_Circuit6,_Circuit7,_Circuit8,_Circuit9,_Circuit10,_Circuit11,_Circuit12,_Circuit13,_Circuit14]; //...
 var _Circuit = {MinX: 0, MaxX: 0, MinY: 0, MaxY: 0, DriveDirection: 0, StartDirection: undefined, Name: undefined, BestTime: [999.99,undefined], MainColor: [0x000000,0x000000,0x000000], AvatarColor: 0x000000, Angle: 0, Team: 0, ID: 0};
@@ -253,11 +253,11 @@ function logPlayerSpeed(){
     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && playerList[p.name].speedEnabled == true);
 
     players.forEach(p => {
-	room.setPlayerAvatar(p.id,(Math.floor(10*Math.hypot(room.getPlayerDiscProperties(p.id).xspeed,room.getPlayerDiscProperties(p.id).yspeed))).toString());
-		// setTimeout(() => {
-		room.setPlayerDiscProperties(p.id,{xspeed: room.getPlayerDiscProperties(p.id).xspeed*1.01});
-		room.setPlayerDiscProperties(p.id, {yspeed: room.getPlayerDiscProperties(p.id).yspeed*1.01});
-		// });
+	// room.setPlayerAvatar(p.id,(Math.floor(10*Math.hypot(room.getPlayerDiscProperties(p.id).xspeed,room.getPlayerDiscProperties(p.id).yspeed))).toString());
+		setTimeout(() => {
+		room.setPlayerDiscProperties(p.id,{xspeed: room.getPlayerDiscProperties(p.id).xspeed*1.005});
+		room.setPlayerDiscProperties(p.id, {yspeed: room.getPlayerDiscProperties(p.id).yspeed*1.005});
+		});
     });
 }
 
@@ -320,7 +320,7 @@ room.onPlayerChat = function(player,message){
 	    return false;
 	}
 	else if(message.toLowerCase().split(" ")[0] == commands.commands){
-	    room.sendAnnouncement("Available commands: !circuit [ID], !discord, !help, !map, !maps, !speed",player.id,colors.commands,fonts.commands,sounds.commands);
+	    room.sendAnnouncement("Available commands: !circuit [ID], !discord, !help, !map, !maps",player.id,colors.commands,fonts.commands,sounds.commands);
 	    return false;
 	}
 	else if(message.toLowerCase().split(" ")[0] == commands.discord){
@@ -363,15 +363,11 @@ room.onPlayerChat = function(player,message){
 
 	    return false;
 	}
-	// else if(message.toLowerCase().split(" ")[0] == commands.speed){
-	//     playerList[player.name].speedEnabled = !playerList[player.name].speedEnabled;
-	//     room.sendAnnouncement(`Speed is turned ${speedEnableChanges[Number(playerList[player.name].speedEnabled)]}`,player.id,colors.speed,fonts.speed,sounds.speed);
-
-	//     if(playerList[player.name].speedEnabled == true)
-	// 	room.setPlayerAvatar(player.id);
-
-	//     return false;
-	// }
+	else if(message.toLowerCase().split(" ")[0] == commands.speed){
+	    playerList[player.name].speedEnabled = !playerList[player.name].speedEnabled;
+	    room.sendAnnouncement(`Speed is turned ${speedEnableChanges[Number(playerList[player.name].speedEnabled)]}`,player.id,colors.speed,fonts.speed,sounds.speed);
+	    return false;
+	}
     }
     else{
 	if(message.toLowerCase().split(" ")[0] == commands.admin){
@@ -394,10 +390,6 @@ room.onPlayerChat = function(player,message){
 	else if(message.toLowerCase().split(" ")[0] == commands.speed){
 	    playerList[player.name].speedEnabled = !playerList[player.name].speedEnabled;
 	    room.sendAnnouncement(`Speed is turned ${speedEnableChanges[Number(playerList[player.name].speedEnabled)]}`,player.id,colors.speed,fonts.speed,sounds.speed);
-
-	    if(playerList[player.name].speedEnabled == true)
-		room.setPlayerAvatar(player.id);
-
 	    return false;
 	}
     }
