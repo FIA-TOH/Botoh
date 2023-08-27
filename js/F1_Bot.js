@@ -61,7 +61,7 @@ const gameEndTimeout = 2000;
 
 const Circuits = [Circuit1,Circuit2,Circuit3,Circuit4,Circuit5,Circuit6,Circuit7,Circuit8,Circuit9,Circuit10,Circuit11,Circuit12]; //...
 
-const _Circuits = [_Circuit1,_Circuit2,_Circuit3,_Circuit4,_Circuit5,_Circuit6,_Circuit7,_Circuit8,_Circuit9,_Circuit10,_Circuit11,_Circuit12]; //...
+const _Circuits = [_Circuit1,_Circuit2,_Circuit3,_Circuit4,_Circuit5,_Circuit6,_Circuit7,_Circuit8,_Circuit9,_Circuit10,_Circuit11,_Circuit12,_Circuit13,_Circuit14]; //...
 var _Circuit = {MinX: 0, MaxX: 0, MinY: 0, MaxY: 0, DriveDirection: 0, StartDirection: undefined, Name: undefined, BestTime: [999.99,undefined], MainColor: [0x000000,0x000000,0x000000], AvatarColor: 0x000000, Angle: 0, Team: 0, ID: 0};
 var limit = _Circuit.Limit;
 
@@ -255,8 +255,8 @@ function logPlayerSpeed(){
     players.forEach(p => {
 	room.setPlayerAvatar(p.id,(Math.floor(10*Math.hypot(room.getPlayerDiscProperties(p.id).xspeed,room.getPlayerDiscProperties(p.id).yspeed))).toString());
 		// setTimeout(() => {
-		room.setPlayerDiscProperties(p.id,{xspeed: room.getPlayerDiscProperties(p.id).xspeed*1.02});
-		room.setPlayerDiscProperties(p.id, {yspeed: room.getPlayerDiscProperties(p.id).yspeed*1.02});
+		room.setPlayerDiscProperties(p.id,{xspeed: room.getPlayerDiscProperties(p.id).xspeed*1.01});
+		room.setPlayerDiscProperties(p.id, {yspeed: room.getPlayerDiscProperties(p.id).yspeed*1.01});
 		// });
     });
 }
