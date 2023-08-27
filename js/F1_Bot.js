@@ -77,11 +77,11 @@ const playerKicked = [" was kicked"," was banned"];
 const speedEnableChanges = ["OFF","ON"];
 const teams = ["spectators","red","blue"];
 var generalSafetyCar = false;
-var positions = [];
+// var positions = [];
 
 var isRoomSet = false;
 
-var room = HBInit({roomName:"Fórmula 1 - Sessão Livre",noPlayer:true,public:true,maxPlayers:20,password:"1234"});
+var room = HBInit({roomName:"Fórmula 1 - Sessão 1",noPlayer:true,public:true,maxPlayers:20,password:"1234"});
 
 room.setScoreLimit(0);
 room.setTimeLimit(0);
@@ -188,13 +188,16 @@ function checkPlayerLaps(){
 			_Circuits[index].BestTime = [lapTime,name];
 		    }
 		    room.sendAnnouncement(`Você completou suas voltas!`,id,colors.lapChanged,fonts.lapChanged,sounds.lapChanged);
+		 //    let timeSum = parseFloat(playerList[name].lapTimes.reduce((a, b) => a + b, 0));
+		 //    positions.push(timeSum);
+		 //    positions = positions.sort(function(a, b) {
+			// return a - b;
+		 //    });
+		 //    actualPosition = positions.indexOf(timeSum) + 1;
+		 //    room.sendAnnouncement(`P${actualPosition}. ${name} - ${serialize(secondsToTime(timeSum))}`,null,colors.finish,fonts.lapChanged,sounds.lapChanged);
+		 //    room.setPlayerTeam(id,0);
 		    let timeSum = parseFloat(playerList[name].lapTimes.reduce((a, b) => a + b, 0));
-		    positions.push(timeSum);
-		    positions = positions.sort(function(a, b) {
-			return a - b;
-		    });
-		    actualPosition = positions.indexOf(timeSum) + 1;
-		    room.sendAnnouncement(`P${actualPosition}. ${name} - ${serialize(secondsToTime(timeSum))}`,null,colors.finish,fonts.lapChanged,sounds.lapChanged);
+		    room.sendAnnouncement(`Tempo total de ${name} - ${secondsToTime(serialize(timeSum))}`,id,colors.finish,fonts.lapChanged,sounds.lapChanged);
 		    room.setPlayerTeam(id,0);
 		}
 		else{
