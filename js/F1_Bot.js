@@ -81,7 +81,7 @@ var generalSafetyCar = false;
 
 var isRoomSet = false;
 
-var room = HBInit({roomName:"Fórmula 1 - Sessão 1",noPlayer:true,public:true,maxPlayers:20,password:"1234"});
+var room = HBInit({roomName:"Fórmula 1 - Sessão 1",noPlayer:true,public:true,maxPlayers:20});
 
 room.setScoreLimit(0);
 room.setTimeLimit(0);
