@@ -93,7 +93,7 @@ function secondsToTime(seconds) {
   const remainingSeconds = seconds % 60;
   
   const formattedMinutes = String(minutes).padStart(2, '0');
-  const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+  const formattedSeconds = String(remainingSeconds).padStart(6, '0');
   
   return `${formattedMinutes}:${formattedSeconds}`;
 }
@@ -197,7 +197,7 @@ function checkPlayerLaps(){
 		 //    room.sendAnnouncement(`P${actualPosition}. ${name} - ${serialize(secondsToTime(timeSum))}`,null,colors.finish,fonts.lapChanged,sounds.lapChanged);
 		 //    room.setPlayerTeam(id,0);
 		    let timeSum = parseFloat(playerList[name].lapTimes.reduce((a, b) => a + b, 0));
-		    room.sendAnnouncement(`Tempo total de ${name} - ${serialize(secondsToTime(timeSum))}`,null,colors.finish,fonts.lapChanged,sounds.lapChanged);
+		    room.sendAnnouncement(`Tempo total de ${name} - ${secondsToTime(serialize(timeSum))}`,null,colors.finish,fonts.lapChanged,sounds.lapChanged);
 		    room.setPlayerTeam(id,0);
 		}
 		else{
