@@ -252,19 +252,31 @@ function ifInLapChangeZone(player){
     return room.getScores().time > 0 && _Circuit && _Circuit.MinX <= room.getPlayerDiscProperties(player.id).x && room.getPlayerDiscProperties(player.id).x <= _Circuit.MaxX && _Circuit.MinY <= room.getPlayerDiscProperties(player.id).y && room.getPlayerDiscProperties(player.id).y <= _Circuit.MaxY;
 }
 
-function logPlayerSpeed(){
-    let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && playerList[p.name].speedEnabled == true);
+// function logPlayerSpeed(){
+//     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && playerList[p.name].speedEnabled == true && p.name.search("BRC")>=0);
+
+//     players.forEach(p => {
+// 	// room.setPlayerAvatar(p.id,(Math.floor(10*Math.hypot(room.getPlayerDiscProperties(p.id).xspeed,room.getPlayerDiscProperties(p.id).yspeed))).toString());
+// 		// setTimeout(() => {
+// 	    if(p.name.search("BRC")>=0){
+// 		room.setPlayerDiscProperties(p.id,{xspeed: room.getPlayerDiscProperties(p.id).xspeed*1.01});
+// 		room.setPlayerDiscProperties(p.id, {yspeed: room.getPlayerDiscProperties(p.id).yspeed*1.01});
+// 	    }
+// 		// });
+//     });
+// }
+
+const logPlayerSpeed = setInterval(function(){
+	let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && playerList[p.name].speedEnabled == true && p.name.search("BRC")>=0);
 
     players.forEach(p => {
 	// room.setPlayerAvatar(p.id,(Math.floor(10*Math.hypot(room.getPlayerDiscProperties(p.id).xspeed,room.getPlayerDiscProperties(p.id).yspeed))).toString());
 		// setTimeout(() => {
-	    if(p.name.search("BRC")>=0){
-		room.setPlayerDiscProperties(p.id,{xspeed: room.getPlayerDiscProperties(p.id).xspeed*1.01});
-		room.setPlayerDiscProperties(p.id, {yspeed: room.getPlayerDiscProperties(p.id).yspeed*1.01});
-	    }
+		room.setPlayerDiscProperties(p.id,{xspeed: room.getPlayerDiscProperties(p.id).xspeed*1.03});
+		room.setPlayerDiscProperties(p.id, {yspeed: room.getPlayerDiscProperties(p.id).yspeed*1.03});
 		// });
     });
-}
+    }, 1000);
 
 function serialize(number){
     return number.toFixed(3);
@@ -303,7 +315,7 @@ room.onGameStop = function(byPlayer){
 room.onGameTick = function(){
     checkPlayerLaps();
     endRaceSession();
-    logPlayerSpeed();
+    // logPlayerSpeed();
 }
 
 room.onGameUnpaused = function(byPlayer){
