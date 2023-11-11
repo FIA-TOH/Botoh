@@ -296,9 +296,6 @@ room.onGameStart = function(byPlayer){
 	for(let i=0; i<limit; i++){
 		playerList[p.name].lapTimes.push(0);
     	}
-	// for(let l=0; l<playerList[p.name].lapTimes.length; l++){
-	//     playerList[p.name].lapTimes[l] = 0;
-	// }
     });
 }
 
@@ -311,9 +308,6 @@ room.onGameStop = function(byPlayer){
 	playerList[p.name].lapChanged = false;
 	playerList[p.name].inSafetyCar = false;
 	playerList[p.name].lapTimes = [];
-	// for(let l=0; l<playerList[p.name].lapTimes.length; l++){
-	//     playerList[p.name].lapTimes[l] = 0;
-	// }
     });
 }
 
