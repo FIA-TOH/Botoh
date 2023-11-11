@@ -93,7 +93,7 @@ var generalSafetyCar = false;
 
 var isRoomSet = false;
 
-var room = HBInit({roomName:"Fórmula 1 - Sessão 1",noPlayer:true,public:false,maxPlayers:20});
+var room = HBInit({roomName:"Fórmula 1 - Sessão Livre",noPlayer:true,public:true,maxPlayers:20});
 
 room.setScoreLimit(0);
 room.setTimeLimit(0);
@@ -287,25 +287,30 @@ room.onGamePaused = function(byPlayer){
 room.onGameStart = function(byPlayer){
     byPlayer == null ? console.log(`Game started`) : console.log(`Game started by ${byPlayer.name}`);
     positions = [];
-	
+    generalSafetyCar = false;	
     var players = room.getPlayerList();
     players.forEach(p => {
 	playerList[p.name].currentLap = 0;
 	playerList[p.name].lapChanged = false;
 	playerList[p.name].inSafetyCar = false;
-	for(var l=0; l<playerList[p.name].lapTimes.length; l++){
-	    playerList[p.name].lapTimes[l] = 0;
-	}
+	for(let i=0; i<limit; i++){
+		lapTimes.push(0);
+    	}
+	// for(let l=0; l<playerList[p.name].lapTimes.length; l++){
+	//     playerList[p.name].lapTimes[l] = 0;
+	// }
     });
 }
 
 room.onGameStop = function(byPlayer){
     byPlayer == null ? console.log(`Game stopped`) : console.log(`Game stopped by ${byPlayer.name}`);
+    generalSafetyCar = false;
     let players = room.getPlayerList();
     players.forEach(p => {
 	playerList[p.name].currentLap = 0;
 	playerList[p.name].lapChanged = false;
 	playerList[p.name].inSafetyCar = false;
+	playerList[p.name].lapTimes = [];
 	for(let l=0; l<playerList[p.name].lapTimes.length; l++){
 	    playerList[p.name].lapTimes[l] = 0;
 	}
@@ -424,7 +429,7 @@ room.onPlayerJoin = function(player){
 	lapTimes.push(0);
     }
 
-    if(playerList[player.name] == undefined)
+    // if(playerList[player.name] == undefined)
 	playerList[player.name] = {name: player.name, id: player.id, currentLap: 0, lapChanged: false, lapTimes: lapTimes, speedEnabled: false, inSafetyCar: false, isInTheRoom: true};
 
     if(room.getScores() == null && players.length == 1){
