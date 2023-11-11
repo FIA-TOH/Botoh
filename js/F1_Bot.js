@@ -93,7 +93,7 @@ var generalSafetyCar = false;
 
 var isRoomSet = false;
 
-var room = HBInit({roomName:"Fórmula 1 - Sessão 1",noPlayer:true,public:true,maxPlayers:20});
+var room = HBInit({roomName:"Fórmula 1 - Sessão 1",noPlayer:true,public:false,maxPlayers:20});
 
 room.setScoreLimit(0);
 room.setTimeLimit(0);
@@ -270,8 +270,8 @@ const logPlayerSpeed = setInterval(function(){
     players.forEach(p => {
 	// room.setPlayerAvatar(p.id,(Math.floor(10*Math.hypot(room.getPlayerDiscProperties(p.id).xspeed,room.getPlayerDiscProperties(p.id).yspeed))).toString());
 		// setTimeout(() => {
-		room.setPlayerDiscProperties(p.id,{xspeed: room.getPlayerDiscProperties(p.id).xspeed*1.012});
-		room.setPlayerDiscProperties(p.id, {yspeed: room.getPlayerDiscProperties(p.id).yspeed*1.012});
+		room.setPlayerDiscProperties(p.id,{xspeed: room.getPlayerDiscProperties(p.id).xspeed*1.01});
+		room.setPlayerDiscProperties(p.id, {yspeed: room.getPlayerDiscProperties(p.id).yspeed*1.01});
 		// });
     });
     }, 1000);
@@ -292,6 +292,7 @@ room.onGameStart = function(byPlayer){
     players.forEach(p => {
 	playerList[p.name].currentLap = 0;
 	playerList[p.name].lapChanged = false;
+	playerList[p.name].inSafetyCar = false;
 	for(var l=0; l<playerList[p.name].lapTimes.length; l++){
 	    playerList[p.name].lapTimes[l] = 0;
 	}
@@ -304,6 +305,7 @@ room.onGameStop = function(byPlayer){
     players.forEach(p => {
 	playerList[p.name].currentLap = 0;
 	playerList[p.name].lapChanged = false;
+	playerList[p.name].inSafetyCar = false;
 	for(let l=0; l<playerList[p.name].lapTimes.length; l++){
 	    playerList[p.name].lapTimes[l] = 0;
 	}
