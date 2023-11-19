@@ -110,6 +110,23 @@ function secondsToTime(seconds) {
   return `${formattedMinutes}:${formattedSeconds}`;
 }
 
+function checkPlayerDRS(){
+    let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
+    players.forEach(p => {
+	if(!ifInDRSZone(p) && playerList[p.name].drsChanged == true){
+	    playerList[p.name].lapChanged = false;
+	    room.setPlayerAvatar(p.id,"❌");
+	}
+	if(ifInDRSZone(p) && playerList[p.name].drsChanged == false){
+	    room.setPlayerAvatar(p.id,"✅");
+	}
+    });
+}
+
+function ifInDRSZone(player){
+    return room.getScores().time > 0 && _Circuit && (_Circuit.MinO1X <= room.getPlayerDiscProperties(player.id).x || _Circuit.MinO2X <= room.getPlayerDiscProperties(player.id).x || _Circuit.MinO3X <= room.getPlayerDiscProperties(player.id).x) && (room.getPlayerDiscProperties(player.id).x <= _Circuit.MaxO1X || room.getPlayerDiscProperties(player.id).x <= _Circuit.MaxO2X || room.getPlayerDiscProperties(player.id).x <= _Circuit.MaxO3X) && (_Circuit.MinO1Y <= room.getPlayerDiscProperties(player.id).y || _Circuit.MinO2Y <= room.getPlayerDiscProperties(player.id).y || _Circuit.MinO3Y <= room.getPlayerDiscProperties(player.id).y) && (room.getPlayerDiscProperties(player.id).y <= _Circuit.MaxO1Y || room.getPlayerDiscProperties(player.id).y <= _Circuit.MaxO2Y || room.getPlayerDiscProperties(player.id).y <= _Circuit.MaxO3Y);
+}
+
 function checkPlayerLaps(){
     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
 
@@ -313,15 +330,12 @@ room.onGameStop = function(byPlayer){
 
 room.onGameTick = function(){
     checkPlayerLaps();
+    checkPlayerDRS();
     endRaceSession();
 }
 
 room.onGameUnpaused = function(byPlayer){
 	
-}
-
-room.onKickRateLimitSet = function(min,rate,burst,byPlayer){
-    byPlayer == null ? console.log(`Kick rate limit set as min: ${min} max: ${max} burst: ${burst}`) : console.log(`Kick rate limit set as min: ${min} max: ${max} burst: ${burst} by ${byPlayer.name}`);
 }
 
 room.onPlayerAdminChange = function(changedPlayer,byPlayer){
@@ -423,8 +437,7 @@ room.onPlayerJoin = function(player){
 	lapTimes.push(0);
     }
 
-    // if(playerList[player.name] == undefined)
-	playerList[player.name] = {name: player.name, id: player.id, currentLap: 0, lapChanged: false, lapTimes: lapTimes, speedEnabled: false, inSafetyCar: false, isInTheRoom: true};
+    playerList[player.name] = {name: player.name, id: player.id, currentLap: 0, lapChanged: false, drsChanged: false, lapTimes: lapTimes, speedEnabled: false, inSafetyCar: false, isInTheRoom: true};
 
     if(room.getScores() == null && players.length == 1){
 	if(_Circuit.Team != 0)
