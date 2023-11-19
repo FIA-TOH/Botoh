@@ -114,10 +114,11 @@ function checkPlayerDRS(){
     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
     players.forEach(p => {
 	if(!ifInDRSZone(p) && playerList[p.name].drsChanged == true){
-	    playerList[p.name].lapChanged = false;
+	    playerList[p.name].drsChanged = false;
 	    room.setPlayerAvatar(p.id,"❌");
 	}
 	if(ifInDRSZone(p) && playerList[p.name].drsChanged == false){
+	    playerList[p.name].drsChanged = true;
 	    room.setPlayerAvatar(p.id,"✅");
 	}
     });
@@ -309,6 +310,7 @@ room.onGameStart = function(byPlayer){
     players.forEach(p => {
 	playerList[p.name].currentLap = 0;
 	playerList[p.name].lapChanged = false;
+	playerList[p.name].drsChanged = false;
 	playerList[p.name].inSafetyCar = false;
 	for(let i=0; i<limit; i++){
 		playerList[p.name].lapTimes.push(0);
@@ -323,6 +325,7 @@ room.onGameStop = function(byPlayer){
     players.forEach(p => {
 	playerList[p.name].currentLap = 0;
 	playerList[p.name].lapChanged = false;
+	playerList[p.name].drsChanged = false;
 	playerList[p.name].inSafetyCar = false;
 	playerList[p.name].lapTimes = [];
     });
@@ -453,6 +456,8 @@ room.onPlayerLeave = function(player){
 
     playerList[player.name].currentLap = 0;
     playerList[player.name].lapChanged = false;
+    playerList[player.name].drsChanged = false;
+    playerList[player.name].inSafetyCar = false;
     playerList[player.name].isInTheRoom = false;
 
     if(room.getScores() != null && players.length == 0){
