@@ -115,7 +115,7 @@ function checkPlayerDRS(){
     players.forEach(p => {
 	if(!ifInDRSZone(p) && playerList[p.name].drsChanged == true){
 	    playerList[p.name].drsChanged = false;
-	    room.setPlayerAvatar(p.id,"❌");
+	    room.setPlayerAvatar(p.id,null);
 	}
 	if(ifInDRSZone(p) && playerList[p.name].drsChanged == false){
 	    playerList[p.name].drsChanged = true;
