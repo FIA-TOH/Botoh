@@ -82,7 +82,7 @@ const fonts = {commands: "normal", info: "normal", lapChanged: "normal", lapTime
 const sounds = {commands: 1, info: 0, lapChanged: 1, lapTime: 1, mapChangeWrongName: 1, mapChangeDeny: 2, mapLoad: 1, mapLoadDeny: 1, safety: 1, speed: 0, trackRecord: 1};
 
 var playerList = {};
-const commands = {admin: "!admkarp", commands: "!help", discord: "!discord", mapInfo:"!map", mapLoad: "!circuit", maps: "!maps", safetyon: "!sc on", safetyoff: "!sc off", speed: "!speed"};
+const commands = {admin: "!admkarp", commands: "!help", discord: "!discord", mapInfo:"!map", mapLoad: "!circuit", maps: "!maps", qualy: "!qualy", safetyon: "!sc on", safetyoff: "!sc off", speed: "!speed"};
 
 const adminChanges = ["'s admin rights were taken away"," was given admin rights"];
 const playerKicked = [" was kicked"," was banned"];
@@ -91,6 +91,7 @@ const teams = ["spectators","red","blue"];
 var generalSafetyCar = false;
 // var positions = [];
 
+var sendRecWebhookURL = "";
 var isRoomSet = false;
 
 var room = HBInit({roomName:"Fórmula 1 - Sessão Livre",noPlayer:true,public:true,maxPlayers:20});
@@ -117,7 +118,7 @@ function checkPlayerDRS(){
 	    playerList[p.name].drsChanged = false;
 	    room.setPlayerAvatar(p.id,null);
 	}
-	if(ifInDRSZone(p) && playerList[p.name].drsChanged == false){
+	if(ifInDRSZone(p) && playerList[p.name].drsChanged == false && playerList[p.name].currentLap > 3){
 	    playerList[p.name].drsChanged = true;
 	    room.setPlayerAvatar(p.id,"✅");
 	}
@@ -255,6 +256,60 @@ function checkPlayerLaps(){
 //     });
 // }
 
+let RecSistem = {
+    getCustomDate: ()=>{
+        let
+        data = new Date().toLocaleDateString().split("/").join("-"),
+        relogio = new Date().toLocaleTimeString().split(":");
+
+        return `${data}-${relogio[0]}h${relogio[1]}m`;
+    },
+    getScoresTime: time=>{
+        return ~~(Math.trunc(time) / 60) + ":" + (Math.trunc(time)%60).toString().padStart(2, '0');
+    },
+    sendDiscordWebhook: scores=>{
+        let
+        red = room.getPlayerList().filter((player)=>player.team == 1).map((player)=> player.name),
+        blue = room.getPlayerList().filter((player)=>player.team == 2).map((player)=> player.name);
+
+        let form = new FormData();
+        form.append(null, new File( [room.stopRecording()], `HBReplay-${RecSistem.getCustomDate()}.hbr2`, {"type": "text/plain"} ));
+        form.append("payload_json", JSON.stringify(RecSistem.getParams(scores, red, blue)));
+
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", sendRecWebhookURL);
+        xhr.send(form);
+    },
+    getParams: (scores, red, blue)=>{
+        let params = {
+          "username": "Match Record",
+          "avatar_url": "",//Avatar Url Of The Bot
+          "content": "",
+          "embeds": [{
+            "title": "",
+            "color": 2078513,
+            "description": "",
+            "timestamp": null,
+            "author": { "name": roomNameString },
+            "image": {},
+            "thumbnail": {},
+            "footer": {
+                "text": `Match Record - Statistics`,
+                "icon_url": ""
+            },
+            "fields": [
+            { "name": "🔴RED", "value": `${red.join("\n")}\n**⚽Goals**\n${scores.red}`, "inline": true },
+            { "name": "🔵BLUE", "value": `${blue.join("\n")}\n**⚽Goals**\n${scores.blue}`, "inline": true },
+            { "name": "🕐Time", "value": RecSistem.getScoresTime(scores.time) }
+            ]
+        }],
+        "components": []
+    };
+    return params;
+}
+
+};
+
 function endRaceSession(){
     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
     let id = _Circuits.findIndex(c => c.Name == _Circuit.Name);
@@ -360,6 +415,16 @@ room.onPlayerChat = function(player,message){
 	    room.sendAnnouncement("Link: https://discord.gg/sCfhQWpbE",null,colors.info,"normal",sounds.info);
 	    return false;
 	}
+	else if(message.toLowerCase().split(" ")[0] == commands.laps){
+	    let number = message.toLowerCase().split(" ")[1];
+	    if (number >= 1){
+		limit = number;
+	    }
+	    else{
+		room.sendAnnouncement(`Número inválido de voltas`,player.id,colors.mapLoadDeny,fonts.mapLoadDeny,sounds.mapLoadDeny);
+	    }
+	    return false;
+	}
 	else if(message.toLowerCase().split(" ")[0] == commands.mapInfo){
 	    room.sendAnnouncement(`${_Circuit.Name} best lap: ${serialize(_Circuit.BestTime[0])} seconds by ${_Circuit.BestTime[1]}`,player.id,colors.mapInfo,fonts.mapInfo,sounds.mapInfo);
 	    return false;
@@ -379,6 +444,13 @@ room.onPlayerChat = function(player,message){
 	}
 	else if(message.toLowerCase().split(" ")[0] == commands.maps){
 	    room.sendAnnouncement(`Map list below:\n${_Circuits.map(c => c.Name + " [" + c.ID + "]").join('\n')}`,player.id,colors.info,fonts.info,sounds.info);
+	    return false;
+	}
+	else if(message.toLowerCase().split(" ")[0] == commands.qualy){
+	    if(sendRecWebhookURL != ""){
+       		room.startRecording();
+        	room.sendAnnouncement("📢Você pode assistir o replay da sua qualificatória no Discord",player.id,colors.info,"bold",sounds.info);
+    	}
 	    return false;
 	}
 	else if(message.toLowerCase() == commands.safetyoff){
