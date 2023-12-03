@@ -434,7 +434,7 @@ room.onPlayerChat = function(player,message){
 	    return false;
 	}
 	else if(message.toLowerCase().split(" ")[0] == commands.link){
-	    let link = message.toLowerCase().split(" ")[1];
+	    let link = message.split(" ")[1];
 	    discordLink = link;
 	    return false;
 	}
