@@ -87,7 +87,7 @@ const fonts = {commands: "normal", info: "normal", lapChanged: "normal", lapTime
 const sounds = {commands: 1, info: 0, lapChanged: 1, lapTime: 1, mapChangeWrongName: 1, mapChangeDeny: 2, mapLoad: 1, mapLoadDeny: 1, safety: 1, speed: 0, trackRecord: 1};
 
 var playerList = {};
-const commands = {admin: "!admkarp2", commands: "!help", discord: "!discord", laps: "!laps", mapInfo:"!map", mapLoad: "!circuit", maps: "!maps", qualy: "!qualy", safetyon: "!sc on", safetyoff: "!sc off", speed: "!speed"};
+const commands = {admin: "!admkarp3", commands: "!help", discord: "!discord", laps: "!laps", mapInfo:"!map", mapLoad: "!circuit", maps: "!maps", qualy: "!qualy", safetyon: "!sc on", safetyoff: "!sc off", speed: "!speed"};
 
 const adminChanges = ["'s admin rights were taken away"," was given admin rights"];
 const playerKicked = [" was kicked"," was banned"];
@@ -100,7 +100,7 @@ var currentTime = 0;
 // var sendRecWebhookURL = "https://discord.com/api/webhooks/1179905207849730159/cToYtn9CrnEC7IXEdA0SSxI0crT23pL4m5Wp4mXNmFE1w-wMDgjaXrbICM7g9ojBojtz";
 var isRoomSet = false;
 
-var room = HBInit({roomName:"Fórmula 1 - Sessão 4",noPlayer:true,public:true,password:"ftoh",maxPlayers:20});
+var room = HBInit({roomName:"Fórmula 1 - Sessão 6",noPlayer:true,public:true,password:"ftoh",maxPlayers:20});
 
 room.setScoreLimit(0);
 room.setTimeLimit(0);
