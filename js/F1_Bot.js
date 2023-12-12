@@ -117,11 +117,11 @@ function secondsToTime(seconds) {
   return `${formattedMinutes}:${formattedSeconds}`;
 }
 
-const changeCamera = setInterval(function(){
-    let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
+// const changeCamera = setInterval(function(){
+//     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
 
-    room.setDiscProperties(0,{y: room.getPlayerDiscProperties(1).y});
-    }, 20000);
+//     room.setDiscProperties(0,{y: room.getPlayerDiscProperties(1).y});
+//     }, 20000);
 
 
 // function checkPlayerDRS(){
