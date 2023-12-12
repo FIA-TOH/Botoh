@@ -94,7 +94,7 @@ const playerKicked = [" was kicked"," was banned"];
 const teams = ["spectators","red","blue"];
 var generalSafetyCar = false;
 var currentTime = 0;
-var camID = 1;
+var camID = null;
 // var positions = {};
 
 // var sendRecWebhookURL = "https://discord.com/api/webhooks/1179905207849730159/cToYtn9CrnEC7IXEdA0SSxI0crT23pL4m5Wp4mXNmFE1w-wMDgjaXrbICM7g9ojBojtz";
@@ -368,15 +368,17 @@ room.onGameTick = function(){
     // checkPlayerDRS();
     endRaceSession();
     currentTime += 1/60;
+    let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
     if (currentTime >= 60) {
 	if(Math.floor(currentTime) % 30 == 0) {
-        let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
 	camId = Math.floor(Math.random() * players.length);
 	}
+	if(camId != null) {
             room.setDiscProperties(0,{x: room.getPlayerDiscProperties(camId).x});
             room.setDiscProperties(0,{y: room.getPlayerDiscProperties(camId).y});
 	    room.setDiscProperties(0,{xspeed: 0});
             room.setDiscProperties(0,{yspeed: 0})
+    	}
     	};
 }
 
