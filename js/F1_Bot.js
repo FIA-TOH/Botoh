@@ -371,7 +371,7 @@ room.onGameTick = function(){
     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
     if (currentTime >= 60) {
 	if(Math.floor(currentTime) % 30 == 0) {
-	camId = Math.floor(Math.random() * players.length);
+	camId = Math.ceil(Math.random() * players.length);
 	}
 	if(camId != null) {
             room.setDiscProperties(0,{x: room.getPlayerDiscProperties(camId).x});
@@ -502,7 +502,7 @@ room.onPlayerJoin = function(player){
 	lapTimes.push(0);
     }
 
-    playerList[player.name] = {name: player.name, id: player.id, currentLap: 0, lapChanged: false, delta: 0, drsChanged: false, lapTimes: lapTimes, speedEnabled: false, inSafetyCar: false, isInTheRoom: true};
+    playerList[player.name] = {name: player.name, id: player.id, currentLap: 0, lapChanged: false, delta: 0, drsChanged: false, lapTimes: lapTimes, speedEnabled: false, inSafetyCar: false, isInTheRoom: true, isInTheTrack: false};
 
     if(room.getScores() == null && players.length == 1){
 	if(_Circuit.Team != 0)
@@ -529,7 +529,8 @@ room.onPlayerLeave = function(player){
 
 room.onPlayerTeamChange = function(changedPlayer,byPlayer){
     byPlayer == null ? console.log(`${changedPlayer.name} was moved to ${teams[changedPlayer.team]}`) : console.log(`${changedPlayer.name} was moved to ${teams[changedPlayer.team]} by ${byPlayer.name}`);
-
+    // console.log(changedPlayer);
+    // changedPlayer.team != 0 ? playerList[name].isInTheTrack = false : playerList[name].isInTheTrack = true;
     playerList[changedPlayer.name].currentLap = 0;
     playerList[changedPlayer.name].lapChanged = false;
 }
