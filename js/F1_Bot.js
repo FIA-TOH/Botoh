@@ -368,7 +368,7 @@ room.onGameTick = function(){
     // checkPlayerDRS();
     endRaceSession();
     currentTime += 1/60;
-    if (currentTime > 60) {
+    if (currentTime >= 60) {
 	if(Math.floor(currentTime) % 30 == 0) {
         let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
 	camId = Math.floor(Math.random() * players.length);
