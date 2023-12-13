@@ -94,7 +94,7 @@ const playerKicked = [" was kicked"," was banned"];
 const teams = ["spectators","red","blue"];
 var generalSafetyCar = false;
 var currentTime = 0;
-var camID = null;
+var camId = null;
 // var positions = {};
 
 // var sendRecWebhookURL = "https://discord.com/api/webhooks/1179905207849730159/cToYtn9CrnEC7IXEdA0SSxI0crT23pL4m5Wp4mXNmFE1w-wMDgjaXrbICM7g9ojBojtz";
