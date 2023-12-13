@@ -372,7 +372,7 @@ room.onGameTick = function(){
     // checkPlayerDRS();
     endRaceSession();
     currentTime += 1/60;
-    let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
+    let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && playerList[p.name].isInTheTrack == true);
     if (currentTime >= 60) {
 	if(Math.floor(currentTime) % 30 == 0) {
 	camId = Math.ceil(Math.random() * players.length);
@@ -538,6 +538,7 @@ room.onPlayerLeave = function(player){
     playerList[player.name].drsChanged = false;
     playerList[player.name].inSafetyCar = false;
     playerList[player.name].isInTheRoom = false;
+    playerList[player.name].isInTheTrack = false;
 
     if(room.getScores() != null && players.length == 0){
 	room.stopGame();
@@ -546,8 +547,14 @@ room.onPlayerLeave = function(player){
 
 room.onPlayerTeamChange = function(changedPlayer,byPlayer){
     byPlayer == null ? console.log(`${changedPlayer.name} was moved to ${teams[changedPlayer.team]}`) : console.log(`${changedPlayer.name} was moved to ${teams[changedPlayer.team]} by ${byPlayer.name}`);
-    // console.log(changedPlayer);
-    // changedPlayer.team != 0 ? playerList[name].isInTheTrack = false : playerList[name].isInTheTrack = true;
+    console.log(changedPlayer);
+    if(changedPlayer.team != 0) {
+	playerList[changedPlayer.name].isInTheTrack = true;
+    }
+    else {
+	playerList[changedPlayer.name].isInTheTrack = false;
+    }
+    // changedPlayer.team != 0 ? playerList[changedPlayer.name].isInTheTrack = false : playerList[changedPlayer.name].isInTheTrack = true;
     playerList[changedPlayer.name].currentLap = 0;
     playerList[changedPlayer.name].lapChanged = false;
 }
