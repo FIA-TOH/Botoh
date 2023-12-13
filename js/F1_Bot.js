@@ -415,7 +415,7 @@ room.onPlayerChat = function(player,message){
 		limit = number;
 		var players = room.getPlayerList();
 	        players.forEach(p => {
-			for(let i=playerList[p.name].currentLap; i<limit; i++){
+			for(let i=0; i<(limit-playerList[p.name].currentLap); i++){
 			playerList[p.name].lapTimes.push(0);
     			}
    		 });
@@ -467,7 +467,7 @@ room.onPlayerChat = function(player,message){
 	    room.sendAnnouncement(`🚨 O Safety Car está LIGADO 🚨`, null, 0xFFFF00, "bold", sounds.safety);
 	    var players = room.getPlayerList();
 	        players.forEach(p => {
-			for(let i=playerList[p.name].currentLap; i<limit; i++){
+			for(let i=0; i<(limit-playerList[p.name].currentLap); i++){
 			playerList[p.name].lapTimes.push(0);
     			}
    		 });
