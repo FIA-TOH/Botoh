@@ -337,7 +337,9 @@ room.onGamePaused = function(byPlayer){
 room.onGameStart = function(byPlayer){
     byPlayer == null ? console.log(`Game started`) : console.log(`Game started by ${byPlayer.name}`);
     positions = [];
-    generalSafetyCar = false;	
+    generalSafetyCar = false;
+    camId = null;
+    currentTime = 0;
     var players = room.getPlayerList();
     players.forEach(p => {
 	playerList[p.name].currentLap = 0;
@@ -353,6 +355,8 @@ room.onGameStart = function(byPlayer){
 room.onGameStop = function(byPlayer){
     byPlayer == null ? console.log(`Game stopped`) : console.log(`Game stopped by ${byPlayer.name}`);
     generalSafetyCar = false;
+    camId = null;
+    currentTime = 0;
     let players = room.getPlayerList();
     players.forEach(p => {
 	playerList[p.name].currentLap = 0;
@@ -374,8 +378,8 @@ room.onGameTick = function(){
 	camId = Math.ceil(Math.random() * players.length);
 	}
 	if(camId != null) {
-            room.setDiscProperties(0,{x: room.getPlayerDiscProperties(camId).x});
-            room.setDiscProperties(0,{y: room.getPlayerDiscProperties(camId).y});
+            room.setDiscProperties(0,{x: room.getPlayerDiscProperties(camId).x+1});
+            room.setDiscProperties(0,{y: room.getPlayerDiscProperties(camId).y+1});
 	    room.setDiscProperties(0,{xspeed: 0});
             room.setDiscProperties(0,{yspeed: 0})
     	}
@@ -409,6 +413,12 @@ room.onPlayerChat = function(player,message){
 	    let number = message.toLowerCase().split(" ")[1];
 	    if (number >= 1){
 		limit = number;
+		var players = room.getPlayerList();
+	        players.forEach(p => {
+			for(let i=playerList[p.name].currentLap; i<limit; i++){
+			playerList[p.name].lapTimes.push(0);
+    			}
+   		 });
 	    }
 	    else{
 		room.sendAnnouncement(`Número inválido de voltas`,player.id,colors.mapLoadDeny,fonts.mapLoadDeny,sounds.mapLoadDeny);
@@ -452,8 +462,15 @@ room.onPlayerChat = function(player,message){
 	}
 	else if(message.toLowerCase() == commands.safetyon){
 	    generalSafetyCar = true;
+	    limit += 1;
 	    room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, 0xFFFF00, "bold", sounds.safety);
 	    room.sendAnnouncement(`🚨 O Safety Car está LIGADO 🚨`, null, 0xFFFF00, "bold", sounds.safety);
+	    var players = room.getPlayerList();
+	        players.forEach(p => {
+			for(let i=playerList[p.name].currentLap; i<limit; i++){
+			playerList[p.name].lapTimes.push(0);
+    			}
+   		 });
 
 	    return false;
 	}
