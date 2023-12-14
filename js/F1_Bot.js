@@ -378,7 +378,7 @@ room.onGameTick = function(){
 	if(Math.floor(currentTime) % 15 == 0) {
 	camId = Math.ceil(Math.random() * players.length);
 	}
-	if(camId != null && room.getPlayerDiscProperties(camId) != null) {
+	if(camId != null && room.getPlayerDiscProperties(camId) != null && room.getPlayerDiscProperties(camId).x != null) {
             room.setDiscProperties(0,{x: room.getPlayerDiscProperties(camId).x+randomDistance});
             room.setDiscProperties(0,{y: room.getPlayerDiscProperties(camId).y+randomDistance});
 	    room.setDiscProperties(0,{xspeed: 0});
