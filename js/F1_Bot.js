@@ -372,7 +372,7 @@ room.onGameTick = function(){
     // checkPlayerDRS();
     endRaceSession();
     currentTime += 1/60;
-    let randomDistance = (Math.round(Math.random())*2-1)*(Math.floor(Math.random() * (100 - 50 + 1))+50);
+    let randomDistance = (Math.round(Math.random())*2-1)*(Math.floor(Math.random() * (80 - 50 + 1))+50);
     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && playerList[p.name].isInTheTrack == true);
     if (currentTime >= 60) {
 	if(Math.floor(currentTime) % 15 == 0) {
