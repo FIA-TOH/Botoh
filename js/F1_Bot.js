@@ -100,7 +100,7 @@ var currentTime = 0;
 // var sendRecWebhookURL = "https://discord.com/api/webhooks/1179905207849730159/cToYtn9CrnEC7IXEdA0SSxI0crT23pL4m5Wp4mXNmFE1w-wMDgjaXrbICM7g9ojBojtz";
 var isRoomSet = false;
 
-var room = HBInit({roomName:"Fórmula 1 - GP de Suzuka",noPlayer:true,public:true,maxPlayers:20});
+var room = HBInit({roomName:"Fórmula 1 - GP de Interlagos",noPlayer:true,public:true,maxPlayers:20});
 
 room.setScoreLimit(0);
 room.setTimeLimit(0);
