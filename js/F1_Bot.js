@@ -94,7 +94,7 @@ const playerKicked = [" was kicked"," was banned"];
 const teams = ["spectators","red","blue"];
 var generalSafetyCar = false;
 var currentTime = 0;
-var camId = null;
+// var camId = null;
 // var positions = {};
 
 // var sendRecWebhookURL = "https://discord.com/api/webhooks/1179905207849730159/cToYtn9CrnEC7IXEdA0SSxI0crT23pL4m5Wp4mXNmFE1w-wMDgjaXrbICM7g9ojBojtz";
@@ -338,7 +338,7 @@ room.onGameStart = function(byPlayer){
     byPlayer == null ? console.log(`Game started`) : console.log(`Game started by ${byPlayer.name}`);
     positions = [];
     generalSafetyCar = false;
-    camId = null;
+    // camId = null;
     currentTime = 0;
     var players = room.getPlayerList();
     players.forEach(p => {
@@ -355,7 +355,7 @@ room.onGameStart = function(byPlayer){
 room.onGameStop = function(byPlayer){
     byPlayer == null ? console.log(`Game stopped`) : console.log(`Game stopped by ${byPlayer.name}`);
     generalSafetyCar = false;
-    camId = null;
+    // camId = null;
     currentTime = 0;
     let players = room.getPlayerList();
     players.forEach(p => {
@@ -373,20 +373,7 @@ room.onGameTick = function(){
     endRaceSession();
     currentTime += 1/60;
     // let randomDistance = (Math.round(Math.random())*2-1)*(Math.floor(Math.random() * (80 - 50 + 1))+50);
-    let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && playerList[p.name].isInTheTrack == true);
-    if (currentTime >= 60) {
-	if(Math.floor(currentTime) % 15 == 0) {
-	camId = Math.ceil(Math.random() * players.length);
-	}
-	if(camId != null && room.getPlayerDiscProperties(camId) != null && room.getPlayerDiscProperties(camId).x != null) {
-            // room.setDiscProperties(0,{x: room.getPlayerDiscProperties(camId).x+randomDistance});
-            // room.setDiscProperties(0,{y: room.getPlayerDiscProperties(camId).y+randomDistance});
-            room.setDiscProperties(0,{x: room.getPlayerDiscProperties(camId).x});
-            room.setDiscProperties(0,{y: room.getPlayerDiscProperties(camId).y});
-	    room.setDiscProperties(0,{xspeed: 0});
-            room.setDiscProperties(0,{yspeed: 0})
-    	}
-    	};
+    // let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && playerList[p.name].isInTheTrack == true);
 }
 
 room.onGameUnpaused = function(byPlayer){
