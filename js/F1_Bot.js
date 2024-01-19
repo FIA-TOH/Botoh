@@ -96,7 +96,7 @@ var currentTime = 0;
 
 var isRoomSet = false;
 
-var room = HBInit({roomName:"Fórmula 1 - GP de Interlagos",noPlayer:true,public:true,maxPlayers:20});
+var room = HBInit({roomName:"Fórmula 1 - GP de Buenos Aires",noPlayer:true,public:true,maxPlayers:20});
 
 room.setScoreLimit(0);
 room.setTimeLimit(0);
