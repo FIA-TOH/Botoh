@@ -358,7 +358,7 @@ room.onGameTick = function(){
 	// 	};
 	//  });
 	}
-	if(camId != null && room.getPlayerDiscProperties(camId) != null && room.getPlayerDiscProperties(camId).x != null && validCam == true) {
+	if(camId != null && room.getPlayerDiscProperties(camId) != null && room.getPlayerDiscProperties(camId).x != null) {
             // room.setDiscProperties(0,{x: room.getPlayerDiscProperties(camId).x+randomDistance});
             // room.setDiscProperties(0,{y: room.getPlayerDiscProperties(camId).y+randomDistance});
             room.setDiscProperties(0,{x: room.getPlayerDiscProperties(camId).x});
