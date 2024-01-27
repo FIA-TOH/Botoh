@@ -316,6 +316,10 @@ function serialize(number){
     return number.toFixed(3);
 }
 
+function pointDistance(p1, p2) {
+    return Math.hypot(p1.x - p2.x, p1.y - p2.y);
+}
+
 function runCamera(){
     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && playerList[p.name].isInTheTrack == true);
     if (currentTime >= 28) {
