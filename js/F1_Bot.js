@@ -103,7 +103,7 @@ var generalSafetyCar = false;
 var currentTime = 0;
 var camId = null;
 var currentCircuit = 1;
-var JMap = JSON.parse(Circuits[id-1]);
+var JMap = JSON.parse(Circuits[currentCircuit-1]);
 
 
 var isRoomSet = false;
