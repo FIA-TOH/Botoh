@@ -98,7 +98,7 @@ const fonts = {commands: "normal", info: "normal", lapChanged: "normal", lapTime
 const sounds = {commands: 1, info: 0, lapChanged: 1, lapTime: 1, mapChangeWrongName: 1, mapChangeDeny: 2, mapLoad: 1, mapLoadDeny: 1, safety: 1, speed: 0, trackRecord: 1};
 
 var playerList = {};
-const commands = {admin: "!supermax2", commands: "!help", discord: "!discord", laps: "!laps", mapInfo:"!map", mapLoad: "!circuit", maps: "!maps", safetyon: "!sc on", safetyoff: "!sc off"};
+const commands = {admin: "!supermax2", commands: "!help", discord: "!discord", endurance: "!endurance", laps: "!laps", mapInfo:"!map", mapLoad: "!circuit", maps: "!maps", safetyon: "!sc on", safetyoff: "!sc off"};
 
 const adminChanges = ["'s admin rights were taken away"," was given admin rights"];
 const playerKicked = [" was kicked"," was banned"];
@@ -107,8 +107,8 @@ var generalSafetyCar = false;
 var currentTime = 0;
 var camId = null;
 var currentCircuit = 1;
-var JMap = JSON.parse(Circuits[currentCircuit-1]);
-
+// var JMap = JSON.parse(Circuits[currentCircuit-1]);
+var isEndurance = false;
 
 var isRoomSet = false;
 
@@ -446,7 +446,12 @@ room.onPlayerChat = function(player,message){
 	}
 	else if(message.toLowerCase().split(" ")[0] == commands.discord){
 	    room.sendAnnouncement("Entre no nosso Discord e venha participar da Fórmula TOH!",null,colors.info,"bold",sounds.info);
-	    room.sendAnnouncement("Link: https://discord.gg/sCfhQWpbE",null,colors.info,"normal",sounds.info);
+	    room.sendAnnouncement("Link: https://discord.gg/cu7keKJP",null,colors.info,"normal",sounds.info);
+	    return false;
+	}
+	else if(message.toLowerCase().split(" ")[0] == commands.endurance){
+	    isEndurance = !isEndurance;
+	    room.sendAnnouncement(`Modo endurance ajustado para ${isEndurance} por ${player.name}`,null,colors.info,"normal",sounds.info);
 	    return false;
 	}
 	else if(message.toLowerCase().split(" ")[0] == commands.laps){
@@ -505,7 +510,7 @@ room.onPlayerChat = function(player,message){
 	}
 	else if(message.toLowerCase() == commands.safetyon){
 	    generalSafetyCar = true;
-	    limit += 1;
+	    limit = parseInt(limit) + 1;
 	    room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, 0xFFFF00, "bold", sounds.safety);
 	    room.sendAnnouncement(`🚨 O Safety Car está LIGADO 🚨`, null, 0xFFFF00, "bold", sounds.safety);
 	    var players = room.getPlayerList();
