@@ -189,33 +189,24 @@ function checkPlayerSector(){
     // if(room.getScores().time > 0 && _Circuit && _Circuit.MinOX <= room.getPlayerDiscProperties(player.id).x && room.getPlayerDiscProperties(player.id).x <= _Circuit.MaxO1X && _Circuit.MinO1Y <= room.getPlayerDiscProperties(player.id).y && room.getPlayerDiscProperties(player.id).y <= _Circuit.MaxO1Y)
     if(playerList[name].sector == 1 && _Circuit.MinX <= room.getPlayerDiscProperties(p.id).x && room.getPlayerDiscProperties(p.id).x <= _Circuit.MaxX && _Circuit.MinY <= room.getPlayerDiscProperties(p.id).y && room.getPlayerDiscProperties(p.id).y <= _Circuit.MaxY)
     {
-      let sectorCross = setTimeout(p => {
       	var sectorTime = parseFloat(playerList[name].sectorTime);
      	room.sendAnnouncement(`⏱ Setor ${playerList[name].sector}/3 de ${name}: ${serialize(sectorTime)} segundos`,null,colors.lapTime,fonts.lapTime,sounds.lapTime);
    	playerList[name].sector = 2;
   	playerList[name].sectorTime = 0;
-	clearTimeout(sectorCross);
-      },lapChangeAnnouncementTimeout);
     }
     else if(playerList[name].sector == 2 && _Circuit.MinO2X <= room.getPlayerDiscProperties(p.id).x && room.getPlayerDiscProperties(p.id).x <= _Circuit.MaxO2X && _Circuit.MinO2Y <= room.getPlayerDiscProperties(p.id).y && room.getPlayerDiscProperties(p.id).y <= _Circuit.MaxO2Y)
     {
-      let sectorCross = setTimeout(p => {
       	var sectorTime = parseFloat(playerList[name].sectorTime);
       	room.sendAnnouncement(`⏱ Setor ${playerList[name].sector}/3 de ${name}: ${serialize(sectorTime)} segundos`,null,colors.lapTime,fonts.lapTime,sounds.lapTime);
       	playerList[name].sector = 3;
       	playerList[name].sectorTime = 0;
-	clearTimeout(sectorCross);
-      },lapChangeAnnouncementTimeout);
     }
     else if(playerList[name].sector == 3 && _Circuit.MinO3X <= room.getPlayerDiscProperties(p.id).x && room.getPlayerDiscProperties(p.id).x <= _Circuit.MaxO3X && _Circuit.MinO3Y <= room.getPlayerDiscProperties(p.id).y && room.getPlayerDiscProperties(p.id).y <= _Circuit.MaxO3Y)
     {
-      let sectorCross = setTimeout(p => {
      	 var sectorTime = parseFloat(playerList[name].sectorTime);
      	 room.sendAnnouncement(`⏱ Setor ${playerList[name].sector}/3 de ${name}: ${serialize(sectorTime)} segundos`,null,colors.lapTime,fonts.lapTime,sounds.lapTime);
      	 playerList[name].sector = 1;
      	 playerList[name].sectorTime = 0;
-	clearTimeout(sectorCross);
-      },lapChangeAnnouncementTimeout);
     }
     });
 }
