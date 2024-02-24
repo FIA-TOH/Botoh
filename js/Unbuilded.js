@@ -190,21 +190,21 @@ function checkPlayerSector(){
     if(playerList[name].sector == 1 && _Circuit.MinX <= room.getPlayerDiscProperties(p.id).x && room.getPlayerDiscProperties(p.id).x <= _Circuit.MaxX && _Circuit.MinY <= room.getPlayerDiscProperties(p.id).y && room.getPlayerDiscProperties(p.id).y <= _Circuit.MaxY)
     {
       	let sectorTime = parseFloat(playerList[name].sectorTime);
-     	room.sendAnnouncement(`⏱ Setor ${playerList[name].sector}/3 de ${name}: ${serialize(sectorTime)} segundos`,null,colors.lapTime,fonts.lapTime,sounds.lapTime);
+     	room.sendAnnouncement(`⏱ Setor 3/3 de ${name}: ${serialize(sectorTime)} segundos`,null,colors.lapTime,fonts.lapTime,sounds.lapTime);
    	playerList[name].sector = 2;
   	playerList[name].sectorTime = 0;
     }
     else if(playerList[name].sector == 2 && _Circuit.MinO2X <= room.getPlayerDiscProperties(p.id).x && room.getPlayerDiscProperties(p.id).x <= _Circuit.MaxO2X && _Circuit.MinO2Y <= room.getPlayerDiscProperties(p.id).y && room.getPlayerDiscProperties(p.id).y <= _Circuit.MaxO2Y)
     {
       	let sectorTime = parseFloat(playerList[name].sectorTime);
-      	room.sendAnnouncement(`⏱ Setor ${playerList[name].sector}/3 de ${name}: ${serialize(sectorTime)} segundos`,null,colors.lapTime,fonts.lapTime,sounds.lapTime);
+      	room.sendAnnouncement(`⏱ Setor 1/3 de ${name}: ${serialize(sectorTime)} segundos`,null,colors.lapTime,fonts.lapTime,sounds.lapTime);
       	playerList[name].sector = 3;
       	playerList[name].sectorTime = 0;
     }
     else if(playerList[name].sector == 3 && _Circuit.MinO3X <= room.getPlayerDiscProperties(p.id).x && room.getPlayerDiscProperties(p.id).x <= _Circuit.MaxO3X && _Circuit.MinO3Y <= room.getPlayerDiscProperties(p.id).y && room.getPlayerDiscProperties(p.id).y <= _Circuit.MaxO3Y)
     {
      	 let sectorTime = parseFloat(playerList[name].sectorTime);
-     	 room.sendAnnouncement(`⏱ Setor ${playerList[name].sector}/3 de ${name}: ${serialize(sectorTime)} segundos`,null,colors.lapTime,fonts.lapTime,sounds.lapTime);
+     	 room.sendAnnouncement(`⏱ Setor 2/3 de ${name}: ${serialize(sectorTime)} segundos`,null,colors.lapTime,fonts.lapTime,sounds.lapTime);
      	 playerList[name].sector = 1;
      	 playerList[name].sectorTime = 0;
     }
