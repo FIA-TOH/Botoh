@@ -186,27 +186,28 @@ function checkPlayerSector(){
     players.forEach(p => {
     let name = p.name;
     playerList[name].sectorTime += 1/60;
-    // if(room.getScores().time > 0 && _Circuit && _Circuit.MinOX <= room.getPlayerDiscProperties(player.id).x && room.getPlayerDiscProperties(player.id).x <= _Circuit.MaxO1X && _Circuit.MinO1Y <= room.getPlayerDiscProperties(player.id).y && room.getPlayerDiscProperties(player.id).y <= _Circuit.MaxO1Y)
+    if(room.getScores().time > 0 && _Circuit) {
     if(playerList[name].sector == 1 && _Circuit.MinX <= room.getPlayerDiscProperties(p.id).x && room.getPlayerDiscProperties(p.id).x <= _Circuit.MaxX && _Circuit.MinY <= room.getPlayerDiscProperties(p.id).y && room.getPlayerDiscProperties(p.id).y <= _Circuit.MaxY)
     {
-      	var sectorTime = parseFloat(playerList[name].sectorTime);
+      	let sectorTime = parseFloat(playerList[name].sectorTime);
      	room.sendAnnouncement(`⏱ Setor ${playerList[name].sector}/3 de ${name}: ${serialize(sectorTime)} segundos`,null,colors.lapTime,fonts.lapTime,sounds.lapTime);
    	playerList[name].sector = 2;
   	playerList[name].sectorTime = 0;
     }
     else if(playerList[name].sector == 2 && _Circuit.MinO2X <= room.getPlayerDiscProperties(p.id).x && room.getPlayerDiscProperties(p.id).x <= _Circuit.MaxO2X && _Circuit.MinO2Y <= room.getPlayerDiscProperties(p.id).y && room.getPlayerDiscProperties(p.id).y <= _Circuit.MaxO2Y)
     {
-      	var sectorTime = parseFloat(playerList[name].sectorTime);
+      	let sectorTime = parseFloat(playerList[name].sectorTime);
       	room.sendAnnouncement(`⏱ Setor ${playerList[name].sector}/3 de ${name}: ${serialize(sectorTime)} segundos`,null,colors.lapTime,fonts.lapTime,sounds.lapTime);
       	playerList[name].sector = 3;
       	playerList[name].sectorTime = 0;
     }
     else if(playerList[name].sector == 3 && _Circuit.MinO3X <= room.getPlayerDiscProperties(p.id).x && room.getPlayerDiscProperties(p.id).x <= _Circuit.MaxO3X && _Circuit.MinO3Y <= room.getPlayerDiscProperties(p.id).y && room.getPlayerDiscProperties(p.id).y <= _Circuit.MaxO3Y)
     {
-     	 var sectorTime = parseFloat(playerList[name].sectorTime);
+     	 let sectorTime = parseFloat(playerList[name].sectorTime);
      	 room.sendAnnouncement(`⏱ Setor ${playerList[name].sector}/3 de ${name}: ${serialize(sectorTime)} segundos`,null,colors.lapTime,fonts.lapTime,sounds.lapTime);
      	 playerList[name].sector = 1;
      	 playerList[name].sectorTime = 0;
+    }
     }
     });
 }
@@ -717,7 +718,7 @@ room.onStadiumChange = function(newStadiumName,byPlayer){
 
     if(byPlayer == null){
 	if(c){
-	    _Circuit = {MinX: c.MinX, MaxX: c.MaxX, MinY: c.MinY, MaxY: c.MaxY, MinO1X: c.MinO1X, MaxO1X: c.MaxO1X, MinO1Y: c.MinO1Y, MaxO1Y: c.MaxO1Y, DriveDirection: c.DriveDirection, StartDirection: c.StartDirection, Name: c.Name, BestTime: [c.BestTime[0],c.BestTime[1]], MainColor: c.MainColor, AvatarColor: c.AvatarColor, Angle: c.Angle, Team: c.Team, Limit: c.Limit, ID: c.ID};
+	    _Circuit = {MinX: c.MinX, MaxX: c.MaxX, MinY: c.MinY, MaxY: c.MaxY, MinO2X: c.MinO2X, MaxO2X: c.MaxO2X, MinO2Y: c.MinO2Y, MaxO2Y: c.MaxO2Y, MinO3X: c.MinO3X, MaxO3X: c.MaxO3X, MinO3Y: c.MinO3Y, MaxO3Y: c.MaxO3Y, DriveDirection: c.DriveDirection, StartDirection: c.StartDirection, Name: c.Name, BestTime: [c.BestTime[0],c.BestTime[1]], MainColor: c.MainColor, AvatarColor: c.AvatarColor, Angle: c.Angle, Team: c.Team, Limit: c.Limit, ID: c.ID};
 	    limit = c.Limit ? c.Limit : 10;
 	    room.setTeamColors(c.Team,c.Angle,c.AvatarColor,c.MainColor);
 	}
