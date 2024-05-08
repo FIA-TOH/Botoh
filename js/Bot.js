@@ -161,6 +161,7 @@ var camId = null;
 var currentCircuit = 1;
 // var JMap = JSON.parse(Circuits[currentCircuit-1]);
 var isEndurance = false;
+var onQualy = false;
 
 var isRoomSet = false;
 
@@ -546,13 +547,20 @@ room.onPlayerChat = function(player,message){
 	    room.sendAnnouncement(`Map list below:\n${_Circuits.map(c => c.Name + " [" + c.ID + "]").join('\n')}`,player.id,colors.info,fonts.info,sounds.info);
 	    return false;
 	}
-	// else if(message.toLowerCase().split(" ")[0] == commands.qualy){
-	//     if(sendRecWebhookURL != ""){
- //       		room.startRecording();
- //        	room.sendAnnouncement("📢Você pode assistir o replay da sua qualificatória no Discord",player.id,colors.info,"bold",sounds.info);
- //    	}
-	//     return false;
-	// }
+	else if(message.toLowerCase().split(" ")[0] == commands.qualy){
+	    // if(sendRecWebhookURL != ""){
+     //   		room.startRecording();
+		if(onQualy == false) {
+			onQualy = true;
+        		room.sendAnnouncement("📢A qualificatória foi iniciada!",player.id,colors.info,"bold",sounds.info);
+	       }
+		else {
+			onQualy = false;
+        		room.sendAnnouncement("📢 Fim da qualificatória!",player.id,colors.info,"bold",sounds.info);
+	       }
+    	// }
+	    return false;
+	}
 	else if(message.toLowerCase() == commands.safetyoff){
 	    generalSafetyCar = false;
 	    room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, 0x00FF00, "bold", sounds.safety);
