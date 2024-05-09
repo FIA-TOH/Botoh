@@ -552,10 +552,16 @@ room.onPlayerChat = function(player,message){
      //   		room.startRecording();
 		if(onQualy == false) {
 			onQualy = true;
+			players.forEach(p => {
+			    room.setPlayerDiscProperties(p.id, {cGroup: room.CollisionFlags.c0});
+			})
         		room.sendAnnouncement("📢A qualificatória foi iniciada!",player.id,colors.info,"bold",sounds.info);
 	       }
 		else {
 			onQualy = false;
+			players.forEach(p => {
+			    room.setPlayerDiscProperties(p.id, {cGroup: room.CollisionFlags.blue});
+			})
         		room.sendAnnouncement("📢 Fim da qualificatória!",player.id,colors.info,"bold",sounds.info);
 	       }
     	// }
