@@ -150,7 +150,7 @@ const fonts = {commands: "normal", info: "normal", lapChanged: "normal", lapTime
 const sounds = {commands: 1, info: 0, lapChanged: 1, lapTime: 1, mapChangeWrongName: 1, mapChangeDeny: 2, mapLoad: 1, mapLoadDeny: 1, safety: 1, speed: 0, trackRecord: 1};
 
 var playerList = {};
-const commands = {admin: "!receba", commands: "!help", discord: "!discord", endurance: "!endurance", laps: "!laps", mapInfo:"!map", mapLoad: "!circuit", maps: "!maps", safetyon: "!sc on", safetyoff: "!sc off"};
+const commands = {admin: "!receba", commands: "!help", discord: "!discord", endurance: "!endurance", laps: "!laps", mapInfo:"!map", mapLoad: "!circuit", maps: "!maps", qualy: "!qualy", safetyon: "!sc on", safetyoff: "!sc off"};
 
 const adminChanges = ["'s admin rights were taken away"," was given admin rights"];
 const playerKicked = [" was kicked"," was banned"];
