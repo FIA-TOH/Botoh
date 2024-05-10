@@ -550,6 +550,7 @@ room.onPlayerChat = function(player,message){
 	else if(message.toLowerCase().split(" ")[0] == commands.qualy){
 	    // if(sendRecWebhookURL != ""){
      //   		room.startRecording();
+		let players = room.getPlayerList();
 		if(onQualy == false) {
 			onQualy = true;
 			players.forEach(p => {
