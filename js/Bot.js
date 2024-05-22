@@ -228,7 +228,7 @@ function getVotesAndAnnounceResults(){
     room.sendAnnouncement(`Map voting session has begun! You have ${VoteTimeout/1000} seconds to vote a map.`,null,0x00FFFF,"bold",2);
     GetVotesAndAnnounceResults_Timeout_1 = setTimeout(function(){
 	room.sendAnnouncement(`Map voting session has ended! Here's the results:`,null,0x00FFFF,"bold",2);
-	for(var Map in _Circuits){
+	for(var Map in Circuits){
 	    room.sendAnnouncement(`${Map.Name}: ${Map.Votes}`,null,0xFFFFFF,"normal",1);
 	    Votes.push(Map.Votes);
 	}
@@ -241,7 +241,7 @@ function getVotesAndAnnounceResults(){
 	return v1-v2;
     });
 
-    var MaxVotedMaps = _Circuits.filter(m => m.Votes == sorted[0]);
+    var MaxVotedMaps = Circuits.filter(m => m.Votes == sorted[0]);
 
     GetVotesAndAnnounceResults_Timeout_2 = setTimeout(function(){
 	if(MaxVotedMaps.length == 0){
@@ -251,21 +251,21 @@ function getVotesAndAnnounceResults(){
 	    admins.forEach(a => {
 		room.sendAnnouncement("Oops! Something went wrong! Please open a map manually.",0xFFFF00,a.id,"bold",2)
 	    });
-	    nonadmins.forEach(n => {
-		room.sendAnnouncement("Map will be loaded manually by an human administrator. Please wait...",0xFFFF00,n.id,"bold",2)
-	    });
+	 //    nonadmins.forEach(n => {
+		// room.sendAnnouncement("Map will be loaded manually by an human administrator. Please wait...",0xFFFF00,n.id,"bold",2)
+	 //    });
 
-	    //var randomInt = Math.floor(Maps.length * Math.random());
-	    //loadMap(Maps[randomInt].MapObject,MaxVotedMaps[randomInt].ScoreLimit,MaxVotedMaps[randomInt].TimeLimit);
+	    var randomInt = Math.floor(Circuits.length * Math.random());
+	    loadMap(Maps[randomInt].MapObject);
 	    //room.sendAnnouncement(`${MaxVotedMaps[randomInt].Name} was loaded randomly as the result of the voting session. Good games!`,null,0x00FF00,"bold",2);
 	}
 	else if(MaxVotedMaps.length == 1){
-	    loadMap(MaxVotedMaps[0].MapObject,MaxVotedMaps[0].ScoreLimit,MaxVotedMaps[0].TimeLimit);
+	    loadMap(MaxVotedMaps[0].MapObject);
 	    room.sendAnnouncement(`${MaxVotedMaps[0].Name} was loaded as the result of the voting session. Good games!`,null,0x00FF00,"bold",2);
 	}
 	else{
 	    var randomInt = Math.floor(MaxVotedMaps.length * Math.random());
-	    loadMap(MaxVotedMaps[randomInt].MapObject,MaxVotedMaps[randomInt].ScoreLimit,MaxVotedMaps[randomInt].TimeLimit);
+	    loadMap(MaxVotedMaps[randomInt].MapObject);
 	    room.sendAnnouncement(`${MaxVotedMaps[randomInt].Name} was loaded randomly between the max voted maps as the result of the voting session. Good games!`,null,0x00FF00,"bold",2);
 	}
     },MapStartWaitTimeout);
@@ -273,10 +273,8 @@ function getVotesAndAnnounceResults(){
     resetVotes();
 }
 
-function loadMap(Map,ScoreLimit,TimeLimit){
+function loadMap(Map){
     room.setCustomStadium(Map);
-    room.setScoreLimit(ScoreLimit);
-    room.setTimeLimit(TimeLimit);
     room.startGame();
 }
 
@@ -287,7 +285,7 @@ function resetVotes(){
     if(Votes.length != 0){
 	Votes = [];
     }
-    for(var Map in Maps){
+    for(var Map in Circuits){
 	if(Map.Votes != 0){
 	    Map.Votes = 0;
 	}
@@ -465,6 +463,10 @@ function endRaceSession(){
 	if(players.length == 0){
 	    // getPositions();
 	    room.stopGame();
+	    getVotesAndAnnounceResults();
+	    // clearTimeout(GetVotesAndAnnounceResults_Timeout_1);
+     //        clearTimeout(GetVotesAndAnnounceResults_Timeout_2);
+     //        loadMap(MapVote);
 	 //    setTimeout(function(){
 		// if(id < Circuits.length){
 		//     room.setCustomStadium(next);
