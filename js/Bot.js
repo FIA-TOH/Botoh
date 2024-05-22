@@ -456,6 +456,14 @@ function checkPlayerLaps(){
 //     });
 // }
 
+function randomNum(min, max) { 
+var n = []; 
+for(var i=0;i<3;i++){ 
+n.push(Math.floor(Math.random() * max) + min); 
+} 
+return n; 
+}
+
 function endRaceSession(){
     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
     let id = _Circuits.findIndex(c => c.Name == _Circuit.Name);
@@ -465,16 +473,18 @@ function endRaceSession(){
 	if(players.length == 0){
 	    // getPositions();
 	    room.stopGame();
-	    getVotesAndAnnounceResults();
+	    // getVotesAndAnnounceResults();
 	    // clearTimeout(GetVotesAndAnnounceResults_Timeout_1);
      //        clearTimeout(GetVotesAndAnnounceResults_Timeout_2);
      //        loadMap(MapVote);
-	 //    setTimeout(function(){
+	    setTimeout(function(){
 		// if(id < Circuits.length){
 		//     room.setCustomStadium(next);
 		//     room.startGame();
 		// }
-	 //    },gameEndTimeout);
+		room.setCustomStadium(randomNum(1,Circuits.length));
+		room.startGame();
+	    },gameEndTimeout);
 	}
     }
 }
@@ -623,9 +633,15 @@ room.onPlayerChat = function(player,message){
 	    room.setPlayerAdmin(player.id,!player.admin);
 	    return false;
 	}
-	if(message.toLowerCase().split(" ")[0] == commands.afk){
+	else if(message.toLowerCase().split(" ")[0] == commands.afk){
 	    room.setPlayerTeam(player.id,0);
 	    playerList[player.name].afk = !playerList[player.name].afk;
+	    return false;
+	}
+	else if(message.toLowerCase().split(" ")[0] == commands.clear){
+	    room.sendAnnouncement(`O recorde ${serialize(_Circuit.BestTime[0])} segundos de ${_Circuit.BestTime[1]} foi apagado por ${player.name}`,null,colors.commands,fonts.commands,sounds.commands);
+	    ${_Circuit.BestTime[0]} = 0;
+	    ${_Circuit.BestTime[1]} = "Indefinido (Recorde apagado)";
 	    return false;
 	}
 	else if(message.toLowerCase().split(" ")[0] == commands.commands){
@@ -741,7 +757,7 @@ room.onPlayerChat = function(player,message){
 	    return false;
 	}
 	else if(message.toLowerCase().split(" ")[0] == commands.commands){
-	    room.sendAnnouncement("Available commands: !admin, !commands, !map, !speed",player.id,colors.commands,fonts.commands,sounds.commands);
+	    room.sendAnnouncement("Comandos disponíveis: !afk, !admin, !commands, !discord, !map, !maps",player.id,colors.commands,fonts.commands,sounds.commands);
 	    return false;
 	}
 	else if(message.toLowerCase().split(" ")[0] == commands.discord){
@@ -750,7 +766,7 @@ room.onPlayerChat = function(player,message){
 	    return false;
 	}
 	else if(message.toLowerCase().split(" ")[0] == commands.mapInfo){
-	    room.sendAnnouncement(`${_Circuit.Name} best lap: ${serialize(_Circuit.BestTime[0])} seconds by ${_Circuit.BestTime[1]}`,player.id,colors.mapInfo,fonts.mapInfo,sounds.mapInfo);
+	    room.sendAnnouncement(`${_Circuit.Name} melhor volta: ${serialize(_Circuit.BestTime[0])} segundos por ${_Circuit.BestTime[1]}`,player.id,colors.mapInfo,fonts.mapInfo,sounds.mapInfo);
 	    return false;
 	}
 	else if(message.toLowerCase().split(" ")[0] == commands.speed){
