@@ -478,7 +478,7 @@ function endRaceSession(){
      //        clearTimeout(GetVotesAndAnnounceResults_Timeout_2);
      //        loadMap(MapVote);
 	    setTimeout(function(){
-		room.setCustomStadium(Circuits[randomNum(1,Circuits.length)+1]);
+		room.setCustomStadium(Circuits[randomNum(0,Circuits.length+1)]);
 		room.startGame();
 	    },gameEndTimeout);
 	}
