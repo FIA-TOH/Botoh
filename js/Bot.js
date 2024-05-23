@@ -330,6 +330,7 @@ function checkPlayerLaps(){
 		    if(Math.sign(room.getPlayerDiscProperties(id).xspeed) == -1 * _Circuit.DriveDirection){
 			room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, colors.safety, "bold", sounds.safety);
 			room.sendAnnouncement(`❗ Aviso para: ${name} ❗`, null, colors.safety, "bold", sounds.safety);
+			room.setPlayerTeam(p.id,0);
 			playerList[name].inSafetyCar = true;
 			clearTimeout(crossing);
 		    }
@@ -338,6 +339,7 @@ function checkPlayerLaps(){
 		    if(Math.sign(room.getPlayerDiscProperties(id).yspeed) == -1 * _Circuit.DriveDirection){
 			room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, colors.safety, "bold", sounds.safety);
 			room.sendAnnouncement(`❗ Aviso para: ${name} ❗`, null, colors.safety, "bold", sounds.safety);
+			room.setPlayerTeam(p.id,0);
 			playerList[name].inSafetyCar = true;
 			clearTimeout(crossing);
 		    }
@@ -374,6 +376,7 @@ function checkPlayerLaps(){
 		    if(Math.sign(room.getPlayerDiscProperties(id).xspeed) == -1 * _Circuit.DriveDirection){
 			room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, colors.safety, "bold", sounds.safety);
 			room.sendAnnouncement(`❗ Aviso para: ${name} ❗`, null, colors.safety, "bold", sounds.safety);
+			room.setPlayerTeam(p.id,0);
 			playerList[name].inSafetyCar = true;
 			clearTimeout(crossing);
 		    }
@@ -382,6 +385,7 @@ function checkPlayerLaps(){
 		    if(Math.sign(room.getPlayerDiscProperties(id).yspeed) == -1 * _Circuit.DriveDirection){
 			room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, colors.safety, "bold", sounds.safety);
 			room.sendAnnouncement(`❗ Aviso para: ${name} ❗`, null, colors.safety, "bold", sounds.safety);
+			room.setPlayerTeam(p.id,0);
 			playerList[name].inSafetyCar = true;
 			clearTimeout(crossing);
 		    }
@@ -467,7 +471,6 @@ function endRaceSession(){
 
     if(room.getScores() != null){
 	if(players.length == 0){
-	    // next = randomNum(1,Circuits.length);
 	    // getPositions();
 	    room.stopGame();
 	    // getVotesAndAnnounceResults();
@@ -475,15 +478,28 @@ function endRaceSession(){
      //        clearTimeout(GetVotesAndAnnounceResults_Timeout_2);
      //        loadMap(MapVote);
 	    setTimeout(function(){
-		// if(id < Circuits.length){
-		//     room.setCustomStadium(next);
-		//     room.startGame();
-		// }
-		room.setCustomStadium(_Circuits[randomNum(1,Circuits.length)+1].Name);
+		room.setCustomStadium(Circuits[randomNum(1,Circuits.length)+1]);
 		room.startGame();
 	    },gameEndTimeout);
 	}
     }
+
+ //    if(room.getScores() != null){
+	// if(players.length == 0){
+	//     // getPositions();
+	//     room.stopGame();
+	//     setTimeout(function(){
+	// 	if(id < Circuits.length){
+	// 	    room.setCustomStadium(next);
+	// 	    room.startGame();
+	// 	}
+	// 	else{
+	// 	    room.setCustomStadium(Circuits[0]);
+	// 	    room.startGame();
+	// 	}
+	//     },gameEndTimeout);
+	// }
+ //    }
 }
 
 const logPlayerSpeed = setInterval(function(){
