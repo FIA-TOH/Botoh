@@ -135,9 +135,9 @@ const _Circuit30 = {MinX: -188, MaxX: -34, MinY: -100, MaxY: -85, DriveDirection
 const lapChangeAnnouncementTimeout = 0;
 const gameEndTimeout = 2000;
 
-const Circuits = [Circuit1,Circuit2,Circuit3,Circuit4,Circuit5,Circuit6,Circuit7,Circuit8,Circuit9,Circuit10,Circuit11,Circuit12,Circuit13,Circuit14,Circuit15,Circuit16,Circuit17,Circuit18,Circuit19,Circuit20,Circuit21,Circuit22,Circuit23,Circuit24,Circuit25,Circuit26,Circuit27,Circuit28,Circuit29,Circuit30,Circuit31,Circuit32,Circuit33]; //...
+const Circuits = [Circuit1,Circuit2,Circuit3,Circuit4,Circuit5,Circuit6,Circuit7,Circuit8,Circuit9,Circuit10,Circuit11,Circuit12,Circuit13,Circuit14,Circuit15,Circuit16,Circuit17,Circuit18,Circuit19,Circuit20,Circuit21,Circuit22,Circuit23,Circuit24,Circuit25,Circuit26,Circuit27,Circuit28,Circuit29,Circuit30]; //...
 
-const _Circuits = [_Circuit1,_Circuit2,_Circuit3,_Circuit4,_Circuit5,_Circuit6,_Circuit7,_Circuit8,_Circuit9,_Circuit10,_Circuit11,_Circuit12,_Circuit13,_Circuit14,_Circuit15,_Circuit16,_Circuit17,_Circuit18,_Circuit19,_Circuit20,_Circuit21,_Circuit22,_Circuit23,_Circuit24,_Circuit25,_Circuit26,_Circuit27,_Circuit28,_Circuit29,_Circuit30,_Circuit31,_Circuit32,_Circuit33]; //...
+const _Circuits = [_Circuit1,_Circuit2,_Circuit3,_Circuit4,_Circuit5,_Circuit6,_Circuit7,_Circuit8,_Circuit9,_Circuit10,_Circuit11,_Circuit12,_Circuit13,_Circuit14,_Circuit15,_Circuit16,_Circuit17,_Circuit18,_Circuit19,_Circuit20,_Circuit21,_Circuit22,_Circuit23,_Circuit24,_Circuit25,_Circuit26,_Circuit27,_Circuit28,_Circuit29,_Circuit30]; //...
 var _Circuit = {MinX: 0, MaxX: 0, MinY: 0, MaxY: 0, MinO1X: NaN, MaxO1X: NaN, MinO1Y: NaN, MaxO1Y: NaN, DriveDirection: 0, StartDirection: undefined, Name: undefined, BestTime: [999.99,undefined], MainColor: [0x000000,0x000000,0x000000], AvatarColor: 0x000000, Angle: 0, Team: 0, ID: 0};
 var limit = _Circuit.Limit;
 
@@ -207,6 +207,12 @@ function secondsToTime(seconds) {
 // function ifInDRSZone(player){
 //     return room.getScores().time > 0 && _Circuit && (_Circuit.MinO1X <= room.getPlayerDiscProperties(player.id).x || _Circuit.MinO2X <= room.getPlayerDiscProperties(player.id).x || _Circuit.MinO3X <= room.getPlayerDiscProperties(player.id).x) && (room.getPlayerDiscProperties(player.id).x <= _Circuit.MaxO1X || room.getPlayerDiscProperties(player.id).x <= _Circuit.MaxO2X || room.getPlayerDiscProperties(player.id).x <= _Circuit.MaxO3X) && (_Circuit.MinO1Y <= room.getPlayerDiscProperties(player.id).y || _Circuit.MinO2Y <= room.getPlayerDiscProperties(player.id).y || _Circuit.MinO3Y <= room.getPlayerDiscProperties(player.id).y) && (room.getPlayerDiscProperties(player.id).y <= _Circuit.MaxO1Y || room.getPlayerDiscProperties(player.id).y <= _Circuit.MaxO2Y || room.getPlayerDiscProperties(player.id).y <= _Circuit.MaxO3Y);
 // }
+
+const discordMessage = setInterval(function(){
+	room.sendAnnouncement("Entre no nosso Discord e venha participar da Fórmula TOH!",null,colors.info,"bold",sounds.info);
+	room.sendAnnouncement(`Link: https://discord.gg/MuQ7QX6cPr`,null,colors.info,"normal",sounds.info);
+	// clearInterval(discordMessage);
+    }, 300000);
 
 function getVotesAndAnnounceResults(){
     if(VoteSession == false){
@@ -454,11 +460,12 @@ return n;
 
 function endRaceSession(){
     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
-    let id = _Circuits.findIndex(c => c.Name == _Circuit.Name);
-    let next = Circuits[id+1];
+    // let id = _Circuits.findIndex(c => c.Name == _Circuit.Name);
+    // let next = Circuits[id+1];
 
     if(room.getScores() != null){
 	if(players.length == 0){
+	    // next = randomNum(1,Circuits.length);
 	    // getPositions();
 	    room.stopGame();
 	    // getVotesAndAnnounceResults();
@@ -470,7 +477,7 @@ function endRaceSession(){
 		//     room.setCustomStadium(next);
 		//     room.startGame();
 		// }
-		room.setCustomStadium(randomNum(1,Circuits.length));
+		room.setCustomStadium(_Circuits[randomNum(1,Circuits.length)+1]);
 		room.startGame();
 	    },gameEndTimeout);
 	}
@@ -628,8 +635,8 @@ room.onPlayerChat = function(player,message){
 	}
 	else if(message.toLowerCase().split(" ")[0] == commands.clear){
 	    room.sendAnnouncement(`O recorde ${serialize(_Circuit.BestTime[0])} segundos de ${_Circuit.BestTime[1]} foi apagado por ${player.name}`,null,colors.commands,fonts.commands,sounds.commands);
-	    ${_Circuit.BestTime[0]} = 0;
-	    ${_Circuit.BestTime[1]} = "Indefinido (Recorde apagado)";
+	    _Circuit.BestTime[0] = 0;
+	    _Circuit.BestTime[1] = "Indefinido (Recorde apagado)";
 	    return false;
 	}
 	else if(message.toLowerCase().split(" ")[0] == commands.commands){
