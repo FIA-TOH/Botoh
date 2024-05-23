@@ -477,7 +477,7 @@ function endRaceSession(){
 		//     room.setCustomStadium(next);
 		//     room.startGame();
 		// }
-		room.setCustomStadium(Circuits[randomNum(1,Circuits.length)+1]);
+		room.setCustomStadium(_Circuits[randomNum(1,Circuits.length)+1].Name);
 		room.startGame();
 	    },gameEndTimeout);
 	}
