@@ -653,7 +653,7 @@ room.onPlayerChat = function(player,message){
 	}
 	else if(message.toLowerCase().split(" ")[0] == commands.clear){
 	    room.sendAnnouncement(`O recorde ${serialize(_Circuit.BestTime[0])} segundos de ${_Circuit.BestTime[1]} foi apagado por ${player.name}`,null,colors.commands,fonts.commands,sounds.commands);
-	    _Circuit.BestTime[0] = 0;
+	    _Circuit.BestTime[0] = 999;
 	    _Circuit.BestTime[1] = "Indefinido (Recorde apagado)";
 	    return false;
 	}
