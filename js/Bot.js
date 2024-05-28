@@ -160,6 +160,11 @@ var currentCircuit = 1;
 var isEndurance = false;
 var onQualy = false;
 
+var afkLimit = 14;
+var countAFK = false;
+var extendedP = [];
+const eP = { ID: 0, AUTH: 1, CONN: 2, AFK: 3, ACT: 4, MUTE: 5 };
+
 var VoteCommand = "!vote";
 var VotedPlayers = [];
 var Votes = [];
@@ -190,28 +195,9 @@ function secondsToTime(seconds) {
   return `${formattedMinutes}:${formattedSeconds}`;
 }
 
-// function checkPlayerDRS(){
-//     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
-//     players.forEach(p => {
-// 	if(!ifInDRSZone(p) && playerList[p.name].drsChanged == true){
-// 	    playerList[p.name].drsChanged = false;
-// 	    room.setPlayerAvatar(p.id,null);
-// 	}
-// 	if(ifInDRSZone(p) && playerList[p.name].drsChanged == false && playerList[p.name].currentLap > 3){
-// 	    playerList[p.name].drsChanged = true;
-// 	    room.setPlayerAvatar(p.id,"✅");
-// 	}
-//     });
-// }
-
-// function ifInDRSZone(player){
-//     return room.getScores().time > 0 && _Circuit && (_Circuit.MinO1X <= room.getPlayerDiscProperties(player.id).x || _Circuit.MinO2X <= room.getPlayerDiscProperties(player.id).x || _Circuit.MinO3X <= room.getPlayerDiscProperties(player.id).x) && (room.getPlayerDiscProperties(player.id).x <= _Circuit.MaxO1X || room.getPlayerDiscProperties(player.id).x <= _Circuit.MaxO2X || room.getPlayerDiscProperties(player.id).x <= _Circuit.MaxO3X) && (_Circuit.MinO1Y <= room.getPlayerDiscProperties(player.id).y || _Circuit.MinO2Y <= room.getPlayerDiscProperties(player.id).y || _Circuit.MinO3Y <= room.getPlayerDiscProperties(player.id).y) && (room.getPlayerDiscProperties(player.id).y <= _Circuit.MaxO1Y || room.getPlayerDiscProperties(player.id).y <= _Circuit.MaxO2Y || room.getPlayerDiscProperties(player.id).y <= _Circuit.MaxO3Y);
-// }
-
 const discordMessage = setInterval(function(){
 	room.sendAnnouncement("Entre no nosso Discord e venha participar da Fórmula TOH!",null,colors.info,"bold",sounds.info);
 	room.sendAnnouncement(`Link: https://discord.gg/MuQ7QX6cPr`,null,colors.info,"normal",sounds.info);
-	// clearInterval(discordMessage);
     }, 300000);
 
 function getVotesAndAnnounceResults(){
@@ -454,12 +440,70 @@ function checkPlayerLaps(){
 //     });
 // }
 
+function handleInactivity() { // handles inactivity : players will be kicked after afkLimit
+	let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && playerList[p.name].isInTheTrack == true);
+	if (countAFK && (players.length) >= 1) {
+		for (var i = 0; i < players.length ; i++) {
+			setActivity(players[i], getActivity(players[i]) + 1);
+		}
+	}
+	for (var i = 0; i < extendedP.length ; i++) {
+		if (extendedP[i][eP.ACT] == 60 * (2/3 * afkLimit)) {
+			room.sendChat("[PV] ⛔ If you don't move or send a message in the next 4 seconds, you will be kicked !", extendedP[i][eP.ID]);
+		}
+		if (extendedP[i][eP.ACT] >= 60 * afkLimit) {
+			extendedP[i][eP.ACT] = 0;
+            if (room.getScores().time <= afkLimit - 0.5) {
+                room.stopGame();
+			}
+			room.kickPlayer(extendedP[i][eP.ID], "AFK", false);
+		}
+	}
+}
+
+function getAFK(player) {
+	return extendedP.filter((a) => a[0] == player.id) != null ? extendedP.filter((a) => a[0] == player.id)[0][eP.AFK] : null;
+}
+
+function setAFK(player, value) {
+	extendedP.filter((a) => a[0] == player.id).forEach((player) => player[eP.AFK] = value);
+}
+
+function getActivity(player) {
+	return extendedP.filter((a) => a[0] == player.id) != null ? extendedP.filter((a) => a[0] == player.id)[0][eP.ACT] : null;
+}
+
+function setActivity(player, value) {
+	extendedP.filter((a) => a[0] == player.id).forEach((player) => player[eP.ACT] = value);
+}
+
+function alwaysOneAdmin() {
+	let players = room.getPlayerList();
+	// if (players.length == 0 || players.find((player) => player.admin) != null) {
+	if (players.length == 0) {
+		return;
+	}
+	var copie = []; 
+	players.forEach(function(element) { copie.push(element.id); });
+	room.setPlayerAdmin(arrayMin(copie), true); // Give admin to the player who's played the longest on the room
+}
+
+function arrayMin(arr) {
+    var len = arr.length;
+    var min = Infinity;
+	while (len--) {
+		if (arr[len] < min) {
+			min = arr[len];
+	  	}
+	}
+	return min;
+}
+
 function randomNum(min, max) { 
-// var n = []; 
-// for(var i=0;i<3;i++){ 
-// n.push(Math.floor(Math.random() * max) + min); 
-// } 
-// return n;
+// var n = [];
+// for(var i=0;i<3;i++){
+// n.push(Math.floor(Math.random() * max) + min);
+// }
     var n = Math.floor(Math.random() * max) + min;
     return n;
 }
@@ -501,18 +545,6 @@ function endRaceSession(){
 	// }
  //    }
 }
-
-const logPlayerSpeed = setInterval(function(){
-	let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && playerList[p.name].speedEnabled == true && (p.name.search("nto")>=0 || p.name.search("nso")>=0));
-
-    players.forEach(p => {
-	// room.setPlayerAvatar(p.id,(Math.floor(10*Math.hypot(room.getPlayerDiscProperties(p.id).xspeed,room.getPlayerDiscProperties(p.id).yspeed))).toString());
-		// setTimeout(() => {
-		room.setPlayerDiscProperties(p.id,{xspeed: room.getPlayerDiscProperties(p.id).xspeed*1.01});
-		room.setPlayerDiscProperties(p.id, {yspeed: room.getPlayerDiscProperties(p.id).yspeed*1.01});
-		// });
-    });
-    }, 1000);
 
 function ifInLapChangeZone(player){
     return room.getScores().time > 0 && _Circuit && _Circuit.MinX <= room.getPlayerDiscProperties(player.id).x && room.getPlayerDiscProperties(player.id).x <= _Circuit.MaxX && _Circuit.MinY <= room.getPlayerDiscProperties(player.id).y && room.getPlayerDiscProperties(player.id).y <= _Circuit.MaxY;
@@ -592,6 +624,7 @@ room.onGameStart = function(byPlayer){
     generalSafetyCar = false;
     camId = null;
     currentTime = 0;
+    countAFK = true;
     var players = room.getPlayerList();
     players.forEach(p => {
 	playerList[p.name].currentLap = 0;
@@ -602,6 +635,10 @@ room.onGameStart = function(byPlayer){
 		playerList[p.name].lapTimes.push(0);
     	}
     });
+    for (var i = 0; i < extendedP.length; i++) {
+		extendedP[i][eP.ACT] = 0;
+		room.getPlayer(extendedP[i][eP.ID]) == null ? extendedP.splice(i, 1) : null;
+	}
 }
 
 room.onGameStop = function(byPlayer){
@@ -609,6 +646,7 @@ room.onGameStop = function(byPlayer){
     generalSafetyCar = false;
     camId = null;
     currentTime = 0;
+    countAFK = false;
     let players = room.getPlayerList();
     players.forEach(p => {
 	playerList[p.name].currentLap = 0;
@@ -619,9 +657,13 @@ room.onGameStop = function(byPlayer){
     });
 }
 
+room.onPlayerActivity = function(player) {
+	setActivity(player, 0);
+}
+
 room.onGameTick = function(){
     checkPlayerLaps();
-    // checkPlayerDRS();
+    handleInactivity();
     endRaceSession();
     currentTime += 1/60;
     // collisionDetectionSegmentPlayer();
@@ -795,6 +837,7 @@ room.onPlayerKicked = function(kickedPlayer,reason,ban,byPlayer){
 
 room.onPlayerJoin = function(player){
     console.log(`${player.name} has joined`);
+    alwaysOneAdmin();
     let players = room.getPlayerList();
 
     let lapTimes = [];
@@ -814,6 +857,7 @@ room.onPlayerJoin = function(player){
 
 room.onPlayerLeave = function(player){
     console.log(`${player.name} has left`);
+    alwaysOneAdmin();
     let players = room.getPlayerList();
 
     playerList[player.name].currentLap = 0;
