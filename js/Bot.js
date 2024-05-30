@@ -838,6 +838,7 @@ room.onPlayerKicked = function(kickedPlayer,reason,ban,byPlayer){
 room.onPlayerJoin = function(player){
     console.log(`${player.name} has joined`);
     alwaysOneAdmin();
+    extendedP.push([player.id, player.auth, player.conn, false, 0, false]);
     let players = room.getPlayerList();
 
     let lapTimes = [];
