@@ -449,7 +449,7 @@ function handleInactivity() { // handles inactivity : players will be kicked aft
 	}
 	for (var i = 0; i < extendedP.length ; i++) {
 		if (extendedP[i][eP.ACT] == 60 * (2/3 * afkLimit)) {
-			room.sendChat("[PV] ⛔ If you don't move or send a message in the next 4 seconds, you will be kicked !", extendedP[i][eP.ID]);
+			room.sendAnnouncement("[PV] ⛔ Se você não se mover ou enviar uma mensagem nos próximos 4 segundos, você será kickado!", extendedP[i][eP.ID], colors.safety, "bold", sounds.safety);
 		}
 		if (extendedP[i][eP.ACT] >= 60 * afkLimit) {
 			extendedP[i][eP.ACT] = 0;
