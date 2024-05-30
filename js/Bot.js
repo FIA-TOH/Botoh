@@ -453,9 +453,9 @@ function handleInactivity() { // handles inactivity : players will be kicked aft
 		}
 		if (extendedP[i][eP.ACT] >= 60 * afkLimit) {
 			extendedP[i][eP.ACT] = 0;
-            if (room.getScores().time <= afkLimit - 0.5) {
-                room.stopGame();
-			}
+   //          if (room.getScores().time <= afkLimit - 0.5) {
+   //              room.stopGame();
+			// }
 			room.kickPlayer(extendedP[i][eP.ID], "AFK", false);
 		}
 	}
