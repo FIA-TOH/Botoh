@@ -160,7 +160,7 @@ var currentCircuit = 1;
 var isEndurance = false;
 var onQualy = false;
 
-var afkLimit = 14;
+var afkLimit = 30;
 var countAFK = false;
 var extendedP = [];
 const eP = { ID: 0, AUTH: 1, CONN: 2, AFK: 3, ACT: 4, MUTE: 5 };
