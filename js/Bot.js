@@ -143,7 +143,7 @@ var limit = _Circuit.Limit;
 
 const colors = {commands: 0xFFFFFF, finish: 0x0A74FF, info: 0xFFFFFF, lapChanged: 0xFFFFFF, lapTime: 0x2DF73B, mapChangeWrongName: 0xFFFF00, mapChangeDeny: 0xFF0000, mapLoad: 0x80FF00, mapLoadDeny: 0xFFFF00, safety: 0xFF0000, speed: 0x2DF73B, trackRecord: 0xFF33D0};
 const fonts = {commands: "normal", info: "normal", lapChanged: "normal", lapTime: "normal", mapChangeWrongName: "normal", mapChangeDeny: "bold", mapLoad: "normal", mapLoadDeny: "normal", speed: "small", trackRecord: "bold"};
-const sounds = {commands: 1, info: 0, lapChanged: 1, lapTime: 1, mapChangeWrongName: 1, mapChangeDeny: 2, mapLoad: 1, mapLoadDeny: 1, safety: 1, speed: 0, trackRecord: 1};
+const sounds = {commands: 1, info: 0, lapChanged: 1, lapTime: 1, mapChangeWrongName: 1, mapChangeDeny: 2, mapLoad: 1, mapLoadDeny: 1, safety: 1, speed: 0, trackRecord: 2};
 
 var playerList = {};
 const commands = {admin: "!admftoh", afk: "!afk", clear: "!clear", commands: "!help", discord: "!discord", endurance: "!endurance", laps: "!laps", mapInfo:"!map", mapLoad: "!circuit", maps: "!maps", qualy: "!qualy", safetyon: "!sc on", safetyoff: "!sc off", speed: "!spd", vote: "!vote"};
@@ -235,8 +235,24 @@ function getVotesAndAnnounceResults(){
 		// room.sendAnnouncement("Map will be loaded manually by an human administrator. Please wait...",0xFFFF00,n.id,"bold",2)
 	 //    });
 
-	    var randomInt = Math.floor(Circuits.length * Math.random());
+	 	var remainingCircuits = [...Array(Circuits.length).keys()];
+		 function getRandomIntFromList(list) {
+			var randomIndex = Math.floor(list.length * Math.random());
+			return list.splice(randomIndex, 1)[0];
+		}
+		function loadNextMap() {
+			if (remainingCircuits.length === 0) {
+				remainingCircuits = [...Array(Circuits.length).keys()];
+			}
+			var randomInt = getRandomIntFromList(remainingCircuits);
+			loadMap(_Circuits[randomInt].id);
+			// console.log(`Loaded map ID: ${mapId}`);
+			// console.log(`Loaded maps so far: ${loadedCircuits.join(', ')}`);
+			// console.log(`Remaining maps: ${remainingCircuits.map(i => _Circuits[i].id).join(', ')}`);
+		}
+		
 	    loadMap(_Circuits[randomInt].id);
+		loadNextMap();
 	    //room.sendAnnouncement(`${MaxVotedMaps[randomInt].Name} was loaded randomly as the result of the voting session. Good games!`,null,0x00FF00,"bold",2);
 	}
 	else if(MaxVotedMaps.length == 1){
@@ -253,12 +269,14 @@ function getVotesAndAnnounceResults(){
     resetVotes();
 }
 
-function loadMap(id){
+function loadMap(id) {
     room.setCustomStadium(Circuits[id-1]);
-    room.sendAnnouncement(`${_Circuits[id-1].Name} was loaded by ${player.name}`,null,colors.mapLoad,fonts.mapLoad,sounds.mapLoad);
+    room.sendAnnouncement(`${_Circuits[id-1].Name} was loaded by ${player.name}`, null, colors.mapLoad, fonts.mapLoad, sounds.mapLoad);
     currentCircuit = id;
     room.startGame();
 }
+
+
 
 function resetVotes(){
     if(VotedPlayers.length != 0){
