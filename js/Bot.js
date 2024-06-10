@@ -312,6 +312,20 @@ function voteMap(player,message){ //Command example: !vote 1
     }
 }
 
+function gripEffect(){
+    let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && playerList[p.name].speedEnabled == true);
+
+    players.forEach(p => {
+	room.setPlayerAvatar(p.id,(Math.floor(10*Math.hypot(room.getPlayerDiscProperties(p.id).xspeed,room.getPlayerDiscProperties(p.id).yspeed))).toString());
+        if(generalSafetyCar){
+		// setTimeout(() => {
+		room.setPlayerDiscProperties(p.id,{xspeed: room.getPlayerDiscProperties(p.id).xspeed*(75/100)});
+		room.setPlayerDiscProperties(p.id, {yspeed: room.getPlayerDiscProperties(p.id).yspeed*(75/100)});
+		// });
+	}
+    });
+}
+
 function checkPlayerLaps(){
     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
 
@@ -467,7 +481,7 @@ function handleInactivity() { // handles inactivity : players will be kicked aft
 	}
 	for (var i = 0; i < extendedP.length ; i++) {
 		if (extendedP[i][eP.ACT] == 60 * (2/3 * afkLimit)) {
-			room.sendAnnouncement("[PV] ⛔ Se você não se mover ou enviar uma mensagem nos próximos 4 segundos, você será kickado!", extendedP[i][eP.ID], colors.safety, "bold", sounds.safety);
+			room.sendAnnouncement("[PV] ⛔ Se você não se mover ou enviar uma mensagem nos próximos segundos, você será kickado!", extendedP[i][eP.ID], colors.safety, "bold", sounds.safety);
 		}
 		if (extendedP[i][eP.ACT] >= 60 * afkLimit) {
 			extendedP[i][eP.ACT] = 0;
@@ -497,13 +511,12 @@ function setActivity(player, value) {
 
 function alwaysOneAdmin() {
 	let players = room.getPlayerList();
-	// if (players.length == 0 || players.find((player) => player.admin) != null) {
-	if (players.length == 0) {
-		return;
-	}
+	if (players.length == 0 || players.find((player) => player.admin) != null) {
+	// if (players.length == 0) {
 	var copie = []; 
 	players.forEach(function(element) { copie.push(element.id); });
 	room.setPlayerAdmin(arrayMin(copie), true); // Give admin to the player who's played the longest on the room
+	}
 }
 
 function arrayMin(arr) {
@@ -518,10 +531,6 @@ function arrayMin(arr) {
 }
 
 function randomNum(min, max) { 
-// var n = [];
-// for(var i=0;i<3;i++){
-// n.push(Math.floor(Math.random() * max) + min);
-// }
     var n = Math.floor(Math.random() * max) + min;
     return n;
 }
@@ -632,10 +641,6 @@ function pointDistance(p1, p2) {
 //     }
 // }
 
-room.onGamePaused = function(byPlayer){
-	
-}
-
 room.onGameStart = function(byPlayer){
     byPlayer == null ? console.log(`Game started`) : console.log(`Game started by ${byPlayer.name}`);
     // positions = [];
@@ -683,13 +688,10 @@ room.onGameTick = function(){
     checkPlayerLaps();
     handleInactivity();
     endRaceSession();
+    gripEffect();
     currentTime += 1/60;
     // collisionDetectionSegmentPlayer();
     // runCamera();
-}
-
-room.onGameUnpaused = function(byPlayer){
-	
 }
 
 room.onPlayerAdminChange = function(changedPlayer,byPlayer){
