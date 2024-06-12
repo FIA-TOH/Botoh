@@ -146,7 +146,7 @@ const fonts = {commands: "normal", info: "normal", lapChanged: "normal", lapTime
 const sounds = {commands: 1, info: 0, lapChanged: 1, lapTime: 1, mapChangeWrongName: 1, mapChangeDeny: 2, mapLoad: 1, mapLoadDeny: 1, safety: 1, speed: 0, trackRecord: 2};
 
 var playerList = {};
-const commands = {admin: "!admftoh", afk: "!afk", clear: "!clear", commands: "!help", discord: "!discord", endurance: "!endurance", laps: "!laps", mapInfo:"!map", mapLoad: "!circuit", maps: "!maps", qualy: "!qualy", safetyon: "!sc on", safetyoff: "!sc off", speed: "!spd", vote: "!vote"};
+const commands = {admin: "!admftoh", afk: "!afk", clear: "!clear", commands: "!help", discord: "!discord", endurance: "!endurance", laps: "!laps", mapInfo:"!map", mapLoad: "!circuit", maps: "!maps", qualy: "!qualy", safetyon: "!scon", safetyoff: "!scoff", speed: "!spd", vote: "!vote"};
 const hasValue = (commands, value) => Object.values(commands).includes(value);
 
 const adminChanges = ["'s admin rights were taken away"," was given admin rights"];
@@ -178,7 +178,7 @@ var VoteTimeout = 15000; //In milliseconds
 
 var isRoomSet = false;
 
-var room = HBInit({roomName:"🏎️🏁 Fórmula 1 - Sessão Livre 🏎️🏁",noPlayer:true,public:true,maxPlayers:20});
+var room = HBInit({roomName:"🏎️🏁 Fórmula 1 - Sessão Livre 🏎️🏁",noPlayer:true,public:false,maxPlayers:20});
 
 room.setScoreLimit(0);
 room.setTimeLimit(0);
@@ -312,19 +312,17 @@ function voteMap(player,message){ //Command example: !vote 1
     }
 }
 
-function gripEffect(){
+const gripEffect = setInterval(function(){
     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && playerList[p.name].speedEnabled == true);
 
     players.forEach(p => {
-	room.setPlayerAvatar(p.id,(Math.floor(10*Math.hypot(room.getPlayerDiscProperties(p.id).xspeed,room.getPlayerDiscProperties(p.id).yspeed))).toString());
-        if(generalSafetyCar){
+	// room.setPlayerAvatar(p.id,(Math.floor(10*Math.hypot(room.getPlayerDiscProperties(p.id).xspeed,room.getPlayerDiscProperties(p.id).yspeed))).toString());
 		// setTimeout(() => {
-		room.setPlayerDiscProperties(p.id,{xspeed: room.getPlayerDiscProperties(p.id).xspeed*(75/100)});
-		room.setPlayerDiscProperties(p.id, {yspeed: room.getPlayerDiscProperties(p.id).yspeed*(75/100)});
+		room.setPlayerDiscProperties(p.id,{xspeed: room.getPlayerDiscProperties(p.id).xspeed*(91/100)});
+		room.setPlayerDiscProperties(p.id, {yspeed: room.getPlayerDiscProperties(p.id).yspeed*(91/100)});
 		// });
-	}
     });
-}
+    }, 50);
 
 function checkPlayerLaps(){
     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
@@ -688,7 +686,6 @@ room.onGameTick = function(){
     checkPlayerLaps();
     handleInactivity();
     endRaceSession();
-    gripEffect();
     currentTime += 1/60;
     // collisionDetectionSegmentPlayer();
     // runCamera();
