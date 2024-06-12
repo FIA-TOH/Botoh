@@ -318,8 +318,8 @@ const gripEffect = setInterval(function(){
     players.forEach(p => {
 	// room.setPlayerAvatar(p.id,(Math.floor(10*Math.hypot(room.getPlayerDiscProperties(p.id).xspeed,room.getPlayerDiscProperties(p.id).yspeed))).toString());
 		// setTimeout(() => {
-		room.setPlayerDiscProperties(p.id,{xspeed: room.getPlayerDiscProperties(p.id).xspeed*(91/100)});
-		room.setPlayerDiscProperties(p.id, {yspeed: room.getPlayerDiscProperties(p.id).yspeed*(91/100)});
+		room.setPlayerDiscProperties(p.id,{xspeed: room.getPlayerDiscProperties(p.id).xspeed*(95/100)});
+		room.setPlayerDiscProperties(p.id, {yspeed: room.getPlayerDiscProperties(p.id).yspeed*(95/100)});
 		// });
     });
     }, 50);
@@ -643,6 +643,7 @@ room.onGameStart = function(byPlayer){
     byPlayer == null ? console.log(`Game started`) : console.log(`Game started by ${byPlayer.name}`);
     // positions = [];
     generalSafetyCar = false;
+    onQualy = false;
     camId = null;
     currentTime = 0;
     countAFK = true;
@@ -665,6 +666,7 @@ room.onGameStart = function(byPlayer){
 room.onGameStop = function(byPlayer){
     byPlayer == null ? console.log(`Game stopped`) : console.log(`Game stopped by ${byPlayer.name}`);
     generalSafetyCar = false;
+    onQualy = false;
     camId = null;
     currentTime = 0;
     countAFK = false;
@@ -696,7 +698,7 @@ room.onPlayerAdminChange = function(changedPlayer,byPlayer){
 }
 
 room.onPlayerChat = function(player,message){
-    if(message.split(" ")[0][0] == "!" && !hasValue(commands, message.split(" ")[0])){
+    if(message.split(" ")[0][0] == "!" && !hasValue(commands, message)){
 		room.sendAnnouncement("Este comando não existe!",player.id,colors.info,"bold",sounds.info);
 		return false;
 	}
@@ -843,6 +845,16 @@ room.onPlayerChat = function(player,message){
 	}
 	else if(message.toLowerCase().split(" ")[0] == commands.speed){
 	    playerList[player.name].speedEnabled = !playerList[player.name].speedEnabled;
+	    return false;
+	}
+	else if(message.toLowerCase().split(" ")[0] == commands.pitstop){
+	    if(hasValue(tyreOptions, message.toLowerCase().split(" ")[1])){
+	    	playerList[player.name].tyres = message.toLowerCase().split(" ")[1];
+		room.sendAnnouncement(`${player.name} colocou pneus ${message.toLowerCase().split(" ")[1]}`,null,colors.info,"bold",sounds.info);
+	    }
+	    else{
+	    	room.sendAnnouncement("Este pneu não existe! Digite novamente para acertar seu pit stop!",player.id,colors.info,"bold",sounds.info);
+	    }
 	    return false;
 	}
     }
