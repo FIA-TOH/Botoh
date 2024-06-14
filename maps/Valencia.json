@@ -550,7 +550,7 @@
 		{ "radius" : 5, "pos" : [1283,-1012 ], "color" : "ffc500", "bCoef" : 0, "cMask" : ["red","blue","c0" ], "cGroup" : ["redKO","blueKO" ] },
 		{ "radius" : 5, "pos" : [1306,-995 ], "color" : "c70318", "bCoef" : 0, "cMask" : ["red","blue","c0" ], "cGroup" : ["redKO","blueKO" ] },
 		{ "radius" : 5, "pos" : [1329,-979 ], "color" : "ffc500", "bCoef" : 0, "cMask" : ["red","blue","c0" ], "cGroup" : ["redKO","blueKO" ] },
-		{ "radius" : 10, "invMass" : 0, "pos" : [1067,-1118 ], "color" : "30367a", "bCoef" : 0, "cMask" : ["wall" ], "cGroup" : ["wall" ] },
+		{ "radius" : 10, "invMass" : 0, "pos" : [1067,-1118 ], "color" : "30367a", "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["wall" ], "_selected" : true },
 		{ "radius" : 5, "pos" : [1791,-708 ], "color" : "ffc500", "bCoef" : 0, "cMask" : ["red","blue","c0" ], "cGroup" : ["redKO","blueKO" ] },
 		{ "radius" : 5, "pos" : [1819,-708 ], "color" : "c70318", "bCoef" : 0, "cMask" : ["red","blue","c0" ], "cGroup" : ["redKO","blueKO" ] },
 		{ "radius" : 5, "pos" : [1762,-719 ], "color" : "c70318", "bCoef" : 0, "cMask" : ["red","blue","c0" ], "cGroup" : ["redKO","blueKO" ] },
