@@ -146,7 +146,7 @@ const fonts = {commands: "normal", info: "normal", lapChanged: "normal", lapTime
 const sounds = {commands: 1, info: 0, lapChanged: 1, lapTime: 1, mapChangeWrongName: 1, mapChangeDeny: 2, mapLoad: 1, mapLoadDeny: 1, safety: 1, speed: 0, trackRecord: 2};
 
 var playerList = {};
-const commands = {admin: "!admftoh", afk: "!afk", clear: "!clear", commands: "!help", discord: "!discord", endurance: "!endurance", laps: "!laps", mapInfo:"!map", mapLoad: "!circuit", maps: "!maps", qualy: "!qualy", safetyon: "!scon", safetyoff: "!scoff", speed: "!grip", vote: "!vote"};
+const commands = {admin: "!admftoh", afk: "!afk", clear: "!clear", commands: "!help", discord: "!discord", endurance: "!endurance", laps: "!laps", mapInfo:"!map", mapLoad: "!circuit", maps: "!maps", pitstop: "!pneus", qualy: "!qualy", safetyon: "!scon", safetyoff: "!scoff", speed: "!grip", vote: "!vote"};
 const hasValue = (commands, value) => Object.values(commands).includes(value);
 
 const adminChanges = ["'s admin rights were taken away"," was given admin rights"];
@@ -172,6 +172,8 @@ var VoteSession = false;
 
 var GetVotesAndAnnounceResults_Timeout_1;
 var GetVotesAndAnnounceResults_Timeout_2;
+
+const tyreOptions = ["macios", "medios", "duros"];
 
 var MapStartWaitTimeout = 3000; //In milliseconds
 var VoteTimeout = 15000; //In milliseconds
@@ -319,26 +321,38 @@ const gripEffect = setInterval(function(){
     players.forEach(p => {
 	room.setPlayerAvatar(p.id,(Math.floor(10*Math.hypot(room.getPlayerDiscProperties(p.id).xspeed,room.getPlayerDiscProperties(p.id).yspeed))).toString());
         // if(generalSafetyCar){
-	    if(room.getPlayerDiscProperties(p.id).xspeed>=7){
+	if(p.tyres=="medios"){
+	    if(room.getPlayerDiscProperties(p.id).xspeed>=8.5){
 		// setTimeout(() => {
-		room.setPlayerDiscProperties(p.id,{xspeed: 7});
+		room.setPlayerDiscProperties(p.id,{xspeed: 8.5});
 		// });
 	    }
-	    if(room.getPlayerDiscProperties(p.id).yspeed>=7){
+	    if(room.getPlayerDiscProperties(p.id).yspeed>=8.5){
+		room.setPlayerDiscProperties(p.id, {yspeed: 8.5});
+	    }
+	    if(room.getPlayerDiscProperties(p.id).xspeed<=-8.5){
+		room.setPlayerDiscProperties(p.id, {xspeed: -8.5});
+	    }
+	    if(room.getPlayerDiscProperties(p.id).yspeed<=-8.5){
+		room.setPlayerDiscProperties(p.id, {yspeed: -8.5});
+	    }
+    	}
+	else if(p.tyres=="duros"){
+	    if(room.getPlayerDiscProperties(p.id).xspeed>=8){
 		// setTimeout(() => {
-		room.setPlayerDiscProperties(p.id, {yspeed: 7});
+		room.setPlayerDiscProperties(p.id,{xspeed: 8});
 		// });
 	    }
-	    if(room.getPlayerDiscProperties(p.id).xspeed<=-7){
-		// setTimeout(() => {
-		room.setPlayerDiscProperties(p.id, {xspeed: -7});
-		// });
+	    if(room.getPlayerDiscProperties(p.id).yspeed>=8){
+		room.setPlayerDiscProperties(p.id, {yspeed: 8});
 	    }
-	    if(room.getPlayerDiscProperties(p.id).yspeed<=-7){
-		// setTimeout(() => {
-		room.setPlayerDiscProperties(p.id, {yspeed: -7});
-		// });
+	    if(room.getPlayerDiscProperties(p.id).xspeed<=-8){
+		room.setPlayerDiscProperties(p.id, {xspeed: -8});
 	    }
+	    if(room.getPlayerDiscProperties(p.id).yspeed<=-8){
+		room.setPlayerDiscProperties(p.id, {yspeed: -8});
+	    }
+    	}
 	// }
     });
 }, 10);
@@ -624,40 +638,6 @@ function pointDistance(p1, p2) {
 //     	};
 // }
 
-// function collisionDetectionSegmentPlayer() { //This function must be handled in room.onGameTick() to get the true result.
-//     var players = room.getPlayerList();
-//     for (var i = 0; i < players.length; i++) {
-//         for (var j = 0; j < JMap.segments.length; j++) {
-//             if (players[i].team == 1) {
-//                 var distancetov0 = pointDistance(room.getPlayerDiscProperties(players[i].id), JMap.vertexes[JMap.segments[j].v0]);
-//                 var distancetov1 = pointDistance(room.getPlayerDiscProperties(players[i].id), JMap.vertexes[JMap.segments[j].v1]);
-//                 var length = pointDistance(JMap.vertexes[JMap.segments[j].v0], JMap.vertexes[JMap.segments[j].v1]);
-//                 var dot = (((players[i].position.x - JMap.vertexes[JMap.segments[j].v0].x) * (JMap.vertexes[JMap.segments[j].v1].x - JMap.vertexes[JMap.segments[j].v0].x)) + ((players[i].position.y - JMap.vertexes[JMap.segments[j].v0].y) * (JMap.vertexes[JMap.segments[j].v1].y - JMap.vertexes[JMap.segments[j].v0].y))) / Math.pow(length, 2);
-//                 var closestX = JMap.vertexes[JMap.segments[j].v0].x + (dot * (JMap.vertexes[JMap.segments[j].v1].x - JMap.vertexes[JMap.segments[j].v0].x));
-//                 var closestY = JMap.vertexes[JMap.segments[j].v0].y + (dot * (JMap.vertexes[JMap.segments[j].v1].y - JMap.vertexes[JMap.segments[j].v0].y));
-//                 var closestPoint = { x: closestX, y: closestY };
-//                 console.log("distancetov0: " + distancetov0 + "\ndistancetov1: " + distancetov1 + "\nlength: " + length + "\ndot: " + dot + "\nclosestPoint: {" + closestPoint.x + "," + closestPoint.y + "}"); //Before handling this function in room.onGameTick(), toggle this row in command line.
-
-//                 if (pointDistance(closestPoint, JMap.vertexes[JMap.segments[j].v0]) + pointDistance(closestPoint, JMap.vertexes[JMap.segments[j].v1]) == length) {
-//                     distX = closestX - players[i].position.x;
-//                     distY = closestY - players[i].position.y;
-//                     var distancetosegment = Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2));
-
-//                     if (0 <= Math.hypot(room.getPlayerDiscProperties(players[i].id).xspeed, room.getPlayerDiscProperties(players[i].id).yspeed)) {
-//                         if (JMap.segments[j].cMask != undefined && JMap.segments[j].cMask.includes("red") == true && JMap.segments[j].bCoef != undefined && JMap.segments[j].curve == undefined || (JMap.segments[j].curve != undefined && JMap.segments[j].curve == 0)) { //Red team collision condition for parkour maps
-//                             if (distancetosegment <= room.getPlayerDiscProperties(players[i].id).radius + 0.01) { //0.01 is the tolerance
-//                                 if (room.getPlayerDiscProperties(players[i].id) != null) {
-//                                     console.log(new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds() + "." + new Date().getMilliseconds() + " 💥 " + players[i].name + " has collided with the point {" + closestX + "," + closestY + "} located on a wall on the point {" + room.getPlayerDiscProperties(players[i].id).x + "," + room.getPlayerDiscProperties(players[i].id).y + "}.");
-//                                 }
-//                             }
-//                         }
-//                     }
-//                 }
-//             }
-//         }
-//     }
-// }
-
 room.onGameStart = function(byPlayer){
     byPlayer == null ? console.log(`Game started`) : console.log(`Game started by ${byPlayer.name}`);
     // positions = [];
@@ -895,7 +875,7 @@ room.onPlayerJoin = function(player){
 	lapTimes.push(0);
     }
 
-    playerList[player.name] = {name: player.name, id: player.id, currentLap: 0, lapChanged: false, delta: 0, drsChanged: false, lapTimes: lapTimes, speedEnabled: false, inSafetyCar: false, isInTheRoom: true, isInTheTrack: false, afk: false};
+    playerList[player.name] = {name: player.name, id: player.id, currentLap: 0, lapChanged: false, delta: 0, drsChanged: false, lapTimes: lapTimes, speedEnabled: false, inSafetyCar: false, isInTheRoom: true, isInTheTrack: false, afk: false, tyres: "macios"};
 
     if(room.getScores() == null && players.length == 1){
 	if(_Circuit.Team != 0)
