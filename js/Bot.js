@@ -321,7 +321,7 @@ const gripEffect = setInterval(function(){
     players.forEach(p => {
 	room.setPlayerAvatar(p.id,(Math.floor(10*Math.hypot(room.getPlayerDiscProperties(p.id).xspeed,room.getPlayerDiscProperties(p.id).yspeed))).toString());
         // if(generalSafetyCar){
-	if(p.tyres=="medios"){
+	if(playerList[p.name].tyres=="medios"){
 	    if(room.getPlayerDiscProperties(p.id).xspeed>=8.5){
 		// setTimeout(() => {
 		room.setPlayerDiscProperties(p.id,{xspeed: 8.5});
@@ -337,7 +337,7 @@ const gripEffect = setInterval(function(){
 		room.setPlayerDiscProperties(p.id, {yspeed: -8.5});
 	    }
     	}
-	else if(p.tyres=="duros"){
+	else if(playerList[p.name].tyres=="duros"){
 	    if(room.getPlayerDiscProperties(p.id).xspeed>=8){
 		// setTimeout(() => {
 		room.setPlayerDiscProperties(p.id,{xspeed: 8});
@@ -703,16 +703,7 @@ room.onPlayerChat = function(player,message){
 	// 	return false;
 	// }
     if(player.admin == true){
-	if(message.toLowerCase().split(" ")[0] == commands.admin){
-	    room.setPlayerAdmin(player.id,!player.admin);
-	    return false;
-	}
-	else if(message.toLowerCase().split(" ")[0] == commands.afk){
-	    room.setPlayerTeam(player.id,0);
-	    playerList[player.name].afk = !playerList[player.name].afk;
-	    return false;
-	}
-	else if(message.toLowerCase().split(" ")[0] == commands.clear){
+	if(message.toLowerCase().split(" ")[0] == commands.clear){
 	    room.sendAnnouncement(`O recorde ${serialize(_Circuit.BestTime[0])} segundos de ${_Circuit.BestTime[1]} foi apagado por ${player.name}`,null,colors.commands,fonts.commands,sounds.commands);
 	    _Circuit.BestTime[0] = 999;
 	    _Circuit.BestTime[1] = "Indefinido (Recorde apagado)";
@@ -814,13 +805,7 @@ room.onPlayerChat = function(player,message){
 
 	    return false;
 	}
-	else if(message.toLowerCase().split(" ")[0] == commands.speed){
-	    playerList[player.name].speedEnabled = !playerList[player.name].speedEnabled;
-	    // room.sendAnnouncement(`Speed is turned ${speedEnableChanges[Number(playerList[player.name].speedEnabled)]}`,player.id,colors.speed,fonts.speed,sounds.speed);
-	    return false;
-	}
     }
-    else{
 	if(message.toLowerCase().split(" ")[0] == commands.admin){
 	    room.setPlayerAdmin(player.id,!player.admin);
 	    return false;
@@ -831,7 +816,7 @@ room.onPlayerChat = function(player,message){
 	    return false;
 	}
 	else if(message.toLowerCase().split(" ")[0] == commands.commands){
-	    room.sendAnnouncement("Comandos disponíveis: !afk, !admin, !commands, !discord, !map, !maps",player.id,colors.commands,fonts.commands,sounds.commands);
+	    room.sendAnnouncement("Comandos disponíveis: !afk, !commands, !discord, !map, !maps",player.id,colors.commands,fonts.commands,sounds.commands);
 	    return false;
 	}
 	else if(message.toLowerCase().split(" ")[0] == commands.discord){
@@ -845,10 +830,11 @@ room.onPlayerChat = function(player,message){
 	}
 	else if(message.toLowerCase().split(" ")[0] == commands.speed){
 	    playerList[player.name].speedEnabled = !playerList[player.name].speedEnabled;
+	    // room.sendAnnouncement(`Speed is turned ${speedEnableChanges[Number(playerList[player.name].speedEnabled)]}`,player.id,colors.speed,fonts.speed,sounds.speed);
 	    return false;
 	}
 	else if(message.toLowerCase().split(" ")[0] == commands.pitstop){
-	    if(hasValue(tyreOptions, message.toLowerCase().split(" ")[1])){
+	    if(tyreOptions.includes(message.toLowerCase().split(" ")[1])){
 	    	playerList[player.name].tyres = message.toLowerCase().split(" ")[1];
 		room.sendAnnouncement(`${player.name} colocou pneus ${message.toLowerCase().split(" ")[1]}`,null,colors.info,"bold",sounds.info);
 	    }
@@ -856,7 +842,6 @@ room.onPlayerChat = function(player,message){
 	    	room.sendAnnouncement("Este pneu não existe! Digite novamente para acertar seu pit stop!",player.id,colors.info,"bold",sounds.info);
 	    }
 	    return false;
-	}
     }
 }
 
