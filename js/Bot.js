@@ -146,7 +146,7 @@ const fonts = {commands: "normal", info: "normal", lapChanged: "normal", lapTime
 const sounds = {commands: 1, info: 0, lapChanged: 1, lapTime: 1, mapChangeWrongName: 1, mapChangeDeny: 2, mapLoad: 1, mapLoadDeny: 1, safety: 1, speed: 0, trackRecord: 2};
 
 var playerList = {};
-const commands = {admin: "!admftoh", afk: "!afk", clear: "!clear", commands: "!help", discord: "!discord", endurance: "!endurance", laps: "!laps", mapInfo:"!map", mapLoad: "!circuit", maps: "!maps", qualy: "!qualy", safetyon: "!scon", safetyoff: "!scoff", speed: "!spd", vote: "!vote"};
+const commands = {admin: "!admftoh", afk: "!afk", clear: "!clear", commands: "!help", discord: "!discord", endurance: "!endurance", laps: "!laps", mapInfo:"!map", mapLoad: "!circuit", maps: "!maps", qualy: "!qualy", safetyon: "!scon", safetyoff: "!scoff", speed: "!grip", vote: "!vote"};
 const hasValue = (commands, value) => Object.values(commands).includes(value);
 
 const adminChanges = ["'s admin rights were taken away"," was given admin rights"];
@@ -312,17 +312,36 @@ function voteMap(player,message){ //Command example: !vote 1
     }
 }
 
+
 const gripEffect = setInterval(function(){
     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && playerList[p.name].speedEnabled == true);
 
     players.forEach(p => {
-	// room.setPlayerAvatar(p.id,(Math.floor(10*Math.hypot(room.getPlayerDiscProperties(p.id).xspeed,room.getPlayerDiscProperties(p.id).yspeed))).toString());
+	room.setPlayerAvatar(p.id,(Math.floor(10*Math.hypot(room.getPlayerDiscProperties(p.id).xspeed,room.getPlayerDiscProperties(p.id).yspeed))).toString());
+        // if(generalSafetyCar){
+	    if(room.getPlayerDiscProperties(p.id).xspeed>=7){
 		// setTimeout(() => {
-		room.setPlayerDiscProperties(p.id,{xspeed: room.getPlayerDiscProperties(p.id).xspeed*(95/100)});
-		room.setPlayerDiscProperties(p.id, {yspeed: room.getPlayerDiscProperties(p.id).yspeed*(95/100)});
+		room.setPlayerDiscProperties(p.id,{xspeed: 7});
 		// });
+	    }
+	    if(room.getPlayerDiscProperties(p.id).yspeed>=7){
+		// setTimeout(() => {
+		room.setPlayerDiscProperties(p.id, {yspeed: 7});
+		// });
+	    }
+	    if(room.getPlayerDiscProperties(p.id).xspeed<=-7){
+		// setTimeout(() => {
+		room.setPlayerDiscProperties(p.id, {xspeed: -7});
+		// });
+	    }
+	    if(room.getPlayerDiscProperties(p.id).yspeed<=-7){
+		// setTimeout(() => {
+		room.setPlayerDiscProperties(p.id, {yspeed: -7});
+		// });
+	    }
+	// }
     });
-    }, 50);
+}, 10);
 
 function checkPlayerLaps(){
     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
@@ -698,10 +717,10 @@ room.onPlayerAdminChange = function(changedPlayer,byPlayer){
 }
 
 room.onPlayerChat = function(player,message){
-    if(message.split(" ")[0][0] == "!" && !hasValue(commands, message)){
-		room.sendAnnouncement("Este comando não existe!",player.id,colors.info,"bold",sounds.info);
-		return false;
-	}
+ //    if(message.split(" ")[0][0] == "!" && !hasValue(commands, message)){
+	// 	room.sendAnnouncement("Este comando não existe!",player.id,colors.info,"bold",sounds.info);
+	// 	return false;
+	// }
     if(player.admin == true){
 	if(message.toLowerCase().split(" ")[0] == commands.admin){
 	    room.setPlayerAdmin(player.id,!player.admin);
