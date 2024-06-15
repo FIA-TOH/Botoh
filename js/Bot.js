@@ -313,7 +313,7 @@ function voteMap(player,message){ //Command example: !vote 1
 }
 
 
-const gripEffect = setInterval(function(){
+function gripEffect(){
     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && playerList[p.name].speedEnabled == true);
 
     players.forEach(p => {
@@ -341,7 +341,7 @@ const gripEffect = setInterval(function(){
 	    }
 	// }
     });
-}, 10);
+};
 
 function checkPlayerLaps(){
     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
@@ -707,6 +707,7 @@ room.onGameTick = function(){
     checkPlayerLaps();
     handleInactivity();
     endRaceSession();
+    gripEffect();
     currentTime += 1/60;
     // collisionDetectionSegmentPlayer();
     // runCamera();
