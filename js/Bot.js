@@ -322,40 +322,63 @@ const gripEffect = setInterval(function(){
 	room.setPlayerAvatar(p.id,(Math.floor(10*Math.hypot(room.getPlayerDiscProperties(p.id).xspeed,room.getPlayerDiscProperties(p.id).yspeed))).toString());
         // if(generalSafetyCar){
 	if(playerList[p.name].tyres=="medios"){
-	    if(room.getPlayerDiscProperties(p.id).xspeed>=8.5){
+	    if(room.getPlayerDiscProperties(p.id).xspeed>=8.8){
 		// setTimeout(() => {
-		room.setPlayerDiscProperties(p.id,{xspeed: 8.5});
+		room.setPlayerDiscProperties(p.id,{xspeed: 8.8});
 		// });
 	    }
-	    if(room.getPlayerDiscProperties(p.id).yspeed>=8.5){
-		room.setPlayerDiscProperties(p.id, {yspeed: 8.5});
+	    if(room.getPlayerDiscProperties(p.id).yspeed>=8.8){
+		room.setPlayerDiscProperties(p.id, {yspeed: 8.8});
 	    }
-	    if(room.getPlayerDiscProperties(p.id).xspeed<=-8.5){
-		room.setPlayerDiscProperties(p.id, {xspeed: -8.5});
+	    if(room.getPlayerDiscProperties(p.id).xspeed<=-8.8){
+		room.setPlayerDiscProperties(p.id, {xspeed: -8.8});
 	    }
-	    if(room.getPlayerDiscProperties(p.id).yspeed<=-8.5){
-		room.setPlayerDiscProperties(p.id, {yspeed: -8.5});
+	    if(room.getPlayerDiscProperties(p.id).yspeed<=-8.8){
+		room.setPlayerDiscProperties(p.id, {yspeed: -8.8});
 	    }
     	}
 	else if(playerList[p.name].tyres=="duros"){
-	    if(room.getPlayerDiscProperties(p.id).xspeed>=8){
+	    if(room.getPlayerDiscProperties(p.id).xspeed>=8.3){
 		// setTimeout(() => {
-		room.setPlayerDiscProperties(p.id,{xspeed: 8});
+		room.setPlayerDiscProperties(p.id,{xspeed: 8.3});
 		// });
 	    }
-	    if(room.getPlayerDiscProperties(p.id).yspeed>=8){
-		room.setPlayerDiscProperties(p.id, {yspeed: 8});
+	    if(room.getPlayerDiscProperties(p.id).yspeed>=8.3){
+		room.setPlayerDiscProperties(p.id, {yspeed: 8.3});
 	    }
-	    if(room.getPlayerDiscProperties(p.id).xspeed<=-8){
-		room.setPlayerDiscProperties(p.id, {xspeed: -8});
+	    if(room.getPlayerDiscProperties(p.id).xspeed<=-8.3){
+		room.setPlayerDiscProperties(p.id, {xspeed: -8.3});
 	    }
-	    if(room.getPlayerDiscProperties(p.id).yspeed<=-8){
-		room.setPlayerDiscProperties(p.id, {yspeed: -8});
+	    if(room.getPlayerDiscProperties(p.id).yspeed<=-8.3){
+		room.setPlayerDiscProperties(p.id, {yspeed: -8.3});
 	    }
     	}
 	// }
     });
 }, 10);
+
+const tyresWear = setInterval(function(){
+	let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
+	let range = [1, 0.8, 0.6, 0.4, 0.2, 0];
+
+	players.forEach(p => {
+		let playerX = room.getPlayerDiscProperties(p.id).x;
+		let playerY = room.getPlayerDiscProperties(p.id).y;
+		if(playerList[p.tyres=="macios"]){
+			pointdistance(playerX,playerY);
+		}
+		else if(playerList[p.tyres=="medios"]){
+			
+		}
+		else if(playerList[p.tyres=="duros"]){
+			
+		}
+	})
+}, 10);
+
+function pitSpeedLimit(){
+	
+}
 
 function checkPlayerLaps(){
     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
@@ -605,6 +628,14 @@ function endRaceSession(){
 }
 
 function ifInLapChangeZone(player){
+    return room.getScores().time > 0 && _Circuit && _Circuit.MinX <= room.getPlayerDiscProperties(player.id).x && room.getPlayerDiscProperties(player.id).x <= _Circuit.MaxX && _Circuit.MinY <= room.getPlayerDiscProperties(player.id).y && room.getPlayerDiscProperties(player.id).y <= _Circuit.MaxY;
+}
+
+function ifInPitLane(player){
+    return room.getScores().time > 0 && _Circuit && _Circuit.MinX <= room.getPlayerDiscProperties(player.id).x && room.getPlayerDiscProperties(player.id).x <= _Circuit.MaxX && _Circuit.MinY <= room.getPlayerDiscProperties(player.id).y && room.getPlayerDiscProperties(player.id).y <= _Circuit.MaxY;
+}
+
+function ifInBoxesZone(player){
     return room.getScores().time > 0 && _Circuit && _Circuit.MinX <= room.getPlayerDiscProperties(player.id).x && room.getPlayerDiscProperties(player.id).x <= _Circuit.MaxX && _Circuit.MinY <= room.getPlayerDiscProperties(player.id).y && room.getPlayerDiscProperties(player.id).y <= _Circuit.MaxY;
 }
 
