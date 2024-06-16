@@ -173,7 +173,7 @@ var VoteSession = false;
 var GetVotesAndAnnounceResults_Timeout_1;
 var GetVotesAndAnnounceResults_Timeout_2;
 
-const tyreOptions = ["macios", "medios", "duros"];
+const tyreOptions = {macios: 4, medios: 6, duros: 8};
 
 var MapStartWaitTimeout = 3000; //In milliseconds
 var VoteTimeout = 15000; //In milliseconds
@@ -357,24 +357,19 @@ const gripEffect = setInterval(function(){
     });
 }, 10);
 
-const tyresWear = setInterval(function(){
+function tyresWear(){
 	let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
-	let range = [1, 0.8, 0.6, 0.4, 0.2, 0];
 
+	// room.setPlayerAvatar(p.id,"🔴");
 	players.forEach(p => {
-		let playerX = room.getPlayerDiscProperties(p.id).x;
-		let playerY = room.getPlayerDiscProperties(p.id).y;
-		if(playerList[p.tyres=="macios"]){
-			pointdistance(playerX,playerY);
-		}
-		else if(playerList[p.tyres=="medios"]){
-			
-		}
-		else if(playerList[p.tyres=="duros"]){
-			
+		if(ifInLapChangeZone(p) && playerList[p.name].wear<tyreOptions[playerList[p.name].tyres]){
+			setTimeout(p => {
+			playerList[p.name].wear++;
+			room.sendAnnouncement(`❗ Você tem mais ${tyreOptions[playerList[p.name].tyres]-playerList[p.name].wear} voltas de pneu restantes ❗`, p.id, colors.safety, "bold", sounds.safety);
+			}, lapChangeAnnouncementTimeout);
 		}
 	})
-}, 10);
+};
 
 function pitSpeedLimit(){
 	
@@ -683,6 +678,7 @@ room.onGameStart = function(byPlayer){
 	playerList[p.name].lapChanged = false;
 	playerList[p.name].drsChanged = false;
 	playerList[p.name].inSafetyCar = false;
+	playerList[p.name].wear = 0;
 	for(let i=0; i<limit; i++){
 		playerList[p.name].lapTimes.push(0);
     	}
@@ -706,6 +702,7 @@ room.onGameStop = function(byPlayer){
 	playerList[p.name].lapChanged = false;
 	playerList[p.name].drsChanged = false;
 	playerList[p.name].inSafetyCar = false;
+	playerList[p.name].wear = 0;
 	playerList[p.name].lapTimes = [];
     });
 }
@@ -718,6 +715,7 @@ room.onGameTick = function(){
     checkPlayerLaps();
     handleInactivity();
     endRaceSession();
+    tyresWear();
     // gripEffect();
     currentTime += 1/60;
     // collisionDetectionSegmentPlayer();
@@ -891,7 +889,7 @@ room.onPlayerJoin = function(player){
 	lapTimes.push(0);
     }
 
-    playerList[player.name] = {name: player.name, id: player.id, currentLap: 0, lapChanged: false, delta: 0, drsChanged: false, lapTimes: lapTimes, speedEnabled: false, inSafetyCar: false, isInTheRoom: true, isInTheTrack: false, afk: false, tyres: "macios"};
+    playerList[player.name] = {name: player.name, id: player.id, currentLap: 0, lapChanged: false, delta: 0, drsChanged: false, lapTimes: lapTimes, speedEnabled: false, inSafetyCar: false, isInTheRoom: true, isInTheTrack: false, afk: false, tyres: "macios", wear: 0};
 
     if(room.getScores() == null && players.length == 1){
 	if(_Circuit.Team != 0)
@@ -912,6 +910,7 @@ room.onPlayerLeave = function(player){
     playerList[player.name].inSafetyCar = false;
     playerList[player.name].isInTheRoom = false;
     playerList[player.name].isInTheTrack = false;
+    playerList[player.name].wear = 0;
 
     if(room.getScores() != null && players.length == 0){
 	room.stopGame();
