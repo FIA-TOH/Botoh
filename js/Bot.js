@@ -715,7 +715,7 @@ room.onGameTick = function(){
     checkPlayerLaps();
     handleInactivity();
     endRaceSession();
-    tyresWear();
+    // tyresWear();
     // gripEffect();
     currentTime += 1/60;
     // collisionDetectionSegmentPlayer();
