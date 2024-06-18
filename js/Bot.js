@@ -363,9 +363,10 @@ function tyresWear(){
 	// room.setPlayerAvatar(p.id,"🔴");
 	players.forEach(p => {
 		if(ifInLapChangeZone(p) && playerList[p.name].wear<tyreOptions[playerList[p.name].tyres]){
-			setTimeout(p => {
+			let wearTimeout = setTimeout(f => {
 			playerList[p.name].wear++;
 			room.sendAnnouncement(`❗ Você tem mais ${tyreOptions[playerList[p.name].tyres]-playerList[p.name].wear} voltas de pneu restantes ❗`, p.id, colors.safety, "bold", sounds.safety);
+			clearTimeout(wearTimeout);
 			}, lapChangeAnnouncementTimeout);
 		}
 	})
@@ -715,7 +716,7 @@ room.onGameTick = function(){
     checkPlayerLaps();
     handleInactivity();
     endRaceSession();
-    // tyresWear();
+    tyresWear();
     // gripEffect();
     currentTime += 1/60;
     // collisionDetectionSegmentPlayer();
