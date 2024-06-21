@@ -173,7 +173,7 @@ var VoteSession = false;
 var GetVotesAndAnnounceResults_Timeout_1;
 var GetVotesAndAnnounceResults_Timeout_2;
 
-const tyreOptions = {macios: 4, medios: 6, duros: 8};
+const tyreOptions = {macios: 5, medios: 7, duros: 9, furados: 0};
 
 var MapStartWaitTimeout = 3000; //In milliseconds
 var VoteTimeout = 15000; //In milliseconds
@@ -322,6 +322,7 @@ const gripEffect = setInterval(function(){
 	room.setPlayerAvatar(p.id,(Math.floor(10*Math.hypot(room.getPlayerDiscProperties(p.id).xspeed,room.getPlayerDiscProperties(p.id).yspeed))).toString());
         // if(generalSafetyCar){
 	if(playerList[p.name].tyres=="medios"){
+	    room.setPlayerAvatar(p.id,"🟡");
 	    if(room.getPlayerDiscProperties(p.id).xspeed>=8.8){
 		// setTimeout(() => {
 		room.setPlayerDiscProperties(p.id,{xspeed: 8.8});
@@ -338,6 +339,7 @@ const gripEffect = setInterval(function(){
 	    }
     	}
 	else if(playerList[p.name].tyres=="duros"){
+	    room.setPlayerAvatar(p.id,"⚪");
 	    if(room.getPlayerDiscProperties(p.id).xspeed>=8.3){
 		// setTimeout(() => {
 		room.setPlayerDiscProperties(p.id,{xspeed: 8.3});
@@ -353,23 +355,22 @@ const gripEffect = setInterval(function(){
 		room.setPlayerDiscProperties(p.id, {yspeed: -8.3});
 	    }
     	}
+	// else{
+	//     room.setPlayerAvatar(p.id,"🔴🟡⚪");
+	// }
 	// }
     });
 }, 10);
 
 function tyresWear(){
 	let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
-
 	// room.setPlayerAvatar(p.id,"🔴");
 	players.forEach(p => {
-		if(ifInLapChangeZone(p) && playerList[p.name].wear<tyreOptions[playerList[p.name].tyres]){
-			let wearTimeout = setTimeout(f => {
-			playerList[p.name].wear++;
-			room.sendAnnouncement(`❗ Você tem mais ${tyreOptions[playerList[p.name].tyres]-playerList[p.name].wear} voltas de pneu restantes ❗`, p.id, colors.safety, "bold", sounds.safety);
-			clearTimeout(wearTimeout);
-			}, lapChangeAnnouncementTimeout);
+		if(playerList[p.name].wear > tyreOptions[playerList[p.name].tyres){
+			playerList[p.name].tyres=="furados";
+			room.sendAnnouncement(`❗ Teus pneus estão furados, faça o pitstop!❗`, p.id, colors.safety, "bold", sounds.safety);
 		}
-	})
+	});
 };
 
 function pitSpeedLimit(){
@@ -385,6 +386,8 @@ function checkPlayerLaps(){
 	}
 	if(!ifInLapChangeZone(p) && playerList[p.name].lapChanged == true){
 	    playerList[p.name].lapChanged = false;
+	    playerList[p.name].wear++;
+	    room.sendAnnouncement(`❗ Você tem mais ${tyreOptions[playerList[p.name].tyres]-playerList[p.name].wear} voltas de pneu restantes ❗`, p.id, colors.safety, "bold", sounds.safety);
 	}
 	if(ifInLapChangeZone(p) && playerList[p.name].lapChanged == false){
 	    if(playerList[p.name].currentLap < limit){
