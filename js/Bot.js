@@ -355,6 +355,22 @@ const gripEffect = setInterval(function(){
 		room.setPlayerDiscProperties(p.id, {yspeed: -8.3});
 	    }
     	}
+	else if(playerList[p.name].tyres=="furados"){
+	    if(room.getPlayerDiscProperties(p.id).xspeed>=5){
+		// setTimeout(() => {
+		room.setPlayerDiscProperties(p.id,{xspeed: 5});
+		// });
+	    }
+	    if(room.getPlayerDiscProperties(p.id).yspeed>=5){
+		room.setPlayerDiscProperties(p.id, {yspeed: 5});
+	    }
+	    if(room.getPlayerDiscProperties(p.id).xspeed<=-5){
+		room.setPlayerDiscProperties(p.id, {xspeed: -5});
+	    }
+	    if(room.getPlayerDiscProperties(p.id).yspeed<=-5){
+		room.setPlayerDiscProperties(p.id, {yspeed: -5});
+	    }
+    	}
 	// else{
 	//     room.setPlayerAvatar(p.id,"🔴🟡⚪");
 	// }
@@ -362,15 +378,17 @@ const gripEffect = setInterval(function(){
     });
 }, 10);
 
-function tyresWear(){
-	let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
-	// room.setPlayerAvatar(p.id,"🔴");
-	players.forEach(p => {
-		if(playerList[p.name].wear > tyreOptions[playerList[p.name].tyres){
-			playerList[p.name].tyres=="furados";
-			room.sendAnnouncement(`❗ Teus pneus estão furados, faça o pitstop!❗`, p.id, colors.safety, "bold", sounds.safety);
-		}
-	});
+function tyresWear(player){
+	// let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
+	
+	if(playerList[player.name].wear > tyreOptions[playerList[player.name].tyres]){
+		playerList[player.name].tyres=="furados";
+		room.sendAnnouncement(`❗ Teus pneus estão furados, faça o pitstop! ❗`, player.id, colors.safety, "bold", sounds.safety);
+	}
+	else{
+		playerList[player.name].wear++;
+	        room.sendAnnouncement(`❗ Você tem ${tyreOptions[playerList[player.name].tyres]-playerList[player.name].wear} voltas de pneu restantes ❗`, player.id, colors.safety, "bold", sounds.safety);	
+	}
 };
 
 function pitSpeedLimit(){
@@ -386,8 +404,9 @@ function checkPlayerLaps(){
 	}
 	if(!ifInLapChangeZone(p) && playerList[p.name].lapChanged == true){
 	    playerList[p.name].lapChanged = false;
-	    playerList[p.name].wear++;
-	    room.sendAnnouncement(`❗ Você tem mais ${tyreOptions[playerList[p.name].tyres]-playerList[p.name].wear} voltas de pneu restantes ❗`, p.id, colors.safety, "bold", sounds.safety);
+	    tyresWear(p);
+	    // playerList[p.name].wear++;
+	    // room.sendAnnouncement(`❗ Você tem ${tyreOptions[playerList[p.name].tyres]-playerList[p.name].wear} voltas de pneu restantes ❗`, p.id, colors.safety, "bold", sounds.safety);
 	}
 	if(ifInLapChangeZone(p) && playerList[p.name].lapChanged == false){
 	    if(playerList[p.name].currentLap < limit){
@@ -719,7 +738,6 @@ room.onGameTick = function(){
     checkPlayerLaps();
     handleInactivity();
     endRaceSession();
-    tyresWear();
     // gripEffect();
     currentTime += 1/60;
     // collisionDetectionSegmentPlayer();
