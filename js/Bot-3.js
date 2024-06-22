@@ -885,7 +885,7 @@ room.onPlayerChat = function(player,message){
 	    return false;
 	}
 	else if(message.toLowerCase().split(" ")[0] == commands.pitstop){
-	    if(tyreOptions.includes(message.toLowerCase().split(" ")[1])){
+	    if(tyreOptions[message.toLowerCase().split(" ")[1]]){
 	    	playerList[player.name].tyres = message.toLowerCase().split(" ")[1];
 		room.sendAnnouncement(`${player.name} colocou pneus ${message.toLowerCase().split(" ")[1]}`,null,colors.info,"bold",sounds.info);
 	    }
