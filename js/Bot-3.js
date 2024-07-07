@@ -421,9 +421,25 @@ function tyresWear(player){
 	}
 };
 
-function pitSpeedLimit(){
-	
-}
+const pitSpeedLimit = setInterval(function(){
+	let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
+	players.forEach(p => {
+	if(ifInPitLane(p)){
+	    if(room.getPlayerDiscProperties(p.id).xspeed>=4.4){
+		room.setPlayerDiscProperties(p.id,{xspeed: 4.4});
+	    }
+	    if(room.getPlayerDiscProperties(p.id).yspeed>=4.4){
+		room.setPlayerDiscProperties(p.id, {yspeed: 4.4});
+	    }
+	    if(room.getPlayerDiscProperties(p.id).xspeed<=-4.4){
+		room.setPlayerDiscProperties(p.id, {xspeed: -4.4});
+	    }
+	    if(room.getPlayerDiscProperties(p.id).yspeed<=-4.4){
+		room.setPlayerDiscProperties(p.id, {yspeed: -4.4});
+	    }
+	}
+	});
+}, 10)
 
 function checkPlayerLaps(){
     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
@@ -682,7 +698,7 @@ function ifInLapChangeZone(player){
 }
 
 function ifInPitLane(player){
-    return room.getScores().time > 0 && _Circuit && _Circuit.MinX <= room.getPlayerDiscProperties(player.id).x && room.getPlayerDiscProperties(player.id).x <= _Circuit.MaxX && _Circuit.MinY <= room.getPlayerDiscProperties(player.id).y && room.getPlayerDiscProperties(player.id).y <= _Circuit.MaxY;
+    return room.getScores().time > 0 && _Circuit && _Circuit.LaneMinX <= room.getPlayerDiscProperties(player.id).x && room.getPlayerDiscProperties(player.id).x <= _Circuit.LaneMaxX && _Circuit.LaneMinY <= room.getPlayerDiscProperties(player.id).y && room.getPlayerDiscProperties(player.id).y <= _Circuit.LaneMaxY;
 }
 
 function ifInBoxesZone(player){
