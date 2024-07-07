@@ -466,10 +466,12 @@ function checkPlayerLaps(){
 		    if(playerList[name].currentLap > 1){
 			var lapTime = parseFloat(playerList[name].lapTimes[playerList[name].currentLap-2]);
 			room.sendAnnouncement(`⏱ Volta ${playerList[name].currentLap-1}/${limit} de ${name}: ${serialize(lapTime)} segundos`,null,colors.lapTime,fonts.lapTime,sounds.lapTime);
-			if(lapTime < _Circuit.BestTime[0]){
+			if(lapTime < _Circuit.BestTime[0] && lapTime > 20.000){
 			    room.sendAnnouncement(`🆕 Recorde! ${name} - ${serialize(lapTime)} segundos`,null,colors.trackRecord,fonts.trackRecord.trackRecord);
 			    _Circuit.BestTime = [lapTime,name];
 			    _Circuits[index].BestTime = [lapTime,name];
+			} if (lapTime < 20.000){
+				room.kickPlayer(id, "Não cruze a linha ao contrario!", false);
 			}
 		    }
 		    room.sendAnnouncement(`Lap ${playerList[name].currentLap}/${limit}`,id,colors.lapChanged,fonts.lapChanged,sounds.lapChanged);
