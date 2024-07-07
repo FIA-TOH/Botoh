@@ -466,7 +466,7 @@ function checkPlayerLaps(){
 		    if(Math.sign(room.getPlayerDiscProperties(id).xspeed) == -1 * _Circuit.DriveDirection){
 			room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, colors.safety, "bold", sounds.safety);
 			room.sendAnnouncement(`❗ Aviso para: ${name} ❗`, null, colors.safety, "bold", sounds.safety);
-			room.setPlayerTeam(p.id,0);
+			// room.setPlayerTeam(p.id,0);
 			playerList[name].inSafetyCar = true;
 			clearTimeout(crossing);
 		    }
@@ -475,7 +475,7 @@ function checkPlayerLaps(){
 		    if(Math.sign(room.getPlayerDiscProperties(id).yspeed) == -1 * _Circuit.DriveDirection){
 			room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, colors.safety, "bold", sounds.safety);
 			room.sendAnnouncement(`❗ Aviso para: ${name} ❗`, null, colors.safety, "bold", sounds.safety);
-			room.setPlayerTeam(p.id,0);
+			// room.setPlayerTeam(p.id,0);
 			playerList[name].inSafetyCar = true;
 			clearTimeout(crossing);
 		    }
@@ -514,7 +514,7 @@ function checkPlayerLaps(){
 		    if(Math.sign(room.getPlayerDiscProperties(id).xspeed) == -1 * _Circuit.DriveDirection){
 			room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, colors.safety, "bold", sounds.safety);
 			room.sendAnnouncement(`❗ Aviso para: ${name} ❗`, null, colors.safety, "bold", sounds.safety);
-			room.setPlayerTeam(p.id,0);
+			// room.setPlayerTeam(p.id,0);
 			playerList[name].inSafetyCar = true;
 			clearTimeout(crossing);
 		    }
@@ -523,7 +523,7 @@ function checkPlayerLaps(){
 		    if(Math.sign(room.getPlayerDiscProperties(id).yspeed) == -1 * _Circuit.DriveDirection){
 			room.sendAnnouncement(`⚠️ ALERTA DE SAFETY CAR!! ⚠️`, null, colors.safety, "bold", sounds.safety);
 			room.sendAnnouncement(`❗ Aviso para: ${name} ❗`, null, colors.safety, "bold", sounds.safety);
-			room.setPlayerTeam(p.id,0);
+			// room.setPlayerTeam(p.id,0);
 			playerList[name].inSafetyCar = true;
 			clearTimeout(crossing);
 		    }
