@@ -334,7 +334,24 @@ const gripEffect = setInterval(function(){
     players.forEach(p => {
 	room.setPlayerAvatar(p.id,(Math.floor(10*Math.hypot(room.getPlayerDiscProperties(p.id).xspeed,room.getPlayerDiscProperties(p.id).yspeed))).toString());
         // if(generalSafetyCar){
-	if(playerList[p.name].tyres=="medios"){
+	if(playerList[p.name].tyres=="macios"){
+	    room.setPlayerAvatar(p.id,"🔴");
+	    if(room.getPlayerDiscProperties(p.id).xspeed>=9.4){
+		// setTimeout(() => {
+		room.setPlayerDiscProperties(p.id,{xspeed: 9.4});
+		// });
+	    }
+	    if(room.getPlayerDiscProperties(p.id).yspeed>=9.4){
+		room.setPlayerDiscProperties(p.id, {yspeed: 9.4});
+	    }
+	    if(room.getPlayerDiscProperties(p.id).xspeed<=-9.4){
+		room.setPlayerDiscProperties(p.id, {xspeed: -9.4});
+	    }
+	    if(room.getPlayerDiscProperties(p.id).yspeed<=-9.4){
+		room.setPlayerDiscProperties(p.id, {yspeed: -9.4});
+	    }
+    	}
+	else if(playerList[p.name].tyres=="medios"){
 	    room.setPlayerAvatar(p.id,"🟡");
 	    if(room.getPlayerDiscProperties(p.id).xspeed>=8.8){
 		// setTimeout(() => {
