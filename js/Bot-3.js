@@ -193,7 +193,7 @@ var VoteTimeout = 15000; //In milliseconds
 
 var isRoomSet = false;
 
-var room = HBInit({roomName:"🏎️🏁 Fórmula 1 - Sessão Livre 🏎️🏁",noPlayer:true,public:true,maxPlayers:20});
+var room = HBInit({roomName:"🏎️🏁 Fórmula 1 - Sessão Livre 🏎️🏁",noPlayer:true,public:false,maxPlayers:20});
 
 room.setScoreLimit(0);
 room.setTimeLimit(0);
@@ -327,8 +327,7 @@ function voteMap(player,message){ //Command example: !vote 1
     }
 }
 
-
-const gripEffect = setInterval(function(){
+function gripEffect(){
     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && playerList[p.name].speedEnabled == true);
 
     players.forEach(p => {
@@ -406,7 +405,7 @@ const gripEffect = setInterval(function(){
 	// }
 	// }
     });
-}, 10);
+};
 
 function tyresWear(player){
 	// let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
@@ -421,7 +420,7 @@ function tyresWear(player){
 	}
 };
 
-const pitSpeedLimit = setInterval(function(){
+function pitSpeedLimit(){
 	let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
 	players.forEach(p => {
 	if(ifInPitLane(p)){
@@ -439,7 +438,7 @@ const pitSpeedLimit = setInterval(function(){
 	    }
 	}
 	});
-}, 10)
+}
 
 function checkPlayerLaps(){
     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
@@ -549,7 +548,7 @@ function checkPlayerLaps(){
 		 //    room.sendAnnouncement(`P${actualPosition}. ${name} - ${serialize(secondsToTime(timeSum))}`,null,colors.finish,fonts.lapChanged,sounds.lapChanged);
 		 //    room.setPlayerTeam(id,0);
 		    let timeSum = parseFloat(currentTime);
-		    room.sendAnnouncement(`Tempo total de ${name} - ${secondsToTime(serialize(currentTime))}`,null,colors.finish,fonts.lapChanged,sounds.lapChanged);
+		    room.sendAnnouncement(`Tempo total de ${name} - ${secondsToTime(serialize(room.getScores().time))}`,null,colors.finish,fonts.lapChanged,sounds.lapChanged);
 		    room.setPlayerTeam(id,0);
 		}
 		else{
@@ -786,6 +785,8 @@ room.onGameTick = function(){
     checkPlayerLaps();
     handleInactivity();
     endRaceSession();
+    gripEffect();
+    pitSpeedLimit();
     // gripEffect();
     currentTime += 1/60;
     // collisionDetectionSegmentPlayer();
