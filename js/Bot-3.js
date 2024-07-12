@@ -212,7 +212,7 @@ function secondsToTime(seconds) {
 
 const discordMessage = setInterval(function(){
 	room.sendAnnouncement("Entre no nosso Discord e venha participar da Fórmula TOH!",null,colors.info,"bold",sounds.info);
-	room.sendAnnouncement(`Link: https://discord.gg/MAXhQNKRjS`,null,colors.info,"normal",sounds.info);
+	room.sendAnnouncement(`Link: https://discord.gg/Y6m6hhwh`,null,colors.info,"normal",sounds.info);
     }, 300000);
 
 function getVotesAndAnnounceResults(){
