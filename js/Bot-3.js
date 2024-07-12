@@ -193,7 +193,7 @@ var VoteTimeout = 15000; //In milliseconds
 
 var isRoomSet = false;
 
-var room = HBInit({roomName:"🏎️🏁 Fórmula 1 - Sessão Livre 🏎️🏁",noPlayer:true,public:false,maxPlayers:20});
+var room = HBInit({roomName:"🏎️🏁 Fórmula 1 - Sessão Livre 🏎️🏁",noPlayer:true,public:true,maxPlayers:20});
 
 room.setScoreLimit(0);
 room.setTimeLimit(0);
@@ -334,7 +334,7 @@ function gripEffect(){
 	room.setPlayerAvatar(p.id,(Math.floor(10*Math.hypot(room.getPlayerDiscProperties(p.id).xspeed,room.getPlayerDiscProperties(p.id).yspeed))).toString());
         // if(generalSafetyCar){
 	if(playerList[p.name].tyres=="macios"){
-	    room.setPlayerAvatar(p.id,"🔴");
+	    // room.setPlayerAvatar(p.id,"🔴");
 	    if(room.getPlayerDiscProperties(p.id).xspeed>=9.4){
 		// setTimeout(() => {
 		room.setPlayerDiscProperties(p.id,{xspeed: 9.4});
@@ -351,7 +351,7 @@ function gripEffect(){
 	    }
     	}
 	else if(playerList[p.name].tyres=="medios"){
-	    room.setPlayerAvatar(p.id,"🟡");
+	    // room.setPlayerAvatar(p.id,"🟡");
 	    if(room.getPlayerDiscProperties(p.id).xspeed>=8.8){
 		// setTimeout(() => {
 		room.setPlayerDiscProperties(p.id,{xspeed: 8.8});
@@ -368,7 +368,7 @@ function gripEffect(){
 	    }
     	}
 	else if(playerList[p.name].tyres=="duros"){
-	    room.setPlayerAvatar(p.id,"⚪");
+	    // room.setPlayerAvatar(p.id,"⚪");
 	    if(room.getPlayerDiscProperties(p.id).xspeed>=8.3){
 		// setTimeout(() => {
 		room.setPlayerDiscProperties(p.id,{xspeed: 8.3});
@@ -449,9 +449,9 @@ function checkPlayerLaps(){
 	}
 	if(!ifInLapChangeZone(p) && playerList[p.name].lapChanged == true){
 	    playerList[p.name].lapChanged = false;
-	    // tyresWear(p);
+	    tyresWear(p);
 	    // playerList[p.name].wear++;
-	    // room.sendAnnouncement(`❗ Você tem ${tyreOptions[playerList[p.name].tyres]-playerList[p.name].wear} voltas de pneu restantes ❗`, p.id, colors.safety, "bold", sounds.safety);
+	    room.sendAnnouncement(`❗ Você tem ${tyreOptions[playerList[p.name].tyres]-playerList[p.name].wear} voltas de pneu restantes ❗`, p.id, colors.safety, "bold", sounds.safety);
 	}
 	if(ifInLapChangeZone(p) && playerList[p.name].lapChanged == false){
 	    if(playerList[p.name].currentLap < limit){
@@ -712,27 +712,25 @@ function pointDistance(p1, p2) {
     return Math.hypot(p1.x - p2.x, p1.y - p2.y);
 }
 
-// function runCamera(){
-//     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && playerList[p.name].isInTheTrack == true);
-//     if (currentTime >= 42) {
-// 	if(Math.floor(currentTime) % 5 == 0) {
-// 	camId = Math.ceil(Math.random() * players.length);
-// 	// players.forEach(p => {
-// 	// 	if(playerList[p.name].id==camId){
-// 	// 		validCam = true;
-// 	// 	};
-// 	//  });
-// 	}
-// 	if(camId != null && room.getPlayerDiscProperties(camId) != null && room.getPlayerDiscProperties(camId).x != null) {
-//             // room.setDiscProperties(0,{x: room.getPlayerDiscProperties(camId).x+randomDistance});
-//             // room.setDiscProperties(0,{y: room.getPlayerDiscProperties(camId).y+randomDistance});
-//             room.setDiscProperties(0,{x: room.getPlayerDiscProperties(camId).x});
-//             room.setDiscProperties(0,{y: room.getPlayerDiscProperties(camId).y});
-// 	    room.setDiscProperties(0,{xspeed: 0});
-//             room.setDiscProperties(0,{yspeed: 0})
-//     	}
-//     	};
-// }
+function runCamera(){
+    let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && playerList[p.name].isInTheTrack == true);
+    if (currentTime >= 42) {
+	if(Math.floor(currentTime) % 5 == 0) {
+	camId = Math.ceil(Math.random() * players.length);
+	// players.forEach(p => {
+	// 	if(playerList[p.name].id==camId){
+	// 		validCam = true;
+	// 	};
+	//  });
+	}
+	if(camId != null && room.getPlayerDiscProperties(camId) != null && room.getPlayerDiscProperties(camId).x != null) {
+            room.setDiscProperties(0,{x: room.getPlayerDiscProperties(camId).x});
+            room.setDiscProperties(0,{y: room.getPlayerDiscProperties(camId).y});
+	    room.setDiscProperties(0,{xspeed: 0});
+            room.setDiscProperties(0,{yspeed: 0})
+    	}
+    	};
+}
 
 room.onGameStart = function(byPlayer){
     byPlayer == null ? console.log(`Game started`) : console.log(`Game started by ${byPlayer.name}`);
@@ -786,8 +784,7 @@ room.onGameTick = function(){
     handleInactivity();
     endRaceSession();
     gripEffect();
-    pitSpeedLimit();
-    // gripEffect();
+    // pitSpeedLimit();
     currentTime += 1/60;
     // collisionDetectionSegmentPlayer();
     // runCamera();
