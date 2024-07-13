@@ -154,7 +154,7 @@ const _Circuits = [_Circuit1,_Circuit2,_Circuit3,_Circuit4,_Circuit5,_Circuit6,_
 var _Circuit = {MinX: 0, MaxX: 0, MinY: 0, MaxY: 0, MinO1X: NaN, MaxO1X: NaN, MinO1Y: NaN, MaxO1Y: NaN, DriveDirection: 0, StartDirection: undefined, Name: undefined, BestTime: [999.99,undefined], MainColor: [0x000000,0x000000,0x000000], AvatarColor: 0x000000, Angle: 0, Team: 0, ID: 0};
 var limit = _Circuit.Limit;
 
-const colors = {commands: 0xFFFFFF, finish: 0x0A74FF, info: 0xFFFFFF, lapChanged: 0xFFFFFF, lapTime: 0x2DF73B, mapChangeWrongName: 0xFFFF00, mapChangeDeny: 0xFF0000, mapLoad: 0x80FF00, mapLoadDeny: 0xFFFF00, safety: 0xFF0000, speed: 0x2DF73B, trackRecord: 0xFF33D0};
+const colors = {commands: 0xFFFFFF, finish: 0x0A74FF, info: 0xFFFFFF, lapChanged: 0xFFFFFF, lapTime: 0x2DF73B, mapChangeWrongName: 0xFFFF00, mapChangeDeny: 0xFF0000, mapLoad: 0x80FF00, mapLoadDeny: 0xFFFF00, safety: 0xFF0000, speed: 0x2DF73B, trackRecord: 0xFF33D0, personalRecord: 0xfcfd9};
 const fonts = {commands: "normal", info: "normal", lapChanged: "normal", lapTime: "normal", mapChangeWrongName: "normal", mapChangeDeny: "bold", mapLoad: "normal", mapLoadDeny: "normal", speed: "small", trackRecord: "bold"};
 const sounds = {commands: 1, info: 0, lapChanged: 1, lapTime: 1, mapChangeWrongName: 1, mapChangeDeny: 2, mapLoad: 1, mapLoadDeny: 1, safety: 1, speed: 0, trackRecord: 2};
 
@@ -193,7 +193,7 @@ var VoteTimeout = 15000; //In milliseconds
 
 var isRoomSet = false;
 
-var room = HBInit({roomName:"🏎️🏁 Fórmula 1 - Sessão Livre 🏎️🏁",noPlayer:true,public:true,maxPlayers:20});
+var room = HBInit({roomName:"🏎️🏁 Fórmula 1 - Sessão Livre 🏎️🏁",noPlayer:true,public:true,maxPlayers:30});
 
 room.setScoreLimit(0);
 room.setTimeLimit(0);
@@ -449,7 +449,7 @@ function checkPlayerLaps(){
 	}
 	if(!ifInLapChangeZone(p) && playerList[p.name].lapChanged == true){
 	    playerList[p.name].lapChanged = false;
-	    tyresWear(p);
+	    tyresWear(p);   
 	    // playerList[p.name].wear++;
 	    room.sendAnnouncement(`❗ Você tem ${tyreOptions[playerList[p.name].tyres]-playerList[p.name].wear} voltas de pneu restantes ❗`, p.id, colors.safety, "bold", sounds.safety);
 	}
@@ -481,21 +481,34 @@ function checkPlayerLaps(){
 		}
 	    },lapChangeAnnouncementTimeout);
 		let crossing = setTimeout(p => {
-		if(!playerList[name].inSafetyCar && !generalSafetyCar){
-		    playerList[name].currentLap++;
-		    if(playerList[name].currentLap > 1){
-			var lapTime = parseFloat(playerList[name].lapTimes[playerList[name].currentLap-2]);
-			room.sendAnnouncement(`⏱ Volta ${playerList[name].currentLap-1}/${limit} de ${name}: ${serialize(lapTime)} segundos`,null,colors.lapTime,fonts.lapTime,sounds.lapTime);
-			if(lapTime < _Circuit.BestTime[0] && lapTime > 20.000){
-			    room.sendAnnouncement(`🆕 Recorde! ${name} - ${serialize(lapTime)} segundos`,null,colors.trackRecord,fonts.trackRecord.trackRecord);
-			    _Circuit.BestTime = [lapTime,name];
-			    _Circuits[index].BestTime = [lapTime,name];
-			} if (lapTime < 20.000){
-				room.kickPlayer(id, "Não cruze a linha ao contrario!", false);
-			}
-		    }
-		    room.sendAnnouncement(`Lap ${playerList[name].currentLap}/${limit}`,id,colors.lapChanged,fonts.lapChanged,sounds.lapChanged);
-		}
+            if (!playerList[name].inSafetyCar && !generalSafetyCar) {
+                playerList[name].currentLap++;
+                if (playerList[name].currentLap === 1) {
+                    playerList[name].PlayerBestTime = 999.999; // Inicializa o PlayerBestTime na primeira volta
+                    console.log(playerList[name].PlayerBestTime);
+                }
+                if (playerList[name].currentLap > 1) {
+                    var lapTime = parseFloat(playerList[name].lapTimes[playerList[name].currentLap - 2]);
+                    room.sendAnnouncement(`⏱ Volta ${playerList[name].currentLap - 1}/${limit} de ${name}: ${serialize(lapTime)} segundos`, null, colors.lapTime, fonts.lapTime, sounds.lapTime);
+                    if (lapTime < playerList[name].PlayerBestTime) {
+                        let player = room.getPlayerList().find(p => p.id === id);
+                    
+                        playerList[name].PlayerBestTime = lapTime;
+                        if (player) {
+                            room.sendAnnouncement(`Recorde pessoal! - ${serialize(lapTime)} segundos`, player.id, colors.personalRecord, fonts.trackRecord.trackRecord);
+                        }
+                    }
+                    if (lapTime < _Circuit.BestTime[0] && lapTime > 20.000) {
+                        room.sendAnnouncement(`🆕 Recorde! ${name} - ${serialize(lapTime)} segundos`, null, colors.trackRecord, fonts.trackRecord.trackRecord);
+                        _Circuit.BestTime = [lapTime, name];
+                        _Circuits[index].BestTime = [lapTime, name];
+                    }
+                    if (lapTime < 20.000) {
+                        room.kickPlayer(id, "Não cruze a linha ao contrario!", false);
+                    }
+                }
+                room.sendAnnouncement(`Lap ${playerList[name].currentLap}/${limit}`, id, colors.lapChanged, fonts.lapChanged, sounds.lapChanged);
+            }
 		else{
 			playerList[name].inSafetyCar = false;
 			room.sendAnnouncement(`Lap ${playerList[name].currentLap}/${limit}`,id,colors.lapChanged,fonts.lapChanged,sounds.lapChanged);
@@ -732,6 +745,24 @@ function runCamera(){
     	};
 }
 
+function getPersonalBestTimes() {
+    let personalBestTimes = Object.keys(playerList).map(name => {
+        return {
+            name: name,
+            bestTime: playerList[name].PlayerBestTime
+        };
+    });
+
+    personalBestTimes.sort((a, b) => a.bestTime - b.bestTime);
+
+    room.sendAnnouncement('Posição | Nome | Tempo', null, colors.commands, fonts.mapChangeDeny.mapChangeDeny);
+    personalBestTimes.forEach((player, index) => {
+        room.sendAnnouncement(`${index + 1} | ${player.name} | ${serialize(player.bestTime)}s`, null, colors.commands, fonts.commands.commands);
+    });
+
+    return personalBestTimes;
+}
+
 room.onGameStart = function(byPlayer){
     byPlayer == null ? console.log(`Game started`) : console.log(`Game started by ${byPlayer.name}`);
     // positions = [];
@@ -746,6 +777,7 @@ room.onGameStart = function(byPlayer){
 	playerList[p.name].lapChanged = false;
 	playerList[p.name].drsChanged = false;
 	playerList[p.name].inSafetyCar = false;
+    playerList[p.name].PlayerBestTime = 999.999;
 	playerList[p.name].wear = 0;
 	for(let i=0; i<limit; i++){
 		playerList[p.name].lapTimes.push(0);
@@ -759,8 +791,10 @@ room.onGameStart = function(byPlayer){
 
 room.onGameStop = function(byPlayer){
     byPlayer == null ? console.log(`Game stopped`) : console.log(`Game stopped by ${byPlayer.name}`);
+
+    room.sendAnnouncement(`${_Circuit.Name} best lap: ${serialize(_Circuit.BestTime[0])} seconds by ${_Circuit.BestTime[1]}`);
+
     generalSafetyCar = false;
-    onQualy = false;
     camId = null;
     currentTime = 0;
     countAFK = false;
@@ -772,7 +806,12 @@ room.onGameStop = function(byPlayer){
 	playerList[p.name].inSafetyCar = false;
 	playerList[p.name].wear = 0;
 	playerList[p.name].lapTimes = [];
+    
     });
+    if(onQualy === true){
+        getPersonalBestTimes()
+    }
+    onQualy = false;
 }
 
 room.onPlayerActivity = function(player) {
