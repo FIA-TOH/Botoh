@@ -408,7 +408,7 @@ function gripEffect(){
 };
 
 function tyresWear(player){
-	// let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
+	let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
 	
 	if(playerList[player.name].wear > tyreOptions[playerList[player.name].tyres]){
 		playerList[player.name].tyres=="furados";
@@ -416,7 +416,7 @@ function tyresWear(player){
 	}
 	else{
 		playerList[player.name].wear++;
-	        room.sendAnnouncement(`❗ Você tem ${tyreOptions[playerList[player.name].tyres]-playerList[player.name].wear} voltas de pneu restantes ❗`, player.id, colors.safety, "bold", sounds.safety);	
+	        // room.sendAnnouncement(`❗ Você tem ${tyreOptions[playerList[player.name].tyres]-playerList[player.name].wear} voltas de pneu restantes ❗`, player.id, colors.safety, "bold", sounds.safety);	
 	}
 };
 
@@ -449,9 +449,9 @@ function checkPlayerLaps(){
 	}
 	if(!ifInLapChangeZone(p) && playerList[p.name].lapChanged == true){
 	    playerList[p.name].lapChanged = false;
-	    tyresWear(p);   
+	    // tyresWear(p);   
 	    // playerList[p.name].wear++;
-	    room.sendAnnouncement(`❗ Você tem ${tyreOptions[playerList[p.name].tyres]-playerList[p.name].wear} voltas de pneu restantes ❗`, p.id, colors.safety, "bold", sounds.safety);
+	    // room.sendAnnouncement(`❗ Você tem ${tyreOptions[playerList[p.name].tyres]-playerList[p.name].wear} voltas de pneu restantes ❗`, p.id, colors.safety, "bold", sounds.safety);
 	}
 	if(ifInLapChangeZone(p) && playerList[p.name].lapChanged == false){
 	    if(playerList[p.name].currentLap < limit){
@@ -725,25 +725,25 @@ function pointDistance(p1, p2) {
     return Math.hypot(p1.x - p2.x, p1.y - p2.y);
 }
 
-function runCamera(){
-    let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && playerList[p.name].isInTheTrack == true);
-    if (currentTime >= 42) {
-	if(Math.floor(currentTime) % 5 == 0) {
-	camId = Math.ceil(Math.random() * players.length);
-	// players.forEach(p => {
-	// 	if(playerList[p.name].id==camId){
-	// 		validCam = true;
-	// 	};
-	//  });
-	}
-	if(camId != null && room.getPlayerDiscProperties(camId) != null && room.getPlayerDiscProperties(camId).x != null) {
-            room.setDiscProperties(0,{x: room.getPlayerDiscProperties(camId).x});
-            room.setDiscProperties(0,{y: room.getPlayerDiscProperties(camId).y});
-	    room.setDiscProperties(0,{xspeed: 0});
-            room.setDiscProperties(0,{yspeed: 0})
-    	}
-    	};
-}
+// function runCamera(){
+//     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && playerList[p.name].isInTheTrack == true);
+//     if (currentTime >= 42) {
+// 	if(Math.floor(currentTime) % 5 == 0) {
+// 	camId = Math.ceil(Math.random() * players.length);
+// 	// players.forEach(p => {
+// 	// 	if(playerList[p.name].id==camId){
+// 	// 		validCam = true;
+// 	// 	};
+// 	//  });
+// 	}
+// 	if(camId != null && room.getPlayerDiscProperties(camId) != null && room.getPlayerDiscProperties(camId).x != null) {
+//             room.setDiscProperties(0,{x: room.getPlayerDiscProperties(camId).x});
+//             room.setDiscProperties(0,{y: room.getPlayerDiscProperties(camId).y});
+// 	    room.setDiscProperties(0,{xspeed: 0});
+//             room.setDiscProperties(0,{yspeed: 0})
+//     	}
+//     	};
+// }
 
 function getPersonalBestTimes() {
     let personalBestTimes = Object.keys(playerList).map(name => {
