@@ -714,7 +714,7 @@ function ifInPitLane(player){
 }
 
 function ifInBoxesZone(player){
-    return room.getScores().time > 0 && _Circuit && _Circuit. <= room.getPlayerDiscProperties(player.id).x && room.getPlayerDiscProperties(player.id).x <= _Circuit.MaxX && _Circuit.MinY <= room.getPlayerDiscProperties(player.id).y && room.getPlayerDiscProperties(player.id).y <= _Circuit.MaxY;
+    return room.getScores().time > 0 && _Circuit && _Circuit.BoxMinX <= room.getPlayerDiscProperties(player.id).x && room.getPlayerDiscProperties(player.id).x <= _Circuit.BoxMaxX && _Circuit.BoxMinY <= room.getPlayerDiscProperties(player.id).y && room.getPlayerDiscProperties(player.id).y <= _Circuit.BoxMaxY;
 }
 
 function serialize(number){
@@ -823,7 +823,7 @@ room.onGameTick = function(){
     handleInactivity();
     endRaceSession();
     gripEffect();
-    // pitSpeedLimit();
+    pitSpeedLimit();
     currentTime += 1/60;
     // collisionDetectionSegmentPlayer();
     // runCamera();
