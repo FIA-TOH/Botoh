@@ -151,7 +151,7 @@ const gameEndTimeout = 2000;
 const Circuits = [Circuit1,Circuit2,Circuit3,Circuit4,Circuit5,Circuit6,Circuit7,Circuit8,Circuit9,Circuit10,Circuit11,Circuit12,Circuit13,Circuit14,Circuit15,Circuit16,Circuit17,Circuit18,Circuit19,Circuit20,Circuit21,Circuit22,Circuit23,Circuit24,Circuit25,Circuit26,Circuit27,Circuit28,Circuit29,Circuit30,Circuit31,Circuit32,Circuit33]; //...
 
 const _Circuits = [_Circuit1,_Circuit2,_Circuit3,_Circuit4,_Circuit5,_Circuit6,_Circuit7,_Circuit8,_Circuit9,_Circuit10,_Circuit11,_Circuit12,_Circuit13,_Circuit14,_Circuit15,_Circuit16,_Circuit17,_Circuit18,_Circuit19,_Circuit20,_Circuit21,_Circuit22,_Circuit23,_Circuit24,_Circuit25,_Circuit26,_Circuit27,_Circuit28,_Circuit29,_Circuit30,_Circuit31,_Circuit32,_Circuit33]; //...
-var _Circuit = {MinX: 0, MaxX: 0, MinY: 0, MaxY: 0, MinO1X: NaN, MaxO1X: NaN, MinO1Y: NaN, MaxO1Y: NaN, DriveDirection: 0, StartDirection: undefined, Name: undefined, BestTime: [999.99,undefined], MainColor: [0x000000,0x000000,0x000000], AvatarColor: 0x000000, Angle: 0, Team: 0, ID: 0};
+var _Circuit = {MinX: 0, MaxX: 0, MinY: 0, MaxY: 0, LaneMinX: 0, LaneMaxX: 0, LaneMinY: 0, LaneMaxY: 0, DriveDirection: 0, StartDirection: undefined, Name: undefined, BestTime: [999.99,undefined], MainColor: [0x000000,0x000000,0x000000], AvatarColor: 0x000000, Angle: 0, Team: 0, ID: 0};
 var limit = _Circuit.Limit;
 
 const colors = {commands: 0xFFFFFF, finish: 0x0A74FF, info: 0xFFFFFF, lapChanged: 0xFFFFFF, lapTime: 0x2DF73B, mapChangeWrongName: 0xFFFF00, mapChangeDeny: 0xFF0000, mapLoad: 0x80FF00, mapLoadDeny: 0xFFFF00, safety: 0xFF0000, speed: 0x2DF73B, trackRecord: 0xFF33D0, personalRecord: 0xfcfd9};
@@ -714,7 +714,7 @@ function ifInPitLane(player){
 }
 
 function ifInBoxesZone(player){
-    return room.getScores().time > 0 && _Circuit && _Circuit.MinX <= room.getPlayerDiscProperties(player.id).x && room.getPlayerDiscProperties(player.id).x <= _Circuit.MaxX && _Circuit.MinY <= room.getPlayerDiscProperties(player.id).y && room.getPlayerDiscProperties(player.id).y <= _Circuit.MaxY;
+    return room.getScores().time > 0 && _Circuit && _Circuit. <= room.getPlayerDiscProperties(player.id).x && room.getPlayerDiscProperties(player.id).x <= _Circuit.MaxX && _Circuit.MinY <= room.getPlayerDiscProperties(player.id).y && room.getPlayerDiscProperties(player.id).y <= _Circuit.MaxY;
 }
 
 function serialize(number){
@@ -1071,7 +1071,7 @@ room.onStadiumChange = function(newStadiumName,byPlayer){
 
     if(byPlayer == null){
 	if(c){
-	    _Circuit = {MinX: c.MinX, MaxX: c.MaxX, MinY: c.MinY, MaxY: c.MaxY, MinO1X: c.MinO1X, MaxO1X: c.MaxO1X, MinO1Y: c.MinO1Y, MaxO1Y: c.MaxO1Y, DriveDirection: c.DriveDirection, StartDirection: c.StartDirection, Name: c.Name, BestTime: [c.BestTime[0],c.BestTime[1]], MainColor: c.MainColor, AvatarColor: c.AvatarColor, Angle: c.Angle, Team: c.Team, Limit: c.Limit, ID: c.ID};
+	    _Circuit = {MinX: c.MinX, MaxX: c.MaxX, MinY: c.MinY, MaxY: c.MaxY, LaneMinX: c.LaneMinX, LaneMaxX: c.LaneMaxX, LaneMinY: c.LaneMinY, LaneMaxY: c.LaneMaxY, DriveDirection: c.DriveDirection, StartDirection: c.StartDirection, Name: c.Name, BestTime: [c.BestTime[0],c.BestTime[1]], MainColor: c.MainColor, AvatarColor: c.AvatarColor, Angle: c.Angle, Team: c.Team, Limit: c.Limit, ID: c.ID};
 	    limit = c.Limit ? c.Limit : 10;
 	    room.setTeamColors(c.Team,c.Angle,c.AvatarColor,c.MainColor);
 	}
