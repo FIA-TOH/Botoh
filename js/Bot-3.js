@@ -212,7 +212,7 @@ function secondsToTime(seconds) {
 
 const discordMessage = setInterval(function(){
 	room.sendAnnouncement("Entre no nosso Discord e venha participar da Fórmula TOH!",null,colors.info,"bold",sounds.info);
-	room.sendAnnouncement(`Link: https://discord.gg/Y6m6hhwh`,null,colors.info,"normal",sounds.info);
+	room.sendAnnouncement(`Link: https://discord.gg/MAXhQNKRjS`,null,colors.info,"normal",sounds.info);
     }, 300000);
 
 function getVotesAndAnnounceResults(){
@@ -483,21 +483,21 @@ function checkPlayerLaps(){
 		let crossing = setTimeout(p => {
             if (!playerList[name].inSafetyCar && !generalSafetyCar) {
                 playerList[name].currentLap++;
-                if (playerList[name].currentLap === 1) {
-                    playerList[name].PlayerBestTime = 999.999; // Inicializa o PlayerBestTime na primeira volta
-                    console.log(playerList[name].PlayerBestTime);
-                }
+                // if (playerList[name].currentLap === 1) {
+                //     playerList[name].PlayerBestTime = 999.999; // Inicializa o PlayerBestTime na primeira volta
+                //     console.log(playerList[name].PlayerBestTime);
+                // }
                 if (playerList[name].currentLap > 1) {
                     var lapTime = parseFloat(playerList[name].lapTimes[playerList[name].currentLap - 2]);
                     room.sendAnnouncement(`⏱ Volta ${playerList[name].currentLap - 1}/${limit} de ${name}: ${serialize(lapTime)} segundos`, null, colors.lapTime, fonts.lapTime, sounds.lapTime);
-                    if (lapTime < playerList[name].PlayerBestTime) {
-                        let player = room.getPlayerList().find(p => p.id === id);
+                    // if (lapTime < playerList[name].PlayerBestTime) {
+                    //     let player = room.getPlayerList().find(p => p.id === id);
                     
-                        playerList[name].PlayerBestTime = lapTime;
-                        if (player) {
-                            room.sendAnnouncement(`Recorde pessoal! - ${serialize(lapTime)} segundos`, player.id, colors.personalRecord, fonts.trackRecord.trackRecord);
-                        }
-                    }
+                    //     playerList[name].PlayerBestTime = lapTime;
+                    //     if (player) {
+                    //         room.sendAnnouncement(`Recorde pessoal! - ${serialize(lapTime)} segundos`, player.id, colors.personalRecord, fonts.trackRecord.trackRecord);
+                    //     }
+                    // }
                     if (lapTime < _Circuit.BestTime[0] && lapTime > 20.000) {
                         room.sendAnnouncement(`🆕 Recorde! ${name} - ${serialize(lapTime)} segundos`, null, colors.trackRecord, fonts.trackRecord.trackRecord);
                         _Circuit.BestTime = [lapTime, name];
@@ -745,23 +745,23 @@ function pointDistance(p1, p2) {
 //     	};
 // }
 
-function getPersonalBestTimes() {
-    let personalBestTimes = Object.keys(playerList).map(name => {
-        return {
-            name: name,
-            bestTime: playerList[name].PlayerBestTime
-        };
-    });
+// function getPersonalBestTimes() {
+//     let personalBestTimes = Object.keys(playerList).map(name => {
+//         return {
+//             name: name,
+//             bestTime: playerList[name].PlayerBestTime
+//         };
+//     });
 
-    personalBestTimes.sort((a, b) => a.bestTime - b.bestTime);
+//     personalBestTimes.sort((a, b) => a.bestTime - b.bestTime);
 
-    room.sendAnnouncement('Posição | Nome | Tempo', null, colors.commands, fonts.mapChangeDeny.mapChangeDeny);
-    personalBestTimes.forEach((player, index) => {
-        room.sendAnnouncement(`${index + 1} | ${player.name} | ${serialize(player.bestTime)}s`, null, colors.commands, fonts.commands.commands);
-    });
+//     room.sendAnnouncement('Posição | Nome | Tempo', null, colors.commands, fonts.mapChangeDeny.mapChangeDeny);
+//     personalBestTimes.forEach((player, index) => {
+//         room.sendAnnouncement(`${index + 1} | ${player.name} | ${serialize(player.bestTime)}s`, null, colors.commands, fonts.commands.commands);
+//     });
 
-    return personalBestTimes;
-}
+//     return personalBestTimes;
+// }
 
 room.onGameStart = function(byPlayer){
     byPlayer == null ? console.log(`Game started`) : console.log(`Game started by ${byPlayer.name}`);
@@ -777,7 +777,7 @@ room.onGameStart = function(byPlayer){
 	playerList[p.name].lapChanged = false;
 	playerList[p.name].drsChanged = false;
 	playerList[p.name].inSafetyCar = false;
-    playerList[p.name].PlayerBestTime = 999.999;
+    // playerList[p.name].PlayerBestTime = 999.999;
 	playerList[p.name].wear = 0;
 	for(let i=0; i<limit; i++){
 		playerList[p.name].lapTimes.push(0);
@@ -808,9 +808,9 @@ room.onGameStop = function(byPlayer){
 	playerList[p.name].lapTimes = [];
     
     });
-    if(onQualy === true){
-        getPersonalBestTimes()
-    }
+    // if(onQualy === true){
+    //     getPersonalBestTimes()
+    // }
     onQualy = false;
 }
 
