@@ -616,10 +616,15 @@ function handleInactivity() { // handles inactivity : players will be kicked aft
 		}
 	}
 	for (var i = 0; i < extendedP.length ; i++) {
-		if (extendedP[i][eP.ACT] == 60 * (2/3 * afkLimit)) {
+        //Confere se o time não é red
+		if (extendedP[i][eP.ACT] == 60 * (2/3 * afkLimit) && extendedP[i][0] != 2) {  
 			room.sendAnnouncement("[PV] ⛔ Se você não se mover ou enviar uma mensagem nos próximos segundos, você será kickado!", extendedP[i][eP.ID], colors.safety, "bold", sounds.safety);
 		}
-		if (extendedP[i][eP.ACT] >= 60 * afkLimit) {
+		if (extendedP[i][eP.ACT] >= 60 * afkLimit && extendedP[i][0] != 2) {
+            
+            
+            
+            
 			extendedP[i][eP.ACT] = 0;
    //          if (room.getScores().time <= afkLimit - 0.5) {
    //              room.stopGame();
@@ -673,11 +678,21 @@ function randomNum(min, max) {
 
 function endRaceSession(){
     let players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null);
+    let playersInBlue = players.filter(p=>p.team == 2)
+    let playersInRed = players.filter(p=>p.team == 1)
+    
     // let id = _Circuits.findIndex(c => c.Name == _Circuit.Name);
     // let next = Circuits[id+1];
 
     if(room.getScores() != null){
-	if(players.length == 0){
+	if(playersInBlue.length == 0){
+        //Move primeiro os players blue para spec
+        for (i=0; i<playersInBlue.length; i++){
+            room.setPlayerTeam(playersInBlue[i].id, 0)
+        }
+        for (i=0; i<playersInRed.length; i++){
+            room.setPlayerTeam(playersInRed[i].id, 0)
+        }
 	    // getPositions();
 	    room.stopGame();
 	    // getVotesAndAnnounceResults();
@@ -1007,6 +1022,8 @@ room.onPlayerJoin = function(player){
 	    room.setPlayerTeam(player.id,_Circuit.Team);
 
 	room.startGame();
+    } else{
+        room.setPlayerTeam(player.id,1)
     }
 }
 
@@ -1067,8 +1084,8 @@ room.onStadiumChange = function(newStadiumName,byPlayer){
     let players = room.getPlayerList();
     let admins = room.getPlayerList().filter(p => p.admin == true);
 
-    players.forEach(p => {
-	    if(p.afk != true){
+    players.forEach(p => {        
+	    if(playerList[p.name].afk != true){
 	    room.setPlayerTeam(p.id,c.Team)
     	}
     });
