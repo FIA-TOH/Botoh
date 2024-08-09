@@ -239,7 +239,7 @@ function teleportSuzuka() {
                         segment.bCoef != undefined && (segment.curve == undefined || segment.curve == 0)) {
                         if (distancetosegment <= playerDiscProps.radius + 0.01) { // 0.01 é a tolerância
                             if (playerDiscProps != null) {
-								room.setPlayerDiscProperties(players[i].id, {x: playerPosition.x-130, y: playerPosition.y-250});
+								room.setPlayerDiscProperties(players[i].id, {x: playerPosition.x-130, y: playerPosition.y-700});
                             }
                         }
                     }
