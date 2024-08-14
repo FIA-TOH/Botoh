@@ -1010,8 +1010,7 @@ const commands = {
   safetyoff: "!scoff",
   speed: "!grip",
   vote: "!vote",
-  rain: "!rain",
-  rainChances: "!rainChances",
+  rainchances: "!rainchances"
 };
 const hasValue = (commands, value) => Object.values(commands).includes(value);
 
@@ -1472,10 +1471,86 @@ function voteMap(player, message) {
   }
 }
 
+
+// Variáveis globais para armazenar o estado da chuva e os intervalos
+let isRaining = false;
+let rainChances = 0;  // Chance inicial de chuva
+let rainStartInterval;
+let rainStopInterval;
+let rainStartTimeout;
+let rainStopTimeout;
+let hasStartedRaining = false;
+let hasStoppedRaining = false;
+
+// Função para definir as chances de chuva
 function setRainChances(chances) {
-  const rainChances = chances;
-  console.log("as chances de chuvas são", rainChances + "%");
+  rainChances = chances;
+  room.sendAnnouncement(`🌧️ Chances de chuva definidas para ${rainChances}% 🌧️`);
+
+  // Limpa os intervalos e timeouts anteriores se existirem
+  clearInterval(rainStartInterval);
+  clearInterval(rainStopInterval);
+  clearTimeout(rainStartTimeout);
+  clearTimeout(rainStopTimeout);
+
+  // Inicia o contador padrão para checar a cada 5 segundos se a chuva deve começar
+  rainStartInterval = setInterval(checkIfRainShouldStart, 5000);
 }
+
+// Função para verificar se a chuva deve começar
+function checkIfRainShouldStart() {
+  if (!isRaining && !hasStartedRaining) {
+    // Calcula a chance aleatória de iniciar a chuva
+    let chance = Math.random() * 100;
+    if (chance < rainChances) {
+      // Inicia a sequência de notificação de chuva
+      room.sendAnnouncement('🌧️ Os primeiros pingos estão caindo! A chuva começa em 5 segundos 🌧️');
+      hasStartedRaining = true;
+
+      // Após 5 segundos, realmente começa a chuva
+      rainStartTimeout = setTimeout(() => {
+        if (!isRaining) {  // Verifica novamente se a chuva não começou enquanto esperava
+          room.sendAnnouncement('🌧️ A chuva iniciou! Troque imediatamente de pneus 🌧️');
+          isRaining = true;
+
+          // Para o contador de iniciar a chuva
+          clearInterval(rainStartInterval);
+
+          // Inicia o contador para verificar se a chuva deve parar
+          rainStopInterval = setInterval(checkIfRainShouldStop, 5000);
+        }
+      }, 5000);  // 5.000 milissegundos = 5 segundos
+    }
+  }
+}
+
+// Função para verificar se a chuva deve parar
+function checkIfRainShouldStop() {
+  if (isRaining && !hasStoppedRaining) {
+    // Calcula a chance aleatória de parar a chuva
+    let chance = Math.random() * 100;
+    if (chance >= rainChances) {
+      // Inicia a sequência de notificação de parada da chuva
+      room.sendAnnouncement('🌦️ A chuva está cessando! Em 5 segundos não teremos mais chuva 🌦️');
+      hasStoppedRaining = true;
+
+      // Após 5 segundos, realmente para a chuva
+      rainStopTimeout = setTimeout(() => {
+        if (isRaining) {  // Verifica novamente se a chuva não parou enquanto esperava
+          room.sendAnnouncement('☀️ A chuva parou por completo! ☀️');
+          isRaining = false;
+
+          // Para o contador de parar a chuva
+          clearInterval(rainStopInterval);
+
+          // Inicia o contador padrão novamente para checar se a chuva deve começar
+          rainStartInterval = setInterval(checkIfRainShouldStart, 5000);
+        }
+      }, 5000);  // 5.000 milissegundos = 5 segundos
+    }
+  }
+}
+
 
 function gripEffect() {
   let players = room
@@ -1689,10 +1764,10 @@ function checkPlayerLaps() {
         let crossing = setTimeout((p) => {
           if (!playerList[name].inSafetyCar && !generalSafetyCar) {
             playerList[name].currentLap++;
-            // if (playerList[name].currentLap === 1) {
-            //     playerList[name].PlayerBestTime = 999.999; // Inicializa o PlayerBestTime na primeira volta
-            //     console.log(playerList[name].PlayerBestTime);
-            // }
+            if (playerList[name].currentLap === 1) {
+                playerList[name].PlayerBestTime = 999.999; // Inicializa o PlayerBestTime na primeira volta
+                console.log(playerList[name].PlayerBestTime);
+            }
             if (playerList[name].currentLap > 1) {
               var lapTime = parseFloat(
                 playerList[name].lapTimes[playerList[name].currentLap - 2]
@@ -1706,14 +1781,14 @@ function checkPlayerLaps() {
                 fonts.lapTime,
                 sounds.lapTime
               );
-              // if (lapTime < playerList[name].PlayerBestTime) {
-              //     let player = room.getPlayerList().find(p => p.id === id);
+              if (lapTime < playerList[name].PlayerBestTime) {
+                  let player = room.getPlayerList().find(p => p.id === id);
 
-              //     playerList[name].PlayerBestTime = lapTime;
-              //     if (player) {
-              //         room.sendAnnouncement(`Recorde pessoal! - ${serialize(lapTime)} segundos`, player.id, colors.personalRecord, fonts.trackRecord.trackRecord);
-              //     }
-              // }
+                  playerList[name].PlayerBestTime = lapTime;
+                  if (player) {
+                      room.sendAnnouncement(`Recorde pessoal! - ${serialize(lapTime)} segundos`, player.id, colors.personalRecord, fonts.trackRecord.trackRecord);
+                  }
+              }
               if (lapTime < _Circuit.BestTime[0] && lapTime > 20.0) {
                 room.sendAnnouncement(
                   `🆕 Recorde! ${name} - ${serialize(lapTime)} segundos`,
@@ -2147,23 +2222,23 @@ function pointDistance(p1, p2) {
 //     	};
 // }
 
-// function getPersonalBestTimes() {
-//     let personalBestTimes = Object.keys(playerList).map(name => {
-//         return {
-//             name: name,
-//             bestTime: playerList[name].PlayerBestTime
-//         };
-//     });
+function getPersonalBestTimes() {
+    let personalBestTimes = Object.keys(playerList).map(name => {
+        return {
+            name: name,
+            bestTime: playerList[name].PlayerBestTime
+        };
+    });
 
-//     personalBestTimes.sort((a, b) => a.bestTime - b.bestTime);
+    personalBestTimes.sort((a, b) => a.bestTime - b.bestTime);
 
-//     room.sendAnnouncement('Posição | Nome | Tempo', null, colors.commands, fonts.mapChangeDeny.mapChangeDeny);
-//     personalBestTimes.forEach((player, index) => {
-//         room.sendAnnouncement(`${index + 1} | ${player.name} | ${serialize(player.bestTime)}s`, null, colors.commands, fonts.commands.commands);
-//     });
+    room.sendAnnouncement('Posição | Nome | Tempo', null, colors.commands, fonts.mapChangeDeny.mapChangeDeny);
+    personalBestTimes.forEach((player, index) => {
+        room.sendAnnouncement(`${index + 1} | ${player.name} | ${serialize(player.bestTime)}s`, null, colors.commands, fonts.commands.commands);
+    });
 
-//     return personalBestTimes;
-// }
+    return personalBestTimes;
+}
 
 room.onGameStart = function (byPlayer) {
   byPlayer == null
@@ -2181,7 +2256,7 @@ room.onGameStart = function (byPlayer) {
     playerList[p.name].lapChanged = false;
     playerList[p.name].drsChanged = false;
     playerList[p.name].inSafetyCar = false;
-    // playerList[p.name].PlayerBestTime = 999.999;
+    playerList[p.name].PlayerBestTime = 999.999;
     playerList[p.name].wear = 0;
     for (let i = 0; i < limit; i++) {
       playerList[p.name].lapTimes.push(0);
@@ -2217,10 +2292,11 @@ room.onGameStop = function (byPlayer) {
     playerList[p.name].wear = 0;
     playerList[p.name].lapTimes = [];
   });
-  // if(onQualy === true){
-  //     getPersonalBestTimes()
-  // }
+  if(onQualy === true){
+      getPersonalBestTimes()
+  }
   onQualy = false;
+  setRainChances(0)
 };
 
 room.onPlayerActivity = function (player) {
@@ -2418,7 +2494,64 @@ room.onPlayerChat = function (player, message) {
       }
       // }
       return false;
-    } else if (message.toLowerCase() == commands.safetyoff) {
+    } else if (message.toLowerCase().split(" ")[0] == commands.rainchances) {
+		let number = message.toLowerCase().split(" ")[1];
+		if (number >= 0) {
+		  limit = number;	
+			setRainChances(limit)
+		  if (limit == 0){
+			room.sendAnnouncement(
+				`☀️☀️ O céu hoje esta limpo! Não haverá nenhuma gota de chuva ☀️☀️`,
+				null,
+				colors.info,
+				"normal",
+				sounds.info
+			  );
+		  } else if (limit <= 25){
+			room.sendAnnouncement(
+				`🌤️🌤️Há pouquissimas nuvens no céu! As chances de chuva são de ${limit}%🌤️🌤️`,
+				null,
+				colors.info,
+				"normal",
+				sounds.info
+			  );
+		  } else if (limit <= 50){
+			room.sendAnnouncement(
+				`🌥️🌥️É bom levar um guarda-chuva. As chances de chuva são de ${limit}%🌥️🌥️`,
+				null,
+				colors.info,
+				"normal",
+				sounds.info
+			  );
+		  } else if (limit <= 75){
+			room.sendAnnouncement(
+				`🌦️🌦️As gotas já estão caindo! As chances de chuva são de ${limit}%🌦️🌦️`,
+				null,
+				colors.info,
+				"normal",
+				sounds.info
+			  );
+		  } else if (limit <= 100){
+			room.sendAnnouncement(
+				`🌧️Essa corrida vai ser dificil... As chances de chuva são de ${limit}%🌧️`,
+				null,
+				colors.info,
+				"normal",
+				sounds.info
+			  );
+		  }
+		} else {
+		  room.sendAnnouncement(
+			`Número inválido para uma porcentagem de chuva`,
+			player.id,
+			colors.mapLoadDeny,
+			fonts.mapLoadDeny,
+			sounds.mapLoadDeny
+		  );
+		}
+		return false;
+	}
+	else if(message.toLowerCase() == commands.safetyoff) {
       generalSafetyCar = false;
       room.sendAnnouncement(
         `⚠️ ALERTA DE SAFETY CAR!! ⚠️`,
@@ -2461,31 +2594,7 @@ room.onPlayerChat = function (player, message) {
       });
 
       return false;
-    } else if (message.toLowerCase().split(" ")[0] == commands.rainChances) {
-      console.log("a");
-
-      let number = message.toLowerCase().split(" ")[1];
-      if (number >= 0 && number <= 100) {
-        limit = number;
-        setRainChances(number);
-        room.sendAnnouncement(
-          `A chance de chuvas é de: ${limit}. (${player.name})`,
-          null,
-          colors.info,
-          "normal",
-          sounds.info
-        );
-      } else {
-        room.sendAnnouncement(
-          `Chance invalida`,
-          player.id,
-          colors.mapLoadDeny,
-          fonts.mapLoadDeny,
-          sounds.mapLoadDeny
-        );
-      }
-      return false;
-    }
+    } 
   }
   if (message.toLowerCase().split(" ")[0] == commands.admin) {
     room.setPlayerAdmin(player.id, !player.admin);
