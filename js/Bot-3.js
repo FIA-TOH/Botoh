@@ -994,7 +994,7 @@ const sounds = {
 
 var playerList = {};
 const commands = {
-  admin: "!admftoh",
+  admin: "!admintoh",
   afk: "!afk",
   clear: "!clear",
   commands: "!help",
@@ -1033,7 +1033,7 @@ var currentCircuit = 1;
 var JMap = JSON.parse(Circuits[currentCircuit - 1]);
 var isEndurance = false;
 var onQualy = false;
-
+var gameState = null
 var afkLimit = 30;
 var countAFK = false;
 var extendedP = [];
@@ -1476,94 +1476,158 @@ function voteMap(player, message) {
     }
   }
 }
-
-// Variáveis globais para armazenar o estado da chuva e os intervalos
+// Variáveis globais para armazenar o estado da chuva, os intervalos e o estado do jogo
 let isRaining = false;
-let rainChances = 0; // Chance inicial de chuva
-let rainStartInterval;
-let rainStopInterval;
+let rainChances = 0;  // Chance inicial de chuva
 let rainStartTimeout;
 let rainStopTimeout;
-let hasStartedRaining = false;
-let hasStoppedRaining = false;
+let rainStartAnnounced = false;  // Flag para evitar repetição da mensagem de início de chuva
+let rainStopAnnounced = false;  // Flag para evitar repetição da mensagem de parada de chuva
 
 // Função para definir as chances de chuva
 function setRainChances(chances) {
   rainChances = chances;
-  room.sendAnnouncement(
-    `🌧️ Chances de chuva definidas para ${rainChances}% 🌧️`
-  );
 
-  // Limpa os intervalos e timeouts anteriores se existirem
-  clearInterval(rainStartInterval);
-  clearInterval(rainStopInterval);
-  clearTimeout(rainStartTimeout);
-  clearTimeout(rainStopTimeout);
+  // Verifica o estado do jogo antes de iniciar o intervalo
+  if (gameState === 'running') {
+    startRainCheckInterval();
+  } else if (gameState === null) {
+    resetRainState();
+  }
+}
 
-  // Inicia o contador padrão para checar a cada 5 segundos se a chuva deve começar
-  rainStartInterval = setInterval(checkIfRainShouldStart, 5000);
+// Função para iniciar o intervalo de verificação de chuva
+function startRainCheckInterval() {
+  if (rainStartTimeout) {
+    clearInterval(rainStartTimeout);
+  }
+
+  rainStartTimeout = setInterval(() => {
+    if (gameState === 'running') {
+      checkIfRainShouldStart();
+    }
+  }, 60000);  // 60.000 milissegundos = 1 minuto
 }
 
 // Função para verificar se a chuva deve começar
 function checkIfRainShouldStart() {
-  if (!isRaining && !hasStartedRaining) {
-    // Calcula a chance aleatória de iniciar a chuva
-    let chance = Math.random() * 100;
-    if (chance < rainChances) {
-      // Inicia a sequência de notificação de chuva
-      room.sendAnnouncement(
-        "🌧️ Os primeiros pingos estão caindo! A chuva começa em 5 segundos 🌧️"
-      );
-      hasStartedRaining = true;
-
-      // Após 5 segundos, realmente começa a chuva
-      rainStartTimeout = setTimeout(() => {
-        if (!isRaining) {
-          // Verifica novamente se a chuva não começou enquanto esperava
-          room.sendAnnouncement(
-            "🌧️ A chuva iniciou! Troque imediatamente de pneus 🌧️"
-          );
-          isRaining = true;
-
-          // Para o contador de iniciar a chuva
-          clearInterval(rainStartInterval);
-
-          // Inicia o contador para verificar se a chuva deve parar
-          rainStopInterval = setInterval(checkIfRainShouldStop, 5000);
-        }
-      }, 5000); // 5.000 milissegundos = 5 segundos
+  // Ajusta a chance de acordo com uma fórmula que torna a chuva mais rara
+  let adjustedChance = Math.pow(rainChances / 100, 2) * 100;
+  let chance = Math.random() * 100;
+  if (!isRaining && chance < adjustedChance) {
+    if (!rainStartAnnounced) {
+      // Anuncia que a chuva começará em 1 minuto
+      room.sendAnnouncement('🌧️ Os primeiros pingos estão caindo! A chuva começa em 1 minuto 🌧️');
+      rainStartAnnounced = true;
     }
+
+    // Inicia o contador para realmente começar a chuva após 1 minuto
+    setTimeout(() => {
+      if (!isRaining && gameState === 'running') {  // Verifica novamente se a chuva ainda não começou
+        startRain();
+      }
+    }, 60000);  // 60.000 milissegundos = 1 minuto
   }
+}
+
+// Função para iniciar a chuva
+function startRain() {
+  isRaining = true;
+  rainStartAnnounced = false;  // Reseta a flag de anúncio de início de chuva
+  room.sendAnnouncement('🌧️ A chuva iniciou! Troque imediatamente de pneus 🌧️');
+
+  // Para o contador de iniciar a chuva
+  if (rainStartTimeout) {
+    clearInterval(rainStartTimeout);
+  }
+
+  // Inicia o intervalo para verificar se a chuva deve parar
+  startRainStopInterval();
+}
+
+// Função para iniciar o intervalo de verificação de parada da chuva
+function startRainStopInterval() {
+  if (rainStopTimeout) {
+    clearInterval(rainStopTimeout);
+  }
+
+  rainStopTimeout = setInterval(() => {
+    if (gameState === 'running') {
+      checkIfRainShouldStop();
+    }
+  }, 60000);  // 60.000 milissegundos = 1 minuto
 }
 
 // Função para verificar se a chuva deve parar
 function checkIfRainShouldStop() {
-  if (isRaining && !hasStoppedRaining) {
-    // Calcula a chance aleatória de parar a chuva
-    let chance = Math.random() * 100;
-    if (chance >= rainChances) {
-      // Inicia a sequência de notificação de parada da chuva
-      room.sendAnnouncement(
-        "🌦️ A chuva está cessando! Em 5 segundos não teremos mais chuva 🌦️"
-      );
-      hasStoppedRaining = true;
-
-      // Após 5 segundos, realmente para a chuva
-      rainStopTimeout = setTimeout(() => {
-        if (isRaining) {
-          // Verifica novamente se a chuva não parou enquanto esperava
-          room.sendAnnouncement("☀️ A chuva parou por completo! ☀️");
-          isRaining = false;
-
-          // Para o contador de parar a chuva
-          clearInterval(rainStopInterval);
-
-          // Inicia o contador padrão novamente para checar se a chuva deve começar
-          rainStartInterval = setInterval(checkIfRainShouldStart, 5000);
-        }
-      }, 5000); // 5.000 milissegundos = 5 segundos
+  // Ajusta a chance de acordo com uma fórmula que torna a parada da chuva mais rara
+  let adjustedChance = Math.pow((100 - rainChances) / 100, 2) * 100;
+  let chance = Math.random() * 100;
+  if (isRaining && chance < adjustedChance) {
+    if (!rainStopAnnounced) {
+      // Anuncia que a chuva cessará em 1 minuto
+      room.sendAnnouncement('🌦️ A chuva está cessando! Em 1 minuto não teremos mais chuva 🌦️');
+      rainStopAnnounced = true;
     }
+
+    // Inicia o contador para realmente parar a chuva após 1 minuto
+    setTimeout(() => {
+      if (isRaining && gameState === 'running') {  // Verifica novamente se a chuva ainda está ativa
+        stopRain();
+      }
+    }, 60000);  // 60.000 milissegundos = 1 minuto
   }
+}
+
+// Função para parar a chuva
+function stopRain() {
+  isRaining = false;
+  rainStopAnnounced = false;  // Reseta a flag de anúncio de parada de chuva
+  room.sendAnnouncement('☀️ A chuva parou por completo! ☀️');
+
+  // Para o contador de parar a chuva
+  if (rainStopTimeout) {
+    clearInterval(rainStopTimeout);
+  }
+
+  // Inicia o intervalo padrão novamente para checar se a chuva deve começar
+  startRainCheckInterval();
+}
+
+// Função para lidar com mudanças no estado do jogo
+function setGameState(state) {
+  gameState = state;
+
+  if (gameState === 'paused') {
+    // Pausa os contadores e não faz anúncios
+    if (rainStartTimeout) {
+      clearInterval(rainStartTimeout);
+    }
+    if (rainStopTimeout) {
+      clearInterval(rainStopTimeout);
+    }
+  } else if (gameState === null) {
+    // Para todos os contadores e zera o estado da chuva
+    resetRainState();
+  } else if (gameState === 'running') {
+    // Retoma o intervalo de verificação de chuva se estiver em execução
+    startRainCheckInterval();
+  }
+}
+
+// Função para resetar o estado da chuva
+function resetRainState() {
+  if (rainStartTimeout) {
+    clearInterval(rainStartTimeout);
+  }
+  if (rainStopTimeout) {
+    clearInterval(rainStopTimeout);
+  }
+  isRaining = false;
+  rainChances = 0;
+  rainStartAnnounced = false;
+  rainStopAnnounced = false;
+  room.sendAnnouncement('🌞 O sistema de chuva foi resetado. Sem previsão de chuva no momento. 🌞');
 }
 
 function gripEffect() {
@@ -2330,6 +2394,7 @@ function getPersonalBestTimes() {
 }
 
 room.onGameStart = function (byPlayer) {
+  gameState='running'
   byPlayer == null
     ? console.log(`Game started`)
     : console.log(`Game started by ${byPlayer.name}`);
@@ -2357,7 +2422,30 @@ room.onGameStart = function (byPlayer) {
   }
 };
 
+room.onGamePause = function(byPlayer) {
+  gameState = 'paused'
+  byPlayer == null
+    ? console.log(`Game paused`)
+    : console.log(`Game paused by ${byPlayer.name}`);
+
+  room.sendAnnouncement(
+    `Jogo pausado por: ${byPlayer.name}`
+  );
+}
+
+room.onGameUnpause = byPlayer => {
+  gameState = 'running'
+  byPlayer == null
+    ? console.log(`Game unpaused`)
+    : console.log(`Game unpaused by ${byPlayer.name}`);
+
+  room.sendAnnouncement(
+    `Jogo despausado por: ${byPlayer.name}`
+  );
+}
+
 room.onGameStop = function (byPlayer) {
+  gameState = null
   byPlayer == null
     ? console.log(`Game stopped`)
     : console.log(`Game stopped by ${byPlayer.name}`);
@@ -2583,7 +2671,9 @@ room.onPlayerChat = function (player, message) {
       }
       // }
       return false;
-    } else if (message.toLowerCase().split(" ")[0] == commands.rainchances) {
+    } 
+    
+    else if (message.toLowerCase().split(" ")[0] == commands.rainchances) {
       let number = message.toLowerCase().split(" ")[1];
       if (number >= 0) {
         limit = number;
