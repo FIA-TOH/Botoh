@@ -1059,7 +1059,7 @@ var room = HBInit({
   noPlayer: true,
   public: true,
   maxPlayers: 30,
-  token: "thr1.AAAAAGa-iKCQvlcXV9djlQ.uBk0yH8rXuA",
+  token: "thr1.AAAAAGa_YCftxexWvjzChA.z9-IS-DKQFs",
 });
 
 room.setScoreLimit(0);
@@ -1476,57 +1476,66 @@ function voteMap(player, message) {
     }
   }
 }
+
 // Variáveis globais para armazenar o estado da chuva, os intervalos e o estado do jogo
 let isRaining = false;
-let rainChances = 0;  // Chance inicial de chuva
+let rainChances = 0; 
 let rainStartTimeout;
 let rainStopTimeout;
 let rainStartAnnounced = false;  // Flag para evitar repetição da mensagem de início de chuva
 let rainStopAnnounced = false;  // Flag para evitar repetição da mensagem de parada de chuva
 
 // Função para definir as chances de chuva
-function setRainChances(chances) {
+function setRainChances(chances, limit) {
   rainChances = chances;
-
+  console.log(limit);
+  
   // Verifica o estado do jogo antes de iniciar o intervalo
   if (gameState === 'running') {
-    startRainCheckInterval();
+    startRainCheckInterval(limit);
   } else if (gameState === null) {
     resetRainState();
   }
 }
 
 // Função para iniciar o intervalo de verificação de chuva
-function startRainCheckInterval() {
+function startRainCheckInterval(limit) {
   if (rainStartTimeout) {
     clearInterval(rainStartTimeout);
   }
 
   rainStartTimeout = setInterval(() => {
     if (gameState === 'running') {
-      checkIfRainShouldStart();
+      checkIfRainShouldStart(limit);
     }
-  }, 60000);  // 60.000 milissegundos = 1 minuto
+  }, 5000);  // 5 segundos
 }
 
 // Função para verificar se a chuva deve começar
-function checkIfRainShouldStart() {
-  // Ajusta a chance de acordo com uma fórmula que torna a chuva mais rara
-  let adjustedChance = Math.pow(rainChances / 100, 2) * 100;
-  let chance = Math.random() * 100;
-  if (!isRaining && chance < adjustedChance) {
-    if (!rainStartAnnounced) {
-      // Anuncia que a chuva começará em 1 minuto
-      room.sendAnnouncement('🌧️ Os primeiros pingos estão caindo! A chuva começa em 1 minuto 🌧️');
-      rainStartAnnounced = true;
+function checkIfRainShouldStart(limit) {
+  // Se a chance de chuva é 100%, inicia a chuva imediatamente
+  if (rainChances >= 100) {
+    if (!isRaining) {
+      startRain();
     }
-
-    // Inicia o contador para realmente começar a chuva após 1 minuto
-    setTimeout(() => {
-      if (!isRaining && gameState === 'running') {  // Verifica novamente se a chuva ainda não começou
-        startRain();
+  } else {
+    // Calcula a chance de chuva por lap
+    const chancePerLap = rainChances / limit;
+    let chance = Math.random() * 100;
+    if (!isRaining && chance < chancePerLap) {
+      if (!rainStartAnnounced) {
+        // Anuncia que a chuva começará em 1 minuto
+        room.sendAnnouncement('🌧️ Os primeiros pingos estão caindo! A chuva começa em 1 minuto 🌧️');
+        rainStartAnnounced = true;
       }
-    }, 60000);  // 60.000 milissegundos = 1 minuto
+
+      // Inicia o contador para realmente começar a chuva após 1 minuto
+      setTimeout(() => {
+        if (!isRaining && gameState === 'running') {  // Verifica novamente se a chuva ainda não começou
+          startRain();
+        }
+      }, 5000);  // 5 segundos
+    }
   }
 }
 
@@ -1555,7 +1564,7 @@ function startRainStopInterval() {
     if (gameState === 'running') {
       checkIfRainShouldStop();
     }
-  }, 60000);  // 60.000 milissegundos = 1 minuto
+  }, 5000);  // 5 segundos
 }
 
 // Função para verificar se a chuva deve parar
@@ -1575,7 +1584,7 @@ function checkIfRainShouldStop() {
       if (isRaining && gameState === 'running') {  // Verifica novamente se a chuva ainda está ativa
         stopRain();
       }
-    }, 60000);  // 60.000 milissegundos = 1 minuto
+    }, 5000);  // 5 segundos
   }
 }
 
@@ -1591,7 +1600,7 @@ function stopRain() {
   }
 
   // Inicia o intervalo padrão novamente para checar se a chuva deve começar
-  startRainCheckInterval();
+  startRainCheckInterval(limit);
 }
 
 // Função para lidar com mudanças no estado do jogo
@@ -1611,7 +1620,7 @@ function setGameState(state) {
     resetRainState();
   } else if (gameState === 'running') {
     // Retoma o intervalo de verificação de chuva se estiver em execução
-    startRainCheckInterval();
+    startRainCheckInterval(limit);
   }
 }
 
@@ -2572,6 +2581,7 @@ room.onPlayerChat = function (player, message) {
             playerList[p.name].lapTimes.push(0);
           }
         });
+
         room.sendAnnouncement(
           `Número de voltas ajustado para ${limit} por ${player.name}`,
           null,
@@ -2676,9 +2686,8 @@ room.onPlayerChat = function (player, message) {
     else if (message.toLowerCase().split(" ")[0] == commands.rainchances) {
       let number = message.toLowerCase().split(" ")[1];
       if (number >= 0) {
-        limit = number;
-        setRainChances(limit);
-        if (limit == 0) {
+        setRainChances(number);
+        if (number == 0) {
           room.sendAnnouncement(
             `☀️☀️ O céu hoje esta limpo! Não haverá nenhuma gota de chuva ☀️☀️`,
             null,
@@ -2686,25 +2695,25 @@ room.onPlayerChat = function (player, message) {
             "normal",
             sounds.info
           );
-        } else if (limit <= 25) {
+        } else if (number <= 25) {
           room.sendAnnouncement(
-            `🌤️🌤️Há pouquissimas nuvens no céu! As chances de chuva são de ${limit}%🌤️🌤️`,
+            `🌤️🌤️Há pouquissimas nuvens no céu! As chances de chuva são de ${number}%🌤️🌤️`,
             null,
             colors.info,
             "normal",
             sounds.info
           );
-        } else if (limit <= 50) {
+        } else if (number <= 50) {
           room.sendAnnouncement(
-            `🌥️🌥️É bom levar um guarda-chuva. As chances de chuva são de ${limit}%🌥️🌥️`,
+            `🌥️🌥️É bom levar um guarda-chuva. As chances de chuva são de ${number}%🌥️🌥️`,
             null,
             colors.info,
             "normal",
             sounds.info
           );
-        } else if (limit <= 75) {
+        } else if (number <= 75) {
           room.sendAnnouncement(
-            `🌦️🌦️As gotas já estão caindo! As chances de chuva são de ${limit}%🌦️🌦️`,
+            `🌦️🌦️As gotas já estão caindo! As chances de chuva são de ${number}%🌦️🌦️`,
             null,
             colors.info,
             "normal",
@@ -2712,7 +2721,7 @@ room.onPlayerChat = function (player, message) {
           );
         } else if (limit <= 100) {
           room.sendAnnouncement(
-            `🌧️Essa corrida vai ser dificil... As chances de chuva são de ${limit}%🌧️`,
+            `🌧️Essa corrida vai ser dificil... As chances de chuva são de ${number}%🌧️`,
             null,
             colors.info,
             "normal",
