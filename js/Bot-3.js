@@ -1024,7 +1024,7 @@ const commands = {
   admin: "!admintoh",
   afk: "!afk",
   clear: "!clear",
-  commands: "!help",
+  commands: "!ajuda",
   discord: "!discord",
   endurance: "!endurance",
   laps: "!laps",
@@ -2565,7 +2565,7 @@ room.onPlayerChat = function (player, message) {
       return false;
     } else if (message.toLowerCase().split(" ")[0] == commands.commands) {
       room.sendAnnouncement(
-        "Available commands: !discord, !help, !map, !mostrardelta, !lapsgerais, !recordepessoal",
+        "Available commands: !discord, !ajuda, !map, !mostrardelta, !lapsgerais, !recordepessoal",
         player.id,
         colors.commands,
         fonts.commands,
@@ -3072,7 +3072,7 @@ room.onPlayerJoin = function (player) {
   if (room.getScores() == null && players.length == 1) {
     if (_Circuit.Team != 0) room.setPlayerTeam(player.id, _Circuit.Team);
     room.sendAnnouncement(
-      "Bem vindo a FTOH, a corrida já vai começar! Use o comando '!help' para ver mais comandos.",
+      "Bem vindo a FTOH, a corrida já vai começar! Use o comando '!ajuda' para ver mais comandos.",
       player.id,
       colors.info,
       "bold",
@@ -3083,7 +3083,7 @@ room.onPlayerJoin = function (player) {
   } else {
     room.setPlayerTeam(player.id, 1);
     room.sendAnnouncement(
-      "Bem vindo a FTOH, espere a corrida acabar para entrar na pista! Use o comando '!help' para ver mais comandos.",
+      "Bem vindo a FTOH, espere a corrida acabar para entrar na pista! Use o comando '!ajuda' para ver mais comandos.",
       player.id,
       colors.info,
       "bold",
