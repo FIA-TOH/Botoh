@@ -1130,6 +1130,7 @@ const commands = {
   speed: "!grip",
   vote: "!vote",
   rainchances: "!rainchances",
+  drsExplain: "!explicardrs",
 
   showDelta: "!mostrardelta",
   everyoneLaps: "!lapsgerais",
@@ -2655,7 +2656,7 @@ room.onPlayerChat = function (player, message) {
       return false;
     } else if (message.toLowerCase().split(" ")[0] == commands.commands) {
       room.sendAnnouncement(
-        "Available commands: !discord, !ajuda, !map, !mostrardelta, !lapsgerais, !recordepessoal",
+        "Available commands: !discord, !ajuda, !map, !explicardrs, !mostrardelta, !lapsgerais, !recordepessoal",
         player.id,
         colors.commands,
         fonts.commands,
@@ -2951,6 +2952,23 @@ room.onPlayerChat = function (player, message) {
       sounds.mapInfo
     );
     return false;
+  } 
+  else if (message.toLowerCase().split(" ")[0] == commands.drsExplain) {
+        room.sendAnnouncement(
+          "Segure 'X' ou 'spacebar' para ativar o DRS dentro da área demarcada por uma linha verde ou branca.",
+          null,
+          colors.mapInfo,
+          "bold",
+          sounds.mapInfo
+        );
+        room.sendAnnouncement(
+          "Só é permitido utilizar o DRS caso o seu personagem ganhe um '✅' no avatar. Se você ganhar um '❌', não utilize.",
+          null,
+          colors.mapInfo,
+          "bold",
+          sounds.mapInfo
+        );
+      return false;
   } 
   
   else if (message.toLowerCase().startsWith(commands.showDelta)) {
