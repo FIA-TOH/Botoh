@@ -5,7 +5,7 @@
     circuit4: [999.999, undefined], //Bahrein D.
     circuit5: [999.999, undefined], //Sochi D.
     circuit6: [999.999, undefined], //Monaco D.
-    circuit7: [999.999, undefined], //Valencia D.
+    circuit7: [38.800, "Schumacchio"], //Valencia D.
     circuit8: [999.999, undefined], //PaulRicard D.
     circuit9: [999.999, undefined], //Silverstone D.
     circuit10:  [999.999, undefined], //Spa D.
@@ -13,7 +13,7 @@
     circuit12:  [999.999, undefined], //Nurburgring D.
     circuit13:  [999.999, undefined], //Monza D.
     circuit14:  [999.999, undefined], //Canada D.
-    circuit15:  [999.999, undefined], //Austin D.
+    circuit15:  [51.200, "Schumacchio"], //Austin D.
     circuit16:  [999.999, undefined], //Shangai D.
     circuit17:  [999.999, undefined], //Suzuka D.
     circuit18:  [999.999, undefined], //Interlagos D.
