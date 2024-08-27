@@ -1,19 +1,19 @@
 const bestTimes = {
-  circuit1: [28.5, "Ximbastian Vettel"], //Melbourne D.
-  circuit2: [999.999, undefined], //Imola D.
+  circuit1: [28.500, "Ximbastian Vettel"], //Melbourne D.
+  circuit2: [33.850, "Nikhil de Vries"], //Imola D.
   circuit3: [66.250, "Fushi Raikkonen"], //Sepang D.
-  circuit4: [999.999, undefined], //Bahrein D.
+  circuit4: [33.800, "Nikhil de Vries"], //Bahrein D.
   circuit5: [41.250, "Ximbastian Vettel"], //Sochi D.
   circuit6: [999.999, undefined], //Monaco D.
-  circuit7: [38.8, "Schumacchio"], //Valencia D.
+  circuit7: [38.800, "Schumacchio"], //Valencia D.
   circuit8: [999.999, undefined], //PaulRicard D.
   circuit9: [999.999, undefined], //Silverstone D.
-  circuit10: [999.999, undefined], //Spa D.
+  circuit10: [52.200, "Ximbastian Vettel"], //Spa D.
   circuit11: [999.999, undefined], //Istanbul D.
   circuit12: [999.999, undefined], //Nurburgring D.
   circuit13: [999.999, undefined], //Monza D.
   circuit14: [999.999, undefined], //Canada D.
-  circuit15: [51.2, "Schumacchio"], //Austin D.
+  circuit15: [51.200, "Schumacchio"], //Austin D.
   circuit16: [999.999, undefined], //Shangai D.
   circuit17: [999.999, undefined], //Suzuka D.
   circuit18: [999.999, undefined], //Interlagos D.
@@ -23,7 +23,7 @@ const bestTimes = {
 
   circuit21: [35.717, "Adil'"], //Baku
   circuit22: [39.1, "Adil"], //Argentina D.
-  circuit23: [36.95, "Artistic"], //Laguna Seca
+  circuit23: [36.900, "Ximbastian Vettel"], //Laguna Seca
   circuit24: [36.333, "Tico Teco "], //Koreia
   circuit25: [34.0, "Adil"], //Hockenheimring
   circuit26: [38.4, "Adil"], //Zandvoort
@@ -1345,10 +1345,10 @@ const commands = {
 const hasValue = (commands, value) => Object.values(commands).includes(value);
 
 const adminChanges = [
-  "'s admin rights were taken away",
-  " was given admin rights",
+  " teve seu admin removido!",
+  " agora é um admin!",
 ];
-const playerKicked = [" was kicked", " was banned"];
+const playerKicked = [" foi kickado (la ele)", " foi banido"];
 const teams = ["spectators", "red", "blue"];
 var generalSafetyCar = false;
 var currentTime = 0;
@@ -1386,7 +1386,7 @@ var room = HBInit({
   noPlayer: true,
   public: true,
   maxPlayers: 30,
-  token: "thr1.AAAAAGbM2xUxPBjZB6DDyQ.R5rYVP7JXQo",
+  token: "thr1.AAAAAGbN1TYv6NKR5krrgw.iysa8gX48HA",
 });
 
 room.setScoreLimit(0);
@@ -1394,144 +1394,6 @@ room.setTimeLimit(0);
 room.setTeamsLock(true);
 room.setCustomStadium(Circuit1);
 
-// Variáveis globais para armazenar o estado dos segmentos
-// var segmentActivationTimes = {}; // Armazena o tempo de ativação dos segmentos
-// var playerFeedbackTimers = {}; // Armazena os temporizadores de feedback dos jogadores
-// var drsActivated = false; // Controle para saber se o DRS foi ativado
-// function drsFunction() {
-//   var playersDRS = room.getPlayerList();
-//   var targetSegmentColorDRS = "696969"; // Cor do segmento específico para detectar colisões
-//   var segmentsDRS = JMap.segments.filter(
-//     (s) => s.color == targetSegmentColorDRS
-//   );
-
-//   if (segmentsDRS.length > 0) {
-//     // Corrigido para verificar se há segmentos
-//     var currentTime = Date.now();
-
-//     for (var i = 0; i < playersDRS.length; i++) {
-//       if (playersDRS[i].team == 2) {
-//         var playerDiscPropsDRS = room.getPlayerDiscProperties(playersDRS[i].id);
-//         var playerPositionDRS = playersDRS[i].position;
-//         var playerName = playersDRS[i].name;
-
-//         // Encontra o jogador correspondente na lista completa para obter o currentLap
-//         var playerInfo = playerList[playerName];
-//         if (playerInfo) {
-//           var currentLapDrs = playerInfo.currentLap; // Obtém a lap atual do jogador
-
-//           // Verifica se a currentLap do jogador é igual ou maior que 3
-//           if (currentLapDrs >= 3) {
-//             for (var j = 0; j < segmentsDRS.length; j++) {
-//               var segmentDRS = segmentsDRS[j];
-//               var v0DRS = JMap.vertexes[segmentDRS.v0];
-//               var v1DRS = JMap.vertexes[segmentDRS.v1];
-
-//               var lengthDRS = pointDistance(v0DRS, v1DRS);
-//               var dotDRS =
-//                 ((playerPositionDRS.x - v0DRS.x) * (v1DRS.x - v0DRS.x) +
-//                   (playerPositionDRS.y - v0DRS.y) * (v1DRS.y - v0DRS.y)) /
-//                 Math.pow(lengthDRS, 2);
-//               var closestXDRS = v0DRS.x + dotDRS * (v1DRS.x - v0DRS.x);
-//               var closestYDRS = v0DRS.y + dotDRS * (v1DRS.y - v0DRS.y);
-//               var closestPointDRS = { x: closestXDRS, y: closestYDRS };
-
-//               if (
-//                 pointDistance(closestPointDRS, v0DRS) +
-//                   pointDistance(closestPointDRS, v1DRS) ==
-//                 lengthDRS
-//               ) {
-//                 var distXDRS = closestXDRS - playerPositionDRS.x;
-//                 var distYDRS = closestYDRS - playerPositionDRS.y;
-//                 var distancetosegmentDRS = Math.sqrt(
-//                   Math.pow(distXDRS, 2) + Math.pow(distYDRS, 2)
-//                 );
-
-//                 if (
-//                   0 <=
-//                   Math.hypot(
-//                     playerDiscPropsDRS.xspeed,
-//                     playerDiscPropsDRS.yspeed
-//                   )
-//                 ) {
-//                   if (segmentDRS.curve == undefined || segmentDRS.curve == 0) {
-//                     if (
-//                       distancetosegmentDRS <=
-//                       playerDiscPropsDRS.radius + 0.01
-//                     ) {
-//                       // 0.01 é a tolerância
-//                       var segmentId = segmentDRS.id; // Identificador único do segmento
-
-//                       // Checa o tempo de ativação do segmento
-//                       if (!segmentActivationTimes[segmentId]) {
-//                         // Se o DRS ainda não foi ativado
-//                         if (!drsActivated) {
-//                           drsActivated = true;
-//                         }
-//                         segmentActivationTimes[segmentId] = currentTime;
-//                       }
-
-//                       var activationTime = segmentActivationTimes[segmentId];
-//                       var timeElapsed = currentTime - activationTime;
-
-//                       if (drsActivated) {
-//                         if (timeElapsed < 1000) {
-//                           // Se passou menos de 1 segundo
-//                           if (
-//                             !playerFeedbackTimers[playersDRS[i].id] ||
-//                             currentTime -
-//                               playerFeedbackTimers[playersDRS[i].id] >
-//                               5000
-//                           ) {
-//                             // O jogador passa pelo segmento antes do tempo de 1 segundo, dá o feedback de "✅"
-//                             room.setPlayerAvatar(playersDRS[i].id, "✅");
-//                             playerFeedbackTimers[playersDRS[i].id] =
-//                               currentTime;
-
-//                             setTimeout(
-//                               function (playerId) {
-//                                 room.setPlayerAvatar(playerId, null);
-//                               },
-//                               5000,
-//                               playersDRS[i].id
-//                             ); // Define o avatar de volta para "null" após 5 segundos
-//                           }
-//                         } else {
-//                           if (
-//                             !playerFeedbackTimers[playersDRS[i].id] ||
-//                             currentTime -
-//                               playerFeedbackTimers[playersDRS[i].id] >
-//                               5000
-//                           ) {
-//                             // O jogador passa pelo segmento depois do tempo de 1 segundo, dá o feedback de "❌"
-//                             room.setPlayerAvatar(playersDRS[i].id, "❌");
-//                             playerFeedbackTimers[playersDRS[i].id] =
-//                               currentTime;
-
-//                             setTimeout(
-//                               function (playerId) {
-//                                 room.setPlayerAvatar(playerId, null);
-//                               },
-//                               5000,
-//                               playersDRS[i].id
-//                             ); // Define o avatar de volta para "null" após 5 segundos
-//                           }
-//                         }
-
-//                         // Reinicializa o tempo de ativação do segmento
-//                         segmentActivationTimes[segmentId] = currentTime;
-//                       }
-//                     }
-//                   }
-//                 }
-//               }
-//             }
-//           }
-//         }
-//       }
-//     }
-//   }
-// }
 
 function teleportSuzuka() {
   var players = room.getPlayerList();
@@ -1938,7 +1800,7 @@ function announceRainStart() {
       // Após 4 segundos, para a alternância e remove o avatar
       setTimeout(() => {
         clearInterval(intervalId); // Para o intervalo de alternância
-        room.setPlayerAvatar(player.id, null); // Remove o avatar após 4 segundos
+        room.setPlayerAvatar(player.id, playerList[player.name].tyreEmoji); // Remove o avatar após 4 segundos
       }, 4000); // 4 segundos para alternância de emojis
     });
   }
@@ -1963,7 +1825,7 @@ function startRain() {
     // Após 4 segundos, para a alternância e remove o avatar
     setTimeout(() => {
       clearInterval(intervalId); // Para o intervalo de alternância
-      room.setPlayerAvatar(player.id, null); // Remove o avatar após 4 segundos
+      room.setPlayerAvatar(player.id, playerList[player.name].tyreEmoji); // Remove o avatar após 4 segundos
     }, 4000); // 4 segundos para alternância de emojis
   });
 
@@ -2065,7 +1927,7 @@ function announceRainStop() {
       // Após 4 segundos, para a alternância e remove o avatar
       setTimeout(() => {
         clearInterval(intervalId); // Para o intervalo de alternância
-        room.setPlayerAvatar(player.id, null); // Remove o avatar após 4 segundos
+        room.setPlayerAvatar(player.id, playerList[player.name].tyreEmoji); // Remove o avatar após 4 segundos
       }, 4000); // 4 segundos para alternância de emojis
     });
 
@@ -2093,7 +1955,7 @@ function stopRain() {
     // Após 4 segundos, para a alternância e remove o avatar
     setTimeout(() => {
       clearInterval(intervalId); // Para o intervalo de alternância
-      room.setPlayerAvatar(player.id, null); // Remove o avatar após 4 segundos
+      room.setPlayerAvatar(player.id, playerList[player.name].tyreEmoji); // Remove o avatar após 4 segundos
     }, 4000); // 4 segundos para alternância de emojis
   });
 
@@ -2188,7 +2050,6 @@ function resetAllRainEvents() {
     "⛅ Todos os eventos de chuva foram resetados e os contadores foram parados. ⛅"
   );
 }
-
 function gripEffect() {
   let players = room
     .getPlayerList()
@@ -2199,97 +2060,42 @@ function gripEffect() {
     );
 
   players.forEach((p) => {
-    room.setPlayerAvatar(
-      p.id,
-      Math.floor(
-        10 *
-          Math.hypot(
-            room.getPlayerDiscProperties(p.id).xspeed,
-            room.getPlayerDiscProperties(p.id).yspeed
-          )
-      ).toString()
-    );
-    // if(generalSafetyCar){
+    let discProps = room.getPlayerDiscProperties(p.id);
+    let newXSpeed = discProps.xspeed;
+    let newYSpeed = discProps.yspeed;
+    let maxSpeed;
+
+    // room.setPlayerAvatar(
+    //   p.id,
+    //   Math.floor(10 * Math.hypot(newXSpeed, newYSpeed)).toString()
+    // );
+
     if (playerList[p.name].tyres == "macios") {
-      // room.setPlayerAvatar(p.id,"🔴");
-      if (room.getPlayerDiscProperties(p.id).xspeed >= 9.4) {
-        // setTimeout(() => {
-        room.setPlayerDiscProperties(p.id, { xspeed: 9.4 });
-        // });
-      }
-      if (room.getPlayerDiscProperties(p.id).yspeed >= 9.4) {
-        room.setPlayerDiscProperties(p.id, { yspeed: 9.4 });
-      }
-      if (room.getPlayerDiscProperties(p.id).xspeed <= -9.4) {
-        room.setPlayerDiscProperties(p.id, { xspeed: -9.4 });
-      }
-      if (room.getPlayerDiscProperties(p.id).yspeed <= -9.4) {
-        room.setPlayerDiscProperties(p.id, { yspeed: -9.4 });
-      }
+      maxSpeed = 9.4;
     } else if (playerList[p.name].tyres == "medios") {
-      // room.setPlayerAvatar(p.id,"🟡");
-      if (room.getPlayerDiscProperties(p.id).xspeed >= 8.8) {
-        // setTimeout(() => {
-        room.setPlayerDiscProperties(p.id, { xspeed: 8.8 });
-        // });
-      }
-      if (room.getPlayerDiscProperties(p.id).yspeed >= 8.8) {
-        room.setPlayerDiscProperties(p.id, { yspeed: 8.8 });
-      }
-      if (room.getPlayerDiscProperties(p.id).xspeed <= -8.8) {
-        room.setPlayerDiscProperties(p.id, { xspeed: -8.8 });
-      }
-      if (room.getPlayerDiscProperties(p.id).yspeed <= -8.8) {
-        room.setPlayerDiscProperties(p.id, { yspeed: -8.8 });
-      }
+      maxSpeed = 8.8;
     } else if (playerList[p.name].tyres == "duros") {
-      // room.setPlayerAvatar(p.id,"⚪");
-      if (room.getPlayerDiscProperties(p.id).xspeed >= 8.3) {
-        // setTimeout(() => {
-        room.setPlayerDiscProperties(p.id, { xspeed: 8.3 });
-        // });
-      }
-      if (room.getPlayerDiscProperties(p.id).yspeed >= 8.3) {
-        room.setPlayerDiscProperties(p.id, { yspeed: 8.3 });
-      }
-      if (room.getPlayerDiscProperties(p.id).xspeed <= -8.3) {
-        room.setPlayerDiscProperties(p.id, { xspeed: -8.3 });
-      }
-      if (room.getPlayerDiscProperties(p.id).yspeed <= -8.3) {
-        room.setPlayerDiscProperties(p.id, { yspeed: -8.3 });
-      }
+      maxSpeed = 8.3;
     } else if (playerList[p.name].tyres == "furados") {
-      if (room.getPlayerDiscProperties(p.id).xspeed >= 5) {
-        // setTimeout(() => {
-        room.setPlayerDiscProperties(p.id, { xspeed: 5 });
-        // });
-      }
-      if (room.getPlayerDiscProperties(p.id).yspeed >= 5) {
-        room.setPlayerDiscProperties(p.id, { yspeed: 5 });
-      }
-      if (room.getPlayerDiscProperties(p.id).xspeed <= -5) {
-        room.setPlayerDiscProperties(p.id, { xspeed: -5 });
-      }
-      if (room.getPlayerDiscProperties(p.id).yspeed <= -5) {
-        room.setPlayerDiscProperties(p.id, { yspeed: -5 });
-      }
+      maxSpeed = 5.0;
     }
-    // else{
-    //     room.setPlayerAvatar(p.id,"🔴🟡⚪");
-    // }
-    // }
+
+    if (maxSpeed !== undefined) {
+      if (newXSpeed > maxSpeed) newXSpeed = maxSpeed;
+      if (newXSpeed < -maxSpeed) newXSpeed = -maxSpeed;
+
+      if (newYSpeed > maxSpeed) newYSpeed = maxSpeed;
+      if (newYSpeed < -maxSpeed) newYSpeed = -maxSpeed;
+
+      room.setPlayerDiscProperties(p.id, { xspeed: newXSpeed, yspeed: newYSpeed });
+    }
   });
 }
 
 function tyresWear(player) {
-  let players = room
-    .getPlayerList()
-    .filter((p) => room.getPlayerDiscProperties(p.id) != null);
-
-  if (
-    playerList[player.name].wear > tyreOptions[playerList[player.name].tyres]
-  ) {
-    playerList[player.name].tyres == "furados";
+  // Verifica se o pneu já está furado antes de processar o desgaste
+  if (playerList[player.name].tyres === "furados") {
+    // Se os pneus já estão furados, envia um aviso sem alterar o desgaste
     room.sendAnnouncement(
       `❗ Seus pneus estão furados, faça o pitstop! ❗`,
       player.id,
@@ -2297,9 +2103,47 @@ function tyresWear(player) {
       fonts.alert,
       sounds.alert
     );
+    return; // Sai da função para evitar outras mensagens
+  }
+
+  // Incrementa o desgaste dos pneus
+  playerList[player.name].wear++;
+
+  // Verifica o desgaste e altera o status do pneu se necessário
+  if (playerList[player.name].wear >= tyreOptions[playerList[player.name].tyres]) {
+    playerList[player.name].tyres = "furados"; // Marca os pneus como furados
+    room.sendAnnouncement(
+      `❗ Seus pneus estão furados, faça o pitstop! ❗`,
+      player.id,
+      colors.alert,
+      fonts.alert,
+      sounds.alert
+    );
+    playerList[player.name].tyreEmoji = "⚫"
+    room.setPlayerAvatar(player.id, "⚫"); 
   } else {
-    playerList[player.name].wear++;
-    // room.sendAnnouncement(`❗ Você tem ${tyreOptions[playerList[player.name].tyres]-playerList[player.name].wear} voltas de pneu restantes ❗`, player.id, colors.safety, "bold", sounds.safety);
+    // Calcula voltas restantes
+    let voltasRestantes = tyreOptions[playerList[player.name].tyres] - playerList[player.name].wear;
+
+    // Verifica se restam apenas 1 volta e envia um aviso mais forte
+    if (voltasRestantes === 1) {
+      room.sendAnnouncement(
+        `❗ BOX BOX BOX! Você tem apenas 1 volta de pneu restante! ❗`,
+        player.id,
+        colors.alert,
+        fonts.alert,
+        sounds.alert
+      );
+    } else {
+      // Envia o aviso padrão para outras quantidades de voltas restantes
+      room.sendAnnouncement(
+        `❗ Você tem ${voltasRestantes} voltas de pneu restantes ❗`,
+        player.id,
+        colors.secondaryInfo,
+        fonts.secondaryInfo,
+        sounds.info
+      );
+    }
   }
 }
 
@@ -2307,20 +2151,20 @@ function pitSpeedLimit() {
   let players = room
     .getPlayerList()
     .filter((p) => room.getPlayerDiscProperties(p.id) != null);
+
   players.forEach((p) => {
     if (ifInPitLane(p)) {
-      if (room.getPlayerDiscProperties(p.id).xspeed >= 4.4) {
-        room.setPlayerDiscProperties(p.id, { xspeed: 4.4 });
-      }
-      if (room.getPlayerDiscProperties(p.id).yspeed >= 4.4) {
-        room.setPlayerDiscProperties(p.id, { yspeed: 4.4 });
-      }
-      if (room.getPlayerDiscProperties(p.id).xspeed <= -4.4) {
-        room.setPlayerDiscProperties(p.id, { xspeed: -4.4 });
-      }
-      if (room.getPlayerDiscProperties(p.id).yspeed <= -4.4) {
-        room.setPlayerDiscProperties(p.id, { yspeed: -4.4 });
-      }
+      let discProps = room.getPlayerDiscProperties(p.id);
+      let newXSpeed = discProps.xspeed;
+      let newYSpeed = discProps.yspeed;
+
+      if (newXSpeed > 4.4) newXSpeed = 4.4;
+      if (newXSpeed < -4.4) newXSpeed = -4.4;
+
+      if (newYSpeed > 4.4) newYSpeed = 4.4;
+      if (newYSpeed < -4.4) newYSpeed = -4.4;
+
+      room.setPlayerDiscProperties(p.id, { xspeed: newXSpeed, yspeed: newYSpeed });
     }
   });
 }
@@ -2338,10 +2182,9 @@ function checkPlayerLaps() {
     }
     if (!ifInLapChangeZone(p) && playerList[p.name].lapChanged == true) {
       playerList[p.name].lapChanged = false;
-      // tyresWear(p);
-      // playerList[p.name].wear++;
-      // room.sendAnnouncement(`❗ Você tem ${tyreOptions[playerList[p.name].tyres]-playerList[p.name].wear} voltas de pneu restantes ❗`, p.id, colors.safety, "bold", sounds.safety);
+      tyresWear(p); // Isso já vai incrementar o desgaste e enviar as mensagens necessárias
     }
+    
     if (ifInLapChangeZone(p) && playerList[p.name].lapChanged == false) {
       if (playerList[p.name].currentLap < limit) {
         playerList[p.name].lapChanged = true;
@@ -3310,20 +3153,53 @@ room.onPlayerChat = function (player, message) {
       return false;
     }
   } else if (message.toLowerCase().split(" ")[0] == commands.speed) {
+    
     playerList[player.name].speedEnabled =
       !playerList[player.name].speedEnabled;
-    // room.sendAnnouncement(`Speed is turned ${speedEnableChanges[Number(playerList[player.name].speedEnabled)]}`,player.id,colors.speed,fonts.speed,sounds.speed);
+
     return false;
   } else if (message.toLowerCase().split(" ")[0] == commands.pitstop) {
-    if (tyreOptions[message.toLowerCase().split(" ")[1]]) {
-      playerList[player.name].tyres = message.toLowerCase().split(" ")[1];
+    let args = message.toLowerCase().split(" ");
+    let pneu = args[1];
+
+    pneusOption = ["macios", "medios", "duros", "furados", "chuva"]
+
+    if (pneusOption.includes(pneu)) {
+      playerList[player.name].tyres = pneu;
       room.sendAnnouncement(
-        `${player.name} colocou pneus ${message.toLowerCase().split(" ")[1]}`,
+        `${player.name} colocou pneus ${pneu}`,
         null,
         colors.secondaryInfo,
         fonts.secondaryInfo,
         sounds.secondaryInfo
       );
+ 
+      
+      if (pneu == "macios"){
+        playerList[player.name].tyreEmoji = "🔴"
+        room.setPlayerAvatar(player.id, "🔴"); 
+        playerList[player.name].wear 
+
+        
+      } else if (pneu == "medios") {
+        playerList[player.name].tyreEmoji = "🟡"
+        room.setPlayerAvatar(player.id, "🟡");
+        
+      } else if (pneu == "duros"){
+        playerList[player.name].tyreEmoji = "⚪"
+        room.setPlayerAvatar(player.id, "⚪"); 
+        
+      } else if (pneu == "chuva"){
+        playerList[player.name].tyreEmoji = "🔵"
+        room.setPlayerAvatar(player.id, "🔵"); 
+       
+      } else if (pneu == "furados"){
+        playerList[player.name].tyreEmoji = "⚫"
+        room.setPlayerAvatar(player.id, "⚫"); 
+    
+      }
+        
+        
     } else {
       room.sendAnnouncement(
         "Este pneu não existe! Digite novamente para acertar seu pit stop!",
@@ -4057,13 +3933,14 @@ room.onPlayerJoin = function (player) {
     lapChanged: false,
     // drsChanged: false,
     lapTimes: lapTimes,
-    speedEnabled: false,
     inSafetyCar: false,
     isInTheRoom: true,
     isInTheTrack: false,
     afk: false,
     tyres: "macios",
     wear: 0,
+    speedEnabled: false,
+    tyreEmoji: "🔴", //🔴🟡⚪🔵⚫
     showDelta: true,
     everyoneLaps: false,
     boxRadio: true,
