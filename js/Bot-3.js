@@ -1489,7 +1489,7 @@ var room = HBInit({
   noPlayer: true,
   public: true,
   maxPlayers: 30,
-  token: "thr1.AAAAAGbOY3aM7GqVvh6j5A.G8cTGFe9DO8",
+  token: "thr1.AAAAAGbPMyAFqw9uHYWEWw.xATnlsnv11k",
 });
 
 room.setScoreLimit(0);
@@ -2164,49 +2164,59 @@ function gripEffect() {
 
   players.forEach((p) => {
     let discProps = room.getPlayerDiscProperties(p.id);
-    let newXSpeed = discProps.xspeed;
-    let newYSpeed = discProps.yspeed;
-    let maxSpeed;
+    let XSpeed = discProps.xspeed;
+    let YSpeed = discProps.yspeed;
+    let gripMultiplier;
 
     // room.setPlayerAvatar(
     //   p.id,
-    //   Math.floor(10 * Math.hypot(newXSpeed, newYSpeed)).toString()
+    //   Math.floor(10 * Math.hypot(XSpeed, YSpeed)).toString()
     // );
 
-    if (isRaining == false){
-      if (playerList[p.name].tyres == "macios") {
-        maxSpeed = 9.4;
-      } else if (playerList[p.name].tyres == "medios") {
-        maxSpeed = 8.8;
-      } else if (playerList[p.name].tyres == "duros") {
-        maxSpeed = 8.3;
-      } else if (playerList[p.name].tyres == "furados") {
-        maxSpeed = 5.0;
-      } else if (playerList[p.name].tyres == "chuva") {
-        maxSpeed = 7.0;
+    if (!isRaining) {
+      switch (playerList[p.name].tyres) {
+        case "macios":
+          gripMultiplier = 1.0; // Exemplo de multiplicador para pneus macios
+          break;
+        case "medios":
+          gripMultiplier = 0.995; // Exemplo de multiplicador para pneus médios
+          break;
+        case "duros":
+          gripMultiplier = 0.993; // Exemplo de multiplicador para pneus duros
+          break;
+        case "furados":
+          gripMultiplier = 0.6; // Exemplo de multiplicador para pneus furados
+          break;
+        case "chuva":
+          gripMultiplier = 0.9; // Exemplo de multiplicador para pneus de chuva
+          break;
       }
-    } else if (isRaining == true){
-      if (playerList[p.name].tyres == "macios") {
-        maxSpeed = 5.4;
-      } else if (playerList[p.name].tyres == "medios") {
-        maxSpeed = 4.8;
-      } else if (playerList[p.name].tyres == "duros") {
-        maxSpeed = 4.3;
-      } else if (playerList[p.name].tyres == "furados") {
-        maxSpeed = 2.0;
-      } else if (playerList[p.name].tyres == "chuva") {
-        maxSpeed = 8.0;
+    } else {
+      switch (playerList[p.name].tyres) {
+        case "macios":
+          gripMultiplier = 0.9; // Reduz o grip na chuva para pneus macios
+          break;
+        case "medios":
+          gripMultiplier = 0.89; // Reduz o grip na chuva para pneus médios
+          break;
+        case "duros":
+          gripMultiplier = 0.88; // Reduz o grip na chuva para pneus duros
+          break;
+        case "furados":
+          gripMultiplier = 0.5; // Reduz o grip na chuva para pneus furados
+          break;
+        case "chuva":
+          gripMultiplier = 1.0; // Aumenta o grip na chuva para pneus de chuva
+          break;
       }
     }
 
-    if (maxSpeed !== undefined) {
-      if (newXSpeed > maxSpeed) newXSpeed = maxSpeed;
-      if (newXSpeed < -maxSpeed) newXSpeed = -maxSpeed;
-
-      if (newYSpeed > maxSpeed) newYSpeed = maxSpeed;
-      if (newYSpeed < -maxSpeed) newYSpeed = -maxSpeed;
-
-      room.setPlayerDiscProperties(p.id, { xspeed: newXSpeed, yspeed: newYSpeed });
+    // Aplica o multiplicador de grip à velocidade do jogador
+    if (gripMultiplier !== undefined) {
+      room.setPlayerDiscProperties(p.id, {
+        xspeed: XSpeed*gripMultiplier,
+        yspeed: YSpeed*gripMultiplier,
+      });
     }
   });
 }
@@ -2320,16 +2330,17 @@ function pitSpeedLimit() {
   players.forEach((p) => {
     if (ifInPitLane(p)) {
       let discProps = room.getPlayerDiscProperties(p.id);
-      let newXSpeed = discProps.xspeed;
-      let newYSpeed = discProps.yspeed;
+      if (discProps) {
+        const xspeed = discProps.xspeed;
+        const yspeed = discProps.yspeed;
+        const gripMultiplier = 0.5; // Multiplicador de grip para jogadores no pit stop
 
-      if (newXSpeed > 4.4) newXSpeed = 4.4;
-      if (newXSpeed < -4.4) newXSpeed = -4.4;
-
-      if (newYSpeed > 4.4) newYSpeed = 4.4;
-      if (newYSpeed < -4.4) newYSpeed = -4.4;
-
-      room.setPlayerDiscProperties(p.id, { xspeed: newXSpeed, yspeed: newYSpeed });
+        // Aplica o multiplicador de grip diretamente às velocidades
+        room.setPlayerDiscProperties(p.id, {
+          xspeed: xspeed * gripMultiplier,
+          yspeed: yspeed * gripMultiplier,
+        });
+      }
     }
   });
 }
