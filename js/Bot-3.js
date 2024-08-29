@@ -1359,7 +1359,6 @@ const commands = {
 
   showDelta: "!mostrardelta",
   everyoneLaps: "!lapsgerais",
-  boxRadio: "!boxradio",
   everyoneTyres: "!everyonetyres",
 
   ajudamod: "!ajudamod",
@@ -1370,7 +1369,8 @@ const commands = {
   start: "!start",
   kick: "!kick",
   mute: "!mute",
-
+  tyres: "!tyres",
+  
   tp: "!tp",
   ajudaadm: "!ajudaadm",
   listamods: "!listamods",
@@ -1380,7 +1380,6 @@ const commands = {
   qualy: "!qualy",
   safetyon: "!scon",
   safetyoff: "!scoff",
-  speed: "!grip",
   rainchances: "!rainchances",
   rainExplain: "!explicarchuva",
 };
@@ -1403,7 +1402,7 @@ var canMod = true;
 var muteMode = false;
 var onQualy = false;
 var gameState = null;
-
+var speedEnabled = false
 var afkLimit = 30;
 var countAFK = false;
 var extendedP = [];
@@ -1418,6 +1417,16 @@ var GetVotesAndAnnounceResults_Timeout_1;
 var GetVotesAndAnnounceResults_Timeout_2;
 // const tyreOptions = { macios: 60, medios: 90, duros: 120, chuva: 120, furados: 0 };
 const tyreOptions = (limit) => {
+  if (limit === null) {
+    // Retorna uma durabilidade infinita ou um valor que indica que a durabilidade é ilimitada
+    return {
+      macios: Infinity,
+      medios: Infinity,
+      duros: Infinity,
+      chuva: Infinity,
+    };
+  }
+
   if (limit >= 0 && limit <= 7) {
     return {
       macios: 150,
@@ -1489,7 +1498,7 @@ var room = HBInit({
   noPlayer: true,
   public: true,
   maxPlayers: 30,
-  token: "thr1.AAAAAGbPMyAFqw9uHYWEWw.xATnlsnv11k",
+  token: "thr1.AAAAAGbPxBkOy82xdDRjGw.abZqWPxXn9c",
 });
 
 room.setScoreLimit(0);
@@ -2153,13 +2162,16 @@ function resetAllRainEvents() {
     "⛅ Todos os eventos de chuva foram resetados e os contadores foram parados. ⛅"
   );
 }
+const safetyCarFactor = 0.25;
+
 function gripEffect() {
   let players = room
     .getPlayerList()
     .filter(
       (p) =>
         room.getPlayerDiscProperties(p.id) != null &&
-        playerList[p.name].speedEnabled == true
+        speedEnabled == true &&
+        playerList[p.name].tyres !== null // Ignora se o pneu for null
     );
 
   players.forEach((p) => {
@@ -2168,65 +2180,76 @@ function gripEffect() {
     let YSpeed = discProps.yspeed;
     let gripMultiplier;
 
-    // room.setPlayerAvatar(
-    //   p.id,
-    //   Math.floor(10 * Math.hypot(XSpeed, YSpeed)).toString()
-    // );
+    // Calcula a magnitude da velocidade do jogador
+    let speedMagnitude = Math.hypot(XSpeed, YSpeed);
+ 
 
-    if (!isRaining) {
-      switch (playerList[p.name].tyres) {
-        case "macios":
-          gripMultiplier = 1.0; // Exemplo de multiplicador para pneus macios
-          break;
-        case "medios":
-          gripMultiplier = 0.995; // Exemplo de multiplicador para pneus médios
-          break;
-        case "duros":
-          gripMultiplier = 0.993; // Exemplo de multiplicador para pneus duros
-          break;
-        case "furados":
-          gripMultiplier = 0.6; // Exemplo de multiplicador para pneus furados
-          break;
-        case "chuva":
-          gripMultiplier = 0.9; // Exemplo de multiplicador para pneus de chuva
-          break;
-      }
+    // Verifica se o generalSafetyCar está ativado
+    if (generalSafetyCar) {
+      // Aplica o multiplicador universal para todos os jogadores exceto pneus furados
+      gripMultiplier = playerList[p.name].tyres === "furados" ? 0.6 : 0.85;
     } else {
-      switch (playerList[p.name].tyres) {
-        case "macios":
-          gripMultiplier = 0.9; // Reduz o grip na chuva para pneus macios
-          break;
-        case "medios":
-          gripMultiplier = 0.89; // Reduz o grip na chuva para pneus médios
-          break;
-        case "duros":
-          gripMultiplier = 0.88; // Reduz o grip na chuva para pneus duros
-          break;
-        case "furados":
-          gripMultiplier = 0.5; // Reduz o grip na chuva para pneus furados
-          break;
-        case "chuva":
-          gripMultiplier = 1.0; // Aumenta o grip na chuva para pneus de chuva
-          break;
+      // Verifica se a velocidade é maior que 7 antes de aplicar o grip effect
+      if (!isRaining) {
+        switch (playerList[p.name].tyres) {
+          case "macios":
+            if (speedMagnitude > 7) {
+              // gripMultiplier = 1.0;
+            }
+            break;
+          case "medios":
+            if (speedMagnitude > 7) {
+              gripMultiplier = 0.998;
+            }
+            break;
+          case "duros":
+            if (speedMagnitude > 7) {
+              gripMultiplier = 0.997;
+            }
+            break;
+          case "furados":
+            gripMultiplier = 0.95;
+            break;
+          case "chuva":
+            gripMultiplier = 0.99;
+            break;
+        }
+      } else {
+        switch (playerList[p.name].tyres) {
+          case "macios":
+            gripMultiplier = 0.99;
+            break;
+          case "medios":
+            gripMultiplier = 0.98;
+            break;
+          case "duros":
+            gripMultiplier = 0.97;
+            break;
+          case "furados":
+            gripMultiplier = 0.9;
+            break;
+          case "chuva":
+            // gripMultiplier = 1.0;
+            break;
+        }
       }
     }
 
     // Aplica o multiplicador de grip à velocidade do jogador
     if (gripMultiplier !== undefined) {
       room.setPlayerDiscProperties(p.id, {
-        xspeed: XSpeed*gripMultiplier,
-        yspeed: YSpeed*gripMultiplier,
+        xspeed: XSpeed * gripMultiplier,
+        yspeed: YSpeed * gripMultiplier,
       });
     }
   });
 }
 
-const safetyCarFactor = 0.25;
-
 function checkTyreWear(player) {
   const playerData = playerList[player.name];
-  
-  if (playerData.tyres === "furados") return;
+
+  // Ignora o desgaste dos pneus se o estado dos pneus for null
+  if (playerData.tyres === "null" || playerData.tyres === "furados") return;
 
   // Calcular o fator de desgaste dependendo do status do safety car
   const wearFactor = generalSafetyCar ? safetyCarFactor : 1;
@@ -2234,18 +2257,17 @@ function checkTyreWear(player) {
   // Incrementa desgaste dos pneus com base no fator de desgaste
   playerData.wear += (1 / 60) * wearFactor; // Incrementa desgaste por segundo
   
-  const totalDurability = tyreOptions(limit)[playerData.tyres]; // Corrigido para acessar o objeto retornado por tyreOptions
+  const totalDurability = tyreOptions(limit)[playerData.tyres];
   const remainingDurability = totalDurability - playerData.wear;
   const remainingPercentage = (remainingDurability / totalDurability) * 100;
 
   let currentTime = new Date().getTime() / 1000;
 
-  // Verifica se o percentual de desgaste é exatamente 75%, 50%, 25%, 10%, 5% ou 0%
   switch (true) {
     case remainingPercentage <= 0:
-      playerData.tyres = "furados"; // Marca os pneus como furados
+      playerData.tyres = "furados";
       room.sendAnnouncement(
-        `❗ Seus pneus estão furados, faça o pitstop! ❗`,
+        "❗ Seus pneus estão furados, faça o pitstop! ❗",
         player.id,
         colors.alert,
         fonts.alert,
@@ -2258,7 +2280,7 @@ function checkTyreWear(player) {
     case remainingPercentage <= 5 && remainingPercentage > 4:
       if (!playerData.lastAlertTime || currentTime - playerData.lastAlertTime >= alertCooldown) {
         room.sendAnnouncement(
-          `❗ Seus pneus estão quase furados! Restam apenas 5%! ❗`,
+          "❗ Seus pneus estão quase furados! Restam apenas 5%! ❗",
           player.id,
           colors.alert,
           fonts.alert,
@@ -2271,7 +2293,7 @@ function checkTyreWear(player) {
     case remainingPercentage <= 10 && remainingPercentage > 9:
       if (!playerData.lastAlertTime || currentTime - playerData.lastAlertTime >= alertCooldown) {
         room.sendAnnouncement(
-          `❗ Seus pneus estão desgastados! Restam apenas 10%! ❗`,
+          "❗ Seus pneus estão desgastados! Restam apenas 10%! ❗",
           player.id,
           colors.secondaryInfo,
           fonts.secondaryInfo,
@@ -2284,7 +2306,7 @@ function checkTyreWear(player) {
     case remainingPercentage <= 25 && remainingPercentage > 24:
       if (!playerData.lastAlertTime || currentTime - playerData.lastAlertTime >= alertCooldown) {
         room.sendAnnouncement(
-          `❗ Atenção! Restam apenas 25% dos seus pneus! ❗`,
+          "❗ Atenção! Restam apenas 25% dos seus pneus! ❗",
           player.id,
           colors.secondaryInfo,
           fonts.secondaryInfo,
@@ -2297,7 +2319,7 @@ function checkTyreWear(player) {
     case remainingPercentage <= 50 && remainingPercentage > 49:
       if (!playerData.lastAlertTime || currentTime - playerData.lastAlertTime >= alertCooldown) {
         room.sendAnnouncement(
-          `Você está com 50% dos pneus restantes.`,
+          "Você está com 50% dos pneus restantes.",
           player.id,
           colors.secondaryInfo,
           fonts.secondaryInfo,
@@ -2310,7 +2332,7 @@ function checkTyreWear(player) {
     case remainingPercentage <= 75 && remainingPercentage > 74:
       if (!playerData.lastAlertTime || currentTime - playerData.lastAlertTime >= alertCooldown) {
         room.sendAnnouncement(
-          `Seus pneus estão em 75%.`,
+          "Seus pneus estão em 75%.",
           player.id,
           colors.secondaryInfo,
           fonts.secondaryInfo,
@@ -2322,6 +2344,7 @@ function checkTyreWear(player) {
   }
 }
 
+
 function pitSpeedLimit() {
   let players = room
     .getPlayerList()
@@ -2330,17 +2353,16 @@ function pitSpeedLimit() {
   players.forEach((p) => {
     if (ifInPitLane(p)) {
       let discProps = room.getPlayerDiscProperties(p.id);
-      if (discProps) {
-        const xspeed = discProps.xspeed;
-        const yspeed = discProps.yspeed;
-        const gripMultiplier = 0.5; // Multiplicador de grip para jogadores no pit stop
+      let newXSpeed = discProps.xspeed;
+      let newYSpeed = discProps.yspeed;
 
-        // Aplica o multiplicador de grip diretamente às velocidades
-        room.setPlayerDiscProperties(p.id, {
-          xspeed: xspeed * gripMultiplier,
-          yspeed: yspeed * gripMultiplier,
-        });
-      }
+      if (newXSpeed > 3) newXSpeed = 3;
+      if (newXSpeed < -3) newXSpeed = -3;
+
+      if (newYSpeed > 3) newYSpeed = 3;
+      if (newYSpeed < -3) newYSpeed = -3;
+
+      room.setPlayerDiscProperties(p.id, { xspeed: newXSpeed, yspeed: newYSpeed });
     }
   });
 }
@@ -3401,12 +3423,6 @@ room.onPlayerChat = function (player, message) {
       }
       return false;
     }
-  } else if (message.toLowerCase().split(" ")[0] == commands.speed) {
-    
-    playerList[player.name].speedEnabled =
-      !playerList[player.name].speedEnabled;
-
-    return false;
   } else if (message.toLowerCase().split(" ")[0] == commands.pitstop) {
     let args = message.toLowerCase().split(" ");
     let pneu = args[1];
@@ -3666,6 +3682,60 @@ room.onPlayerChat = function (player, message) {
         sounds.info
       );
       return false;
+    } else if (message.toLowerCase().startsWith(commands.tyres)) {
+      let args = message.toLowerCase().split(" ");
+    
+      let command = args[0];
+      let option = args[1];
+    
+      if (command === commands.tyres) {
+        if (option === "on") {
+          // Define pneus como macios e atualiza o avatar
+          for (const playerName in playerList) {
+            const player = playerList[playerName];
+            if (player.isInTheTrack) {
+              player.tyres = "macios";
+              room.setPlayerAvatar(player.id, "🔴");
+            }
+          }
+          speedEnabled = true
+          room.sendAnnouncement(
+            "Pneus ativados e configurados como macios",
+            player.id,
+            colors.info,
+            fonts.info,
+            sounds.info
+          );
+          canMod = true;
+        } else if (option === "off") {
+          // Define pneus como null e atualiza o avatar para um carro de corrida
+          for (const playerName in playerList) {
+            const player = playerList[playerName];
+            if (player.isInTheTrack) {
+              player.tyres = null;
+              room.setPlayerAvatar(player.id, "🏎️");
+            }
+          }
+          speedEnabled = false
+          room.sendAnnouncement(
+            "Pneus desativados e configurados como null",
+            player.id,
+            colors.info,
+            fonts.info,
+            sounds.info
+          );
+          canMod = false;
+        } else {
+          room.sendAnnouncement(
+            "Uso correto: !tyres [on|off]",
+            player.id,
+            colors.wrong,
+            fonts.wrong,
+            sounds.wrong
+          );
+        }
+        return false;
+      }
     } else if (message.toLowerCase().split(" ")[0] == commands.mapLoad) {
       var id = message.toLowerCase().split(" ")[1];
 
@@ -3721,7 +3791,7 @@ room.onPlayerChat = function (player, message) {
       return false;
     } else if (message.toLowerCase().split(" ")[0] == commands.ajudaadm) {
       room.sendAnnouncement(
-        "Comandos disponíveis como Administrador: !ajudaadm, !laps, !circuit, !maps, !clear, !endurance, !qualy, !scon, !scoff, !grip, !rainchances, !explicarchuva, !moderation, !mute, !tp",
+        "Comandos disponíveis como Administrador: !ajudaadm, !laps, !circuit, !maps, !clear, !endurance, !qualy, !scon, !scoff, !grip, !rainchances, !explicarchuva, !moderation, !mute, !tp, !tyres",
         player.id,
         colors.commands,
         fonts.commands,
@@ -4166,6 +4236,32 @@ room.onPlayerKicked = function (kickedPlayer, reason, ban, byPlayer) {
       );
 };
 
+function getRandomEmoji() {
+  const emojis = [
+    "🎫",
+    "👥",
+    "🏟️",
+    "👨‍👩‍👧‍👦",
+    "👀",
+    "📣", 
+    "🙌",
+    "🎉",
+    "📸", 
+    "🍿", 
+    "🍻",
+    "🎟️",
+    "🎊",
+    "🥳",
+    "🎽", // Camiseta esportiva
+    "🚩", // Bandeira
+    "🧢", // Boné
+    "🥂" // Taças de champanhe
+  ];
+  
+  const randomIndex = Math.floor(Math.random() * emojis.length);
+  return emojis[randomIndex];
+}
+
 room.onPlayerJoin = function (player) {
   console.log(`${player.name} has joined`);
   console.log(player.id);
@@ -4184,9 +4280,8 @@ room.onPlayerJoin = function (player) {
     isInTheRoom: true,
     isInTheTrack: false,
     afk: false,
-    tyres: "macios",
+    tyres: null,
     wear: 0,
-    speedEnabled: false,
     tyreEmoji: "🔴", // Emoji padrão dos pneus
     showDelta: true,
     everyoneLaps: false,
@@ -4282,6 +4377,19 @@ room.onPlayerTeamChange = function (changedPlayer, byPlayer) {
   } else {
     playerList[changedPlayer.name].isInTheTrack = false;
   }
+
+  if (changedPlayer.team == 1){
+    playerList[changedPlayer.name].tyres = null
+    const randomEmoji = getRandomEmoji();
+    room.setPlayerAvatar(changedPlayer.id, randomEmoji);
+    }
+
+    if (changedPlayer.team == 2){
+      playerList[changedPlayer.name].tyres = "macios"
+      room.setPlayerAvatar(changedPlayer.id, "🔴");
+      }
+    
+
   // changedPlayer.team != 0 ? playerList[changedPlayer.name].isInTheTrack = false : playerList[changedPlayer.name].isInTheTrack = true;
   playerList[changedPlayer.name].currentLap = 0;
   playerList[changedPlayer.name].lapChanged = false;
