@@ -706,7 +706,7 @@ const _Circuit26 = {
   LaneMaxY: -55, //Baixo
   DriveDirection: -1,
   StartDirection: "X",
-  Name: JSON.parse(Circui26).name,
+  Name: JSON.parse(Circuit26).name,
   BestTime: bestTimes.circuit26,
   MainColor: [0xd6001d, 0xd6001d, 0xffffff],
   AvatarColor: 0xffffff,
