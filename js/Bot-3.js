@@ -1441,59 +1441,59 @@ const tyreOptions = (limit) => {
 
   if (limit >= 0 && limit <= 7) {
     return {
+      macios: 75,
+      medios: 100,
+      duros: 125,
+      chuva: 125,
+    };
+  } else if (limit >= 8 && limit <= 13) {
+    return {
       macios: 150,
       medios: 200,
       duros: 250,
       chuva: 250,
     };
-  } else if (limit >= 8 && limit <= 13) {
+  } else if (limit >= 14 && limit <= 23) {
+    return {
+      macios: 225,
+      medios: 300,
+      duros: 375,
+      chuva: 375,
+    };
+  } else if (limit >= 24 && limit <= 33) {
     return {
       macios: 300,
       medios: 400,
       duros: 500,
       chuva: 500,
     };
-  } else if (limit >= 14 && limit <= 23) {
-    return {
-      macios: 450,
-      medios: 600,
-      duros: 750,
-      chuva: 750,
-    };
-  } else if (limit >= 24 && limit <= 33) {
-    return {
-      macios: 600,
-      medios: 800,
-      duros: 1000,
-      chuva: 1000,
-    };
   } else if (limit >= 34 && limit <= 43) {
     return {
-      macios: 800,
-      medios: 1050,
-      duros: 1300,
-      chuva: 1300,
+      macios: 400,
+      medios: 525,
+      duros: 650,
+      chuva: 650,
     };
   } else if (limit >= 44 && limit <= 53) {
     return {
-      macios: 1000,
-      medios: 1300,
-      duros: 1600,
-      chuva: 1600,
+      macios: 500,
+      medios: 650,
+      duros: 800,
+      chuva: 800,
     };
   } else if (limit >= 54 && limit <= 100) {
     return {
-      macios: 1500,
-      medios: 2000,
-      duros: 2500,
-      chuva: 2500,
+      macios: 750,
+      medios: 1000,
+      duros: 1250,
+      chuva: 1250,
     };
   } else {
     return {
-      macios: 2000,
-      medios: 2700,
-      duros: 3400,
-      chuva: 3400,
+      macios: 1000,
+      medios: 1350,
+      duros: 1700,
+      chuva: 1700,
     };
   }
 };
@@ -1833,7 +1833,7 @@ function decideRainEvents(chances) {
   console.log(`Vai chover na volta ${rainLap}`);
 
   let bestTime = bestTimes[`circuit${currentCircuit}`]?.[0] || 999.999;
-  let lapTime = bestTime === 999.999 ? 40.0 : bestTime + 1.0;
+  let lapTime = bestTime === 999.999 ? 40.000 : bestTime + 1.000;
 
   // Calcular o tempo para iniciar a chuva (em milissegundos)
   let rainStartTime = lapTime * rainLap * 1000;
@@ -2317,6 +2317,9 @@ function gripEffect() {
 }
 
 function checkTyreWear(player) {
+  if (!speedEnabled) {
+    return; // Não faz nada se speedEnabled não for true
+  }
   const playerData = playerList[player.name];
 
   // Ignora o desgaste dos pneus se o estado dos pneus for null
@@ -2540,7 +2543,7 @@ function checkPlayerLaps() {
                 .filter((p) => playerList[p.name].everyoneLaps)
                 .map((p) => p.id);
 
-              if (lapTime < _Circuit.BestTime[0] && lapTime > 20.0) {
+              if (lapTime < _Circuit.BestTime[0] && lapTime > 20.000) {
                 room.sendAnnouncement(
                   `🆕 Recorde! ${name} - ${serialize(lapTime)} segundos`,
                   null, // Envia para todos os jogadores
@@ -2617,7 +2620,7 @@ function checkPlayerLaps() {
               }
 
               // Quando o tempo de volta é maior que 20 segundos
-              if (lapTime > 20.0) {
+              if (lapTime > 20.000) {
                 // Atualiza as informações do jogador na volta atual
                 let currentLapInfo = {
                   id: id,
