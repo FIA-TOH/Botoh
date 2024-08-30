@@ -1538,59 +1538,59 @@ const tyreOptions = (limit) => {
 
   if (limit >= 0 && limit <= 7) {
     return {
-      macios: 75,
-      medios: 100,
-      duros: 125,
-      chuva: 125,
+      macios: 75 * 1.75,  // 131.25
+      medios: 100 * 1.75,  // 175
+      duros: 125 * 1.75,   // 218.75
+      chuva: 125 * 1.75,   // 218.75
     };
   } else if (limit >= 8 && limit <= 13) {
     return {
-      macios: 150,
-      medios: 200,
-      duros: 250,
-      chuva: 250,
+      macios: 150 * 1.75,  // 262.5
+      medios: 200 * 1.75,  // 350
+      duros: 250 * 1.75,   // 437.5
+      chuva: 250 * 1.75,   // 437.5
     };
   } else if (limit >= 14 && limit <= 23) {
     return {
-      macios: 225,
-      medios: 300,
-      duros: 375,
-      chuva: 375,
+      macios: 225 * 1.75,  // 393.75
+      medios: 300 * 1.75,  // 525
+      duros: 375 * 1.75,   // 656.25
+      chuva: 375 * 1.75,   // 656.25
     };
   } else if (limit >= 24 && limit <= 33) {
     return {
-      macios: 300,
-      medios: 400,
-      duros: 500,
-      chuva: 500,
+      macios: 300 * 1.75,  // 525
+      medios: 400 * 1.75,  // 700
+      duros: 500 * 1.75,   // 875
+      chuva: 500 * 1.75,   // 875
     };
   } else if (limit >= 34 && limit <= 43) {
     return {
-      macios: 400,
-      medios: 525,
-      duros: 650,
-      chuva: 650,
+      macios: 400 * 1.75,  // 700
+      medios: 525 * 1.75,  // 918.75
+      duros: 650 * 1.75,   // 1137.5
+      chuva: 650 * 1.75,   // 1137.5
     };
   } else if (limit >= 44 && limit <= 53) {
     return {
-      macios: 500,
-      medios: 650,
-      duros: 800,
-      chuva: 800,
+      macios: 500 * 1.75,  // 875
+      medios: 650 * 1.75,  // 1137.5
+      duros: 800 * 1.75,   // 1400
+      chuva: 800 * 1.75,   // 1400
     };
   } else if (limit >= 54 && limit <= 100) {
     return {
-      macios: 750,
-      medios: 1000,
-      duros: 1250,
-      chuva: 1250,
+      macios: 750 * 1.75,  // 1312.5
+      medios: 1000 * 1.75, // 1750
+      duros: 1250 * 1.75,  // 2187.5
+      chuva: 1250 * 1.75,  // 2187.5
     };
   } else {
     return {
-      macios: 1000,
-      medios: 1350,
-      duros: 1700,
-      chuva: 1700,
+      macios: 1000 * 1.75, // 1750
+      medios: 1350 * 1.75, // 2362.5
+      duros: 1700 * 1.75,  // 2975
+      chuva: 1700 * 1.75,  // 2975
     };
   }
 };
