@@ -1,51 +1,51 @@
 const bestTimes = {
   circuit1: [28.283, "Ximbastian Vettel"], //Melbourne D.
-  circuit2: [33.300, "Schumacchio"], //Imola D.
+  circuit2: [32.800, "Ximbastian Vettel"], //Imola D.
   circuit3: [50.767, "Schumacchio"], //Sepang D.
-  circuit4: [32.667, "Schumacchio"], //Bahrein D.
+  circuit4: [32.650, "Ximbastian Vettel"], //Bahrein D.
   circuit5: [41.050, "Ximbastian Vettel"], //Sochi D.
   circuit6: [35.700, "Ximbastian Vettel"], //Monaco D.
   circuit7: [38.800, "Schumacchio"], //Valencia D.
-  circuit8: [43.850, "Schumacchio"], //PaulRicard D.
-  circuit9: [999.999, undefined], //Silverstone D.
+  circuit8: [43.450, "Ximbastian Vettel"], //PaulRicard D.
+  circuit9: [34.600, "Ximbastian Vettel"], //Silverstone D.
   circuit10: [52.200, "Ximbastian Vettel"], //Spa D.
-  circuit11: [35.550, "Schumacchio"], //Istanbul D.
-  circuit12: [40.800, "Schumacchio"], //Nurburgring D.
-  circuit13: [26.967, "Schumacchio"], //Monza D.
-  circuit14: [31.900, "Schumacchio"], //Canada D.
-  circuit15: [51.200, "Schumacchio"], //Austin D.
-  circuit16: [41.750, "Schumacchio"], //Shangai D.
-  circuit17: [32.250, "Schumacchio"], //Suzuka D.
-  circuit18: [33.950, "Schumacchio"], //Interlagos D.
+  circuit11: [35.350, "Ximbastian Vettel"], //Istanbul D.
+  circuit12: [40.600, "Ximbastian Vettel"], //Nurburgring D.
+  circuit13: [26.700, "Ximbastian Vettel"], //Monza D.
+  circuit14: [31.650, "Piquet"], //Canada D.
+  circuit15: [51.150, "Ximbastian Vettel"], //Austin D.
+  circuit16: [41.500, "Ximbastian Vettel"], //Shangai D.
+  circuit17: [35.200, "Ximbastian Vettel"], //Suzuka D.
+  circuit18: [33.850, "Ximbastian Vettel"], //Interlagos D.
 
-  circuit19: [65.850, "Adil"], //Le Mans
-  circuit20: [30.500, "Schumacchio"], //Indianapolis
+  circuit19: [65.85, "Adil"], //Le Mans
+  circuit20: [30.5, "Schumacchio"], //Indianapolis
 
   circuit21: [35.717, "Adil"], //Baku
-  circuit22: [39.100, "Adil"], //Argentina D.
-  circuit23: [36.900, "Ximbastian Vettel"], //Laguna Seca
+  circuit22: [39.1, "Adil"], //Argentina D.
+  circuit23: [36.9, "Ximbastian Vettel"], //Laguna Seca
   circuit24: [36.033, "Ximbastian Vettel"], //Koreia
-  circuit25: [33.850, "Adil"], //Hockenheimring
-  circuit26: [38.200, "Adil"], //Zandvoort
-  circuit27: [42.150, "Adil"], //Okayama
-  circuit28: [39.950, "Ximbastian Vettel"], //Yas Marina
+  circuit25: [33.85, "Adil"], //Hockenheimring
+  circuit26: [38.2, "Adil"], //Zandvoort
+  circuit27: [42.15, "Adil"], //Okayama
+  circuit28: [39.95, "Ximbastian Vettel"], //Yas Marina
 
-  circuit29: [28.550, "Ximbastian Vettel"], //Melbourne N.
+  circuit29: [28.55, "Ximbastian Vettel"], //Melbourne N.
   circuit30: [43.033, "Adil"], //Imola N.
-  circuit31: [67.450, "Adil"], //Sepang N.
-  circuit32: [43.250, "Artistic"], //Bahrein N.
-  circuit33: [53.200, "Adil"], //Sochi N.
-  circuit34: [49.750, "Schumacchio"], //Monaco N.
+  circuit31: [67.45, "Adil"], //Sepang N.
+  circuit32: [43.25, "Artistic"], //Bahrein N.
+  circuit33: [53.2, "Adil"], //Sochi N.
+  circuit34: [49.75, "Schumacchio"], //Monaco N.
   circuit35: [999.999, undefined], //Valencia N.
   circuit36: [999.999, undefined], //PaulRicard N.
-  circuit37: [47.200, "Adil"], //Silverstone N.
+  circuit37: [47.2, "Adil"], //Silverstone N.
   circuit38: [999.999, undefined], //Spa N.
   circuit39: [999.999, undefined], //Istanbul N.
-  circuit40: [53.300, "Adil"], //Nurburgring N.
+  circuit40: [53.3, "Adil"], //Nurburgring N.
   circuit41: [999.999, undefined], //Monza N.
-  circuit42: [40.750, "Schumacchio"], //Canada N.
+  circuit42: [40.75, "Schumacchio"], //Canada N.
   circuit43: [999.999, undefined], //Austin N.
-  circuit44: [55.550, "Adil"], //Shangai N.
+  circuit44: [55.55, "Adil"], //Shangai N.
   circuit45: [999.999, undefined], //Suzuka N.
   circuit46: [999.999, undefined], //Interlagos N.
 };
@@ -64,10 +64,10 @@ const _Circuit1 = {
   LaneMaxX: 800,
   LaneMinY: -10,
   LaneMaxY: 48,
-  BoxMinX: 100, 
-  BoxMaxX: 800, 
-  BoxMinY: -75, 
-  BoxMaxY: -10, 
+  BoxMinX: 100,
+  BoxMaxX: 800,
+  BoxMinY: -75,
+  BoxMaxY: -10,
   DriveDirection: -1,
   StartDirection: "X",
   Name: JSON.parse(Circuit1).name,
@@ -92,10 +92,10 @@ const _Circuit2 = {
   LaneMaxX: -150,
   LaneMinY: 594,
   LaneMaxY: 667,
-  BoxMinX: -1150, 
-  BoxMaxX: -150, 
-  BoxMinY: 667, 
-  BoxMaxY: 760, 
+  BoxMinX: -1150,
+  BoxMaxX: -150,
+  BoxMinY: 667,
+  BoxMaxY: 760,
   DriveDirection: 1,
   StartDirection: "X",
   Name: JSON.parse(Circuit2).name,
@@ -121,7 +121,7 @@ const _Circuit3 = {
   LaneMinY: -253,
   LaneMaxY: -190,
   BoxMinX: 133, //Sai
-  BoxMaxX:  1234, //Entra
+  BoxMaxX: 1234, //Entra
   BoxMinY: -345, //Cima
   BoxMaxY: -253, //Baixo
   DriveDirection: -1,
@@ -148,8 +148,8 @@ const _Circuit4 = {
   LaneMaxX: 1218,
   LaneMinY: 10,
   LaneMaxY: 74,
-  BoxMinX: -500, 
-  BoxMaxX: 1100, 
+  BoxMinX: -500,
+  BoxMaxX: 1100,
   BoxMinY: -55, //Cima
   BoxMaxY: 10, //Baixo
   DriveDirection: -1,
@@ -172,12 +172,12 @@ const _Circuit5 = {
   MaxX: 2030,
   MinY: 1441,
   MaxY: 1684,
-  LaneMinX: 2122, 
-  LaneMaxX: 3233, 
+  LaneMinX: 2122,
+  LaneMaxX: 3233,
   LaneMinY: 1406, //Cima
   LaneMaxY: 1500, //Baixo
-  BoxMinX: 2122, 
-  BoxMaxX: 3233, 
+  BoxMinX: 2122,
+  BoxMaxX: 3233,
   BoxMinY: 1320, //Cima
   BoxMaxY: 1421, //Baixo
   DriveDirection: -1,
@@ -232,10 +232,10 @@ const _Circuit7 = {
   LaneMaxX: 86, //Direita
   LaneMinY: 130, //Entra
   LaneMaxY: 730, //Sai
-  BoxMinX: 86, 
-  BoxMaxX: 200, 
-  BoxMinY: 130, 
-  BoxMaxY: 730, 
+  BoxMinX: 86,
+  BoxMaxX: 200,
+  BoxMinY: 130,
+  BoxMaxY: 730,
   DriveDirection: -1,
   StartDirection: "Y",
   Name: JSON.parse(Circuit7).name,
@@ -260,10 +260,10 @@ const _Circuit8 = {
   LaneMaxX: 535,
   LaneMinY: -169,
   LaneMaxY: 81,
-  BoxMinX: -1000, 
-  BoxMaxX: 363, 
-  BoxMinY: -169, 
-  BoxMaxY: 0, 
+  BoxMinX: -1000,
+  BoxMaxX: 363,
+  BoxMinY: -169,
+  BoxMaxY: 0,
   DriveDirection: -1,
   StartDirection: "X",
   Name: JSON.parse(Circuit8).name,
@@ -288,8 +288,8 @@ const _Circuit9 = {
   LaneMaxX: 615, //Sai
   LaneMinY: 84, //Cima
   LaneMaxY: 663, //Baixo
-  BoxMinX: -350, 
-  BoxMaxX: 550, 
+  BoxMinX: -350,
+  BoxMaxX: 550,
   BoxMinY: 180, //Cima
   BoxMaxY: 256, //Baixo
   DriveDirection: 1,
@@ -316,10 +316,10 @@ const _Circuit10 = {
   LaneMaxX: -1670, //Entra
   LaneMinY: -1018, //Cima
   LaneMaxY: -956, //Baixo
- BoxMinX: -2960, //Sai
- BoxMaxX: -1670, //Entra
- BoxMinY: -1120, //Cima
- BoxMaxY: -1018, //Baixo
+  BoxMinX: -2960, //Sai
+  BoxMaxX: -1670, //Entra
+  BoxMinY: -1120, //Cima
+  BoxMaxY: -1018, //Baixo
   MinO1X: -546,
   MaxO1X: 707,
   MinO1Y: 22,
@@ -349,9 +349,9 @@ const _Circuit11 = {
   LaneMinY: 6, //Cima
   LaneMaxY: 58, //Baixo
   BoxMinX: -1101, //Sai
- BoxMaxX: -101, //Entra
- BoxMinY: -95, //Cima
- BoxMaxY: 6, //Baixo
+  BoxMaxX: -101, //Entra
+  BoxMinY: -95, //Cima
+  BoxMaxY: 6, //Baixo
   DriveDirection: 1,
   StartDirection: "X",
   Name: JSON.parse(Circuit11).name,
@@ -376,8 +376,8 @@ const _Circuit12 = {
   LaneMaxX: -654, //Sai
   LaneMinY: 12, //Cima
   LaneMaxY: 70, //Baixo
-  BoxMinX: -1454, 
-  BoxMaxX: -654, 
+  BoxMinX: -1454,
+  BoxMaxX: -654,
   BoxMinY: 71, //Cima
   BoxMaxY: 150, //Baixo
   DriveDirection: 1,
@@ -432,8 +432,8 @@ const _Circuit14 = {
   LaneMaxX: 936, //Sai
   LaneMinY: 200, //Cima
   LaneMaxY: 325, //Baixo
-  BoxMinX: 100, 
-  BoxMaxX: 936, 
+  BoxMinX: 100,
+  BoxMaxX: 936,
   BoxMinY: 325, //Cima
   BoxMaxY: 390, //Baixo
   DriveDirection: -1,
@@ -458,12 +458,12 @@ const _Circuit15 = {
   MaxY: -1285,
   LaneMinX: -2582, //Esquerda
   LaneMaxX: -2515, //Direita
-  LaneMinY: -1991, 
-  LaneMaxY: -1285,  
+  LaneMinY: -1991,
+  LaneMaxY: -1285,
   BoxMinX: -2515, //Sai
   BoxMaxX: -2430, //Entra
-  BoxMinY: -1991, 
-  BoxMaxY: -1285, 
+  BoxMinY: -1991,
+  BoxMaxY: -1285,
   DriveDirection: 1,
   StartDirection: "Y",
   Name: JSON.parse(Circuit15).name,
@@ -488,10 +488,10 @@ const _Circuit16 = {
   LaneMaxX: 611,
   LaneMinY: -111,
   LaneMaxY: 23,
-  BoxMinX: -525, 
-  BoxMaxX: 485, 
-  BoxMinY: -140, 
-  BoxMaxY: -80, 
+  BoxMinX: -525,
+  BoxMaxX: 485,
+  BoxMinY: -140,
+  BoxMaxY: -80,
   DriveDirection: -1,
   StartDirection: "X",
   Name: JSON.parse(Circuit16).name,
@@ -516,10 +516,10 @@ const _Circuit17 = {
   LaneMaxX: 200, //Sai
   LaneMinY: -15, //Cima
   LaneMaxY: 60, //Baixo
-  BoxMinX: -840, 
-  BoxMaxX: -200, 
-  BoxMinY: 60, 
-  BoxMaxY: 150, 
+  BoxMinX: -840,
+  BoxMaxX: -200,
+  BoxMinY: 60,
+  BoxMaxY: 150,
   DriveDirection: 1,
   StartDirection: "X",
   Name: JSON.parse(Circuit17).name,
@@ -544,10 +544,10 @@ const _Circuit18 = {
   LaneMaxX: 510, //Sai
   LaneMinY: -24, //Cima
   LaneMaxY: 34, //Baixo
-  BoxMinX: -1203, 
-  BoxMaxX: 510, 
-  BoxMinY: -76, 
-  BoxMaxY: -24, 
+  BoxMinX: -1203,
+  BoxMaxX: 510,
+  BoxMinY: -76,
+  BoxMaxY: -24,
   MinO1X: -1687,
   MaxO1X: 511,
   MinO1Y: 39,
@@ -780,10 +780,10 @@ const _Circuit29 = {
   LaneMaxX: 800,
   LaneMinY: -10,
   LaneMaxY: 48,
-  BoxMinX: 100, 
-  BoxMaxX: 800, 
-  BoxMinY: -75, 
-  BoxMaxY: -10, 
+  BoxMinX: 100,
+  BoxMaxX: 800,
+  BoxMinY: -75,
+  BoxMaxY: -10,
   DriveDirection: -1,
   StartDirection: "X",
   Name: JSON.parse(Circuit29).name,
@@ -808,10 +808,10 @@ const _Circuit30 = {
   LaneMaxX: -150,
   LaneMinY: 594,
   LaneMaxY: 667,
-  BoxMinX: -1150, 
-  BoxMaxX: -150, 
-  BoxMinY: 667, 
-  BoxMaxY: 760, 
+  BoxMinX: -1150,
+  BoxMaxX: -150,
+  BoxMinY: 667,
+  BoxMaxY: 760,
   DriveDirection: 1,
   StartDirection: "X",
   Name: JSON.parse(Circuit30).name,
@@ -837,7 +837,7 @@ const _Circuit31 = {
   LaneMinY: -253,
   LaneMaxY: -190,
   BoxMinX: 133, //Sai
-  BoxMaxX:  1234, //Entra
+  BoxMaxX: 1234, //Entra
   BoxMinY: -345, //Cima
   BoxMaxY: -253, //Baixo
   DriveDirection: -1,
@@ -864,8 +864,8 @@ const _Circuit32 = {
   LaneMaxX: 1218,
   LaneMinY: 10,
   LaneMaxY: 74,
-  BoxMinX: -500, 
-  BoxMaxX: 1100, 
+  BoxMinX: -500,
+  BoxMaxX: 1100,
   BoxMinY: -55, //Cima
   BoxMaxY: 10, //Baixo
   DriveDirection: -1,
@@ -892,8 +892,8 @@ const _Circuit33 = {
   LaneMaxX: 3233, //Sai
   LaneMinY: 1406, //Cima
   LaneMaxY: 1500, //Baixo
-  BoxMinX: 2122, 
-  BoxMaxX: 3233, 
+  BoxMinX: 2122,
+  BoxMaxX: 3233,
   BoxMinY: 1320, //Cima
   BoxMaxY: 1421, //Baixo
   DriveDirection: -1,
@@ -948,10 +948,10 @@ const _Circuit35 = {
   LaneMaxX: 86,
   LaneMinY: -464,
   LaneMaxY: 730,
-  BoxMinX: 86, 
-  BoxMaxX: 200, 
-  BoxMinY: 130, 
-  BoxMaxY: 730, 
+  BoxMinX: 86,
+  BoxMaxX: 200,
+  BoxMinY: 130,
+  BoxMaxY: 730,
   DriveDirection: -1,
   StartDirection: "Y",
   Name: JSON.parse(Circuit35).name,
@@ -976,9 +976,9 @@ const _Circuit36 = {
   LaneMaxX: 535,
   LaneMinY: -169,
   LaneMaxY: 81,
-  BoxMinX: -1000, 
-  BoxMaxX: 363, 
-  BoxMinY: -169, 
+  BoxMinX: -1000,
+  BoxMaxX: 363,
+  BoxMinY: -169,
   BoxMaxY: 0,
   DriveDirection: -1,
   StartDirection: "X",
@@ -1004,8 +1004,8 @@ const _Circuit37 = {
   LaneMaxX: 550, //Sai
   LaneMinY: -15, //Cima
   LaneMaxY: 180, //Baixo
-  BoxMinX: -350, 
-  BoxMaxX: 550, 
+  BoxMinX: -350,
+  BoxMaxX: 550,
   BoxMinY: 180, //Cima
   BoxMaxY: 256, //Baixo
   DriveDirection: 1,
@@ -1092,8 +1092,8 @@ const _Circuit40 = {
   LaneMaxX: -654, //Sai
   LaneMinY: 12, //Cima
   LaneMaxY: 70, //Baixo
-  BoxMinX: -1454, 
-  BoxMaxX: -654, 
+  BoxMinX: -1454,
+  BoxMaxX: -654,
   BoxMinY: 71, //Cima
   BoxMaxY: 150, //Baixo
   DriveDirection: 1,
@@ -1148,8 +1148,8 @@ const _Circuit42 = {
   LaneMaxX: 936, //Sai
   LaneMinY: 200, //Cima
   LaneMaxY: 325, //Baixo
-  BoxMinX: 100, 
-  BoxMaxX: 936, 
+  BoxMinX: 100,
+  BoxMaxX: 936,
   BoxMinY: 325, //Cima
   BoxMaxY: 390, //Baixo
   DriveDirection: -1,
@@ -1178,8 +1178,8 @@ const _Circuit43 = {
   LaneMaxY: -1285, //Entra
   BoxMinX: -2515, //Sai
   BoxMaxX: -2430, //Entra
-  BoxMinY: -1991, 
-  BoxMaxY: -1285, 
+  BoxMinY: -1991,
+  BoxMaxY: -1285,
   DriveDirection: 1,
   StartDirection: "Y",
   Name: JSON.parse(Circuit43).name,
@@ -1208,10 +1208,10 @@ const _Circuit44 = {
   LaneMaxX: 611,
   LaneMinY: -111,
   LaneMaxY: 23,
-  BoxMinX: -525, 
-  BoxMaxX: 485, 
-  BoxMinY: -140, 
-  BoxMaxY: -80, 
+  BoxMinX: -525,
+  BoxMaxX: 485,
+  BoxMinY: -140,
+  BoxMaxY: -80,
   DriveDirection: -1,
   StartDirection: "X",
   Name: JSON.parse(Circuit44).name,
@@ -1235,10 +1235,10 @@ const _Circuit45 = {
   LaneMaxX: 200, //Sai
   LaneMinY: -15, //Cima
   LaneMaxY: 60, //Baixo
-  BoxMinX: -840, 
-  BoxMaxX: -200, 
-  BoxMinY: 60, 
-  BoxMaxY: 150, 
+  BoxMinX: -840,
+  BoxMaxX: -200,
+  BoxMinY: 60,
+  BoxMaxY: 150,
   DriveDirection: 1,
   StartDirection: "X",
   Name: JSON.parse(Circuit45).name,
@@ -1427,7 +1427,7 @@ const colors = {
   yellowFlag: 0xffd900,
   redFlag: 0xff0000,
   blueFlag: 0x0a74ff,
-  blackFlag: 0x000000 ,
+  blackFlag: 0x000000,
 };
 const fonts = {
   commands: "normal",
@@ -1467,7 +1467,6 @@ const commands = {
 
   showDelta: "!mostrardelta",
   everyoneLaps: "!lapsgerais",
-  everyoneTyres: "!everyonetyres",
 
   ajudamod: "!ajudamod",
   laps: "!laps",
@@ -1479,32 +1478,30 @@ const commands = {
   mute: "!mute",
   tyres: "!tyres",
   safetyEmoji: "!scemoji",
-  
+  safetyCar: "!sc",
+  virtualSafetyCar: "!vsc",
+  flag: "!flag",
+  rainExplain: "!explicarchuva",
+  tyresExplain: "!explicarpneus",
   tp: "!tp",
+
   ajudaadm: "!ajudaadm",
   listamods: "!listamods",
   removemod: "!moderation",
   clear: "!clear",
   endurance: "!endurance",
   qualy: "!qualy",
-  safetyCar: "!sc",
-  virtualSafetyCar: "!vsc",
-  flag: "!flag",
   rainchances: "!rainchances",
-  rainExplain: "!explicarchuva",
 };
 
 const hasValue = (commands, value) => Object.values(commands).includes(value);
 
-const adminChanges = [
-  " teve seu admin removido!",
-  " agora é um admin!",
-];
+const adminChanges = [" teve seu admin removido!", " agora é um admin!"];
 const playerKicked = [" foi kickado (la ele)", " foi banido"];
 const teams = ["spectators", "red", "blue"];
 var generalSafetyCar = false;
 var generalVirtualSC = false;
-var flag = "green"
+var flag = "green";
 var currentTime = 0;
 var camId = null;
 var currentCircuit = 1;
@@ -1514,7 +1511,7 @@ var canMod = true;
 var muteMode = false;
 var onQualy = false;
 var gameState = null;
-var speedEnabled = false
+var speedEnabled = false;
 var afkLimit = 30;
 var countAFK = false;
 var extendedP = [];
@@ -1618,7 +1615,6 @@ room.setTimeLimit(0);
 room.setTeamsLock(true);
 room.setCustomStadium(Circuit1);
 
-
 function teleportSuzuka() {
   var players = room.getPlayerList();
   var targetSegmentColor = "969696"; // Segmento específico para detectar colisões
@@ -1719,15 +1715,15 @@ const discordMessage = setInterval(function () {
 
 function getPlayerIdByCitedName(citedPlayer) {
   for (const playerName in playerList) {
-      if (playerList.hasOwnProperty(playerName)) {
-          // Compara os nomes em minúsculas para evitar problemas de case sensitivity
-          if (playerName.toLowerCase() === citedPlayer.toLowerCase()) {
-              return {
-                  id: playerList[playerName].id,
-                  name: playerList[playerName].name
-              };
-          }
+    if (playerList.hasOwnProperty(playerName)) {
+      // Compara os nomes em minúsculas para evitar problemas de case sensitivity
+      if (playerName.toLowerCase() === citedPlayer.toLowerCase()) {
+        return {
+          id: playerList[playerName].id,
+          name: playerList[playerName].name,
+        };
       }
+    }
   }
   return null; // Retorna null se nenhum jogador for encontrado
 }
@@ -1933,7 +1929,7 @@ function decideRainEvents(chances) {
   console.log(`Vai chover na volta ${rainLap}`);
 
   let bestTime = bestTimes[`circuit${currentCircuit}`]?.[0] || 999.999;
-  let lapTime = bestTime === 999.999 ? 40.000 : bestTime + 1.000;
+  let lapTime = bestTime === 999.999 ? 40.0 : bestTime + 1.0;
 
   // Calcular o tempo para iniciar a chuva (em milissegundos)
   let rainStartTime = lapTime * rainLap * 1000;
@@ -2025,17 +2021,17 @@ function announceRainStart() {
     );
     rainStartAnnounced = true;
 
-    Object.values(playerList).forEach(player => {
+    Object.values(playerList).forEach((player) => {
       let currentEmojiIndex = 0; // Índice para controlar o emoji atual
       const emojis = ["☁️", "🌧️", "⛔"];
       const durations = [500, 500, 1000]; // Durações correspondentes: 0.25s, 0.25s, 0.5s
-    
+
       // Atualiza o emoji do avatar a cada duração especificada
       const intervalId = setInterval(() => {
         room.setPlayerAvatar(player.id, emojis[currentEmojiIndex]);
         currentEmojiIndex = (currentEmojiIndex + 1) % emojis.length;
       }, durations[currentEmojiIndex]);
-    
+
       // Após 4 segundos, para a alternância e remove o avatar
       setTimeout(() => {
         clearInterval(intervalId); // Para o intervalo de alternância
@@ -2050,17 +2046,17 @@ function startRain() {
   rainStartAnnounced = false;
   console.log("🌧️ A chuva começou! 🌧️");
 
-  Object.values(playerList).forEach(player => {
+  Object.values(playerList).forEach((player) => {
     let currentEmojiIndex = 0; // Índice para controlar o emoji atual
     const emojis = ["🌧️", "🌩️", "⛔"];
     const durations = [500, 500, 100]; // Durações correspondentes: 0.25s, 0.25s, 0.5s
-  
+
     // Atualiza o emoji do avatar a cada duração especificada
     const intervalId = setInterval(() => {
       room.setPlayerAvatar(player.id, emojis[currentEmojiIndex]);
       currentEmojiIndex = (currentEmojiIndex + 1) % emojis.length;
     }, durations[currentEmojiIndex]);
-  
+
     // Após 4 segundos, para a alternância e remove o avatar
     setTimeout(() => {
       clearInterval(intervalId); // Para o intervalo de alternância
@@ -2068,8 +2064,6 @@ function startRain() {
     }, 4000); // 4 segundos para alternância de emojis
   });
 
- 
-  
   // Anúncios com atraso
   setTimeout(() => {
     room.sendAnnouncement(
@@ -2113,10 +2107,6 @@ function startRain() {
     );
     console.log("🌧️ A chuva começou! 🌧️");
   }, 3000); // Anúncio final após 3 segundos
-
-
-
- 
 }
 
 let stopTime;
@@ -2152,17 +2142,17 @@ function announceRainStop() {
       fonts.alert,
       sounds.alert
     );
-    Object.values(playerList).forEach(player => {
+    Object.values(playerList).forEach((player) => {
       let currentEmojiIndex = 0; // Índice para controlar o emoji atual
       const emojis = ["🌧️", "🌤️", "⛔"];
       const durations = [500, 500, 100]; // Durações correspondentes: 0.25s, 0.25s, 0.5s
-    
+
       // Atualiza o emoji do avatar a cada duração especificada
       const intervalId = setInterval(() => {
         room.setPlayerAvatar(player.id, emojis[currentEmojiIndex]);
         currentEmojiIndex = (currentEmojiIndex + 1) % emojis.length;
       }, durations[currentEmojiIndex]);
-    
+
       // Após 4 segundos, para a alternância e remove o avatar
       setTimeout(() => {
         clearInterval(intervalId); // Para o intervalo de alternância
@@ -2170,27 +2160,24 @@ function announceRainStop() {
       }, 4000); // 4 segundos para alternância de emojis
     });
 
-
     rainStopAnnounced = true;
   }
 }
 
 function stopRain() {
- 
   rainStopAnnounced = false;
-  
-  
-  Object.values(playerList).forEach(player => {
+
+  Object.values(playerList).forEach((player) => {
     let currentEmojiIndex = 0; // Índice para controlar o emoji atual
     const emojis = ["🌤️", "☀️", "⛔"];
     const durations = [500, 500, 100]; // Durações correspondentes: 0.25s, 0.25s, 0.5s
-  
+
     // Atualiza o emoji do avatar a cada duração especificada
     const intervalId = setInterval(() => {
       room.setPlayerAvatar(player.id, emojis[currentEmojiIndex]);
       currentEmojiIndex = (currentEmojiIndex + 1) % emojis.length;
     }, durations[currentEmojiIndex]);
-  
+
     // Após 4 segundos, para a alternância e remove o avatar
     setTimeout(() => {
       clearInterval(intervalId); // Para o intervalo de alternância
@@ -2198,8 +2185,8 @@ function stopRain() {
     }, 4000); // 4 segundos para alternância de emojis
   });
 
-   // Anúncios com atraso
-   setTimeout(() => {
+  // Anúncios com atraso
+  setTimeout(() => {
     room.sendAnnouncement(
       "Chuva parando em 3...",
       null,
@@ -2230,7 +2217,7 @@ function stopRain() {
   }, 2000); // Anúncio após 2 segundos
 
   setTimeout(() => {
-    isRaining = false; 
+    isRaining = false;
     rainStopAnnounced = true;
     room.sendAnnouncement(
       "☀️A chuva parou por completo! Troque imediatamente de pneus ! ☀️",
@@ -2241,9 +2228,6 @@ function stopRain() {
     );
     console.log("☀️ A chuva parou! ☀️");
   }, 3000); // Anúncio final após 3 segundos
-
-
-
 }
 
 // Função para lidar com mudanças no estado do jogo
@@ -2290,17 +2274,17 @@ function resetAllRainEvents() {
   );
 }
 const safetyCarFactor = 0.5;
-const virtualSafetyCarFactor = 0.25
+const virtualSafetyCarFactor = 0.25;
 
 function gripEffect() {
-  let players = room
-  .getPlayerList()
-  .filter((p) => {
+  let players = room.getPlayerList().filter((p) => {
     const player = playerList[p.name];
-    return room.getPlayerDiscProperties(p.id) != null &&
-           speedEnabled === true &&
-           player != null &&
-           player.tyres != null; // Ignora se o pneu for null ou undefined
+    return (
+      room.getPlayerDiscProperties(p.id) != null &&
+      speedEnabled === true &&
+      player != null &&
+      player.tyres != null
+    ); // Ignora se o pneu for null ou undefined
   });
 
   players.forEach((p) => {
@@ -2312,15 +2296,15 @@ function gripEffect() {
 
     // Calcula a magnitude da velocidade do jogador
     let speedMagnitude = Math.hypot(XSpeed, YSpeed);
- 
 
     // Verifica se o generalSafetyCar está ativado
     if (generalSafetyCar) {
       // Aplica o multiplicador universal para todos os jogadores exceto pneus furados
       gripMultiplier = playerList[p.name].tyres === "furados" ? 0.97 : 0.98;
-    } else if(generalVirtualSC){
+    } else if (generalVirtualSC) {
       gripMultiplier = playerList[p.name].tyres === "furados" ? 0.97 : 0.99;
-    } {
+    }
+    {
       // Verifica se a velocidade é maior que 7 antes de aplicar o grip effect
       if (!isRaining) {
         switch (playerList[p.name].tyres) {
@@ -2328,10 +2312,9 @@ function gripEffect() {
             if (speedMagnitude > 8) {
               if (tyreWear > 60) {
                 // Reduz gradualmente o gripMultiplier de 1.0 até 0.980
-                gripMultiplier = 1.0 - ((tyreWear - 60) / 40) * 0.020;
+                gripMultiplier = 1.0 - ((tyreWear - 60) / 40) * 0.02;
               } else if (tyreWear > 10) {
                 // Mantém o gripMultiplier no auge (1.0) entre 10% e 60%
-        
               } else {
                 // Grip inicial de 0.997 para pneus novos até 10% de desgaste
                 gripMultiplier = 0.997;
@@ -2342,10 +2325,9 @@ function gripEffect() {
             if (speedMagnitude > 8) {
               if (tyreWear > 60) {
                 // Reduz gradualmente o gripMultiplier de 0.999 até 0.980
-                gripMultiplier = 0.999 - ((tyreWear - 60) / 40) * 0.020;
+                gripMultiplier = 0.999 - ((tyreWear - 60) / 40) * 0.02;
               } else if (tyreWear > 10) {
-                gripMultiplier = 0.999
-        
+                gripMultiplier = 0.999;
               } else {
                 // Grip inicial de 0.997 para pneus novos até 10% de desgaste
                 gripMultiplier = 0.996;
@@ -2356,15 +2338,13 @@ function gripEffect() {
             if (speedMagnitude > 8) {
               if (tyreWear > 60) {
                 // Reduz gradualmente o gripMultiplier de 0.998 até 0.980
-                gripMultiplier = 0.998 - ((tyreWear - 60) / 40) * 0.020;
+                gripMultiplier = 0.998 - ((tyreWear - 60) / 40) * 0.02;
               } else if (tyreWear > 10) {
-                gripMultiplier = 0.998
-        
+                gripMultiplier = 0.998;
               } else {
                 // Grip inicial de 0.997 para pneus novos até 10% de desgaste
                 gripMultiplier = 0.995;
               }
-            
             }
             break;
           case "furados":
@@ -2392,10 +2372,9 @@ function gripEffect() {
             if (speedMagnitude > 7) {
               if (tyreWear > 60) {
                 // Reduz gradualmente o gripMultiplier de 1.0 até 0.980
-                gripMultiplier = 1.0 - ((tyreWear - 60) / 40) * 0.020;
+                gripMultiplier = 1.0 - ((tyreWear - 60) / 40) * 0.02;
               } else if (tyreWear > 10) {
                 // Mantém o gripMultiplier no auge (1.0) entre 10% e 60%
-        
               } else {
                 // Grip inicial de 0.997 para pneus novos até 10% de desgaste
                 gripMultiplier = 0.997;
@@ -2423,19 +2402,25 @@ function checkTyreWear(player) {
   const playerData = playerList[player.name];
 
   // Ignora o desgaste dos pneus se o estado dos pneus for null
-  if (playerData == null || playerData.tyres === undefined || playerData.tyres === "null" || playerData.tyres === "furados") {
+  if (
+    playerData == null ||
+    playerData.tyres === undefined ||
+    playerData.tyres === "null" ||
+    playerData.tyres === "furados"
+  ) {
     return;
-}
+  }
 
   // Calcular o fator de desgaste dependendo do status do safety car
-  const wearFactor = 
-    generalSafetyCar ? safetyCarFactor :
-    generalVirtualSC ? virtualSafetyCarFactor :
-    1;
-  
+  const wearFactor = generalSafetyCar
+    ? safetyCarFactor
+    : generalVirtualSC
+    ? virtualSafetyCarFactor
+    : 1;
+
   // Incrementa desgaste dos pneus com base no fator de desgaste
   playerData.wear += (1 / 60) * wearFactor; // Incrementa desgaste por segundo
-  
+
   const totalDurability = tyreOptions(limit)[playerData.tyres];
   const remainingDurability = totalDurability - playerData.wear;
   const remainingPercentage = (remainingDurability / totalDurability) * 100;
@@ -2446,7 +2431,7 @@ function checkTyreWear(player) {
     case remainingPercentage <= 0:
       playerData.tyres = "furados";
       room.sendAnnouncement(
-        "❗ Seus pneus estão furados, faça o pitstop! ❗",
+        "❗ Seus pneus estão furados, faça o pitstop! (Digite !pneus dentro do BOX) ❗",
         player.id,
         colors.alert,
         fonts.alert,
@@ -2457,7 +2442,10 @@ function checkTyreWear(player) {
       break;
 
     case remainingPercentage <= 5 && remainingPercentage > 4:
-      if (!playerData.lastAlertTime || currentTime - playerData.lastAlertTime >= alertCooldown) {
+      if (
+        !playerData.lastAlertTime ||
+        currentTime - playerData.lastAlertTime >= alertCooldown
+      ) {
         room.sendAnnouncement(
           "❗ Seus pneus estão quase furados! Restam apenas 5%! ❗",
           player.id,
@@ -2470,7 +2458,10 @@ function checkTyreWear(player) {
       break;
 
     case remainingPercentage <= 10 && remainingPercentage > 9:
-      if (!playerData.lastAlertTime || currentTime - playerData.lastAlertTime >= alertCooldown) {
+      if (
+        !playerData.lastAlertTime ||
+        currentTime - playerData.lastAlertTime >= alertCooldown
+      ) {
         room.sendAnnouncement(
           "❗ Seus pneus estão desgastados! Restam apenas 10%! ❗",
           player.id,
@@ -2483,7 +2474,10 @@ function checkTyreWear(player) {
       break;
 
     case remainingPercentage <= 25 && remainingPercentage > 24:
-      if (!playerData.lastAlertTime || currentTime - playerData.lastAlertTime >= alertCooldown) {
+      if (
+        !playerData.lastAlertTime ||
+        currentTime - playerData.lastAlertTime >= alertCooldown
+      ) {
         room.sendAnnouncement(
           "❗ Atenção! Restam apenas 25% dos seus pneus! ❗",
           player.id,
@@ -2496,7 +2490,10 @@ function checkTyreWear(player) {
       break;
 
     case remainingPercentage <= 50 && remainingPercentage > 49:
-      if (!playerData.lastAlertTime || currentTime - playerData.lastAlertTime >= alertCooldown) {
+      if (
+        !playerData.lastAlertTime ||
+        currentTime - playerData.lastAlertTime >= alertCooldown
+      ) {
         room.sendAnnouncement(
           "Você está com 50% dos pneus restantes.",
           player.id,
@@ -2509,7 +2506,10 @@ function checkTyreWear(player) {
       break;
 
     case remainingPercentage <= 75 && remainingPercentage > 74:
-      if (!playerData.lastAlertTime || currentTime - playerData.lastAlertTime >= alertCooldown) {
+      if (
+        !playerData.lastAlertTime ||
+        currentTime - playerData.lastAlertTime >= alertCooldown
+      ) {
         room.sendAnnouncement(
           "Seus pneus estão em 75%.",
           player.id,
@@ -2523,11 +2523,8 @@ function checkTyreWear(player) {
   }
 }
 
-
 function pitSpeedLimit() {
-  let players = room
-  .getPlayerList()
-  .filter((p) => {
+  let players = room.getPlayerList().filter((p) => {
     const playerDiscProperties = room.getPlayerDiscProperties(p.id);
     return playerDiscProperties !== undefined && playerDiscProperties !== null;
   });
@@ -2544,7 +2541,10 @@ function pitSpeedLimit() {
       if (newYSpeed > 3) newYSpeed = 3;
       if (newYSpeed < -3) newYSpeed = -3;
 
-      room.setPlayerDiscProperties(p.id, { xspeed: newXSpeed, yspeed: newYSpeed });
+      room.setPlayerDiscProperties(p.id, {
+        xspeed: newXSpeed,
+        yspeed: newYSpeed,
+      });
     }
   });
 }
@@ -2556,18 +2556,17 @@ function checkPlayerLaps() {
     .getPlayerList()
     .filter((p) => room.getPlayerDiscProperties(p.id) != null);
 
-    players.forEach((p) => {
-      const playerData = playerList[p.name];
-      if (playerData) {
-        if (playerData.currentLap <= limit) {
-          playerData.lapTimes[playerData.currentLap - 1] += 1 / 60;
-        }
-        if (!ifInLapChangeZone(p) && playerData.lapChanged) {
-          playerData.lapChanged = false;
-        }
+  players.forEach((p) => {
+    const playerData = playerList[p.name];
+    if (playerData) {
+      if (playerData.currentLap <= limit) {
+        playerData.lapTimes[playerData.currentLap - 1] += 1 / 60;
       }
-    
-    
+      if (!ifInLapChangeZone(p) && playerData.lapChanged) {
+        playerData.lapChanged = false;
+      }
+    }
+
     if (ifInLapChangeZone(p) && playerList[p.name].lapChanged == false) {
       if (playerList[p.name].currentLap < limit) {
         playerList[p.name].lapChanged = true;
@@ -2597,8 +2596,8 @@ function checkPlayerLaps() {
                 fonts.alert,
                 sounds.alert
               );
-              room.setPlayerTeam(p.id,0);
-              
+              room.setPlayerTeam(p.id, 0);
+
               clearTimeout(crossing);
             }
           } else if (_Circuit.StartDirection == "Y") {
@@ -2622,14 +2621,18 @@ function checkPlayerLaps() {
                 fonts.alert,
                 sounds.alert
               );
-              room.setPlayerTeam(p.id,0);
-              
+              room.setPlayerTeam(p.id, 0);
+
               clearTimeout(crossing);
             }
           }
         }, lapChangeAnnouncementTimeout);
         let crossing = setTimeout((p) => {
-          if (!playerList[name].inSafetyCar && !generalSafetyCar && !generalVirtualSC) {
+          if (
+            !playerList[name].inSafetyCar &&
+            !generalSafetyCar &&
+            !generalVirtualSC
+          ) {
             playerList[name].currentLap++;
             if (playerList[name].currentLap === 1) {
               playerList[name].PlayerBestTime = 999.999; // Inicializa o PlayerBestTime na primeira volta
@@ -2643,7 +2646,7 @@ function checkPlayerLaps() {
                 .filter((p) => playerList[p.name].everyoneLaps)
                 .map((p) => p.id);
 
-              if (lapTime < _Circuit.BestTime[0] && lapTime > 20.000) {
+              if (lapTime < _Circuit.BestTime[0] && lapTime > 20.0) {
                 room.sendAnnouncement(
                   `🆕 Recorde! ${name} - ${serialize(lapTime)} segundos`,
                   null, // Envia para todos os jogadores
@@ -2720,7 +2723,7 @@ function checkPlayerLaps() {
               }
 
               // Quando o tempo de volta é maior que 20 segundos
-              if (lapTime > 20.000) {
+              if (lapTime > 20.0) {
                 // Atualiza as informações do jogador na volta atual
                 let currentLapInfo = {
                   id: id,
@@ -2854,8 +2857,8 @@ function checkPlayerLaps() {
                 fonts.alert,
                 sounds.alert
               );
-              room.setPlayerTeam(p.id,0);
-           
+              room.setPlayerTeam(p.id, 0);
+
               clearTimeout(crossing);
             }
           } else if (_Circuit.StartDirection == "Y") {
@@ -2877,14 +2880,18 @@ function checkPlayerLaps() {
                 fonts.alert,
                 sounds.alert
               );
-              room.setPlayerTeam(p.id,0);
-           
+              room.setPlayerTeam(p.id, 0);
+
               clearTimeout(crossing);
             }
           }
         }, lapChangeAnnouncementTimeout);
         let crossing = setTimeout((p) => {
-          if (!playerList[name].inSafetyCar && !generalSafetyCar && !generalVirtualSC) {
+          if (
+            !playerList[name].inSafetyCar &&
+            !generalSafetyCar &&
+            !generalVirtualSC
+          ) {
             playerList[name].currentLap++;
             let lapTime = parseFloat(
               playerList[name].lapTimes[playerList[name].currentLap - 2]
@@ -2983,14 +2990,14 @@ function checkPlayerLaps() {
 
 function handleInactivity() {
   // handles inactivity : players will be kicked after afkLimit
-  let players = room
-  .getPlayerList()
-  .filter((p) => {
+  let players = room.getPlayerList().filter((p) => {
     // Verifica se as propriedades do jogador estão definidas
     const player = playerList[p.name];
-    return room.getPlayerDiscProperties(p.id) != null &&
-           player != null &&
-           player.isInTheTrack === true;
+    return (
+      room.getPlayerDiscProperties(p.id) != null &&
+      player != null &&
+      player.isInTheTrack === true
+    );
   });
   if (countAFK && players.length >= 1) {
     for (var i = 0; i < players.length; i++) {
@@ -3140,19 +3147,19 @@ function ifInPitLane(player) {
 function ifInBoxesZone(player) {
   // Verifica se o tempo é igual a 0
   console.log("Player", player);
-  
-  if (gameState != "running"){
+
+  if (gameState != "running") {
     room.sendAnnouncement(
       `Não há corrida no momento.`,
       player.id,
       colors.wrong,
       fonts.wrong,
-      sounds.wrong  
+      sounds.wrong
     );
     return false;
-  } 
+  }
 
-  if (player.team != 2){
+  if (player.team != 2) {
     room.sendAnnouncement(
       `Você não é um piloto.`,
       player.id,
@@ -3236,7 +3243,7 @@ function getPersonalBestTimes() {
 room.onGameStart = function (byPlayer) {
   gameState = "running";
   handleGameStateChange(gameState);
-  
+
   byPlayer == null
     ? console.log(`Game started`)
     : console.log(`Game started by ${byPlayer.name}`);
@@ -3252,7 +3259,7 @@ room.onGameStart = function (byPlayer) {
 
   // Obter a lista de jogadores
   var players = room.getPlayerList();
-  
+
   players.forEach((p) => {
     const playerData = playerList[p.name];
 
@@ -3267,7 +3274,7 @@ room.onGameStart = function (byPlayer) {
     playerData.tyres = "macios"; // Tipo padrão de pneus
     playerData.tyreEmoji = "🔴"; // Emoji padrão dos pneus
     room.setPlayerAvatar(p.id, "🔴"); // Avatar padrão dos pneus
-    
+
     // Inicializar os tempos de volta
     playerData.lapTimes = [];
     for (let i = 0; i < limit; i++) {
@@ -3320,13 +3327,15 @@ room.onGameUnpause = (byPlayer) => {
 room.onGameStop = function (byPlayer) {
   gameState = null;
   handleGameStateChange(gameState);
-  
+
   byPlayer == null
     ? console.log(`Game stopped`)
     : console.log(`Game stopped by ${byPlayer.name}`);
 
   room.sendAnnouncement(
-    `${_Circuit.Name} Melhor Volta: ${serialize(_Circuit.BestTime[0])} segundos, por ${_Circuit.BestTime[1]}`,
+    `${_Circuit.Name} Melhor Volta: ${serialize(
+      _Circuit.BestTime[0]
+    )} segundos, por ${_Circuit.BestTime[1]}`,
     null,
     colors.info,
     fonts.info,
@@ -3341,7 +3350,7 @@ room.onGameStop = function (byPlayer) {
 
   // Obter a lista de jogadores
   let players = room.getPlayerList();
-  
+
   players.forEach((p) => {
     const playerData = playerList[p.name];
 
@@ -3350,7 +3359,7 @@ room.onGameStop = function (byPlayer) {
     playerData.wear = 0; // Desgaste inicial
     playerData.tyreEmoji = "🔴"; // Emoji padrão dos pneus
     room.setPlayerAvatar(p.id, "🔴"); // Avatar padrão dos pneus
-    
+
     // Redefinir outras propriedades do jogador
     playerData.currentLap = 0;
     playerData.lapChanged = false;
@@ -3378,7 +3387,6 @@ room.onGameTick = function () {
     .getPlayerList()
     .filter((p) => room.getPlayerDiscProperties(p.id) != null);
 
-
   checkPlayerLaps();
   handleInactivity();
   endRaceSession();
@@ -3393,7 +3401,7 @@ room.onGameTick = function () {
   // collisionDetectionSegmentPlayer();
   // runCamera();
   players.forEach((p) => {
-    if (room.getScores().time > 0){
+    if (room.getScores().time > 0) {
       checkTyreWear(p);
     }
   });
@@ -3421,7 +3429,6 @@ room.onPlayerChat = function (player, message) {
   var Admin = "👑 | ";
   var AdminColor = "0x8555b5";
   var ModColor = "0x5d87d4";
-  var GuesteColor = "0xffffff";
 
   if (message.startsWith("!")) {
     const command = message.toLowerCase().split(" ")[0];
@@ -3449,7 +3456,7 @@ room.onPlayerChat = function (player, message) {
     return false;
   } else if (message.toLowerCase().split(" ")[0] == commands.commands) {
     room.sendAnnouncement(
-      "Comandos disponíveis: !afk, !ajuda, !discord, !map, !dicas, !mostrardelta, !lapsgerais, !recordepessoal",
+      "Comandos disponíveis: !afk, !ajuda, !discord, !map, !dicas, !pneus, !mostrardelta, !lapsgerais",
       player.id,
       colors.commands,
       fonts.commands,
@@ -3493,6 +3500,29 @@ room.onPlayerChat = function (player, message) {
     );
     room.sendAnnouncement(
       "Se você deixar de segurar enquanto corre, você poderá ser banido.",
+      null,
+      colors.info,
+      "bold",
+      sounds.info
+    );
+    room.sendAnnouncement(
+      "Lembre-se de botar pneus de chuva antes da chuva começar, e assim que ela acabar, coloque pneus para seco novamente.",
+      null,
+      colors.info,
+      "bold",
+      sounds.info
+    );
+    return false;
+  } else if (message.toLowerCase().split(" ")[0] == commands.tyresExplain) {
+    room.sendAnnouncement(
+      "Cada pneu tem sua duração, e velocidade. Um aviso no chat irá falar a cada quanto % seu pneu esta. ",
+      null,
+      colors.info,
+      "bold",
+      sounds.info
+    );
+    room.sendAnnouncement(
+      "Ao chegar em 0% ele estourará, não deixe isso acontecer entrando no box e digitando !pneus [macios|medios|duros|chuva]",
       null,
       colors.info,
       "bold",
@@ -3613,13 +3643,13 @@ room.onPlayerChat = function (player, message) {
     let args = message.toLowerCase().split(" ");
     let pneu = args[1];
 
-    pneusOption = ["macios", "medios", "duros", "furados", "chuva"]
+    pneusOption = ["macios", "medios", "duros", "furados", "chuva"];
 
     if (ifInBoxesZone(player)) {
       if (pneusOption.includes(pneu)) {
         playerList[player.name].tyres = pneu;
-        playerList[player.name].wear = 0;  // Zerar desgaste ao trocar de pneus
-        
+        playerList[player.name].wear = 0; // Zerar desgaste ao trocar de pneus
+
         room.sendAnnouncement(
           `${player.name} colocou pneus ${pneu}`,
           null,
@@ -3627,22 +3657,22 @@ room.onPlayerChat = function (player, message) {
           fonts.secondaryInfo,
           sounds.secondaryInfo
         );
-  
+
         if (pneu == "macios") {
           playerList[player.name].tyreEmoji = "🔴";
-          room.setPlayerAvatar(player.id, "🔴"); 
+          room.setPlayerAvatar(player.id, "🔴");
         } else if (pneu == "medios") {
           playerList[player.name].tyreEmoji = "🟡";
           room.setPlayerAvatar(player.id, "🟡");
         } else if (pneu == "duros") {
           playerList[player.name].tyreEmoji = "⚪";
-          room.setPlayerAvatar(player.id, "⚪"); 
+          room.setPlayerAvatar(player.id, "⚪");
         } else if (pneu == "chuva") {
           playerList[player.name].tyreEmoji = "🔵";
-          room.setPlayerAvatar(player.id, "🔵"); 
+          room.setPlayerAvatar(player.id, "🔵");
         } else if (pneu == "furados") {
           playerList[player.name].tyreEmoji = "⚫";
-          room.setPlayerAvatar(player.id, "⚫"); 
+          room.setPlayerAvatar(player.id, "⚫");
         }
       } else {
         room.sendAnnouncement(
@@ -3662,7 +3692,7 @@ room.onPlayerChat = function (player, message) {
         sounds.wrong
       );
     }
-    
+
     return false;
   }
   if (player.admin == true) {
@@ -3781,70 +3811,69 @@ room.onPlayerChat = function (player, message) {
       return false;
     } else if (message.toLowerCase().startsWith(commands.safetyEmoji)) {
       let args = message.toLowerCase().split(" ");
-    
+
       let command = args[0];
       let citedPlayer = args.slice(1).join(" ");
-    
+
       if (command === commands.safetyEmoji) {
         let cited = getPlayerIdByCitedName(citedPlayer);
-          if (cited) {
-            room.sendAnnouncement(
-              `Você agora é o Safety Car`,
-              cited.id,
-              colors.alert,
-              fonts.alert,
-              sounds.alert
-            );
-            const safetyCarEmojis = ["⚠️", "🚓", "🚨"];
-            let emojiIndex = 0;
-            const intervalId = setInterval(() => {
-              // Muda o avatar para o emoji atual no array
-              room.setPlayerAvatar(cited.id, safetyCarEmojis[emojiIndex]);
-      
-              // Atualiza o índice para o próximo emoji
-              emojiIndex = (emojiIndex + 1) % safetyCarEmojis.length;
-      
-              // Se generalSafetyCar for falso, para de trocar os avatares e retorna ao original
-              if (!generalSafetyCar) {
-                  clearInterval(intervalId);
-                  room.setPlayerAvatar(cited.id, playerList[cited.name].tyreEmoji);
-              }
+        if (cited) {
+          room.sendAnnouncement(
+            `Você agora é o Safety Car`,
+            cited.id,
+            colors.alert,
+            fonts.alert,
+            sounds.alert
+          );
+          const safetyCarEmojis = ["⚠️", "🚓", "🚨"];
+          let emojiIndex = 0;
+          const intervalId = setInterval(() => {
+            // Muda o avatar para o emoji atual no array
+            room.setPlayerAvatar(cited.id, safetyCarEmojis[emojiIndex]);
+
+            // Atualiza o índice para o próximo emoji
+            emojiIndex = (emojiIndex + 1) % safetyCarEmojis.length;
+
+            // Se generalSafetyCar for falso, para de trocar os avatares e retorna ao original
+            if (!generalSafetyCar) {
+              clearInterval(intervalId);
+              room.setPlayerAvatar(cited.id, playerList[cited.name].tyreEmoji);
+            }
           }, 1000);
         } else {
-            room.sendAnnouncement(
-                `Nenhum jogador com o nome ${citedPlayer} encontrado.`,
-                player.id,
-                colors.wrong,
-                fonts.wrong,
-                sounds.wrong
-            );
+          room.sendAnnouncement(
+            `Nenhum jogador com o nome ${citedPlayer} encontrado.`,
+            player.id,
+            colors.wrong,
+            fonts.wrong,
+            sounds.wrong
+          );
         }
         return false;
       }
     } else if (message.toLowerCase().startsWith(commands.safetyCar)) {
       let args = message.toLowerCase().split(" ");
-      
+
       let command = args[0];
       let option = args[1];
-    
+
       if (command === commands.safetyCar) {
         if (option === "on") {
-          generalSafetyCar = true
-          generalVirtualSC = false
-          flag = "yellow"
+          generalSafetyCar = true;
+          generalVirtualSC = false;
+          flag = "yellow";
           limit = parseInt(limit) + 1;
           for (const playerName in playerList) {
             if (playerList.hasOwnProperty(playerName)) {
-                playerList[playerName].inSafetyCar = true;
+              playerList[playerName].inSafetyCar = true;
             }
-        }
-        Object.values(playerList).forEach(p => {
-           
-          room.setPlayerAvatar(p.id, "⚠️");
-          setTimeout(() => {
+          }
+          Object.values(playerList).forEach((p) => {
+            room.setPlayerAvatar(p.id, "⚠️");
+            setTimeout(() => {
               room.setPlayerAvatar(p.id, playerList[p.name].tyreEmoji);
-          }, 5000);
-        });
+            }, 5000);
+          });
           room.sendAnnouncement(
             `⚠️ ALERTA DE SAFETY CAR!! ⚠️`,
             null,
@@ -3865,26 +3894,25 @@ room.onPlayerChat = function (player, message) {
               playerList[p.name].lapTimes.push(0);
             }
           });
-          room.setTeamColors(1, 45, 0xFFFFFF, [0x218A6A, 0x196951, 0x145441])
+          room.setTeamColors(1, 45, 0xffffff, [0x218a6a, 0x196951, 0x145441]);
 
           return false;
         } else if (option === "off") {
           generalSafetyCar = false;
           generalVirtualSC = false;
           flag = "green";
-          room.setTeamColors(1, 45, 0xFFFFFF, [0xA62808])
+          room.setTeamColors(1, 45, 0xffffff, [0xa62808]);
           for (const playerName in playerList) {
             if (playerList.hasOwnProperty(playerName)) {
-                playerList[playerName].inSafetyCar = false;
+              playerList[playerName].inSafetyCar = false;
             }
-        }
-        Object.values(playerList).forEach(p => {
-           
-          room.setPlayerAvatar(p.id, "🟩");
-          setTimeout(() => {
+          }
+          Object.values(playerList).forEach((p) => {
+            room.setPlayerAvatar(p.id, "🟩");
+            setTimeout(() => {
               room.setPlayerAvatar(p.id, playerList[p.name].tyreEmoji);
-          }, 5000);
-        });
+            }, 5000);
+          });
           room.sendAnnouncement(
             `⚠️ ALERTA DE SAFETY CAR!! ⚠️`,
             null,
@@ -3902,7 +3930,7 @@ room.onPlayerChat = function (player, message) {
           );
 
           return false;
-        } else{
+        } else {
           room.sendAnnouncement(
             "Uso correto: !sc [on|off]",
             player.id,
@@ -3915,28 +3943,27 @@ room.onPlayerChat = function (player, message) {
       }
     } else if (message.toLowerCase().startsWith(commands.virtualSafetyCar)) {
       let args = message.toLowerCase().split(" ");
-    
+
       let command = args[0];
       let option = args[1];
-    
+
       if (command === commands.virtualSafetyCar) {
         if (option === "on") {
-          generalSafetyCar = false
-          generalVirtualSC = true
-          flag = "yellow"
+          generalSafetyCar = false;
+          generalVirtualSC = true;
+          flag = "yellow";
           limit = parseInt(limit) + 1;
           for (const playerName in playerList) {
             if (playerList.hasOwnProperty(playerName)) {
-                playerList[playerName].inSafetyCar = true;
+              playerList[playerName].inSafetyCar = true;
             }
-        }
-        Object.values(playerList).forEach(p => {
-           
-          room.setPlayerAvatar(p.id, "⚠️");
-          setTimeout(() => {
+          }
+          Object.values(playerList).forEach((p) => {
+            room.setPlayerAvatar(p.id, "⚠️");
+            setTimeout(() => {
               room.setPlayerAvatar(p.id, playerList[p.name].tyreEmoji);
-          }, 5000);
-        });
+            }, 5000);
+          });
           room.sendAnnouncement(
             `⚠️ ALERTA DE VIRTUAL SAFETY CAR!! ⚠️`,
             null,
@@ -3962,19 +3989,18 @@ room.onPlayerChat = function (player, message) {
         } else if (option === "off") {
           generalSafetyCar = false;
           generalVirtualSC = false;
-          flag = "green"
-          Object.values(playerList).forEach(p => {
-           
+          flag = "green";
+          Object.values(playerList).forEach((p) => {
             room.setPlayerAvatar(p.id, "🟩");
             setTimeout(() => {
-                room.setPlayerAvatar(p.id, playerList[p.name].tyreEmoji);
+              room.setPlayerAvatar(p.id, playerList[p.name].tyreEmoji);
             }, 5000);
           });
           for (const playerName in playerList) {
             if (playerList.hasOwnProperty(playerName)) {
-                playerList[playerName].inSafetyCar = false;
+              playerList[playerName].inSafetyCar = false;
             }
-        }
+          }
           room.sendAnnouncement(
             `⚠️ ALERTA DE VIRTUAL SAFETY CAR!! ⚠️`,
             null,
@@ -3991,7 +4017,7 @@ room.onPlayerChat = function (player, message) {
             sounds.alert
           );
           return false;
-        } else{
+        } else {
           room.sendAnnouncement(
             "Uso correto: !vsc [on|off]",
             player.id,
@@ -4004,18 +4030,18 @@ room.onPlayerChat = function (player, message) {
       }
     } else if (message.toLowerCase().startsWith(commands.flag)) {
       let args = message.toLowerCase().split(" ");
-    
+
       let command = args[0];
       let option = args[1];
       let citedPlayer = args.slice(2).join(" ");
-    
+
       if (command === commands.flag) {
         if (option === "green") {
-          generalSafetyCar = false
-          generalVirtualSC = false
-          muteMode = false
-          flag = "green"
-        
+          generalSafetyCar = false;
+          generalVirtualSC = false;
+          muteMode = false;
+          flag = "green";
+
           room.sendAnnouncement(
             `🟩🚨🟩 Bandeira VERDE! 🟩🚨🟩`,
             null,
@@ -4030,20 +4056,19 @@ room.onPlayerChat = function (player, message) {
             fonts.flag,
             sounds.flag
           );
-          Object.values(playerList).forEach(p => {
-           
+          Object.values(playerList).forEach((p) => {
             room.setPlayerAvatar(p.id, "🟩");
             setTimeout(() => {
-                room.setPlayerAvatar(p.id, playerList[p.name].tyreEmoji);
+              room.setPlayerAvatar(p.id, playerList[p.name].tyreEmoji);
             }, 5000);
           });
-         
+
           return false;
         } else if (option === "yellow") {
-          generalSafetyCar = false
-          generalVirtualSC = true
-          flag = "yellow"
-        
+          generalSafetyCar = false;
+          generalVirtualSC = true;
+          flag = "yellow";
+
           room.sendAnnouncement(
             `🟨🚨🟨 Bandeira AMARELA! 🟨🚨🟨`,
             null,
@@ -4059,24 +4084,20 @@ room.onPlayerChat = function (player, message) {
             sounds.flag
           );
 
-          Object.values(playerList).forEach(p => {
-           
+          Object.values(playerList).forEach((p) => {
             room.setPlayerAvatar(p.id, "🟨");
             setTimeout(() => {
-                room.setPlayerAvatar(p.id, playerList[p.name].tyreEmoji);
+              room.setPlayerAvatar(p.id, playerList[p.name].tyreEmoji);
             }, 5000);
           });
-      
-          
-
 
           return false;
         } else if (option === "red") {
-          generalSafetyCar = true
-          generalVirtualSC = false
-          muteMode = true
-          flag = "red"
-        
+          generalSafetyCar = true;
+          generalVirtualSC = false;
+          muteMode = true;
+          flag = "red";
+
           room.sendAnnouncement(
             `🟥🚨🟥 Bandeira VERMELHA! 🟥🚨🟥`,
             null,
@@ -4091,22 +4112,18 @@ room.onPlayerChat = function (player, message) {
             fonts.flag,
             sounds.flag
           );
-          Object.values(playerList).forEach(p => {
-           
+          Object.values(playerList).forEach((p) => {
             room.setPlayerAvatar(p.id, "🟥");
             setTimeout(() => {
-                room.setPlayerAvatar(p.id, playerList[p.name].tyreEmoji);
+              room.setPlayerAvatar(p.id, playerList[p.name].tyreEmoji);
             }, 5000);
           });
-      
+
           return false;
         } else if (option === "blue") {
-          generalSafetyCar = false
-          generalVirtualSC = false
-          flag = "blue"
-        
-        
-
+          generalSafetyCar = false;
+          generalVirtualSC = false;
+          flag = "blue";
 
           let cited = getPlayerIdByCitedName(citedPlayer);
           if (cited) {
@@ -4126,24 +4143,24 @@ room.onPlayerChat = function (player, message) {
             );
             room.setPlayerAvatar(cited.id, "🟦");
             setTimeout(() => {
-                room.setPlayerAvatar(cited.id, playerList[cited.name].tyreEmoji);
+              room.setPlayerAvatar(cited.id, playerList[cited.name].tyreEmoji);
             }, 5000);
-        } else {
+          } else {
             room.sendAnnouncement(
-                `Nenhum jogador com o nome ${citedPlayer} encontrado.`,
-                player.id,
-                colors.wrong,
-                fonts.wrong,
-                sounds.wrong
+              `Nenhum jogador com o nome ${citedPlayer} encontrado.`,
+              player.id,
+              colors.wrong,
+              fonts.wrong,
+              sounds.wrong
             );
-        }
-      
+          }
+
           return false;
-        }  else if (option === "black") {
-          generalSafetyCar = false
-          generalVirtualSC = false
-          flag = "black"
-        
+        } else if (option === "black") {
+          generalSafetyCar = false;
+          generalVirtualSC = false;
+          flag = "black";
+
           let cited = getPlayerIdByCitedName(citedPlayer);
           if (cited) {
             room.sendAnnouncement(
@@ -4154,20 +4171,18 @@ room.onPlayerChat = function (player, message) {
               sounds.flag
             );
             room.setPlayerAvatar(cited.id, "⬛️");
-            room.setPlayerTeam(cited.id,1);
-        } else {
+            room.setPlayerTeam(cited.id, 1);
+          } else {
             room.sendAnnouncement(
-                `Nenhum jogador com o nome ${citedPlayer} encontrado.`,
-                player.id,
-                colors.wrong,
-                fonts.wrong,
-                sounds.wrong
+              `Nenhum jogador com o nome ${citedPlayer} encontrado.`,
+              player.id,
+              colors.wrong,
+              fonts.wrong,
+              sounds.wrong
             );
-        }
+          }
           return false;
-        } 
-        
-        else{
+        } else {
           room.sendAnnouncement(
             "Uso correto: !flag [green|yello|red|blue|black]",
             player.id,
@@ -4178,11 +4193,7 @@ room.onPlayerChat = function (player, message) {
         }
         return false;
       }
-    } 
-    
-    
-    
-   else if (message.toLowerCase().split(" ")[0] == commands.listamods) {
+    } else if (message.toLowerCase().split(" ")[0] == commands.listamods) {
       let adminSecPlayers = [];
 
       // Itera sobre as chaves de playerList (que são os nomes dos jogadores)
@@ -4229,10 +4240,10 @@ room.onPlayerChat = function (player, message) {
       return false;
     } else if (message.toLowerCase().startsWith(commands.tyres)) {
       let args = message.toLowerCase().split(" ");
-    
+
       let command = args[0];
       let option = args[1];
-    
+
       if (command === commands.tyres) {
         if (option === "on") {
           // Define pneus como macios e atualiza o avatar
@@ -4243,7 +4254,7 @@ room.onPlayerChat = function (player, message) {
               room.setPlayerAvatar(player.id, "🔴");
             }
           }
-          speedEnabled = true
+          speedEnabled = true;
           room.sendAnnouncement(
             "Pneus ativados e configurados como macios",
             player.id,
@@ -4261,7 +4272,7 @@ room.onPlayerChat = function (player, message) {
               room.setPlayerAvatar(player.id, "🏎️");
             }
           }
-          speedEnabled = false
+          speedEnabled = false;
           room.sendAnnouncement(
             "Pneus desativados e configurados como null",
             player.id,
@@ -4336,7 +4347,7 @@ room.onPlayerChat = function (player, message) {
       return false;
     } else if (message.toLowerCase().split(" ")[0] == commands.ajudaadm) {
       room.sendAnnouncement(
-        "Comandos disponíveis como Administrador: !ajudaadm, !laps, !circuit, !maps, !clear, !endurance, !qualy, !scon, !scoff, !grip, !rainchances, !explicarchuva, !moderation, !mute, !tp, !tyres",
+        "Comandos disponíveis como Administrador: !laps, !circuit, !maps, !mute, !tyres, !scemoji, !sc, !vsc, !flag, !explicarchuva, !eplicarpneus, !tp, !ajudaadm, !listamods, !moderation, !clear, !endurance, !qualy, !rainchances",
         player.id,
         colors.commands,
         fonts.commands,
@@ -4618,9 +4629,571 @@ room.onPlayerChat = function (player, message) {
           }
           return false;
         }
+      } else if (message.toLowerCase().startsWith(commands.safetyEmoji)) {
+        let args = message.toLowerCase().split(" ");
+
+        let command = args[0];
+        let citedPlayer = args.slice(1).join(" ");
+
+        if (command === commands.safetyEmoji) {
+          let cited = getPlayerIdByCitedName(citedPlayer);
+          if (cited) {
+            room.sendAnnouncement(
+              `Você agora é o Safety Car`,
+              cited.id,
+              colors.alert,
+              fonts.alert,
+              sounds.alert
+            );
+            const safetyCarEmojis = ["⚠️", "🚓", "🚨"];
+            let emojiIndex = 0;
+            const intervalId = setInterval(() => {
+              // Muda o avatar para o emoji atual no array
+              room.setPlayerAvatar(cited.id, safetyCarEmojis[emojiIndex]);
+
+              // Atualiza o índice para o próximo emoji
+              emojiIndex = (emojiIndex + 1) % safetyCarEmojis.length;
+
+              // Se generalSafetyCar for falso, para de trocar os avatares e retorna ao original
+              if (!generalSafetyCar) {
+                clearInterval(intervalId);
+                room.setPlayerAvatar(
+                  cited.id,
+                  playerList[cited.name].tyreEmoji
+                );
+              }
+            }, 1000);
+          } else {
+            room.sendAnnouncement(
+              `Nenhum jogador com o nome ${citedPlayer} encontrado.`,
+              player.id,
+              colors.wrong,
+              fonts.wrong,
+              sounds.wrong
+            );
+          }
+          return false;
+        }
+      } else if (message.toLowerCase().startsWith(commands.safetyCar)) {
+        let args = message.toLowerCase().split(" ");
+
+        let command = args[0];
+        let option = args[1];
+
+        if (command === commands.safetyCar) {
+          if (option === "on") {
+            generalSafetyCar = true;
+            generalVirtualSC = false;
+            flag = "yellow";
+            limit = parseInt(limit) + 1;
+            for (const playerName in playerList) {
+              if (playerList.hasOwnProperty(playerName)) {
+                playerList[playerName].inSafetyCar = true;
+              }
+            }
+            Object.values(playerList).forEach((p) => {
+              room.setPlayerAvatar(p.id, "⚠️");
+              setTimeout(() => {
+                room.setPlayerAvatar(p.id, playerList[p.name].tyreEmoji);
+              }, 5000);
+            });
+            room.sendAnnouncement(
+              `⚠️ ALERTA DE SAFETY CAR!! ⚠️`,
+              null,
+              colors.alert,
+              fonts.alert,
+              sounds.alert
+            );
+            room.sendAnnouncement(
+              `🚨 O Safety Car está LIGADO 🚨`,
+              null,
+              colors.alert,
+              fonts.alert,
+              sounds.alert
+            );
+            var players = room.getPlayerList();
+            players.forEach((p) => {
+              for (let i = 0; i < limit - playerList[p.name].currentLap; i++) {
+                playerList[p.name].lapTimes.push(0);
+              }
+            });
+            room.setTeamColors(1, 45, 0xffffff, [0x218a6a, 0x196951, 0x145441]);
+
+            return false;
+          } else if (option === "off") {
+            generalSafetyCar = false;
+            generalVirtualSC = false;
+            flag = "green";
+            room.setTeamColors(1, 45, 0xffffff, [0xa62808]);
+            for (const playerName in playerList) {
+              if (playerList.hasOwnProperty(playerName)) {
+                playerList[playerName].inSafetyCar = false;
+              }
+            }
+            Object.values(playerList).forEach((p) => {
+              room.setPlayerAvatar(p.id, "🟩");
+              setTimeout(() => {
+                room.setPlayerAvatar(p.id, playerList[p.name].tyreEmoji);
+              }, 5000);
+            });
+            room.sendAnnouncement(
+              `⚠️ ALERTA DE SAFETY CAR!! ⚠️`,
+              null,
+              colors.alert,
+              fonts.alert,
+              sounds.alert
+            );
+            room.sendAnnouncement(
+              `🚨 O Safety Car está DESLIGADO 🚨`,
+              null,
+              colors.alert,
+              fonts.alert,
+              sounds.alert,
+              sounds.alert
+            );
+
+            return false;
+          } else {
+            room.sendAnnouncement(
+              "Uso correto: !sc [on|off]",
+              player.id,
+              colors.wrong,
+              fonts.wrong,
+              sounds.wrong
+            );
+          }
+          return false;
+        }
+      } else if (message.toLowerCase().startsWith(commands.virtualSafetyCar)) {
+        let args = message.toLowerCase().split(" ");
+
+        let command = args[0];
+        let option = args[1];
+
+        if (command === commands.virtualSafetyCar) {
+          if (option === "on") {
+            generalSafetyCar = false;
+            generalVirtualSC = true;
+            flag = "yellow";
+            limit = parseInt(limit) + 1;
+            for (const playerName in playerList) {
+              if (playerList.hasOwnProperty(playerName)) {
+                playerList[playerName].inSafetyCar = true;
+              }
+            }
+            Object.values(playerList).forEach((p) => {
+              room.setPlayerAvatar(p.id, "⚠️");
+              setTimeout(() => {
+                room.setPlayerAvatar(p.id, playerList[p.name].tyreEmoji);
+              }, 5000);
+            });
+            room.sendAnnouncement(
+              `⚠️ ALERTA DE VIRTUAL SAFETY CAR!! ⚠️`,
+              null,
+              colors.alert,
+              fonts.alert,
+              sounds.alert
+            );
+            room.sendAnnouncement(
+              `🚨 O Virtual Safety Car está LIGADO 🚨`,
+              null,
+              colors.alert,
+              fonts.alert,
+              sounds.alert
+            );
+            var players = room.getPlayerList();
+            players.forEach((p) => {
+              for (let i = 0; i < limit - playerList[p.name].currentLap; i++) {
+                playerList[p.name].lapTimes.push(0);
+              }
+            });
+
+            return false;
+          } else if (option === "off") {
+            generalSafetyCar = false;
+            generalVirtualSC = false;
+            flag = "green";
+            Object.values(playerList).forEach((p) => {
+              room.setPlayerAvatar(p.id, "🟩");
+              setTimeout(() => {
+                room.setPlayerAvatar(p.id, playerList[p.name].tyreEmoji);
+              }, 5000);
+            });
+            for (const playerName in playerList) {
+              if (playerList.hasOwnProperty(playerName)) {
+                playerList[playerName].inSafetyCar = false;
+              }
+            }
+            room.sendAnnouncement(
+              `⚠️ ALERTA DE VIRTUAL SAFETY CAR!! ⚠️`,
+              null,
+              colors.alert,
+              fonts.alert,
+              sounds.alert
+            );
+            room.sendAnnouncement(
+              `🚨 O Virtual Safety Car está DESLIGADO 🚨`,
+              null,
+              colors.alert,
+              fonts.alert,
+              sounds.alert,
+              sounds.alert
+            );
+            return false;
+          } else {
+            room.sendAnnouncement(
+              "Uso correto: !vsc [on|off]",
+              player.id,
+              colors.wrong,
+              fonts.wrong,
+              sounds.wrong
+            );
+          }
+          return false;
+        }
+      } else if (message.toLowerCase().startsWith(commands.flag)) {
+        let args = message.toLowerCase().split(" ");
+
+        let command = args[0];
+        let option = args[1];
+        let citedPlayer = args.slice(2).join(" ");
+
+        if (command === commands.flag) {
+          if (option === "green") {
+            generalSafetyCar = false;
+            generalVirtualSC = false;
+            muteMode = false;
+            flag = "green";
+
+            room.sendAnnouncement(
+              `🟩🚨🟩 Bandeira VERDE! 🟩🚨🟩`,
+              null,
+              colors.greenFlag,
+              fonts.flag,
+              sounds.flag
+            );
+            room.sendAnnouncement(
+              `🟩🚨🟩 a pista foi LIBERADA! 🟩🚨🟩`,
+              null,
+              colors.greenFlag,
+              fonts.flag,
+              sounds.flag
+            );
+            Object.values(playerList).forEach((p) => {
+              room.setPlayerAvatar(p.id, "🟩");
+              setTimeout(() => {
+                room.setPlayerAvatar(p.id, playerList[p.name].tyreEmoji);
+              }, 5000);
+            });
+
+            return false;
+          } else if (option === "yellow") {
+            generalSafetyCar = false;
+            generalVirtualSC = true;
+            flag = "yellow";
+
+            room.sendAnnouncement(
+              `🟨🚨🟨 Bandeira AMARELA! 🟨🚨🟨`,
+              null,
+              colors.yellowFlag,
+              fonts.flag,
+              sounds.flag
+            );
+            room.sendAnnouncement(
+              `🟨🚨🟨 ultrapassagens PROIBIDAS! 🟨🚨🟨`,
+              null,
+              colors.yellowFlag,
+              fonts.flag,
+              sounds.flag
+            );
+
+            Object.values(playerList).forEach((p) => {
+              room.setPlayerAvatar(p.id, "🟨");
+              setTimeout(() => {
+                room.setPlayerAvatar(p.id, playerList[p.name].tyreEmoji);
+              }, 5000);
+            });
+
+            return false;
+          } else if (option === "red") {
+            generalSafetyCar = true;
+            generalVirtualSC = false;
+            muteMode = true;
+            flag = "red";
+
+            room.sendAnnouncement(
+              `🟥🚨🟥 Bandeira VERMELHA! 🟥🚨🟥`,
+              null,
+              colors.redFlag,
+              fonts.flag,
+              sounds.flag
+            );
+            room.sendAnnouncement(
+              `🟥🚨🟥 retornem ao BOX! 🟥🚨🟥`,
+              null,
+              colors.redFlag,
+              fonts.flag,
+              sounds.flag
+            );
+            Object.values(playerList).forEach((p) => {
+              room.setPlayerAvatar(p.id, "🟥");
+              setTimeout(() => {
+                room.setPlayerAvatar(p.id, playerList[p.name].tyreEmoji);
+              }, 5000);
+            });
+
+            return false;
+          } else if (option === "blue") {
+            generalSafetyCar = false;
+            generalVirtualSC = false;
+            flag = "blue";
+
+            let cited = getPlayerIdByCitedName(citedPlayer);
+            if (cited) {
+              room.sendAnnouncement(
+                `🟦🚨🟦 Bandeira AZUL para ${citedPlayer}! 🟦🚨🟦`,
+                null,
+                colors.blueFlag,
+                fonts.flag,
+                sounds.flag
+              );
+              room.sendAnnouncement(
+                `🟦🚨🟦 LIBERE o caminho! 🟦🚨🟦`,
+                cited.id,
+                colors.blueFlag,
+                fonts.flag,
+                sounds.flag
+              );
+              room.setPlayerAvatar(cited.id, "🟦");
+              setTimeout(() => {
+                room.setPlayerAvatar(
+                  cited.id,
+                  playerList[cited.name].tyreEmoji
+                );
+              }, 5000);
+            } else {
+              room.sendAnnouncement(
+                `Nenhum jogador com o nome ${citedPlayer} encontrado.`,
+                player.id,
+                colors.wrong,
+                fonts.wrong,
+                sounds.wrong
+              );
+            }
+
+            return false;
+          } else if (option === "black") {
+            generalSafetyCar = false;
+            generalVirtualSC = false;
+            flag = "black";
+
+            let cited = getPlayerIdByCitedName(citedPlayer);
+            if (cited) {
+              room.sendAnnouncement(
+                `⬛️🚨⬛️ Bandeira PRETA para ${citedPlayer}! ⬛️🚨⬛️`,
+                null,
+                colors.blackFlag,
+                fonts.flag,
+                sounds.flag
+              );
+              room.setPlayerAvatar(cited.id, "⬛️");
+              room.setPlayerTeam(cited.id, 1);
+            } else {
+              room.sendAnnouncement(
+                `Nenhum jogador com o nome ${citedPlayer} encontrado.`,
+                player.id,
+                colors.wrong,
+                fonts.wrong,
+                sounds.wrong
+              );
+            }
+            return false;
+          } else {
+            room.sendAnnouncement(
+              "Uso correto: !flag [green|yello|red|blue|black]",
+              player.id,
+              colors.wrong,
+              fonts.wrong,
+              sounds.wrong
+            );
+          }
+          return false;
+        }
+      } else if (message.toLowerCase().startsWith(commands.mute)) {
+        let args = message.toLowerCase().split(" ");
+
+        let command = args[0];
+        let option = args[1];
+
+        if (command === commands.mute) {
+          if (option === "on") {
+            room.sendAnnouncement(
+              "Chat mutado!",
+              null,
+              colors.alert,
+              fonts.alert,
+              sounds.alert
+            );
+
+            muteMode = true;
+          } else if (option === "off") {
+            room.sendAnnouncement(
+              "Chat desmutado!",
+              null,
+              colors.alert,
+              fonts.alert,
+              sounds.alert
+            );
+            muteMode = false;
+          } else {
+            room.sendAnnouncement(
+              "Uso correto: !mute [on|off]",
+              player.id,
+              colors.wrong,
+              fonts.wrong,
+              sounds.wrong
+            );
+          }
+          return false;
+        }
+      } else if (message.toLowerCase().startsWith(commands.tp)) {
+        let args = message.toLowerCase().split(" ");
+
+        let command = args[0];
+        let xPosition = args[1];
+        let yPosition = args[2];
+
+        let integerPattern = /^-?\d+$/;
+
+        if (command === commands.tp) {
+          if (xPosition && yPosition) {
+            if (!integerPattern.test(xPosition)) {
+              if (xPosition.includes(",") || xPosition.includes(".")) {
+                room.sendAnnouncement(
+                  "Aviso: xPosition não pode conter vírgula ou ponto.",
+                  player.id,
+                  colors.wrong,
+                  fonts.wrong,
+                  sounds.wrong
+                );
+              } else {
+                room.sendAnnouncement(
+                  "Aviso: xPosition deve ser um número inteiro positivo, negativo ou zero.",
+                  player.id,
+                  colors.wrong,
+                  fonts.wrong,
+                  sounds.wrong
+                );
+              }
+            }
+
+            if (!integerPattern.test(yPosition)) {
+              if (yPosition.includes(",") || yPosition.includes(".")) {
+                room.sendAnnouncement(
+                  "Aviso: yPosition não pode conter vírgula ou ponto.",
+                  player.id,
+                  colors.wrong,
+                  fonts.wrong,
+                  sounds.wrong
+                );
+              } else {
+                room.sendAnnouncement(
+                  "Aviso: yPosition deve ser um número inteiro positivo, negativo ou zero.",
+                  player.id,
+                  colors.wrong,
+                  fonts.wrong,
+                  sounds.wrong
+                );
+              }
+            }
+
+            if (
+              integerPattern.test(xPosition) &&
+              integerPattern.test(yPosition)
+            ) {
+              let xPos = parseFloat(xPosition);
+              let yPos = parseFloat(yPosition);
+              room.sendAnnouncement(
+                `Teleportado mais ${xPosition}X e ${yPosition}Y`,
+                player.id,
+                colors.alert,
+                fonts.alert,
+                sounds.alert
+              );
+
+              room.setPlayerDiscProperties(player.id, {
+                x: player.position.x + xPos,
+                y: player.position.y + yPos,
+              });
+            }
+          } else {
+            room.sendAnnouncement(
+              "Uso correto: !tp [X] [Y]",
+              player.id,
+              colors.wrong,
+              fonts.wrong,
+              sounds.wrong
+            );
+          }
+          return false;
+        }
+      } else if (message.toLowerCase().startsWith(commands.tyres)) {
+        let args = message.toLowerCase().split(" ");
+
+        let command = args[0];
+        let option = args[1];
+
+        if (command === commands.tyres) {
+          if (option === "on") {
+            // Define pneus como macios e atualiza o avatar
+            for (const playerName in playerList) {
+              const player = playerList[playerName];
+              if (player.isInTheTrack) {
+                player.tyres = "macios";
+                room.setPlayerAvatar(player.id, "🔴");
+              }
+            }
+            speedEnabled = true;
+            room.sendAnnouncement(
+              "Pneus ativados e configurados como macios",
+              player.id,
+              colors.info,
+              fonts.info,
+              sounds.info
+            );
+            canMod = true;
+          } else if (option === "off") {
+            // Define pneus como null e atualiza o avatar para um carro de corrida
+            for (const playerName in playerList) {
+              const player = playerList[playerName];
+              if (player.isInTheTrack) {
+                player.tyres = null;
+                room.setPlayerAvatar(player.id, "🏎️");
+              }
+            }
+            speedEnabled = false;
+            room.sendAnnouncement(
+              "Pneus desativados e configurados como null",
+              player.id,
+              colors.info,
+              fonts.info,
+              sounds.info
+            );
+            canMod = false;
+          } else {
+            room.sendAnnouncement(
+              "Uso correto: !tyres [on|off]",
+              player.id,
+              colors.wrong,
+              fonts.wrong,
+              sounds.wrong
+            );
+          }
+          return false;
+        }
       } else if (message.toLowerCase().split(" ")[0] == commands.ajudamod) {
         room.sendAnnouncement(
-          "Comandos disponíveis como Moderador: !ajudamod, !stop, !start, !laps, !circuit, !maps, !kick !mute",
+          "Comandos disponíveis como Moderador: !ajudamod, !laps, !circuit, !maps, !stop, !start, !kick, !mute, !tyres, !scemoji, !sc, !vsc, !flag, !explicarchuva, !explicarpneus, !tp",
           player.id,
           colors.commands,
           fonts.commands,
@@ -4788,11 +5361,11 @@ function getRandomEmoji() {
     "🏟️",
     "👨‍👩‍👧‍👦",
     "👀",
-    "📣", 
+    "📣",
     "🙌",
     "🎉",
-    "📸", 
-    "🍿", 
+    "📸",
+    "🍿",
     "🍻",
     "🎟️",
     "🎊",
@@ -4800,9 +5373,9 @@ function getRandomEmoji() {
     "🎽", // Camiseta esportiva
     "🚩", // Bandeira
     "🧢", // Boné
-    "🥂" // Taças de champanhe
+    "🥂", // Taças de champanhe
   ];
-  
+
   const randomIndex = Math.floor(Math.random() * emojis.length);
   return emojis[randomIndex];
 }
@@ -4817,12 +5390,12 @@ room.onPlayerJoin = function (player) {
     return;
   }
 
-  const allowedCharacters = /^[a-zA-Z0-9À-ÿ \-_\.\,\!\?\@\+\$\/\%\*\#\&\(\)\=\[\]\{\}\;\:\'\\"\<\>\|\\\~\^\`]+$/;
+  const allowedCharacters =
+    /^[a-zA-Z0-9À-ÿ \-_\.\,\!\?\@\+\$\/\%\*\#\&\(\)\=\[\]\{\}\;\:\'\\"\<\>\|\\\~\^\`]+$/;
   if (!allowedCharacters.test(player.name)) {
     room.kickPlayer(player.id, "Nome com caracteres especiais", false);
     return;
   }
-
 
   // Adiciona o jogador à lista de jogadores com configurações básicas
   extendedP.push([player.id, player.auth, player.conn, false, 0, false]);
@@ -4874,7 +5447,7 @@ room.onPlayerJoin = function (player) {
 
 room.onPlayerLeave = function (player) {
   console.log(`${player.name} has left`);
-  
+
   // Verifica se o jogador estava na lista e, se sim, atualiza suas informações
   if (playerList[player.name]) {
     // Atualiza as informações do jogador
@@ -4916,17 +5489,16 @@ room.onPlayerTeamChange = function (changedPlayer, byPlayer) {
     playerList[changedPlayer.name].isInTheTrack = false;
   }
 
-  if (changedPlayer.team == 1){
-    playerList[changedPlayer.name].tyres = null
+  if (changedPlayer.team == 1) {
+    playerList[changedPlayer.name].tyres = null;
     const randomEmoji = getRandomEmoji();
     room.setPlayerAvatar(changedPlayer.id, randomEmoji);
-    }
+  }
 
-    if (changedPlayer.team == 2){
-      playerList[changedPlayer.name].tyres = "macios"
-      room.setPlayerAvatar(changedPlayer.id, "🔴");
-      }
-    
+  if (changedPlayer.team == 2) {
+    playerList[changedPlayer.name].tyres = "macios";
+    room.setPlayerAvatar(changedPlayer.id, "🔴");
+  }
 
   // changedPlayer.team != 0 ? playerList[changedPlayer.name].isInTheTrack = false : playerList[changedPlayer.name].isInTheTrack = true;
   playerList[changedPlayer.name].currentLap = 0;
