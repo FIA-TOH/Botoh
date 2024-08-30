@@ -176,10 +176,10 @@ const _Circuit5 = {
   LaneMaxX: 3233, 
   LaneMinY: 1406, //Cima
   LaneMaxY: 1500, //Baixo
-  BoxMinX: -2122, 
-  BoxMaxX: -3122, 
-  BoxMinY: -1320, //Cima
-  BoxMaxY: -1421, //Baixo
+  BoxMinX: 2122, 
+  BoxMaxX: 3233, 
+  BoxMinY: 1320, //Cima
+  BoxMaxY: 1421, //Baixo
   DriveDirection: -1,
   StartDirection: "X",
   Name: JSON.parse(Circuit5).name,
@@ -206,7 +206,7 @@ const _Circuit6 = {
   LaneMaxY: -55, //Baixo
   BoxMinX: 103, //Sai
   BoxMaxX: 954, //Entra
-  BoxMinY: -85, //Cima
+  BoxMinY: -170, //Cima
   BoxMaxY: -27, //Baixo
   DriveDirection: -1,
   StartDirection: "X",
@@ -232,6 +232,10 @@ const _Circuit7 = {
   LaneMaxX: 86, //Direita
   LaneMinY: 130, //Entra
   LaneMaxY: 730, //Sai
+  BoxMinX: 86, 
+  BoxMaxX: 200, 
+  BoxMinY: 130, 
+  BoxMaxY: 730, 
   DriveDirection: -1,
   StartDirection: "Y",
   Name: JSON.parse(Circuit7).name,
@@ -256,6 +260,10 @@ const _Circuit8 = {
   LaneMaxX: 535,
   LaneMinY: -169,
   LaneMaxY: 81,
+  BoxMinX: -1000, 
+  BoxMaxX: 363, 
+  BoxMinY: -169, 
+  BoxMaxY: 0, 
   DriveDirection: -1,
   StartDirection: "X",
   Name: JSON.parse(Circuit8).name,
@@ -276,10 +284,14 @@ const _Circuit9 = {
   MaxX: 32,
   MinY: -270,
   MaxY: 178,
-  LaneMinX: -350, //Entra
-  LaneMaxX: 550, //Sai
-  LaneMinY: -15, //Cima
-  LaneMaxY: 180, //Baixo
+  LaneMinX: -606, //Entra
+  LaneMaxX: 615, //Sai
+  LaneMinY: 84, //Cima
+  LaneMaxY: 663, //Baixo
+  BoxMinX: -350, 
+  BoxMaxX: 550, 
+  BoxMinY: 180, //Cima
+  BoxMaxY: 256, //Baixo
   DriveDirection: 1,
   StartDirection: "X",
   Name: JSON.parse(Circuit9).name,
@@ -336,6 +348,10 @@ const _Circuit11 = {
   LaneMaxX: -101, //Sai
   LaneMinY: 6, //Cima
   LaneMaxY: 58, //Baixo
+  BoxMinX: -1101, //Sai
+ BoxMaxX: -101, //Entra
+ BoxMinY: -95, //Cima
+ BoxMaxY: 6, //Baixo
   DriveDirection: 1,
   StartDirection: "X",
   Name: JSON.parse(Circuit11).name,
@@ -360,6 +376,10 @@ const _Circuit12 = {
   LaneMaxX: -654, //Sai
   LaneMinY: 12, //Cima
   LaneMaxY: 70, //Baixo
+  BoxMinX: -1454, 
+  BoxMaxX: -654, 
+  BoxMinY: 71, //Cima
+  BoxMaxY: 150, //Baixo
   DriveDirection: 1,
   StartDirection: "X",
   Name: JSON.parse(Circuit12).name,
@@ -384,6 +404,10 @@ const _Circuit13 = {
   LaneMaxX: 1406,
   LaneMinY: -78,
   LaneMaxY: 3,
+  BoxMinX: -61, //Sai
+  BoxMaxX: 1200, //Entra
+  BoxMinY: -140, //Cima
+  BoxMaxY: -80, //Baixo
   DriveDirection: -1,
   StartDirection: "X",
   Name: JSON.parse(Circuit13).name,
@@ -408,6 +432,10 @@ const _Circuit14 = {
   LaneMaxX: 936, //Sai
   LaneMinY: 200, //Cima
   LaneMaxY: 325, //Baixo
+  BoxMinX: 100, 
+  BoxMaxX: 936, 
+  BoxMinY: 325, //Cima
+  BoxMaxY: 390, //Baixo
   DriveDirection: -1,
   StartDirection: "X",
   Name: JSON.parse(Circuit14).name,
@@ -430,8 +458,12 @@ const _Circuit15 = {
   MaxY: -1285,
   LaneMinX: -2582, //Esquerda
   LaneMaxX: -2515, //Direita
-  LaneMinY: -1991, //Sai
-  LaneMaxY: -1285, //Entra
+  LaneMinY: -1991, 
+  LaneMaxY: -1285,  
+  BoxMinX: -2515, //Sai
+  BoxMaxX: -2430, //Entra
+  BoxMinY: -1991, 
+  BoxMaxY: -1285, 
   DriveDirection: 1,
   StartDirection: "Y",
   Name: JSON.parse(Circuit15).name,
@@ -456,6 +488,10 @@ const _Circuit16 = {
   LaneMaxX: 611,
   LaneMinY: -111,
   LaneMaxY: 23,
+  BoxMinX: -525, 
+  BoxMaxX: 485, 
+  BoxMinY: -140, 
+  BoxMaxY: -80, 
   DriveDirection: -1,
   StartDirection: "X",
   Name: JSON.parse(Circuit16).name,
@@ -744,6 +780,10 @@ const _Circuit29 = {
   LaneMaxX: 800,
   LaneMinY: -10,
   LaneMaxY: 48,
+  BoxMinX: 100, 
+  BoxMaxX: 800, 
+  BoxMinY: -75, 
+  BoxMaxY: -10, 
   DriveDirection: -1,
   StartDirection: "X",
   Name: JSON.parse(Circuit29).name,
@@ -768,6 +808,10 @@ const _Circuit30 = {
   LaneMaxX: -150,
   LaneMinY: 594,
   LaneMaxY: 667,
+  BoxMinX: -1150, 
+  BoxMaxX: -150, 
+  BoxMinY: 667, 
+  BoxMaxY: 760, 
   DriveDirection: 1,
   StartDirection: "X",
   Name: JSON.parse(Circuit30).name,
@@ -792,6 +836,10 @@ const _Circuit31 = {
   LaneMaxX: 1234,
   LaneMinY: -253,
   LaneMaxY: -190,
+  BoxMinX: 133, //Sai
+  BoxMaxX:  1234, //Entra
+  BoxMinY: -345, //Cima
+  BoxMaxY: -253, //Baixo
   DriveDirection: -1,
   StartDirection: "X",
   Name: JSON.parse(Circuit31).name,
@@ -816,6 +864,10 @@ const _Circuit32 = {
   LaneMaxX: 1218,
   LaneMinY: 10,
   LaneMaxY: 74,
+  BoxMinX: -500, 
+  BoxMaxX: 1100, 
+  BoxMinY: -55, //Cima
+  BoxMaxY: 10, //Baixo
   DriveDirection: -1,
   StartDirection: "X",
   Name: JSON.parse(Circuit32).name,
@@ -840,6 +892,10 @@ const _Circuit33 = {
   LaneMaxX: 3233, //Sai
   LaneMinY: 1406, //Cima
   LaneMaxY: 1500, //Baixo
+  BoxMinX: 2122, 
+  BoxMaxX: 3233, 
+  BoxMinY: 1320, //Cima
+  BoxMaxY: 1421, //Baixo
   DriveDirection: -1,
   StartDirection: "X",
   Name: JSON.parse(Circuit33).name,
@@ -864,6 +920,10 @@ const _Circuit34 = {
   LaneMaxX: 1290, //Entra
   LaneMinY: -80, //Cima
   LaneMaxY: -55, //Baixo
+  BoxMinX: 103, //Sai
+  BoxMaxX: 954, //Entra
+  BoxMinY: -170, //Cima
+  BoxMaxY: -27, //Baixo
   DriveDirection: -1,
   StartDirection: "X",
   Name: JSON.parse(Circuit34).name,
@@ -888,6 +948,10 @@ const _Circuit35 = {
   LaneMaxX: 86,
   LaneMinY: -464,
   LaneMaxY: 730,
+  BoxMinX: 86, 
+  BoxMaxX: 200, 
+  BoxMinY: 130, 
+  BoxMaxY: 730, 
   DriveDirection: -1,
   StartDirection: "Y",
   Name: JSON.parse(Circuit35).name,
@@ -912,6 +976,10 @@ const _Circuit36 = {
   LaneMaxX: 535,
   LaneMinY: -169,
   LaneMaxY: 81,
+  BoxMinX: -1000, 
+  BoxMaxX: 363, 
+  BoxMinY: -169, 
+  BoxMaxY: 0,
   DriveDirection: -1,
   StartDirection: "X",
   Name: JSON.parse(Circuit36).name,
@@ -936,6 +1004,10 @@ const _Circuit37 = {
   LaneMaxX: 550, //Sai
   LaneMinY: -15, //Cima
   LaneMaxY: 180, //Baixo
+  BoxMinX: -350, 
+  BoxMaxX: 550, 
+  BoxMinY: 180, //Cima
+  BoxMaxY: 256, //Baixo
   DriveDirection: 1,
   StartDirection: "X",
   Name: JSON.parse(Circuit37).name,
@@ -964,6 +1036,10 @@ const _Circuit38 = {
   LaneMaxX: -1670, //Entra
   LaneMinY: -1018, //Cima
   LaneMaxY: -956, //Baixo
+  BoxMinX: -2960, //Sai
+  BoxMaxX: -1670, //Entra
+  BoxMinY: -1120, //Cima
+  BoxMaxY: -1018, //Baixo
   DriveDirection: -1,
   StartDirection: "X",
   Name: JSON.parse(Circuit38).name,
@@ -988,6 +1064,10 @@ const _Circuit39 = {
   LaneMaxX: -101, //Sai
   LaneMinY: 6, //Cima
   LaneMaxY: 58, //Baixo
+  BoxMinX: -1101, //Sai
+  BoxMaxX: -101, //Entra
+  BoxMinY: -95, //Cima
+  BoxMaxY: 6, //Baixo
   DriveDirection: 1,
   StartDirection: "X",
   Name: JSON.parse(Circuit39).name,
@@ -1012,6 +1092,10 @@ const _Circuit40 = {
   LaneMaxX: -654, //Sai
   LaneMinY: 12, //Cima
   LaneMaxY: 70, //Baixo
+  BoxMinX: -1454, 
+  BoxMaxX: -654, 
+  BoxMinY: 71, //Cima
+  BoxMaxY: 150, //Baixo
   DriveDirection: 1,
   StartDirection: "X",
   Name: JSON.parse(Circuit40).name,
@@ -1036,6 +1120,10 @@ const _Circuit41 = {
   LaneMaxX: 1406,
   LaneMinY: -78,
   LaneMaxY: 3,
+  BoxMinX: -61, //Sai
+  BoxMaxX: 1200, //Entra
+  BoxMinY: -140, //Cima
+  BoxMaxY: -80, //Baixo
   DriveDirection: -1,
   StartDirection: "X",
   Name: JSON.parse(Circuit41).name,
@@ -1060,6 +1148,10 @@ const _Circuit42 = {
   LaneMaxX: 936, //Sai
   LaneMinY: 200, //Cima
   LaneMaxY: 325, //Baixo
+  BoxMinX: 100, 
+  BoxMaxX: 936, 
+  BoxMinY: 325, //Cima
+  BoxMaxY: 390, //Baixo
   DriveDirection: -1,
   StartDirection: "X",
   Name: JSON.parse(Circuit42).name,
@@ -1084,6 +1176,10 @@ const _Circuit43 = {
   LaneMaxX: -2515, //Direita
   LaneMinY: -1991, //Sai
   LaneMaxY: -1285, //Entra
+  BoxMinX: -2515, //Sai
+  BoxMaxX: -2430, //Entra
+  BoxMinY: -1991, 
+  BoxMaxY: -1285, 
   DriveDirection: 1,
   StartDirection: "Y",
   Name: JSON.parse(Circuit43).name,
@@ -1112,6 +1208,10 @@ const _Circuit44 = {
   LaneMaxX: 611,
   LaneMinY: -111,
   LaneMaxY: 23,
+  BoxMinX: -525, 
+  BoxMaxX: 485, 
+  BoxMinY: -140, 
+  BoxMaxY: -80, 
   DriveDirection: -1,
   StartDirection: "X",
   Name: JSON.parse(Circuit44).name,
