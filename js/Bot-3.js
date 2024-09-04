@@ -2329,14 +2329,20 @@
         } else if (!isRaining) {
             switch (playerList[p.name].tyres) {
                 case "macios":
+                  if(speedMagnitude > 7){
                     gripMultiplier = calculateGripMultiplier(tyreWear, speedMagnitude, 1.0, 0.9997);
-                    break;
+                  }
+                  break;
                 case "medios":
+                  if(speedMagnitude > 7){
                     gripMultiplier = calculateGripMultiplier(tyreWear, speedMagnitude, 0.9999, 0.9995);
-                    break;
+                  }
+                  break;
                 case "duros":
+                  if(speedMagnitude > 7){
                     gripMultiplier = calculateGripMultiplier(tyreWear, speedMagnitude, 0.9998, 0.9993);
-                    break;
+                  }
+                  break;
                 case "furados":
                     gripMultiplier = 0.90;
                     break;
@@ -2356,34 +2362,38 @@
                     gripMultiplier = 0.90;
                     break;
                 case "chuva":
+                  if(speedMagnitude > 7){
                     gripMultiplier = calculateGripMultiplier(tyreWear, speedMagnitude, 0.9997, 0.9990);
-                    break;
+                  }
+                  break;
             }
         }
 
         // Aplica um multiplicador de 1.25 vezes mais forte se o KERS estiver a 0 e o damping for 0.986
         if (playerList[p.name].kers === 0 && discProps.damping === 0.986) {
-      
-          
           if (gripMultiplier !== undefined) {
               gripMultiplier -= 0.010; // Atualiza o valor de gripMultiplier subtraindo 2
           }
-          
-         
       }
 
-        if (gripMultiplier !== undefined) {
-            let newGravityX = -XSpeed * (1 - gripMultiplier);
-            let newGravityY = -YSpeed * (1 - gripMultiplier);
+        // Apply room.setPlayerDiscProperties only if conditions are met
+        const tyreType = playerList[p.name].tyres;
+        if (gripMultiplier !== undefined && speedMagnitude > 7) {
+            if (
+                (!isRaining && ["macios", "medios", "duros"].includes(tyreType)) ||
+                (isRaining && tyreType === "chuva")
+            ) {
+                let newGravityX = -XSpeed * (1 - gripMultiplier);
+                let newGravityY = -YSpeed * (1 - gripMultiplier);
 
-            room.setPlayerDiscProperties(p.id, {
-                xgravity: newGravityX,
-                ygravity: newGravityY,
-            });
+                room.setPlayerDiscProperties(p.id, {
+                    xgravity: newGravityX,
+                    ygravity: newGravityY,
+                });
+            }
         }
     });
 }
-  
 
   function calculateGripMultiplier(tyreWear, speedMagnitude, maxGrip, minGrip) {
     
