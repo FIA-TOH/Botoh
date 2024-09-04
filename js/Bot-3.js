@@ -1607,7 +1607,7 @@
     noPlayer: true,
     public: true,
     maxPlayers: 30,
-    token: "thr1.AAAAAGbXQssxhnqJJJc4Mw.hD97KOW8XVU",
+    token: "thr1.AAAAAGbXuDrXO4Aim4c7uA.4cgGZBN90Fk",
   });
 
   room.setScoreLimit(0);
@@ -2302,14 +2302,15 @@
 
   function gripEffect() {
     let players = room.getPlayerList().filter((p) => {
-        const player = playerList[p.name];
-        return (
-            room.getPlayerDiscProperties(p.id) != null &&
-            speedEnabled === true &&
-            player != null &&
-            player.tyres != null
-        ); 
-    });
+      const player = playerList[p.name];
+      return (
+          room.getPlayerDiscProperties(p.id) != null &&
+          speedEnabled === true &&
+          player != null &&
+          player.tyres != null &&
+          p.team == 2 
+      ); 
+  });
 
     players.forEach((p) => {
         let discProps = room.getPlayerDiscProperties(p.id);
@@ -2323,9 +2324,9 @@
         
         // Determine the gripMultiplier based on the player's tyres and conditions
         if (generalSafetyCar) {
-            gripMultiplier = playerList[p.name].tyres === "furados" ? 0.97 : 0.98;
+            gripMultiplier = playerList[p.name].tyres === "furados" ? 0.98 : 0.990;
         } else if (generalVirtualSC) {
-            gripMultiplier = playerList[p.name].tyres === "furados" ? 0.97 : 0.99;
+            gripMultiplier = playerList[p.name].tyres === "furados" ? 0.98 : 0.992;
         } else if (!isRaining) {
             switch (playerList[p.name].tyres) {
                 case "macios":
@@ -2344,10 +2345,11 @@
                   }
                   break;
                 case "furados":
-                    gripMultiplier = 0.90;
+              
+                    gripMultiplier = 0.98;
                     break;
                 case "chuva":
-                    gripMultiplier = 0.95;
+                    gripMultiplier = 0.992;
                     break;
             }
         } else {
@@ -2356,10 +2358,10 @@
                 case "macios":
                 case "medios":
                 case "duros":
-                    gripMultiplier = 0.95;
+                    gripMultiplier = 0.992;
                     break;
                 case "furados":
-                    gripMultiplier = 0.90;
+                    gripMultiplier = 0.98;
                     break;
                 case "chuva":
                   if(speedMagnitude > 7){
@@ -2370,19 +2372,26 @@
         }
 
         // Aplica um multiplicador de 1.25 vezes mais forte se o KERS estiver a 0 e o damping for 0.986
-        if (playerList[p.name].kers === 0 && discProps.damping === 0.986) {
-          if (gripMultiplier !== undefined) {
-              gripMultiplier -= 0.010; // Atualiza o valor de gripMultiplier subtraindo 2
-          }
-      }
+      if (playerList[p.name].kers === 0 && discProps.damping === 0.986) {
+        if (gripMultiplier !== undefined) {
+            gripMultiplier -= 0.010; // Atualiza o valor de gripMultiplier subtraindo 2
+        }
+    }else {
+        // Se o KERS não estiver a 0%, redefina a gravidade para evitar puxões
+        room.setPlayerDiscProperties(p.id, {
+            xgravity: 0,
+            ygravity: 0,
+        });
+    }
 
         // Apply room.setPlayerDiscProperties only if conditions are met
         const tyreType = playerList[p.name].tyres;
-        if (gripMultiplier !== undefined && speedMagnitude > 7) {
+        if (gripMultiplier !== undefined) {
             if (
                 (!isRaining && ["macios", "medios", "duros"].includes(tyreType)) ||
                 (isRaining && tyreType === "chuva")
             ) {
+              if(speedMagnitude > 7){
                 let newGravityX = -XSpeed * (1 - gripMultiplier);
                 let newGravityY = -YSpeed * (1 - gripMultiplier);
 
@@ -2390,6 +2399,16 @@
                     xgravity: newGravityX,
                     ygravity: newGravityY,
                 });
+
+              }
+            } else {
+              let newGravityX = -XSpeed * (1 - gripMultiplier);
+              let newGravityY = -YSpeed * (1 - gripMultiplier);
+
+              room.setPlayerDiscProperties(p.id, {
+                  xgravity: newGravityX,
+                  ygravity: newGravityY,
+              });
             }
         }
     });
@@ -2983,10 +3002,13 @@
     });
   }
 
+
+
   function updateKers(player) {
+    
     const disc = room.getPlayerDiscProperties(player.id);
     let playerData = playerList[player.name];
-
+    
     if (player.team == 2) {
         if (disc.damping === 0.986) {
             // Se o jogador está usando o KERS
@@ -2995,13 +3017,17 @@
                 if (playerData.kers < 0) playerData.kers = 0;
             }
             room.setPlayerAvatar(player.id, Math.floor(playerData.kers).toString());
+            setTimeout(()=>{
+              
+              room.setPlayerAvatar(player.id, playerList[player.name].tyreEmoji);
+            }, 3000)
         } else {
             // Recarregar KERS quando não está em uso
             if (playerData.kers < 100) {
                 playerData.kers += 100 / (2 * 60 * 60); // 2 minutos para recarregar completamente
                 if (playerData.kers > 100) playerData.kers = 100;
             }
-            room.setPlayerAvatar(player.id, playerList[player.name].tyreEmoji);
+          
 
             // // Resetar a gravidade ao recarregar o KERS
             // room.setPlayerDiscProperties(player.id, {
@@ -3310,6 +3336,7 @@
     camId = null;
     currentTime = 0;
     countAFK = true;
+    speedEnabled = false
 
     // Obter a lista de jogadores
     var players = room.getPlayerList();
@@ -3328,7 +3355,7 @@
       // Configurar pneus
       playerData.tyres = "macios"; // Tipo padrão de pneus
       playerData.tyreEmoji = "🔴"; // Emoji padrão dos pneus
-      room.setPlayerAvatar(p.id, "🔴"); // Avatar padrão dos pneus
+      room.setPlayerAvatar(p.id, "🏎️"); // Avatar padrão sem pneus
 
       // Inicializar os tempos de volta
       playerData.lapTimes = [];
@@ -3448,7 +3475,9 @@
     checkPlayerLaps();
     handleInactivity();
     endRaceSession();
-    gripEffect();
+    if(speedEnabled == true){
+      gripEffect();
+    }
     pitSpeedLimit();
     if (currentCircuit == 17 || currentCircuit == 38) {
       teleportSuzuka();
@@ -3460,7 +3489,9 @@
     // runCamera();
     players.forEach((p) => {
       if (room.getScores().time > 0) {
-        checkTyreWear(p);
+        if(speedEnabled == true){
+          checkTyreWear(p);
+        }
         updateKers(p);
       }
     });
@@ -3479,10 +3510,21 @@
   };
 
   room.onPlayerChat = function (player, message) {
+    console.log(message.split(" ")[0]);
+    
+    if (message.toLowerCase().startsWith("!") && !hasValue(commands, message.split(" ")[0])){
+      room.sendAnnouncement(
+        "Esse comando não existe",
+        player.id,
+        colors.wrong,
+        fonts.wrong,
+        sounds.wrong
+      );
 
+      
 
-    console.log(room.getPlayerDiscProperties(player.id))
-
+      return false;
+    }
     if (message.toLowerCase().split(" ")[0] == commands.admin) {
       if (player.admin == false) {
         playerList[player.name].adminSec = false;
@@ -5375,18 +5417,6 @@
           return false;
         }
       }
-    }
-
-    if (message.toLowerCase().startsWith("!")){
-      room.sendAnnouncement(
-        "Esse comando não existe",
-        player.id,
-        colors.wrong,
-        fonts.wrong,
-        sounds.wrong
-      );
-
-      return false;
     }
 
  
