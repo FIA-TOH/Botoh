@@ -1524,6 +1524,7 @@
 
   var GetVotesAndAnnounceResults_Timeout_1;
   var GetVotesAndAnnounceResults_Timeout_2;
+  
   // const tyreOptions = { macios: 60, medios: 90, duros: 120, chuva: 120, furados: 0 };
   const tyreOptions = (limit) => {
     if (limit === null) {
@@ -1605,9 +1606,9 @@
   var room = HBInit({
     roomName: "🏎️🏁 Fórmula 1 - Sessão Livre 🏎️🏁",
     noPlayer: true,
-    public: true,
+    public: false,
     maxPlayers: 30,
-    token: "thr1.AAAAAGbXuDrXO4Aim4c7uA.4cgGZBN90Fk",
+    token: "thr1.AAAAAGbYgzTTLBMHVmnPcQ.yvgMv3rUBDs",
   });
 
   room.setScoreLimit(0);
@@ -2596,11 +2597,7 @@
       .getPlayerList()
       .filter((p) => room.getPlayerDiscProperties(p.id) != null);
 
-   
-      
-
     players.forEach((p) => {
-  
       const playerData = playerList[p.name];
       if (playerData) {
         if (playerData.currentLap <= limit) {
@@ -4390,7 +4387,7 @@
               fonts.info,
               sounds.info
             );
-            canMod = true;
+           
           } else if (option === "off") {
             // Define pneus como null e atualiza o avatar para um carro de corrida
             for (const playerName in playerList) {
@@ -4408,7 +4405,7 @@
               fonts.info,
               sounds.info
             );
-            canMod = false;
+            
           } else {
             room.sendAnnouncement(
               "Uso correto: !tyres [on|off]",
@@ -5289,7 +5286,7 @@
                 fonts.info,
                 sounds.info
               );
-              canMod = true;
+              
             } else if (option === "off") {
               // Define pneus como null e atualiza o avatar para um carro de corrida
               for (const playerName in playerList) {
@@ -5307,7 +5304,7 @@
                 fonts.info,
                 sounds.info
               );
-              canMod = false;
+             
             } else {
               room.sendAnnouncement(
                 "Uso correto: !tyres [on|off]",
@@ -5601,8 +5598,15 @@
     }
 
     if (changedPlayer.team == 2) {
-      playerList[changedPlayer.name].tyres = "macios";
-      room.setPlayerAvatar(changedPlayer.id, "🔴");
+      if(speedEnabled == true){
+        playerList[changedPlayer.name].tyres = "macios";
+        
+        room.setPlayerAvatar(changedPlayer.id, "🔴");
+      } else {
+        playerList[changedPlayer.name].tyres = "macios";
+       
+        room.setPlayerAvatar(changedPlayer.id, "🏎️");
+      }
     }
 
     // changedPlayer.team != 0 ? playerList[changedPlayer.name].isInTheTrack = false : playerList[changedPlayer.name].isInTheTrack = true;
