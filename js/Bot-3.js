@@ -517,7 +517,7 @@
     LaneMinY: -15, //Cima
     LaneMaxY: 60, //Baixo
     BoxMinX: -840,
-    BoxMaxX: -200,
+    BoxMaxX: 200,
     BoxMinY: 60,
     BoxMaxY: 150,
     DriveDirection: 1,
@@ -2755,7 +2755,7 @@
                   );
                 }
 
-                if (lapTime < playerList[name].PlayerBestTime) {
+                if (lapTime < playerList[name].PlayerBestTime && lapTime > 20.000) {
                   let player = room.getPlayerList().find((p) => p.id === id);
 
                   playerList[name].PlayerBestTime = lapTime;
@@ -2860,7 +2860,23 @@
                     }
                   }
                 } else {
-                  room.kickPlayer(id, "Não cruze a linha ao contrario!", false);
+                  if (playerList[name].currentLap > 1) {
+                    playerList[name].currentLap--;
+                }
+                  room.sendAnnouncement(
+                    `⚠️ ALERTA DE INFRAÇÃO!! ⚠️`,
+                    null,
+                    colors.alert,
+                    fonts.alert,
+                    sounds.alert
+                  );
+                  room.sendAnnouncement(
+                    `❗ Aviso para: ${name} ❗`,
+                    null,
+                    colors.alert,
+                    fonts.alert,
+                    sounds.alert
+                  );
                 }
               }
               room.sendAnnouncement(
@@ -3516,7 +3532,7 @@
   room.onPlayerChat = function (player, message) {
     console.log(message.split(" ")[0]);
     
-    if (message.toLowerCase().startsWith("!") && !hasValue(commands, message.split(" ")[0])){
+    if (message.toLowerCase().startsWith("!") && !hasValue(commands, message.split(" ")[0].toLowerCase())) {
       room.sendAnnouncement(
         "Esse comando não existe",
         player.id,
@@ -3771,50 +3787,61 @@
         }
         return false;
       }
-    } else if (message.toLowerCase().split(" ")[0] == commands.pitstop) {
-      let args = message.toLowerCase().split(" ");
+    } else if (message.split(" ")[0].toLowerCase() == commands.pitstop.toLowerCase()) {
+      let args = message.split(" ");
       let pneu = args[1];
 
       pneusOption = ["macios", "medios", "duros", "furados", "chuva"];
 
       if (ifInBoxesZone(player)) {
-        if (pneusOption.includes(pneu)) {
-          playerList[player.name].tyres = pneu;
-          playerList[player.name].wear = 0; // Zerar desgaste ao trocar de pneus
-
-          room.sendAnnouncement(
-            `${player.name} colocou pneus ${pneu}`,
-            null,
-            colors.secondaryInfo,
-            fonts.secondaryInfo,
-            sounds.secondaryInfo
-          );
-
-          if (pneu == "macios") {
-            playerList[player.name].tyreEmoji = "🔴";
-            room.setPlayerAvatar(player.id, "🔴");
-          } else if (pneu == "medios") {
-            playerList[player.name].tyreEmoji = "🟡";
-            room.setPlayerAvatar(player.id, "🟡");
-          } else if (pneu == "duros") {
-            playerList[player.name].tyreEmoji = "⚪";
-            room.setPlayerAvatar(player.id, "⚪");
-          } else if (pneu == "chuva") {
-            playerList[player.name].tyreEmoji = "🔵";
-            room.setPlayerAvatar(player.id, "🔵");
-          } else if (pneu == "furados") {
-            playerList[player.name].tyreEmoji = "⚫";
-            room.setPlayerAvatar(player.id, "⚫");
+        if(speedEnabled == true){
+          if (pneusOption.includes(pneu)) {
+            playerList[player.name].tyres = pneu;
+            playerList[player.name].wear = 0; // Zerar desgaste ao trocar de pneus
+  
+            room.sendAnnouncement(
+              `${player.name} colocou pneus ${pneu}`,
+              null,
+              colors.secondaryInfo,
+              fonts.secondaryInfo,
+              sounds.secondaryInfo
+            );
+  
+            if (pneu == "macios") {
+              playerList[player.name].tyreEmoji = "🔴";
+              room.setPlayerAvatar(player.id, "🔴");
+            } else if (pneu == "medios") {
+              playerList[player.name].tyreEmoji = "🟡";
+              room.setPlayerAvatar(player.id, "🟡");
+            } else if (pneu == "duros") {
+              playerList[player.name].tyreEmoji = "⚪";
+              room.setPlayerAvatar(player.id, "⚪");
+            } else if (pneu == "chuva") {
+              playerList[player.name].tyreEmoji = "🔵";
+              room.setPlayerAvatar(player.id, "🔵");
+            } else if (pneu == "furados") {
+              playerList[player.name].tyreEmoji = "⚫";
+              room.setPlayerAvatar(player.id, "⚫");
+            }
+          } else {
+            room.sendAnnouncement(
+              "Este pneu não existe! Digite novamente para acertar seu pit stop!",
+              player.id,
+              colors.wrong,
+              fonts.wrong,
+              sounds.wrong
+            );
           }
         } else {
           room.sendAnnouncement(
-            "Este pneu não existe! Digite novamente para acertar seu pit stop!",
+            "Os Pneus estão desativados",
             player.id,
             colors.wrong,
             fonts.wrong,
             sounds.wrong
           );
         }
+       
       } else {
         room.sendAnnouncement(
           "Você tem que estar dentro do Box para trocar de pneus!!",
