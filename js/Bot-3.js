@@ -1,20 +1,20 @@
   const bestTimes = {
     circuit1: [28.283, "Ximbastian Vettel"], //Melbourne D.
     circuit2: [32.800, "Ximbastian Vettel"], //Imola D.
-    circuit3: [50.750, "Ximbastian Vettel"], //Sepang D.
-    circuit4: [32.650, "Ximbastian Vettel"], //Bahrein D.
+    circuit3: [50.700, "Ximbastian Vettel"], //Sepang D.
+    circuit4: [32.500, "Ximbastian Vettel"], //Bahrein D.
     circuit5: [41.050, "Ximbastian Vettel"], //Sochi D.
     circuit6: [35.700, "Ximbastian Vettel"], //Monaco D.
     circuit7: [38.700, "Ximbastian Vettel"], //Valencia D.
     circuit8: [43.450, "Ximbastian Vettel"], //PaulRicard D.
-    circuit9: [34.600, "Ximbastian Vettel"], //Silverstone D.
+    circuit9: [34.450, "Gabriel Schumacchio"], //Silverstone D.
     circuit10: [52.200, "Ximbastian Vettel"], //Spa D.
     circuit11: [35.350, "Ximbastian Vettel"], //Istanbul D.
-    circuit12: [40.600, "Ximbastian Vettel"], //Nurburgring D.
+    circuit12: [40.550, "Luiz Di Grassi"], //Nurburgring D.
     circuit13: [26.700, "Ximbastian Vettel"], //Monza D.
     circuit14: [31.600, "Ximbastian Vettel"], //Canada D.
     circuit15: [51.150, "Ximbastian Vettel"], //Austin D.
-    circuit16: [41.500, "Ximbastian Vettel"], //Shangai D.
+    circuit16: [41.400, "Ximbastian Vettel"], //Shangai D.
     circuit17: [35.200, "Ximbastian Vettel"], //Suzuka D.
     circuit18: [33.850, "Ximbastian Vettel"], //Interlagos D.
 
@@ -25,7 +25,7 @@
     circuit22: [39.583, "Ximbastian Vettel"], //Argentina D.
     circuit23: [36.700, "Ximbastian Vettel"], //Laguna Seca
     circuit24: [36.033, "Ximbastian Vettel"], //Koreia
-    circuit25: [33.85, "Adil"], //Hockenheimring
+    circuit25: [33.833, "Adil"], //Hockenheimring
     circuit26: [38.2, "Adil"], //Zandvoort
     circuit27: [42.15, "Adil"], //Okayama
     circuit28: [39.95, "Ximbastian Vettel"], //Yas Marina
@@ -1608,7 +1608,7 @@
     noPlayer: true,
     public: false,
     maxPlayers: 30,
-    token: "thr1.AAAAAGbYgzTTLBMHVmnPcQ.yvgMv3rUBDs",
+    token: "thr1.AAAAAGbaTxJgY0qx2GZcIw.4eUGFZr-fTQ",
   });
 
   room.setScoreLimit(0);
@@ -2301,12 +2301,13 @@
   const safetyCarFactor = 0.5;
   const virtualSafetyCarFactor = 0.25;
 
+
   function gripEffect() {
     let players = room.getPlayerList().filter((p) => {
       const player = playerList[p.name];
       return (
           room.getPlayerDiscProperties(p.id) != null &&
-          speedEnabled === true &&
+        
           player != null &&
           player.tyres != null &&
           p.team == 2 
@@ -2324,7 +2325,8 @@
         let speedMagnitude = Math.hypot(XSpeed, YSpeed);
         
         // Determine the gripMultiplier based on the player's tyres and conditions
-        if (generalSafetyCar) {
+        if(speedEnabled == true){
+          if (generalSafetyCar) {
             gripMultiplier = playerList[p.name].tyres === "furados" ? 0.98 : 0.990;
         } else if (generalVirtualSC) {
             gripMultiplier = playerList[p.name].tyres === "furados" ? 0.98 : 0.992;
@@ -2371,9 +2373,14 @@
                   break;
             }
         }
+        }
+    
 
         // Aplica um multiplicador de 1.25 vezes mais forte se o KERS estiver a 0 e o damping for 0.986
       if (playerList[p.name].kers === 0 && discProps.damping === 0.986) {
+        
+       
+        
         if (gripMultiplier !== undefined) {
             gripMultiplier -= 0.010; // Atualiza o valor de gripMultiplier subtraindo 2
         }
@@ -2385,33 +2392,35 @@
         });
     }
 
-        // Apply room.setPlayerDiscProperties only if conditions are met
-        const tyreType = playerList[p.name].tyres;
-        if (gripMultiplier !== undefined) {
-            if (
-                (!isRaining && ["macios", "medios", "duros"].includes(tyreType)) ||
-                (isRaining && tyreType === "chuva")
-            ) {
-              if(speedMagnitude > 7){
-                let newGravityX = -XSpeed * (1 - gripMultiplier);
-                let newGravityY = -YSpeed * (1 - gripMultiplier);
+  // Apply room.setPlayerDiscProperties only if conditions are met
+  const tyreType = playerList[p.name].tyres;
+  if (gripMultiplier !== undefined) {
+      if (
+          (!isRaining && ["macios", "medios", "duros"].includes(tyreType)) ||
+          (isRaining && tyreType === "chuva")
+      ) {
+        if(speedMagnitude > 7){
+          let newGravityX = -XSpeed * (1 - gripMultiplier);
+          let newGravityY = -YSpeed * (1 - gripMultiplier);
 
-                room.setPlayerDiscProperties(p.id, {
-                    xgravity: newGravityX,
-                    ygravity: newGravityY,
-                });
+          room.setPlayerDiscProperties(p.id, {
+              xgravity: newGravityX,
+              ygravity: newGravityY,
+          });
 
-              }
-            } else {
-              let newGravityX = -XSpeed * (1 - gripMultiplier);
-              let newGravityY = -YSpeed * (1 - gripMultiplier);
-
-              room.setPlayerDiscProperties(p.id, {
-                  xgravity: newGravityX,
-                  ygravity: newGravityY,
-              });
-            }
         }
+      } else {
+        let newGravityX = -XSpeed * (1 - gripMultiplier);
+        let newGravityY = -YSpeed * (1 - gripMultiplier);
+
+        room.setPlayerDiscProperties(p.id, {
+            xgravity: newGravityX,
+            ygravity: newGravityY,
+        });
+      }
+  
+    }
+      
     });
 }
 
@@ -3002,7 +3011,7 @@
 
 
   function updateKers(player) {
-    
+  
     const disc = room.getPlayerDiscProperties(player.id);
     let playerData = playerList[player.name];
     
@@ -3016,7 +3025,7 @@
             room.setPlayerAvatar(player.id, Math.floor(playerData.kers).toString());
             setTimeout(()=>{
               
-              room.setPlayerAvatar(player.id, playerList[player.name].tyreEmoji);
+              playerList[player.name] ? room.setPlayerAvatar(player.id, playerList[player.name].tyreEmoji) : room.setPlayerAvatar(player.id, "X");
             }, 3000)
         } else {
             // Recarregar KERS quando não está em uso
@@ -3127,7 +3136,7 @@
 
   function setActivity(player, value) {
     // Verifica se o jogador está no time 2 (Red Team)
-    if (player.team !== 1) {
+    if (player.team !== 1 && onQualy == false) {
       extendedP
         .filter((a) => a[0] == player.id)
         .forEach((p) => (p[eP.ACT] = value));
@@ -3472,9 +3481,7 @@
     checkPlayerLaps();
     handleInactivity();
     endRaceSession();
-    if(speedEnabled == true){
       gripEffect();
-    }
     pitSpeedLimit();
     if (currentCircuit == 17 || currentCircuit == 38) {
       teleportSuzuka();
@@ -5610,7 +5617,7 @@
     }
 
     // changedPlayer.team != 0 ? playerList[changedPlayer.name].isInTheTrack = false : playerList[changedPlayer.name].isInTheTrack = true;
-    playerList[changedPlayer.name].currentLap = 0;
+    playerList[changedPlayer.name].currentLap = playerList[changedPlayer.name].currentLap;
     playerList[changedPlayer.name].lapChanged = false;
   };
 
