@@ -22,9 +22,9 @@ const bestTimes = {
   circuit20: [30.5, "Schumacchio"], //Indianapolis
 
   circuit21: [35.717, "Adil"], //Baku
-  circuit22: [39.583, "Ximbastian Vettel"], //Argentina D.
+  circuit22: [38.450, "Adil"], //Argentina D.
   circuit23: [36.7, "Ximbastian Vettel"], //Laguna Seca
-  circuit24: [36.033, "Ximbastian Vettel"], //Koreia
+  circuit24: [35.933, "Adil"], //Koreia
   circuit25: [33.833, "Adil"], //Hockenheimring
   circuit26: [42.15, "Adil"], //Okayama
   circuit27: [39.95, "Ximbastian Vettel"], //Yas Marina
