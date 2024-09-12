@@ -490,7 +490,7 @@ const _Circuit16 = {
   LaneMaxY: 23,
   BoxMinX: -525,
   BoxMaxX: 485,
-  BoxMinY: -140 ,
+  BoxMinY: -140,
   BoxMaxY: -80,
   DriveDirection: -1,
   StartDirection: "X",
@@ -1186,7 +1186,7 @@ const _Circuit43 = {
   LaneMaxY: 23,
   BoxMinX: -525,
   BoxMaxX: 485,
-  BoxMinY: -140 ,
+  BoxMinY: -140,
   BoxMaxY: -80,
   DriveDirection: -1,
   StartDirection: "X",
@@ -1623,7 +1623,7 @@ var room = HBInit({
   noPlayer: true,
   public: false,
   maxPlayers: 30,
-  token: "thr1.AAAAAGbcoiEm38RBSWqzVQ.LAI-WiOCwPM",
+  token: "thr1.AAAAAGbiLRODlhazrFMrVw.5R9CoRFKRJ0",
 });
 
 room.setScoreLimit(0);
@@ -1750,8 +1750,7 @@ function getVotesAndAnnounceResults() {
   }
 
   room.sendAnnouncement(
-    `Map voting session has begun! You have ${
-      VoteTimeout / 1000
+    `Map voting session has begun! You have ${VoteTimeout / 1000
     } seconds to vote a map.`,
     null,
     0x00ffff,
@@ -1952,13 +1951,11 @@ function decideRainEvents(chances) {
   announcementTime = rainStartTime - 60000; // A chuva começa 60 segundos após o anúncio
 
   console.log(
-    `A chuva vai começar em ${rainStartTime / 1000} segundos (${
-      rainStartTime / 60000
+    `A chuva vai começar em ${rainStartTime / 1000} segundos (${rainStartTime / 60000
     } minutos)`
   );
   console.log(
-    `Tempo de anúncio configurado para ${announcementTime / 1000} segundos (${
-      announcementTime / 60000
+    `Tempo de anúncio configurado para ${announcementTime / 1000} segundos (${announcementTime / 60000
     } minutos)`
   );
 
@@ -1984,13 +1981,11 @@ function decideRainEvents(chances) {
 
   console.log(`A chuva vai parar na volta ${stopLap}`);
   console.log(
-    `Tempo de anúncio pararChuva configurado para ${
-      stopAnnouncementTime / 1000
+    `Tempo de anúncio pararChuva configurado para ${stopAnnouncementTime / 1000
     } segundos (${stopAnnouncementTime / 60000} minutos)`
   );
   console.log(
-    `A chuva vai parar em ${rainStopTime / 1000} segundos (${
-      rainStopTime / 60000
+    `A chuva vai parar em ${rainStopTime / 1000} segundos (${rainStopTime / 60000
     } minutos)`
   );
 
@@ -2317,148 +2312,116 @@ const safetyCarFactor = 0.5;
 const virtualSafetyCarFactor = 0.25;
 
 function gripEffect() {
-  let players = room.getPlayerList().filter((p) => {
+  const players = room.getPlayerList().filter((p) => {
     const player = playerList[p.name];
     return (
       room.getPlayerDiscProperties(p.id) != null &&
       player != null &&
       player.tyres != null &&
-      p.team == 2
+      p.team === 2
     );
   });
 
   players.forEach((p) => {
-    let discProps = room.getPlayerDiscProperties(p.id);
-    let XSpeed = discProps.xspeed;
-    let YSpeed = discProps.yspeed;
+    const player = playerList[p.name];
+    const discProps = room.getPlayerDiscProperties(p.id);
+    const { xspeed: XSpeed, yspeed: YSpeed, damping } = discProps;
+    const { tyres, wear, kers } = player;
+    const speedMagnitude = Math.hypot(XSpeed, YSpeed);
     let gripMultiplier;
-    let tyreWear = playerList[p.name].wear;
 
-
-    // Calculate the magnitude of the player's speed
-    let speedMagnitude = Math.hypot(XSpeed, YSpeed);
-
-    // Determine the gripMultiplier based on the player's tyres and conditions
-    if (speedEnabled == true) {
-      if (generalSafetyCar) {
-        gripMultiplier = playerList[p.name].tyres === "furados" ? 0.98 : 0.99;
-      } else if (generalVirtualSC) {
-        gripMultiplier = playerList[p.name].tyres === "furados" ? 0.98 : 0.992;
-      } else if (!isRaining) {
-        switch (playerList[p.name].tyres) {
-          case "macios":
-            if (speedMagnitude) {
-              gripMultiplier = calculateGripMultiplier(
-                tyreWear,
-                speedMagnitude,
-                1.0,
-                0.992
-              );
-            }
-            break;
-          case "medios":
-            if (speedMagnitude) {
-              gripMultiplier = calculateGripMultiplier(
-                tyreWear,
-                speedMagnitude,
-                0.9995,
-                0.993
-              );
-            }
-            break;
-          case "duros":
-            if (speedMagnitude) {
-              gripMultiplier = calculateGripMultiplier(
-                tyreWear,
-                speedMagnitude,
-                0.999,
-                0.994
-              );
-            }
-            break;
-          case "furados":
-            gripMultiplier = 0.98;
-            break;
-          case "chuva":
-            gripMultiplier = 0.992;
-            break;
-        }
-      } else {
-        // Raining conditions
-        switch (playerList[p.name].tyres) {
-          case "macios":
-          case "medios":
-          case "duros":
-            gripMultiplier = 0.992;
-            break;
-          case "furados":
-            gripMultiplier = 0.98;
-            break;
-          case "chuva":
-            if (speedMagnitude) {
-              gripMultiplier = calculateGripMultiplier(
-                tyreWear,
-                speedMagnitude,
-                0.9997,
-                0.999
-              );
-            }
-            break;
-        }
-      }
+    if (speedEnabled) {
+      gripMultiplier = calculateGripMultiplierForConditions(
+        tyres,
+        wear,
+        speedMagnitude
+      );
     }
 
-    // Aplica um multiplicador de 1.25 vezes mais forte se o KERS estiver a 0 e o damping for 0.986
-    if (playerList[p.name].kers === 0 && discProps.damping === 0.986) {
-      if (gripMultiplier !== undefined) {
-        gripMultiplier -= 0.01; // Atualiza o valor de gripMultiplier subtraindo 2
-      }
+    // If Kers reached 0, then:
+    if (kers === 0 && damping === 0.986 && gripMultiplier !== undefined) {
+      gripMultiplier -= 0.01;
     } else {
-      // Se o KERS não estiver a 0%, redefina a gravidade para evitar puxões
+      // Reset Gravity after Kers 0
       room.setPlayerDiscProperties(p.id, {
         xgravity: 0,
         ygravity: 0,
       });
     }
 
-    // Apply room.setPlayerDiscProperties only if conditions are met
-    const tyreType = playerList[p.name].tyres;
+    //
     if (gripMultiplier !== undefined) {
-      if (
-        (!isRaining && ["macios", "medios", "duros"].includes(tyreType)) ||
-        (isRaining && tyreType === "chuva")
-      ) {
+      if (!isRaining && player.tyres == "macios" || player.tyres == "medios" || player.tyres == "duros") {
         if (speedMagnitude > 6) {
-          let newGravityX = -XSpeed * (1 - gripMultiplier);
-          let newGravityY = -YSpeed * (1 - gripMultiplier);
-
+          const newGravityX = -XSpeed * (1 - gripMultiplier);
+          const newGravityY = -YSpeed * (1 - gripMultiplier);
+          room.setPlayerDiscProperties(p.id, {
+            xgravity: newGravityX,
+            ygravity: newGravityY,
+          });
+        }
+      } else if (isRaining && player.tyres == "chuva") {
+        if (speedMagnitude > 6) {
+          const newGravityX = -XSpeed * (1 - gripMultiplier);
+          const newGravityY = -YSpeed * (1 - gripMultiplier);
           room.setPlayerDiscProperties(p.id, {
             xgravity: newGravityX,
             ygravity: newGravityY,
           });
         }
       } else {
-        let newGravityX = -XSpeed * (1 - gripMultiplier);
-        let newGravityY = -YSpeed * (1 - gripMultiplier);
-
+        const newGravityX = -XSpeed * (1 - gripMultiplier);
+        const newGravityY = -YSpeed * (1 - gripMultiplier);
         room.setPlayerDiscProperties(p.id, {
           xgravity: newGravityX,
           ygravity: newGravityY,
         });
       }
-    }
 
-    // room.setPlayerAvatar(
-    //   p.id,
-    //   Math.floor(
-    //     10 *
-    //       Math.hypot(
-    //         room.getPlayerDiscProperties(p.id).xspeed,
-    //         room.getPlayerDiscProperties(p.id).yspeed
-    //       )
-    //   ).toString()
-    // );
+    }
   });
+}
+
+function calculateGripMultiplierForConditions(tyres, tyreWear, speedMagnitude) {
+  if (generalSafetyCar) {
+    return tyres === "furados" ? 0.98 : 0.99;
+  } else if (generalVirtualSC) {
+    return tyres === "furados" ? 0.98 : 0.992;
+  } else if (!isRaining) {
+    return calculateGripForDryConditions(tyres, tyreWear, speedMagnitude);
+  } else {
+    return calculateGripForWetConditions(tyres, tyreWear, speedMagnitude);
+  }
+}
+
+function calculateGripForDryConditions(tyres, tyreWear, speedMagnitude) {
+  if (!speedMagnitude) return;
+  switch (tyres) {
+    case "macios":
+      return calculateGripMultiplier(tyreWear, speedMagnitude, 1.0, 0.997);
+    case "medios":
+      return calculateGripMultiplier(tyreWear, speedMagnitude, 0.9995, 0.9975);
+    case "duros":
+      return calculateGripMultiplier(tyreWear, speedMagnitude, 0.999, 0.998);
+    case "furados":
+      return 0.99;
+    case "chuva":
+      return 0.993;
+  }
+}
+
+function calculateGripForWetConditions(tyres, tyreWear, speedMagnitude) {
+  if (!speedMagnitude) return;
+  switch (tyres) {
+    case "macios":
+    case "medios":
+    case "duros":
+      return 0.995;
+    case "furados":
+      return 0.99;
+    case "chuva":
+      return calculateGripMultiplier(tyreWear, speedMagnitude, 0.9997, 0.999);
+  }
 }
 
 function calculateGripMultiplier(tyreWear, speedMagnitude, maxGrip, minGrip) {
@@ -2471,131 +2434,55 @@ function calculateGripMultiplier(tyreWear, speedMagnitude, maxGrip, minGrip) {
   }
 }
 
+
 function checkTyreWear(player) {
-  if (!speedEnabled) {
-    return; // Não faz nada se speedEnabled não for true
-  }
+  if (!speedEnabled) return;
+
   const playerData = playerList[player.name];
+  if (!playerData || !playerData.tyres || playerData.tyres === "furados") return;
 
-  // Ignora o desgaste dos pneus se o estado dos pneus for null
-  if (
-    playerData == null ||
-    playerData.tyres === undefined ||
-    playerData.tyres === "null" ||
-    playerData.tyres === "furados"
-  ) {
-    return;
-  }
-
-  // Calcular o fator de desgaste dependendo do status do safety car
-  const wearFactor = generalSafetyCar
-    ? safetyCarFactor
-    : generalVirtualSC
-    ? virtualSafetyCarFactor
-    : 1;
-
-  // Incrementa desgaste dos pneus com base no fator de desgaste
-  playerData.wear += (1 / 60) * wearFactor; // Incrementa desgaste por segundo
+  const wearFactor = generalSafetyCar ? safetyCarFactor : (generalVirtualSC ? virtualSafetyCarFactor : 1);
+  playerData.wear += (1 / 60) * wearFactor; // tyreWear per second
 
   const totalDurability = tyreOptions(limit)[playerData.tyres];
   const remainingDurability = totalDurability - playerData.wear;
   const remainingPercentage = (remainingDurability / totalDurability) * 100;
 
-  let currentTime = new Date().getTime() / 1000;
+  // Resetar alertas caso os pneus estejam em 100%
+  if (remainingPercentage === 100 && playerData.alertSent) {
+    playerData.alertSent = {}; // Limpa os alertas enviados
+  }
 
-  switch (true) {
-    case remainingPercentage <= 0:
-      playerData.tyres = "furados";
-      room.sendAnnouncement(
-        "❗ Seus pneus estão furados, faça o pitstop! (Digite !pneus dentro do BOX) ❗",
-        player.id,
-        colors.alert,
-        fonts.alert,
-        sounds.alert
-      );
-      playerData.tyreEmoji = "⚫";
-      room.setPlayerAvatar(player.id, "⚫");
-      break;
+  const alerts = [
+    { threshold: 0, message: "❗ Seus pneus estão furados, faça o pitstop! (Digite !pneus dentro do BOX) ❗", color: colors.alert, emoji: "⚫", sound: sounds.alert, key: 'flat' },
+    { threshold: 5, message: "❗ Seus pneus estão quase furados! Restam apenas 5%! ❗", color: colors.alert, sound: sounds.alert, key: 'fivePercent' },
+    { threshold: 10, message: "❗ Seus pneus estão desgastados! Restam apenas 10%! ❗", color: colors.secondaryInfo, sound: sounds.info, key: 'tenPercent' },
+    { threshold: 25, message: "❗ Atenção! Restam apenas 25% dos seus pneus! ❗", color: colors.secondaryInfo, sound: sounds.info, key: 'twentyFivePercent' },
+    { threshold: 40, message: "Você está com 40% dos pneus restantes.", color: colors.secondaryInfo, sound: sounds.info, key: 'fortyPercent' },
+    { threshold: 75, message: "Seus pneus estão em 75%.", color: colors.secondaryInfo, sound: sounds.info, key: 'seventyFivePercent' },
+    { threshold: 90, message: "Seus pneus aqueceram!", color: colors.secondaryInfo, sound: sounds.info, key: 'ninetyPercent' }
+  ];
 
-    case remainingPercentage <= 5 && remainingPercentage > 4:
-      if (
-        !playerData.lastAlertTime ||
-        currentTime - playerData.lastAlertTime >= alertCooldown
-      ) {
-        room.sendAnnouncement(
-          "❗ Seus pneus estão quase furados! Restam apenas 5%! ❗",
-          player.id,
-          colors.alert,
-          fonts.alert,
-          sounds.alert
-        );
-        playerData.lastAlertTime = currentTime;
+  const currentTime = new Date().getTime() / 1000;
+
+  // Inicializa o controle de alertas enviados se não existir
+  if (!playerData.alertSent) playerData.alertSent = {};
+
+  // Checar se o jogador precisa de um alerta baseado no percentual restante
+  for (let alert of alerts) {
+    if (remainingPercentage <= alert.threshold && !playerData.alertSent[alert.key]) {
+      room.sendAnnouncement(alert.message, player.id, alert.color, fonts.secondaryInfo, alert.sound);
+      playerData.alertSent[alert.key] = true; // Marca que o alerta foi enviado
+      playerData.lastAlertTime = currentTime;
+
+      // Configurar avatar e status de pneus furados
+      if (alert.emoji) {
+        playerData.tyres = "furados";
+        playerData.tyreEmoji = alert.emoji;
+        room.setPlayerAvatar(player.id, alert.emoji);
       }
       break;
-
-    case remainingPercentage <= 10 && remainingPercentage > 9:
-      if (
-        !playerData.lastAlertTime ||
-        currentTime - playerData.lastAlertTime >= alertCooldown
-      ) {
-        room.sendAnnouncement(
-          "❗ Seus pneus estão desgastados! Restam apenas 10%! ❗",
-          player.id,
-          colors.secondaryInfo,
-          fonts.secondaryInfo,
-          sounds.info
-        );
-        playerData.lastAlertTime = currentTime;
-      }
-      break;
-
-    case remainingPercentage <= 25 && remainingPercentage > 24:
-      if (
-        !playerData.lastAlertTime ||
-        currentTime - playerData.lastAlertTime >= alertCooldown
-      ) {
-        room.sendAnnouncement(
-          "❗ Atenção! Restam apenas 25% dos seus pneus! ❗",
-          player.id,
-          colors.secondaryInfo,
-          fonts.secondaryInfo,
-          sounds.info
-        );
-        playerData.lastAlertTime = currentTime;
-      }
-      break;
-
-    case remainingPercentage <= 50 && remainingPercentage > 49:
-      if (
-        !playerData.lastAlertTime ||
-        currentTime - playerData.lastAlertTime >= alertCooldown
-      ) {
-        room.sendAnnouncement(
-          "Você está com 50% dos pneus restantes.",
-          player.id,
-          colors.secondaryInfo,
-          fonts.secondaryInfo,
-          sounds.info
-        );
-        playerData.lastAlertTime = currentTime;
-      }
-      break;
-
-    case remainingPercentage <= 75 && remainingPercentage > 74:
-      if (
-        !playerData.lastAlertTime ||
-        currentTime - playerData.lastAlertTime >= alertCooldown
-      ) {
-        room.sendAnnouncement(
-          "Seus pneus estão em 75%.",
-          player.id,
-          colors.secondaryInfo,
-          fonts.secondaryInfo,
-          sounds.info
-        );
-        playerData.lastAlertTime = currentTime;
-      }
-      break;
+    }
   }
 }
 
@@ -2636,6 +2523,18 @@ function pitSpeedLimit() {
 
 let infoPlayerByLap = [];
 
+let lastTime;
+setInterval(() => {
+  if (gameState != null) {
+    if (room.getScores().time > 0 && lastTime !== room.getScores().time) {
+
+      gripEffect();
+      lastTime = room.getScores().time;
+    }
+  }
+
+}, 250);
+
 function checkPlayerLaps() {
   let players = room
     .getPlayerList()
@@ -2659,30 +2558,13 @@ function checkPlayerLaps() {
         let id = p.id;
         let _p = p;
         let index = _Circuits.findIndex((c) => c.Name == _Circuit.Name);
+        checkIfTrolling();
         setTimeout((p) => {
           if (_Circuit.StartDirection == "X") {
             if (
               Math.sign(room.getPlayerDiscProperties(id).xspeed) ==
               -1 * _Circuit.DriveDirection
             ) {
-              room.sendAnnouncement(
-                `⚠️ ALERTA DE INFRAÇÃO!! ⚠️`,
-                null,
-                null,
-                colors.alert,
-                fonts.alert,
-                sounds.alert
-              );
-              room.sendAnnouncement(
-                `❗ Aviso para: ${name} ❗`,
-                null,
-                null,
-                colors.alert,
-                fonts.alert,
-                sounds.alert
-              );
-              room.setPlayerTeam(p.id, 0);
-
               clearTimeout(crossing);
             }
           } else if (_Circuit.StartDirection == "Y") {
@@ -2690,24 +2572,6 @@ function checkPlayerLaps() {
               Math.sign(room.getPlayerDiscProperties(id).yspeed) ==
               -1 * _Circuit.DriveDirection
             ) {
-              room.sendAnnouncement(
-                `⚠️ ALERTA DE INFRAÇÃO!! ⚠️`,
-                null,
-                null,
-                colors.alert,
-                fonts.alert,
-                sounds.alert
-              );
-              room.sendAnnouncement(
-                `❗ Aviso para: ${name} ❗`,
-                null,
-                null,
-                colors.alert,
-                fonts.alert,
-                sounds.alert
-              );
-              room.setPlayerTeam(p.id, 0);
-
               clearTimeout(crossing);
             }
           }
@@ -2743,12 +2607,11 @@ function checkPlayerLaps() {
                 _Circuits[index].BestTime = [lapTime, name];
               }
               // Recorde pessoal do jogador
-              else if (lapTime < playerList[name].PlayerBestTime) {
+              else if (lapTime < playerList[name].PlayerBestTime && lapTime > 20.0) {
                 playerList[name].PlayerBestTime = lapTime;
                 recipients.forEach((recipientId) => {
                   room.sendAnnouncement(
-                    `⏱ Volta Rápida ${
-                      playerList[name].currentLap - 1
+                    `⏱ Volta Rápida ${playerList[name].currentLap - 1
                     }/${limit} de ${name}: ${serialize(lapTime)} segundos`,
                     recipientId,
                     colors.lapTimeBetter,
@@ -2757,8 +2620,7 @@ function checkPlayerLaps() {
                   );
                 });
                 room.sendAnnouncement(
-                  `⏱ Volta Rápida ${
-                    playerList[name].currentLap - 1
+                  `⏱ Volta Rápida ${playerList[name].currentLap - 1
                   }/${limit} de ${name}: ${serialize(lapTime)} segundos`,
                   id,
                   colors.lapTimeBetter,
@@ -2767,11 +2629,10 @@ function checkPlayerLaps() {
                 );
               }
               // Volta normal
-              else {
+              else if (lapTime > 20.0) {
                 recipients.forEach((recipientId) => {
                   room.sendAnnouncement(
-                    `⏱ Volta ${
-                      playerList[name].currentLap - 1
+                    `⏱ Volta ${playerList[name].currentLap - 1
                     }/${limit} de ${name}: ${serialize(lapTime)} segundos`,
                     recipientId,
                     colors.lapTimeWorse,
@@ -2780,9 +2641,25 @@ function checkPlayerLaps() {
                   );
                 });
                 room.sendAnnouncement(
-                  `⏱ Volta ${
-                    playerList[name].currentLap - 1
+                  `⏱ Volta ${playerList[name].currentLap - 1
                   }/${limit} de ${name}: ${serialize(lapTime)} segundos`,
+                  id,
+                  colors.lapTimeWorse,
+                  fonts.lapTime,
+                  sounds.lapTime
+                );
+              } else {
+                recipients.forEach((recipientId) => {
+                  room.sendAnnouncement(
+                    `Volta Invalida por ${name}! - ${serialize(lapTime)} segundos`,
+                    recipientId,
+                    colors.lapTimeWorse,
+                    fonts.lapTime,
+                    sounds.lapTime
+                  );
+                });
+                room.sendAnnouncement(
+                  `Volta Invalida! - ${serialize(lapTime)} segundos`,
                   id,
                   colors.lapTimeWorse,
                   fonts.lapTime,
@@ -2796,8 +2673,7 @@ function checkPlayerLaps() {
                 playerList[name].PlayerBestTime = lapTime;
                 if (player && playerList[name].personalRecord) {
                   room.sendAnnouncement(
-                    `⏱ Volta Rápida ${
-                      playerList[name].currentLap - 1
+                    `⏱ Volta Rápida ${playerList[name].currentLap - 1
                     }/${limit} de ${name}: ${serialize(lapTime)} segundos`,
                     player.id,
                     colors.lapTimeBetter,
@@ -2898,20 +2774,7 @@ function checkPlayerLaps() {
                 if (playerList[name].currentLap > 1) {
                   playerList[name].currentLap--;
                 }
-                room.sendAnnouncement(
-                  `⚠️ ALERTA DE INFRAÇÃO!! ⚠️`,
-                  null,
-                  colors.alert,
-                  fonts.alert,
-                  sounds.alert
-                );
-                room.sendAnnouncement(
-                  `❗ Aviso para: ${name} ❗`,
-                  null,
-                  colors.alert,
-                  fonts.alert,
-                  sounds.alert
-                );
+
               }
             }
             room.sendAnnouncement(
@@ -2944,21 +2807,7 @@ function checkPlayerLaps() {
               Math.sign(room.getPlayerDiscProperties(id).xspeed) ==
               -1 * _Circuit.DriveDirection
             ) {
-              room.sendAnnouncement(
-                `⚠️ ALERTA DE INFRAÇÃO!! ⚠️`,
-                null,
-                colors.alert,
-                fonts.alert,
-                sounds.alert
-              );
-              room.sendAnnouncement(
-                `❗ Aviso para: ${name} ❗`,
-                null,
-                colors.alert,
-                fonts.alert,
-                sounds.alert
-              );
-              room.setPlayerTeam(p.id, 0);
+
 
               clearTimeout(crossing);
             }
@@ -2967,21 +2816,7 @@ function checkPlayerLaps() {
               Math.sign(room.getPlayerDiscProperties(id).yspeed) ==
               -1 * _Circuit.DriveDirection
             ) {
-              room.sendAnnouncement(
-                `⚠️ ALERTA DE INFRAÇÃO!! ⚠️`,
-                null,
-                colors.alert,
-                fonts.alert,
-                sounds.alert
-              );
-              room.sendAnnouncement(
-                `❗ Aviso para: ${name} ❗`,
-                null,
-                colors.alert,
-                fonts.alert,
-                sounds.alert
-              );
-              room.setPlayerTeam(p.id, 0);
+
 
               clearTimeout(crossing);
             }
@@ -3072,9 +2907,17 @@ function updateKers(player) {
       }
       room.setPlayerAvatar(player.id, Math.floor(playerData.kers).toString());
       setTimeout(() => {
-        playerList[player.name]
-          ? room.setPlayerAvatar(player.id, playerList[player.name].tyreEmoji)
-          : room.setPlayerAvatar(player.id, "X");
+        if (speedEnabled) {
+          playerList[player.name]
+            ? room.setPlayerAvatar(player.id, playerList[player.name].tyreEmoji)
+            : room.setPlayerAvatar(player.id, "X");
+        } else {
+          playerList[player.name]
+            ? room.setPlayerAvatar(player.id, "🏎️")
+            : room.setPlayerAvatar(player.id, "X");
+
+        }
+
       }, 3000);
     } else {
       // Recarregar KERS quando não está em uso
@@ -3275,6 +3118,57 @@ function endRaceSession() {
   // }
   //    }
 }
+
+function checkIfTrolling() {
+  var players = room.getPlayerList().filter(p => room.getPlayerDiscProperties(p.id) != null && ifInLapChangeZone(p) == true);
+
+  players.forEach(p => {
+    if (_Circuit.StartDirection == "X") {
+      if (Math.sign(room.getPlayerDiscProperties(p.id).xspeed) == -1 * _Circuit.DriveDirection) {
+        room.setPlayerTeam(p.id, 1);
+        room.sendAnnouncement(
+          `⚠️ ALERTA DE INFRAÇÃO!! ⚠️`,
+          null,
+          null,
+          colors.alert,
+          fonts.alert,
+          sounds.alert
+        );
+        room.sendAnnouncement(
+          `❗ Aviso para: ${p.name} ❗`,
+          null,
+          null,
+          colors.alert,
+          fonts.alert,
+          sounds.alert
+        );
+      }
+    }
+    else if (_Circuit.StartDirection == "Y") {
+      if (Math.sign(room.getPlayerDiscProperties(p.id).yspeed) == -1 * _Circuit.DriveDirection) {
+        room.setPlayerTeam(p.id, 1);
+        room.sendAnnouncement(
+          `⚠️ ALERTA DE INFRAÇÃO!! ⚠️`,
+          null,
+          null,
+          colors.alert,
+          fonts.alert,
+          sounds.alert
+        );
+        room.sendAnnouncement(
+          `❗ Aviso para: ${p.name} ❗`,
+          null,
+          null,
+          colors.alert,
+          fonts.alert,
+          sounds.alert
+        );
+      }
+    }
+    playerList[p.name].currentLap == playerList[p.name].currentLap - 1
+  });
+}
+
 
 function ifInLapChangeZone(player) {
   return (
@@ -3536,6 +3430,7 @@ room.onPlayerActivity = function (player) {
   setActivity(player, 0);
 };
 
+
 room.onGameTick = function () {
   let players = room
     .getPlayerList()
@@ -3544,7 +3439,6 @@ room.onGameTick = function () {
   checkPlayerLaps();
   handleInactivity();
   endRaceSession();
-  gripEffect();
   pitSpeedLimit();
   // if (currentCircuit == 17 || currentCircuit == 38) {
   //   teleportSuzuka();
@@ -3567,13 +3461,12 @@ room.onGameTick = function () {
 room.onPlayerAdminChange = function (changedPlayer, byPlayer) {
   byPlayer == null
     ? console.log(
-        `${changedPlayer.name}${adminChanges[Number(changedPlayer.admin)]}`
-      )
+      `${changedPlayer.name}${adminChanges[Number(changedPlayer.admin)]}`
+    )
     : console.log(
-        `${changedPlayer.name}${adminChanges[Number(changedPlayer.admin)]} by ${
-          byPlayer.name
-        }`
-      );
+      `${changedPlayer.name}${adminChanges[Number(changedPlayer.admin)]} by ${byPlayer.name
+      }`
+    );
 };
 
 room.onPlayerChat = function (player, message) {
@@ -3905,8 +3798,7 @@ room.onPlayerChat = function (player, message) {
   if (player.admin == true) {
     if (message.toLowerCase().split(" ")[0] == commands.clear) {
       room.sendAnnouncement(
-        `O recorde ${serialize(_Circuit.BestTime[0])} segundos de ${
-          _Circuit.BestTime[1]
+        `O recorde ${serialize(_Circuit.BestTime[0])} segundos de ${_Circuit.BestTime[1]
         } foi apagado por ${player.name}`,
         null,
         colors.infoAdmin,
@@ -5521,13 +5413,12 @@ room.onPlayerChat = function (player, message) {
 room.onPlayerKicked = function (kickedPlayer, reason, ban, byPlayer) {
   byPlayer == null
     ? console.log(
-        `${kickedPlayer.name} ${playerKicked[Number(ban)]} (${reason})`
-      )
+      `${kickedPlayer.name} ${playerKicked[Number(ban)]} (${reason})`
+    )
     : console.log(
-        `${kickedPlayer.name} ${playerKicked[Number(ban)]} by ${
-          byPlayer.name
-        } (${reason})`
-      );
+      `${kickedPlayer.name} ${playerKicked[Number(ban)]} by ${byPlayer.name
+      } (${reason})`
+    );
 };
 
 function getRandomEmoji() {
@@ -5653,13 +5544,12 @@ room.onPlayerLeave = function (player) {
 room.onPlayerTeamChange = function (changedPlayer, byPlayer) {
   byPlayer == null
     ? console.log(
-        `${changedPlayer.name} was moved to ${teams[changedPlayer.team]}`
-      )
+      `${changedPlayer.name} was moved to ${teams[changedPlayer.team]}`
+    )
     : console.log(
-        `${changedPlayer.name} was moved to ${teams[changedPlayer.team]} by ${
-          byPlayer.name
-        }`
-      );
+      `${changedPlayer.name} was moved to ${teams[changedPlayer.team]} by ${byPlayer.name
+      }`
+    );
   console.log(changedPlayer);
   if (changedPlayer.team != 0) {
     playerList[changedPlayer.name].isInTheTrack = true;
@@ -5755,21 +5645,21 @@ room.onStadiumChange = function (newStadiumName, byPlayer) {
     } else {
       admins.length > 0
         ? admins.forEach((p) =>
-            room.sendAnnouncement(
-              `Something went wrong with map ${newStadiumName}. Please try again!`,
-              p.id,
-              colors.wrong,
-              fonts.wrong,
-              sounds.wrong
-            )
-          )
-        : room.sendAnnouncement(
-            `Something went wrong with map ${newStadiumName}. Please call an admin to try again!`,
-            null,
+          room.sendAnnouncement(
+            `Something went wrong with map ${newStadiumName}. Please try again!`,
+            p.id,
             colors.wrong,
             fonts.wrong,
             sounds.wrong
-          );
+          )
+        )
+        : room.sendAnnouncement(
+          `Something went wrong with map ${newStadiumName}. Please call an admin to try again!`,
+          null,
+          colors.wrong,
+          fonts.wrong,
+          sounds.wrong
+        );
     }
   } else {
     room.sendAnnouncement(
