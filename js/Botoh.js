@@ -1,6 +1,6 @@
 const bestTimes = {
   circuit1: [28.283, "Ximbastian Vettel"], //Melbourne D.
-  circuit2: [32.8, "Ximbastian Vettel"], //Imola D.
+  circuit2: [32.767, "Ximbastian Vettel"], //Imola D.
   circuit3: [50.7, "Ximbastian Vettel"], //Sepang D.
   circuit4: [32.5, "Ximbastian Vettel"], //Bahrein D.
   circuit5: [41.05, "Ximbastian Vettel"], //Sochi D.
@@ -10,12 +10,12 @@ const bestTimes = {
   circuit9: [34.45, "Gabriel Schumacchio"], //Silverstone D.
   circuit10: [52.2, "Ximbastian Vettel"], //Spa D.
   circuit11: [35.35, "Ximbastian Vettel"], //Istanbul D.
-  circuit12: [40.55, "Luiz Di Grassi"], //Nurburgring D.
+  circuit12: [41.000, "Adil"], //Nurburgring D.
   circuit13: [26.7, "Ximbastian Vettel"], //Monza D.
   circuit14: [31.6, "Ximbastian Vettel"], //Canada D.
   circuit15: [51.15, "Ximbastian Vettel"], //Austin D.
   circuit16: [41.4, "Ximbastian Vettel"], //Shangai D.
-  circuit17: [35.2, "Ximbastian Vettel"], //Suzuka D.
+  circuit17: [36.000, "Adil"], //Suzuka D.
   circuit18: [33.85, "Ximbastian Vettel"], //Interlagos D.
 
   circuit19: [65.85, "Adil"], //Le Mans
