@@ -2323,7 +2323,7 @@
     });
 
     players.forEach((p) => {
-      room.setPlayerAvatar(p.id,(Math.floor(10*Math.hypot(room.getPlayerDiscProperties(p.id).xspeed,room.getPlayerDiscProperties(p.id).yspeed))).toString());
+      // room.setPlayerAvatar(p.id,(Math.floor(10*Math.hypot(room.getPlayerDiscProperties(p.id).xspeed,room.getPlayerDiscProperties(p.id).yspeed))).toString());
 
       const player = playerList[p.name];
       const discProps = room.getPlayerDiscProperties(p.id);
