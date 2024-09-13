@@ -1476,7 +1476,7 @@
     commands: "!ajuda",
     discord: "!discord",
     mapInfo: "!map",
-    pitstop: "!pneus",
+    pitstop: "!tyres",
     vote: "!vote",
     dicas: "!dicas",
 
@@ -2456,7 +2456,7 @@
     }
   
     const alerts = [
-      { threshold: 0, message: "❗ Seus pneus estão furados, faça o pitstop! (Digite !pneus dentro do BOX) ❗", color: colors.alert, emoji: "⚫", sound: sounds.alert, key: 'flat' },
+      { threshold: 0, message: "❗ Seus pneus estão furados, faça o pitstop! (Digite !tyres dentro do BOX) ❗", color: colors.alert, emoji: "⚫", sound: sounds.alert, key: 'flat' },
       { threshold: 5, message: "❗ Seus pneus estão quase furados! Restam apenas 5%! ❗", color: colors.alert, sound: sounds.alert, key: 'fivePercent' },
       { threshold: 10, message: "❗ Seus pneus estão desgastados! Restam apenas 10%! ❗", color: colors.secondaryInfo, sound: sounds.info, key: 'tenPercent' },
       { threshold: 25, message: "❗ Atenção! Restam apenas 25% dos seus pneus! ❗", color: colors.secondaryInfo, sound: sounds.info, key: 'twentyFivePercent' },
@@ -3552,7 +3552,7 @@
       return false;
     } else if (message.toLowerCase().split(" ")[0] == commands.commands) {
       room.sendAnnouncement(
-        "Comandos disponíveis: !afk, !ajuda, !discord, !map, !dicas, !pneus, !mostrardelta, !lapsgerais",
+        "Comandos disponíveis: !afk, !ajuda, !discord, !map, !dicas, !tyres, !mostrardelta, !lapsgerais",
         player.id,
         colors.commands,
         fonts.commands,
@@ -3618,7 +3618,7 @@
         sounds.info
       );
       room.sendAnnouncement(
-        "Ao chegar em 0% ele estourará, não deixe isso acontecer entrando no box e digitando !pneus [macios|medios|duros|chuva]",
+        "Ao chegar em 0% ele estourará, não deixe isso acontecer entrando no box e digitando !tyres [s|m|h|r]",
         null,
         colors.info,
         "bold",
@@ -3742,7 +3742,7 @@
       let pneu = args[1];
       let playerData = playerList[player.name];
 
-      pneusOption = ["macios", "medios", "duros", "furados", "chuva"];
+      pneusOption = ["s", "m", "h", "furados", "r"];
 
       if (ifInBoxesZone(player)) {
         if (speedEnabled == true) {
@@ -4382,7 +4382,7 @@
             }
             speedEnabled = false;
             room.sendAnnouncement(
-              "Pneus desativados e configurados como null",
+              "Pneus desativados",
               player.id,
               colors.info,
               fonts.info,
@@ -5279,7 +5279,7 @@
               }
               speedEnabled = false;
               room.sendAnnouncement(
-                "Pneus desativados e configurados como null",
+                "Pneus desativados",
                 player.id,
                 colors.info,
                 fonts.info,
