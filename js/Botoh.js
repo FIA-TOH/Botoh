@@ -1476,7 +1476,7 @@
     commands: "!ajuda",
     discord: "!discord",
     mapInfo: "!map",
-    pitstop: "!tyres",
+    pitstop: "!pneus",
     vote: "!vote",
     dicas: "!dicas",
 
@@ -1491,7 +1491,7 @@
     start: "!start",
     kick: "!kick",
     mute: "!mute",
-    tyres: "!pneus",
+    tyres: "!tyres",
     safetyEmoji: "!scemoji",
     safetyCar: "!sc",
     virtualSafetyCar: "!vsc",
@@ -2456,7 +2456,7 @@
     }
   
     const alerts = [
-      { threshold: 0, message: "❗ Seus pneus estão furados, faça o pitstop! (Digite !tyres dentro do BOX) ❗", color: colors.alert, emoji: "⚫", sound: sounds.alert, key: 'flat' },
+      { threshold: 0, message: "❗ Seus pneus estão furados, faça o pitstop! (Digite !pneus dentro do BOX) ❗", color: colors.alert, emoji: "⚫", sound: sounds.alert, key: 'flat' },
       { threshold: 5, message: "❗ Seus pneus estão quase furados! Restam apenas 5%! ❗", color: colors.alert, sound: sounds.alert, key: 'fivePercent' },
       { threshold: 10, message: "❗ Seus pneus estão desgastados! Restam apenas 10%! ❗", color: colors.secondaryInfo, sound: sounds.info, key: 'tenPercent' },
       { threshold: 25, message: "❗ Atenção! Restam apenas 25% dos seus pneus! ❗", color: colors.secondaryInfo, sound: sounds.info, key: 'twentyFivePercent' },
@@ -3552,7 +3552,7 @@
       return false;
     } else if (message.toLowerCase().split(" ")[0] == commands.commands) {
       room.sendAnnouncement(
-        "Comandos disponíveis: !afk, !ajuda, !discord, !map, !dicas, !tyres, !mostrardelta, !lapsgerais",
+        "Comandos disponíveis: !afk, !ajuda, !discord, !map, !dicas, !pneus, !mostrardelta, !lapsgerais",
         player.id,
         colors.commands,
         fonts.commands,
@@ -3618,7 +3618,7 @@
         sounds.info
       );
       room.sendAnnouncement(
-        "Ao chegar em 0% ele estourará, não deixe isso acontecer entrando no box e digitando !tyres [s|m|h|r]",
+        "Ao chegar em 0% ele estourará, não deixe isso acontecer entrando no box e digitando !pneus [macios|medios|duros|chuva]",
         null,
         colors.info,
         "bold",
@@ -3742,7 +3742,7 @@
       let pneu = args[1];
       let playerData = playerList[player.name];
 
-      pneusOption = ["s", "m", "h", "furados", "r"];
+      pneusOption = ["macios", "medios", "duros", "furados", "chuva"];
 
       if (ifInBoxesZone(player)) {
         if (speedEnabled == true) {
@@ -4382,7 +4382,7 @@
             }
             speedEnabled = false;
             room.sendAnnouncement(
-              "Pneus desativados",
+              "Pneus desativados e configurados como null",
               player.id,
               colors.info,
               fonts.info,
@@ -4390,7 +4390,7 @@
             );
           } else {
             room.sendAnnouncement(
-              "Uso correto: !pneus [on|off]",
+              "Uso correto: !tyres [on|off]",
               player.id,
               colors.wrong,
               fonts.wrong,
@@ -4454,7 +4454,7 @@
         return false;
       } else if (message.toLowerCase().split(" ")[0] == commands.ajudaadm) {
         room.sendAnnouncement(
-          "Comandos disponíveis como Administrador: !laps, !circuit, !maps, !mute, !pneus, !scemoji, !sc, !vsc, !flag, !explicarchuva, !explicarpneus, !tp, !ajudaadm, !listamods, !moderation, !clear, !endurance, !qualy, !rainchances",
+          "Comandos disponíveis como Administrador: !laps, !circuit, !maps, !mute, !tyres, !scemoji, !sc, !vsc, !flag, !explicarchuva, !eplicarpneus, !tp, !ajudaadm, !listamods, !moderation, !clear, !endurance, !qualy, !rainchances",
           player.id,
           colors.commands,
           fonts.commands,
@@ -5279,7 +5279,7 @@
               }
               speedEnabled = false;
               room.sendAnnouncement(
-                "Pneus desativados",
+                "Pneus desativados e configurados como null",
                 player.id,
                 colors.info,
                 fonts.info,
@@ -5287,7 +5287,7 @@
               );
             } else {
               room.sendAnnouncement(
-                "Uso correto: !pneus [on|off]",
+                "Uso correto: !tyres [on|off]",
                 player.id,
                 colors.wrong,
                 fonts.wrong,
@@ -5298,7 +5298,7 @@
           }
         } else if (message.toLowerCase().split(" ")[0] == commands.ajudamod) {
           room.sendAnnouncement(
-            "Comandos disponíveis como Moderador: !ajudamod, !laps, !circuit, !maps, !stop, !start, !kick, !mute, !pneus, !scemoji, !sc, !vsc, !flag, !explicarchuva, !explicarpneus, !tp",
+            "Comandos disponíveis como Moderador: !ajudamod, !laps, !circuit, !maps, !stop, !start, !kick, !mute, !tyres, !scemoji, !sc, !vsc, !flag, !explicarchuva, !explicarpneus, !tp",
             player.id,
             colors.commands,
             fonts.commands,
