@@ -1491,7 +1491,7 @@
     start: "!start",
     kick: "!kick",
     mute: "!mute",
-    tyres: "!tyres",
+    tyres: "!pneus",
     safetyEmoji: "!scemoji",
     safetyCar: "!sc",
     virtualSafetyCar: "!vsc",
@@ -4390,7 +4390,7 @@
             );
           } else {
             room.sendAnnouncement(
-              "Uso correto: !tyres [on|off]",
+              "Uso correto: !pneus [on|off]",
               player.id,
               colors.wrong,
               fonts.wrong,
@@ -4454,7 +4454,7 @@
         return false;
       } else if (message.toLowerCase().split(" ")[0] == commands.ajudaadm) {
         room.sendAnnouncement(
-          "Comandos disponíveis como Administrador: !laps, !circuit, !maps, !mute, !tyres, !scemoji, !sc, !vsc, !flag, !explicarchuva, !eplicarpneus, !tp, !ajudaadm, !listamods, !moderation, !clear, !endurance, !qualy, !rainchances",
+          "Comandos disponíveis como Administrador: !laps, !circuit, !maps, !mute, !pneus, !scemoji, !sc, !vsc, !flag, !explicarchuva, !explicarpneus, !tp, !ajudaadm, !listamods, !moderation, !clear, !endurance, !qualy, !rainchances",
           player.id,
           colors.commands,
           fonts.commands,
@@ -5287,7 +5287,7 @@
               );
             } else {
               room.sendAnnouncement(
-                "Uso correto: !tyres [on|off]",
+                "Uso correto: !pneus [on|off]",
                 player.id,
                 colors.wrong,
                 fonts.wrong,
@@ -5298,7 +5298,7 @@
           }
         } else if (message.toLowerCase().split(" ")[0] == commands.ajudamod) {
           room.sendAnnouncement(
-            "Comandos disponíveis como Moderador: !ajudamod, !laps, !circuit, !maps, !stop, !start, !kick, !mute, !tyres, !scemoji, !sc, !vsc, !flag, !explicarchuva, !explicarpneus, !tp",
+            "Comandos disponíveis como Moderador: !ajudamod, !laps, !circuit, !maps, !stop, !start, !kick, !mute, !pneus, !scemoji, !sc, !vsc, !flag, !explicarchuva, !explicarpneus, !tp",
             player.id,
             colors.commands,
             fonts.commands,
