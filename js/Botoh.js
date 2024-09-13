@@ -8,7 +8,7 @@
     circuit7: [38.7, "Ximbastian Vettel"], //Valencia D.
     circuit8: [43.45, "Ximbastian Vettel"], //PaulRicard D.
     circuit9: [34.45, "Gabriel Schumacchio"], //Silverstone D.
-    circuit10: [52.2, "Ximbastian Vettel"], //Spa D.
+    circuit10: [52.033, "Ximbastian Vettel"], //Spa D.
     circuit11: [35.35, "Ximbastian Vettel"], //Istanbul D.
     circuit12: [41.000, "Adil"], //Nurburgring D.
     circuit13: [26.7, "Ximbastian Vettel"], //Monza D.
