@@ -19,8 +19,8 @@ const bestTimes = {
   circuit18: [33.800, "Schumacchio"], //Interlagos D.
   
   circuit19: [48.100, "Ximbastian Vettel"], //Baku
-  circuit20: [999.999, undefined], //Argentina D.
-  circuit21: [999.999, undefined], //Marina Bay D.
+  circuit20: [43.250, "Ximbastian Vettel"], //Argentina D.
+  circuit21: [49.900, "Ximbastian Vettel"], //Marina Bay D.
 
   circuit22: [65.85, "Adil"], //Le Mans
   circuit23: [30.5, "Schumacchio"], //Indianapolis
@@ -3212,6 +3212,8 @@ function checkPlayerLaps() {
                 if (playersInCurrentLap.length === 0) {
                   // Se não há mais jogadores na mesma volta, o jogador está em primeiro lugar
                   if (playerList[name].showDelta) {
+                
+                    
                     const getFirstPlaceMessage = (language) => {
                       const messages = {
                         portugues: "Você está em primeiro lugar!",
@@ -3228,6 +3230,7 @@ function checkPlayerLaps() {
                       fonts.secondaryInfo,
                       sounds.lapChanged
                     );
+                   
                   }
                 } else {
                   // Caso contrário, encontra a posição do jogador na lista de jogadores na mesma volta
@@ -3250,6 +3253,23 @@ function checkPlayerLaps() {
                       fonts.secondaryInfo,
                       sounds.lapChanged
                     );
+                    if(positionInLap == 1){
+                      let spectators = players.filter(p=>p.team != 2)
+
+                      
+                      spectators.forEach((s)=>{
+    
+                        
+                        room.sendAnnouncement(
+                          `Lap ${playerList[name].currentLap}/${limit}`,
+                          s.id,
+                          colors.lapTime,
+                          fonts.lapTime,
+                          sounds.lapTime
+                        )
+                      })
+                    }
+                
 
                   }
                 }
@@ -3449,8 +3469,9 @@ function checkPlayerLaps() {
                 sounds.lapChanged
               );
             
-              room.setPlayerTeam(player.id, 0);
+              
             });
+            room.setPlayerTeam(id, 0);
           } else {
             // Função para obter a mensagem "Volta atual"
             const getCurrentLapMessage = (language, currentLap, limit) => {
@@ -3692,7 +3713,7 @@ function endRaceSession() {
       //        clearTimeout(GetVotesAndAnnounceResults_Timeout_2);
       //        loadMap(MapVote);
       setTimeout(function () {
-        room.setCustomStadium(Circuits[randomNum(0, 29)]);
+        room.setCustomStadium(Circuits[randomNum(0, 28)]);
         room.startGame();
       }, gameEndTimeout);
     }
@@ -3838,7 +3859,11 @@ function ifInBoxesZone(player) {
 }
 
 function serialize(number) {
+  if(number == undefined){
+    return 999.999
+  } else{
   return number.toFixed(3);
+}
 }
 
 function pointDistance(p1, p2) {
