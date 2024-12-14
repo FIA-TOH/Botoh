@@ -1,6 +1,6 @@
 # HaxBall-F1-Racing-Bot
 
-<a href="https://discord.gg/t6Wvbqk"><img alt="Discord" src="https://img.shields.io/discord/536193210096156682?color=blue&label=DEVELOPER%27S%20DISCORD"></a>
+<a href="https://discord.gg/Czz85Mwu"><img alt="Discord" src="https://img.shields.io/discord/1172318938588262501?color=purple&label=OUR%20DISCORD"></a>
 
 ### What is F1 Racing Bot
 F1 is a different version of parkours, it is circular, unlike a yellow or a survival parkour, that's why we call the maps here as circuits. Our F1 Racing bot is made to act as a semi-automatic system for hotlapping and practicing **(1.1)** and letting race through a more immersive experience.
