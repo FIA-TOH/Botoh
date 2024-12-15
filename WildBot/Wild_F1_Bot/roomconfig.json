@@ -1,0 +1,9 @@
+{
+  "publicAdminPassword": "toh",
+  "leagueAdminPassword": "toh",
+  "bans": ["90.94.201.31"],
+  "publicName": "🏎️ Formula 1 - Treinos livres 🏎️",
+  "leagueName": "🏎️ Formula 1 - FTOH 🏎️",
+  "maxPlayers": 30,
+  "roomPassword": null
+}

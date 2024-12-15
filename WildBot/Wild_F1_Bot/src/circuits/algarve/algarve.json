@@ -1,0 +1,461 @@
+{
+
+	"name" : "Autodromo Internacional de Algavre by POPkORN from HaxMaps",
+
+	"width" : 1510,
+
+	"height" : 1050,
+
+	"spawnDistance" : 1390,
+
+	"bg" : { "type" : "hockey", "width" : 0, "height" : 0, "kickOffRadius" : 0, "cornerRadius" : 0 },
+
+	"vertexes" : [
+		 { "x" : 376, "y" : 134, "trait" : "ready_vertex", "curve" : -180, "color" : "008e00" },
+		 { "x" : 376, "y" : 164, "trait" : "ready_vertex", "curve" : -180, "color" : "008e00" },
+		 { "x" : 356, "y" : 194, "trait" : "ready_vertex", "curve" : -180, "color" : "008e00" },
+		 { "x" : 356, "y" : 224, "trait" : "ready_vertex", "curve" : -180, "color" : "008e00" },
+		 { "x" : 436, "y" : 134, "trait" : "ready_vertex", "curve" : -180, "color" : "008e00" },
+		 { "x" : 436, "y" : 164, "trait" : "ready_vertex", "curve" : -180, "color" : "008e00" },
+		 { "x" : 416, "y" : 194, "trait" : "ready_vertex", "curve" : -180, "color" : "008e00" },
+		 { "x" : 416, "y" : 224, "trait" : "ready_vertex", "curve" : -180, "color" : "008e00" },
+		 { "x" : 496, "y" : 134, "trait" : "ready_vertex", "curve" : -180, "color" : "008e00" },
+		 { "x" : 496, "y" : 164, "trait" : "ready_vertex", "curve" : -180, "color" : "008e00" },
+		 { "x" : 476, "y" : 194, "trait" : "ready_vertex", "curve" : -180, "color" : "008e00" },
+		 { "x" : 476, "y" : 224, "trait" : "ready_vertex", "curve" : -180, "color" : "008e00" },
+		 { "x" : 556, "y" : 134, "trait" : "ready_vertex", "curve" : -180, "color" : "008e00" },
+		 { "x" : 556, "y" : 164, "trait" : "ready_vertex", "curve" : -180, "color" : "008e00" },
+		 { "x" : 536, "y" : 194, "trait" : "ready_vertex", "curve" : -180, "color" : "008e00" },
+		 { "x" : 536, "y" : 224, "trait" : "ready_vertex", "curve" : -180, "color" : "008e00" },
+
+		 { "x" : 268, "y" : 104, "trait" : "wall_vertex" },
+		 { "x" : 268, "y" : 256, "trait" : "wall_vertex" },
+		 { "x" : 1349, "y" : 256, "trait" : "wall_vertex", "curve" : 89 },
+		 { "x" : -1086, "y" : 256, "trait" : "wall_vertex", "curve" : -90 },
+		 { "x" : 1158, "y" : 105, "cMask" : ["ball" ], "cGroup" : ["redKO","blueKO" ], "trait" : "wall_vertex", "curve" : 0, "color" : "32CD32" },
+		 { "x" : -600, "y" : 104, "trait" : "wall_vertex", "curve" : 10 },
+
+		 { "x" : 616, "y" : 134, "trait" : "ready_vertex", "curve" : -180, "color" : "ffff00" },
+		 { "x" : 616, "y" : 164, "trait" : "ready_vertex", "curve" : -180, "color" : "ffff00" },
+		 { "x" : 596, "y" : 194, "trait" : "ready_vertex", "curve" : -180, "color" : "002994" },
+		 { "x" : 596, "y" : 224, "trait" : "ready_vertex", "curve" : -180, "color" : "002994" },
+		 { "x" : 676, "y" : 134, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+		 { "x" : 676, "y" : 164, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+		 { "x" : 656, "y" : 194, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+		 { "x" : 656, "y" : 224, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+		 { "x" : 736, "y" : 134, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+		 { "x" : 736, "y" : 164, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+		 { "x" : 716, "y" : 194, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+		 { "x" : 716, "y" : 224, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+
+		 { "x" : 1488, "y" : -56, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "curve" : -33 },
+
+		 { "x" : 1322, "y" : 3, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -67 },
+		 { "x" : -1069, "y" : 104, "trait" : "wall_vertex", "curve" : -135 },
+		 { "x" : -420, "y" : 77, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 10, "vis" : false },
+
+		 { "x" : -700, "y" : 104, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "curve" : 20 },
+
+		 { "x" : -420, "y" : 47, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 0, "vis" : false },
+
+		 { "x" : 796, "y" : 134, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+		 { "x" : 796, "y" : 164, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+		 { "x" : 776, "y" : 194, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+		 { "x" : 776, "y" : 224, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+		 { "x" : 854.2853223593964, "y" : 135.71467764060355, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+		 { "x" : 854.2853223593964, "y" : 165.71467764060355, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+		 { "x" : 834.2853223593964, "y" : 195.71467764060355, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+		 { "x" : 834.2853223593964, "y" : 225.71467764060355, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+		 { "x" : 914.2853223593964, "y" : 135.71467764060355, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+		 { "x" : 914.2853223593964, "y" : 165.71467764060355, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+		 { "x" : 894.2853223593964, "y" : 195.71467764060355, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+		 { "x" : 894.2853223593964, "y" : 225.71467764060355, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+
+		 { "x" : 1446, "y" : -194.43751525879, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "curve" : -33 },
+
+		 { "x" : 1307, "y" : -167, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "color" : "808080" },
+		 { "x" : 1018, "y" : -577, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -180 },
+		 { "x" : 1098, "y" : -671, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -180 },
+		 { "x" : 928, "y" : -518, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 0 },
+		 { "x" : 812, "y" : -478, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 0 },
+		 { "x" : 950, "y" : -290, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 180 },
+		 { "x" : 1130, "y" : -243, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 96 },
+		 { "x" : 1103, "y" : -142, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 96 },
+		 { "x" : 925, "y" : -256, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 0 },
+		 { "x" : 973, "y" : -126, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 12 },
+		 { "x" : 638, "y" : -330, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 0 },
+		 { "x" : 601, "y" : -217, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 0 },
+		 { "x" : 455, "y" : -411, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 0 },
+		 { "x" : 575, "y" : -420, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 0 },
+		 { "x" : 455, "y" : -817, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -84 },
+		 { "x" : 575, "y" : -970, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -90 },
+		 { "x" : 528, "y" : -1015, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -90 },
+		 { "x" : 412, "y" : -1016, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -41 },
+		 { "x" : 405, "y" : -872, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -84 },
+		 { "x" : 346, "y" : -869, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -28 },
+		 { "x" : 198, "y" : -924, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -41 },
+		 { "x" : 262, "y" : -821, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -28 },
+		 { "x" : 4, "y" : -734, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 0 },
+		 { "x" : 77, "y" : -636, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 51 },
+		 { "x" : -184, "y" : -680, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		 { "x" : -206, "y" : -561, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 51 },
+		 { "x" : -761, "y" : -802, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -135 },
+		 { "x" : -718, "y" : -674, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -138 },
+		 { "x" : -900, "y" : -626, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -135 },
+		 { "x" : -756, "y" : -622, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -138 },
+		 { "x" : -710, "y" : -347, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -72 },
+		 { "x" : -608, "y" : -408, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -69 },
+		 { "x" : -509, "y" : -377, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -69 },
+		 { "x" : -467, "y" : -271, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -72 },
+		 { "x" : -206, "y" : -354, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 40 },
+		 { "x" : -303, "y" : -446, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 45 },
+		 { "x" : -8, "y" : -431, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 45 },
+		 { "x" : 264, "y" : -272, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -53 },
+		 { "x" : -98, "y" : -348, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 40 },
+		 { "x" : 87, "y" : -249, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 150 },
+		 { "x" : 78, "y" : -212, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 150, "_selected" : "segment" },
+		 { "x" : 282, "y" : -80, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -90 },
+		 { "x" : -716, "y" : -80, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 69 },
+		 { "x" : 336, "y" : -143, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -53 },
+		 { "x" : -752, "y" : -209, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 68 },
+		 { "x" : -804, "y" : -244, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 68 },
+		 { "x" : -915, "y" : -516, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -127.5 },
+		 { "x" : -910, "y" : -205, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 69 },
+		 { "x" : -1012, "y" : -451, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -129 },
+		 { "x" : -1088, "y" : -453, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -129 },
+		 { "x" : -1172, "y" : -529, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -127.5 },
+		 { "x" : -1310, "y" : -288, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -90 },
+		 { "x" : -1175, "y" : -300, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -90 },
+		 { "x" : -1165, "y" : -271, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -90 },
+		 { "x" : -1281, "y" : -196, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -90 },
+		 { "x" : -1105, "y" : -109, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 90 },
+		 { "x" : -1024, "y" : -197, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 99.5 },
+		 { "x" : -1100, "y" : -89, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 90 },
+		 { "x" : -996, "y" : -52, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 99.5 },
+		 { "x" : -1090, "y" : 58, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -135 },
+		 { "x" : -1205, "y" : 36, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -34 },
+		 { "x" : -1231, "y" : 105, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -34 },
+
+		 { "x" : 1488, "y" : 117, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "curve" : 0 },
+
+		 { "x" : 1012, "y" : 105, "cMask" : ["ball" ], "trait" : "wall_vertex", "curve" : -100, "color" : "ff0000" },
+		 { "x" : 891, "y" : 77, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -18, "vis" : false },
+
+		 { "x" : 1105.4520188695, "y" : 93, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "curve" : -25 },
+
+		 { "x" : 900, "y" : 47, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 0, "vis" : false },
+		 { "x" : 1011.2199707031, "y" : 96.399963378906, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -100 },
+
+		 { "x" : 970.8834019204389, "y" : 133.1426611796982, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+		 { "x" : 970.8834019204389, "y" : 163.1426611796982, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+		 { "x" : 950.8834019204389, "y" : 193.1426611796982, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+		 { "x" : 950.8834019204389, "y" : 223.1426611796982, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+		 { "x" : 1030.8834019204392, "y" : 133.1426611796982, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+		 { "x" : 1030.8834019204392, "y" : 163.1426611796982, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+		 { "x" : 1010.8834019204389, "y" : 193.1426611796982, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+		 { "x" : 1010.8834019204389, "y" : 223.1426611796982, "trait" : "ready_vertex", "curve" : -180, "color" : "ff0000" },
+
+		 { "x" : -1085.837658366592, "y" : 261.3165356079038, "trait" : "wall_vertex", "curve" : -90, "color" : "008e00" },
+		 { "x" : -1236.3736444873466, "y" : 105.38179214625893, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -34, "color" : "008e00" },
+		 { "x" : -1019.4184942448928, "y" : -201.87763458220198, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 99.5, "color" : "ff0000" },
+		 { "x" : -990.1393306124291, "y" : -49.70924712244633, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 99.5, "color" : "ff0000" },
+		 { "x" : -1316.2424615338298, "y" : -292.43873355650015, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -90, "color" : "008e00" },
+		 { "x" : -1285.6867385090727, "y" : -190.33022668555867, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -90, "color" : "008e00" },
+		 { "x" : -908.509533513598, "y" : -520.4672879962216, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -127.5, "color" : "ff0000" },
+		 { "x" : -1179.359283532885, "y" : -532.2452332432011, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -127.5, "color" : "ff0000" },
+		 { "x" : -719.7037037037038, "y" : -73.51851851851852, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 69, "color" : "008e00" },
+		 { "x" : -915.5555555555555, "y" : -201.29629629629628, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 69, "color" : "008e00" },
+		 { "x" : 268.820525702759, "y" : -277.01142177588855, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -53, "color" : "ff0000" },
+		 { "x" : 298.3425373096362, "y" : -77.5185185185185, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -90, "color" : "ff0000" },
+		 { "x" : 342.7268242103736, "y" : -143.24534272889215, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -53, "color" : "ff0000" },
+		 { "x" : -210.62962962962962, "y" : -345.6666666666667, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 40, "color" : "008e00" },
+		 { "x" : -95.22222222222221, "y" : -339.66666666666663, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 40, "color" : "008e00" },
+		 { "x" : -716.3506579281615, "y" : -342.237006553879, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -72, "color" : "ff0000" },
+		 { "x" : -463.0308387948991, "y" : -264.64934207183865, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -72, "color" : "ff0000" },
+		 { "x" : -755.8547910304247, "y" : -810.085328380761, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -135, "color" : "008e00" },
+		 { "x" : -905.8802388223716, "y" : -621.5898208832213, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -135, "color" : "008e00" },
+		 { "x" : 82.1452089695752, "y" : -631.5898208832213, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 51, "color" : "ff0000" },
+		 { "x" : -208.9401194111858, "y" : -555.1197611776283, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 51, "color" : "ff0000" },
+		 { "x" : 580.8802388223716, "y" : -967.0598805888142, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -90, "color" : "008e00" },
+		 { "x" : 528, "y" : -1022.3502985279645, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -90, "color" : "008e00" },
+		 { "x" : 405.3847313248319, "y" : -1021.8802388223716, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -41, "color" : "008e00" },
+		 { "x" : 605.4101791167787, "y" : -209.64970147203545, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 75, "color" : "ff0000" },
+		 { "x" : 446.914671619239, "y" : -416.14520896957515, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 75, "color" : "ff0000" },
+		 { "x" : 1135.1452089695752, "y" : -247.41017911677875, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 96, "color" : "008e00" },
+		 { "x" : 1108.1452089695752, "y" : -137.5898208832213, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 96, "color" : "008e00" },
+		 { "x" : 967.1197611776283, "y" : -121.58982088322128, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 12, "color" : "008e00" },
+		 { "x" : 1103.880238822372, "y" : -676.1452089695752, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : -180, "color" : "ff0000" },
+		 { "x" : 805.3847313248319, "y" : -473.58982088322125, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 0, "color" : "ff0000" },
+		 { "x" : 1345.3248507360179, "y" : 261.14520896957515, "trait" : "wall_vertex", "curve" : 89, "color" : "008e00" },
+
+		 { "x" : 1494.6152686751684, "y" : -60.41017911677872, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "curve" : -33, "color" : "008e00" },
+		 { "x" : 1493.1452089695754, "y" : 117, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "curve" : 0, "color" : "008e00" },
+
+		 { "x" : 300, "y" : 47, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 0, "vis" : false },
+		 { "x" : 900, "y" : -73, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 0, "vis" : false },
+		 { "x" : 300, "y" : -73, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 0, "vis" : false },
+		 { "x" : 780, "y" : 47, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 0, "vis" : false },
+		 { "x" : 660, "y" : 47, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 0, "vis" : false },
+		 { "x" : 540, "y" : 47, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 0, "vis" : false },
+		 { "x" : 420, "y" : 47, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 0, "vis" : false },
+		 { "x" : 780, "y" : -73, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 0, "vis" : false },
+		 { "x" : 660, "y" : -73, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 0, "vis" : false },
+		 { "x" : 540, "y" : -73, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 0, "vis" : false },
+		 { "x" : 420, "y" : -73, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "curve" : 0, "vis" : false },
+
+		 { "x" : 1158, "y" : 257, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ], "curve" : 0, "color" : "32CD32" },
+		 { "x" : -953, "y" : 103, "cGroup" : ["redKO","blueKO" ] },
+		 { "x" : -953, "y" : 256, "cGroup" : ["redKO","blueKO" ] },
+		 { "x" : -716, "y" : -209, "cGroup" : ["redKO","blueKO" ] },
+		 { "x" : 78, "y" : -80, "_selected" : "segment" }
+
+	],
+
+	"segments" : [
+		{ "v0" : 16, "v1" : 17, "vis" : true, "color" : "FFFFFF", "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+
+		{ "v0" : 18, "v1" : 19, "trait" : "wall", "y" : 256 },
+
+		{ "v0" : 20, "v1" : 35, "curve" : -67, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 21, "v1" : 37, "curve" : 10, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+
+		{ "v0" : 36, "v1" : 38, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "y" : 104 },
+
+		{ "v0" : 38, "v1" : 39, "curve" : 20, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+
+		{ "v0" : 34, "v1" : 52, "curve" : -33, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "x" : 1475 },
+
+		{ "v0" : 35, "v1" : 53, "curve" : -49.247235484478, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 53, "v1" : 54, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 52, "v1" : 55, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 54, "v1" : 56, "curve" : -180, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 55, "v1" : 57, "curve" : -180, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 57, "v1" : 58, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 56, "v1" : 59, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 59, "v1" : 60, "curve" : 96, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 58, "v1" : 61, "curve" : 138.76681954705, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 60, "v1" : 62, "curve" : 34.162545110616, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 61, "v1" : 63, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 62, "v1" : 64, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 64, "v1" : 65, "curve" : 72.378974245001, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 63, "v1" : 66, "curve" : 66.470181503557, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 65, "v1" : 67, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 66, "v1" : 68, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "x" : 575 },
+		{ "v0" : 69, "v1" : 70, "curve" : -3, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "y" : -985 },
+		{ "v0" : 67, "v1" : 71, "curve" : -84, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 68, "v1" : 69, "curve" : -90, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 71, "v1" : 72, "curve" : -16.260204708312, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 70, "v1" : 73, "curve" : -41.649929351855, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 72, "v1" : 74, "curve" : -28, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 73, "v1" : 75, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 74, "v1" : 76, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 75, "v1" : 77, "curve" : 52.752800762901, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 76, "v1" : 78, "curve" : 51, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 77, "v1" : 79, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 78, "v1" : 80, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 79, "v1" : 81, "curve" : -135, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 80, "v1" : 82, "curve" : -138, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 81, "v1" : 83, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 82, "v1" : 84, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 84, "v1" : 85, "curve" : -69, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 83, "v1" : 86, "curve" : -72, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 86, "v1" : 87, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 85, "v1" : 88, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 88, "v1" : 89, "curve" : 45, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 89, "v1" : 90, "curve" : 8, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 87, "v1" : 91, "curve" : 40, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 91, "v1" : 92, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 92, "v1" : 93, "curve" : 150, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 94, "v1" : 95, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 94, "v1" : 96, "curve" : -90, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 96, "v1" : 90, "curve" : -53, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 93, "v1" : 97, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 97, "v1" : 98, "curve" : 68, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 98, "v1" : 99, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 95, "v1" : 100, "curve" : 69, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 100, "v1" : 101, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 101, "v1" : 102, "curve" : -129, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 99, "v1" : 103, "curve" : -127.5, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 103, "v1" : 104, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 102, "v1" : 105, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 105, "v1" : 106, "curve" : -90, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 104, "v1" : 107, "curve" : -90, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 107, "v1" : 108, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 106, "v1" : 109, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 108, "v1" : 110, "curve" : 90, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 109, "v1" : 111, "curve" : 99.5, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 111, "v1" : 112, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 112, "v1" : 36, "curve" : -135, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 113, "v1" : 114, "curve" : -34, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 110, "v1" : 113, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 114, "v1" : 19, "curve" : -90, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+
+		{ "v0" : 34, "v1" : 115, "curve" : 0, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "x" : 1490 },
+		{ "v0" : 115, "v1" : 18, "curve" : 89, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ] },
+
+		{ "v0" : 118, "v1" : 119, "curve" : -25, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+
+		{ "v0" : 117, "v1" : 37, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "y" : 77 },
+		{ "v0" : 116, "v1" : 21, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ] },
+		{ "v0" : 20, "v1" : 118, "curve" : 15, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "y" : 104 },
+
+		{ "v0" : 116, "v1" : 120, "curve" : -100, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 120, "v1" : 117, "curve" : -18, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+
+		{ "v0" : 48, "v1" : 49, "curve" : -180, "vis" : true, "color" : "ff0000", "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+		{ "v0" : 50, "v1" : 51, "curve" : -180, "vis" : true, "color" : "ff0000", "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+		{ "v0" : 44, "v1" : 45, "curve" : -180, "vis" : true, "color" : "ff0000", "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+		{ "v0" : 46, "v1" : 47, "curve" : -180, "vis" : true, "color" : "ff0000", "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+		{ "v0" : 40, "v1" : 41, "curve" : -180, "vis" : true, "color" : "ff0000", "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+		{ "v0" : 42, "v1" : 43, "curve" : -180, "vis" : true, "color" : "ff0000", "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+		{ "v0" : 30, "v1" : 31, "curve" : -180, "vis" : true, "color" : "ff0000", "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+		{ "v0" : 26, "v1" : 27, "curve" : -180, "vis" : true, "color" : "ff0000", "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+		{ "v0" : 22, "v1" : 23, "curve" : -180, "vis" : true, "color" : "ffff00", "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+		{ "v0" : 12, "v1" : 13, "curve" : -180, "vis" : true, "color" : "008e00", "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+		{ "v0" : 8, "v1" : 9, "curve" : -180, "vis" : true, "color" : "008e00", "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+		{ "v0" : 4, "v1" : 5, "curve" : -180, "vis" : true, "color" : "008e00", "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+		{ "v0" : 6, "v1" : 7, "curve" : -180, "vis" : true, "color" : "008e00", "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+		{ "v0" : 10, "v1" : 11, "curve" : -180, "vis" : true, "color" : "008e00", "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+		{ "v0" : 14, "v1" : 15, "curve" : -180, "vis" : true, "color" : "008e00", "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+		{ "v0" : 24, "v1" : 25, "curve" : -180, "vis" : true, "color" : "002994", "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+		{ "v0" : 28, "v1" : 29, "curve" : -180, "vis" : true, "color" : "ff0000", "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+		{ "v0" : 32, "v1" : 33, "curve" : -180, "vis" : true, "color" : "ff0000", "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+		{ "v0" : 0, "v1" : 1, "curve" : -180, "vis" : true, "color" : "008e00", "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+		{ "v0" : 2, "v1" : 3, "curve" : -180, "vis" : true, "color" : "008e00", "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+		{ "v0" : 125, "v1" : 126, "curve" : -180, "vis" : true, "color" : "ff0000", "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+		{ "v0" : 127, "v1" : 128, "curve" : -180, "vis" : true, "color" : "ff0000", "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+		{ "v0" : 121, "v1" : 122, "curve" : -180, "vis" : true, "color" : "ff0000", "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+		{ "v0" : 123, "v1" : 124, "curve" : -180, "vis" : true, "color" : "ff0000", "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+
+		{ "v0" : 130, "v1" : 129, "curve" : -90, "vis" : true, "color" : "008e00", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 131, "v1" : 132, "curve" : 99.5, "vis" : true, "color" : "ff0000", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 133, "v1" : 134, "curve" : -88.01056703775156, "vis" : true, "color" : "008e00", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 135, "v1" : 136, "curve" : -126.97160397317116, "vis" : true, "color" : "ff0000", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 137, "v1" : 138, "curve" : 69, "vis" : true, "color" : "008e00", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 140, "v1" : 141, "curve" : -78.7815146905872, "vis" : true, "color" : "ff0000", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 141, "v1" : 139, "curve" : -53, "vis" : true, "color" : "ff0000", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 142, "v1" : 143, "curve" : 50.259809798180974, "vis" : true, "color" : "008e00", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 144, "v1" : 145, "curve" : -72, "vis" : true, "color" : "ff0000", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 146, "v1" : 147, "curve" : -135, "vis" : true, "color" : "008e00", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 148, "v1" : 149, "curve" : 51, "vis" : true, "color" : "ff0000", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 151, "v1" : 152, "curve" : -3, "vis" : true, "color" : "008e00", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex", "y" : -985 },
+		{ "v0" : 150, "v1" : 151, "curve" : -90, "vis" : true, "color" : "008e00", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 153, "v1" : 154, "curve" : 75, "vis" : true, "color" : "ff0000", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 155, "v1" : 156, "curve" : 96, "vis" : true, "color" : "008e00", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 156, "v1" : 157, "curve" : 36.75736194543931, "vis" : true, "color" : "008e00", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+		{ "v0" : 158, "v1" : 159, "curve" : -180.22007884228483, "vis" : true, "color" : "ff0000", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "trait" : "wall_vertex" },
+
+		{ "v0" : 161, "v1" : 162, "curve" : 0, "vis" : true, "color" : "008e00", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "x" : 1490 },
+		{ "v0" : 162, "v1" : 160, "curve" : 89, "vis" : true, "color" : "008e00", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ] },
+		{ "v0" : 163, "v1" : 39, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ] },
+		{ "v0" : 165, "v1" : 164, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ] },
+		{ "v0" : 165, "v1" : 163, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ] },
+		{ "v0" : 164, "v1" : 119, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ] },
+		{ "v0" : 169, "v1" : 173, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ] },
+		{ "v0" : 168, "v1" : 172, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ] },
+		{ "v0" : 167, "v1" : 171, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ] },
+		{ "v0" : 166, "v1" : 170, "vis" : true, "color" : "303030", "bCoef" : 0.25, "cMask" : ["red","blue","ball" ] },
+		{ "v0" : 116, "v1" : 20, "vis" : true, "color" : "ff0000", "bCoef" : 0.25, "cMask" : ["ball" ] },
+		{ "v0" : 163, "v1" : 119, "vis" : true, "color" : "ff0000", "bCoef" : 0.25, "cMask" : ["ball" ] },
+		{ "v0" : 38, "v1" : 21, "vis" : true, "color" : "ff0000", "bCoef" : 0.25 },
+		{ "v0" : 20, "v1" : 174, "curve" : 0, "vis" : true, "color" : "32CD32", "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+		{ "v0" : 175, "v1" : 176, "curve" : 0, "vis" : true, "color" : "32CD32", "cGroup" : ["redKO","blueKO" ] },
+		{ "v0" : 95, "v1" : 177, "curve" : 0, "vis" : true, "color" : "32CD32", "cGroup" : ["redKO","blueKO" ] },
+		{ "v0" : 93, "v1" : 178, "curve" : 0, "vis" : true, "color" : "32CD32", "_selected" : true }
+
+	],
+
+	"goals" : [
+
+	],
+
+	"discs" : [
+		{ "pos" : [6000,13 ], "bCoef" : 10, "cMask" : ["ball" ], "damping" : 1, "speed" : [-4.3,0 ] }
+
+	],
+
+	"planes" : [
+		{ "normal" : [0,1 ], "dist" : -1042 },
+		{ "normal" : [0,-1 ], "dist" : -700 },
+		{ "normal" : [1,0 ], "dist" : -1504 }
+
+	],
+
+	"traits" : {
+		"ready_vertex" : { "bCoef" : 0, "cGroup" : ["redKO","blueKO" ], "cMask" : ["red","blue" ] },
+		"ready" : { "vis" : true, "bCoef" : 0, "cGroup" : ["redKO","blueKO" ], "cMask" : ["red","blue" ], "color" : "CCCCCC" },
+		"init_bound" : { "vis" : false, "bCoef" : 0, "cGroup" : ["redKO","blueKO" ], "cMask" : ["red","blue" ] },
+		"wall_vertex" : { "bCoef" : 0.25, "cMask" : ["red","blue","ball" ] },
+		"wall" : { "vis" : true, "bCoef" : 0.25, "cMask" : ["red","blue","ball" ], "color" : "303030" },
+		"inner_track_vertex" : { "bCoef" : 1, "cMask" : ["red","blue","ball" ] },
+		"inner_track" : { "vis" : true, "bCoef" : 1, "cMask" : ["red","blue","ball" ], "color" : "808080" },
+		"word_vertex" : { "bCoef" : 1, "cMask" : ["" ] },
+		"word_1" : { "vis" : true, "bCoef" : 1, "cMask" : ["" ], "color" : "ff8080" },
+		"word_2" : { "vis" : true, "bCoef" : 1, "cMask" : ["" ], "color" : "80ff80" },
+		"word_3" : { "vis" : true, "bCoef" : 1, "cMask" : ["" ], "color" : "8080ff" },
+		"word_finish" : { "vis" : true, "bCoef" : 1, "cMask" : ["" ], "color" : "CCCCCC" },
+		"red_wall" : { "vis" : true, "bCoef" : 0, "cMask" : ["blue" ], "color" : "FF4A4A" },
+		"cushion" : { "radius" : 3, "invMass" : 0.25, "bCoef" : 0.5, "color" : "CCCCCC" }
+
+	},
+
+	"playerPhysics" : {
+		"bCoef" : 0.5,
+		"invMass" : 0.5,
+		"damping" : 0.985,
+		"acceleration" : 0.09,
+		"kickingAcceleration" : 0,
+		"kickingDamping" : 0.985,
+		"kickStrength" : -3,
+		"radius" : 15,
+		"cGroup" : [ "red", "blue"
+		],
+		"gravity" : [ 0, 0
+		],
+		"kickback" : 0
+
+	},
+
+	"ballPhysics" : {
+		"radius" : 15,
+		"bCoef" : 1e-21,
+		"invMass" : 100000,
+		"damping" : 1.000708,
+		"color" : "FFFFFF",
+		"cMask" : [ "all"
+		],
+		"cGroup" : [ "ball"
+		],
+		"gravity" : [ 0, 0
+		]
+
+	},
+
+	"joints" : [
+
+	],
+
+	"redSpawnPoints" : [
+		[ 400, 150
+		]
+
+	],
+
+	"blueSpawnPoints" : [
+		[ 400, 150
+		]
+
+	],
+
+	"canBeStored" : false,
+
+	"cameraWidth" : 0,
+
+	"cameraHeight" : 0,
+
+	"maxViewWidth" : 0,
+
+	"cameraFollow" : "player",
+
+	"kickOffReset" : "partial"
+}

@@ -1,0 +1,433 @@
+{
+	"name": "GP Bahrain - Bahrain International Circuit",
+	"width": 2100,
+	"height": 1700,
+	"spawnDistance": 1935,
+	"bg": {
+		"type": "hockey",
+		"width": 0,
+		"height": 0,
+		"kickOffRadius": 0,
+		"cornerRadius": 0
+	},
+	"vertexes": [
+		{
+			"x": -1000,
+			"y": 0,
+			"bCoef": 0.25,
+			"cMask": [
+				"red",
+				"blue",
+				"ball"
+			],
+			"trait": "wall_vertex",
+			"curve": -180
+		},
+		{
+			"x": 1000,
+			"y": 0,
+			"bCoef": 0.25,
+			"cMask": [
+				"red",
+				"blue",
+				"ball"
+			],
+			"trait": "wall_vertex"
+		},
+		{
+			"x": -1000,
+			"y": 30,
+			"bCoef": 0.25,
+			"cMask": [
+				"red",
+				"blue",
+				"ball"
+			],
+			"trait": "wall_vertex",
+			"curve": -180
+		},
+		{
+			"x": 1000,
+			"y": 30,
+			"bCoef": 0.25,
+			"cMask": [
+				"red",
+				"blue",
+				"ball"
+			],
+			"trait": "wall_vertex"
+		},
+		{
+			"x": 135.84000768892804,
+			"y": -827.9467888754756,
+			"bCoef": 0.25,
+			"cMask": [
+				"red",
+				"blue",
+				"ball"
+			],
+			"trait": "wall_vertex",
+			"curve": -180
+		},
+		{
+			"x": 157.05321112452447,
+			"y": -849.1599923110721,
+			"bCoef": 0.25,
+			"cMask": [
+				"red",
+				"blue",
+				"ball"
+			],
+			"trait": "wall_vertex",
+			"curve": -180
+		},
+		{
+			"x": 864.159992311072,
+			"y": -142.0532111245244,
+			"bCoef": 0.25,
+			"cMask": [
+				"red",
+				"blue",
+				"ball"
+			],
+			"trait": "wall_vertex",
+			"curve": -180
+		},
+		{
+			"x": 842.9467888754755,
+			"y": -120.84000768892793,
+			"bCoef": 0.25,
+			"cMask": [
+				"red",
+				"blue",
+				"ball"
+			],
+			"trait": "wall_vertex",
+			"curve": -180
+		}
+	],
+	"segments": [
+		{
+			"v0": 0,
+			"v1": 1,
+			"curve": 0,
+			"vis": true,
+			"color": "303030",
+			"bCoef": 0.25,
+			"cMask": [
+				"red",
+				"blue",
+				"ball"
+			],
+			"trait": "wall_vertex"
+		},
+		{
+			"v0": 2,
+			"v1": 3,
+			"curve": 0,
+			"vis": true,
+			"color": "303030",
+			"bCoef": 0.25,
+			"cMask": [
+				"red",
+				"blue",
+				"ball"
+			],
+			"trait": "wall_vertex",
+			"y": 30
+		},
+		{
+			"v0": 0,
+			"v1": 2,
+			"curve": -180,
+			"vis": true,
+			"color": "303030",
+			"bCoef": 0.25,
+			"cMask": [
+				"red",
+				"blue",
+				"ball"
+			],
+			"trait": "wall_vertex"
+		},
+		{
+			"v0": 3,
+			"v1": 1,
+			"curve": -180,
+			"vis": true,
+			"color": "303030",
+			"bCoef": 0.25,
+			"cMask": [
+				"red",
+				"blue",
+				"ball"
+			],
+			"trait": "wall_vertex"
+		},
+		{
+			"v0": 7,
+			"v1": 4,
+			"curve": 0,
+			"vis": true,
+			"color": "303030",
+			"bCoef": 0.25,
+			"cMask": [
+				"red",
+				"blue",
+				"ball"
+			],
+			"trait": "wall_vertex"
+		},
+		{
+			"v0": 5,
+			"v1": 6,
+			"curve": 0,
+			"vis": true,
+			"color": "303030",
+			"bCoef": 0.25,
+			"cMask": [
+				"red",
+				"blue",
+				"ball"
+			],
+			"trait": "wall_vertex"
+		},
+		{
+			"v0": 7,
+			"v1": 6,
+			"curve": -180,
+			"vis": true,
+			"color": "303030",
+			"bCoef": 0.25,
+			"cMask": [
+				"red",
+				"blue",
+				"ball"
+			],
+			"trait": "wall_vertex"
+		},
+		{
+			"v0": 5,
+			"v1": 4,
+			"curve": -180,
+			"vis": true,
+			"color": "303030",
+			"bCoef": 0.25,
+			"cMask": [
+				"red",
+				"blue",
+				"ball"
+			],
+			"trait": "wall_vertex"
+		}
+	],
+	"goals": [],
+	"discs": [
+		{
+			"pos": [
+				6947,
+				3
+			],
+			"bCoef": 10,
+			"cMask": [
+				"ball"
+			],
+			"damping": 1,
+			"speed": [
+				-4.7,
+				0
+			]
+		}
+	],
+	"planes": [],
+	"traits": {
+		"ready_vertex": {
+			"bCoef": 0,
+			"cGroup": [
+				"redKO",
+				"blueKO"
+			],
+			"cMask": [
+				"red",
+				"blue"
+			]
+		},
+		"ready": {
+			"vis": true,
+			"bCoef": 0,
+			"cGroup": [
+				"redKO",
+				"blueKO"
+			],
+			"cMask": [
+				"red",
+				"blue"
+			],
+			"color": "CCCCCC"
+		},
+		"init_bound": {
+			"vis": false,
+			"bCoef": 0,
+			"cGroup": [
+				"redKO",
+				"blueKO"
+			],
+			"cMask": [
+				"red",
+				"blue"
+			]
+		},
+		"wall_vertex": {
+			"bCoef": 0.25,
+			"cMask": [
+				"red",
+				"blue",
+				"ball"
+			]
+		},
+		"wall": {
+			"vis": true,
+			"bCoef": 0.25,
+			"cMask": [
+				"red",
+				"blue",
+				"ball"
+			],
+			"color": "303030"
+		},
+		"inner_track_vertex": {
+			"bCoef": 1,
+			"cMask": [
+				"red",
+				"blue",
+				"ball"
+			]
+		},
+		"inner_track": {
+			"vis": true,
+			"bCoef": 1,
+			"cMask": [
+				"red",
+				"blue",
+				"ball"
+			],
+			"color": "808080"
+		},
+		"word_vertex": {
+			"bCoef": 1,
+			"cMask": [
+				""
+			]
+		},
+		"word_1": {
+			"vis": true,
+			"bCoef": 1,
+			"cMask": [
+				""
+			],
+			"color": "ff8080"
+		},
+		"word_2": {
+			"vis": true,
+			"bCoef": 1,
+			"cMask": [
+				""
+			],
+			"color": "80ff80"
+		},
+		"word_3": {
+			"vis": true,
+			"bCoef": 1,
+			"cMask": [
+				""
+			],
+			"color": "8080ff"
+		},
+		"word_finish": {
+			"vis": true,
+			"bCoef": 1,
+			"cMask": [
+				""
+			],
+			"color": "CCCCCC"
+		},
+		"red_wall": {
+			"vis": true,
+			"bCoef": 0,
+			"cMask": [
+				"blue"
+			],
+			"color": "FF4A4A"
+		},
+		"cushion": {
+			"radius": 12,
+			"invMass": 0.25,
+			"bCoef": 0.5,
+			"color": "CCCCCC"
+		}
+	},
+	"playerPhysics": {
+		"bCoef": 0.5,
+		"invMass": 0.5,
+		"damping": 0.985,
+		"acceleration": 0.09,
+		"kickingAcceleration": 0.035,
+		"kickingDamping": 0.985,
+		"kickStrength": -3,
+		"radius": 15,
+		"cGroup": [
+			"red",
+			"blue"
+		],
+		"gravity": [
+			0,
+			0
+		],
+		"kickback": 0
+	},
+	"ballPhysics": {
+		"radius": 15,
+		"bCoef": 1,
+		"invMass": 100000,
+		"damping": 1.000437,
+		"color": "FFFFFF",
+		"cMask": [
+			"wall",
+			"ball"
+		],
+		"gravity": [
+			0,
+			0
+		],
+		"cGroup": [
+			"ball"
+		]
+	},
+	"joints": [],
+	"redSpawnPoints": [
+		[
+			-1000,
+			15
+		],
+		[
+			-970,
+			15
+		]
+	],
+	"blueSpawnPoints": [
+		[
+			853.55,
+			-131.45
+		],
+		[
+			832.34,
+			-152.66
+		]
+	],
+	"cameraFollow": "player",
+	"canBeStored": false,
+	"kickOffReset": "full",
+	"cameraWidth": 0,
+	"cameraHeight": 0,
+	"maxViewWidth": 0
+}

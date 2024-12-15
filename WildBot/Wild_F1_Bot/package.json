@@ -1,0 +1,29 @@
+{
+  "name": "wild-f1-bot",
+  "version": "2.0.0",
+  "description": "## Haxball bot for simulating f1 races.\n",
+  "scripts": {
+    "build:league": "webpack --env LEAGUE_MODE=true",
+    "build:non-league": "webpack --env LEAGUE_MODE=false",
+    "build:all": "npm run build:league && npm run build:non-league"
+  },
+  "author": "RicardoPinto26",
+  "license": "",
+  "dependencies": {
+    "@types/haxball-headless-browser": "^0.2.5",
+    "@types/node": "^22.1.0",
+    "browserify": "^17.0.0",
+    "envify": "^4.1.0",
+    "js-sha256": "^0.11.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.3",
+    "babel-loader": "^9.1.3",
+    "dotenv-webpack": "^8.1.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.5.4",
+    "webpack": "^5.93.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

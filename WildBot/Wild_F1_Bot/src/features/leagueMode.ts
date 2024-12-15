@@ -1,0 +1,1 @@
+export const LEAGUE_MODE = process.env.LEAGUE_MODE === 'true';
