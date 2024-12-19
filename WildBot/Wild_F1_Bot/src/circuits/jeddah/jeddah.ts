@@ -4,31 +4,31 @@ import {Circuit, CircuitInfo, Direction} from "../Circuit";
 const JEDDAH_INFO: CircuitInfo = {
     finishLine: {
         bounds: {
-            minX: 1300,
-            maxX: 1330,
-            minY: -535,
-            maxY: -290
+            minX: 470,
+            maxX: 502,
+            minY: -160,
+            maxY: 201
         },
         passingDirection: Direction.LEFT
     },
-    name: "Jeddah Corniche Circuit",
+    name: "Jeddah Street Circuit - By Ximb",
     boxLine: {
-        minX: 1340,
-        maxX: 1940,
-        minY: -290,
-        maxY: -180
+        minX: 470,
+        maxX: 1424,
+        minY: 100,
+        maxY: 201
     },
     pitlaneStart: {
-        minX: 2151,
-        maxX: 2257,
-        minY: -378,
-        maxY: -368
+        minX: 1482,
+        maxX: 1512,
+        minY: 10,
+        maxY: 150
     },
     pitlaneEnd: {
-        minX: 902,
-        maxX: 932,
-        minY: -175,
-        maxY: -117
+        minX: -395,
+        maxX: -365,
+        minY: 110,
+        maxY: 213
     },
     drsStart: [{
         minX: 0,

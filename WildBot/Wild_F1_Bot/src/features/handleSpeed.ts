@@ -153,10 +153,10 @@ export function controlPlayerSpeed(playersAndDiscs: {
 
         const isUsingErsInco = playerList[p.id].kers <= 0 && player.disc.damping === 0.986;
 
-        const hasJumpedStart = detectStartJump(p, properties, room);
+        // const hasJumpedStart = detectStartJump(p, properties, room);
 
         const gripMultiplier: any = calculateGripMultiplierForConditions(
-            p, playerInfo.tires, playerInfo.wear, norm, player.disc, hasSlipstream, isUsingErsInco, hasJumpedStart
+            p, playerInfo.tires, playerInfo.wear, norm, player.disc, hasSlipstream, isUsingErsInco
         );
 
         // Pit Lane or VSC
@@ -209,7 +209,7 @@ export function controlPlayerSpeed(playersAndDiscs: {
     });
 }
 
-function calculateGripMultiplierForConditions(player: PlayerObject, tyres: Tires, wear: number, norm: Number, playerDisc: DiscPropertiesObject, hasSlipstream: boolean, isUsingErsInco: boolean, hasJumpedStart: boolean) {
+function calculateGripMultiplierForConditions(player: PlayerObject, tyres: Tires, wear: number, norm: Number, playerDisc: DiscPropertiesObject, hasSlipstream: boolean, isUsingErsInco: boolean) {
     const p = playerList[player.id]
     if (playerList.inPitLane || vsc) {
         return;
@@ -219,10 +219,6 @@ function calculateGripMultiplierForConditions(player: PlayerObject, tyres: Tires
         }
         if (isUsingErsInco){
             NORMAL_SPEED + ERS_PENALTY
-        }
-
-        if (hasJumpedStart){
-            NORMAL_SPEED + JUMP_START_PENALTY
         }
         return NORMAL_SPEED;
     }else if(!isRaining) {
@@ -235,10 +231,6 @@ function calculateGripMultiplierForConditions(player: PlayerObject, tyres: Tires
         }
         if (isUsingErsInco){
             grip += ERS_PENALTY
-        }
-
-        if (hasJumpedStart){
-            grip += JUMP_START_PENALTY
         }
 
         return grip;
@@ -388,42 +380,42 @@ export function handlePitlane(playersAndDiscs: { p: PlayerObject, disc: DiscProp
     })
 }
 
-function detectStartJump(
-    p: PlayerObject, disc: DiscPropertiesObject,
-    room: RoomObject
-  ): boolean {
-    const scores = room.getScores();
-    if (!scores) return false;
+// function detectStartJump(
+//     p: PlayerObject, disc: DiscPropertiesObject,
+//     room: RoomObject
+//   ): boolean {
+//     const scores = room.getScores();
+//     if (!scores) return false;
 
     
     
-    const reactionTimeTooFast = scores.time > 0 && scores.time < 0.05;
-    const playerMoving = disc.xspeed != 0 || disc.yspeed != 0;
-    const playerData = playerList[p.id];
+//     const reactionTimeTooFast = scores.time > 0 && scores.time < 0.05;
+//     const playerMoving = disc.xspeed != 0 || disc.yspeed != 0;
+//     const playerData = playerList[p.id];
   
-    if (!playerData) return false; 
+//     if (!playerData) return false; 
 
-    if(reactionTimeTooFast){
-        console.log(disc.xspeed, disc.yspeed);
-    }
+//     if(reactionTimeTooFast){
+//         console.log(disc.xspeed, disc.yspeed);
+//     }
 
-    if(scores.time == 0){
-        room.setPlayerDiscProperties(p.id, {
-            xspeed: 0,
-            yspeed: 0
-        })
-        return false;
-    }
-    if (playerData.penaltyCounter > 0) {
-      playerData.penaltyCounter -= 1;
-      return true;
-    }
+//     if(scores.time == 0){
+//         room.setPlayerDiscProperties(p.id, {
+//             xspeed: 0,
+//             yspeed: 0
+//         })
+//         return false;
+//     }
+//     if (playerData.penaltyCounter > 0) {
+//       playerData.penaltyCounter -= 1;
+//       return true;
+//     }
   
-    if (reactionTimeTooFast && playerMoving) {
-      playerData.penaltyCounter = 120;
-      return true;
-    }
-    playerData.penaltyCounter = 0;
-    return false;
-  }
+//     if (reactionTimeTooFast && playerMoving) {
+//       playerData.penaltyCounter = 120;
+//       return true;
+//     }
+//     playerData.penaltyCounter = 0;
+//     return false;
+//   }
   

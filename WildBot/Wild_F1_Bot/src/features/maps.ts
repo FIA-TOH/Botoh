@@ -12,26 +12,33 @@ import {AUSTIN} from "../circuits/austin/austin";
 import {MONZA} from "../circuits/monza/monza";
 import {CANADA} from "../circuits/canada/canada";
 import {SEPANG} from "../circuits/sepang/sepang";
+import {BAHRAIN} from "../circuits/bahrain/bahrain";
+import {VALENCIA} from "../circuits/valencia/valencia";
+import {SILVERSTONE} from "../circuits/silverstone/silverstone";
+import {MONACO} from "../circuits/monaco/monaco";
+import {SOCHI} from "../circuits/sochi/sochi";
+import {PAUL_RICARD} from "../circuits/paul_ricard/paul_ricard";
+import {ISTANBUL} from "../circuits/istanbul/istanbul";
+import {SUZUKA} from "../circuits/suzuka/suzuka";
+import {INDIANAPOLIS} from "../circuits/indianapolis/indianapolis";
+import {INTERLAGOS} from "../circuits/interlagos/interlagos";
+import {ARGENTINA} from "../circuits/argentina/argentina";
+import {MARINA_BAY} from "../circuits/marina_bay/marina_bay";
+import {JEDDAH} from "../circuits/jeddah/jeddah";
 
 // import {DAYTONA} from "../circuits/daytona/daytona";
-import {BAHRAIN} from "../circuits/bahrain/bahrain";
 // import {BARCELONA} from "../circuits/barcelona/barcelona";
-// import {JEDDAH} from "../circuits/jeddah/jeddah";
-// import {MONACO} from "../circuits/monaco/monaco";
 // import {MACAU} from "../circuits/macau/macau";
-// import {SUZUKA} from "../circuits/suzuka/suzuka";
 // import {WALES} from "../circuits/wales/wales";
 // import {AUSTRIA} from "../circuits/austria/austria";
 // import {NETHERLANDS} from "../circuits/netherlands/netherlands";
-// import {INTERLAGOS} from "../circuits/interlagos/interlagos";
-// import {SILVERSTONE} from "../circuits/silverstone/silverstone";
 // import {ABU_DHABI} from "../circuits/abu_dhabi/abu_dhabi";
 // import {ALGARVE} from "../circuits/algarve/algarve";
 // import {HUNGARY} from "../circuits/hungary/hungary";
 // import {TARNOW} from "../circuits/tarnow/tarnow";
-// import {VALENCIA} from "../circuits/valencia/valencia";
+
 export const CIRCUITS: Circuit[] = [
-    MELBOURNE, BAKU, SPA, IMOLA, NURBURGRING, SHANGHAI, AUSTIN, MONZA, CANADA, SEPANG, BAHRAIN
+    SUZUKA, MELBOURNE, BAKU, SPA, IMOLA, NURBURGRING, SHANGHAI, AUSTIN, MONZA, CANADA, SEPANG, BAHRAIN, VALENCIA, SILVERSTONE, MONACO, SOCHI, PAUL_RICARD, ISTANBUL, INTERLAGOS, ARGENTINA, MARINA_BAY, JEDDAH, INDIANAPOLIS
 ]
 
 

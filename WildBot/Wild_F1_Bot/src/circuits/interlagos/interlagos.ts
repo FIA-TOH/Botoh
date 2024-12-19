@@ -1,34 +1,35 @@
+import { bestTimes } from "../bestTimes";
 import {Circuit, CircuitInfo, Direction} from "../Circuit";
 import interlagos_json from "./interlagos.json";
 
 const INTERLAGOS_INFO: CircuitInfo = {
     finishLine: {
         bounds: {
-            minX: 0,
-            maxX: 30,
-            minY: -167,
-            maxY: 20
+            minX: -100,
+            maxX: -75,
+            minY: -24,
+            maxY: 224
         },
         passingDirection: Direction.RIGHT
     },
-    name: "Autodromo de Interlagos",
+    name: "Autodromo Interlagos - By Ximb",
     boxLine: {
-        minX: -920,
-        maxX: -200,
-        minY: 20,
-        maxY: 140
+        minX: -1100,
+        maxX: -100,
+        minY: -100,
+        maxY: -24
     },
     pitlaneStart: {
-        minX: -1136,
-        maxX: -1106,
-        minY: -25,
-        maxY: 15
+        minX: -1601,
+        maxX: -1571,
+        minY: -71,
+        maxY: 36
     },
     pitlaneEnd: {
-        minX: 220,
-        maxX: 280,
-        minY: -17,
-        maxY: 13
+        minX: 438,
+        maxX: 468,
+        minY: -61,
+        maxY: 33
     },
     drsStart: [{
         minX: 0,
@@ -46,7 +47,13 @@ const INTERLAGOS_INFO: CircuitInfo = {
     lastPlace: {
         x: interlagos_json.redSpawnPoints[interlagos_json.redSpawnPoints.length - 1][0],
         y: interlagos_json.redSpawnPoints[interlagos_json.redSpawnPoints.length - 1][1],
-    }
+    },
+    BestTime: bestTimes.interlagos,
+    MainColor: [0x10a100, 0xffff00, 0x10a100],
+    AvatarColor: 0x00008C,
+    Angle: 90,
+    Limit: 5,
+    Votes: 0,
 }
 
 export const INTERLAGOS: Circuit = {

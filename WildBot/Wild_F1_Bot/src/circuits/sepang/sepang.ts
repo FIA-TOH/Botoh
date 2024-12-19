@@ -1,3 +1,4 @@
+import { bestTimes } from "../bestTimes";
 import {Circuit, CircuitInfo, Direction} from "../Circuit";
 import sepang_json from "./sepang.json";
 
@@ -62,7 +63,13 @@ const SEPANG_INFO: CircuitInfo = {
     lastPlace: {
         x: sepang_json.redSpawnPoints[sepang_json.redSpawnPoints.length - 1][0],
         y: sepang_json.redSpawnPoints[sepang_json.redSpawnPoints.length - 1][1],
-    }
+    },
+    BestTime: bestTimes.sepang,
+    MainColor: [0x009246, 0xffffff, 0xce2b37],
+    AvatarColor: 0x000000,
+    Angle: 0,
+    Limit: 5,
+    Votes: 0,
 }
 
 export const SEPANG: Circuit = {

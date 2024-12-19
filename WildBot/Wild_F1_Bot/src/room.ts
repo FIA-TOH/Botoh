@@ -25,6 +25,7 @@ import { resetAllRainEvents, setRainChances } from "./features/rain";
 import { updateErs } from "./features/ers";
 import { Circuit } from "./circuits/Circuit";
 import { handleAvatar } from "./features/handleAvatar";
+import { handleSuzukaTp } from "./features/handleSuzukaTp";
 
 
 const BAN_LIST = bans
@@ -39,7 +40,12 @@ export const room = HBInit({
     public: !LEAGUE_MODE,
     maxPlayers: maxPlayers,
     password: roomPassword ?? undefined,
-    token: 'thr1.AAAAAGdDS0jEIWnS04qeVA.1F4ha2154X8'
+    token: 'thr1.AAAAAGdDS0jEIWnS04qeVA.1F4ha2154X8',
+    geo: {
+        "code": "BR",
+        "lat": -23.55052,
+        "lon": -46.633308
+    }
 })
 
 if (!LEAGUE_MODE) {
@@ -70,10 +76,11 @@ room.onGameTick = function () {
     checkPlayerLaps(playersAndDiscs, room)
     endRaceSession(playersAndDiscs, room)
     logPlayerSpeed(playersAndDiscs, room)
-    updateErs(playersAndDiscs, room)
+    updateErs(playersAndDiscs, room),
     players.forEach(pad => { 
         const p = pad.p
         handleTireWear(p, room)
+        handleSuzukaTp(pad, room)
     })
 }
 
@@ -339,14 +346,14 @@ function checkAdminsAFK() {
         const id = Number(idStr)
         if (isNaN(id)) continue
         afkAdmins[id] = afkAdmins[id] + 1
-        if (afkAdmins[id] >= MAX_AFK_TICKS) {
-            log(`Admin ${room.getPlayer(Number(id)).name}[${id}] is AFK for too long, removing admin status`)
-            room.setPlayerAdmin(Number(id), false)
-            delete afkAdmins[id]
-        } else if (afkAdmins[id] === MAX_AFK_WARNING_TICKS) {
-            log("Removing admin status in 5 seconds or " + MAX_AFK_WARNING_TICKS + " ticks")
-            sendErrorMessage(room, MESSAGES.ADMIN_AFK_WARNING(), id)
-        }
+        // if (afkAdmins[id] >= MAX_AFK_TICKS) {
+        //     log(`Admin ${room.getPlayer(Number(id)).name}[${id}] is AFK for too long, removing admin status`)
+        //     room.setPlayerAdmin(Number(id), false)
+        //     delete afkAdmins[id]
+        // } else if (afkAdmins[id] === MAX_AFK_WARNING_TICKS) {
+        //     log("Removing admin status in 5 seconds or " + MAX_AFK_WARNING_TICKS + " ticks")
+        //     sendErrorMessage(room, MESSAGES.ADMIN_AFK_WARNING(), id)
+        // }
     }
 }
 

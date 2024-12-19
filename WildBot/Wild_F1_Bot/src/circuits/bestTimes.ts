@@ -15,15 +15,17 @@ export const bestTimes = {
     canada: [31.6, "Ximbastian Vettel"], //Canada D.
     austin: [51.050, "Schumacchio"], //Austin D.
     shanghai: [41.4, "Ximbastian Vettel"], //Shangai D.
-    suzuka: [999.999, undefined], //Suzuka D.
+    suzuka: [999.999, "undefined"], //Suzuka D.
     interlagos: [33.800, "Schumacchio"], //Interlagos D.
     
     baku: [48.100, "Ximbastian Vettel"], //Baku
     argentina: [43.250, "Ximbastian Vettel"], //Argentina D.
     marinaBay: [49.900, "Ximbastian Vettel"], //Marina Bay D.
-    jeddah: [999.999, undefined], //Jeddah D.
-    yasMarina: [999.999, undefined], //Yas Marina
-    hockenheimring: [999.999, undefined], //Hockenheimring
-    fuji: [999.999, undefined], //Fuji
-    hungaroing: [999.999, undefined], //Hungaroing
+    jeddah: [999.999, "undefined"], //Jeddah D.
+    yasMarina: [999.999, "undefined"], //Yas Marina
+    hockenheimring: [999.999, "undefined"], //Hockenheimring
+    fuji: [999.999, "undefined"], //Fuji
+    hungaroing: [999.999, "undefined"], //Hungaroing
+
+    indianapolis: [999.999, "undefined"]
   };

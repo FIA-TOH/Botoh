@@ -19,7 +19,7 @@ export let drsOn = false
 
 export function enableDRS(room: RoomObject) {
     drsOn = true
-    sendNonLocalizedSmallChatMessage(room, "DRS ENABLED")
+    // sendNonLocalizedSmallChatMessage(room, "DRS ENABLED")
 }
 
 export function checkPlayersDRSZone(playersAndDiscs: {

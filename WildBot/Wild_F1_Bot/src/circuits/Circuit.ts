@@ -32,7 +32,7 @@ export interface CircuitInfo {
     AvatarColor?: number,
     Angle?: number,
     Limit?: number,
-    Votes?: number
+    Votes?: number,
 }
 
 export interface Circuit {

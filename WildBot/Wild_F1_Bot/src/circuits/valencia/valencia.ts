@@ -1,3 +1,4 @@
+import { bestTimes } from "../bestTimes";
 import {Circuit, CircuitInfo, Direction} from "../Circuit";
 import valencia_json from "./valencia.json";
 
@@ -5,58 +6,58 @@ import valencia_json from "./valencia.json";
 const VALENCIA_INFO: CircuitInfo = {
     finishLine: {
         bounds: {
-            minX: -167,
-            maxX: -17,
-            minY: -222,
-            maxY: -192
+            minX: -215,
+            maxX: 210,
+            minY: 68,
+            maxY: 100
         },
         passingDirection: Direction.UP
     },
-    name: "Valencia Street Circuit",
+    name: "Valencia Street Circuit - By Ximb",
     boxLine: {
-        minX: 45,
-        maxX: 75,
-        minY: -100,
-        maxY: 620
+        minX: 85,
+        maxX: 200,
+        minY: 130,
+        maxY: 714
     },
     pitlaneStart: {
-        minX: -12,
-        maxX: 18,
-        minY: 717,
-        maxY: 753
+        minX: 18,
+        maxX: 200,
+        minY: 730,
+        maxY: 760
     },
     pitlaneEnd: {
-        minX: 2,
-        maxX: 32,
-        minY: -339,
-        maxY: -258
+        minX: 10,
+        maxX: 125,
+        minY: -436,
+        maxY: -406
     },
     drsStart: [
         {
-            minX: 653,
-            maxX: 623,
-            minY: 965,
-            maxY: 1206,
+            minX: 0,
+            maxX: 0,
+            minY: 0,
+            maxY: 0,
         },
         {
-            minX: -654,
-            maxX: -684,
-            minY: 136,
-            maxY: 832,
+            minX: 0,
+            maxX: 0,
+            minY: 0,
+            maxY: 0,
         }
     ],
     drsEnd: [
         {
-            minX: -62,
-            maxX: -32,
-            minY: 965,
-            maxY: 1206,
+            minX: 0,
+            maxX: 0,
+            minY: 0,
+            maxY: 0,
         },
         {
-            minX: -1645,
-            maxX: -1615,
-            minY: 136,
-            maxY: 832,
+            minX: 0,
+            maxX: 0,
+            minY: 0,
+            maxY: 0,
         },
         
     ],
@@ -64,7 +65,13 @@ const VALENCIA_INFO: CircuitInfo = {
     lastPlace: {
         x: valencia_json.redSpawnPoints[valencia_json.redSpawnPoints.length - 1][0],
         y: valencia_json.redSpawnPoints[valencia_json.redSpawnPoints.length - 1][1],
-    }
+    },
+    BestTime: bestTimes.valencia,
+    MainColor: [0xc60b1e, 0xffc400, 0xc60b1e],
+    AvatarColor: 0xffffff,
+    Angle: 90,
+    Limit: 5,
+    Votes: 0,
 }
 
 export const VALENCIA: Circuit = {

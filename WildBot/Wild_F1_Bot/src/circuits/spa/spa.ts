@@ -26,10 +26,10 @@ const SPA_INFO: CircuitInfo = {
         maxY: -808
     },
     pitlaneEnd: {
-        minX: -3437,
-        maxX: -3225,
-        minY: -1163,
-        maxY: -1133
+        minX: -1203,
+        maxX: -1173,
+        minY: -1045,
+        maxY: -954
     },
     drsStart: [{
         minX: 0,

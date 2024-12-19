@@ -1,5 +1,6 @@
 import bahrain_json from "./bahrain.json"
 import {Circuit, CircuitInfo, Direction} from "../Circuit";
+import { bestTimes } from "../bestTimes";
 
 const BAHRAIN_INFO: CircuitInfo = {
     finishLine: {
@@ -46,7 +47,13 @@ const BAHRAIN_INFO: CircuitInfo = {
     lastPlace: {
         x: bahrain_json.redSpawnPoints[bahrain_json.redSpawnPoints.length - 1][0],
         y: bahrain_json.redSpawnPoints[bahrain_json.redSpawnPoints.length - 1][1],
-    }
+    },
+    BestTime: bestTimes.bahrein,
+    MainColor: [0xffffff, 0xe90018, 0xe90018],
+    AvatarColor: 0xf4d008,
+    Angle: 0,
+    Limit: 5,
+    Votes: 0,
 }
 export const BAHRAIN: Circuit = {
     map: JSON.stringify(bahrain_json),
