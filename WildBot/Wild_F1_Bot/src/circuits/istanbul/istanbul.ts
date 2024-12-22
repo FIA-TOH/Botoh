@@ -7,7 +7,7 @@ const ISTANBUL_INFO: CircuitInfo = {
         bounds: {
             minX: -100,
             maxX: -84,
-            minY: 6,
+            minY: -95,
             maxY: 269
         },
         passingDirection: Direction.RIGHT

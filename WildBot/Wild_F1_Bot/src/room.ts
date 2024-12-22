@@ -52,12 +52,6 @@ if (!LEAGUE_MODE) {
     setInterval(() => {
         sendChatMessage(room, MESSAGES.DISCORD_INVITE())
     }, 10 * 60 * 1000);
-
-    setTimeout(
-        () => setInterval(() => {
-            sendChatMessage(room, MESSAGES.LEAGUE_INVITE())
-        }, 10 * 60 * 1000),
-        5 * 60 * 1000);
 }
 
 room.setScoreLimit(0)
@@ -72,10 +66,10 @@ room.onGameTick = function () {
     const players = getRunningPlayers(playersAndDiscs)
     handlePitlane(playersAndDiscs, room)
     controlPlayerSpeed(playersAndDiscs, room)
-    checkPlayersDRSZone(playersAndDiscs, room)
+    // checkPlayersDRSZone(playersAndDiscs, room)
     checkPlayerLaps(playersAndDiscs, room)
     endRaceSession(playersAndDiscs, room)
-    logPlayerSpeed(playersAndDiscs, room)
+    // logPlayerSpeed(playersAndDiscs, room)
     updateErs(playersAndDiscs, room),
     players.forEach(pad => { 
         const p = pad.p
@@ -142,6 +136,9 @@ room.onGameStop = function (byPlayer) {
     } else {
         printAllPositions(room)
         movePlayersToCorrectSide()
+        sendChatMessage(room, MESSAGES.EXPLAIN_TYRES())
+        sendChatMessage(room, MESSAGES.EXPLAIN_ERS())
+        sendChatMessage(room, MESSAGES.DISCORD_INVITE())
     }
 
     setRainChances(0)

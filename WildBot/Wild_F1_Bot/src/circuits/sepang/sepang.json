@@ -108,8 +108,8 @@
 		 { "x" : -417, "y" : -176, "cGroup" : ["redKO","blueKO" ] },
 		 { "x" : -1150, "y" : -176, "cGroup" : ["redKO","blueKO" ] },
 		 { "x" : 1226, "y" : -345, "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["redKO","blueKO" ], "color" : "333333" },
-		 { "x" : 133, "y" : -345, "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["redKO","blueKO" ], "_selected" : "segment" },
-		 { "x" : 133, "y" : -253, "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["redKO","blueKO" ], "_selected" : "segment" },
+		 { "x" : 133, "y" : -345, "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["redKO","blueKO" ] },
+		 { "x" : 133, "y" : -253, "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["redKO","blueKO" ] },
 		 { "x" : 242.3, "y" : -345, "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["redKO","blueKO" ] },
 		 { "x" : 242.3, "y" : -253, "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["redKO","blueKO" ] },
 		 { "x" : 351.6, "y" : -345, "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["redKO","blueKO" ] },
@@ -247,7 +247,8 @@
 		 { "x" : -595, "y" : -176, "cGroup" : ["redKO","blueKO" ] },
 		 { "x" : -563, "y" : -176, "cGroup" : ["redKO","blueKO" ] },
 		 { "x" : -517, "y" : -176, "cGroup" : ["redKO","blueKO" ] },
-		 { "x" : -485, "y" : -176, "cGroup" : ["redKO","blueKO" ] }
+		 { "x" : -485, "y" : -176, "cGroup" : ["redKO","blueKO" ] },
+		 { "x" : 774, "y" : 338, "cMask" : ["red","blue","ball","c0" ] }
 
 	],
 
@@ -331,7 +332,7 @@
 		{ "v0" : 92, "v1" : 56, "curve" : 0, "color" : "ffffff", "cGroup" : ["redKO","blueKO" ] },
 		{ "v0" : 89, "v1" : 94, "curve" : 0, "color" : "333333", "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["redKO","blueKO" ] },
 		{ "v0" : 94, "v1" : 95, "curve" : 0, "color" : "333333", "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["red" ] },
-		{ "v0" : 95, "v1" : 96, "curve" : 0, "color" : "333333", "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["redKO","blueKO" ], "_selected" : true },
+		{ "v0" : 95, "v1" : 96, "curve" : 0, "color" : "333333", "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["redKO","blueKO" ] },
 		{ "v0" : 97, "v1" : 98, "curve" : 0, "color" : "333333", "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["redKO","blueKO" ], "x" : 242.3 },
 		{ "v0" : 99, "v1" : 100, "curve" : 0, "color" : "333333", "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["redKO","blueKO" ], "x" : 351.6 },
 		{ "v0" : 101, "v1" : 102, "curve" : 0, "color" : "333333", "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["redKO","blueKO" ], "x" : 460.9 },
@@ -441,7 +442,8 @@
 		{ "v0" : 225, "v1" : 226, "curve" : 0, "color" : "ffffff", "cGroup" : ["redKO","blueKO" ], "y" : -176 },
 		{ "v0" : 227, "v1" : 228, "curve" : 0, "color" : "ffffff", "cGroup" : ["redKO","blueKO" ], "y" : -176 },
 		{ "v0" : 229, "v1" : 230, "curve" : 0, "color" : "ffffff", "cGroup" : ["redKO","blueKO" ], "y" : -176 },
-		{ "v0" : 231, "v1" : 232, "curve" : 0, "color" : "ffffff", "cGroup" : ["redKO","blueKO" ], "y" : -176 }
+		{ "v0" : 231, "v1" : 232, "curve" : 0, "color" : "ffffff", "cGroup" : ["redKO","blueKO" ], "y" : -176 },
+		{ "v0" : 233, "v1" : 209, "curve" : 11.666445805311973, "color" : "fcd014", "cMask" : ["red","blue","ball","c0" ] }
 
 	],
 
@@ -570,7 +572,8 @@
 		{ "radius" : 5, "invMass" : 0, "pos" : [1366,60 ], "color" : "555555", "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ] },
 		{ "radius" : 5, "invMass" : 0, "pos" : [1331,283 ], "color" : "CC0000", "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ] },
 		{ "radius" : 5, "invMass" : 0, "pos" : [454,-1575 ], "color" : "CC0000", "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ] },
-		{ "radius" : 5, "invMass" : 0, "pos" : [58,-297 ], "color" : "1a237a", "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ] }
+		{ "radius" : 5, "invMass" : 0, "pos" : [58,-297 ], "color" : "1a237a", "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ] },
+		{ "radius" : 5, "invMass" : 0, "pos" : [774,340 ], "color" : "CC0000", "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ] }
 
 	],
 
@@ -622,47 +625,46 @@
 	],
 
 	"redSpawnPoints" : [
-
 		[ 193, -70
-	],
-	[ 225, -130
-	],
-	[ 250, -70
-	],
-	[ 280, -130
-	],
-	[ 310, -70
-	],
-	[ 345, -130
-	],
-	[ 375, -70
-	],
-	[ 405, -130
-	],
-	[ 435, -70
-	],
-	[ 465, -130
-	],
-	[ 495, -70
-	],
-	[ 525, -130
-	],
-	[ 555, -70
-	],
-	[ 585, -130
-	],
-	[ 625, -70
-	],
-	[ 650, -130
-	],
-	[ 680, -70
-	],
-	[ 710, -130
-	],
-	[ 740, -70
-	],
-	[ 770, -130
-	]
+		],
+		[ 225, -130
+		],
+		[ 250, -70
+		],
+		[ 280, -130
+		],
+		[ 310, -70
+		],
+		[ 345, -130
+		],
+		[ 375, -70
+		],
+		[ 405, -130
+		],
+		[ 435, -70
+		],
+		[ 465, -130
+		],
+		[ 495, -70
+		],
+		[ 525, -130
+		],
+		[ 555, -70
+		],
+		[ 585, -130
+		],
+		[ 625, -70
+		],
+		[ 650, -130
+		],
+		[ 680, -70
+		],
+		[ 710, -130
+		],
+		[ 740, -70
+		],
+		[ 770, -130
+		]
 
 	],
 

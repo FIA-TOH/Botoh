@@ -7,7 +7,7 @@ const SPA_INFO: CircuitInfo = {
         bounds: {
             minX: -2963,
             maxX: -2932,
-            minY: -1018,
+            minY: -1120,
             maxY: -747
         },
         passingDirection: Direction.LEFT
@@ -20,16 +20,16 @@ const SPA_INFO: CircuitInfo = {
         maxY: -1018
     },
     pitlaneStart: {
-        minX: -945,
-        maxX: -244,
-        minY: -838,
-        maxY: -808
+        minX: -1022,
+        maxX: -1092,
+        minY: -1107,
+        maxY: -953
     },
     pitlaneEnd: {
-        minX: -1203,
-        maxX: -1173,
-        minY: -1045,
-        maxY: -954
+        minX: -945,
+        maxX: -915,
+        minY: -1215,
+        maxY: -960
     },
     drsStart: [{
         minX: 0,

@@ -7,7 +7,7 @@ const INTERLAGOS_INFO: CircuitInfo = {
         bounds: {
             minX: -100,
             maxX: -75,
-            minY: -24,
+            minY: -100,
             maxY: 224
         },
         passingDirection: Direction.RIGHT

@@ -8,7 +8,7 @@ const SUZUKA_INFO: CircuitInfo = {
             minX: 202,
             maxX: 232,
             minY: -225,
-            maxY: 60
+            maxY: 150
         },
         passingDirection: Direction.RIGHT
     },
@@ -29,7 +29,7 @@ const SUZUKA_INFO: CircuitInfo = {
         minX: 380,
         maxX: 410,
         minY: -26,
-        maxY: 60
+        maxY: 150
     },
     drsStart: [
         {

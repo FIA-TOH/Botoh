@@ -7,7 +7,7 @@ const SHANGHAI_INFO: CircuitInfo = {
         bounds: {
             minX: 84,
             maxX: 114,
-            minY: -83,
+            minY: -140,
             maxY: 216
         },
         passingDirection: Direction.LEFT

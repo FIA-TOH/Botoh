@@ -4,58 +4,58 @@ import hungary_json from "./hungary.json";
 const HUNGARY_INFO: CircuitInfo = {
     finishLine: {
         bounds: {
-            minX: 318,
-            maxX: 348,
-            minY: 71,
-            maxY: 204
+            minX: -26,
+            maxX: 4,
+            minY: -122,
+            maxY: 280
         },
         passingDirection: Direction.LEFT
     },
-    name: "Hungaroring by POPkORN",
+    name: "Hungaroring - By Ximb",
     boxLine: {
-        minX: 380,
-        maxX: 1100,
-        minY: -8,
-        maxY: 22
+        minX: 0,
+        maxX: 1000,
+        minY: -122,
+        maxY: -36
     },
     pitlaneStart: {
-        minX: 1155,
-        maxX: 1185,
-        minY: 5,
-        maxY: 41
+        minX: 1582,
+        maxX: 1612,
+        minY: -36,
+        maxY: 34
     },
     pitlaneEnd: {
-        minX: -893,
-        maxX: -768,
-        minY: 51,
-        maxY: 81
+        minX: -151,
+        maxX: -121,
+        minY: -122,
+        maxY: 34
     },
     drsStart: [
         {
-            minX: 1118,
-            maxX: 1088,
-            minY: 71,
-            maxY: 204,
+            minX: 0,
+            maxX: 0,
+            minY: 0,
+            maxY: 0,
         },
         {
-            minX: -1003,
-            maxX: -973,
-            minY: -319,
-            maxY: -100,
+            minX: 0,
+            maxX: 0,
+            minY: 0,
+            maxY: 0,
         }
     ],
     drsEnd: [
         {
-            minX: -718,
-            maxX: -748,
-            minY: 71,
-            maxY: 204,
+            minX: 0,
+            maxX: 0,
+            minY: 0,
+            maxY: 0,
         },
         {
-            minX: -182,
-            maxX: -212,
-            minY: -319,
-            maxY: -100,
+            minX: 0,
+            maxX: 0,
+            minY: 0,
+            maxY: 0,
         }
     ],
     checkpoints: [],

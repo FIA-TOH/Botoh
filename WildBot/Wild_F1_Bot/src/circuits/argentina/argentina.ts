@@ -7,7 +7,7 @@ const ARGENTINA_INFO: CircuitInfo = {
     finishLine: {
         bounds: {
             minX: -637,
-            maxX: -368,
+            maxX: -280,
             minY: 18,
             maxY: 50
         },

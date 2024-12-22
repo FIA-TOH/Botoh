@@ -25,6 +25,10 @@ import {INTERLAGOS} from "../circuits/interlagos/interlagos";
 import {ARGENTINA} from "../circuits/argentina/argentina";
 import {MARINA_BAY} from "../circuits/marina_bay/marina_bay";
 import {JEDDAH} from "../circuits/jeddah/jeddah";
+import {ABU_DHABI} from "../circuits/abu_dhabi/abu_dhabi";
+import {HOCKEN} from "../circuits/hocken/hocken";
+import {FUJI} from "../circuits/fuji/fuji";
+import {HUNGARY} from "../circuits/hungary/hungary";
 
 // import {DAYTONA} from "../circuits/daytona/daytona";
 // import {BARCELONA} from "../circuits/barcelona/barcelona";
@@ -32,13 +36,11 @@ import {JEDDAH} from "../circuits/jeddah/jeddah";
 // import {WALES} from "../circuits/wales/wales";
 // import {AUSTRIA} from "../circuits/austria/austria";
 // import {NETHERLANDS} from "../circuits/netherlands/netherlands";
-// import {ABU_DHABI} from "../circuits/abu_dhabi/abu_dhabi";
 // import {ALGARVE} from "../circuits/algarve/algarve";
-// import {HUNGARY} from "../circuits/hungary/hungary";
 // import {TARNOW} from "../circuits/tarnow/tarnow";
 
 export const CIRCUITS: Circuit[] = [
-    SUZUKA, MELBOURNE, BAKU, SPA, IMOLA, NURBURGRING, SHANGHAI, AUSTIN, MONZA, CANADA, SEPANG, BAHRAIN, VALENCIA, SILVERSTONE, MONACO, SOCHI, PAUL_RICARD, ISTANBUL, INTERLAGOS, ARGENTINA, MARINA_BAY, JEDDAH, INDIANAPOLIS
+    SUZUKA, MELBOURNE, BAKU, SPA, IMOLA, NURBURGRING, SHANGHAI, AUSTIN, MONZA, CANADA, SEPANG, BAHRAIN, VALENCIA, SILVERSTONE, MONACO, SOCHI, PAUL_RICARD, ISTANBUL, INTERLAGOS, ARGENTINA, MARINA_BAY, JEDDAH, ABU_DHABI, HOCKEN, FUJI, HUNGARY, INDIANAPOLIS
 ]
 
 

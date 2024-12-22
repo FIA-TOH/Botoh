@@ -6,7 +6,7 @@ import marina_bay_json from "./marina_bay.json";
 const MARINA_BAY_INFO: CircuitInfo = {
     finishLine: {
         bounds: {
-            minX: -64,
+            minX: -155,
             maxX: 216,
             minY: -513,
             maxY: -482
@@ -29,8 +29,8 @@ const MARINA_BAY_INFO: CircuitInfo = {
     pitlaneEnd: {
         minX: -155,
         maxX: 15,
-        minY: -65,
-        maxY: -35
+        minY: -594,
+        maxY: -564
     },
     drsStart: [
         {

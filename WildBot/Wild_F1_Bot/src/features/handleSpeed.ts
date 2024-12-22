@@ -193,7 +193,7 @@ export function controlPlayerSpeed(playersAndDiscs: {
             });
             // Normal
         } else {   
-            if (norm > 6 || gripMultiplier !== undefined) {
+            if ((norm > 6 || gripMultiplier !== undefined) && tyresActivated) {
                 const newGravityX = -x * (1 - gripMultiplier);
                 const newGravityY = -y * (1 - gripMultiplier);
                 room.setPlayerDiscProperties(p.id, {
