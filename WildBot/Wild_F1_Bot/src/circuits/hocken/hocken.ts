@@ -67,7 +67,7 @@ const HOCKEN_INFO: CircuitInfo = {
         y: hocken_json.redSpawnPoints[hocken_json.redSpawnPoints.length - 1][1],
     },
     BestTime: bestTimes.hockenheimring,
-    MainColor: [0x000000, 0xed2939, 0xfae042],
+    MainColor: [0x000001, 0xed2939, 0xfae042],
     AvatarColor: 0xffffff,
     Angle: 90,
     Limit: 5,

@@ -96,8 +96,8 @@
 		 { "x" : 646, "y" : -1622, "bCoef" : 0, "cGroup" : ["redKO","blueKO" ], "color" : "ffffff" },
 		 { "x" : 1310, "y" : -532, "bCoef" : 0, "cGroup" : ["redKO","blueKO" ], "color" : "ce1126" },
 		 { "x" : 1224, "y" : -295, "bCoef" : 0, "cGroup" : ["redKO","blueKO" ], "color" : "ce1126" },
-		 { "x" : -620, "y" : -162, "bCoef" : 0, "cGroup" : ["redKO","blueKO" ], "color" : "ffffff" },
-		 { "x" : 1259, "y" : -164, "bCoef" : 0, "cGroup" : ["redKO","blueKO" ], "color" : "ffffff" },
+		 { "x" : -620, "y" : -162, "bCoef" : 0, "cGroup" : ["redKO","blueKO" ], "color" : "ffffff", "_selected" : "segment" },
+		 { "x" : 1259, "y" : -164, "bCoef" : 0, "cGroup" : ["redKO","blueKO" ], "color" : "ffffff", "_selected" : "segment" },
 
 		 { "x" : 1442, "y" : 74, "bCoef" : 0, "cGroup" : ["redKO","blueKO" ], "trait" : "kickOffBarrier", "color" : "ffffff" },
 		 { "x" : 1218, "y" : 74, "bCoef" : 0, "cGroup" : ["redKO","blueKO" ], "trait" : "kickOffBarrier", "color" : "ffffff" },
@@ -301,7 +301,7 @@
 		{ "v0" : 74, "v1" : 75, "color" : "ffffff", "bCoef" : 0, "cGroup" : ["redKO","blueKO" ] },
 		{ "v0" : 76, "v1" : 77, "color" : "ffffff", "bCoef" : 0, "cGroup" : ["redKO","blueKO" ] },
 		{ "v0" : 70, "v1" : 82, "color" : "ffffff", "bCoef" : 0, "cGroup" : ["redKO","blueKO" ] },
-		{ "v0" : 83, "v1" : 84, "color" : "ffffff", "bCoef" : 0, "cGroup" : ["redKO","blueKO" ] },
+		{ "v0" : 83, "v1" : 84, "color" : "ffffff", "bCoef" : 0, "cGroup" : ["redKO","blueKO" ], "_selected" : true },
 		{ "v0" : 72, "v1" : 83, "curve" : -115.0284773858319, "color" : "ffffff", "bCoef" : 0, "cGroup" : ["redKO","blueKO" ] },
 		{ "v0" : 82, "v1" : 81, "curve" : -137.5319842065486, "color" : "ce1126", "bCoef" : 0, "cGroup" : ["redKO","blueKO" ] },
 		{ "v0" : 84, "v1" : 79, "curve" : -119.63584835790418, "color" : "ffffff", "bCoef" : 0, "cGroup" : ["redKO","blueKO" ] },
@@ -548,7 +548,7 @@
 
 	"planes" : [
 		{ "normal" : [-1,0 ], "dist" : -1100, "bCoef" : 0, "cGroup" : ["redKO","blueKO" ] },
-		{ "normal" : [1,0 ], "dist" : 100, "bCoef" : 0, "cGroup" : ["redKO","blueKO" ] }
+		{ "normal" : [1,0 ], "dist" : 129, "bCoef" : 0, "cGroup" : ["redKO","blueKO" ] }
 
 	],
 
@@ -593,7 +593,6 @@
 	],
 
 	"redSpawnPoints" : [
-
 		[ 160, 180
 		],
 		[ 190, 120

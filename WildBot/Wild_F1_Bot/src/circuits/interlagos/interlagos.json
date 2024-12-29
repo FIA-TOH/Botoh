@@ -238,7 +238,7 @@
 		 { "x" : 948, "y" : 232, "bCoef" : 0, "cMask" : ["red","blue","c0" ], "cGroup" : ["red","blue","c0" ] },
 		 { "x" : -1798, "y" : 232, "bCoef" : 0, "cMask" : ["red","blue","c0" ], "cGroup" : ["red","blue","c0" ] },
 		 { "x" : -100, "y" : -24, "bCoef" : 0.25, "cMask" : ["red","blue","c0" ], "cGroup" : ["redKO","blueKO" ], "curve" : 0, "color" : "00923E" },
-		 { "x" : -100, "y" : -100, "bCoef" : 0.25, "cMask" : ["red","blue","c0" ], "cGroup" : ["redKO","blueKO" ], "curve" : 0, "color" : "333333", "_selected" : true },
+		 { "x" : -100, "y" : -100, "bCoef" : 0.25, "cMask" : ["red","blue","c0" ], "cGroup" : ["redKO","blueKO" ], "curve" : 0, "color" : "333333" },
 		 { "x" : -900, "y" : -24, "bCoef" : 0.25, "cMask" : ["red","blue","c0" ], "cGroup" : ["redKO","blueKO" ], "curve" : 0, "color" : "00923E" },
 		 { "x" : -900, "y" : -100, "bCoef" : 0.25, "cMask" : ["red","blue","c0" ], "cGroup" : ["redKO","blueKO" ], "curve" : 0, "color" : "333333" },
 		 { "x" : -800, "y" : -24, "bCoef" : 0.25, "cMask" : ["red","blue","c0" ], "cGroup" : ["redKO","blueKO" ], "curve" : 0, "color" : "00923E" },
@@ -474,8 +474,8 @@
 
 	"discs" : [
 		{ "radius" : 14, "pos" : [-7000,0 ], "color" : "28166F", "bCoef" : 10, "cMask" : ["ball" ], "damping" : 1, "speed" : [5.4,0 ] },
-		{ "radius" : 4, "invMass" : 0.1, "pos" : [0,190 ], "color" : "ffffff", "bCoef" : 100, "cMask" : ["ball" ], "cGroup" : ["ball" ], "damping" : 1, "speed" : [0,-0.054 ] },
-		{ "radius" : 4, "invMass" : 0.1, "pos" : [0,40 ], "color" : "ffffff", "bCoef" : 100, "cMask" : ["ball" ], "cGroup" : ["red","blue","c0" ], "damping" : 1, "speed" : [0,0.054 ] },
+		{ "radius" : 4, "invMass" : 0.1, "pos" : [0,190 ], "color" : "ffffff", "bCoef" : 100, "cMask" : ["ball" ], "cGroup" : ["ball" ], "damping" : 1, "speed" : [0,-0.0535 ] },
+		{ "radius" : 4, "invMass" : 0.1, "pos" : [0,40 ], "color" : "ffffff", "bCoef" : 100, "cMask" : ["ball" ], "cGroup" : ["red","blue","c0" ], "damping" : 1, "speed" : [0,0.0535 ] },
 		{ "radius" : 10, "invMass" : 0, "pos" : [-1595.727294921875,214.9146728515625 ], "color" : "555555", "bCoef" : 0, "cMask" : ["red","blue","c0" ], "cGroup" : ["red","blue","c0" ] },
 		{ "radius" : 10, "invMass" : 0, "pos" : [-884.727294921875,212.9146728515625 ], "color" : "555555", "bCoef" : 0, "cMask" : ["red","blue","c0" ], "cGroup" : ["red","blue","c0" ] },
 		{ "radius" : 10, "invMass" : 0, "pos" : [-230.727294921875,211.9146728515625 ], "color" : "555555", "bCoef" : 0, "cMask" : ["red","blue","c0" ], "cGroup" : ["red","blue","c0" ] },
@@ -546,7 +546,7 @@
 
 	"planes" : [
 		{ "normal" : [0,1 ], "dist" : 40, "bCoef" : 0, "cGroup" : ["redKO","blueKO" ] },
-		{ "normal" : [-1,0 ], "dist" : 100, "bCoef" : 0, "cGroup" : ["redKO","blueKO" ] },
+		{ "normal" : [-1,0 ], "dist" : 122, "bCoef" : 0, "cGroup" : ["redKO","blueKO" ], "_selected" : true },
 		{ "normal" : [1,0 ], "dist" : -1350, "bCoef" : 0, "cGroup" : ["redKO","blueKO" ] }
 
 	],

@@ -50,7 +50,7 @@ const MONZA_INFO: CircuitInfo = {
     },
     BestTime: bestTimes.monza,
     MainColor: [0x009246, 0xffffff, 0xce2b37],
-    AvatarColor: 0x000000,
+    AvatarColor: 0x000001,
     Angle: 0,
     Limit: 5,
     Votes: 0,

@@ -14,6 +14,7 @@ export function createPlayerInfo(ip?: string) {
         speedEnabled: false,
         isInTheRoom: true,
         inPitlane: false,
+        boxAlert: false,
         tires: Tires.SOFT,
         wear: 0,
         lapsOnCurrentTire: -1,
@@ -31,6 +32,7 @@ export function createPlayerInfo(ip?: string) {
         penaltyCounter: 0,
         afk: false,
         everyoneLaps: false,
+        voted: false
 
     }
 
@@ -42,21 +44,24 @@ export function resetPlayers(room: RoomObject) {
     })
 }
 
-export function resetPlayer(player: PlayerObject, room: RoomObject, id: number) {
+export function resetPlayer(player: PlayerObject, room: RoomObject, id: number, startingRace?: boolean) {
     if (playerList[id] === undefined) {
         playerList[id] = createPlayerInfo()
+    }
+    if(startingRace){
+        playerList[id].bestTime = Number.MAX_VALUE
     }
     playerList[id].currentLap = 0
     playerList[id].lapChanged = false
     playerList[id].lapTime = 0
     playerList[id].isInTheRoom = true
     playerList[id].inPitlane = false
+    playerList[id].boxAlert = false
     playerList[id].tires = Tires.SOFT
     playerList[id].showTires = true,
     playerList[id].wear = 0
     playerList[id].lapsOnCurrentTire = -1
     playerList[id].pits = 0
-    playerList[id].bestTime = Number.MAX_VALUE
     playerList[id].gripCounter = 0
     playerList[id].maxSpeed = TIRE_STARTING_SPEED[Tires.SOFT]
     playerList[id].drs = false
@@ -65,7 +70,7 @@ export function resetPlayer(player: PlayerObject, room: RoomObject, id: number) 
     playerList[id].slipstreamEndTime = undefined,
     playerList[id].kers = 100,
     playerList[id].penaltyCounter = 0,
-    playerList[id].afk = false,
+    playerList[id].voted = false,
 
     handleAvatar("ChangeTyre", player, room)
 

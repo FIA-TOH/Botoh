@@ -1,6 +1,6 @@
 {
 
-	"name" : "Spa-Francorchamps - By Ximb ",
+	"name" : "Spa-Francorchamps - By Ximb",
 
 	"width" : 4000,
 
@@ -668,7 +668,7 @@
 		{ "normal" : [-1,0 ], "dist" : -892.3489757932603, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
 		{ "normal" : [0,1 ], "dist" : -946, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
 		{ "normal" : [0,-1 ], "dist" : 784, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
-		{ "normal" : [1,0 ], "dist" : -2971, "bCoef" : 1, "cMask" : ["ball" ], "cGroup" : ["red","blue","ball" ] }
+		{ "normal" : [1,0 ], "dist" : -2931, "bCoef" : 1, "cMask" : ["ball" ], "cGroup" : ["red","blue","ball" ], "_selected" : true }
 
 	],
 

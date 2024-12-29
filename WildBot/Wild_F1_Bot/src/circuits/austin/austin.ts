@@ -6,7 +6,7 @@ const AUSTIN_INFO: CircuitInfo = {
     finishLine: {
         bounds: {
             minX: -2800,
-            maxX: -2515,
+            maxX: -2430,
             minY: -1315,
             maxY: -1285
         },

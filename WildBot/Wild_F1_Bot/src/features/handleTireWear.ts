@@ -5,12 +5,13 @@ import { Tires, TYRE_DURABILITY } from "./tires";
 import {laps} from "../features/laps";
 import { changeTires } from "./handleSpeed";
 import { tyresActivated } from "./handleCommands";
+import { qualiMode } from "./qualiMode";
 
 export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
     const p = playerList[player.id];
 
-    if (!tyresActivated) {
-        p.wear = 100;
+    if (!tyresActivated || qualiMode) {
+        p.wear = 20;
         return;
     }
 
@@ -30,6 +31,7 @@ export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
     const alerts = [
         { threshold: 90, message: MESSAGES.WEAR_ON_CURRENT_TIRE(90), key: 90 },
         { threshold: 75, message: MESSAGES.WEAR_ON_CURRENT_TIRE(75), key: 75 },
+        { threshold: 60, message: MESSAGES.WEAR_ON_CURRENT_TIRE(60), key: 60 },
         { threshold: 40, message: MESSAGES.WEAR_ON_CURRENT_TIRE(40), key: 40 },
         { threshold: 25, message: MESSAGES.WEAR_ON_CURRENT_TIRE(25), key: 25 },
         { threshold: 10, message: MESSAGES.WEAR_ON_CURRENT_TIRE(10), key: 10 },

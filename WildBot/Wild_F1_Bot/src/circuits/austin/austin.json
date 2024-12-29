@@ -483,8 +483,8 @@
 
 	"discs" : [
 		{ "pos" : [0,-7500 ], "color" : "cccccc", "bCoef" : 5, "cMask" : ["ball" ], "damping" : 1, "speed" : [0,5.1 ] },
-		{ "radius" : 4, "invMass" : 0.1, "pos" : [-2583,-1287 ], "color" : "ffffff", "bCoef" : 100, "cMask" : ["ball" ], "cGroup" : ["ball" ], "damping" : 1, "speed" : [-0.06,0 ], "_selected" : true },
-		{ "radius" : 4, "invMass" : 0.1, "pos" : [-2757,-1287 ], "color" : "ffffff", "bCoef" : 100, "cMask" : ["ball" ], "cGroup" : ["ball" ], "damping" : 1, "speed" : [0.06,0 ] },
+		{ "radius" : 4, "invMass" : 0.1, "pos" : [-2583,-1287 ], "color" : "ffffff", "bCoef" : 100, "cMask" : ["ball" ], "cGroup" : ["ball" ], "damping" : 1, "speed" : [-0.0557,0 ] },
+		{ "radius" : 4, "invMass" : 0.1, "pos" : [-2757,-1287 ], "color" : "ffffff", "bCoef" : 100, "cMask" : ["ball" ], "cGroup" : ["ball" ], "damping" : 1, "speed" : [0.0557,0 ] },
 		{ "radius" : 5, "invMass" : 0, "pos" : [-2550,-2178 ], "color" : "B31942", "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["ball" ] },
 		{ "radius" : 5, "invMass" : 0, "pos" : [-2555,619 ], "color" : "B31942", "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["ball" ] },
 		{ "radius" : 5, "invMass" : 0, "pos" : [-2522,649 ], "color" : "B31942", "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["ball" ] },
@@ -638,8 +638,8 @@
 	],
 
 	"planes" : [
-		{ "normal" : [0,-1 ], "dist" : 1075.703616, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
-		{ "normal" : [0,1 ], "dist" : -1980.259712, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+		{ "normal" : [0,1 ], "dist" : -1298.296384, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+		{ "normal" : [0,-1 ], "dist" : 1976.740288, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ], "_selected" : true },
 		{ "normal" : [1,0 ], "dist" : -2752.176512000001, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
 		{ "normal" : [-1,0 ], "dist" : 2589.176512000001, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] }
 

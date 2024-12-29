@@ -10,6 +10,7 @@ interface PlayerInfo {
     speedEnabled: boolean,
     isInTheRoom: boolean,
     inPitlane: boolean,
+    boxAlert: boolean | number,
     tires: Tires,
     wear: number,
     lapsOnCurrentTire: number,
@@ -26,6 +27,7 @@ interface PlayerInfo {
     penaltyCounter: number,
     afk: boolean,
     everyoneLaps: boolean,
+    voted: boolean
 }
 
 type PlayerList = {

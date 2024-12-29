@@ -12,7 +12,7 @@ const SPA_INFO: CircuitInfo = {
         },
         passingDirection: Direction.LEFT
     },
-    name: "Spa-Francorchamps - By Ximb ",
+    name: "Spa-Francorchamps - By Ximb",
     boxLine: {
         minX: -2960,
         maxX: -1670,
@@ -20,14 +20,14 @@ const SPA_INFO: CircuitInfo = {
         maxY: -1018
     },
     pitlaneStart: {
-        minX: -1022,
-        maxX: -1092,
+        minX: -1166,
+        maxX: -1036,
         minY: -1107,
         maxY: -953
     },
     pitlaneEnd: {
-        minX: -945,
-        maxX: -915,
+        minX: -3195,
+        maxX: -3165,
         minY: -1215,
         maxY: -960
     },
@@ -49,7 +49,7 @@ const SPA_INFO: CircuitInfo = {
         y: spa_json.redSpawnPoints[spa_json.redSpawnPoints.length - 1][1],
     },
     BestTime: bestTimes.spa,
-    MainColor: [0x000000, 0xfae042, 0xed2939],
+    MainColor: [0x000001, 0xfae042, 0xed2939],
     AvatarColor: 0xffffff,
     Angle: 0,
     Limit: 5,

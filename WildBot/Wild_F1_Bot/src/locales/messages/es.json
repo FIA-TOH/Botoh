@@ -9,6 +9,7 @@
   "FIVE_PERCENTAGE_TYRES": "❗ ¡Tus neumáticos están casi pinchados! ¡Solo queda un 5%! ❗",
   "TEN_PERCENTAGE_TYRES": "❗ ¡Tus neumáticos están desgastados! ¡Solo queda un 10%! ❗",
   "TWENTYFIVE_PERCENTAGE_TYRES": "❗ ¡Atención! ¡Solo queda un 25% de tus neumáticos! ❗",
+  "SIXTHY_PERCENTAGE_TYRES": "¡Tus neumáticos comenzaron a desgastarse, están al 60%!",
   "FOURTHY_PERCENTAGE_TYRES": "Tienes el 40% de tus neumáticos restantes.",
   "SEVENTY_PERCENTAGE_TYRES": "Tus neumáticos están al 75%.",
   "HEATED_TYRES": "¡Tus neumáticos están calientes!",
@@ -91,5 +92,16 @@
     "BLUE_FLAG": "🟦🚨🟦 ¡Bandera AZUL para {{citedPlayer}}! 🟦🚨🟦",
     "BLUE_FLAG_TWO": "🟦🚨🟦 ¡LIBERA el camino! 🟦🚨🟦",
     "BLACK_FLAG": "⬛️🚨⬛️ ¡Bandera NEGRA para {{citedPlayer}}! ⬛️🚨⬛️",
-    "BLACK_FLAG_TWO": "⬛️🚨⬛️ ¡{{citedPlayer}} está FUERA de la carrera! ⬛️🚨⬛️"
+    "BLACK_FLAG_TWO": "⬛️🚨⬛️ ¡{{citedPlayer}} está FUERA de la carrera! ⬛️🚨⬛️",
+    "NOT_VOTE": "¡No es hora de votar!",
+  "ALREADY_VOTE": "¡Ya has votado!",
+  "INVALIDE_VOTE": "Elige un número entre 1 y 3",
+  "VOTED": "Has votado por: {{circuit}}",
+  "CIRCUIT_CHOOSED": "El circuito ganador fue {{circuit}}, con {{votes}} votos",
+        "TIME_TO_VOTE":"Time to vote! Choose one of the circuits below by typing !vote (Number)",
+        "TIME_TO_QUALY": "🚨¡Clasificación! ¡Haz tu mejor tiempo!🚨",
+"TIME_TO_RACE": "🚨¡Carrera! ¡Que gane el mejor!🚨",
+"WORSE_TIME": "Tiempo de vuelta: {{lapTime}} (-{{diferenca}})",
+"CODE_BOX":"Tu código de PitStop es {{codigo}}, escríbelo al revés después del tipo de neumático.",
+"CODE_WRONG": "¡Código incorrecto! Ingresa el código correcto y al revés."
 }

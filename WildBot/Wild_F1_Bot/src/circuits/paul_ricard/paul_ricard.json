@@ -154,7 +154,7 @@
 		 { "x" : 917.6863564800001, "y" : -669.4327179586866, "bCoef" : 0.25, "cMask" : ["red","blue","c0" ], "cGroup" : ["wall" ], "color" : "5c5c5c" },
 		 { "x" : 1293.713332606077, "y" : -269.04877327188274, "bCoef" : 0, "cMask" : ["red","blue","c0" ], "cGroup" : ["wall" ], "curve" : -90, "color" : "666666", "vis" : true },
 		 { "x" : 539.116544, "y" : -81.856832, "bCoef" : 0.25, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ], "curve" : 0 },
-		 { "x" : 465, "y" : -110.934528, "bCoef" : 0.25, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ], "curve" : 0, "color" : "333333", "_selected" : "segment" },
+		 { "x" : 465, "y" : -110.934528, "bCoef" : 0.25, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ], "curve" : 0, "color" : "333333" },
 		 { "x" : 749, "y" : 83, "bCoef" : 0.25, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ], "curve" : 0 },
 		 { "x" : 500, "y" : 5, "bCoef" : 0.25, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ], "curve" : 0, "color" : "444444", "vis" : true },
 		 { "x" : 538, "y" : 82, "bCoef" : 0.25, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ], "color" : "002395", "curve" : 0 },
@@ -176,7 +176,7 @@
 		 { "x" : -1199, "y" : 62, "bCoef" : 0.25, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
 		 { "x" : 535, "y" : 81, "bCoef" : 0.25, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ], "curve" : 0, "color" : "ffffff" },
 		 { "x" : 660, "y" : 59, "bCoef" : 0.25, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
-		 { "x" : 447, "y" : -174, "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["redKO","blueKO" ], "color" : "333333", "_selected" : "segment" },
+		 { "x" : 447, "y" : -174, "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["redKO","blueKO" ], "color" : "333333" },
 		 { "x" : -5249, "y" : 1121, "bCoef" : 0.25, "cMask" : ["red","blue","c0" ], "cGroup" : ["wall" ] },
 		 { "x" : -5232, "y" : -351, "bCoef" : 0.25, "cMask" : ["red","blue","c0" ], "cGroup" : ["wall" ] },
 		 { "x" : 962, "y" : -1224, "bCoef" : 0.25, "cMask" : ["red","blue","c0" ], "cGroup" : ["wall" ], "curve" : 0 },
@@ -395,7 +395,7 @@
 		{ "v0" : 64, "v1" : 66, "curve" : -48.34248561587883, "color" : "ffffff", "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
 		{ "v0" : 138, "v1" : 158, "curve" : 13.937129143452024, "color" : "002395", "bCoef" : 0.25, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
 		{ "v0" : 140, "v1" : 158, "curve" : 42.42823137398819, "color" : "002395", "bCoef" : 0.25, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
-		{ "v0" : 159, "v1" : 139, "curve" : 0, "color" : "333333", "bCoef" : 0.25, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ], "_selected" : true },
+		{ "v0" : 159, "v1" : 139, "curve" : 0, "color" : "333333", "bCoef" : 0.25, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
 		{ "v0" : 103, "v1" : 100, "curve" : -52.69401246077201, "color" : "5c5c5c", "bCoef" : 0.25, "cMask" : ["red","blue","c0" ], "cGroup" : ["wall" ] },
 		{ "v0" : 108, "v1" : 105, "curve" : -57.738521173519146, "color" : "5c5c5c", "bCoef" : 0.25, "cMask" : ["red","blue","c0" ], "cGroup" : ["wall" ] },
 		{ "v0" : 119, "v1" : 149, "curve" : 17.016791686057484, "color" : "5c5c5c", "bCoef" : 0.25, "cMask" : ["red","blue","c0" ], "cGroup" : ["wall" ] },
@@ -562,7 +562,8 @@
 	"planes" : [
 		{ "normal" : [0,-1 ], "dist" : -241, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
 		{ "normal" : [0,1 ], "dist" : 82, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
-		{ "normal" : [-1,0 ], "dist" : -401, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ], "curve" : 56.618009674141 }
+		{ "normal" : [-1,0 ], "dist" : -401, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ], "curve" : 56.618009674141 },
+		{ "normal" : [-1,0 ], "dist" : 308, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ], "curve" : 56.618009674141, "_selected" : true }
 
 	],
 
@@ -614,48 +615,48 @@
 	],
 
 	"redSpawnPoints" : [
-        [ -277, 195
-    ],
-    [ -242, 120
-    ],
-    [ -213, 195
-    ],
-    [ -195, 120
-    ],
-    [ -145, 195
-    ],
-    [ -123, 120
-    ],
-    [ -79, 195
-    ],
-    [ -55, 120
-    ],
-    [ -13, 195
-    ],
-    [ 3, 120
-    ],
-    [ 47, 195
-    ],
-    [ 61, 120
-    ],
-    [ 105, 195
-    ],
-    [ 128, 120
-    ],
-    [ 173, 195
-    ],
-    [ 194, 120
-    ],
-    [ 239, 195
-    ],
-    [ 260, 120
-    ],
-    [ 305, 195
-    ],
-    [ 320, 120
-    ],
-    [ 365, 195
-    ]
+		[ -277, 195
+		],
+		[ -242, 120
+		],
+		[ -213, 195
+		],
+		[ -195, 120
+		],
+		[ -145, 195
+		],
+		[ -123, 120
+		],
+		[ -79, 195
+		],
+		[ -55, 120
+		],
+		[ -13, 195
+		],
+		[ 3, 120
+		],
+		[ 47, 195
+		],
+		[ 61, 120
+		],
+		[ 105, 195
+		],
+		[ 128, 120
+		],
+		[ 173, 195
+		],
+		[ 194, 120
+		],
+		[ 239, 195
+		],
+		[ 260, 120
+		],
+		[ 305, 195
+		],
+		[ 320, 120
+		],
+		[ 365, 195
+		]
 
 	],
 

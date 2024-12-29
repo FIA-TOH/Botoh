@@ -8,9 +8,27 @@ import {
 } from "./chat";
 import {MESSAGES} from "./messages";
 import {playerList} from "./playerList";
-
 export let qualiMode = false;
-export let qualiTime = 5;
+export let qualiTime = 2;
+
+let arrayPlayers:  { name: string, time: number }[] = []
+
+
+export function updatePlayerTime(name: string, time: number) {
+    const existingPlayer = arrayPlayers.find(player => player.name.toLowerCase() === name.toLowerCase());
+    
+    if (existingPlayer) {
+        existingPlayer.time = time;
+    } else {
+        arrayPlayers.push({ name, time });
+    }
+}
+
+export function clearPlayers() {
+    arrayPlayers = [];
+}
+
+
 
 export function setQualiTime(player: PlayerObject, time: number, room: RoomObject) {
     if (!qualiMode) {
@@ -40,26 +58,18 @@ export function changeQuali(newValue: boolean, room: RoomObject) {
     if (newValue) {
         qualiMode = true;
         room.setTimeLimit(qualiTime);
-        sendChatMessage(room, MESSAGES.QUALIFICATION_MODE());
+        sendSuccessMessage(room, MESSAGES.TIME_TO_QUALY());
         return;
     }
 
     qualiMode = false;
     room.setTimeLimit(0);
-    sendChatMessage(room, MESSAGES.RACING_MODE());
+    sendSuccessMessage(room, MESSAGES.TIME_TO_RACE());
 }
 
 export function getPlayersOrderedByQualiTime(room: RoomObject) {
-    let orderedList: { id: number, name: string, time: number }[] = [];
 
-    const players = room.getPlayerList();
-    players.forEach(p => {
-        if (playerList[p.id] !== undefined) {
-            orderedList.push({id: p.id, name: p.name, time: playerList[p.id].bestTime});
-        }
-    });
-
-    return orderedList.sort((a, b) => {
+    return arrayPlayers.sort((a, b) => {
         if (a.time < b.time) return -1;
         if (a.time > b.time) return 1;
         return 0;
@@ -73,6 +83,7 @@ export function printAllTimes(room: RoomObject, toPlayerID?: number) {
     }
 
     let orderedList = getPlayersOrderedByQualiTime(room);
+    
 
     let i = 1;
 
@@ -88,6 +99,7 @@ export function printAllTimes(room: RoomObject, toPlayerID?: number) {
             const leftSpaces = ' '.repeat(leftSpacesLength);
             const rightSpaces = ' '.repeat(rightSpacesLength);
 
+            
             const displayedTime = p.time === 1.7976931348623157e+308 ? 'N/A' : p.time.toFixed(3);
 
             sendNonLocalizedSmallChatMessage(room,
@@ -102,3 +114,29 @@ export function printAllTimes(room: RoomObject, toPlayerID?: number) {
         sendChatMessage(room, MESSAGES.NO_TIMES(), toPlayerID);
     }
 }
+
+export function reorderPlayersInRoom(room: RoomObject) {
+    const orderedPlayers = getPlayersOrderedByQualiTime(room);
+    console.log("orderedPlayers", orderedPlayers);
+    
+
+    const playerListInRoom = room.getPlayerList();
+    console.log("playerListInRoom", playerListInRoom);
+
+    const validPlayers = orderedPlayers.filter(player => {
+        const playerObj = playerListInRoom.find(p => p.name === player.name);
+        return playerObj && playerObj.id;
+    });
+    console.log("validPlayers", validPlayers);
+
+    const playerIds = validPlayers.map(p => {
+        const playerObj = playerListInRoom.find(pObj => pObj.name === p.name);
+        return playerObj?.id;
+    }).filter(id => id !== undefined);
+    console.log("playerIds", playerIds);
+
+    if (playerIds.length > 0) {
+        room.reorderPlayers(playerIds, true);
+    }
+}
+

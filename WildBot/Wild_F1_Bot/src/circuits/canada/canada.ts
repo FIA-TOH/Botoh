@@ -50,7 +50,7 @@ const CANADA_INFO: CircuitInfo = {
     },
     BestTime: bestTimes.canada,
     MainColor: [0xd6001d, 0xffffff, 0xd6001d],
-    AvatarColor: 0x000000,
+    AvatarColor: 0x000001,
     Angle: 90,
     Limit: 5,
     Votes: 0,

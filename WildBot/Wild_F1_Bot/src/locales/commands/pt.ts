@@ -31,6 +31,7 @@ export default function pt_commands(
     handleRainItensity: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleEndRainCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleAfkCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
+    handleEnableQualyForPub: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleEnableTyresCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleTipsCommands: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleExplainTyresCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
@@ -39,6 +40,8 @@ export default function pt_commands(
     handleEveryoneLapsCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleTpCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleFlagCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
+    handleVoteCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
+    handleClearCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
 
 
 ): Commands {
@@ -76,6 +79,7 @@ export default function pt_commands(
         "!rain_intensity": handleRainItensity,
         "!end_rain":handleEndRainCommand,
         "!afk":handleAfkCommand,
+        "!enable_qualy_for_pub": handleEnableQualyForPub,
         "!enable_tyres":handleEnableTyresCommand,
         "!dicas": handleTipsCommands,
         "!explain_tyres": handleExplainTyresCommand,
@@ -83,6 +87,8 @@ export default function pt_commands(
         "!explain_ers": handleExplainErsCommand,
         "!everyone_laps": handleEveryoneLapsCommand,
         "!tp": handleTpCommand,
-        "!flag": handleFlagCommand
+        "!flag": handleFlagCommand,
+        "!votar": handleVoteCommand,
+        "!clear": handleClearCommand
     }
 }

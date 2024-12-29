@@ -25,13 +25,13 @@ import {
     vsc
 } from "./handleSpeed";
 import {leagueAdminPassword, publicAdminPassword} from "../../roomconfig.json"
-import {changeQuali, printAllTimes, qualiMode, qualiTime, setQualiTime} from "./qualiMode";
+import {changeQuali, printAllTimes, qualiMode, qualiTime, setQualiTime, updatePlayerTime} from "./qualiMode";
 import en_commands from "../locales/commands/en";
 import fr_commands from "../locales/commands/fr";
 import es_commands from "../locales/commands/es";
 import tr_commands from "../locales/commands/tr";
 import pt_commands from "../locales/commands/pt";
-import {toggleGhostMode} from "./ghost";
+import {setGhostMode} from "./ghost";
 import {Tires} from "./tires";
 import {Commands} from "./commands";
 import {LEAGUE_MODE} from "./leagueMode";
@@ -41,11 +41,16 @@ import {afkAdmins} from "./afkAdmins";
 import { rainIntensity, resetAllRainEvents, setRainChances, setRainItensity } from "./rain";
 import { Teams } from "./teams";
 import { resetPlayer } from "./players";
-import { getPlayerByName } from "../room";
+import { ACTUAL_CIRCUIT, getPlayerByName } from "../room";
 import { handleAvatar, situacions } from "./handleAvatar";
+import { Circuit } from "../circuits/Circuit";
+import { isOnVoteSession, selectedCircuits } from "./vote";
+import { gameState } from "./gameState";
+import { updateBestTime } from "../circuits/bestTimes";
 
 
 export let tyresActivated = true
+export let qualyForPub = true;
 export let flag = "green"
 
 export type CommandFunction = (
@@ -78,6 +83,7 @@ export type CommandFunction = (
     handleRainItensity: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleEndRainCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleAfkCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
+    handleEnableQualyForPub: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleEnableTyresCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleTipsCommands: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleExplainTyresCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
@@ -86,6 +92,8 @@ export type CommandFunction = (
     handleEveryoneLapsCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleTpCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleFlagCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
+    handleVoteCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
+    handleClearCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
 ) => Commands
 
 function importCommandsByLanguage(commandFunctions: { [key: string]: CommandFunction }): { [key: string]: Commands } {
@@ -120,6 +128,7 @@ function importCommandsByLanguage(commandFunctions: { [key: string]: CommandFunc
             handleRainItensity,
             handleEndRainCommand,
             handleAfkCommand,
+            handleEnableQualyForPub,
             handleEnableTyresCommand,
             handleTipsCommands,
             handleExplainTyresCommand,
@@ -128,6 +137,8 @@ function importCommandsByLanguage(commandFunctions: { [key: string]: CommandFunc
             handleEveryoneLapsCommand,
             handleTpCommand,
             handleFlagCommand,
+            handleVoteCommand,
+            handleClearCommand
         )
     }), {});
 }
@@ -164,6 +175,7 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
             handleRainItensity,
             handleEndRainCommand,
             handleAfkCommand,
+            handleEnableQualyForPub,
             handleEnableTyresCommand,
             handleTipsCommands,
             handleExplainTyresCommand,
@@ -172,6 +184,8 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
             handleEveryoneLapsCommand,
             handleTpCommand,
             handleFlagCommand,
+            handleVoteCommand,
+            handleClearCommand
         ))
     }), {});
 }
@@ -235,7 +249,7 @@ export function handleCircuitCommand(byPlayer: PlayerObject, args: string[], roo
         return
     }
 
-    if (room.getScores() !== null) {
+    if (room.getScores() !== null || isOnVoteSession) {
         sendErrorMessage(room, MESSAGES.ALREADY_STARTED(), byPlayer.id)
         return
     }
@@ -251,6 +265,48 @@ export function handleCircuitCommand(byPlayer: PlayerObject, args: string[], roo
 
 export function handleMapsCommand(byPlayer: PlayerObject, _: string[], room: RoomObject) {
     sendChatMessage(room, MESSAGES.LIST_MAPS(`${CIRCUITS.map(c => c.info).map((c, i) => c.name + " [" + i + "]").join('\n')}`), byPlayer.id)
+}
+
+export function handleClearCommand(byPlayer: PlayerObject, args: string[], room: RoomObject) {
+    if (!byPlayer.admin) {
+        sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id)
+        return
+    }
+
+    updateBestTime(ACTUAL_CIRCUIT.info.name, 999.999, "Limpado");
+    room.sendAnnouncement("Recorde Resetado")
+
+}
+
+
+export function handleVoteCommand(byPlayer: PlayerObject, args: string[], room: RoomObject) {
+    if(gameState !== null){
+        sendErrorMessage(room, MESSAGES.NOT_VOTE(), byPlayer.id)
+    }
+    if (playerList[byPlayer.id]?.voted) {
+        sendErrorMessage(room, MESSAGES.ALREADY_VOTE(), byPlayer.id)
+        return;
+    }
+
+    const voteIndex = Number(args[0])-1;
+
+    
+
+    if (voteIndex < 0 || voteIndex >= selectedCircuits.length || !args) {
+        sendErrorMessage(room, MESSAGES.INVALIDE_VOTE(), byPlayer.id)
+        return;
+    }
+
+    const selectedCircuit = selectedCircuits[voteIndex];
+    if (selectedCircuit.info) {
+        selectedCircuit.info.Votes = (selectedCircuit.info.Votes ? selectedCircuit.info.Votes : 0) + 1;
+    }
+
+    if (playerList[byPlayer.id]) {
+        playerList[byPlayer.id].voted = true;
+    }
+
+    sendSuccessMessage(room, MESSAGES.VOTED(selectedCircuit.info.name), byPlayer.id)
 }
 
 export function handleSpeedCommand(byPlayer: PlayerObject, _: string[], room: RoomObject) {
@@ -347,24 +403,39 @@ export function handleBBCommand(byPlayer: PlayerObject, args: string[], room: Ro
 }
 
 export function handleTiresCommand(byPlayer: PlayerObject, args: string[], room: RoomObject) {
+    if(room.getScores()){
+
+    }
     if (args.length === 0) {
-        enableShowTires(byPlayer, room)
-        return
+        sendErrorMessage(room, MESSAGES.INVALID_TIRES(), byPlayer.id);
+        return;
     }
 
-    const tiresStr = args[0].toUpperCase()
-
-    for (let tiresKey in Tires) {
-        if (tiresKey === tiresStr || tiresKey[0] === tiresStr) {
-            changeTires({p: byPlayer, disc: room.getPlayerDiscProperties(byPlayer.id)}, tiresKey as Tires, room);
-            playerList[byPlayer.id].tires = tiresKey as Tires
-            playerList[byPlayer.id].wear = 0;
-            return
+    if(LEAGUE_MODE && room.getScores().time > 0){
+        const boxAlertReversed = playerList[byPlayer.id].boxAlert
+        .toString()
+        .split('')
+        .reverse()
+        .join('');
+    
+        if (args[1] !== boxAlertReversed || args.length !== 2) {
+            sendErrorMessage(room, MESSAGES.CODE_WRONG(), byPlayer.id);
+            return;
         }
     }
-
-    sendErrorMessage(room, MESSAGES.INVALID_TIRES(), byPlayer.id)
+    const tiresStr = args[0].toUpperCase();
+    
+    for (let tiresKey in Tires) {
+        if (tiresKey === tiresStr || tiresKey[0] === tiresStr) {
+            changeTires({ p: byPlayer, disc: room.getPlayerDiscProperties(byPlayer.id) }, tiresKey as Tires, room);
+            playerList[byPlayer.id].tires = tiresKey as Tires;
+            playerList[byPlayer.id].wear = 0;
+            return;
+        }
+    }
+    sendErrorMessage(room, MESSAGES.INVALID_TIRES(), byPlayer.id);
 }
+
 
 export function handleHelpCommand(byPlayer: PlayerObject, args: string[], room: RoomObject) {
     sendChatMessage(room, MESSAGES.HELP(), byPlayer.id)
@@ -448,25 +519,32 @@ export function handleAvatarCommand(byPlayer: PlayerObject, args: string[], room
 
 export function handleClearTimeCommand(byPlayer: PlayerObject, args: string[], room: RoomObject) {
     if (!byPlayer.admin) {
-        sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id)
-        return
+        sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id);
+        return;
     }
 
     if (args.length === 0) {
-        sendErrorMessage(room, MESSAGES.CLEAR_TIME_USAGE(), byPlayer.id)
-        return
+        sendErrorMessage(room, MESSAGES.CLEAR_TIME_USAGE(), byPlayer.id);
+        return;
     }
 
-    const id = parseInt(args[0])
-    if (isNaN(id) || playerList[id] === undefined) {
-        sendErrorMessage(room, MESSAGES.CLEAR_TIME_USAGE(), byPlayer.id)
-        return
+    const argsString = args.join(' ');
+
+    const listPlayer = room.getPlayerList();
+    const player = listPlayer.find(p => p.name.toLowerCase() === argsString.toLowerCase());
+
+    
+    if (player) {
+        playerList[player.id].bestTime = Number.MAX_VALUE;
+    } else {
+        room.sendAnnouncement("IMPORTANT: The player isn't in the room at the moment, reset their time when they enter again.");
     }
 
-    playerList[id].bestTime = Number.MAX_VALUE
+    updatePlayerTime(argsString, Number.MAX_VALUE);
 
-    sendNonLocalizedSmallChatMessage(room, "Cleared " + id + "'s best time", byPlayer.id)
+    sendNonLocalizedSmallChatMessage(room, "Cleared " + argsString + "'s best time", byPlayer.id);
 }
+
 
 export function handleMuteCommand(byPlayer: PlayerObject, _: string[], room: RoomObject) {
     if (!byPlayer.admin) {
@@ -554,15 +632,25 @@ export function handleAfkCommand(byPlayer: PlayerObject, _: string[], room: Room
         room.setPlayerTeam(byPlayer.id, Teams.RUNNERS);
         player.afk = false;
         resetPlayer(byPlayer, room, byPlayer.id);
-    } else {
+    } else if(player.afk){
         player.afk = false;
         sendAlertMessage(room, MESSAGES.REMOVED_FROM_AFK(), byPlayer.id);
+    } else {
+        player.afk = true;
+        sendAlertMessage(room, MESSAGES.NOW_AFK(), byPlayer.id);
     }
 }
 
+export function handleEnableQualyForPub(byPlayer: PlayerObject, _: string[], room: RoomObject){
+    if (!byPlayer.admin) {
+        sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id)
+        return
+    }
+    qualyForPub = !qualyForPub
+    room.sendAnnouncement(`qualyForPub changed to ${qualyForPub}`, byPlayer.id)
+}
+
 export function handleEnableTyresCommand(byPlayer: PlayerObject, _: string[], room: RoomObject) {
-    console.log(byPlayer);
-    
     if (!byPlayer.admin) {
         sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id)
         return
@@ -617,12 +705,8 @@ export function handleFlagCommand(byPlayer: PlayerObject, args: string[], room: 
 
     const flagChoosen = args[0];
     const playerChoosen = args.slice(1).join(" ");
-
-    console.log(playerChoosen);
     
     const playerChooseInfo = playerChoosen ? getPlayerByName(playerChoosen) : undefined;
-    console.log(playerChooseInfo);
-    
     const playersAndDiscs = room.getPlayerList().map((p) => {
         return { p: p, disc: room.getPlayerDiscProperties(p.id) };
     });
@@ -786,13 +870,25 @@ export function handleSlipstreamCommand(byPlayer: PlayerObject, _: string[], roo
     toggleSlipstream()
 }
 
-export function handleGhostCommand(byPlayer: PlayerObject, _: string[], room: RoomObject) {
+export function handleGhostCommand(byPlayer: PlayerObject, args: string[], room: RoomObject) {
     if (!byPlayer.admin) {
         sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id)
         return
     }
+    let boolean = false
 
-    toggleGhostMode(room)
+    if(args[0] === "false"){
+        boolean = false
+    }
+    else if(args[0] === "true"){
+        boolean = true
+    } else {
+            sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id)
+            return
+    }
+
+
+    setGhostMode(room, boolean)
 }
 
 
@@ -817,9 +913,7 @@ export function handleRRCommand(byPlayer: PlayerObject, _: string[], room: RoomO
         sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id)
         return
     }
-    playerList[byPlayer.id].lapChanged = false
-    playerList[byPlayer.id].lapTime = 0
-    playerList[byPlayer.id].inPitlane = false
+    resetPlayer(byPlayer, room, byPlayer.id);
     room.setPlayerDiscProperties(byPlayer.id, {
         x: CIRCUITS[currentMapIndex].info.lastPlace.x,
         y: CIRCUITS[currentMapIndex].info.lastPlace.y
@@ -843,7 +937,7 @@ export function printAllPositions(room: RoomObject, toPlayerID?: number) {
 
         const position = i.toString().padStart(2, '0')
         const pits = p.pits.toString().padStart(2, '0')
-        sendNonLocalizedSmallChatMessage(room, `${position} - ${leftSpaces}${p.name}${rightSpaces} |  ${pits}  | ${p.time.toFixed(3)} | ${p.fullTime}`, toPlayerID)
+        sendNonLocalizedSmallChatMessage(room, `${position} - ${leftSpaces}${p.name}${rightSpaces} |  ${pits}  | ${p.time.toFixed(3)} | ${p.fullTime.toFixed(3)}`, toPlayerID)
         i++
     })
 

@@ -7,29 +7,29 @@ const INDIANAPOLIS_INFO: CircuitInfo = {
         bounds: {
             minX: 431,
             maxX: 463,
-            minY: 80,
+            minY: -144,
             maxY: 460
         },
         passingDirection: Direction.RIGHT
     },
     name: "Indianapolis Motor Speedway",
     boxLine: {
-        minX: 0,
-        maxX:0,
-        minY: 0,
-        maxY: 0
+        minX: -1724,
+        maxX:453,
+        minY: -312,
+        maxY: -144
     },
     pitlaneStart: {
-        minX: 0,
-        maxX:0,
-        minY: 0,
-        maxY: 0
+        minX: -1840,
+        maxX:-1810,
+        minY: -144,
+        maxY: 108
     },
     pitlaneEnd: {
-        minX: 0,
-        maxX: 0,
-        minY: 0,
-        maxY: 0
+        minX: 2210,
+        maxX: 2240,
+        minY: -168,
+        maxY: 72
     },
     drsStart: [
         {

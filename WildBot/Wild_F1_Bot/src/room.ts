@@ -4,16 +4,16 @@ import {createPlayerInfo, resetPlayer, resetPlayers} from "./features/players";
 import {log} from "./features/logger";
 import {checkPlayerLaps, finishList, lapPositions} from "./features/handleLapChange";
 import {sendDiscordReplay} from "./features/discord";
-import {controlPlayerSpeed, handlePitlane, TIRE_AVATAR} from "./features/handleSpeed";
+import {controlPlayerSpeed, handlePitlane, TIRE_AVATAR, updateGripCounter} from "./features/handleSpeed";
 import {MESSAGES} from "./features/messages";
 import {Teams} from "./features/teams";
 import {bans, leagueName, maxPlayers, publicName, roomPassword} from "../roomconfig.json"
 import {MAX_PLAYER_NAME, sendChatMessage, sendErrorMessage, sendSuccessMessage} from "./features/chat";
-import {changeQuali, getPlayersOrderedByQualiTime, printAllTimes, qualiMode} from "./features/qualiMode";
+import {changeQuali, clearPlayers, getPlayersOrderedByQualiTime, printAllTimes, qualiMode, qualiTime, reorderPlayersInRoom} from "./features/qualiMode";
 import {banPlayer, decodeIPFromConn, getRunningPlayers, kickPlayer} from "./features/utils";
 import {COMMANDS, mute_mode, printAllPositions} from "./features/handleCommands";
 import {sha256} from "js-sha256";
-import {ghostMode} from "./features/ghost";
+import {ghostMode, setGhostMode} from "./features/ghost";
 import {LEAGUE_MODE} from "./features/leagueMode";
 import {laps} from "./features/laps";
 import {idToAuth, playerList} from "./features/playerList";
@@ -26,6 +26,9 @@ import { updateErs } from "./features/ers";
 import { Circuit } from "./circuits/Circuit";
 import { handleAvatar } from "./features/handleAvatar";
 import { handleSuzukaTp } from "./features/handleSuzukaTp";
+import { distributeSpeed } from "./features/distributrSpeed";
+import { voteSession } from "./features/vote";
+import { resetAFKTimer, resetAFKTimers  } from "./features/afk";
 
 
 const BAN_LIST = bans
@@ -59,40 +62,39 @@ room.setTimeLimit(0)
 room.setTeamsLock(true)
 handleChangeMap(0, room)
 
-room.onGameTick = function () {
-    const playersAndDiscs = room.getPlayerList().map(p => {
-        return {p: p, disc: room.getPlayerDiscProperties(p.id)}
-    })
-    const players = getRunningPlayers(playersAndDiscs)
-    handlePitlane(playersAndDiscs, room)
-    controlPlayerSpeed(playersAndDiscs, room)
-    // checkPlayersDRSZone(playersAndDiscs, room)
-    checkPlayerLaps(playersAndDiscs, room)
-    endRaceSession(playersAndDiscs, room)
-    // logPlayerSpeed(playersAndDiscs, room)
-    updateErs(playersAndDiscs, room),
-    players.forEach(pad => { 
-        const p = pad.p
-        handleTireWear(p, room)
-        handleSuzukaTp(pad, room)
-    })
-}
 
-function endRaceSession(playersAndDiscs: { p: PlayerObject, disc: DiscPropertiesObject }[], room: RoomObject) {
-    const players = getRunningPlayers(playersAndDiscs)
-    if (room.getScores() != null && players.length === 0) {
-        room.stopGame()
-    }
-}
+room.onGameTick = function () {
+    const playersAndDiscs = room.getPlayerList().map((p) => ({
+        p: p,
+        disc: room.getPlayerDiscProperties(p.id),
+    }));
+    const players = getRunningPlayers(playersAndDiscs);
+    handlePitlane(playersAndDiscs, room);
+    distributeSpeed(playersAndDiscs, room);
+    // checkPlayersDRSZone(playersAndDiscs, room);
+    checkPlayerLaps(playersAndDiscs, room);
+    endRaceSession(playersAndDiscs, room);
+    checkAfk()
+    updateGripCounter(playersAndDiscs);
+    // logPlayerSpeed(playersAndDiscs, room);
+    updateErs(playersAndDiscs, room),
+        players.forEach((pad) => {
+            const p = pad.p;
+            handleTireWear(p, room);
+            handleSuzukaTp(pad, room);
+        });
+};
 
 room.onGameStart = function (byPlayer) {
     room.startRecording();
     handleGameStateChange("running")
     resetAllRainEvents()
-
+    resetAFKTimers(room)
     byPlayer == null ? log(`Game started`) : log(`Game started by ${byPlayer.name}`)
 
-    resetPlayers(room)
+    room.getPlayerList().forEach(p => {
+        resetPlayer(p, room, p.id, true)
+    })
     finishList.splice(0, finishList.length)
 
     for (let i = 0; i < laps; i++) {
@@ -111,37 +113,81 @@ room.onGameStart = function (byPlayer) {
 
 
 room.onGamePause = function(){
-    handleGameStateChange("paused")
+    handleGameStateChange("paused");
+    resetAFKTimers(room);
 }
 
 room.onGameUnpause = function(){
-    handleGameStateChange("running")
+    handleGameStateChange("running");
+    resetAFKTimers(room);
+}
+
+let gameStopedNaturally = false 
+function endRaceSession(playersAndDiscs: { p: PlayerObject, disc: DiscPropertiesObject }[], room: RoomObject) {
+    const players = getRunningPlayers(playersAndDiscs)
+    if (room.getScores() != null && players.length === 0) {
+        gameStopedNaturally = true
+        room.stopGame()
+    }
+    if(!LEAGUE_MODE && room.getScores()?.time > qualiTime * 60){
+        gameStopedNaturally = true
+        room.stopGame()
+    }
+    
 }
 
 
 room.onGameStop = function (byPlayer) {
-    sendDiscordReplay(room.stopRecording())
+    // sendDiscordReplay(room.stopRecording())
     handleGameStateChange(null)
-
+    resetAFKTimers(room);
     resetAllRainEvents()
-    resetPlayers(room)
 
-    byPlayer == null ? log(`Game stopped`) : log(`Game stopped by ${byPlayer.name}`)
+    byPlayer == null ? log(`Game stopped`) : log(`Game stopped by ${byPlayer.name}`)    
+    
+    if (gameStopedNaturally && !LEAGUE_MODE){
+        if (qualiMode) {
+            printAllTimes(room)
+            room.stopGame()
+            reorderPlayersInRoom(room);
+            movePlayersToCorrectSide()
+            changeQuali(false, room)
+            resetPlayers(room)
+            setGhostMode(room, false)
+            sendChatMessage(room, MESSAGES.EXPLAIN_TYRES())
+            sendChatMessage(room, MESSAGES.EXPLAIN_ERS())
+            room.startGame()
+        } else {
+            room.stopGame()
+            printAllPositions(room)
+            movePlayersToCorrectSide()
+            sendChatMessage(room, MESSAGES.DISCORD_INVITE())
+            voteSession(room)
+            
+        }
+        gameStopedNaturally = false
 
-    if (qualiMode) {
-        printAllTimes(room)
-        room.reorderPlayers(getPlayersOrderedByQualiTime(room).map(p => p.id), true)
-        movePlayersToCorrectSide()
-        changeQuali(false, room)
-    } else {
-        printAllPositions(room)
-        movePlayersToCorrectSide()
-        sendChatMessage(room, MESSAGES.EXPLAIN_TYRES())
-        sendChatMessage(room, MESSAGES.EXPLAIN_ERS())
-        sendChatMessage(room, MESSAGES.DISCORD_INVITE())
+    } else{
+        if (qualiMode) {
+            printAllTimes(room)
+            reorderPlayersInRoom(room);
+            movePlayersToCorrectSide()
+            changeQuali(false, room)
+            resetPlayers(room)
+            setGhostMode(room, false)
+        } else {
+            printAllPositions(room)
+            movePlayersToCorrectSide()
+            resetPlayers(room)
+        }
     }
-
+    clearPlayers()
     setRainChances(0)
+}
+
+room.onPlayerBallKick = function (){
+    console.log("kickou");
+    
 }
 
 
@@ -153,9 +199,11 @@ room.onPlayerTeamChange = function (changedPlayer, _) {
             const boxLine = ACTUAL_CIRCUIT.info.boxLine
             const middleX = (boxLine.minX + boxLine.maxX)/2;
             const middleY = (boxLine.minY + boxLine.maxY)/2;
-            
+            playerList[changedPlayer.id].inPitlane = true
             room.setPlayerDiscProperties(changedPlayer.id, {x: middleX, y: middleY})
         }
+        playerList[changedPlayer.id].afk = false;
+        resetAFKTimer(changedPlayer.id, room);
     }
     if (ghostMode && changedPlayer.team === Teams.RUNNERS) {
         room.setPlayerDiscProperties(changedPlayer.id, {cGroup: room.CollisionFlags.c0 | room.CollisionFlags.redKO})
@@ -171,6 +219,7 @@ function isBanned(ip: string): boolean {
 }
 
 room.onPlayerJoin = function (player) {
+
     const ip = decodeIPFromConn(player.conn)
     if (isBanned(ip)) {
         banPlayer(player.id, `Your ip is banned from this room.`, room)
@@ -208,13 +257,18 @@ room.onPlayerJoin = function (player) {
         log(`${player.name} has joined. (${ip})`)
     }
     
-    if(qualiMode){        
-        room.setPlayerTeam(player.id, Teams.RUNNERS)
-    } else if(room.getScores() !== null){
-        if(gameState === "running"){
-            room.setPlayerTeam(player.id, Teams.SPECTATORS)
+    if(room.getScores()){
+        if(qualiMode && (room.getScores().time < room.getScores().timeLimit)){     
+            room.setPlayerTeam(player.id, Teams.RUNNERS)
+        } else if(room.getScores() !== null){
+            if(gameState === "running"){
+                room.setPlayerTeam(player.id, Teams.SPECTATORS)
+            }
         }
     }
+
+    playerList[player.id].afk = false;
+    
 }
 
 room.onPlayerLeave = function (player) {
@@ -254,27 +308,44 @@ room.onStadiumChange = function (newStadiumName, byPlayer) {
         sendErrorMessage(room, MESSAGES.NO_MANUAL_MAPS(), byPlayer.id)
         handleChangeMap(0, room)
     }
+    console.log(newStadiumName, CIRCUITS);
+    
     let c = CIRCUITS.find((x)=>x.info.name == newStadiumName);
     if(c){
-        ACTUAL_CIRCUIT = c
+        ACTUAL_CIRCUIT = c;
     }
+    
     console.log(c);
     
-    if(c && c.info.Angle && c.info.AvatarColor && c.info.MainColor){
-        console.log(c, c.info.Angle , c.info.AvatarColor , c.info.MainColor);
+    if(c && c.info.Angle && (c.info.AvatarColor !== undefined && c.info.AvatarColor !== 0) && c.info.MainColor){   
+        console.log(c);
         
         room.setTeamColors(Teams.RUNNERS, c.info.Angle, c.info.AvatarColor, c.info.MainColor)
     }
 }
 
+
 function movePlayersToCorrectSide() {
     const players = room.getPlayerList();
-    players.forEach(p => {
-        const player = playerList[p.id]
-        console.log(player);
-        
-        if(!player.afk){
-            room.setPlayerTeam(p.id, Teams.RUNNERS)
+
+
+    const outsidePlayers = players.filter(p => p.team === Teams.SPECTATORS);
+    const otherPlayers = players.filter(p => p.team !== Teams.SPECTATORS);
+
+    outsidePlayers.forEach(p => {
+        const player = playerList[p.id];
+        if (!player.afk) {
+            console.log(p.name);
+            
+            room.setPlayerTeam(p.id, Teams.RUNNERS);
+        }
+    });
+
+    otherPlayers.forEach(p => {
+        const player = playerList[p.id];
+        if (!player.afk) {
+            console.log(p.name);
+            room.setPlayerTeam(p.id, Teams.RUNNERS);
         }
     });
 }
@@ -304,6 +375,9 @@ room.onPlayerChat = function (player, message) {
     return false
 }
 
+room.onPlayerActivity = function(player){
+    resetAFKTimer(player.id, room);
+}
 
 room.onPlayerAdminChange = function (player, _) {
     if (player.admin) {
@@ -338,21 +412,16 @@ const MINUTE = 60 * SECOND
 const MAX_AFK_TICKS = 2 * MINUTE
 const MAX_AFK_WARNING_TICKS = MAX_AFK_TICKS - 5 * SECOND
 
-function checkAdminsAFK() {
-    for (const idStr in afkAdmins) {
-        const id = Number(idStr)
-        if (isNaN(id)) continue
-        afkAdmins[id] = afkAdmins[id] + 1
-        // if (afkAdmins[id] >= MAX_AFK_TICKS) {
-        //     log(`Admin ${room.getPlayer(Number(id)).name}[${id}] is AFK for too long, removing admin status`)
-        //     room.setPlayerAdmin(Number(id), false)
-        //     delete afkAdmins[id]
-        // } else if (afkAdmins[id] === MAX_AFK_WARNING_TICKS) {
-        //     log("Removing admin status in 5 seconds or " + MAX_AFK_WARNING_TICKS + " ticks")
-        //     sendErrorMessage(room, MESSAGES.ADMIN_AFK_WARNING(), id)
-        // }
+function checkAfk() {
+    const players = room.getPlayerList()
+    if(players.length > 18){
+        players.forEach(p => {
+            if(playerList[p.id].afk){
+                room.kickPlayer(p.id, "AFK", false);
+            }
+        });
     }
 }
 
-if (!LEAGUE_MODE) setInterval(checkAdminsAFK, 1000 / INV_TICK_RATE)
+if (!LEAGUE_MODE) setInterval(checkAfk, 1000 / INV_TICK_RATE)
 

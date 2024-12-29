@@ -10,6 +10,7 @@
     "TEN_PERCENTAGE_TYRES": "❗ Seus pneus estão desgastados! Apenas 10% restantes! ❗",
     "TWENTYFIVE_PERCENTAGE_TYRES": "❗ Atenção! Apenas 25% de seus pneus restantes! ❗",
     "FOURTHY_PERCENTAGE_TYRES": "Você tem 40% de seus pneus restantes.",
+    "SIXTHY_PERCENTAGE_TYRES": "Seus pneus começaram a ficar ruins, eles estão em 60%",
     "SEVENTY_PERCENTAGE_TYRES": "Seus pneus estão em 75%.",
     "HEATED_TYRES": "Seus pneus estão aquecidos!",
     "BOX_BOX_BOX": "BOX BOX BOX! Esta é sua última chance de entrar antes que seus pneus estourem!",
@@ -91,6 +92,17 @@
     "BLUE_FLAG": "🟦🚨🟦 Bandeira AZUL para {{citedPlayer}}! 🟦🚨🟦",
     "BLUE_FLAG_TWO": "🟦🚨🟦 LIBERE o caminho! 🟦🚨🟦",
     "BLACK_FLAG": "⬛️🚨⬛️ Bandeira PRETA para {{citedPlayer}}! ⬛️🚨⬛️",
-    "BLACK_FLAG_TWO": "⬛️🚨⬛️ {{citedPlayer}} esta FORA da corrida! ⬛️🚨⬛️"
+    "BLACK_FLAG_TWO": "⬛️🚨⬛️ {{citedPlayer}} esta FORA da corrida! ⬛️🚨⬛️",
+    "NOT_VOTE": "Não é hora de votar!",
+    "ALREADY_VOTE": "Você já votou!",
+    "INVALIDE_VOTE":"Escolha um número de 1 a 3",
+    "VOTED":"Vocë votou em: {{circuit}}",
+    "CIRCUIT_CHOOSED":"O Circuito vencedor foi {{circuit}}, com {{votes}} votos",
+    "TIME_TO_VOTE":"Hora de votar! escolha um dos circuitos abaixos digitando '!votar (Numero)'",
+    "TIME_TO_QUALY": "🚨Qualificatórias! Faça o seu melhor tempo!🚨",
+    "TIME_TO_RACE": "🚨Corrida! Que venca o melhor!🚨",
+    "WORSE_TIME": "Tempo de volta: {{lapTime}} (-{{diferenca}})",
+    "CODE_BOX":"Seu código de PitStop é {{codigo}}, digite-o ao contrario após o tipo de pneu.",
+    "CODE_WRONG": "Codigo errado! Digite o codigo correto e ao contrario."
   }
   

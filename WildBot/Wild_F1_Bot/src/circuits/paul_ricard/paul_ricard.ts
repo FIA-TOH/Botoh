@@ -50,7 +50,7 @@ const PAUL_RICARD_INFO: CircuitInfo = {
     },
     BestTime: bestTimes.paulRicard,
     MainColor: [0x0055a4, 0xffffff, 0xef4135],
-    AvatarColor: 0x000000,
+    AvatarColor: 0x000001,
     Angle: 0,
     Limit: 5,
     Votes: 0,

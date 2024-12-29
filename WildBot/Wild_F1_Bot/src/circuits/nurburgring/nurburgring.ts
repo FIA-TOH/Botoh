@@ -49,7 +49,7 @@ const NURBURGRING_INFO: CircuitInfo = {
         y: nurburgring_json.redSpawnPoints[nurburgring_json.redSpawnPoints.length - 1][1],
     },
     BestTime: bestTimes.nurburgring,
-    MainColor: [0x000000, 0xdd0000, 0xffce00],
+    MainColor: [0x000001, 0xdd0000, 0xffce00],
     AvatarColor: 0xffffff,
     Angle: 90,
     Limit: 5,

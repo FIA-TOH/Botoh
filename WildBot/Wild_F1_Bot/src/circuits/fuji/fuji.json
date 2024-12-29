@@ -517,7 +517,8 @@
 	"planes" : [
 		{ "normal" : [0,-1 ], "dist" : -190, "bCoef" : 0.1, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ], "trait" : "kickOffBarrier" },
 		{ "normal" : [1,0 ], "dist" : -989, "bCoef" : 0.1, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ], "trait" : "kickOffBarrier" },
-		{ "normal" : [0,1 ], "dist" : 40, "bCoef" : 0.1, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ], "trait" : "kickOffBarrier" }
+		{ "normal" : [0,1 ], "dist" : 40, "bCoef" : 0.1, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ], "trait" : "kickOffBarrier" },
+		{ "normal" : [-1,0 ], "dist" : -381, "bCoef" : 0.1, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ], "trait" : "kickOffBarrier" }
 
 	],
 

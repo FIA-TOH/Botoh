@@ -117,13 +117,13 @@ export const MESSAGES = {
                 tr: tr_messages.FOURTHY_PERCENTAGE_TYRES,
                 pt: pt_messages.FOURTHY_PERCENTAGE_TYRES,
             };
-        } else if (remainingPercentage <= 40) {
+        } else if (remainingPercentage <= 60) {
             return {
-                en: en_messages.FOURTHY_PERCENTAGE_TYRES,
-                es: en_messages.FOURTHY_PERCENTAGE_TYRES,
-                fr: en_messages.FOURTHY_PERCENTAGE_TYRES,
-                tr: en_messages.FOURTHY_PERCENTAGE_TYRES,
-                pt: pt_messages.FOURTHY_PERCENTAGE_TYRES,
+                en: en_messages.SIXTHY_PERCENTAGE_TYRES,
+                es: en_messages.SIXTHY_PERCENTAGE_TYRES,
+                fr: en_messages.SIXTHY_PERCENTAGE_TYRES,
+                tr: en_messages.SIXTHY_PERCENTAGE_TYRES,
+                pt: pt_messages.SIXTHY_PERCENTAGE_TYRES,
             };
         } else if (remainingPercentage <= 75) {
             return {
@@ -761,4 +761,85 @@ export const MESSAGES = {
         tr: replaceTemplateString(tr_messages.BLACK_FLAG_TWO, {citedPlayer: citedPlayer}),
         pt: replaceTemplateString(pt_messages.BLACK_FLAG_TWO, {citedPlayer: citedPlayer}),
     }),
+    NOT_VOTE: (): LocalizedMessageFunction => ({
+        en: en_messages.NOT_VOTE,
+        es: es_messages.NOT_VOTE,
+        fr: fr_messages.NOT_VOTE,
+        tr: tr_messages.NOT_VOTE,
+        pt: pt_messages.NOT_VOTE,
+    }),
+    ALREADY_VOTE: (): LocalizedMessageFunction => ({
+        en: en_messages.ALREADY_VOTE,
+        es: es_messages.ALREADY_VOTE,
+        fr: fr_messages.ALREADY_VOTE,
+        tr: tr_messages.ALREADY_VOTE,
+        pt: pt_messages.ALREADY_VOTE,
+    }),
+    INVALIDE_VOTE: (): LocalizedMessageFunction => ({
+        en: en_messages.INVALIDE_VOTE,
+        es: es_messages.INVALIDE_VOTE,
+        fr: fr_messages.INVALIDE_VOTE,
+        tr: tr_messages.INVALIDE_VOTE,
+        pt: pt_messages.INVALIDE_VOTE,
+    }),
+    VOTED: (circuit: string): LocalizedMessageFunction => ({
+        en: replaceTemplateString(en_messages.VOTED, { circuit }),
+        es: replaceTemplateString(es_messages.VOTED, { circuit }),
+        fr: replaceTemplateString(fr_messages.VOTED, { circuit }),
+        tr: replaceTemplateString(tr_messages.VOTED, { circuit }),
+        pt: replaceTemplateString(pt_messages.VOTED, { circuit }),
+    }),
+    CIRCUIT_CHOOSED: (circuit: string, votes: number): LocalizedMessageFunction => ({
+        en: replaceTemplateString(en_messages.CIRCUIT_CHOOSED, { circuit, votes:votes.toString() }),
+        es: replaceTemplateString(es_messages.CIRCUIT_CHOOSED, { circuit, votes:votes.toString() }),
+        fr: replaceTemplateString(fr_messages.CIRCUIT_CHOOSED, { circuit, votes:votes.toString() }),
+        tr: replaceTemplateString(tr_messages.CIRCUIT_CHOOSED, { circuit, votes:votes.toString() }),
+        pt: replaceTemplateString(pt_messages.CIRCUIT_CHOOSED, { circuit, votes:votes.toString() }),
+    }),
+    TIME_TO_VOTE: (): LocalizedMessageFunction => ({
+        en: en_messages.TIME_TO_VOTE,
+        es: es_messages.TIME_TO_VOTE,
+        fr: fr_messages.TIME_TO_VOTE,
+        tr: tr_messages.TIME_TO_VOTE,
+        pt: pt_messages.TIME_TO_VOTE,
+    }),
+    TIME_TO_QUALY: (): LocalizedMessageFunction => ({
+        en: replaceTemplateString(en_messages.TIME_TO_QUALY, {}),
+        es: replaceTemplateString(es_messages.TIME_TO_QUALY, {}),
+        fr: replaceTemplateString(fr_messages.TIME_TO_QUALY, {}),
+        tr: replaceTemplateString(tr_messages.TIME_TO_QUALY, {}),
+        pt: replaceTemplateString(pt_messages.TIME_TO_QUALY, {}),
+    }),
+    
+    TIME_TO_RACE: (): LocalizedMessageFunction => ({
+        en: replaceTemplateString(en_messages.TIME_TO_RACE, {}),
+        es: replaceTemplateString(es_messages.TIME_TO_RACE, {}),
+        fr: replaceTemplateString(fr_messages.TIME_TO_RACE, {}),
+        tr: replaceTemplateString(tr_messages.TIME_TO_RACE, {}),
+        pt: replaceTemplateString(pt_messages.TIME_TO_RACE, {}),
+    }),
+    
+    WORSE_TIME: (lapTime: number, diferenca: number): LocalizedMessageFunction => ({
+        en: replaceTemplateString(en_messages.WORSE_TIME, { lapTime:lapTime.toString(), diferenca: diferenca.toString() }),
+        es: replaceTemplateString(es_messages.WORSE_TIME, { lapTime:lapTime.toString(), diferenca: diferenca.toString() }),
+        fr: replaceTemplateString(fr_messages.WORSE_TIME, { lapTime:lapTime.toString(), diferenca: diferenca.toString() }),
+        tr: replaceTemplateString(tr_messages.WORSE_TIME, { lapTime:lapTime.toString(), diferenca: diferenca.toString() }),
+        pt: replaceTemplateString(pt_messages.WORSE_TIME, { lapTime:lapTime.toString(), diferenca: diferenca.toString() }),
+    }),
+    
+    CODE_BOX: (codigo: number): LocalizedMessageFunction => ({
+        en: replaceTemplateString(en_messages.CODE_BOX, { codigo:codigo.toString()}),
+        es: replaceTemplateString(es_messages.CODE_BOX, { codigo:codigo.toString()}),
+        fr: replaceTemplateString(fr_messages.CODE_BOX, { codigo:codigo.toString()}),
+        tr: replaceTemplateString(tr_messages.CODE_BOX, { codigo:codigo.toString()}),
+        pt: replaceTemplateString(pt_messages.CODE_BOX, { codigo:codigo.toString()}),
+    }),
+    CODE_WRONG: (): LocalizedMessageFunction => ({
+        en: en_messages.CODE_WRONG,
+        es: es_messages.CODE_WRONG,
+        fr: fr_messages.CODE_WRONG,
+        tr: tr_messages.CODE_WRONG,
+        pt: pt_messages.CODE_WRONG,
+    }),
+    
 };

@@ -11,8 +11,6 @@ export function handleSuzukaTp (player: { p: PlayerObject, disc: DiscPropertiesO
         })
     )
     {
-        console.log("oii");
-        
         room.setPlayerDiscProperties(player.p.id,{
             y: 1416,
             x: player.p.position.x - 130,

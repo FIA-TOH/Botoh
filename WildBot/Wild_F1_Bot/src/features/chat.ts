@@ -14,7 +14,7 @@ enum COLORS {
     DARK_YELLOW = 0x93BF0F,
     PURPLE = 0xFF33D0,
     DARK_GREEN = 0x00FF04,
-    BLACK = 0x000000
+    BLACK = 0x000001
 }
 
 enum FONTS {
@@ -35,12 +35,12 @@ enum SOUNDS {
 export function sendMessage(room: RoomObject, message: LocalizedMessageFunction, toPlayerID?: number, color?: COLORS, font?: FONTS, sound?: SOUNDS) {
     if (toPlayerID) {
         const language = getPlayerLanguage(toPlayerID)
-        console.log(language, message, message[language])
+        // console.log(language, message, message[language])
         room.sendAnnouncement(message[language], toPlayerID, color, font, sound)
     } else {
         room.getPlayerList().forEach(player => {
             const language = getPlayerLanguage(player.id);
-            console.log(language, message, message[language])
+            // console.log(language, message, message[language])
             room.sendAnnouncement(message[language], player.id, color, font, sound)
         })
     }

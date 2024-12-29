@@ -681,7 +681,7 @@
 	"planes" : [
 		{ "normal" : [0,1 ], "dist" : 30, "bCoef" : 0, "cGroup" : ["redKO","blueKO" ] },
 		{ "normal" : [1,0 ], "dist" : 244, "bCoef" : 0, "cGroup" : ["redKO","blueKO" ] },
-		{ "normal" : [-1,0 ], "dist" : -1100, "bCoef" : 0, "cGroup" : ["redKO","blueKO" ] }
+		{ "normal" : [-1,0 ], "dist" : -1079, "bCoef" : 0, "cGroup" : ["redKO","blueKO" ], "_selected" : true }
 
 	],
 
