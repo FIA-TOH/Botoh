@@ -20,10 +20,10 @@ const SHANGHAI_INFO: CircuitInfo = {
         maxY: -80
     },
     pitlaneStart: {
-        minX: 732,
-        maxX: 967,
-        minY: -52,
-        maxY: -22
+        minX: 700,
+        maxX: 732,
+        minY: -302,
+        maxY: -84
     },
     pitlaneEnd: {
         minX: -566,

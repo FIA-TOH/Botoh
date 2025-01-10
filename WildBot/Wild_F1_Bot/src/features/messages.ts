@@ -811,12 +811,12 @@ export const MESSAGES = {
         pt: replaceTemplateString(pt_messages.TIME_TO_QUALY, {}),
     }),
     
-    TIME_TO_RACE: (): LocalizedMessageFunction => ({
-        en: replaceTemplateString(en_messages.TIME_TO_RACE, {}),
-        es: replaceTemplateString(es_messages.TIME_TO_RACE, {}),
-        fr: replaceTemplateString(fr_messages.TIME_TO_RACE, {}),
-        tr: replaceTemplateString(tr_messages.TIME_TO_RACE, {}),
-        pt: replaceTemplateString(pt_messages.TIME_TO_RACE, {}),
+    TIME_TO_RACE: (laps:number): LocalizedMessageFunction => ({
+        en: replaceTemplateString(en_messages.TIME_TO_RACE, {laps: laps.toString()}),
+        es: replaceTemplateString(es_messages.TIME_TO_RACE, {laps: laps.toString()}),
+        fr: replaceTemplateString(fr_messages.TIME_TO_RACE, {laps: laps.toString()}),
+        tr: replaceTemplateString(tr_messages.TIME_TO_RACE, {laps: laps.toString()}),
+        pt: replaceTemplateString(pt_messages.TIME_TO_RACE, {laps: laps.toString()}),
     }),
     
     WORSE_TIME: (lapTime: number, diferenca: number): LocalizedMessageFunction => ({

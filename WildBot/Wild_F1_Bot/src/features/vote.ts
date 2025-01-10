@@ -1,7 +1,7 @@
 import { Circuit } from "../circuits/Circuit";
 import { sendAlertMessage, sendMessage, sendSuccessMessage } from "./chat";
 import { setGhostMode } from "./ghost";
-import { qualyForPub } from "./handleCommands";
+import { handleRREnabledCommand, qualyForPub } from "./handleCommands";
 import { CIRCUITS, handleChangeMap } from "./maps";
 import { MESSAGES } from "./messages";
 import { playerList } from "./playerList";
@@ -19,6 +19,8 @@ export function voteSession(room: RoomObject) {
 
     isOnVoteSession = true
     const players = room.getPlayerList();
+
+    
 
     selectedCircuits = CIRCUITS.sort(() => 0.5 - Math.random()).slice(0, 3);
 
@@ -62,6 +64,8 @@ export function voteSession(room: RoomObject) {
             if(qualyForPub){
                 changeQuali(true, room)
                 setGhostMode(room, true)
+                handleRREnabledCommand(undefined, ["true"], room);
+                
             }
             room.startGame()
         } else {

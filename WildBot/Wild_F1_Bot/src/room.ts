@@ -9,9 +9,9 @@ import {MESSAGES} from "./features/messages";
 import {Teams} from "./features/teams";
 import {bans, leagueName, maxPlayers, publicName, roomPassword} from "../roomconfig.json"
 import {MAX_PLAYER_NAME, sendChatMessage, sendErrorMessage, sendSuccessMessage} from "./features/chat";
-import {changeQuali, clearPlayers, getPlayersOrderedByQualiTime, printAllTimes, qualiMode, qualiTime, reorderPlayersInRoom} from "./features/qualiMode";
+import {changeQuali, changeTraining, clearPlayers, getPlayersOrderedByQualiTime, printAllTimes, qualiMode, qualiTime, reorderPlayersInRoom, trainingMode} from "./features/qualiMode";
 import {banPlayer, decodeIPFromConn, getRunningPlayers, kickPlayer} from "./features/utils";
-import {COMMANDS, mute_mode, printAllPositions} from "./features/handleCommands";
+import {changeLaps, COMMANDS, handleRREnabledCommand, mute_mode, printAllPositions} from "./features/handleCommands";
 import {sha256} from "js-sha256";
 import {ghostMode, setGhostMode} from "./features/ghost";
 import {LEAGUE_MODE} from "./features/leagueMode";
@@ -129,7 +129,7 @@ function endRaceSession(playersAndDiscs: { p: PlayerObject, disc: DiscProperties
         gameStopedNaturally = true
         room.stopGame()
     }
-    if(!LEAGUE_MODE && room.getScores()?.time > qualiTime * 60){
+    if(!LEAGUE_MODE && room.getScores()?.time > qualiTime * 60 && qualiMode){
         gameStopedNaturally = true
         room.stopGame()
     }
@@ -151,12 +151,18 @@ room.onGameStop = function (byPlayer) {
             room.stopGame()
             reorderPlayersInRoom(room);
             movePlayersToCorrectSide()
-            changeQuali(false, room)
-            resetPlayers(room)
-            setGhostMode(room, false)
-            sendChatMessage(room, MESSAGES.EXPLAIN_TYRES())
-            sendChatMessage(room, MESSAGES.EXPLAIN_ERS())
-            room.startGame()
+            setTimeout(()=>{
+                changeQuali(false, room)
+                changeTraining(false, room)
+                resetPlayers(room)
+                setGhostMode(room, false)
+                handleRREnabledCommand(undefined, ["false"], room);
+                sendChatMessage(room, MESSAGES.EXPLAIN_TYRES())
+                sendChatMessage(room, MESSAGES.EXPLAIN_ERS())
+                setTimeout(()=>{
+                    room.startGame()
+                }, 5000)
+            }, 5000)
         } else {
             room.stopGame()
             printAllPositions(room)
@@ -168,13 +174,16 @@ room.onGameStop = function (byPlayer) {
         gameStopedNaturally = false
 
     } else{
-        if (qualiMode) {
+        if (qualiMode || trainingMode) {
             printAllTimes(room)
             reorderPlayersInRoom(room);
             movePlayersToCorrectSide()
             changeQuali(false, room)
+            changeTraining(false, room)
+            changeLaps('7', undefined, room)
             resetPlayers(room)
             setGhostMode(room, false)
+            
         } else {
             printAllPositions(room)
             movePlayersToCorrectSide()
@@ -226,10 +235,10 @@ room.onPlayerJoin = function (player) {
         return
     }
 
-    if (player.name.length > MAX_PLAYER_NAME) {
-        kickPlayer(player.id, `Your name cannot be bigger than ${MAX_PLAYER_NAME} characters`, room)
-        return
-    }
+    // if (player.name.length > MAX_PLAYER_NAME) {
+    //     kickPlayer(player.id, `Your name cannot be bigger than ${MAX_PLAYER_NAME} characters`, room)
+    //     return
+    // }
 
     const regexPattern = /^\[[A-Z]{2}] \S.*$/;
 
@@ -258,14 +267,12 @@ room.onPlayerJoin = function (player) {
     }
     
     if(room.getScores()){
-        if(qualiMode && (room.getScores().time < room.getScores().timeLimit)){     
-            room.setPlayerTeam(player.id, Teams.RUNNERS)
-        } else if(room.getScores() !== null){
-            if(gameState === "running"){
+            if(gameState === "running" && !qualiMode && !trainingMode && room.getScores().time !== 0){
                 room.setPlayerTeam(player.id, Teams.SPECTATORS)
+            } else {
+                room.setPlayerTeam(player.id, Teams.RUNNERS)
             }
         }
-    }
 
     playerList[player.id].afk = false;
     

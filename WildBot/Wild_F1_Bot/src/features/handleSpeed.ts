@@ -270,9 +270,9 @@ function calculateGripForDryConditions(tyres: Tires, wear: number, norm: Number)
         case "SOFT":
             return calculateGripMultiplier(wear, norm, 1.0, 0.993);
         case "MEDIUM":
-            return calculateGripMultiplier(wear, norm, 0.99975, 0.994);
+            return calculateGripMultiplier(wear, norm, 0.9999, 0.994);
         case "HARD":
-            return calculateGripMultiplier(wear, norm, 0.9995, 0.995);
+            return calculateGripMultiplier(wear, norm, 0.9998, 0.995);
         case "INTER":
             return calculateGripMultiplier(wear, norm, 0.998, 0.995);
         case "WET":
@@ -332,7 +332,7 @@ function calculateGripMultiplier(wear: number, norm: Number, maxGrip: number, mi
     } else if (wear > 10) {
       return maxGrip;
     } else {
-      return maxGrip - 0.0005;
+      return maxGrip - 0.0001;
     }
   }
 

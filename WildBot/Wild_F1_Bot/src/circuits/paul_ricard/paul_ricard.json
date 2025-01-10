@@ -563,7 +563,7 @@
 		{ "normal" : [0,-1 ], "dist" : -241, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
 		{ "normal" : [0,1 ], "dist" : 82, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
 		{ "normal" : [-1,0 ], "dist" : -401, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ], "curve" : 56.618009674141 },
-		{ "normal" : [-1,0 ], "dist" : 308, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ], "curve" : 56.618009674141, "_selected" : true }
+		{ "normal" : [1,0 ], "dist" : -322, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ], "curve" : 56.618009674141, "_selected" : true }
 
 	],
 

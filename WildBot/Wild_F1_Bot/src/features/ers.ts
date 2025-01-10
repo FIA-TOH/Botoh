@@ -12,7 +12,7 @@ export function updateErs(playersAndDiscs: { p: PlayerObject, disc: DiscProperti
         const properties = pad.disc;
         const playerInfo = playerList[p.id];
 
-        if (room.getScores().time > 0) {            
+        if (room.getScores()?.time > 0) {            
             if (properties.damping === 0.986) {
                 handleAvatar("Ers", p, room)
             }

@@ -638,8 +638,8 @@
 	],
 
 	"planes" : [
-		{ "normal" : [0,1 ], "dist" : -1298.296384, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
-		{ "normal" : [0,-1 ], "dist" : 1976.740288, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ], "_selected" : true },
+		{ "normal" : [0,-1 ], "dist" : 1287.703616, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
+		{ "normal" : [0,1 ], "dist" : -2022.259712, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
 		{ "normal" : [1,0 ], "dist" : -2752.176512000001, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
 		{ "normal" : [-1,0 ], "dist" : 2589.176512000001, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] }
 

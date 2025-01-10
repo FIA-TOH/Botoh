@@ -142,7 +142,7 @@ function startAnnouncementTimer() {
   let rainStartTimeAnnounce = room.getScores().time ?? 0;
   
   const checkAnnouncement = () => {
-    const currentTime = room.getScores().time;
+    const currentTime = room.getScores().time ?? 0;
     if (currentTime - rainStartTimeAnnounce >= announcementTime / 1000) {
       announceRainStart();
       startRainStartTimer();
@@ -154,9 +154,9 @@ function startAnnouncementTimer() {
 }
 
 function startRainStartTimer() {
-  const rainStartTimeAnnounce = room.getScores().time;
+  const rainStartTimeAnnounce = room.getScores().time ?? 0;
   const checkRainStart = () => {
-    const currentTime = room.getScores().time;
+    const currentTime = room.getScores().time ?? 0;
     if (currentTime - rainStartTimeAnnounce >= 60) {
       startRain();
     } else {
@@ -231,7 +231,7 @@ function stopAnnouncementTimer() {
 
   let rainStopTimeAnnouce = room.getScores().time ?? 0;
   const checkStopAnnouncement = () => {
-    const currentTime = room.getScores().time;
+    const currentTime = room.getScores().time ?? 0;
     if (currentTime - rainStopTimeAnnouce >= stopAnnouncementTime / 1000) {
       announceRainStop();
       stopRainStopTimer();
@@ -244,9 +244,9 @@ function stopAnnouncementTimer() {
 
 function stopRainStopTimer() {
 
-  const rainStopTime = room.getScores().time;
+  const rainStopTime = room.getScores().time ?? 0;
   const checkRainStop = () => {
-    const currentTime = room.getScores().time;
+    const currentTime = room.getScores().time ?? 0;
     if (currentTime - rainStopTime >= 60) {
       stopRain();
     } else {

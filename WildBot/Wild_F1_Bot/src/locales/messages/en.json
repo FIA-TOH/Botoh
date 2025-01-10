@@ -100,7 +100,7 @@
   "CIRCUIT_CHOOSED": "The winning circuit was {{circuit}}, with {{votes}} votes",
   "TIME_TO_VOTE":"¡Hora de votar! Elige uno de los circuitos a continuación escribiendo !voto (Número)",
   "TIME_TO_QUALY": "🚨Qualifying! Do your best time!🚨",
-"TIME_TO_RACE": "🚨Race! May the best win!🚨",
+"TIME_TO_RACE": "🚨Race with {{laps}} laps! May the best win!🚨",
 "WORSE_TIME": "Lap time: {{lapTime}} (-{{diferenca}}",
 "CODE_BOX":"Your PitStop code is {{codigo}}, enter it reversed after the tire type.",
 "CODE_WRONG": "Wrong code! Enter the correct code reversed."

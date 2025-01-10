@@ -8,7 +8,9 @@ import {
 } from "./chat";
 import {MESSAGES} from "./messages";
 import {playerList} from "./playerList";
+import { changeLaps } from "./handleCommands";
 export let qualiMode = false;
+export let trainingMode = false
 export let qualiTime = 2;
 
 let arrayPlayers:  { name: string, time: number }[] = []
@@ -64,7 +66,20 @@ export function changeQuali(newValue: boolean, room: RoomObject) {
 
     qualiMode = false;
     room.setTimeLimit(0);
-    sendSuccessMessage(room, MESSAGES.TIME_TO_RACE());
+    sendSuccessMessage(room, MESSAGES.TIME_TO_RACE(laps));
+}
+
+export function changeTraining(newValue: boolean, room: RoomObject) {
+    if (newValue) {
+        trainingMode = true;
+        changeLaps('999', undefined, room)
+        room.setTimeLimit(0);
+        return;
+    }
+
+    trainingMode = false;
+    room.setTimeLimit(0);
+    sendSuccessMessage(room, MESSAGES.TIME_TO_RACE(laps));
 }
 
 export function getPlayersOrderedByQualiTime(room: RoomObject) {
@@ -77,7 +92,7 @@ export function getPlayersOrderedByQualiTime(room: RoomObject) {
 }
 
 export function printAllTimes(room: RoomObject, toPlayerID?: number) {
-    if (!qualiMode) {
+    if (!qualiMode || !trainingMode) {
         sendErrorMessage(room, MESSAGES.TIMES_IN_RACE(), toPlayerID);
         return;
     }

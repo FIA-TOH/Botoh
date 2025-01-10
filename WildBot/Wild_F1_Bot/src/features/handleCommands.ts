@@ -25,7 +25,7 @@ import {
     vsc
 } from "./handleSpeed";
 import {leagueAdminPassword, publicAdminPassword} from "../../roomconfig.json"
-import {changeQuali, printAllTimes, qualiMode, qualiTime, setQualiTime, updatePlayerTime} from "./qualiMode";
+import {changeQuali, changeTraining, printAllTimes, qualiMode, qualiTime, setQualiTime, trainingMode, updatePlayerTime} from "./qualiMode";
 import en_commands from "../locales/commands/en";
 import fr_commands from "../locales/commands/fr";
 import es_commands from "../locales/commands/es";
@@ -63,6 +63,7 @@ export type CommandFunction = (
     handlePositionsCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleVSCCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleQModeCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
+    handleTModeCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleQTimeCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleRModeCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleBBCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
@@ -108,6 +109,7 @@ function importCommandsByLanguage(commandFunctions: { [key: string]: CommandFunc
             handlePositionsCommand,
             handleVSCCommand,
             handleQModeCommand,
+            handleTModeCommand,
             handleQTimeCommand,
             handleRModeCommand,
             handleBBCommand,
@@ -155,6 +157,7 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
             handlePositionsCommand,
             handleVSCCommand,
             handleQModeCommand,
+            handleTModeCommand,
             handleQTimeCommand,
             handleRModeCommand,
             handleBBCommand,
@@ -362,6 +365,20 @@ export function handleQModeCommand(byPlayer: PlayerObject, args: string[], room:
     changeQuali(true, room)
 }
 
+export function handleTModeCommand(byPlayer: PlayerObject, args: string[], room: RoomObject) {
+    if (!byPlayer.admin) {
+        sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id)
+        return
+    }
+
+    if (room.getScores() !== null) {
+        sendErrorMessage(room, MESSAGES.ALREADY_STARTED(), byPlayer.id)
+        return
+    }
+    changeTraining(true, room)
+    room.sendAnnouncement("Training mode on", byPlayer.id)
+}
+
 export function handleQTimeCommand(byPlayer: PlayerObject, args: string[], room: RoomObject) {
     if (!byPlayer.admin) {
         sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id)
@@ -404,36 +421,36 @@ export function handleBBCommand(byPlayer: PlayerObject, args: string[], room: Ro
 
 export function handleTiresCommand(byPlayer: PlayerObject, args: string[], room: RoomObject) {
     if(room.getScores()){
-
-    }
-    if (args.length === 0) {
+        if (args.length === 0) {
+            sendErrorMessage(room, MESSAGES.INVALID_TIRES(), byPlayer.id);
+            return;
+        }
+    
+        if(LEAGUE_MODE && room.getScores().time > 0){
+            const boxAlertReversed = playerList[byPlayer.id].boxAlert
+            .toString()
+            .split('')
+            .reverse()
+            .join('');
+        
+            if (args[1] !== boxAlertReversed || args.length !== 2) {
+                sendErrorMessage(room, MESSAGES.CODE_WRONG(), byPlayer.id);
+                return;
+            }
+        }
+        const tiresStr = args[0].toUpperCase();
+        
+        for (let tiresKey in Tires) {
+            if (tiresKey === tiresStr || tiresKey[0] === tiresStr) {
+                changeTires({ p: byPlayer, disc: room.getPlayerDiscProperties(byPlayer.id) }, tiresKey as Tires, room);
+                playerList[byPlayer.id].tires = tiresKey as Tires;
+                playerList[byPlayer.id].wear = 0;
+                return;
+            }
+        }
         sendErrorMessage(room, MESSAGES.INVALID_TIRES(), byPlayer.id);
-        return;
     }
-
-    if(LEAGUE_MODE && room.getScores().time > 0){
-        const boxAlertReversed = playerList[byPlayer.id].boxAlert
-        .toString()
-        .split('')
-        .reverse()
-        .join('');
     
-        if (args[1] !== boxAlertReversed || args.length !== 2) {
-            sendErrorMessage(room, MESSAGES.CODE_WRONG(), byPlayer.id);
-            return;
-        }
-    }
-    const tiresStr = args[0].toUpperCase();
-    
-    for (let tiresKey in Tires) {
-        if (tiresKey === tiresStr || tiresKey[0] === tiresStr) {
-            changeTires({ p: byPlayer, disc: room.getPlayerDiscProperties(byPlayer.id) }, tiresKey as Tires, room);
-            playerList[byPlayer.id].tires = tiresKey as Tires;
-            playerList[byPlayer.id].wear = 0;
-            return;
-        }
-    }
-    sendErrorMessage(room, MESSAGES.INVALID_TIRES(), byPlayer.id);
 }
 
 
@@ -628,7 +645,7 @@ export function handleAfkCommand(byPlayer: PlayerObject, _: string[], room: Room
         player.afk = true;
         sendAlertMessage(room, MESSAGES.NOW_AFK(), byPlayer.id);
         resetPlayer(byPlayer, room, byPlayer.id);
-    } else if (qualiMode) {
+    } else if (qualiMode || trainingMode) {
         room.setPlayerTeam(byPlayer.id, Teams.RUNNERS);
         player.afk = false;
         resetPlayer(byPlayer, room, byPlayer.id);
@@ -895,17 +912,27 @@ export function handleGhostCommand(byPlayer: PlayerObject, args: string[], room:
 
 export let rrEnabled = false
 
-export function handleRREnabledCommand(byPlayer: PlayerObject, _: string[], room: RoomObject) {
-    if (!byPlayer.admin) {
-        sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id)
-        return
+export function handleRREnabledCommand(byPlayer?: PlayerObject, args?: string[], room?: RoomObject) {
+    if(room){
+        if(byPlayer){
+            if (!byPlayer.admin) {
+                sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id)
+                return
+            }
+        }
+        if(args && args[0] === "false"){
+            rrEnabled = true
+            room.sendAnnouncement("RR mode!")
+        } else if (args && args[0] === "true"){
+            rrEnabled = false
+            room.sendAnnouncement("No RR mode!")
+        } else if (byPlayer){
+            sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id)
+            return
+        } else {
+            return
+        }
     }
-
-    rrEnabled = !rrEnabled
-    if (rrEnabled)
-        room.sendAnnouncement("RR mode!")
-    else
-        room.sendAnnouncement("No RR mode!")
 }
 
 export function handleRRCommand(byPlayer: PlayerObject, _: string[], room: RoomObject) {
@@ -914,6 +941,8 @@ export function handleRRCommand(byPlayer: PlayerObject, _: string[], room: RoomO
         return
     }
     resetPlayer(byPlayer, room, byPlayer.id);
+    playerList[byPlayer.id].kers = 100;
+    playerList[byPlayer.id].wear = 20
     room.setPlayerDiscProperties(byPlayer.id, {
         x: CIRCUITS[currentMapIndex].info.lastPlace.x,
         y: CIRCUITS[currentMapIndex].info.lastPlace.y
@@ -921,7 +950,7 @@ export function handleRRCommand(byPlayer: PlayerObject, _: string[], room: RoomO
 }
 
 export function printAllPositions(room: RoomObject, toPlayerID?: number) {
-    if (qualiMode) {
+    if (qualiMode || trainingMode) {
         sendErrorMessage(room, MESSAGES.POSITIONS_IN_QUALI(), toPlayerID)
         return false
     }
@@ -947,24 +976,33 @@ export function printAllPositions(room: RoomObject, toPlayerID?: number) {
 }
 
 
-function changeLaps(newLapsArg: string, byPlayer: PlayerObject, room: RoomObject) {
-    if (qualiMode) {
-        sendErrorMessage(room, MESSAGES.LAPS_IN_QUALI(), byPlayer.id)
-        return false
-    }
+export function changeLaps(newLapsArg?: string, byPlayer?: PlayerObject, room?: RoomObject) {
+    if(room && newLapsArg){
+        const newLaps = Number(newLapsArg)
+        if(byPlayer){
+            if (qualiMode || trainingMode) {
+                sendErrorMessage(room, MESSAGES.LAPS_IN_QUALI(), byPlayer.id)
+                return false
+            }
+        
+            if (room.getScores() !== null) {
+                sendErrorMessage(room, MESSAGES.ALREADY_STARTED(), byPlayer.id)
+                return false
+            }
+            if (!isNaN(newLaps)) {
+                setLaps(newLaps)
+                sendChatMessage(room, MESSAGES.LAPS_CHANGED_TO(newLaps), byPlayer.id)
+                return true
+            } else {
+                sendErrorMessage(room, MESSAGES.LAPS_USAGE(), byPlayer.id)
+                return false
+            }
+        } else {
+            setLaps(newLaps)
+            return true
+        }
+    
 
-    if (room.getScores() !== null) {
-        sendErrorMessage(room, MESSAGES.ALREADY_STARTED(), byPlayer.id)
-        return false
-    }
-
-    const newLaps = Number(newLapsArg)
-    if (!isNaN(newLaps)) {
-        setLaps(newLaps)
-        sendChatMessage(room, MESSAGES.LAPS_CHANGED_TO(newLaps), byPlayer.id)
-        return true
-    } else {
-        sendErrorMessage(room, MESSAGES.LAPS_USAGE(), byPlayer.id)
-        return false
-    }
+    } return false
+   
 }
