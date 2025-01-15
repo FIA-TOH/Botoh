@@ -44,6 +44,11 @@ export function voteSession(room: RoomObject) {
         });
 
         sendSuccessMessage(room, MESSAGES.CIRCUIT_CHOOSED(winnerCircuit.info?.name || "Nome não definido", winnerCircuit.info?.Votes ?? 0));
+        console.log(winnerCircuit.info.BestTime);
+        
+        if(winnerCircuit.info.BestTime && winnerCircuit.info.BestTime.length > 1){
+            room.sendAnnouncement(`Recorde: ${winnerCircuit.info.BestTime[0]} - ${winnerCircuit.info.BestTime[1]}`)
+        }
 
         const winnerIndex = CIRCUITS.findIndex(circuit => circuit.info?.name === winnerCircuit.info?.name);
 

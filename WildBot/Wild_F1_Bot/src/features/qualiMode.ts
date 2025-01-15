@@ -92,11 +92,11 @@ export function getPlayersOrderedByQualiTime(room: RoomObject) {
 }
 
 export function printAllTimes(room: RoomObject, toPlayerID?: number) {
-    if (!qualiMode || !trainingMode) {
+    if (!qualiMode && !trainingMode) {
         sendErrorMessage(room, MESSAGES.TIMES_IN_RACE(), toPlayerID);
         return;
     }
-
+    
     let orderedList = getPlayersOrderedByQualiTime(room);
     
 

@@ -1,7 +1,7 @@
 import {playerList} from "./playerList";
 import {CHECK_IF_TROLLING, checkIfTrolling, getRunningPlayers, inHitbox} from "./utils";
 import {CIRCUITS, currentMapIndex} from "./maps";
-import {qualiMode, qualiTime, updatePlayerTime} from "./qualiMode";
+import {qualiMode, qualiTime, trainingMode, updatePlayerTime} from "./qualiMode";
 import {sendBestTimeRace, sendChatMessage, sendErrorMessage, sendSuccessMessage, sendWorseTime} from "./chat";
 import {MESSAGES} from "./messages";
 import {laps} from "./laps";
@@ -11,6 +11,7 @@ import { ACTUAL_CIRCUIT } from "../room";
 import { Teams } from "./teams";
 import { bestTimes, getAbbreviatedTrackName, updateBestTime } from "../circuits/bestTimes";
 import { LEAGUE_MODE } from "./leagueMode";
+import { printAllPositions } from "./handleCommands";
 
 
 export const lapPositions: {
@@ -29,6 +30,60 @@ export const finishList: {
     time: number,
     fullTime: number
 }[] = []
+
+export const positionList: {
+    name: string,
+    pits: number,
+    time: number,
+    lap: number,
+    active: boolean
+}[] = [];
+
+export function updatePositionList(players: { p: PlayerObject, disc: DiscPropertiesObject }[], currentLap: number) {
+    // Cria um set com os nomes dos jogadores atualmente ativos
+    const activePlayers = new Set(players.map(player => player.p.name));
+
+    // Atualiza ou adiciona informações dos jogadores na lista
+    players.forEach(player => {
+        const { p } = player;
+        const playerData = playerList[p.id];
+
+        const playerPositionIndex = positionList.findIndex(entry => entry.name === p.name);
+        const playerInfo = {
+            name: p.name,
+            pits: playerData.pits,
+            time: serialize(playerData.lapTime),
+            lap: playerData.currentLap,
+            active: true // Marca o jogador como ativo
+        };
+
+        if (playerPositionIndex !== -1) {
+            // Atualiza as informações se o jogador já está na lista
+            positionList[playerPositionIndex] = playerInfo;
+        } else {
+            // Adiciona o jogador se ele ainda não está na lista
+            positionList.push(playerInfo);
+        }
+    });
+
+    // Marca jogadores que não estão mais ativos como inativos
+    positionList.forEach(entry => {
+        if (!activePlayers.has(entry.name)) {
+            entry.active = false; // Jogador ficou inativo
+        }
+    });
+
+    // Ordena a lista
+    positionList.sort((a, b) => {
+        if (a.lap === b.lap) {
+            return a.time - b.time; // Ordena pelo tempo na mesma volta
+        }
+        return b.lap - a.lap; // Ordena pela volta (maior volta primeiro)
+    });
+
+    console.log(positionList);
+    
+}
 
 function serialize(number: number) {
     return parseFloat(number.toFixed(3))
@@ -73,6 +128,10 @@ export function checkPlayerLaps(playersAndDiscs: { p: PlayerObject, disc: DiscPr
 
         if (currentLap > 1) {
             if (!drsOn && currentLap == 2) enableDRS(room);
+            if(!qualiMode || !trainingMode){
+                updatePositionList(players, currentLap);
+            }
+           
             const lapTime = serialize(playerList[p.id].lapTime)
             let bestTimeP = serialize(playerList[p.id].bestTime)
 
@@ -135,7 +194,10 @@ export function checkPlayerLaps(playersAndDiscs: { p: PlayerObject, disc: DiscPr
 
                         if (prevPlayer.currentLap > currentLap) {
                             const distance = prevPlayer.currentLap - currentLap
-                            sendChatMessage(room, MESSAGES.POSITION_AND_DISTANCE_AHEAD(position, distance, "laps"), p.id)
+                            if(!trainingMode){
+                                sendChatMessage(room, MESSAGES.POSITION_AND_DISTANCE_AHEAD(position, distance, "laps"), p.id)
+                            }
+                            
                         } else {
                             const distance = serialize(playerList[prevPlayer.id].lapTime)
                             sendChatMessage(room, MESSAGES.POSITION_AND_DISTANCE_AHEAD(position, distance, "seconds"), p.id)
@@ -144,6 +206,7 @@ export function checkPlayerLaps(playersAndDiscs: { p: PlayerObject, disc: DiscPr
                         const playersOnSpec = playersAndDiscs.filter(pla => pla.p.team !== Teams.RUNNERS)
                         playersOnSpec.forEach(pla => {
                             sendChatMessage(room, MESSAGES.CURRENT_LAP(currentLap, laps), pla.p.id)
+                            printAllPositions(room, pla.p.id)
                         });
                     }
                 } else {

@@ -2,7 +2,7 @@ import {CIRCUITS, handleChangeMap} from "./features/maps";
 import {logPlayerSpeed} from "./features/logPlayerSpeed";
 import {createPlayerInfo, resetPlayer, resetPlayers} from "./features/players";
 import {log} from "./features/logger";
-import {checkPlayerLaps, finishList, lapPositions} from "./features/handleLapChange";
+import {checkPlayerLaps, finishList, lapPositions, positionList} from "./features/handleLapChange";
 import {sendDiscordReplay} from "./features/discord";
 import {controlPlayerSpeed, handlePitlane, TIRE_AVATAR, updateGripCounter} from "./features/handleSpeed";
 import {MESSAGES} from "./features/messages";
@@ -96,6 +96,7 @@ room.onGameStart = function (byPlayer) {
         resetPlayer(p, room, p.id, true)
     })
     finishList.splice(0, finishList.length)
+    positionList.splice(0, positionList.length)
 
     for (let i = 0; i < laps; i++) {
         lapPositions[i] = []
@@ -265,14 +266,22 @@ room.onPlayerJoin = function (player) {
     } else {
         log(`${player.name} has joined. (${ip})`)
     }
+
     
-    if(room.getScores()){
+    if(room.getPlayerList().length > 0){
+        if(room.getScores()){
             if(gameState === "running" && !qualiMode && !trainingMode && room.getScores().time !== 0){
                 room.setPlayerTeam(player.id, Teams.SPECTATORS)
             } else {
                 room.setPlayerTeam(player.id, Teams.RUNNERS)
             }
         }
+    } else {
+        room.stopGame();
+        room.setPlayerTeam(player.id, Teams.SPECTATORS)
+        room.startGame();
+    }
+    
 
     playerList[player.id].afk = false;
     

@@ -43,6 +43,7 @@ export default function pt_commands(
     handleFlagCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleVoteCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleClearCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
+    handleRecordCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
 
 
 ): Commands {
@@ -91,6 +92,7 @@ export default function pt_commands(
         "!tp": handleTpCommand,
         "!flag": handleFlagCommand,
         "!votar": handleVoteCommand,
-        "!clear": handleClearCommand
+        "!clear": handleClearCommand,
+        "!record": handleRecordCommand
     }
 }

@@ -44,6 +44,7 @@ export default function en_commands(
     handleFlagCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleVoteCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleClearCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
+    handleRecordCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
 ): Commands {
     return {
         "!admin": handleAdminCommand,
@@ -87,6 +88,7 @@ export default function en_commands(
         "!tp": handleTpCommand,
         "!flag": handleFlagCommand,
         "!vote": handleVoteCommand,
-        "!clear": handleClearCommand
+        "!clear": handleClearCommand,
+        "!record": handleRecordCommand
     }
 }

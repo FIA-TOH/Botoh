@@ -15,7 +15,7 @@ import {
 } from "./chat";
 import {MESSAGES} from "./messages";
 import {CIRCUITS, currentMapIndex, handleChangeMap} from "./maps";
-import {finishList, lapPositions} from "./handleLapChange";
+import {finishList, lapPositions, positionList} from "./handleLapChange";
 import {
     changeTires,
     changeVSC,
@@ -95,6 +95,7 @@ export type CommandFunction = (
     handleFlagCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleVoteCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleClearCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
+    handleRecordCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
 ) => Commands
 
 function importCommandsByLanguage(commandFunctions: { [key: string]: CommandFunction }): { [key: string]: Commands } {
@@ -140,7 +141,8 @@ function importCommandsByLanguage(commandFunctions: { [key: string]: CommandFunc
             handleTpCommand,
             handleFlagCommand,
             handleVoteCommand,
-            handleClearCommand
+            handleClearCommand,
+            handleRecordCommand
         )
     }), {});
 }
@@ -188,7 +190,8 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
             handleTpCommand,
             handleFlagCommand,
             handleVoteCommand,
-            handleClearCommand
+            handleClearCommand,
+            handleRecordCommand
         ))
     }), {});
 }
@@ -218,13 +221,15 @@ export function handleAdminCommand(byPlayer: PlayerObject, args: string[], room:
         room.setPlayerAdmin(byPlayer.id, true)
         afkAdmins[byPlayer.id] = 0
         return
-    }
-    if (getAdmins(room).length === 0 && !LEAGUE_MODE) {
-        room.setPlayerAdmin(byPlayer.id, true)
-        afkAdmins[byPlayer.id] = 0
     } else {
-        sendErrorMessage(room, MESSAGES.ADMIN_ALREADY_IN_ROOM(), byPlayer.id)
+        return
     }
+    // if (getAdmins(room).length === 0 && !LEAGUE_MODE) {
+    //     room.setPlayerAdmin(byPlayer.id, true)
+    //     afkAdmins[byPlayer.id] = 0
+    // } else {
+    //     sendErrorMessage(room, MESSAGES.ADMIN_ALREADY_IN_ROOM(), byPlayer.id)
+    // }
 }
 
 export function handleCommandsCommand(byPlayer: PlayerObject, _: string[], room: RoomObject) {
@@ -277,10 +282,17 @@ export function handleClearCommand(byPlayer: PlayerObject, args: string[], room:
     }
 
     updateBestTime(ACTUAL_CIRCUIT.info.name, 999.999, "Limpado");
+    const players = room.getPlayerList()
+    players.forEach(p => {playerList[p.id].bestTime === 999.999});
     room.sendAnnouncement("Recorde Resetado")
 
 }
 
+export function handleRecordCommand(byPlayer: PlayerObject, args: string[], room: RoomObject) {
+    if(ACTUAL_CIRCUIT && ACTUAL_CIRCUIT.info.BestTime){
+        room.sendAnnouncement(`Record: ${ACTUAL_CIRCUIT.info.BestTime[0]} - ${ACTUAL_CIRCUIT.info.BestTime[1]}`)
+    }
+}
 
 export function handleVoteCommand(byPlayer: PlayerObject, args: string[], room: RoomObject) {
     if(gameState !== null){
@@ -920,10 +932,10 @@ export function handleRREnabledCommand(byPlayer?: PlayerObject, args?: string[],
                 return
             }
         }
-        if(args && args[0] === "false"){
+        if(args && args[0] === "true"){
             rrEnabled = true
             room.sendAnnouncement("RR mode!")
-        } else if (args && args[0] === "true"){
+        } else if (args && args[0] === "false"){
             rrEnabled = false
             room.sendAnnouncement("No RR mode!")
         } else if (byPlayer){
@@ -941,8 +953,10 @@ export function handleRRCommand(byPlayer: PlayerObject, _: string[], room: RoomO
         return
     }
     resetPlayer(byPlayer, room, byPlayer.id);
-    playerList[byPlayer.id].kers = 100;
-    playerList[byPlayer.id].wear = 20
+    if(qualiMode){
+        playerList[byPlayer.id].kers = 100;
+        playerList[byPlayer.id].wear = 20
+    }
     room.setPlayerDiscProperties(byPlayer.id, {
         x: CIRCUITS[currentMapIndex].info.lastPlace.x,
         y: CIRCUITS[currentMapIndex].info.lastPlace.y
@@ -957,18 +971,35 @@ export function printAllPositions(room: RoomObject, toPlayerID?: number) {
     const headerSpaces = (MAX_PLAYER_NAME - 4) / 2.0
     const headerLeftSpaces = ' '.repeat(Math.ceil(headerSpaces))
     const headerRightSpaces = ' '.repeat(Math.trunc(headerSpaces))
-    sendNonLocalizedSmallChatMessage(room, ` P - ${headerLeftSpaces}Name${headerRightSpaces} | Pits | Best Lap | Time`, toPlayerID)
     let i = 1
-    finishList.forEach(p => {
-        const spaces = (MAX_PLAYER_NAME - p.name.length) / 2.0
-        const leftSpaces = ' '.repeat(Math.ceil(spaces))
-        const rightSpaces = ' '.repeat(Math.trunc(spaces))
 
-        const position = i.toString().padStart(2, '0')
-        const pits = p.pits.toString().padStart(2, '0')
-        sendNonLocalizedSmallChatMessage(room, `${position} - ${leftSpaces}${p.name}${rightSpaces} |  ${pits}  | ${p.time.toFixed(3)} | ${p.fullTime.toFixed(3)}`, toPlayerID)
-        i++
-    })
+    if(finishList.length > 0){
+        sendNonLocalizedSmallChatMessage(room, ` P - ${headerLeftSpaces}Name${headerRightSpaces} | Pits | Best Lap | Time`, toPlayerID)
+        finishList.forEach(p => {
+            const spaces = (MAX_PLAYER_NAME - p.name.length) / 2.0
+            const leftSpaces = ' '.repeat(Math.ceil(spaces))
+            const rightSpaces = ' '.repeat(Math.trunc(spaces))
+    
+            const position = i.toString().padStart(2, '0')
+            const pits = p.pits.toString().padStart(2, '0')
+            sendNonLocalizedSmallChatMessage(room, `${position} - ${leftSpaces}${p.name}${rightSpaces} |  ${pits}  | ${p.time.toFixed(3)} | ${p.fullTime.toFixed(3)}`, toPlayerID)
+            i++
+        })
+    } else {
+        sendNonLocalizedSmallChatMessage(room, ` P - ${headerLeftSpaces}Name${headerRightSpaces} | Pits | Best Lap`, toPlayerID)
+        positionList.forEach(p=>{
+            const spaces = (MAX_PLAYER_NAME - p.name.length) / 2.0
+            const leftSpaces = ' '.repeat(Math.ceil(spaces))
+            const rightSpaces = ' '.repeat(Math.trunc(spaces))
+    
+            const position = i.toString().padStart(2, '0')
+            const pits = p.pits.toString().padStart(2, '0')
+            sendNonLocalizedSmallChatMessage(room, `${position} - ${leftSpaces}${p.name}${rightSpaces} |  ${pits}  | ${p.time.toFixed(3)}}`, toPlayerID)
+            i++
+        })
+    }
+    
+   
 
     if (i === 1) {
         sendErrorMessage(room, MESSAGES.NO_POSITIONS(), toPlayerID)
