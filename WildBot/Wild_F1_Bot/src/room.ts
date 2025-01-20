@@ -175,7 +175,7 @@ room.onGameStop = function (byPlayer) {
         gameStopedNaturally = false
 
     } else{
-        if (qualiMode || trainingMode) {
+        if (qualiMode) {
             printAllTimes(room)
             reorderPlayersInRoom(room);
             movePlayersToCorrectSide()
@@ -185,6 +185,11 @@ room.onGameStop = function (byPlayer) {
             resetPlayers(room)
             setGhostMode(room, false)
             
+        } else if(trainingMode){
+            printAllTimes(room)
+            reorderPlayersInRoom(room);
+            movePlayersToCorrectSide()
+            resetPlayers(room)
         } else {
             printAllPositions(room)
             movePlayersToCorrectSide()
@@ -236,10 +241,10 @@ room.onPlayerJoin = function (player) {
         return
     }
 
-    // if (player.name.length > MAX_PLAYER_NAME) {
-    //     kickPlayer(player.id, `Your name cannot be bigger than ${MAX_PLAYER_NAME} characters`, room)
-    //     return
-    // }
+    if (player.name.length > MAX_PLAYER_NAME) {
+        kickPlayer(player.id, "Your name cannot be bigger than 22 characters", room)
+        return
+    }
 
     const regexPattern = /^\[[A-Z]{2}] \S.*$/;
 
@@ -267,8 +272,9 @@ room.onPlayerJoin = function (player) {
         log(`${player.name} has joined. (${ip})`)
     }
 
+    console.log(room.getPlayerList().length);
     
-    if(room.getPlayerList().length > 0){
+    if(room.getPlayerList().length > 1){
         if(room.getScores()){
             if(gameState === "running" && !qualiMode && !trainingMode && room.getScores().time !== 0){
                 room.setPlayerTeam(player.id, Teams.SPECTATORS)
@@ -277,8 +283,7 @@ room.onPlayerJoin = function (player) {
             }
         }
     } else {
-        room.stopGame();
-        room.setPlayerTeam(player.id, Teams.SPECTATORS)
+        room.setPlayerTeam(player.id, Teams.RUNNERS)
         room.startGame();
     }
     
@@ -314,7 +319,7 @@ room.onPlayerLeave = function (player) {
         return {p: p, disc: room.getPlayerDiscProperties(p.id)}
     })
 
-    if (room.getScores() != null && getRunningPlayers(playersAndDiscs).length === 0) {
+    if (room.getScores() != null && getRunningPlayers(playersAndDiscs).length === 0 && !trainingMode) {
         room.stopGame()
     }
 }

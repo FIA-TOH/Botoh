@@ -32,8 +32,8 @@ const trackNameMapping: { [key: string]: string } = {
 // Atualizando o objeto bestTimes com os nomes completos
 export const bestTimes: { [key: string]: [number, string, string] } = {
   melbourne: [27.600, "Lando Canorris", trackNameMapping["melbourne"]],
-  imola: [32.383, "Ximbastian Vettel", trackNameMapping["imola"]],
-  sepang: [50.267, "Ximbastian Vettel", trackNameMapping["sepang"]],
+  imola: [31.867, "Lib Wallard", trackNameMapping["imola"]],
+  sepang: [50.150, "HiroShiryu Fushida", trackNameMapping["sepang"]],
   bahrein: [32.117, "Ximbastian Vettel", trackNameMapping["bahrein"]],
   sochi: [40.783, "Ximbastian Vettel", trackNameMapping["sochi"]],
   monaco: [35.233, "Ximbastian Vettel", trackNameMapping["monaco"]],
@@ -48,7 +48,7 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   austin: [50.483, "Lando Canorris", trackNameMapping["austin"]],
   shanghai: [41.217, "Lando Canorris", trackNameMapping["shanghai"]],
   suzuka: [33.967, "Ximbastian Vettel", trackNameMapping["suzuka"]],
-  interlagos: [33.800, "Gabriel Schumacchio", trackNameMapping["interlagos"]],
+  interlagos: [33.300, "Lando Canorris", trackNameMapping["interlagos"]],
   baku: [47.933, "HiroShiryu FUshida", trackNameMapping["baku"]],
   argentina: [42.467, "HiroShiryu Fushida", trackNameMapping["argentina"]],
   marinaBay: [48.717, "Ximbastian Vettel", trackNameMapping["marinaBay"]],
@@ -64,20 +64,53 @@ export const getAbbreviatedTrackName = (fullTrackName: string): string | undefin
   return Object.keys(trackNameMapping).find(key => trackNameMapping[key] === fullTrackName);
 };
 
+export const getBestTime = (trackName: string, room: RoomObject, byPlayer: PlayerObject) => {
+  const abbreviatedTrackName = getAbbreviatedTrackName(trackName) || trackName;
+
+  if (trackNameMapping.hasOwnProperty(abbreviatedTrackName)) {
+    const bestTime = bestTimes[abbreviatedTrackName][0];
+    const driver = bestTimes[abbreviatedTrackName][1];
+
+    if(bestTime && driver){
+      room.sendAnnouncement(`Record: ${bestTime} - ${driver}`, byPlayer.id)
+      return
+    }
+    return
+  }
+}
+
 // Atualizando a função para usar o nome completo
 export const updateBestTime = (trackName: string, newTime: number, driverName: string) => {
   // Se o nome completo for passado, tenta obter o nome abreviado
   const abbreviatedTrackName = getAbbreviatedTrackName(trackName) || trackName;
+  
 
-  if (trackNameMapping.hasOwnProperty(abbreviatedTrackName)) {
+  if (trackNameMapping.hasOwnProperty(abbreviatedTrackName))  {
     const currentBestTime = bestTimes[abbreviatedTrackName][0];
 
     // Só atualiza se o tempo atual for maior que o novo tempo ou se for indefinido (999.999)
     if (currentBestTime === 999.999 || newTime < currentBestTime) {
       const circuitName = trackNameMapping[abbreviatedTrackName]; // Usa o nome completo da pista
       bestTimes[abbreviatedTrackName] = [newTime, driverName, circuitName];
+      console.log(bestTimes[abbreviatedTrackName]);
+      
     } else {
     }
+  } else {
+    console.log(`A pista ${abbreviatedTrackName} não foi encontrada no mapeamento.`);
+  }
+};
+
+export const clearBestTime = (trackName: string, newTime: number, driverName: string) => {
+  // Se o nome completo for passado, tenta obter o nome abreviado
+  const abbreviatedTrackName = getAbbreviatedTrackName(trackName) || trackName;
+  
+
+  if (trackNameMapping.hasOwnProperty(abbreviatedTrackName))  {
+      const circuitName = trackNameMapping[abbreviatedTrackName]; // Usa o nome completo da pista
+      bestTimes[abbreviatedTrackName] = [newTime, driverName, circuitName];
+      console.log(bestTimes[abbreviatedTrackName]);
+
   } else {
     console.log(`A pista ${abbreviatedTrackName} não foi encontrada no mapeamento.`);
   }

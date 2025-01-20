@@ -21,7 +21,8 @@ export const TIRE_AVATAR: {
     "HARD": "⚪",
     "INTER": "🟢",
     "WET": "🔵",
-    "FLAT": "⚫"
+    "FLAT": "⚫",
+    "TRAIN": "🟣"
 }
 
 export let vsc = false
@@ -170,7 +171,7 @@ export function controlPlayerSpeed(
         if (vsc) {
             gripMultiplierSlow = 0.985;
         } else if (playerInfo.inPitlane) {
-            gripMultiplierSlow = 0.97;
+            gripMultiplierSlow = 0.95;
         }
 
         
@@ -279,6 +280,8 @@ function calculateGripForDryConditions(tyres: Tires, wear: number, norm: Number)
             return calculateGripMultiplier(wear, norm, 0.997, 0.994);
         case "FLAT":
             return 0.99;
+        case "TRAIN":
+            return 1.0;
     }
 }
 
@@ -288,6 +291,7 @@ function calculateGripForWetConditions(tyres: Tires, wear: number, norm: Number)
     const normalizedRain = rainIntensity / 100;
 
     switch (tyres) {
+        case "TRAIN":
         case "SOFT":
         case "MEDIUM":
         case "HARD": {

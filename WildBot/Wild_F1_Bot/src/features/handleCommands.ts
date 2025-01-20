@@ -46,7 +46,7 @@ import { handleAvatar, situacions } from "./handleAvatar";
 import { Circuit } from "../circuits/Circuit";
 import { isOnVoteSession, selectedCircuits } from "./vote";
 import { gameState } from "./gameState";
-import { updateBestTime } from "../circuits/bestTimes";
+import { clearBestTime, getBestTime, updateBestTime } from "../circuits/bestTimes";
 
 
 export let tyresActivated = true
@@ -281,7 +281,7 @@ export function handleClearCommand(byPlayer: PlayerObject, args: string[], room:
         return
     }
 
-    updateBestTime(ACTUAL_CIRCUIT.info.name, 999.999, "Limpado");
+    clearBestTime(ACTUAL_CIRCUIT.info.name, 999.999, "Limpado");
     const players = room.getPlayerList()
     players.forEach(p => {playerList[p.id].bestTime === 999.999});
     room.sendAnnouncement("Recorde Resetado")
@@ -290,7 +290,7 @@ export function handleClearCommand(byPlayer: PlayerObject, args: string[], room:
 
 export function handleRecordCommand(byPlayer: PlayerObject, args: string[], room: RoomObject) {
     if(ACTUAL_CIRCUIT && ACTUAL_CIRCUIT.info.BestTime){
-        room.sendAnnouncement(`Record: ${ACTUAL_CIRCUIT.info.BestTime[0]} - ${ACTUAL_CIRCUIT.info.BestTime[1]}`)
+        getBestTime(ACTUAL_CIRCUIT.info.name, room, byPlayer)
     }
 }
 
@@ -451,6 +451,10 @@ export function handleTiresCommand(byPlayer: PlayerObject, args: string[], room:
             }
         }
         const tiresStr = args[0].toUpperCase();
+        if(!trainingMode && (tiresStr === "TRAIN" || tiresStr === "T")){
+            sendErrorMessage(room, MESSAGES.INVALID_TIRES(), byPlayer.id);
+            return;
+        }
         
         for (let tiresKey in Tires) {
             if (tiresKey === tiresStr || tiresKey[0] === tiresStr) {
@@ -953,7 +957,7 @@ export function handleRRCommand(byPlayer: PlayerObject, _: string[], room: RoomO
         return
     }
     resetPlayer(byPlayer, room, byPlayer.id);
-    if(qualiMode){
+    if(qualiMode || trainingMode){
         playerList[byPlayer.id].kers = 100;
         playerList[byPlayer.id].wear = 20
     }

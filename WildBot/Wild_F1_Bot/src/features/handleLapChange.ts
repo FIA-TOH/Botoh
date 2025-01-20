@@ -12,6 +12,7 @@ import { Teams } from "./teams";
 import { bestTimes, getAbbreviatedTrackName, updateBestTime } from "../circuits/bestTimes";
 import { LEAGUE_MODE } from "./leagueMode";
 import { printAllPositions } from "./handleCommands";
+import { Tires } from "./tires";
 
 
 export const lapPositions: {
@@ -171,7 +172,7 @@ export function checkPlayerLaps(playersAndDiscs: { p: PlayerObject, disc: DiscPr
                 console.log(`Circuito ${ACTUAL_CIRCUIT.info.name} não encontrado no mapeamento de nomes.`);
             }
             
-            if(qualiMode){
+            if(qualiMode || playerList[p.id].tires === Tires.TRAIN){
                 playerList[p.id].kers = 100
             }
             sendChatMessage(room, MESSAGES.RAIN_INTENSITY_LAP(correctRainIntensity), pad.p.id)

@@ -4,7 +4,8 @@ export enum Tires {
   HARD = "HARD",
   INTER = "INTER",
   WET = "WET",
-  FLAT = "FLAT"
+  FLAT = "FLAT",
+  TRAIN = "TRAIN"
 }
 
 export const TIRE_STARTING_SPEED = {
@@ -13,7 +14,8 @@ export const TIRE_STARTING_SPEED = {
   [Tires.HARD]: 4.9,
   [Tires.INTER]: 4.4,
   [Tires.WET]: 3.9,
-  [Tires.FLAT]:3.0
+  [Tires.FLAT]:3.0,
+  [Tires.TRAIN]:5.4
 }
 
 export type TireDurability = Record<Tires, number | typeof Infinity>;
@@ -27,6 +29,7 @@ if (limit === null) {
       [Tires.WET]: Infinity,
       [Tires.INTER]: Infinity,
       [Tires.FLAT]: Infinity,
+      [Tires.TRAIN]: Infinity,
     };
   }
 
@@ -38,6 +41,7 @@ if (limit === null) {
       [Tires.WET]: 200,  // 3.33
       [Tires.INTER]: 200,  // 3.33
       [Tires.FLAT]: Infinity,
+      [Tires.TRAIN]: Infinity,
     };
   } else if (limit >= 8 && limit <= 13) {
     return {
@@ -47,6 +51,7 @@ if (limit === null) {
       [Tires.WET]: 400,  // 6.67
       [Tires.INTER]: 400,  // 6.67
       [Tires.FLAT]: Infinity,
+      [Tires.TRAIN]: Infinity,
     };
   } else if (limit >= 14 && limit <= 23) {
     return {
@@ -56,6 +61,7 @@ if (limit === null) {
       [Tires.WET]: 600,  // 10
       [Tires.INTER]: 600,  // 10
       [Tires.FLAT]: Infinity,
+      [Tires.TRAIN]: Infinity,
     };
   } else {
     return {
@@ -65,6 +71,7 @@ if (limit === null) {
       [Tires.WET]: 2000, 
       [Tires.INTER]: 2000, 
       [Tires.FLAT]: Infinity,
+      [Tires.TRAIN]: Infinity,
     };
   }
 }

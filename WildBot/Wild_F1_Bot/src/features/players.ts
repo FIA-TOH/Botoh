@@ -2,6 +2,7 @@ import {DEFAULT_LANGUAGE} from "./language";
 import {TIRE_STARTING_SPEED, Tires} from "./tires";
 import {playerList} from "./playerList";
 import { handleAvatar } from "./handleAvatar";
+import { trainingMode } from "./qualiMode";
 
 
 
@@ -51,13 +52,15 @@ export function resetPlayer(player: PlayerObject, room: RoomObject, id: number, 
     if(startingRace){
         playerList[id].bestTime = Number.MAX_VALUE
     }
+    if(!trainingMode){
+        playerList[id].tires = Tires.SOFT
+    }
     playerList[id].currentLap = 0
     playerList[id].lapChanged = false
     playerList[id].lapTime = 0
     playerList[id].isInTheRoom = true
     playerList[id].inPitlane = false
     playerList[id].boxAlert = false
-    playerList[id].tires = Tires.SOFT
     playerList[id].showTires = true,
     playerList[id].wear = 0
     playerList[id].lapsOnCurrentTire = -1
