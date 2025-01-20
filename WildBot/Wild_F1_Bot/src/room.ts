@@ -435,7 +435,7 @@ const MAX_AFK_WARNING_TICKS = MAX_AFK_TICKS - 5 * SECOND
 
 function checkAfk() {
     const players = room.getPlayerList()
-    if(players.length > 18){
+    if(players.length > maxPlayers - 2){
         players.forEach(p => {
             if(playerList[p.id].afk){
                 room.kickPlayer(p.id, "AFK", false);

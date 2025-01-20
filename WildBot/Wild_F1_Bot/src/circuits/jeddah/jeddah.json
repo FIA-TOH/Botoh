@@ -8,7 +8,7 @@
 
 	"spawnDistance" : 1070,
 
-	"bg" : { "type" : "", "height" : 0, "width" : 0, "color" : "050314", "cornerRadius" : 0, "kickOffRadius" : 0 },
+	"bg" : { "type" : "hockey", "height" : 0, "width" : 0, "cornerRadius" : 0, "kickOffRadius" : 0 },
 
 	"vertexes" : [
 		 { "x" : 372, "y" : 0, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ], "color" : "11a857", "vis" : false },
