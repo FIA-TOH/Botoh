@@ -419,6 +419,17 @@ export function getPlayerByName(name: string){
     return player
 }
 
+export function getPlayerById(id: string){
+    const playersAndDiscs = room.getPlayerList().map(p => {
+        return {p: p, disc: room.getPlayerDiscProperties(p.id)}
+    })
+    const players = getRunningPlayers(playersAndDiscs)
+
+    const player = players.find(pad => pad.p.id);
+
+    return player
+}
+
 /**
  * Check if admins are AFK and remove their admin status if they are.
  * 1 unit is 1/INV_TICK_RATE of a second, so INV_TICK_RATE units is 1 second.

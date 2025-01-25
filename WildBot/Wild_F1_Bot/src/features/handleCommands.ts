@@ -41,7 +41,7 @@ import {afkAdmins} from "./afkAdmins";
 import { rainIntensity, resetAllRainEvents, setRainChances, setRainItensity } from "./rain";
 import { Teams } from "./teams";
 import { resetPlayer } from "./players";
-import { ACTUAL_CIRCUIT, getPlayerByName } from "../room";
+import { ACTUAL_CIRCUIT, getPlayerById } from "../room";
 import { handleAvatar, situacions } from "./handleAvatar";
 import { Circuit } from "../circuits/Circuit";
 import { isOnVoteSession, selectedCircuits } from "./vote";
@@ -739,7 +739,7 @@ export function handleFlagCommand(byPlayer: PlayerObject, args: string[], room: 
     const flagChoosen = args[0];
     const playerChoosen = args.slice(1).join(" ");
     
-    const playerChooseInfo = playerChoosen ? getPlayerByName(playerChoosen) : undefined;
+    const playerChooseInfo = playerChoosen ? getPlayerById(playerChoosen) : undefined;
     const playersAndDiscs = room.getPlayerList().map((p) => {
         return { p: p, disc: room.getPlayerDiscProperties(p.id) };
     });
