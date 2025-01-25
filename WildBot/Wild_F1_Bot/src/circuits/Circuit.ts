@@ -33,6 +33,9 @@ export interface CircuitInfo {
     Angle?: number,
     Limit?: number,
     Votes?: number,
+    sectorOne?: DirectedHitboxBounds,
+    sectorTwo?: DirectedHitboxBounds,
+    sectorThree?: DirectedHitboxBounds,
 }
 
 export interface Circuit {

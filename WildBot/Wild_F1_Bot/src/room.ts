@@ -29,6 +29,7 @@ import { handleSuzukaTp } from "./features/handleSuzukaTp";
 import { distributeSpeed } from "./features/distributrSpeed";
 import { voteSession } from "./features/vote";
 import { resetAFKTimer, resetAFKTimers  } from "./features/afk";
+import { checkPlayerSector } from "./features/handleSectorChange";
 
 
 const BAN_LIST = bans
@@ -72,6 +73,7 @@ room.onGameTick = function () {
     handlePitlane(playersAndDiscs, room);
     distributeSpeed(playersAndDiscs, room);
     // checkPlayersDRSZone(playersAndDiscs, room);
+    checkPlayerSector(playersAndDiscs, room)
     checkPlayerLaps(playersAndDiscs, room);
     endRaceSession(playersAndDiscs, room);
     checkAfk()

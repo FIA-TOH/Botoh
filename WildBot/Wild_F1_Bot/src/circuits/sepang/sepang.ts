@@ -13,11 +13,38 @@ const SEPANG_INFO: CircuitInfo = {
         passingDirection: Direction.LEFT
     },
     name: "Sepang F1 International Circuit - By Ximb",
+    sectorOne:{
+        bounds: {
+            minX: 102,
+            maxX: 132,
+            minY: -345,
+            maxY: 6
+        },
+        passingDirection: Direction.LEFT
+    },
+    sectorTwo:{
+        bounds: {
+            minX: -1161,
+            maxX: -1130,
+            minY: -2006,
+            maxY: -1732
+        },
+        passingDirection: Direction.RIGHT
+    },
+    sectorThree:{
+        bounds: {
+            minX: 667,
+            maxX: 699,
+            minY: 413,
+            maxY: 628
+        },
+        passingDirection: Direction.LEFT
+    },
     boxLine: {
         minX: 133,
         maxX: 1226,
         minY: -345,
-        maxY: -253
+        maxY: -277
     },
     pitlaneStart: {
         minX: 1496,

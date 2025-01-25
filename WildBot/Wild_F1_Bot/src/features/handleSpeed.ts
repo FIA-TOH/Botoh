@@ -400,7 +400,7 @@ export function handlePitlane(playersAndDiscs: { p: PlayerObject, disc: DiscProp
     players.forEach(player => {
         const p = player.p
         if (ifInPitlaneStart(player, room) && !playerList[p.id].inPitlane) {
-            playerList[p.id].pits += 1
+            playerList[p.id].pits.pitsNumber += 1
             playerList[p.id].inPitlane = true
             if(LEAGUE_MODE && playerList[player.p.id].boxAlert === false){
                 const numero = Math.floor(1000 + Math.random() * 9000);

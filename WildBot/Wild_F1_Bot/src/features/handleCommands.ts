@@ -313,15 +313,23 @@ export function handleVoteCommand(byPlayer: PlayerObject, args: string[], room: 
     }
 
     const selectedCircuit = selectedCircuits[voteIndex];
-    if (selectedCircuit.info) {
-        selectedCircuit.info.Votes = (selectedCircuit.info.Votes ? selectedCircuit.info.Votes : 0) + 1;
-    }
-
-    if (playerList[byPlayer.id]) {
-        playerList[byPlayer.id].voted = true;
-    }
-
+    if(selectedCircuit){
+        if (selectedCircuit.info) {
+            selectedCircuit.info.Votes = (selectedCircuit.info.Votes ? selectedCircuit.info.Votes : 0) + 1;
+        }
+        if (playerList[byPlayer.id]) {
+            playerList[byPlayer.id].voted = true;
+        }
+        
     sendSuccessMessage(room, MESSAGES.VOTED(selectedCircuit.info.name), byPlayer.id)
+    } else {
+        sendErrorMessage(room, MESSAGES.INVALIDE_VOTE(), byPlayer.id)
+        return;
+    }
+
+
+
+
 }
 
 export function handleSpeedCommand(byPlayer: PlayerObject, _: string[], room: RoomObject) {
@@ -461,6 +469,10 @@ export function handleTiresCommand(byPlayer: PlayerObject, args: string[], room:
                 changeTires({ p: byPlayer, disc: room.getPlayerDiscProperties(byPlayer.id) }, tiresKey as Tires, room);
                 playerList[byPlayer.id].tires = tiresKey as Tires;
                 playerList[byPlayer.id].wear = 0;
+                playerList[byPlayer.id].pits.pit.push({
+                    tyre: tiresKey as Tires,  // Convertendo o `tiresKey` para o tipo Tires
+                    lap: playerList[byPlayer.id].currentLap,         // Inicializando com o valor atual de `currentLap`
+                });
                 return;
             }
         }
@@ -968,7 +980,7 @@ export function handleRRCommand(byPlayer: PlayerObject, _: string[], room: RoomO
 }
 
 export function printAllPositions(room: RoomObject, toPlayerID?: number) {
-    if (qualiMode || trainingMode) {
+    if (qualiMode || trainingMode || !room.getScores() || !room.getScores().time) {
         sendErrorMessage(room, MESSAGES.POSITIONS_IN_QUALI(), toPlayerID)
         return false
     }
@@ -991,14 +1003,19 @@ export function printAllPositions(room: RoomObject, toPlayerID?: number) {
         })
     } else {
         sendNonLocalizedSmallChatMessage(room, ` P - ${headerLeftSpaces}Name${headerRightSpaces} | Pits | Best Lap`, toPlayerID)
+        console.log("positionList: ")
         positionList.forEach(p=>{
+            console.log(p);
+            
             const spaces = (MAX_PLAYER_NAME - p.name.length) / 2.0
             const leftSpaces = ' '.repeat(Math.ceil(spaces))
             const rightSpaces = ' '.repeat(Math.trunc(spaces))
     
             const position = i.toString().padStart(2, '0')
             const pits = p.pits.toString().padStart(2, '0')
-            sendNonLocalizedSmallChatMessage(room, `${position} - ${leftSpaces}${p.name}${rightSpaces} |  ${pits}  | ${p.time.toFixed(3)}}`, toPlayerID)
+            const time = p.time < 999.999 ? p.time.toFixed(3) : "N/A";
+
+            sendNonLocalizedSmallChatMessage(room, `${position} - ${leftSpaces}${p.name}${rightSpaces} |  ${pits}  | ${time}`, toPlayerID)
             i++
         })
     }

@@ -20,7 +20,10 @@ export function createPlayerInfo(ip?: string) {
         wear: 0,
         lapsOnCurrentTire: -1,
         showTires: true,
-        pits: 0,
+        pits: {
+            pitsNumber: 0,
+            pit: []
+        },
         language: DEFAULT_LANGUAGE,
         bestTime: Number.MAX_VALUE,
         gripCounter: 0,
@@ -33,7 +36,11 @@ export function createPlayerInfo(ip?: string) {
         penaltyCounter: 0,
         afk: false,
         everyoneLaps: false,
-        voted: false
+        voted: false,
+        currentSector: 3,
+        sectorChanged: false,
+        sectorTime: [],
+        sectorTimeCounter: 0
 
     }
 
@@ -64,7 +71,10 @@ export function resetPlayer(player: PlayerObject, room: RoomObject, id: number, 
     playerList[id].showTires = true,
     playerList[id].wear = 0
     playerList[id].lapsOnCurrentTire = -1
-    playerList[id].pits = 0
+    playerList[id].pits = {
+        pitsNumber: 0,
+        pit: []
+    }
     playerList[id].gripCounter = 0
     playerList[id].maxSpeed = TIRE_STARTING_SPEED[Tires.SOFT]
     playerList[id].drs = false
@@ -74,6 +84,10 @@ export function resetPlayer(player: PlayerObject, room: RoomObject, id: number, 
     playerList[id].kers = 100,
     playerList[id].penaltyCounter = 0,
     playerList[id].voted = false,
+    playerList[id].currentSector = 3;
+    playerList[id].sectorChanged = false
+    playerList[id].sectorTime = []
+    playerList[id].sectorTimeCounter = 0
 
     handleAvatar("ChangeTyre", player, room)
 

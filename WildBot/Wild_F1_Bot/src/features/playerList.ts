@@ -1,6 +1,14 @@
 import {Tires} from "./tires";
 import {Language} from "./language";
 
+export interface PitsInfo {
+    pitsNumber: number;
+    pit: {
+        tyre: string;
+        lap: number;
+    }[];
+}
+
 interface PlayerInfo {
     drs: boolean;
     ip: string,
@@ -15,7 +23,7 @@ interface PlayerInfo {
     wear: number,
     lapsOnCurrentTire: number,
     showTires: boolean,
-    pits: number,
+    pits: PitsInfo,
     language: Language,
     bestTime: number,
     gripCounter: number,
@@ -27,7 +35,11 @@ interface PlayerInfo {
     penaltyCounter: number,
     afk: boolean,
     everyoneLaps: boolean,
-    voted: boolean
+    voted: boolean,
+    currentSector: number,
+    sectorChanged: boolean,
+    sectorTime: number[],
+    sectorTimeCounter: number,
 }
 
 type PlayerList = {
