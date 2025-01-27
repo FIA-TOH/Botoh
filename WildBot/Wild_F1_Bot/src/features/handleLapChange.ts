@@ -195,7 +195,7 @@ export function checkPlayerLaps(playersAndDiscs: { p: PlayerObject, disc: DiscPr
                         });
                     }
                     if(hasSector){
-                        room.sendAnnouncement(`Sector 1: ${playerData.sectorTime[0]} | Sector 2: ${playerData.sectorTime[1]} | Sector 3: ${playerData.sectorTime[2]}`, p.id, 0x0000FF)
+                        room.sendAnnouncement(`Sector 1: ${playerData.sectorTime[0]} | Sector 2: ${playerData.sectorTime[1]} | Sector 3: ${playerData.sectorTime[2]}`, p.id, 0xFF8F00)
                     }
                 } else {
                     console.log(`Circuito ${ACTUAL_CIRCUIT.info.name} não encontrado no mapeamento de nomes.`);

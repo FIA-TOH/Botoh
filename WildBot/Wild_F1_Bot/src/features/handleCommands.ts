@@ -469,6 +469,7 @@ export function handleTiresCommand(byPlayer: PlayerObject, args: string[], room:
                 changeTires({ p: byPlayer, disc: room.getPlayerDiscProperties(byPlayer.id) }, tiresKey as Tires, room);
                 playerList[byPlayer.id].tires = tiresKey as Tires;
                 playerList[byPlayer.id].wear = 0;
+                playerList[byPlayer.id].kers = Math.min(playerList[byPlayer.id].kers + 20, 100);
                 playerList[byPlayer.id].pits.pit.push({
                     tyre: tiresKey as Tires,  // Convertendo o `tiresKey` para o tipo Tires
                     lap: playerList[byPlayer.id].currentLap,         // Inicializando com o valor atual de `currentLap`

@@ -73,14 +73,14 @@ export function checkPlayerSector(playersAndDiscs: { p: PlayerObject, disc: Disc
             updatePositionList(players, room);
             playerList[p.id].currentSector = 2;
             playerList[p.id].sectorTime[0] = serialize(playerList[p.id].sectorTimeCounter);
-            room.sendAnnouncement(`Sector 1: ${playerList[p.id].sectorTime[0]}s`, p.id, 0x0000FF );
+            room.sendAnnouncement(`Sector 1: ${playerList[p.id].sectorTime[0]}s`, p.id, 0xFF8F00 );
             playerList[p.id].sectorTimeCounter = 0;
             updatePositionList(players, room);
         } else if (ifInSectorThreeChangeZone(pad, room)) {
             updatePositionList(players, room);
             playerList[p.id].currentSector = 3;
             playerList[p.id].sectorTime[1] = serialize(playerList[p.id].sectorTimeCounter);
-            room.sendAnnouncement(`Sector 2: ${playerList[p.id].sectorTime[1]}s`, p.id, 0x0000FF);
+            room.sendAnnouncement(`Sector 2: ${playerList[p.id].sectorTime[1]}s`, p.id, 0xFF8F00);
             playerList[p.id].sectorTimeCounter = 0;
             updatePositionList(players, room);
         }

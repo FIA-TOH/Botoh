@@ -448,13 +448,23 @@ const MAX_AFK_WARNING_TICKS = MAX_AFK_TICKS - 5 * SECOND
 
 function checkAfk() {
     const players = room.getPlayerList()
-    if(players.length > maxPlayers - 2){
+    //If there is players afk when the room is full
+    if (players.length > maxPlayers - 2) {
         players.forEach(p => {
-            if(playerList[p.id].afk){
+            if (playerList[p.id].afk) {
                 room.kickPlayer(p.id, "AFK", false);
             }
         });
     }
+    
+    // If all players are afk
+    const afkPlayers = players.filter(p => playerList[p.id].afk);
+    if (afkPlayers.length === players.length) {
+        afkPlayers.forEach(p => {
+            room.kickPlayer(p.id, "All players are AFK, Restarting the room", false);
+        });
+    }
+    
 }
 
 if (!LEAGUE_MODE) setInterval(checkAfk, 1000 / INV_TICK_RATE)

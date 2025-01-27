@@ -460,7 +460,8 @@
 
 		{ "v0" : 238, "v1" : 239, "curve" : 0, "color" : "ffffff", "bCoef" : 0.25, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
 		{ "v0" : 240, "v1" : 241, "curve" : 0, "color" : "ffffff", "bCoef" : 0.25, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
-		{ "v0" : 242, "v1" : 243, "curve" : -19.349143818090738, "color" : "fcd014", "cMask" : ["red","blue","ball","c0" ] }
+		{ "v0" : 242, "v1" : 243, "curve" : -19.349143818090738, "color" : "fcd014", "cMask" : ["red","blue","ball","c0" ] },
+		{ "v0" : 140, "v1" : 139, "curve" : -167.3353302195581, "color" : "777777", "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["wall" ] }
 
 	],
 

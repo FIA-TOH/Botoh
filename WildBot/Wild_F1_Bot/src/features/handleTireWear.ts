@@ -3,7 +3,7 @@ import { MESSAGES } from "./messages";
 import { playerList } from "./playerList";
 import { Tires, TYRE_DURABILITY } from "./tires";
 import {laps} from "../features/laps";
-import { changeTires } from "./handleSpeed";
+import { changeTires, vsc } from "./handleSpeed";
 import { tyresActivated } from "./handleCommands";
 import { qualiMode } from "./qualiMode";
 
@@ -23,7 +23,8 @@ export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
     const timeElapsed = currentTime - p.lastCheckTime;
     p.lastCheckTime = currentTime;
 
-    const wearIncrementPerSecond = 100 / totalDurability;
+    const wearReductionFactor = vsc ? 0.25 : 1; 
+    const wearIncrementPerSecond = (100 / totalDurability) * wearReductionFactor;
     p.wear = Math.min(100, p.wear + wearIncrementPerSecond * timeElapsed);
 
     const remainingPercentage = 100 - p.wear;
