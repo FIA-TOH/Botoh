@@ -13,6 +13,33 @@ const BAHRAIN_INFO: CircuitInfo = {
         passingDirection: Direction.LEFT
     },
     name: "Sakhir Bahrain International Circuit - By Ximb",
+    sectorOne:{
+        bounds: {
+            minX: 70,
+            maxX: 100,
+            minY: -56,
+            maxY: 271,
+        },
+        passingDirection: Direction.LEFT
+    },
+    sectorTwo:{
+        bounds: {
+            minX: -100,
+            maxX: -60,
+            minY: -1545,
+            maxY: -1014
+        },
+        passingDirection: Direction.RIGHT
+    },
+    sectorThree:{
+        bounds: {
+            minX: 493,
+            maxX: 837,
+            minY: -1385,
+            maxY: -1355
+        },
+        passingDirection: Direction.UP
+    },
     boxLine: {
         minX: 106,
         maxX: 1100,
@@ -54,6 +81,7 @@ const BAHRAIN_INFO: CircuitInfo = {
     Angle: 0,
     Limit: 5,
     Votes: 0,
+    pitSpeed: 0.92
 }
 export const BAHRAIN: Circuit = {
     map: JSON.stringify(bahrain_json),

@@ -36,6 +36,7 @@ export interface CircuitInfo {
     sectorOne?: DirectedHitboxBounds,
     sectorTwo?: DirectedHitboxBounds,
     sectorThree?: DirectedHitboxBounds,
+    pitSpeed?: number
 }
 
 export interface Circuit {

@@ -138,6 +138,7 @@ export function checkPlayerLaps(playersAndDiscs: { p: PlayerObject, disc: DiscPr
         if (CHECK_IF_TROLLING && checkIfTrolling(pad, CIRCUITS[currentMapIndex].info.finishLine.passingDirection)) {
             //IF HAS SECTORS
             if(hasSector){
+                sendErrorMessage(room, MESSAGES.TROLLING_DETECTED(), p.id)
                 return;
             } else {
                 sendErrorMessage(room, MESSAGES.TROLLING_DETECTED(), p.id)

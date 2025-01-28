@@ -9,7 +9,7 @@ import { grip } from "./rainGrip";
 import { rainEnabled, rainIntensity, isRaining } from "./rain";
 import { handleAvatar } from "./handleAvatar";
 import { handleFlagCommand, tyresActivated } from "./handleCommands";
-import { room } from "../room";
+import { ACTUAL_CIRCUIT, room } from "../room";
 import { LEAGUE_MODE } from "./leagueMode";
 
 
@@ -105,6 +105,8 @@ const SLIPSTREAM_SPEED_GAIN = 0.0005
 const DRS_SPEED_GAIN = 0.001
 const ERS_PENALTY = -0.006
 const JUMP_START_PENALTY = -0.005
+const DEFAULT_PIT_SPEED = 0.95
+const SAFETY_CAR_SPEED = 0.985
 
 /**
  * Function that sets a players max speed.
@@ -168,11 +170,16 @@ export function controlPlayerSpeed(
         );
 
         let gripMultiplierSlow = 0;
-        if (vsc) {
-            gripMultiplierSlow = 0.985;
-        } else if (playerInfo.inPitlane) {
-            gripMultiplierSlow = 0.95;
+        if (playerInfo.inPitlane) {
+            if(ACTUAL_CIRCUIT.info.pitSpeed){
+                gripMultiplierSlow = ACTUAL_CIRCUIT.info.pitSpeed
+            } else {
+                gripMultiplierSlow = DEFAULT_PIT_SPEED;
+            }
         }
+        if (vsc && !playerInfo.inPitlane) {
+            gripMultiplierSlow = SAFETY_CAR_SPEED;
+        } 
 
         
 
