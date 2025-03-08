@@ -1,8 +1,8 @@
 import { bestTimes } from "../bestTimes";
 import {Circuit, CircuitInfo, Direction} from "../Circuit";
-import baku_json from "./baku.json";
+import bakuLeague_json from "./bakuLeague.json";
 
-const BAKU_INFO: CircuitInfo = {
+const BAKULEAGUE_INFO: CircuitInfo = {
     finishLine: {
         bounds: {
             minX: 1100,
@@ -72,8 +72,8 @@ const BAKU_INFO: CircuitInfo = {
     }],
     checkpoints: [],
     lastPlace: {
-        x: baku_json.redSpawnPoints[baku_json.redSpawnPoints.length - 1][0],
-        y: baku_json.redSpawnPoints[baku_json.redSpawnPoints.length - 1][1],
+        x: bakuLeague_json.redSpawnPoints[bakuLeague_json.redSpawnPoints.length - 1][0],
+        y: bakuLeague_json.redSpawnPoints[bakuLeague_json.redSpawnPoints.length - 1][1],
     },
     BestTime: bestTimes.baku,
     MainColor: [0x00b5e2, 0xef3340, 0x509e2f],
@@ -84,8 +84,8 @@ const BAKU_INFO: CircuitInfo = {
     pitSpeed: 0.97
 }
 
-export const BAKU: Circuit = {
-    map: JSON.stringify(baku_json),
-    info: BAKU_INFO
+export const BAKULEAGUE: Circuit = {
+    map: JSON.stringify(bakuLeague_json),
+    info: BAKULEAGUE_INFO
 
 }

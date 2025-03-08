@@ -1,9 +1,10 @@
 {
   "publicAdminPassword": "toh",
+  "publicModPassword": "mod",
   "leagueAdminPassword": "toh",
   "bans": ["90.94.201.31"],
   "publicName": "🏎️ Formula 1 - Treinos livres 🏎️",
   "leagueName": "🏎️ Formula 1 - FTOH 🏎️",
-  "maxPlayers": 26,
+  "maxPlayers": 22,
   "roomPassword": null
 }

@@ -11,6 +11,7 @@ import { handleAvatar } from "./handleAvatar";
 import { handleFlagCommand, tyresActivated } from "./handleCommands";
 import { ACTUAL_CIRCUIT, room } from "../room";
 import { LEAGUE_MODE } from "./leagueMode";
+import { laps } from "./laps";
 
 
 export const TIRE_AVATAR: {
@@ -199,11 +200,11 @@ export function controlPlayerSpeed(
             isRaining &&
             gripMultiplier
         ) {
-            
+            const slideFactor = 2.5;
             // Chuva
             playerInfo.gripCounter = 0;
-            const newGravityX = -x * (1 - gripMultiplier);
-            const newGravityY = -y * (1 - gripMultiplier);
+            const newGravityX = -x * (1 - gripMultiplier) * slideFactor;
+            const newGravityY = -y * (1 - gripMultiplier) * slideFactor;
 
             room.setPlayerDiscProperties(p.id, {
                 xspeed: x,
@@ -274,22 +275,42 @@ function calculateGripMultiplierForConditions(player: PlayerObject, tyres: Tires
 
 function calculateGripForDryConditions(tyres: Tires, wear: number, norm: Number) {
     if (!norm) return;
-    switch (tyres) {
-        case "SOFT":
-            return calculateGripMultiplier(wear, norm, 1.0, 0.993);
-        case "MEDIUM":
-            return calculateGripMultiplier(wear, norm, 0.9999, 0.994);
-        case "HARD":
-            return calculateGripMultiplier(wear, norm, 0.9998, 0.995);
-        case "INTER":
-            return calculateGripMultiplier(wear, norm, 0.998, 0.995);
-        case "WET":
-            return calculateGripMultiplier(wear, norm, 0.997, 0.994);
-        case "FLAT":
-            return 0.99;
-        case "TRAIN":
-            return 1.0;
+    if(laps >= 23){
+        switch (tyres) {
+            case "SOFT":
+                return calculateGripMultiplier(wear, norm, 1.0, 0.993);
+            case "MEDIUM":
+                return calculateGripMultiplier(wear, norm, 0.9999, 0.994);
+            case "HARD":
+                return calculateGripMultiplier(wear, norm, 0.9998, 0.995);
+            case "INTER":
+                return calculateGripMultiplier(wear, norm, 0.998, 0.995);
+            case "WET":
+                return calculateGripMultiplier(wear, norm, 0.997, 0.994);
+            case "FLAT":
+                return 0.99;
+            case "TRAIN":
+                return 1.0;
+        }
+    } else {
+        switch (tyres) {
+            case "SOFT":
+                return calculateGripMultiplier(wear, norm, 1.0, 0.996);
+            case "MEDIUM":
+                return calculateGripMultiplier(wear, norm, 0.99975, 0.9965);
+            case "HARD":
+                return calculateGripMultiplier(wear, norm, 0.9995, 0.997);
+            case "INTER":
+                return calculateGripMultiplier(wear, norm, 0.998, 0.995);
+            case "WET":
+                return calculateGripMultiplier(wear, norm, 0.997, 0.994);
+            case "FLAT":
+                return 0.99;
+            case "TRAIN":
+                return 1.0;
+        }
     }
+
 }
 
 function calculateGripForWetConditions(tyres: Tires, wear: number, norm: Number) {
@@ -310,21 +331,25 @@ function calculateGripForWetConditions(tyres: Tires, wear: number, norm: Number)
         }
 
         case "INTER": {
-            // Sem impacto até 40%, depois decaimento de 0.001 por 10%
-            if (normalizedRain <= 0.6) {
-                return calculateGripMultiplier(wear, norm, 0.998, 0.996);
+            if (normalizedRain <= 0.4) {
+                return calculateGripMultiplier(wear, norm, 1, 0.995);
             } else {
-                const rainImpact = Math.floor((normalizedRain - 0.6) / 0.1) * 0.001;
-                const maxGrip = 0.998 - rainImpact;
-                const minGrip = 0.996 - rainImpact;
+                const rainImpact = Math.floor((normalizedRain - 0.4) / 0.1) * 0.001;
+                const maxGrip = 1 - rainImpact;
+                const minGrip = 0.995 - rainImpact;
                 return calculateGripMultiplier(wear, norm, maxGrip, minGrip);
             }
         }
 
         case "WET": {
-            const maxGrip = 0.997;
-            const minGrip = 0.994;
-            return calculateGripMultiplier(wear, norm, maxGrip, minGrip);
+            if (normalizedRain >= 0.4) {
+                return calculateGripMultiplier(wear, norm, 1, 0.995);
+            } else {
+                const rainImpact = Math.floor((0.4 - normalizedRain) / 0.1) * 0.001;
+                const maxGrip = 1 - rainImpact;
+                const minGrip = 0.995 - rainImpact;
+                return calculateGripMultiplier(wear, norm, maxGrip, minGrip);
+            }
         }
 
         case "FLAT":
@@ -343,11 +368,11 @@ function calculateGripMultiplier(wear: number, norm: Number, maxGrip: number, mi
     } else if (wear > 10) {
       return maxGrip;
     } else {
-      return maxGrip - 0.0001;
+      return maxGrip - 0.0005;
     }
   }
 
-function ifInBoxZone(player: { p: PlayerObject, disc: DiscPropertiesObject }, room: RoomObject) {
+export function ifInBoxZone(player: { p: PlayerObject, disc: DiscPropertiesObject }, room: RoomObject) {
     return room.getScores().time > 0 && inHitbox(player, CIRCUITS[currentMapIndex].info.boxLine)
 }
 

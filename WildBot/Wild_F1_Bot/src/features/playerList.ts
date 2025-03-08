@@ -6,10 +6,12 @@ export interface PitsInfo {
     pit: {
         tyre: string;
         lap: number;
-    }[];
+    }[],
+    pitsAttemp: number;
 }
 
-interface PlayerInfo {
+export interface PlayerInfo {
+    totalTime: number;
     drs: boolean;
     ip: string,
     currentLap: number,

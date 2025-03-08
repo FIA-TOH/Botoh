@@ -9,6 +9,7 @@ import { trainingMode } from "./qualiMode";
 export function createPlayerInfo(ip?: string) {
     return {
         ip: ip || "Not Available",
+        totalTime: 0,
         currentLap: 0,
         lapChanged: false,
         lapTime: 0,
@@ -22,7 +23,8 @@ export function createPlayerInfo(ip?: string) {
         showTires: true,
         pits: {
             pitsNumber: 0,
-            pit: []
+            pit: [],
+            pitsAttemp: 0,
         },
         language: DEFAULT_LANGUAGE,
         bestTime: Number.MAX_VALUE,
@@ -40,7 +42,7 @@ export function createPlayerInfo(ip?: string) {
         currentSector: 3,
         sectorChanged: false,
         sectorTime: [],
-        sectorTimeCounter: 0
+        sectorTimeCounter: 0,
 
     }
 
@@ -60,8 +62,9 @@ export function resetPlayer(player: PlayerObject, room: RoomObject, id: number, 
         playerList[id].bestTime = Number.MAX_VALUE
     }
     if(!trainingMode){
-        playerList[id].tires = Tires.SOFT
+    playerList[id].tires = Tires.SOFT
     }
+    playerList[id].totalTime = 0
     playerList[id].currentLap = 0
     playerList[id].lapChanged = false
     playerList[id].lapTime = 0
@@ -73,7 +76,8 @@ export function resetPlayer(player: PlayerObject, room: RoomObject, id: number, 
     playerList[id].lapsOnCurrentTire = -1
     playerList[id].pits = {
         pitsNumber: 0,
-        pit: []
+        pit: [],
+        pitsAttemp: 0,
     }
     playerList[id].gripCounter = 0
     playerList[id].maxSpeed = TIRE_STARTING_SPEED[Tires.SOFT]

@@ -1,8 +1,8 @@
 import { bestTimes } from "../bestTimes";
 import {Circuit, CircuitInfo, Direction} from "../Circuit";
-import monaco_json from "./monaco.json";
+import monacoLeague_json from "./monacoLeague.json";
 
-const MONACO_INFO: CircuitInfo = {
+const MONACOLEAGUE_INFO: CircuitInfo = {
     finishLine: {
         bounds: {
             minX: 70,
@@ -72,8 +72,8 @@ const MONACO_INFO: CircuitInfo = {
     }],
     checkpoints: [],
     lastPlace: {
-        x: monaco_json.redSpawnPoints[monaco_json.redSpawnPoints.length - 1][0],
-        y: monaco_json.redSpawnPoints[monaco_json.redSpawnPoints.length - 1][1],
+        x: monacoLeague_json.redSpawnPoints[monacoLeague_json.redSpawnPoints.length - 1][0],
+        y: monacoLeague_json.redSpawnPoints[monacoLeague_json.redSpawnPoints.length - 1][1],
     },
     BestTime: bestTimes.monaco,
     MainColor: [0xd6001d, 0xd6001d, 0xffffff],
@@ -84,7 +84,7 @@ const MONACO_INFO: CircuitInfo = {
     pitSpeed: 0.955
 }
 
-export const MONACO: Circuit = {
-    map: JSON.stringify(monaco_json),
-    info: MONACO_INFO
+export const MONACOLEAGUE: Circuit = {
+    map: JSON.stringify(monacoLeague_json),
+    info: MONACOLEAGUE_INFO
 }

@@ -45,6 +45,8 @@ export default function en_commands(
     handleVoteCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleClearCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleRecordCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
+    handleAjustPlayerCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
+    handleNerfListCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
 ): Commands {
     return {
         "!admin": handleAdminCommand,
@@ -89,6 +91,8 @@ export default function en_commands(
         "!flag": handleFlagCommand,
         "!vote": handleVoteCommand,
         "!clear": handleClearCommand,
-        "!record": handleRecordCommand
+        "!record": handleRecordCommand,
+        "!adjust": handleAjustPlayerCommand,
+        "!nerf": handleNerfListCommand,
     }
 }

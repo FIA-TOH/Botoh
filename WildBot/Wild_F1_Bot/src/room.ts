@@ -63,7 +63,6 @@ room.setTimeLimit(0)
 room.setTeamsLock(true)
 handleChangeMap(0, room)
 
-
 room.onGameTick = function () {
     const playersAndDiscs = room.getPlayerList().map((p) => ({
         p: p,

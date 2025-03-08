@@ -179,7 +179,7 @@ function announceRainStart() {
 
     players.forEach((player) => {
       const rainEmojis = ["☁️", "🌧️", "⛔"];
-      const rainDurations = [500, 500, 1000];
+      const rainDurations = [2000, 2000, 2000];
       handleAvatar(situacions.Rain, player, room, undefined, rainEmojis, rainDurations);
   });
   }
@@ -193,7 +193,7 @@ function startRain() {
 
   players.forEach((player) => {
     const rainEmojis = ["🌧️", "🌩️", "⛔"];
-    const rainDurations = [500, 500, 1000];
+    const rainDurations = [2000, 2000, 2000];
     handleAvatar(situacions.Rain, player, room, undefined, rainEmojis, rainDurations);
 });
 
@@ -265,7 +265,7 @@ function announceRainStop() {
     sendAlertMessage(room, MESSAGES.RAIN_STOP_ONE_MINUTE())
   players.forEach((player) => {
     const rainEmojis = ["🌧️", "🌤️", "⛔"];
-    const rainDurations = [500, 500, 1000];
+    const rainDurations = [2000, 2000, 2000];
     handleAvatar(situacions.Rain, player, room, undefined, rainEmojis, rainDurations);
 });
 
@@ -280,7 +280,7 @@ function stopRain() {
 
   players.forEach((player) => {
     const rainEmojis = ["🌤️", "☀️", "⛔"];
-    const rainDurations = [500, 500, 1000];
+    const rainDurations = [2000, 2000, 20000];
     handleAvatar(situacions.Rain, player, room, undefined, rainEmojis, rainDurations);
 });
 
@@ -325,7 +325,7 @@ export function calculateRainIntensity(
 
   const relativeTime = currentTime - rainStartTime;
 
-  console.log(currentTime, rainDuration, progressiveTime, peakTime, relativeTime, peakIntensity);
+  // console.log(currentTime, rainDuration, progressiveTime, peakTime, relativeTime, peakIntensity);
   
 
   if (relativeTime <= progressiveTime) {

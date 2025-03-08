@@ -1,6 +1,10 @@
-import { updatePositionList } from "./handleLapChange";
+import { sendBlueMessage } from "./chat";
+import { handleAvatar, situacions } from "./handleAvatar";
+import { positionList, updatePositionList } from "./handleLapChange";
 import { CIRCUITS, currentMapIndex } from "./maps";
+import { MESSAGES } from "./messages";
 import { playerList } from "./playerList";
+import { qualiMode, trainingMode } from "./qualiMode";
 import { getRunningPlayers, inHitbox } from "./utils";
 
 
@@ -69,21 +73,46 @@ export function checkPlayerSector(playersAndDiscs: { p: PlayerObject, disc: Disc
         if (ifInSectorOneChangeZone(pad, room)) {
             playerList[p.id].sectorTime[2] = serialize(playerList[p.id].sectorTimeCounter);
             playerList[p.id].sectorTimeCounter = 0;
-        } else if (ifInSectorTwoChangeZone(pad, room)) {
             updatePositionList(players, room);
+        } else if (ifInSectorTwoChangeZone(pad, room)) {
+            playerList[p.id].totalTime = room.getScores().time;
             playerList[p.id].currentSector = 2;
             playerList[p.id].sectorTime[0] = serialize(playerList[p.id].sectorTimeCounter);
             room.sendAnnouncement(`Sector 1: ${playerList[p.id].sectorTime[0]}s`, p.id, 0xFF8F00 );
             playerList[p.id].sectorTimeCounter = 0;
             updatePositionList(players, room);
+            checkBlueFlag(p, room);
         } else if (ifInSectorThreeChangeZone(pad, room)) {
-            updatePositionList(players, room);
+            playerList[p.id].totalTime = room.getScores().time;
             playerList[p.id].currentSector = 3;
             playerList[p.id].sectorTime[1] = serialize(playerList[p.id].sectorTimeCounter);
             room.sendAnnouncement(`Sector 2: ${playerList[p.id].sectorTime[1]}s`, p.id, 0xFF8F00);
             playerList[p.id].sectorTimeCounter = 0;
             updatePositionList(players, room);
+            checkBlueFlag(p, room);
         }
     })
 
+}
+
+export function checkBlueFlag(p: PlayerObject, room: RoomObject) {
+    const playerInfo = positionList.find(entry => entry.name === p.name);
+    if (!playerInfo) return;
+    if(qualiMode || trainingMode) return
+
+    
+    positionList.forEach(opponent => {
+        const opponentInfo =  room.getPlayerList().find(p => p.name === opponent.name);
+        if (
+            room.getScores().time > 20 &&
+            opponent.lap < playerInfo.lap && 
+            opponent.currentSector === playerInfo.currentSector &&
+            playerInfo.totalTime - opponent.totalTime < 1 &&
+            opponentInfo
+        ) {
+            sendBlueMessage(room, MESSAGES.BLUE_FLAG(opponent.name));
+            sendBlueMessage(room, MESSAGES.BLUE_FLAG_OPPONENT(opponent.name, playerInfo.name), opponentInfo.id);
+            handleAvatar(situacions.Flag, opponentInfo, room, undefined, ["🟦"], [5000]);
+        }
+    });
 }

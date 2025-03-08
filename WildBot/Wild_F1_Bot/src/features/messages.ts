@@ -740,12 +740,19 @@ export const MESSAGES = {
         tr: replaceTemplateString(tr_messages.BLUE_FLAG, {citedPlayer: citedPlayer}),
         pt: replaceTemplateString(pt_messages.BLUE_FLAG, {citedPlayer: citedPlayer}),
     }),
-    BLUE_FLAG_TWO: (citedPlayer:string): LocalizedMessageFunction => ({
-        en: replaceTemplateString(en_messages.BLUE_FLAG_TWO, {citedPlayer: citedPlayer}),
-        es: replaceTemplateString(es_messages.BLUE_FLAG_TWO, {citedPlayer: citedPlayer}),
-        fr: replaceTemplateString(fr_messages.BLUE_FLAG_TWO, {citedPlayer: citedPlayer}),
-        tr: replaceTemplateString(tr_messages.BLUE_FLAG_TWO, {citedPlayer: citedPlayer}),
-        pt: replaceTemplateString(pt_messages.BLUE_FLAG_TWO, {citedPlayer: citedPlayer}),
+    BLUE_FLAG_TO: (citedPlayer:string): LocalizedMessageFunction => ({
+        en: replaceTemplateString(en_messages.BLUE_FLAG_TO, {citedPlayer: citedPlayer}),
+        es: replaceTemplateString(es_messages.BLUE_FLAG_TO, {citedPlayer: citedPlayer}),
+        fr: replaceTemplateString(fr_messages.BLUE_FLAG_TO, {citedPlayer: citedPlayer}),
+        tr: replaceTemplateString(tr_messages.BLUE_FLAG_TO, {citedPlayer: citedPlayer}),
+        pt: replaceTemplateString(pt_messages.BLUE_FLAG_TO, {citedPlayer: citedPlayer}),
+    }),
+    BLUE_FLAG_OPPONENT: (citedPlayer:string, opponent:string): LocalizedMessageFunction => ({
+        en: replaceTemplateString(en_messages.BLUE_FLAG_OPPONENT, {citedPlayer: citedPlayer, opponent}),
+        es: replaceTemplateString(es_messages.BLUE_FLAG_OPPONENT, {citedPlayer: citedPlayer, opponent}),
+        fr: replaceTemplateString(fr_messages.BLUE_FLAG_OPPONENT, {citedPlayer: citedPlayer, opponent}),
+        tr: replaceTemplateString(tr_messages.BLUE_FLAG_OPPONENT, {citedPlayer: citedPlayer, opponent}),
+        pt: replaceTemplateString(pt_messages.BLUE_FLAG_OPPONENT, {citedPlayer: citedPlayer, opponent}),
     }),
     BLACK_FLAG: (citedPlayer:string): LocalizedMessageFunction => ({
         en: replaceTemplateString(en_messages.BLACK_FLAG, {citedPlayer: citedPlayer}),

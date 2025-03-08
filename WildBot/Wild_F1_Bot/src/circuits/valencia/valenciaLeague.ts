@@ -1,9 +1,9 @@
 import { bestTimes } from "../bestTimes";
 import {Circuit, CircuitInfo, Direction} from "../Circuit";
-import valencia_json from "./valencia.json";
+import valenciaLeague_json from "./valenciaLeague.json";
 
 
-const VALENCIA_INFO: CircuitInfo = {
+const VALENCIALEAGUE_INFO: CircuitInfo = {
     finishLine: {
         bounds: {
             minX: -215,
@@ -90,10 +90,10 @@ const VALENCIA_INFO: CircuitInfo = {
     ],
     checkpoints: [],
     lastPlace: {
-        x: valencia_json.redSpawnPoints[valencia_json.redSpawnPoints.length - 1][0],
-        y: valencia_json.redSpawnPoints[valencia_json.redSpawnPoints.length - 1][1],
+        x: valenciaLeague_json.redSpawnPoints[valenciaLeague_json.redSpawnPoints.length - 1][0],
+        y: valenciaLeague_json.redSpawnPoints[valenciaLeague_json.redSpawnPoints.length - 1][1],
     },
-    BestTime: bestTimes.valencia,
+    BestTime: bestTimes.valenciaLeague,
     MainColor: [0xc60b1e, 0xffc400, 0xc60b1e],
     AvatarColor: 0xffffff,
     Angle: 90,
@@ -102,7 +102,7 @@ const VALENCIA_INFO: CircuitInfo = {
     pitSpeed: 0.92
 }
 
-export const VALENCIA: Circuit = {
-    map: JSON.stringify(valencia_json),
-    info: VALENCIA_INFO
+export const VALENCIALEAGUE: Circuit = {
+    map: JSON.stringify(valenciaLeague_json),
+    info: VALENCIALEAGUE_INFO
 }

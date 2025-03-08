@@ -26,6 +26,12 @@ const trackNameMapping: { [key: string]: string } = {
   hockenheimring: "Hockenheimring - By Ximb",
   fuji: "Fuji International - By Ximb",
   hungaroing: "Hungaroring - By Ximb",
+  mexico: "Mexico City - Autodromo Hermanos Rodriquez By Ximb",
+  austria: "Redbull Ring MGP by Rodri",
+  laguna_seca: "Laguna Seca by Rodri",
+  balaton: "Balaton Park by Rodri",
+  nurburgringNano: "Nurburgring GP By Nanoseb",
+  hungaroingNano: "hungaroring By Nanoseb",
   indianapolis: "Indianapolis Motor Speedway"
 };
 
@@ -33,11 +39,11 @@ const trackNameMapping: { [key: string]: string } = {
 export const bestTimes: { [key: string]: [number, string, string] } = {
   melbourne: [27.600, "Lando Canorris", trackNameMapping["melbourne"]],
   imola: [31.867, "Lib Wallard", trackNameMapping["imola"]],
-  sepang: [50.150, "HiroShiryu Fushida", trackNameMapping["sepang"]],
-  bahrein: [32.117, "Ximbastian Vettel", trackNameMapping["bahrein"]],
-  sochi: [40.783, "Ximbastian Vettel", trackNameMapping["sochi"]],
-  monaco: [35.233, "Ximbastian Vettel", trackNameMapping["monaco"]],
-  valencia: [38.267, "Ximbastian Vettel", trackNameMapping["valencia"]],
+  sepang: [49.650, "Lib Wallard ", trackNameMapping["sepang"]],
+  bahrein: [32.884, "Alberto Ulasscari", trackNameMapping["bahrein"]],
+  sochi: [40.150, "Alberto Ulasscari", trackNameMapping["sochi"]],
+  monaco: [34.467, "Alberto Ulasscari", trackNameMapping["monaco"]],
+  valencia: [44.433, "Alberto Ulasscari", trackNameMapping["valencia"]],
   paulRicard: [42.567, "Ximbastian Vettel", trackNameMapping["paulRicard"]],
   silverstone: [33.900, "Lando Canorris", trackNameMapping["silverstone"]],
   spa: [51.717, "Lando Canorris", trackNameMapping["spa"]],
@@ -49,14 +55,20 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   shanghai: [41.217, "Lando Canorris", trackNameMapping["shanghai"]],
   suzuka: [33.967, "Ximbastian Vettel", trackNameMapping["suzuka"]],
   interlagos: [33.300, "Lando Canorris", trackNameMapping["interlagos"]],
-  baku: [47.933, "HiroShiryu FUshida", trackNameMapping["baku"]],
+  baku: [46.749, "Alberto Ulasscari", trackNameMapping["baku"]],
   argentina: [42.467, "HiroShiryu Fushida", trackNameMapping["argentina"]],
   marinaBay: [48.717, "Ximbastian Vettel", trackNameMapping["marinaBay"]],
   jeddah: [43.433, "HiroShiryu Fushida", trackNameMapping["jeddah"]],
   yasMarina: [39.733, "HiroShiryu Fushida", trackNameMapping["yasMarina"]],
   hockenheimring: [39.233, "Jean Dany-Vegne", trackNameMapping["hockenheimring"]],
-  fuji: [999.999, "undefined", trackNameMapping["fuji"]],
+  fuji: [37.183, "Ximbastian Vettel", trackNameMapping["fuji"]],
   hungaroing: [37.617, "Jean Dany-Vegne", trackNameMapping["hungaroing"]],
+  mexico: [999.999, "undefined", trackNameMapping["mexico"]],
+  austria: [31.266, "Ximbastian Vettel", trackNameMapping["austria"]],
+  laguna_seca: [37.850, "Chimmi Antonelli", trackNameMapping["laguna_seca"]],
+  balaton: [999.999, "undefined", trackNameMapping["balaton"]],
+  nurburgringNano: [999.999, "undefined", trackNameMapping["nurburgringNano"]],
+  hungaroingNano: [999.999, "undefined", trackNameMapping["hungaroingNano"]],
   indianapolis: [30.500, "Gabriel Schumacchio", trackNameMapping["indianapolis"]]
 };
 // Função para converter nome completo para abreviado

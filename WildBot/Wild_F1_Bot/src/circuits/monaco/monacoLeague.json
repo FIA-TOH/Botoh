@@ -239,8 +239,7 @@
 		 { "x" : -2388, "y" : -2431, "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ], "color" : "888888" },
 		 { "x" : -2230, "y" : -3094, "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["redKO","blueKO" ] },
 		 { "x" : 198, "y" : -372, "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["redKO","blueKO" ] },
-		 { "x" : 202, "y" : -274, "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["redKO","blueKO" ] },
-		 { "x" : 497, "y" : -280, "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ] }
+		 { "x" : 202, "y" : -274, "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["redKO","blueKO" ] }
 
 	],
 
@@ -377,7 +376,7 @@
 		{ "v0" : 159, "v1" : 158, "curve" : -180, "color" : "ffffff", "bCoef" : 0.1, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ], "trait" : "kickOffBarrier" },
 		{ "v0" : 161, "v1" : 160, "curve" : -180, "color" : "ffffff", "bCoef" : 0.1, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ], "trait" : "kickOffBarrier" },
 
-		{ "v0" : 162, "v1" : 163, "curve" : -45.15464996381538, "color" : "888888", "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ] },
+		{ "v0" : 162, "v1" : 163, "curve" : 44.97926694860751, "color" : "888888", "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ] },
 		{ "v0" : 53, "v1" : 164, "curve" : 5.624073391026913, "color" : "888888", "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ] },
 		{ "v0" : 75, "v1" : 166, "curve" : 0, "color" : "888888", "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ] },
 		{ "v0" : 168, "v1" : 131, "curve" : 113.77846479789211, "color" : "888888", "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ] },
@@ -444,8 +443,7 @@
 		{ "v0" : 221, "v1" : 168, "curve" : 0, "color" : "ffffff", "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ] },
 		{ "v0" : 166, "v1" : 220, "curve" : 79.444464993163, "color" : "888888", "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ] },
 		{ "v0" : 171, "v1" : 222, "curve" : 0, "color" : "ffffff", "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["redKO","blueKO" ] },
-		{ "v0" : 223, "v1" : 224, "curve" : 0, "color" : "ffffff", "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["redKO","blueKO" ] },
-		{ "v0" : 214, "v1" : 225, "curve" : -2.3813324475989877, "color" : "888888", "bCoef" : 0, "cMask" : ["red","blue","ball","c0" ] }
+		{ "v0" : 223, "v1" : 224, "curve" : 0, "color" : "ffffff", "cMask" : ["red","blue","ball","c0" ], "cGroup" : ["redKO","blueKO" ] }
 
 	],
 

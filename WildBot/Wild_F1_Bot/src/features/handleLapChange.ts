@@ -13,6 +13,7 @@ import { bestTimes, getAbbreviatedTrackName, updateBestTime } from "../circuits/
 import { LEAGUE_MODE } from "./leagueMode";
 import { printAllPositions } from "./handleCommands";
 import { Tires } from "./tires";
+import { checkBlueFlag } from "./handleSectorChange";
 
 
 export const lapPositions: {
@@ -44,10 +45,8 @@ export const positionList: {
 }[] = [];
 
 export function updatePositionList(players: { p: PlayerObject, disc: DiscPropertiesObject }[], room: RoomObject) {
-    // Cria um set com os nomes dos jogadores atualmente ativos
     const activePlayers = new Set(players.map(player => player.p.name));
 
-    // Atualiza ou adiciona informações dos jogadores na lista
     players.forEach(player => {
         const { p } = player;
         const playerData = playerList[p.id];
@@ -58,7 +57,7 @@ export function updatePositionList(players: { p: PlayerObject, disc: DiscPropert
             pitsInfo: playerData.pits,
             pits: playerData.pits.pitsNumber,
             time: playerData.bestTime,
-            totalTime: room.getScores().time, 
+            totalTime: playerData.totalTime,
             lap: playerData.currentLap, 
             active: true,
             currentSector: playerData.currentSector 
@@ -134,7 +133,6 @@ export function checkPlayerLaps(playersAndDiscs: { p: PlayerObject, disc: DiscPr
 
 
         //CHEF IF TROLLING WITH SECTORS TOO
-
         if (CHECK_IF_TROLLING && checkIfTrolling(pad, CIRCUITS[currentMapIndex].info.finishLine.passingDirection)) {
             //IF HAS SECTORS
             if(hasSector){
@@ -145,12 +143,12 @@ export function checkPlayerLaps(playersAndDiscs: { p: PlayerObject, disc: DiscPr
                 room.setPlayerTeam(p.id, 0)
                 return;
             }
-
         }
         
-        const currentLap = ++playerData.currentLap
-        playerData.lapChanged = true
+
         if((!hasSector || (hasSector && playerData.currentSector === 3))){
+            const currentLap = ++playerData.currentLap
+            playerData.lapChanged = true
             if (currentLap > 1) {
 
                 
@@ -252,6 +250,8 @@ export function checkPlayerLaps(playersAndDiscs: { p: PlayerObject, disc: DiscPr
                             fullTime: fullTime
                         })
                         sendSuccessMessage(room, MESSAGES.FINISH_RACE(), p.id)
+                        playerList[p.id].totalTime = room.getScores().time;
+                        updatePositionList(players, room);
                         room.setPlayerTeam(p.id, 0)
                         return
                     }
@@ -270,8 +270,10 @@ export function checkPlayerLaps(playersAndDiscs: { p: PlayerObject, disc: DiscPr
             playerData.sectorTimeCounter = 0
             playerData.sectorTime = []
             playerData.currentSector = 1;
+            playerList[p.id].totalTime = room.getScores().time;
             if(!qualiMode || !trainingMode){
                 updatePositionList(players, room);
+                checkBlueFlag(p, room);
             }
 
         }

@@ -20,11 +20,12 @@ import {
     changeTires,
     changeVSC,
     enableShowTires,
+    ifInBoxZone,
     slipstreamEnabled,
     toggleSlipstream,
     vsc
 } from "./handleSpeed";
-import {leagueAdminPassword, publicAdminPassword} from "../../roomconfig.json"
+import {leagueAdminPassword, publicAdminPassword, publicModPassword} from "../../roomconfig.json"
 import {changeQuali, changeTraining, printAllTimes, qualiMode, qualiTime, setQualiTime, trainingMode, updatePlayerTime} from "./qualiMode";
 import en_commands from "../locales/commands/en";
 import fr_commands from "../locales/commands/fr";
@@ -35,7 +36,7 @@ import {setGhostMode} from "./ghost";
 import {Tires} from "./tires";
 import {Commands} from "./commands";
 import {LEAGUE_MODE} from "./leagueMode";
-import {playerList} from "./playerList";
+import {PlayerInfo, playerList} from "./playerList";
 import {laps, setLaps} from "./laps";
 import {afkAdmins} from "./afkAdmins";
 import { rainIntensity, resetAllRainEvents, setRainChances, setRainItensity } from "./rain";
@@ -96,6 +97,9 @@ export type CommandFunction = (
     handleVoteCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleClearCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleRecordCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
+    handleAjustPlayerCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
+    handleNerfListCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
+
 ) => Commands
 
 function importCommandsByLanguage(commandFunctions: { [key: string]: CommandFunction }): { [key: string]: Commands } {
@@ -142,7 +146,9 @@ function importCommandsByLanguage(commandFunctions: { [key: string]: CommandFunc
             handleFlagCommand,
             handleVoteCommand,
             handleClearCommand,
-            handleRecordCommand
+            handleRecordCommand,
+            handleAjustPlayerCommand,
+            handleNerfListCommand
         )
     }), {});
 }
@@ -191,7 +197,9 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
             handleFlagCommand,
             handleVoteCommand,
             handleClearCommand,
-            handleRecordCommand
+            handleRecordCommand,
+            handleAjustPlayerCommand,
+            handleNerfListCommand
         ))
     }), {});
 }
@@ -203,6 +211,8 @@ const COMMANDS_BY_LANGUAGE = importCommandsByLanguage(
 export const COMMANDS: Commands = importCommands(en_commands, es_commands, fr_commands, tr_commands, pt_commands)
 
 export let mute_mode = false
+export let playerNerfList: PlayerObject[] = [];
+
 
 export function toggleMuteMode() {
     mute_mode = !mute_mode
@@ -216,20 +226,23 @@ export function handleAdminCommand(byPlayer: PlayerObject, args: string[], room:
     }
 
     const SECRET_PASSWORD = LEAGUE_MODE ? leagueAdminPassword : publicAdminPassword
+    const SECRET_PASSWORD_MOD = LEAGUE_MODE ? leagueAdminPassword : publicModPassword
 
     if (args[0] === SECRET_PASSWORD) {
         room.setPlayerAdmin(byPlayer.id, true)
         afkAdmins[byPlayer.id] = 0
         return
+    } else if(args[0] === SECRET_PASSWORD_MOD) {
+        if (getAdmins(room).length === 0 && !LEAGUE_MODE) {
+            room.setPlayerAdmin(byPlayer.id, true)
+            afkAdmins[byPlayer.id] = 0
+        } else {
+            sendErrorMessage(room, MESSAGES.ADMIN_ALREADY_IN_ROOM(), byPlayer.id)
+        }
     } else {
         return
     }
-    // if (getAdmins(room).length === 0 && !LEAGUE_MODE) {
-    //     room.setPlayerAdmin(byPlayer.id, true)
-    //     afkAdmins[byPlayer.id] = 0
-    // } else {
-    //     sendErrorMessage(room, MESSAGES.ADMIN_ALREADY_IN_ROOM(), byPlayer.id)
-    // }
+
 }
 
 export function handleCommandsCommand(byPlayer: PlayerObject, _: string[], room: RoomObject) {
@@ -328,6 +341,129 @@ export function handleVoteCommand(byPlayer: PlayerObject, args: string[], room: 
     }
 
 
+
+
+}
+
+export function handleAjustPlayerCommand(byPlayer: PlayerObject, args: string[], room: RoomObject) {
+    if (!byPlayer.admin) {
+        sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id)
+        return
+    }
+    if (room.getScores() === null) {
+        sendChatMessage(room, MESSAGES.NO_WAIT_TIME(), byPlayer.id)
+        return false
+    }
+    if (args.length === 0) {
+        room.sendAnnouncement("Correct model !adjust [wear|laps] [id] [value]", byPlayer.id, 0xff0000);
+        return
+    }
+
+    const adjust = args[0]
+    const playerChoosen = args[1]
+    const value = args[2]
+    let playerNumero: number | undefined;
+    if (!isNaN(Number(playerChoosen))) {
+        playerNumero = Number(playerChoosen);
+    }
+    let valueNumber: number | undefined;
+    if (!isNaN(Number(value))) {
+        valueNumber = Number(value);
+    }
+    const playersAndDiscs = room.getPlayerList().map((p) => {
+        return { p: p, disc: room.getPlayerDiscProperties(p.id) };
+    });
+    const players = getRunningPlayers(playersAndDiscs);
+    let playerEscolhido: { p: PlayerObject; disc: DiscPropertiesObject; }[] = []
+    if (!playerChoosen) {
+        room.sendAnnouncement("Escolha um jogador", byPlayer.id, 0xff0000);
+        return;
+    }
+    
+    if(playerNumero !== undefined){
+        playerEscolhido = players.filter(p=>p.p.id === playerNumero)
+    } else {
+        room.sendAnnouncement("Player not found", byPlayer.id, 0xff0000);
+        return;
+    }
+    if(valueNumber !== undefined){
+        playerEscolhido = players.filter(p=>p.p.id === playerNumero)
+    } else {
+        room.sendAnnouncement("Value must be a number", byPlayer.id, 0xff0000);
+    }
+
+    if (playerEscolhido?.length === 0) {
+        room.sendAnnouncement("Escolha um jogador válido", byPlayer.id, 0xff0000);
+        return;
+    }
+    const playerInfo = playerList[playerEscolhido[0].p.id]
+
+    if(adjust === "wear"){
+        playerInfo.wear = valueNumber as number
+    } else if(adjust === "laps"){
+        playerInfo.currentLap = valueNumber as number
+        playerInfo.currentSector = 3 as number
+    } else{
+        room.sendAnnouncement("Now you can only change wear or laps", byPlayer.id, 0xff0000);
+        return;
+    }
+
+
+}
+
+
+export function handleNerfListCommand(byPlayer: PlayerObject, args: string[], room: RoomObject) {
+    if (!byPlayer.admin) {
+        sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id)
+        return
+    }
+    if (room.getScores() === null) {
+        sendChatMessage(room, MESSAGES.NO_WAIT_TIME(), byPlayer.id)
+        return false
+    }
+    if (args.length === 0) {
+        sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id)
+        return
+    }
+    const playerId = args[0]
+
+    let playerNumero: number | undefined;
+    if (!isNaN(Number(playerId))) {
+        playerNumero = Number(playerId);
+    }
+
+    const playersAndDiscs = room.getPlayerList().map((p) => {
+        return { p: p, disc: room.getPlayerDiscProperties(p.id) };
+    });
+    const players = getRunningPlayers(playersAndDiscs);
+
+    let playerEscolhido: { p: PlayerObject; disc: DiscPropertiesObject; }[] = []
+    if (!playerId) {
+        room.sendAnnouncement("Escolha um jogador", byPlayer.id, 0xff0000);
+        return;
+    }
+    if(playerNumero !== undefined){
+        playerEscolhido = players.filter(p=>p.p.id === playerNumero)
+    } else {
+        room.sendAnnouncement("Player not found", byPlayer.id, 0xff0000);
+        return;
+    }
+    if (playerEscolhido?.length === 0) {
+        room.sendAnnouncement("Escolha um jogador válido", byPlayer.id, 0xff0000);
+        return;
+    }
+
+    playerNerfList.push(playerEscolhido[0].p)
+
+    // if(adjust === "wear"){
+    //     playerInfo.wear = valueNumber as number
+    // } else if(adjust === "laps"){
+    //     playerInfo.currentLap = valueNumber as number
+    //     playerInfo.currentSector = 3 as number
+    // } else{
+    //     room.sendAnnouncement("Now you can only change wear or laps", byPlayer.id, 0xff0000);
+    //     return;
+    // }
 
 
 }
@@ -440,11 +576,15 @@ export function handleBBCommand(byPlayer: PlayerObject, args: string[], room: Ro
 }
 
 export function handleTiresCommand(byPlayer: PlayerObject, args: string[], room: RoomObject) {
-    if(room.getScores()){
+    if (room.getScores() && gameState !== undefined && gameState !== null) {
+        if (!ifInBoxZone({ p: byPlayer, disc: room.getPlayerDiscProperties(byPlayer.id) }, room) && room.getScores().time > 0) {
+                sendErrorMessage(room, MESSAGES.NOT_IN_BOXES(), byPlayer.id)
+                return
+            }
         if (args.length === 0) {
             sendErrorMessage(room, MESSAGES.INVALID_TIRES(), byPlayer.id);
             return;
-        }
+        }        
     
         if(LEAGUE_MODE && room.getScores().time > 0){
             const boxAlertReversed = playerList[byPlayer.id].boxAlert
@@ -463,6 +603,19 @@ export function handleTiresCommand(byPlayer: PlayerObject, args: string[], room:
             sendErrorMessage(room, MESSAGES.INVALID_TIRES(), byPlayer.id);
             return;
         }
+
+        console.log("PlayerInfo", playerList[byPlayer.id]);
+        
+
+        if (
+            playerNerfList.some(player => player.name === byPlayer.name) &&
+            playerList[byPlayer.id].pits.pitsAttemp < 2
+        ) {
+            playerList[byPlayer.id].pits.pitsAttemp++;
+            sendErrorMessage(room, MESSAGES.CODE_WRONG(), byPlayer.id);
+            return;
+        }
+        
         
         for (let tiresKey in Tires) {
             if (tiresKey === tiresStr || tiresKey[0] === tiresStr) {
@@ -471,8 +624,8 @@ export function handleTiresCommand(byPlayer: PlayerObject, args: string[], room:
                 playerList[byPlayer.id].wear = 0;
                 playerList[byPlayer.id].kers = Math.min(playerList[byPlayer.id].kers + 20, 100);
                 playerList[byPlayer.id].pits.pit.push({
-                    tyre: tiresKey as Tires,  // Convertendo o `tiresKey` para o tipo Tires
-                    lap: playerList[byPlayer.id].currentLap,         // Inicializando com o valor atual de `currentLap`
+                    tyre: tiresKey as Tires,
+                    lap: playerList[byPlayer.id].currentLap,   
                 });
                 return;
             }
@@ -750,13 +903,22 @@ export function handleFlagCommand(byPlayer: PlayerObject, args: string[], room: 
     }
 
     const flagChoosen = args[0];
-    const playerChoosen = args.slice(1).join(" ");
-    
-    const playerChooseInfo = playerChoosen ? getPlayerById(playerChoosen) : undefined;
+    const playerChoosen = args[1];
+    let playerNumero: number | undefined; 
+
+    if (!isNaN(Number(playerChoosen))) {
+        playerNumero = Number(playerChoosen);
+    }
+
     const playersAndDiscs = room.getPlayerList().map((p) => {
         return { p: p, disc: room.getPlayerDiscProperties(p.id) };
     });
+    let playerEscolhido: { p: PlayerObject; disc: DiscPropertiesObject; }[] = []
     const players = getRunningPlayers(playersAndDiscs);
+    if(playerNumero !== undefined){
+        playerEscolhido = players.filter(p=>p.p.id === playerNumero)
+        console.log(playerEscolhido, players);
+    }
 
     if (flagChoosen === "green" && vsc === true) {
         changeVSC();
@@ -793,33 +955,34 @@ export function handleFlagCommand(byPlayer: PlayerObject, args: string[], room: 
             room.sendAnnouncement("Escolha um jogador", byPlayer.id, 0xff0000);
             return;
         }
-        if (!playerChooseInfo) {
+        if (playerEscolhido?.length === 0) {
             room.sendAnnouncement("Escolha um jogador válido", byPlayer.id, 0xff0000);
             return;
         }
         flag = "blue";
 
-        sendBlueMessage(room, MESSAGES.BLUE_FLAG(playerChoosen));
-        sendBlueMessage(room, MESSAGES.BLUE_FLAG_TWO(playerChoosen), playerChooseInfo.p.id);
+        sendBlueMessage(room, MESSAGES.BLUE_FLAG(playerEscolhido[0].p.name));
+        
+        sendBlueMessage(room, MESSAGES.BLUE_FLAG_TO(playerEscolhido[0].p.name), playerEscolhido[0].p.id);
 
-        handleAvatar(situacions.Flag, playerChooseInfo.p, room, undefined, ["🟦"], [5000]);
+        handleAvatar(situacions.Flag, playerEscolhido[0].p, room, undefined, ["🟦"], [5000]);
     } else if (flagChoosen === "black") {
         if (!playerChoosen) {
             room.sendAnnouncement("Escolha um jogador", byPlayer.id, 0xff0000);
             return;
         }
-        if (!playerChooseInfo) {
+        if (playerEscolhido?.length === 0 || !playerEscolhido) {
             room.sendAnnouncement("Escolha um jogador válido", byPlayer.id, 0xff0000);
             return;
         }
         flag = "black";
 
-        sendBlackMessage(room, MESSAGES.BLACK_FLAG(playerChoosen));
-        sendBlackMessage(room, MESSAGES.BLACK_FLAG_TWO(playerChoosen), playerChooseInfo.p.id);
+        sendBlackMessage(room, MESSAGES.BLACK_FLAG(playerEscolhido[0].p.name));
+        sendBlackMessage(room, MESSAGES.BLACK_FLAG_TWO(playerEscolhido[0].p.name), playerEscolhido[0].p.id);
 
-        room.setPlayerTeam(playerChooseInfo.p.id, Teams.SPECTATORS)
+        room.setPlayerTeam(playerEscolhido[0].p.id, Teams.SPECTATORS)
 
-        handleAvatar(situacions.Flag, playerChooseInfo.p, room, undefined, ["⬛"], [5000]);
+        handleAvatar(situacions.Flag, playerEscolhido[0].p, room, undefined, ["⬛"], [5000]);
     }
 }
 
@@ -981,7 +1144,7 @@ export function handleRRCommand(byPlayer: PlayerObject, _: string[], room: RoomO
 }
 
 export function printAllPositions(room: RoomObject, toPlayerID?: number) {
-    if (qualiMode || trainingMode || !room.getScores() || !room.getScores().time) {
+    if (qualiMode || trainingMode) {
         sendErrorMessage(room, MESSAGES.POSITIONS_IN_QUALI(), toPlayerID)
         return false
     }
@@ -990,19 +1153,6 @@ export function printAllPositions(room: RoomObject, toPlayerID?: number) {
     const headerRightSpaces = ' '.repeat(Math.trunc(headerSpaces))
     let i = 1
 
-    if(finishList.length > 0){
-        sendNonLocalizedSmallChatMessage(room, ` P - ${headerLeftSpaces}Name${headerRightSpaces} | Pits | Best Lap | Time`, toPlayerID)
-        finishList.forEach(p => {
-            const spaces = (MAX_PLAYER_NAME - p.name.length) / 2.0
-            const leftSpaces = ' '.repeat(Math.ceil(spaces))
-            const rightSpaces = ' '.repeat(Math.trunc(spaces))
-    
-            const position = i.toString().padStart(2, '0')
-            const pits = p.pits.toString().padStart(2, '0')
-            sendNonLocalizedSmallChatMessage(room, `${position} - ${leftSpaces}${p.name}${rightSpaces} |  ${pits}  | ${p.time.toFixed(3)} | ${p.fullTime.toFixed(3)}`, toPlayerID)
-            i++
-        })
-    } else {
         sendNonLocalizedSmallChatMessage(room, ` P - ${headerLeftSpaces}Name${headerRightSpaces} | Pits | Best Lap`, toPlayerID)
         console.log("positionList: ")
         positionList.forEach(p=>{
@@ -1019,7 +1169,6 @@ export function printAllPositions(room: RoomObject, toPlayerID?: number) {
             sendNonLocalizedSmallChatMessage(room, `${position} - ${leftSpaces}${p.name}${rightSpaces} |  ${pits}  | ${time}`, toPlayerID)
             i++
         })
-    }
     
    
 

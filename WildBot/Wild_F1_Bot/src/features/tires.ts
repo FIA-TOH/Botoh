@@ -1,3 +1,5 @@
+import { LEAGUE_MODE } from "./leagueMode";
+
 export enum Tires {
   SOFT = "SOFT",
   MEDIUM = "MEDIUM",
@@ -33,7 +35,7 @@ if (limit === null) {
     };
   }
 
-  if (limit >= 0 && limit <= 7) {
+  if (!LEAGUE_MODE && (limit >= 0 && limit <= 7)) {
     return {
       [Tires.SOFT]: 150, // 2.5
       [Tires.MEDIUM]: 185.94, // 3.1 (15% a menos)
@@ -43,17 +45,7 @@ if (limit === null) {
       [Tires.FLAT]: Infinity,
       [Tires.TRAIN]: Infinity,
     };
-  } else if (limit >= 8 && limit <= 13) {
-    return {
-      [Tires.SOFT]: 300, // 5
-      [Tires.MEDIUM]: 371.87, // 6.2 (15% a menos)
-      [Tires.HARD]: 510,  // 8.5 (15% a menos)
-      [Tires.WET]: 400,  // 6.67
-      [Tires.INTER]: 400,  // 6.67
-      [Tires.FLAT]: Infinity,
-      [Tires.TRAIN]: Infinity,
-    };
-  } else if (limit >= 14 && limit <= 23) {
+  }  else if (!LEAGUE_MODE && (limit >= 14 && limit <= 23)) {
     return {
       [Tires.SOFT]: 450, // 7.5
       [Tires.MEDIUM]: 558.06, // 9.3 (15% a menos)
@@ -63,13 +55,23 @@ if (limit === null) {
       [Tires.FLAT]: Infinity,
       [Tires.TRAIN]: Infinity,
     };
+  } else if (!LEAGUE_MODE && (limit >= 24 && limit <= 33)) {
+    return {
+      [Tires.SOFT]: 750, // 12.5
+      [Tires.MEDIUM]: 928.69, // 15.5 (15% a menos)
+      [Tires.HARD]: 1275,  // 21.25 (15% a menos)
+      [Tires.WET]: 1000,  // 16.67
+      [Tires.INTER]: 1000,  // 16.67
+      [Tires.FLAT]: Infinity,
+      [Tires.TRAIN]: Infinity,
+    };
   } else {
     return {
       [Tires.SOFT]: 900,
       [Tires.MEDIUM]: 1200,
       [Tires.HARD]: 1600, 
-      [Tires.WET]: 2000, 
-      [Tires.INTER]: 2000, 
+      [Tires.WET]: 1200, 
+      [Tires.INTER]: 1200, 
       [Tires.FLAT]: Infinity,
       [Tires.TRAIN]: Infinity,
     };

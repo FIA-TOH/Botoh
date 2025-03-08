@@ -1,6 +1,6 @@
 import { bestTimes } from "../bestTimes";
 import {Circuit, CircuitInfo, Direction} from "../Circuit";
-import sochi_json from "./sochi.json";
+import sochiLeague_json from "./sochiLeague.json";
 
 const SOCHI_INFO: CircuitInfo = {
     finishLine: {
@@ -72,8 +72,8 @@ const SOCHI_INFO: CircuitInfo = {
     }],
     checkpoints: [],
     lastPlace: {
-        x: sochi_json.redSpawnPoints[sochi_json.redSpawnPoints.length - 1][0],
-        y: sochi_json.redSpawnPoints[sochi_json.redSpawnPoints.length - 1][1],
+        x: sochiLeague_json.redSpawnPoints[sochiLeague_json.redSpawnPoints.length - 1][0],
+        y: sochiLeague_json.redSpawnPoints[sochiLeague_json.redSpawnPoints.length - 1][1],
     },
     BestTime: bestTimes.sochi,
     MainColor: [0xffffff, 0x000080, 0xdd0000],
@@ -83,7 +83,7 @@ const SOCHI_INFO: CircuitInfo = {
     Votes: 0,
 }
 
-export const SOCHI: Circuit = {
-    map: JSON.stringify(sochi_json),
+export const SOCHILEAGUE: Circuit = {
+    map: JSON.stringify(sochiLeague_json),
     info: SOCHI_INFO
 }
