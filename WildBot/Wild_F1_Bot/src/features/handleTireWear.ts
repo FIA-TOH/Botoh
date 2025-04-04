@@ -5,12 +5,12 @@ import { Tires, TYRE_DURABILITY } from "./tires";
 import {laps} from "../features/laps";
 import { changeTires, vsc } from "./handleSpeed";
 import { tyresActivated } from "./handleCommands";
-import { qualiMode } from "./qualiMode";
+import { gameMode, GameMode } from "./qualiMode";
 
 export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
     const p = playerList[player.id];
 
-    if (!tyresActivated || qualiMode) {
+    if (!tyresActivated || gameMode == GameMode.QUALY) {
         p.wear = 20;
         return;
     }

@@ -1,8 +1,8 @@
 import { bestTimes } from "../bestTimes";
 import {Circuit, CircuitInfo, Direction} from "../Circuit";
-import spa_json from "./spa.json";
+import spaLeague_json from "./spaLeague.json";
 
-const SPA_INFO: CircuitInfo = {
+const SPALEAGUE_INFO: CircuitInfo = {
     finishLine: {
         bounds: {
             minX: -2963,
@@ -72,8 +72,8 @@ const SPA_INFO: CircuitInfo = {
     }],
     checkpoints: [],
     lastPlace: {
-        x: spa_json.redSpawnPoints[spa_json.redSpawnPoints.length - 1][0],
-        y: spa_json.redSpawnPoints[spa_json.redSpawnPoints.length - 1][1],
+        x: spaLeague_json.redSpawnPoints[spaLeague_json.redSpawnPoints.length - 1][0],
+        y: spaLeague_json.redSpawnPoints[spaLeague_json.redSpawnPoints.length - 1][1],
     },
     BestTime: bestTimes.spa,
     MainColor: [0x000001, 0xfae042, 0xed2939],
@@ -84,7 +84,7 @@ const SPA_INFO: CircuitInfo = {
     pitSpeed: 0.96
 }
 
-export const SPA: Circuit = {
-    map: JSON.stringify(spa_json),
-    info: SPA_INFO
+export const SPALEAGUE: Circuit = {
+    map: JSON.stringify(spaLeague_json),
+    info: SPALEAGUE_INFO
 }

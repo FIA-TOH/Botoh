@@ -26,7 +26,7 @@ import {
     vsc
 } from "./handleSpeed";
 import {leagueAdminPassword, publicAdminPassword, publicModPassword} from "../../roomconfig.json"
-import {changeQuali, changeTraining, printAllTimes, qualiMode, qualiTime, setQualiTime, trainingMode, updatePlayerTime} from "./qualiMode";
+import {changeGameMode,gameMode,GameMode, printAllTimes, qualiTime, setQualiTime, updatePlayerTime} from "./qualiMode";
 import en_commands from "../locales/commands/en";
 import fr_commands from "../locales/commands/fr";
 import es_commands from "../locales/commands/es";
@@ -93,6 +93,7 @@ export type CommandFunction = (
     handleExplainErsCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleEveryoneLapsCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleTpCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
+    handleIndyModeCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleFlagCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleVoteCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleClearCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
@@ -143,6 +144,7 @@ function importCommandsByLanguage(commandFunctions: { [key: string]: CommandFunc
             handleExplainErsCommand,
             handleEveryoneLapsCommand,
             handleTpCommand,
+            handleIndyModeCommand,
             handleFlagCommand,
             handleVoteCommand,
             handleClearCommand,
@@ -194,6 +196,7 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
             handleExplainErsCommand,
             handleEveryoneLapsCommand,
             handleTpCommand,
+            handleIndyModeCommand,
             handleFlagCommand,
             handleVoteCommand,
             handleClearCommand,
@@ -518,7 +521,7 @@ export function handleQModeCommand(byPlayer: PlayerObject, args: string[], room:
         return
     }
 
-    changeQuali(true, room)
+    changeGameMode(GameMode.QUALY, room)
 }
 
 export function handleTModeCommand(byPlayer: PlayerObject, args: string[], room: RoomObject) {
@@ -531,8 +534,23 @@ export function handleTModeCommand(byPlayer: PlayerObject, args: string[], room:
         sendErrorMessage(room, MESSAGES.ALREADY_STARTED(), byPlayer.id)
         return
     }
-    changeTraining(true, room)
+    changeGameMode(GameMode.TRAINING, room)
     room.sendAnnouncement("Training mode on", byPlayer.id)
+}
+
+
+export function handleIndyModeCommand(byPlayer: PlayerObject, args: string[], room: RoomObject) {
+    if (!byPlayer.admin) {
+        sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id)
+        return
+    }
+
+    if (room.getScores() !== null) {
+        sendErrorMessage(room, MESSAGES.ALREADY_STARTED(), byPlayer.id)
+        return
+    }
+    changeGameMode(GameMode.INDY, room)
+    room.sendAnnouncement("Indy mode on", byPlayer.id)
 }
 
 export function handleQTimeCommand(byPlayer: PlayerObject, args: string[], room: RoomObject) {
@@ -545,7 +563,7 @@ export function handleQTimeCommand(byPlayer: PlayerObject, args: string[], room:
         sendErrorMessage(room, MESSAGES.ALREADY_STARTED(), byPlayer.id)
         return
     }
-    if (!qualiMode) {
+    if (gameMode !== GameMode.QUALY) {
         sendErrorMessage(room, MESSAGES.NOT_IN_QUALI(), byPlayer.id)
         return false
     }
@@ -568,7 +586,7 @@ export function handleRModeCommand(byPlayer: PlayerObject, args: string[], room:
         return
     }
 
-    changeQuali(false, room)
+    changeGameMode(GameMode.RACE, room)
 }
 
 export function handleBBCommand(byPlayer: PlayerObject, args: string[], room: RoomObject) {
@@ -599,22 +617,22 @@ export function handleTiresCommand(byPlayer: PlayerObject, args: string[], room:
             }
         }
         const tiresStr = args[0].toUpperCase();
-        if(!trainingMode && (tiresStr === "TRAIN" || tiresStr === "T")){
+        if(gameMode !== GameMode.TRAINING && (tiresStr === "TRAIN" || tiresStr === "T")){
             sendErrorMessage(room, MESSAGES.INVALID_TIRES(), byPlayer.id);
             return;
         }
 
-        console.log("PlayerInfo", playerList[byPlayer.id]);
+        // console.log("PlayerInfo", playerList[byPlayer.id]);
         
 
-        if (
-            playerNerfList.some(player => player.name === byPlayer.name) &&
-            playerList[byPlayer.id].pits.pitsAttemp < 2
-        ) {
-            playerList[byPlayer.id].pits.pitsAttemp++;
-            sendErrorMessage(room, MESSAGES.CODE_WRONG(), byPlayer.id);
-            return;
-        }
+        // if (
+        //     playerNerfList.some(player => player.name === byPlayer.name) &&
+        //     playerList[byPlayer.id].pits.pitsAttemp < 2
+        // ) {
+        //     playerList[byPlayer.id].pits.pitsAttemp++;
+        //     sendErrorMessage(room, MESSAGES.CODE_WRONG(), byPlayer.id);
+        //     return;
+        // }
         
         
         for (let tiresKey in Tires) {
@@ -671,7 +689,7 @@ export function handleWaitTimeCommand(byPlayer: PlayerObject, args: string[], ro
         return false
     }
 
-    if (qualiMode) {
+    if (gameMode == GameMode.QUALY) {
         const willEnd = (qualiTime !== Number.MAX_VALUE)
 
         if (!willEnd)
@@ -827,7 +845,7 @@ export function handleAfkCommand(byPlayer: PlayerObject, _: string[], room: Room
         player.afk = true;
         sendAlertMessage(room, MESSAGES.NOW_AFK(), byPlayer.id);
         resetPlayer(byPlayer, room, byPlayer.id);
-    } else if (qualiMode || trainingMode) {
+    } else if (gameMode == GameMode.QUALY || gameMode == GameMode.TRAINING) {
         room.setPlayerTeam(byPlayer.id, Teams.RUNNERS);
         player.afk = false;
         resetPlayer(byPlayer, room, byPlayer.id);
@@ -1133,7 +1151,7 @@ export function handleRRCommand(byPlayer: PlayerObject, _: string[], room: RoomO
         return
     }
     resetPlayer(byPlayer, room, byPlayer.id);
-    if(qualiMode || trainingMode){
+    if(gameMode == GameMode.QUALY || gameMode == GameMode.TRAINING){
         playerList[byPlayer.id].kers = 100;
         playerList[byPlayer.id].wear = 20
     }
@@ -1144,7 +1162,7 @@ export function handleRRCommand(byPlayer: PlayerObject, _: string[], room: RoomO
 }
 
 export function printAllPositions(room: RoomObject, toPlayerID?: number) {
-    if (qualiMode || trainingMode) {
+    if (gameMode == GameMode.QUALY || gameMode == GameMode.TRAINING) {
         sendErrorMessage(room, MESSAGES.POSITIONS_IN_QUALI(), toPlayerID)
         return false
     }
@@ -1182,7 +1200,7 @@ export function changeLaps(newLapsArg?: string, byPlayer?: PlayerObject, room?: 
     if(room && newLapsArg){
         const newLaps = Number(newLapsArg)
         if(byPlayer){
-            if (qualiMode || trainingMode) {
+            if (gameMode == GameMode.QUALY || gameMode == GameMode.TRAINING) {
                 sendErrorMessage(room, MESSAGES.LAPS_IN_QUALI(), byPlayer.id)
                 return false
             }

@@ -1,8 +1,8 @@
 import { bestTimes } from "../bestTimes";
 import {Circuit, CircuitInfo, Direction} from "../Circuit";
-import silverstone_json from "./silverstone.json";
+import silverstoneLeague_json from "./silverstoneLeague.json";
 
-const SILVERSTONE_INFO: CircuitInfo = {
+const SILVERSTONELEAGUE_INFO: CircuitInfo = {
     finishLine: {
         bounds: {
             minX: -1300,
@@ -72,8 +72,8 @@ const SILVERSTONE_INFO: CircuitInfo = {
     }],
     checkpoints: [],
     lastPlace: {
-        x: silverstone_json.redSpawnPoints[silverstone_json.redSpawnPoints.length - 1][0],
-        y: silverstone_json.redSpawnPoints[silverstone_json.redSpawnPoints.length - 1][1],
+        x: silverstoneLeague_json.redSpawnPoints[silverstoneLeague_json.redSpawnPoints.length - 1][0],
+        y: silverstoneLeague_json.redSpawnPoints[silverstoneLeague_json.redSpawnPoints.length - 1][1],
     },
     BestTime: bestTimes.silverstone,
     MainColor: [0x023286, 0x023286, 0xff0000],
@@ -84,7 +84,7 @@ const SILVERSTONE_INFO: CircuitInfo = {
     pitSpeed: 0.95
 }
 
-export const SILVERSTONE: Circuit = {
-    map: JSON.stringify(silverstone_json),
-    info: SILVERSTONE_INFO
+export const SILVERSTONELEAGUE: Circuit = {
+    map: JSON.stringify(silverstoneLeague_json),
+    info: SILVERSTONELEAGUE_INFO
 }

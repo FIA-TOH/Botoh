@@ -2,7 +2,7 @@ import {DEFAULT_LANGUAGE} from "./language";
 import {TIRE_STARTING_SPEED, Tires} from "./tires";
 import {playerList} from "./playerList";
 import { handleAvatar } from "./handleAvatar";
-import { trainingMode } from "./qualiMode";
+import { gameMode, GameMode } from "./qualiMode";
 
 
 
@@ -61,7 +61,7 @@ export function resetPlayer(player: PlayerObject, room: RoomObject, id: number, 
     if(startingRace){
         playerList[id].bestTime = Number.MAX_VALUE
     }
-    if(!trainingMode){
+    if(gameMode !== GameMode.TRAINING){
     playerList[id].tires = Tires.SOFT
     }
     playerList[id].totalTime = 0

@@ -9,7 +9,7 @@ import {MESSAGES} from "./features/messages";
 import {Teams} from "./features/teams";
 import {bans, leagueName, maxPlayers, publicName, roomPassword} from "../roomconfig.json"
 import {MAX_PLAYER_NAME, sendChatMessage, sendErrorMessage, sendSuccessMessage} from "./features/chat";
-import {changeQuali, changeTraining, clearPlayers, getPlayersOrderedByQualiTime, printAllTimes, qualiMode, qualiTime, reorderPlayersInRoom, trainingMode} from "./features/qualiMode";
+import { changeGameMode, clearPlayers, gameMode, GameMode, getPlayersOrderedByQualiTime, printAllTimes, qualiTime, reorderPlayersInRoom} from "./features/qualiMode";
 import {banPlayer, decodeIPFromConn, getRunningPlayers, kickPlayer} from "./features/utils";
 import {changeLaps, COMMANDS, handleRREnabledCommand, mute_mode, printAllPositions} from "./features/handleCommands";
 import {sha256} from "js-sha256";
@@ -131,7 +131,7 @@ function endRaceSession(playersAndDiscs: { p: PlayerObject, disc: DiscProperties
         gameStopedNaturally = true
         room.stopGame()
     }
-    if(!LEAGUE_MODE && room.getScores()?.time > qualiTime * 60 && qualiMode){
+    if(!LEAGUE_MODE && room.getScores()?.time > qualiTime * 60 && gameMode == GameMode.QUALY){
         gameStopedNaturally = true
         room.stopGame()
     }
@@ -148,14 +148,13 @@ room.onGameStop = function (byPlayer) {
     byPlayer == null ? log(`Game stopped`) : log(`Game stopped by ${byPlayer.name}`)    
     
     if (gameStopedNaturally && !LEAGUE_MODE){
-        if (qualiMode) {
+        if (gameMode == GameMode.QUALY) {
             printAllTimes(room)
             room.stopGame()
             reorderPlayersInRoom(room);
             movePlayersToCorrectSide()
             setTimeout(()=>{
-                changeQuali(false, room)
-                changeTraining(false, room)
+                changeGameMode(GameMode.RACE, room)
                 resetPlayers(room)
                 setGhostMode(room, false)
                 handleRREnabledCommand(undefined, ["false"], room);
@@ -176,17 +175,16 @@ room.onGameStop = function (byPlayer) {
         gameStopedNaturally = false
 
     } else{
-        if (qualiMode) {
+        if (gameMode == GameMode.QUALY) {
             printAllTimes(room)
             reorderPlayersInRoom(room);
             movePlayersToCorrectSide()
-            changeQuali(false, room)
-            changeTraining(false, room)
+            changeGameMode(GameMode.RACE, room)
             changeLaps('7', undefined, room)
             resetPlayers(room)
             setGhostMode(room, false)
             
-        } else if(trainingMode){
+        } else if(gameMode == GameMode.TRAINING){
             printAllTimes(room)
             reorderPlayersInRoom(room);
             movePlayersToCorrectSide()
@@ -277,7 +275,7 @@ room.onPlayerJoin = function (player) {
     
     if(room.getPlayerList().length > 1){
         if(room.getScores()){
-            if(gameState === "running" && !qualiMode && !trainingMode && room.getScores().time !== 0){
+            if(gameState === "running" && gameMode !== GameMode.QUALY && gameMode !== GameMode.TRAINING && room.getScores().time !== 0){
                 room.setPlayerTeam(player.id, Teams.SPECTATORS)
             } else {
                 room.setPlayerTeam(player.id, Teams.RUNNERS)
@@ -320,7 +318,7 @@ room.onPlayerLeave = function (player) {
         return {p: p, disc: room.getPlayerDiscProperties(p.id)}
     })
 
-    if (room.getScores() != null && getRunningPlayers(playersAndDiscs).length === 0 && !trainingMode) {
+    if (room.getScores() != null && getRunningPlayers(playersAndDiscs).length === 0 && gameMode !== GameMode.TRAINING) {
         room.stopGame()
     }
 }

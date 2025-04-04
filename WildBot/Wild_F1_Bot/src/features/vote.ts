@@ -6,7 +6,7 @@ import { CIRCUITS, handleChangeMap } from "./maps";
 import { MESSAGES } from "./messages";
 import { playerList } from "./playerList";
 import { resetPlayers } from "./players";
-import { changeQuali } from "./qualiMode";
+import { changeGameMode, GameMode } from "./qualiMode";
 
 export let selectedCircuits: Circuit[] = [];
 export let isOnVoteSession: boolean = false;
@@ -67,7 +67,7 @@ export function voteSession(room: RoomObject) {
             handleChangeMap(winnerIndex, room);
             resetPlayers(room)
             if(qualyForPub){
-                changeQuali(true, room)
+                changeGameMode(GameMode.QUALY, room)
                 setGhostMode(room, true)
                 handleRREnabledCommand(undefined, ["true"], room);
                 

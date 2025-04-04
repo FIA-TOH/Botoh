@@ -12,6 +12,7 @@
   "dependencies": {
     "@types/haxball-headless-browser": "^0.2.5",
     "@types/node": "^22.1.0",
+    "ajv-keywords": "^5.1.0",
     "browserify": "^17.0.0",
     "envify": "^4.1.0",
     "js-sha256": "^0.11.0"

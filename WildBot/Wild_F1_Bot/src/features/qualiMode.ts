@@ -9,8 +9,15 @@ import {
 import {MESSAGES} from "./messages";
 import {playerList} from "./playerList";
 import { changeLaps } from "./handleCommands";
-export let qualiMode = false;
-export let trainingMode = false
+export enum GameMode {
+    RACE = "race",
+    QUALY = "qualy",
+    TRAINING = "training",
+    INDY = "indy"
+}
+
+export let gameMode: GameMode = GameMode.RACE;
+
 export let qualiTime = 2;
 
 let arrayPlayers:  { name: string, time: number }[] = []
@@ -33,7 +40,7 @@ export function clearPlayers() {
 
 
 export function setQualiTime(player: PlayerObject, time: number, room: RoomObject) {
-    if (!qualiMode) {
+    if (gameMode !== GameMode.QUALY) {
         sendErrorMessage(room, MESSAGES.NOT_IN_QUALI(), player.id);
         return false;
     }
@@ -55,32 +62,27 @@ export function setQualiTime(player: PlayerObject, time: number, room: RoomObjec
     room.setTimeLimit(qualiTime);
     sendSuccessMessage(room, msg);
 }
-
-export function changeQuali(newValue: boolean, room: RoomObject) {
-    if (newValue) {
-        qualiMode = true;
-        room.setTimeLimit(qualiTime);
-        sendSuccessMessage(room, MESSAGES.TIME_TO_QUALY());
-        return;
+export function changeGameMode(newMode: GameMode, room: RoomObject) {
+    gameMode = newMode;
+    room.setTimeLimit(newMode === GameMode.QUALY ? qualiTime : 0);
+    
+    switch (newMode) {
+        case GameMode.QUALY:
+            sendSuccessMessage(room, MESSAGES.TIME_TO_QUALY());
+            break;
+        case GameMode.TRAINING:
+            changeLaps("999", undefined, room);
+            room.sendAnnouncement("Training mode on");
+            break;
+        case GameMode.INDY:
+            room.sendAnnouncement("Indy mode on");
+            break;
+        case GameMode.RACE:
+            sendSuccessMessage(room, MESSAGES.TIME_TO_RACE(laps));
+            break;
     }
-
-    qualiMode = false;
-    room.setTimeLimit(0);
-    sendSuccessMessage(room, MESSAGES.TIME_TO_RACE(laps));
 }
 
-export function changeTraining(newValue: boolean, room: RoomObject) {
-    if (newValue) {
-        trainingMode = true;
-        changeLaps('999', undefined, room)
-        room.setTimeLimit(0);
-        return;
-    }
-
-    trainingMode = false;
-    room.setTimeLimit(0);
-    sendSuccessMessage(room, MESSAGES.TIME_TO_RACE(laps));
-}
 
 export function getPlayersOrderedByQualiTime(room: RoomObject) {
 
@@ -92,7 +94,7 @@ export function getPlayersOrderedByQualiTime(room: RoomObject) {
 }
 
 export function printAllTimes(room: RoomObject, toPlayerID?: number) {
-    if (!qualiMode && !trainingMode) {
+    if (gameMode !== GameMode.QUALY && gameMode !== GameMode.TRAINING) {
         sendErrorMessage(room, MESSAGES.TIMES_IN_RACE(), toPlayerID);
         return;
     }

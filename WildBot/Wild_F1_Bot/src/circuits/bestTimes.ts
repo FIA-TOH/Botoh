@@ -45,7 +45,7 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   monaco: [34.467, "Alberto Ulasscari", trackNameMapping["monaco"]],
   valencia: [44.433, "Alberto Ulasscari", trackNameMapping["valencia"]],
   paulRicard: [42.567, "Ximbastian Vettel", trackNameMapping["paulRicard"]],
-  silverstone: [33.900, "Lando Canorris", trackNameMapping["silverstone"]],
+  silverstone: [999.999, "Lando Canorris", trackNameMapping["silverstone"]],
   spa: [51.717, "Lando Canorris", trackNameMapping["spa"]],
   istanbul: [34.483, "Artistic", trackNameMapping["istanbul"]],
   nurburgring: [40.233, "Trisk Evans", trackNameMapping["nurburgring"]],

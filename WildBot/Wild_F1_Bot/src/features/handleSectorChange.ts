@@ -4,7 +4,7 @@ import { positionList, updatePositionList } from "./handleLapChange";
 import { CIRCUITS, currentMapIndex } from "./maps";
 import { MESSAGES } from "./messages";
 import { playerList } from "./playerList";
-import { qualiMode, trainingMode } from "./qualiMode";
+import { GameMode, gameMode } from "./qualiMode";
 import { getRunningPlayers, inHitbox } from "./utils";
 
 
@@ -98,7 +98,7 @@ export function checkPlayerSector(playersAndDiscs: { p: PlayerObject, disc: Disc
 export function checkBlueFlag(p: PlayerObject, room: RoomObject) {
     const playerInfo = positionList.find(entry => entry.name === p.name);
     if (!playerInfo) return;
-    if(qualiMode || trainingMode) return
+    if(gameMode == GameMode.QUALY || gameMode == GameMode.TRAINING) return
 
     
     positionList.forEach(opponent => {

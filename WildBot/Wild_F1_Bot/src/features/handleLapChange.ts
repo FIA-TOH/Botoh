@@ -1,7 +1,7 @@
 import {PitsInfo, playerList} from "./playerList";
 import {CHECK_IF_TROLLING, checkIfTrolling, getRunningPlayers, inHitbox} from "./utils";
 import {CIRCUITS, currentMapIndex} from "./maps";
-import {qualiMode, qualiTime, trainingMode, updatePlayerTime} from "./qualiMode";
+import {GameMode, gameMode, qualiTime, updatePlayerTime} from "./qualiMode";
 import {sendBestTimeRace, sendChatMessage, sendErrorMessage, sendSuccessMessage, sendWorseTime} from "./chat";
 import {MESSAGES} from "./messages";
 import {laps} from "./laps";
@@ -200,13 +200,13 @@ export function checkPlayerLaps(playersAndDiscs: { p: PlayerObject, disc: DiscPr
                     console.log(`Circuito ${ACTUAL_CIRCUIT.info.name} não encontrado no mapeamento de nomes.`);
                 }
                 
-                if(qualiMode || playerData.tires === Tires.TRAIN){
+                if(gameMode == GameMode.QUALY || playerData.tires === Tires.TRAIN){
                     playerData.kers = 100
                 }
                 sendChatMessage(room, MESSAGES.RAIN_INTENSITY_LAP(correctRainIntensity), pad.p.id)
                 sendChatMessage(room, MESSAGES.TYRE_WEAR_LAP(roundWear), p.id)
     
-                if (!qualiMode) {
+                if (gameMode !== GameMode.QUALY) {
                     if (currentLap <= laps) {
                         const lapIndex = currentLap - 2
                         const position = lapPositions[lapIndex].push({
@@ -223,7 +223,7 @@ export function checkPlayerLaps(playersAndDiscs: { p: PlayerObject, disc: DiscPr
     
                             if (prevPlayer.currentLap > currentLap) {
                                 const distance = prevPlayer.currentLap - currentLap
-                                if(!trainingMode){
+                                if(gameMode !== GameMode.TRAINING){
                                     sendChatMessage(room, MESSAGES.POSITION_AND_DISTANCE_AHEAD(position, distance, "laps"), p.id)
                                 }
                                 
@@ -271,7 +271,7 @@ export function checkPlayerLaps(playersAndDiscs: { p: PlayerObject, disc: DiscPr
             playerData.sectorTime = []
             playerData.currentSector = 1;
             playerList[p.id].totalTime = room.getScores().time;
-            if(!qualiMode || !trainingMode){
+            if(!(gameMode == GameMode.QUALY || gameMode == GameMode.TRAINING)){
                 updatePositionList(players, room);
                 checkBlueFlag(p, room);
             }
