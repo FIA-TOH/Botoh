@@ -13,6 +13,33 @@ const NURBURGRING_INFO: CircuitInfo = {
         passingDirection: Direction.RIGHT
     },
     name: "Aramco Grosser Preis der Eifel - By Ximb",
+    sectorOne:{
+        bounds: {
+            minX: -654,
+            maxX: -624,
+            minY: -194,
+            maxY: 150
+        },
+        passingDirection: Direction.RIGHT
+    },
+    sectorTwo:{
+        bounds: {
+            minX: 2516,
+            maxX: 2548,
+            minY: -319,
+            maxY: -32
+        },
+        passingDirection: Direction.RIGHT
+    },
+    sectorThree:{
+        bounds: {
+            minX: 1571,
+            maxX: 1603,
+            minY: 1082,
+            maxY: 1483
+        },
+        passingDirection: Direction.LEFT
+    },
     boxLine: {
         minX: -1454,
         maxX: -654,
@@ -54,6 +81,7 @@ const NURBURGRING_INFO: CircuitInfo = {
     Angle: 90,
     Limit: 5,
     Votes: 0,
+    pitSpeed: 0.95
 }
 
 export const NURBURGRING: Circuit = {

@@ -2,10 +2,11 @@ import { sendAlertMessage, sendChatMessage, sendMessage } from "./chat";
 import { MESSAGES } from "./messages";
 import { playerList } from "./playerList";
 import { Tires, TYRE_DURABILITY } from "./tires";
-import {laps} from "../features/laps";
-import { changeTires, vsc } from "./handleSpeed";
-import { tyresActivated } from "./handleCommands";
+import { laps } from "../features/laps";
+import { vsc } from "./handleSpeed";
+import { playerNerfList, tyresActivated } from "./handleCommands";
 import { gameMode, GameMode } from "./qualiMode";
+import { changeTires } from "./pits";
 
 export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
     const p = playerList[player.id];
@@ -23,9 +24,15 @@ export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
     const timeElapsed = currentTime - p.lastCheckTime;
     p.lastCheckTime = currentTime;
 
+    const isNerfed = playerNerfList.some(nerfPlayer => nerfPlayer.name === player.name);
     const wearReductionFactor = vsc ? 0.25 : 1; 
     const wearIncrementPerSecond = (100 / totalDurability) * wearReductionFactor;
-    p.wear = Math.min(100, p.wear + wearIncrementPerSecond * timeElapsed);
+
+    if (isNerfed && (100 - p.wear) <= 50) {
+        return
+    } else {
+        p.wear = Math.min(100, p.wear + wearIncrementPerSecond * timeElapsed);
+    }
 
     const remainingPercentage = 100 - p.wear;
 
@@ -42,8 +49,8 @@ export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
 
     if (!p.alertSent) p.alertSent = {};
 
-    if (remainingPercentage === 0 && p.tires != Tires.FLAT){
-        changeTires({p: player, disc: room.getPlayerDiscProperties(player.id)}, Tires.FLAT, room);
+    if (remainingPercentage === 0 && p.tires != Tires.FLAT) {
+        changeTires({ p: player, disc: room.getPlayerDiscProperties(player.id) }, Tires.FLAT, room);
     }
 
     if (remainingPercentage === 100) {
@@ -55,7 +62,7 @@ export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
         p.alertSent[0] = true;
         return;  
     }
-    
+
     for (let alert of alerts) {
         if (remainingPercentage <= alert.threshold && !p.alertSent[alert.key]) {
             sendAlertMessage(room, alert.message, player.id);

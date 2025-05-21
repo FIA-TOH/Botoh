@@ -5,31 +5,58 @@ import monza_json from "./monza.json";
 const MONZA_INFO: CircuitInfo = {
     finishLine: {
         bounds: {
-            minX: 136,
-            maxX: 151,
-            minY: -145,
-            maxY: 285
+            minX: 1313,
+            maxX: 1335,
+            minY: 243,
+            maxY: 668
         },
         passingDirection: Direction.LEFT
     },
     name: "Autodromo Nazionale di Monza - By Ximb",
+    sectorOne:{
+        bounds: {
+            minX: 1313,
+            maxX: 1335,
+            minY: 243,
+            maxY: 668
+        },
+        passingDirection: Direction.LEFT
+    },
+    sectorTwo:{
+        bounds: {
+            minX: -3698,
+            maxX: -3433,
+            minY: -1873,
+            maxY: -1841
+        },
+        passingDirection: Direction.UP
+    },
+    sectorThree:{
+        bounds: {
+            minX: -1236,
+            maxX: -1204,
+            minY: -1505,
+            maxY: -960
+        },
+        passingDirection: Direction.RIGHT
+    },
     boxLine: {
-        minX: 170,
-        maxX: 1200,
-        minY: -140,
-        maxY: -80
+        minX: 1349,
+        maxX: 2379,
+        minY: 250,
+        maxY: 325
     },
     pitlaneStart: {
-        minX: 1352,
-        maxX: 1382,
-        minY: -140,
-        maxY: 3
+        minX: 3100,
+        maxX: 3132,
+        minY: 272,
+        maxY: 406
     },
     pitlaneEnd: {
-        minX: -21,
-        maxX: 11,
-        minY: -140,
-        maxY: 3
+        minX: 1242,
+        maxX: 1274,
+        minY: 248,
+        maxY: 409
     },
     drsStart: [{
         minX: 0,
@@ -54,6 +81,7 @@ const MONZA_INFO: CircuitInfo = {
     Angle: 0,
     Limit: 5,
     Votes: 0,
+    pitSpeed: 0.96
 }
 
 export const MONZA: Circuit = {

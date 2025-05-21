@@ -12,7 +12,7 @@ const INDIANAPOLIS_INFO: CircuitInfo = {
         },
         passingDirection: Direction.RIGHT
     },
-    name: "Indianapolis Motor Speedway",
+    name: "Indianapolis Motor Speedway - By Ximb",
     sectorOne:{
         bounds: {
             minX: 431,
@@ -47,16 +47,16 @@ const INDIANAPOLIS_INFO: CircuitInfo = {
         maxY: -144
     },
     pitlaneStart: {
-        minX: -1840,
-        maxX:-1810,
+        minX: -1776,
+        maxX: -1744,
         minY: -144,
-        maxY: 108
+        maxY: 93
     },
     pitlaneEnd: {
         minX: 1446,
         maxX: 1478,
         minY: -168,
-        maxY: 72
+        maxY: 90
     },
     drsStart: [
         {
@@ -84,7 +84,7 @@ const INDIANAPOLIS_INFO: CircuitInfo = {
     AvatarColor: 0xbc002d,
     Angle: 90,
     Votes: 0,
-    pitSpeed: 0.995
+    pitSpeed: 0.98
 }
 
 export const INDIANAPOLIS: Circuit = {

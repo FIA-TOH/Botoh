@@ -5,31 +5,58 @@ import canada_json from "./canada.json";
 const CANADA_INFO: CircuitInfo = {
     finishLine: {
         bounds: {
-            minX: 84,
-            maxX: 116,
-            minY: 0,
-            maxY: 325
-        },
+            minX: -2770,
+            maxX: -2745,
+            minY: 236,
+            maxY: 660
+            },
         passingDirection: Direction.LEFT
+    },
+    sectorOne:{
+        bounds: {
+            minX: -2770,
+            maxX: -2745,
+            minY: 236,
+            maxY: 660
+            },
+            passingDirection: Direction.LEFT
+    },
+    sectorTwo:{
+        bounds: {
+            minX: -924,
+            maxX: -894,
+            minY: -849,
+            maxY: -576
+        },
+        passingDirection: Direction.RIGHT
+    },
+    sectorThree:{
+        bounds: {
+            minX: 2801,
+            maxX: 2830,
+            minY: -4,
+            maxY: 245
+        },
+        passingDirection: Direction.RIGHT
     },
     name: "Circuit Gilles Villeneuve - By Ximb",
     boxLine: {
-        minX: 100,
-        maxX: 936,
-        minY: 325,
-        maxY: 390
+        minX: -2720,
+        maxX: -1885,
+        minY: 548,
+        maxY: 618
     },
     pitlaneStart: {
-        minX: 1180,
-        maxX: 1210,
-        minY: 401,
-        maxY: 496
+        minX: -1264,
+        maxX: -1234,
+        minY: 436,
+        maxY: 602
     },
     pitlaneEnd: {
-        minX: -1212,
-        maxX: -1182,
-        minY: 264,
-        maxY: 348
+        minX: -3321,
+        maxX: -3291,
+        minY: 439,
+        maxY: 740
     },
     drsStart: [{
         minX: 0,
@@ -54,6 +81,7 @@ const CANADA_INFO: CircuitInfo = {
     Angle: 90,
     Limit: 5,
     Votes: 0,
+    pitSpeed: 0.96
 }
 
 export const CANADA: Circuit = {

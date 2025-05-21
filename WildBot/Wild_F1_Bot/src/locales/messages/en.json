@@ -78,7 +78,7 @@
   "AFK_MESSAGE": "⛔ If you don't move on the next seconds, you will be kicked! ⛔",
   "NOW_AFK": "You are now AFK, type !afk again to return.",
   "REMOVED_FROM_AFK": "You are no longer AFK. Wait for the race to finish to rejoin the game.",
-  "ENABLED_TYRES":"Now the tyres action is {{boolean}}",
+  "ENABLED_TYRES": "Now the tyres action is {{boolean}}",
   "TIPS": "Increase your extrapolation to 100 | decrease the zoom with Ctrl - | Copy what the best are doing",
   "EXPLAIN_TYRES": "Your tires wear out over time, when they are almost gone, type !tires (s|m|h) in the pits.",
   "EXPLAIN_RAIN": "When the rain starts, change the tires with !tires (i|w), light rain = intermediate, heavy rain = wet",
@@ -99,11 +99,12 @@
   "INVALIDE_VOTE": "Choose a number between 1 and 3",
   "VOTED": "You voted for: {{circuit}}",
   "CIRCUIT_CHOOSED": "The winning circuit was {{circuit}}, with {{votes}} votes",
-  "TIME_TO_VOTE":"¡Hora de votar! Elige uno de los circuitos a continuación escribiendo !voto (Número)",
+  "TIME_TO_VOTE": "¡Hora de votar! Elige uno de los circuitos a continuación escribiendo !voto (Número)",
   "TIME_TO_QUALY": "🚨Qualifying! Do your best time!🚨",
-"TIME_TO_RACE": "🚨Race with {{laps}} laps! May the best win!🚨",
-"WORSE_TIME": "Lap time: {{lapTime}} (-{{diferenca}}",
-"CODE_BOX":"Your PitStop code is {{codigo}}, enter it reversed after the tire type.",
-"CODE_WRONG": "Wrong code! Enter the correct code reversed."
-
+  "TIME_TO_RACE": "🚨Race with {{laps}} laps! May the best win!🚨",
+  "WORSE_TIME": "Lap time: {{lapTime}} (-{{diferenca}}",
+  "CODE_BOX": "Your PitStop code is {{codigo}}, enter it reversed after the tire type.",
+  "CODE_WRONG": "Wrong code! Enter the correct code reversed.",
+  "PRESENTATION_LAP": "Presentation lap! Follow slowly and do not overtake until the green flag!",
+  "SECONDS_TO_FINISH": "The race ends in {{segundos}} seconds"
 }

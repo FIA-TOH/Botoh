@@ -25,6 +25,7 @@ export default function es_commands(
     handleMuteCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleRainCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleSlipstreamCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
+    handleGasCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleGhostCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleRREnabledCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleRRCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
@@ -39,12 +40,15 @@ export default function es_commands(
     handleExplainErsCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleEveryoneLapsCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleTpCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
+    handleIndyModeCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleFlagCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleVoteCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleClearCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleRecordCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleAjustPlayerCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
     handleNerfListCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
+    handlePresentationLapCommand: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
+    handleChangePropierties: (byPlayer: PlayerObject, args: string[], room: RoomObject) => void,
 ): Commands {
     return {
         "!admin": handleAdminCommand,
@@ -75,6 +79,7 @@ export default function es_commands(
         "!mute": handleMuteCommand,
         "!lluvia": handleRainCommand,
         "!rebufo": handleSlipstreamCommand,
+        "!gas": handleGasCommand,
         "!fantasma": handleGhostCommand,
         "!toggle_rr": handleRREnabledCommand,
         "!rr": handleRRCommand,
@@ -89,11 +94,14 @@ export default function es_commands(
         "!explain_ers": handleExplainErsCommand,
         "!everyone_laps": handleEveryoneLapsCommand,
          "!tp": handleTpCommand,
+         "!imode": handleIndyModeCommand,
          "!flag": handleFlagCommand,
          "!voto": handleVoteCommand,
          "!clear": handleClearCommand,
          "!record": handleRecordCommand,
          "!adjust": handleAjustPlayerCommand,
          "!nerf": handleNerfListCommand,
+         "!presentation": handlePresentationLapCommand,
+         "!constants":handleChangePropierties
     }
 }

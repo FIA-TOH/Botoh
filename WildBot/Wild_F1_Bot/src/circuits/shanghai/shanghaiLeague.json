@@ -1,0 +1,4909 @@
+{
+  "name": "Shanghai International Circuit - By Ximb",
+
+  "width": 3300,
+
+  "height": 3300,
+
+  "spawnDistance": 710,
+
+  "bg": {
+    "type": "hockey",
+    "height": 0,
+    "width": 0,
+    "cornerRadius": 0,
+    "kickOffRadius": 0
+  },
+
+  "vertexes": [
+    {
+      "x": -1534,
+      "y": 51,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": 771,
+      "y": 201,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": -1534,
+      "y": 201,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": 820,
+      "y": 51,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+
+    {
+      "x": -610,
+      "y": 52,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier",
+      "color": "ffdf00"
+    },
+    {
+      "x": -610,
+      "y": 202,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier",
+      "color": "ffdf00"
+    },
+    {
+      "x": -559,
+      "y": 170,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier",
+      "color": "df2407",
+      "curve": 180
+    },
+    {
+      "x": -559,
+      "y": 140,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier",
+      "color": "df2407",
+      "curve": 180
+    },
+    {
+      "x": -529,
+      "y": 80,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -529,
+      "y": 110,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -499,
+      "y": 170,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -499,
+      "y": 140,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -469,
+      "y": 110,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier",
+      "curve": 180
+    },
+    {
+      "x": -469,
+      "y": 80,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier",
+      "curve": 180
+    },
+    {
+      "x": -439,
+      "y": 170,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -439,
+      "y": 140,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -409,
+      "y": 80,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -409,
+      "y": 110,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -379,
+      "y": 170,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -379,
+      "y": 140,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -349,
+      "y": 80,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -349,
+      "y": 110,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -319,
+      "y": 170,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -319,
+      "y": 140,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -289,
+      "y": 80,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -289,
+      "y": 110,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -259,
+      "y": 170,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -259,
+      "y": 140,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -229,
+      "y": 80,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -229,
+      "y": 110,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+
+    {
+      "x": 235,
+      "y": -2681,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": 877,
+      "y": 289,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": 1050,
+      "y": 756,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "curve": -20,
+      "color": "ffffff"
+    },
+    {
+      "x": 991,
+      "y": 155,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "curve": 0,
+      "color": "ffffff"
+    },
+    {
+      "x": 1200,
+      "y": 739,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": 1401,
+      "y": 1024,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": 1708,
+      "y": 1297,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": 1293,
+      "y": 1096,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "curve": -20,
+      "color": "ffffff"
+    },
+    {
+      "x": 1634,
+      "y": 1389,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": 1791,
+      "y": 1241,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": 318,
+      "y": -2802,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": 1916,
+      "y": 1194,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": -1000,
+      "y": 51,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": -1194,
+      "y": 51,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": -1868,
+      "y": -548,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": -1351,
+      "y": -513,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": -1443,
+      "y": -323,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": -1242,
+      "y": -365,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": -1391,
+      "y": -230,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": -1060,
+      "y": -355,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": -1233,
+      "y": -16,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": -930,
+      "y": -344,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": -1500,
+      "y": -64,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": -1245,
+      "y": -559,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": -1083,
+      "y": -580,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": -1678,
+      "y": -1543,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": -961,
+      "y": -620,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": -1558,
+      "y": -1592,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "curve": 20,
+      "color": "df2407"
+    },
+    {
+      "x": -1627,
+      "y": -1789,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "curve": 20,
+      "color": "df2407"
+    },
+    {
+      "x": -1675,
+      "y": -2189,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": -1767,
+      "y": -1797,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": -1811,
+      "y": -2168,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": -1593,
+      "y": -2246,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": -1403,
+      "y": -1963,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": -1286,
+      "y": -1554,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": -1277,
+      "y": -1986,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": -1156,
+      "y": -1580,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": -1517,
+      "y": -2339,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": -613,
+      "y": -1552,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": -535,
+      "y": -1716,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": -497,
+      "y": -1498,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff",
+      "curve": 0
+    },
+    {
+      "x": -420,
+      "y": -1671,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407",
+      "curve": 0
+    },
+    {
+      "x": 28,
+      "y": -1556,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407",
+      "curve": 13
+    },
+    {
+      "x": -446,
+      "y": -2855,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": -524,
+      "y": -2507,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": -316,
+      "y": -2375,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": -130,
+      "y": -2491,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": -298,
+      "y": -2267,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": -53,
+      "y": -2419,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": 175,
+      "y": -2454,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": 568,
+      "y": -1503,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": 66,
+      "y": -2402,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": 438,
+      "y": -1489,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": -31,
+      "y": -1334,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff",
+      "curve": 13
+    },
+    {
+      "x": 141,
+      "y": -1551,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": 85,
+      "y": -1333,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": 161,
+      "y": -1270,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": 412,
+      "y": -1426,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": 188,
+      "y": -1168,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": 516,
+      "y": -1362,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": -546,
+      "y": -2965,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": -651,
+      "y": -2496,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+
+    {
+      "x": -409,
+      "y": 80,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -409,
+      "y": 110,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -379,
+      "y": 170,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -379,
+      "y": 140,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -349,
+      "y": 80,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -349,
+      "y": 110,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -319,
+      "y": 170,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -319,
+      "y": 140,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -289,
+      "y": 80,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -289,
+      "y": 110,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -259,
+      "y": 170,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -259,
+      "y": 140,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -229,
+      "y": 80,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -229,
+      "y": 110,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -201,
+      "y": 169,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -201,
+      "y": 139,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -171,
+      "y": 79,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -171,
+      "y": 109,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -141,
+      "y": 169,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -141,
+      "y": 139,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -111,
+      "y": 79,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -111,
+      "y": 109,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -81,
+      "y": 169,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -81,
+      "y": 139,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -51,
+      "y": 79,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -51,
+      "y": 109,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -21,
+      "y": 169,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -21,
+      "y": 139,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -171,
+      "y": 79,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -171,
+      "y": 109,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -141,
+      "y": 169,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -141,
+      "y": 139,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -111,
+      "y": 79,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -111,
+      "y": 109,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -81,
+      "y": 169,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -81,
+      "y": 139,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -51,
+      "y": 79,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -51,
+      "y": 109,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -21,
+      "y": 169,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": -21,
+      "y": 139,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": 13,
+      "y": 82,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": 13,
+      "y": 112,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": 13,
+      "y": 82,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "x": 13,
+      "y": 112,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+
+    {
+      "x": 719,
+      "y": 228,
+      "bCoef": 0.5,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "444444"
+    },
+    {
+      "x": -2370,
+      "y": 228,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "444444"
+    },
+    {
+      "x": -1740,
+      "y": -900,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "x": -1268,
+      "y": -728,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "curve": 0,
+      "color": "444444"
+    },
+    {
+      "x": -2002,
+      "y": -2624,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "x": -1385,
+      "y": -2476,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "x": -1114,
+      "y": -1586,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "ffdf00"
+    },
+    {
+      "x": -878,
+      "y": -1554,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "x": -576,
+      "y": -1888,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "x": 217,
+      "y": -1884,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "curve": 0
+    },
+    {
+      "x": 380,
+      "y": -1480,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "x": 144,
+      "y": -1362,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "x": 191,
+      "y": -1333,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "x": 68,
+      "y": -2263,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "curve": 0
+    },
+    {
+      "x": -691,
+      "y": -2232,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "x": -219,
+      "y": -3223,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "x": 466,
+      "y": -2748,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "curve": 0
+    },
+    {
+      "x": 2077,
+      "y": 1575,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "curve": 0
+    },
+    {
+      "x": 1267,
+      "y": 1464,
+      "bCoef": 0.5,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "curve": 0
+    },
+    {
+      "x": 837,
+      "y": 305,
+      "bCoef": 0.5,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "curve": 0,
+      "color": "696969",
+      "vis": false
+    },
+    {
+      "x": -895,
+      "y": -50,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "curve": 0,
+      "color": "ffffff"
+    },
+    {
+      "x": -897,
+      "y": 13,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": 441,
+      "y": 13,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "ffffff"
+    },
+    {
+      "x": 438,
+      "y": -51,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "curve": 0,
+      "color": "ffffff"
+    },
+    {
+      "x": -859,
+      "y": -112,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "444444"
+    },
+    { "x": -1199, "y": 32, "bCoef": 0, "cMask": ["red", "blue", "ball", "c0"] },
+    {
+      "x": -1521,
+      "y": 33,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "ffdf00"
+    },
+    {
+      "x": -861,
+      "y": -792,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "curve": 0
+    },
+    {
+      "x": -1510,
+      "y": -1704,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "curve": 0,
+      "color": "ffdf00"
+    },
+    {
+      "x": -1583,
+      "y": -2036,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "curve": 0
+    },
+    { "x": -1510, "y": -2051, "cMask": ["red", "blue", "ball", "c0"] },
+    { "x": -1315, "y": -1431, "cMask": ["red", "blue", "ball", "c0"] },
+    { "x": -381, "y": -1585, "cMask": ["red", "blue", "ball", "c0"] },
+    {
+      "x": -82,
+      "y": -1500,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "curve": 0
+    },
+    { "x": 51, "y": -1027, "cMask": ["red", "blue", "ball", "c0"], "curve": 0 },
+    {
+      "x": 726,
+      "y": -1333,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "curve": 0
+    },
+    {
+      "x": 198,
+      "y": -2638,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    { "x": -345, "y": -2672, "cMask": ["red", "blue", "ball", "c0"] },
+    {
+      "x": 1719,
+      "y": 1177,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "curve": 0
+    },
+    { "x": 1674, "y": 1200, "cMask": ["red", "blue", "ball", "c0"] },
+    { "x": 1303, "y": 864, "cMask": ["red", "blue", "ball", "c0"], "curve": 0 },
+    {
+      "x": 775,
+      "y": 28,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["wall"],
+      "curve": 0
+    },
+    { "x": -901, "y": 28, "bCoef": 0, "cMask": ["red", "blue", "ball", "c0"] },
+    {
+      "x": -1070,
+      "y": -465,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "curve": 0,
+      "color": "444444"
+    },
+    {
+      "x": -1583,
+      "y": -1698,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "ffdf00"
+    },
+    { "x": 8, "y": -2419, "cMask": ["red", "blue", "ball", "c0"] },
+    {
+      "x": -1186,
+      "y": 124,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "x": -1534,
+      "y": 124,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    { "x": 878, "y": -156, "cMask": ["red", "blue", "ball", "c0"] },
+    {
+      "x": 775,
+      "y": -118,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "x": -610,
+      "y": -52,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "333333"
+    },
+    {
+      "x": -610,
+      "y": -125,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "444444"
+    },
+    {
+      "x": -510,
+      "y": -52,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "333333"
+    },
+    {
+      "x": -510,
+      "y": -125,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "333333"
+    },
+    {
+      "x": -410,
+      "y": -52,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "333333"
+    },
+    {
+      "x": -410,
+      "y": -125,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "333333"
+    },
+    {
+      "x": -310,
+      "y": -52,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "333333"
+    },
+    {
+      "x": -310,
+      "y": -125,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "333333"
+    },
+    {
+      "x": -210,
+      "y": -52,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "333333"
+    },
+    {
+      "x": -210,
+      "y": -125,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "333333"
+    },
+    {
+      "x": -110,
+      "y": -52,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "333333"
+    },
+    {
+      "x": -110,
+      "y": -125,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "333333"
+    },
+    {
+      "x": -10,
+      "y": -52,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "333333"
+    },
+    {
+      "x": -10,
+      "y": -125,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "333333"
+    },
+    {
+      "x": 90,
+      "y": -52,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "333333"
+    },
+    {
+      "x": 90,
+      "y": -125,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "333333"
+    },
+    {
+      "x": 190,
+      "y": -52,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "333333"
+    },
+    {
+      "x": 190,
+      "y": -125,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "333333"
+    },
+    {
+      "x": 290,
+      "y": -52,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "333333"
+    },
+    {
+      "x": 290,
+      "y": -125,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "333333"
+    },
+    {
+      "x": 390,
+      "y": -52,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "333333"
+    },
+    {
+      "x": 390,
+      "y": -125,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "333333"
+    },
+    {
+      "x": 719,
+      "y": -122,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "x": 671,
+      "y": -164,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "x": 851,
+      "y": -144,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    { "x": 647, "y": -210, "cMask": ["red", "blue", "ball", "c0"] },
+    {
+      "x": -981,
+      "y": -27,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "x": -1124,
+      "y": 41,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "x": -1099,
+      "y": 101,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "x": -947,
+      "y": 25,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "x": 740,
+      "y": -110,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["wall"],
+      "curve": 0
+    },
+    { "x": 531, "y": -97 },
+    {
+      "x": -1980,
+      "y": -613,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "x": -1414,
+      "y": -134,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": -1271,
+      "y": -122,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": -1347,
+      "y": -129,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "444444"
+    },
+    { "x": -1212, "y": -1106, "cMask": ["red", "blue", "ball", "c0"] },
+    { "x": -1403, "y": -1016, "cMask": ["red", "blue", "ball", "c0"] },
+    { "x": -1397, "y": -1397, "cMask": ["red", "blue", "ball", "c0"] },
+    {
+      "x": -1625,
+      "y": -2219,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "curve": 0
+    },
+    {
+      "x": -90,
+      "y": -1746,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "curve": 0,
+      "color": "df2407"
+    },
+    {
+      "x": -27,
+      "y": -1694,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "curve": 0,
+      "color": "df2407"
+    },
+    {
+      "x": -19,
+      "y": -1829,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "curve": 0
+    },
+    {
+      "x": 47,
+      "y": -1776,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "curve": 0
+    },
+    {
+      "x": -678,
+      "y": -1525,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "color": "ffdf00"
+    },
+    { "x": -380, "y": -1671, "cMask": ["red", "blue", "ball", "c0"] },
+    { "x": -124, "y": -1719, "cMask": ["red", "blue", "ball", "c0"] },
+    {
+      "x": -271,
+      "y": -1755,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "curve": 0
+    },
+    { "x": -39, "y": -1662, "cMask": ["red", "blue", "ball", "c0"] },
+    { "x": 110, "y": -1305, "cMask": ["red", "blue", "ball", "c0"] },
+    { "x": 416, "y": -1462, "cMask": ["red", "blue", "ball", "c0"] },
+    { "x": 265, "y": -2322, "cMask": ["red", "blue", "ball", "c0"] },
+    { "x": 313, "y": -2336, "cMask": ["red", "blue", "ball", "c0"] },
+    {
+      "x": -180,
+      "y": -2975,
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"],
+      "color": "df2407"
+    },
+    {
+      "x": -236,
+      "y": -2600,
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    { "x": 204, "y": -2672, "cMask": ["red", "blue", "ball", "c0"] },
+    { "x": -179, "y": -2936, "cMask": ["red", "blue", "ball", "c0"] },
+    { "x": -478, "y": -2514, "cMask": ["red", "blue", "ball", "c0"] },
+    { "x": -170, "y": -2505, "cMask": ["red", "blue", "ball", "c0"] },
+    { "x": 1754, "y": 1279 },
+    { "x": 416, "y": -1950, "cMask": ["red", "blue", "ball", "c0"] },
+    { "x": 465, "y": -1972, "cMask": ["red", "blue", "ball", "c0"] }
+  ],
+
+  "segments": [
+    {
+      "v0": 2,
+      "v1": 1,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+
+    {
+      "v0": 5,
+      "v1": 4,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "v0": 6,
+      "v1": 7,
+      "curve": 180,
+      "color": "df2407",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "v0": 12,
+      "v1": 13,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+
+    {
+      "v0": 1,
+      "v1": 31,
+      "curve": 71.075355583949,
+      "color": "df2407",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 31,
+      "v1": 32,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 33,
+      "v1": 34,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 34,
+      "v1": 35,
+      "curve": -27.462678472487784,
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 35,
+      "v1": 36,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 37,
+      "v1": 38,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 32,
+      "v1": 37,
+      "curve": -26.24863945231272,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 39,
+      "v1": 30,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 41,
+      "v1": 40,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 42,
+      "v1": 3,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 43,
+      "v1": 0,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 0,
+      "v1": 44,
+      "curve": 124.85321822136,
+      "color": "df2407",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 44,
+      "v1": 45,
+      "curve": 116.193068350424,
+      "color": "df2407",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 45,
+      "v1": 46,
+      "curve": 104.94354105520588,
+      "color": "df2407",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 47,
+      "v1": 48,
+      "curve": 53.26322445856631,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 50,
+      "v1": 51,
+      "curve": -41.985805215594965,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 46,
+      "v1": 52,
+      "curve": -113.56727821432092,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 47,
+      "v1": 53,
+      "curve": -48.896886221268744,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 49,
+      "v1": 54,
+      "curve": -50.2259435996969,
+      "color": "df2407",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 54,
+      "v1": 55,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 56,
+      "v1": 57,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 51,
+      "v1": 56,
+      "curve": -50.37627767310536,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 57,
+      "v1": 58,
+      "curve": 20,
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 58,
+      "v1": 59,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 60,
+      "v1": 61,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 55,
+      "v1": 60,
+      "curve": 19.53086053102,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 62,
+      "v1": 63,
+      "curve": 34.20028613872087,
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 63,
+      "v1": 64,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 65,
+      "v1": 66,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 65,
+      "v1": 67,
+      "curve": -34.94600029974034,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 66,
+      "v1": 68,
+      "curve": -130.5611525870464,
+      "color": "df2407",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 68,
+      "v1": 69,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 70,
+      "v1": 71,
+      "curve": 0,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 73,
+      "v1": 74,
+      "curve": -54.591120742634295,
+      "color": "df2407",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 74,
+      "v1": 75,
+      "curve": -77.51850243927107,
+      "color": "df2407",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 75,
+      "v1": 76,
+      "curve": -44.551170007190514,
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 77,
+      "v1": 78,
+      "curve": -43.33445515647201,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 80,
+      "v1": 79,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 82,
+      "v1": 81,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 72,
+      "v1": 83,
+      "curve": 13,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 84,
+      "v1": 85,
+      "curve": 13.565199011227739,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 85,
+      "v1": 86,
+      "curve": -133.69760817873367,
+      "color": "df2407",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 86,
+      "v1": 87,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 87,
+      "v1": 82,
+      "curve": -80.633053427845,
+      "color": "df2407",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 88,
+      "v1": 89,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 83,
+      "v1": 88,
+      "curve": -132.38405176085496,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 89,
+      "v1": 80,
+      "curve": -70.75598653390878,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 81,
+      "v1": 78,
+      "curve": -113.58985676545231,
+      "color": "df2407",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 79,
+      "v1": 76,
+      "curve": -120.89662366489374,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 90,
+      "v1": 91,
+      "curve": -59.652295027035,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 91,
+      "v1": 77,
+      "curve": -83.40049716300236,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 36,
+      "v1": 39,
+      "curve": -139.7070702865778,
+      "color": "df2407",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 9,
+      "v1": 8,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 10,
+      "v1": 11,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 14,
+      "v1": 15,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 17,
+      "v1": 16,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 18,
+      "v1": 19,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 21,
+      "v1": 20,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 22,
+      "v1": 23,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 25,
+      "v1": 24,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 29,
+      "v1": 28,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 26,
+      "v1": 27,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 93,
+      "v1": 92,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 94,
+      "v1": 95,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 97,
+      "v1": 96,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 98,
+      "v1": 99,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 101,
+      "v1": 100,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 105,
+      "v1": 104,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 102,
+      "v1": 103,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 106,
+      "v1": 107,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 109,
+      "v1": 108,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 110,
+      "v1": 111,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 113,
+      "v1": 112,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 114,
+      "v1": 115,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 117,
+      "v1": 116,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 118,
+      "v1": 119,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 121,
+      "v1": 120,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 122,
+      "v1": 123,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 125,
+      "v1": 124,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 126,
+      "v1": 127,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 129,
+      "v1": 128,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 130,
+      "v1": 131,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 133,
+      "v1": 132,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 135,
+      "v1": 134,
+      "curve": 180,
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 136,
+      "v1": 137,
+      "color": "444444",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 137,
+      "v1": 138,
+      "curve": 111.0961655236202,
+      "color": "444444",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 138,
+      "v1": 139,
+      "curve": 15.959010147134409,
+      "color": "444444",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 52,
+      "v1": 50,
+      "curve": -70.48751771215093,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 139,
+      "v1": 140,
+      "curve": 46.56529423187691,
+      "color": "444444",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 140,
+      "v1": 141,
+      "curve": 130.1928290965349,
+      "color": "444444",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 141,
+      "v1": 142,
+      "curve": 1.3965373032228607,
+      "color": "444444",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 142,
+      "v1": 143,
+      "curve": -102.43836869169884,
+      "color": "444444",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 143,
+      "v1": 144,
+      "curve": 1.3965373032228607,
+      "color": "444444",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 144,
+      "v1": 145,
+      "curve": 84.26247822542905,
+      "color": "444444",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 145,
+      "v1": 146,
+      "curve": 12.056418276397867,
+      "color": "444444",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 145,
+      "v1": 147,
+      "curve": 41.074108742218606,
+      "color": "444444",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 147,
+      "v1": 148,
+      "curve": -114.17261795494159,
+      "color": "444444",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 148,
+      "v1": 146,
+      "curve": -14.667020059545525,
+      "color": "444444",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 145,
+      "v1": 149,
+      "curve": 0,
+      "color": "444444",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 64,
+      "v1": 70,
+      "curve": -133.63710899981623,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 59,
+      "v1": 62,
+      "curve": 127.28572833130335,
+      "color": "df2407",
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 67,
+      "v1": 61,
+      "curve": -136.9271721135633,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 90,
+      "v1": 40,
+      "curve": 109.7204900749974,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 38,
+      "v1": 41,
+      "curve": -157.10762294017798,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 149,
+      "v1": 150,
+      "curve": 105.8356042991794,
+      "color": "444444",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 150,
+      "v1": 151,
+      "curve": 126.21678582027876,
+      "color": "444444",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 151,
+      "v1": 152,
+      "curve": 68.68423538209896,
+      "color": "444444",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 152,
+      "v1": 153,
+      "curve": 0,
+      "color": "444444",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 153,
+      "v1": 154,
+      "curve": 102.85333824816105,
+      "color": "444444",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 154,
+      "v1": 155,
+      "curve": 0,
+      "color": "444444",
+      "bCoef": 0.5,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 136,
+      "v1": 155,
+      "curve": 65.49677425249837,
+      "color": "444444",
+      "bCoef": 0.5,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 157,
+      "v1": 158,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 159,
+      "v1": 156,
+      "curve": 0,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 160,
+      "v1": 161,
+      "color": "444444",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 161,
+      "v1": 162,
+      "color": "444444",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 160,
+      "v1": 163,
+      "curve": -54.23073449598661,
+      "color": "444444",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 163,
+      "v1": 164,
+      "curve": 0,
+      "color": "444444",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 164,
+      "v1": 165,
+      "curve": 0,
+      "color": "444444",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 165,
+      "v1": 166,
+      "curve": 185.6805050264137,
+      "color": "444444",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 166,
+      "v1": 167,
+      "curve": 0,
+      "color": "444444",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 168,
+      "v1": 169,
+      "curve": 203.35815233229508,
+      "color": "444444",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 169,
+      "v1": 170,
+      "curve": -96.98426449899843,
+      "color": "444444",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 170,
+      "v1": 171,
+      "curve": -97.8891912044386,
+      "color": "444444",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 171,
+      "v1": 172,
+      "curve": 0,
+      "color": "444444",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 172,
+      "v1": 173,
+      "curve": -112.74416261363166,
+      "color": "444444",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 171,
+      "v1": 174,
+      "curve": 0,
+      "color": "444444",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 174,
+      "v1": 175,
+      "curve": 125.70063660443415,
+      "color": "444444",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 176,
+      "v1": 175,
+      "curve": 0,
+      "color": "444444",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 177,
+      "v1": 178,
+      "color": "444444",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 0,
+      "v1": 2,
+      "color": "ffffff",
+      "bCoef": 0.1,
+      "cMask": ["redKO", "blueKO"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 182,
+      "v1": 183,
+      "color": "ffffff",
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 3,
+      "v1": 33,
+      "curve": 68.82180312926695,
+      "color": "ffffff",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 176,
+      "v1": 184,
+      "curve": 0,
+      "color": "444444",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 3,
+      "v1": 185,
+      "color": "ffffff",
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 186,
+      "v1": 187,
+      "color": "333333",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 188,
+      "v1": 189,
+      "color": "333333",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "x": -510
+    },
+    {
+      "v0": 190,
+      "v1": 191,
+      "color": "333333",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "x": -410
+    },
+    {
+      "v0": 192,
+      "v1": 193,
+      "color": "333333",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "x": -310
+    },
+    {
+      "v0": 194,
+      "v1": 195,
+      "color": "333333",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "x": -210
+    },
+    {
+      "v0": 196,
+      "v1": 197,
+      "color": "333333",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "x": -110
+    },
+    {
+      "v0": 198,
+      "v1": 199,
+      "color": "333333",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "x": -10
+    },
+    {
+      "v0": 200,
+      "v1": 201,
+      "color": "333333",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "x": 90
+    },
+    {
+      "v0": 202,
+      "v1": 203,
+      "color": "333333",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "x": 190
+    },
+    {
+      "v0": 204,
+      "v1": 205,
+      "color": "333333",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "x": 290
+    },
+    {
+      "v0": 206,
+      "v1": 207,
+      "color": "333333",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "x": 390
+    },
+    {
+      "v0": 158,
+      "v1": 208,
+      "curve": -48.969851164756896,
+      "color": "ffffff",
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 208,
+      "v1": 185,
+      "curve": 97.70127764782153,
+      "color": "ffffff",
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 159,
+      "v1": 209,
+      "curve": -48.969851164756896,
+      "color": "ffffff",
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 209,
+      "v1": 210,
+      "curve": 119.33633676391078,
+      "color": "ffffff",
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 210,
+      "v1": 33,
+      "curve": 1.3916399016195045,
+      "color": "ffffff",
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 187,
+      "v1": 207,
+      "color": "333333",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 187,
+      "v1": 160,
+      "color": "444444",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 184,
+      "v1": 211,
+      "curve": -116.9256095471193,
+      "color": "444444",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 211,
+      "v1": 207,
+      "curve": 28.194485275798442,
+      "color": "444444",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 156,
+      "v1": 212,
+      "curve": -19.702654685616125,
+      "color": "ffffff",
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 212,
+      "v1": 213,
+      "curve": 0,
+      "color": "ffffff",
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 213,
+      "v1": 43,
+      "curve": 17.689737955154612,
+      "color": "ffffff",
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 182,
+      "v1": 214,
+      "curve": -28.883167143108015,
+      "color": "ffffff",
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 214,
+      "v1": 215,
+      "curve": 0,
+      "color": "ffffff",
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 215,
+      "v1": 157,
+      "curve": 32.31467972917585,
+      "color": "ffffff",
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 2,
+      "v1": 218,
+      "curve": 124.85321822136,
+      "color": "ffffff",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 218,
+      "v1": 53,
+      "curve": 114.1969484936222,
+      "color": "ffffff",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 48,
+      "v1": 219,
+      "curve": -115.16592498815389,
+      "color": "df2407",
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 219,
+      "v1": 220,
+      "curve": -71.39367784881067,
+      "color": "df2407",
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 220,
+      "v1": 49,
+      "curve": -38.05566435477163,
+      "color": "ffffff",
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 139,
+      "v1": 179,
+      "curve": 0,
+      "color": "444444",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 179,
+      "v1": 221,
+      "curve": 72.61163739216602,
+      "color": "444444",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 71,
+      "v1": 226,
+      "curve": 103.15272307510395,
+      "color": "df2407",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 226,
+      "v1": 227,
+      "curve": 0,
+      "color": "ffffff",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 227,
+      "v1": 72,
+      "curve": 48.30234070474951,
+      "color": "df2407",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 69,
+      "v1": 228,
+      "curve": 107.08753956040471,
+      "color": "ffffff",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 228,
+      "v1": 229,
+      "curve": 0,
+      "color": "ffffff",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 229,
+      "v1": 84,
+      "curve": 52.09559150048503,
+      "color": "ffffff",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 30,
+      "v1": 239,
+      "curve": -69.71492817434132,
+      "color": "df2407",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 239,
+      "v1": 73,
+      "curve": -43.74323409116282,
+      "color": "df2407",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 173,
+      "v1": 240,
+      "curve": -170.32372797080458,
+      "color": "444444",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "v0": 240,
+      "v1": 172,
+      "curve": 69.92707400492516,
+      "color": "444444",
+      "cMask": ["red", "blue", "ball", "c0"]
+    }
+  ],
+
+  "goals": [],
+
+  "discs": [
+    {
+      "radius": 6,
+      "pos": [8000, 10],
+      "color": "ffdf00",
+      "bCoef": 0.1,
+      "cMask": ["ball"],
+      "damping": 1,
+      "speed": [-5.4, 0]
+    },
+    {
+      "radius": 4,
+      "invMass": 0.1,
+      "pos": [-660, 52],
+      "color": "FF0000",
+      "bCoef": 100,
+      "cMask": ["ball"],
+      "cGroup": ["ball"],
+      "damping": 1,
+      "speed": [0, 0.047]
+    },
+    {
+      "radius": 4,
+      "invMass": 0.1,
+      "pos": [-660, 202],
+      "color": "FF0000",
+      "bCoef": 100,
+      "cMask": ["ball"],
+      "cGroup": ["ball"],
+      "damping": 1,
+      "speed": [0, -0.047]
+    },
+    {
+      "radius": 10,
+      "invMass": 0,
+      "pos": [-1038.77783203125, -36.111083984375],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 15,
+      "invMass": 0,
+      "pos": [289, -2395],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 10,
+      "invMass": 0,
+      "pos": [665, -2209],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 10,
+      "invMass": 0,
+      "pos": [859, -1698],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 10,
+      "invMass": 0,
+      "pos": [1023, -1252],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 10,
+      "invMass": 0,
+      "pos": [1222, -725],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 10,
+      "invMass": 0,
+      "pos": [833, -1057],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 10,
+      "invMass": 0,
+      "pos": [961, -729],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 10,
+      "invMass": 0,
+      "pos": [1087, -409],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 10,
+      "invMass": 0,
+      "pos": [1379, -302],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 10,
+      "invMass": 0,
+      "pos": [1295, 112],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 10,
+      "invMass": 0,
+      "pos": [1580, 239],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 10,
+      "invMass": 0,
+      "pos": [1453, 510],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 10,
+      "invMass": 0,
+      "pos": [1746, 682],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 10,
+      "invMass": 0,
+      "pos": [1591, 857],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 10,
+      "invMass": 0,
+      "pos": [1848, 966],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 10,
+      "invMass": 0,
+      "pos": [1945, 1218],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-721, 28],
+      "color": "ffdf00",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-900, 28],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1582, -1697],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1644, -2207],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [30, -2403],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [1733, 1142],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1107, -1550],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1648, -2187],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1627, -2222],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 15,
+      "invMass": 0,
+      "pos": [317, -2335],
+      "color": "ffdf00",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 15,
+      "invMass": 0,
+      "pos": [343, -2270],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 15,
+      "invMass": 0,
+      "pos": [372, -2204],
+      "color": "ffdf00",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 15,
+      "invMass": 0,
+      "pos": [397, -2142],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 15,
+      "invMass": 0,
+      "pos": [426, -2070],
+      "color": "ffdf00",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 15,
+      "invMass": 0,
+      "pos": [454, -1995],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 15,
+      "invMass": 0,
+      "pos": [483, -1929],
+      "color": "ffdf00",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 15,
+      "invMass": 0,
+      "pos": [507, -1870],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 15,
+      "invMass": 0,
+      "pos": [531, -1809],
+      "color": "ffdf00",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 15,
+      "invMass": 0,
+      "pos": [563, -1739],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [534, -95],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [741, -109],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [717, 28],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [615, 28],
+      "color": "ffdf00",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [502, 28],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [372, 28],
+      "color": "ffdf00",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [247, 28],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [116, 28],
+      "color": "ffdf00",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-15, 28],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-146, 28],
+      "color": "ffdf00",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-278, 28],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-426, 28],
+      "color": "ffdf00",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-564, 28],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1581, 27],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1644, 12],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1708, -16],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1771, -60],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1823, -112],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1862, -167],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1889, -229],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1901, -310],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1899, -393],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1875, -465],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1846, -523],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1799, -578],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1739, -616],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1669, -639],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1586, -640],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1503, -618],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1433, -571],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1393, -522],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1376, -474],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1375, -430],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1388, -394],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1411, -369],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1445, -351],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1346, -217],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1374, -205],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1396, -195],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1404, -174],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1395, -152],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1376, -139],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1354, -133],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1322, -131],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1293, -141],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1084, -366],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1076, -411],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1073, -462],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1084, -514],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1108, -555],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1401, -1016],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1212, -1106],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1396, -1397],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1600, -2215],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1577, -2195],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1554, -2167],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1526, -2134],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1499, -2098],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1476, -2060],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1453, -2018],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1081, -1511],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1041, -1476],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-987, -1448],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-927, -1428],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-859, -1424],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-786, -1439],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-721, -1475],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-675, -1520],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-387, -1671],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-358, -1709],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-317, -1737],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-269, -1754],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-212, -1759],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-159, -1745],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-121, -1724],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-41, -1662],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-22, -1637],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-8, -1603],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-6, -1565],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [151, -1300],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [128, -1294],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [113, -1328],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [111, -1306],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [411, -1464],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [265, -2322],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 15,
+      "invMass": 0,
+      "pos": [316, -1670],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 15,
+      "invMass": 0,
+      "pos": [293, -1724],
+      "color": "ffdf00",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 15,
+      "invMass": 0,
+      "pos": [266, -1785],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 15,
+      "invMass": 0,
+      "pos": [234, -1854],
+      "color": "ffdf00",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 15,
+      "invMass": 0,
+      "pos": [202, -1923],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 15,
+      "invMass": 0,
+      "pos": [173, -1994],
+      "color": "ffdf00",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 15,
+      "invMass": 0,
+      "pos": [144, -2072],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 15,
+      "invMass": 0,
+      "pos": [116, -2138],
+      "color": "ffdf00",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 15,
+      "invMass": 0,
+      "pos": [84, -2213],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [8, -2414],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-20, -2408],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [48, -2378],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-159, -2490],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-187, -2462],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-225, -2438],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-270, -2418],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-321, -2405],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-374, -2411],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-423, -2431],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-463, -2460],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-493, -2505],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-509, -2560],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-508, -2624],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-497, -2677],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-482, -2735],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-457, -2788],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-424, -2831],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-374, -2882],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-315, -2914],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-246, -2936],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-186, -2942],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-124, -2937],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-58, -2923],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [2, -2902],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [56, -2862],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [101, -2828],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [138, -2789],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [168, -2742],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [196, -2699],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [222, -2643],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [1747, 1174],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [1758, 1205],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [1772, 1233],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [1774, 1254],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [1752, 1275],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [1722, 1274],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [1232, 751],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [1270, 828],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [1331, 915],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [1394, 983],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 6,
+      "invMass": 0,
+      "pos": [770, -248],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [777, 226],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [821, 251],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [847, 285],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 10,
+      "invMass": 0,
+      "pos": [1209, 640],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 10,
+      "invMass": 0,
+      "pos": [1166, 535],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 10,
+      "invMass": 0,
+      "pos": [1111, 399],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 10,
+      "invMass": 0,
+      "pos": [1055, 263],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 6,
+      "invMass": 0,
+      "pos": [904, -92],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 6,
+      "invMass": 0,
+      "pos": [951, 20],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 6,
+      "invMass": 0,
+      "pos": [994, 125],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [415, -1948],
+      "color": "df2407",
+      "cMask": ["red", "blue", "ball", "c0"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1386, 31],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1355, 31],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1319, 31],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1287, 31],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1255, 31],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1223, 31],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1518, 31],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1487, 31],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1451, 31],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-1419, 31],
+      "color": "df2407",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["red"]
+    }
+  ],
+
+  "planes": [
+    {
+      "normal": [0, 1],
+      "dist": -244,
+      "bCoef": 0,
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "normal": [-1, 0],
+      "dist": -88,
+      "bCoef": 0,
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "normal": [1, 0],
+      "dist": -611,
+      "bCoef": 0,
+      "cGroup": ["redKO", "blueKO"]
+    }
+  ],
+
+  "playerPhysics": {
+    "bCoef": 0.5,
+    "invMass": 0.5,
+    "damping": 0.985,
+    "acceleration": 0.144,
+    "kickingAcceleration": 0.148,
+    "kickingDamping": 0.986,
+    "kickStrength": 0,
+    "radius": 14.25,
+    "cGroup": ["red", "blue"],
+    "gravity": [0, 0],
+    "kickback": 0
+  },
+
+  "traits": {},
+
+  "cameraFollow": "player",
+
+  "canBeStored": false,
+
+  "joints": [],
+
+  "redSpawnPoints": [
+    [-560, 154],
+    [-527, 91],
+    [-495, 153],
+    [-461, 97],
+    [-428, 157],
+    [-400, 87],
+    [-369, 157],
+    [-344, 87],
+    [-320, 157],
+    [-288, 87],
+    [-260, 157],
+    [-230, 87],
+    [-190, 157],
+    [-160, 97],
+    [-130, 152],
+    [-110, 97],
+    [-80, 152],
+    [-48, 92],
+    [-20, 157],
+    [10, 92],
+    [945, 126]
+  ],
+
+  "blueSpawnPoints": [[-416, -189]]
+}

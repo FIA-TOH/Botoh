@@ -1,62 +1,94 @@
 import { bestTimes } from "../bestTimes";
-import {Circuit, CircuitInfo, Direction} from "../Circuit";
+import { Circuit, CircuitInfo, Direction } from "../Circuit";
 import shanghai_json from "./shanghai.json";
 
 const SHANGHAI_INFO: CircuitInfo = {
-    finishLine: {
-        bounds: {
-            minX: 84,
-            maxX: 114,
-            minY: -140,
-            maxY: 216
-        },
-        passingDirection: Direction.LEFT
+  finishLine: {
+    bounds: {
+      minX: -642,
+      maxX: -610,
+      minY: -125,
+      maxY: 247,
     },
-    name: "Shanghai International Circuit - By Ximb",
-    boxLine: {
-        minX: -525,
-        maxX: 485,
-        minY: -140,
-        maxY: -80
+    passingDirection: Direction.LEFT,
+  },
+  sectorOne: {
+    bounds: {
+      minX: -642,
+      maxX: -610,
+      minY: -125,
+      maxY: 247,
     },
-    pitlaneStart: {
-        minX: 700,
-        maxX: 732,
-        minY: -302,
-        maxY: -84
+    passingDirection: Direction.LEFT,
+  },
+  sectorTwo: {
+    bounds: {
+      minX: -1915,
+      maxX: -1510,
+      minY: -1780,
+      maxY: -1748,
     },
-    pitlaneEnd: {
-        minX: -566,
-        maxX: -536,
-        minY: -140,
-        maxY: 0
+    passingDirection: Direction.UP,
+  },
+  sectorThree: {
+    bounds: {
+      minX: 69,
+      maxX: 360,
+      minY: -2234,
+      maxY: -2202,
     },
-    drsStart: [{
-        minX: 0,
-        maxX: 0,
-        minY: 0,
-        maxY: 0,
-    }],
-    drsEnd: [{
-        minX: 0,
-        maxX: 0,
-        minY: 0,
-        maxY: 0,
-    }],
-    checkpoints: [],
-    lastPlace: {
-        x: shanghai_json.redSpawnPoints[shanghai_json.redSpawnPoints.length - 1][0],
-        y: shanghai_json.redSpawnPoints[shanghai_json.redSpawnPoints.length - 1][1],
+    passingDirection: Direction.UP,
+  },
+  name: "Shanghai International Circuit - By Ximb",
+  boxLine: {
+    minX: -610,
+    maxX: 390,
+    minY: -125,
+    maxY: -52,
+  },
+  pitlaneStart: {
+    minX: 450,
+    maxX: 482,
+    minY: -165,
+    maxY: 26,
+  },
+  pitlaneEnd: {
+    minX: -837,
+    maxX: -805,
+    minY: -126,
+    maxY: 26,
+  },
+  drsStart: [
+    {
+      minX: 0,
+      maxX: 0,
+      minY: 0,
+      maxY: 0,
     },
-    BestTime: bestTimes.shanghai,
-    MainColor: [0xd6001d],
-    AvatarColor: 0xfae100,
-    Angle: 90,
-    Limit: 5,
-    Votes: 0,
-}
+  ],
+  drsEnd: [
+    {
+      minX: 0,
+      maxX: 0,
+      minY: 0,
+      maxY: 0,
+    },
+  ],
+  checkpoints: [],
+  lastPlace: {
+    x: shanghai_json.redSpawnPoints[shanghai_json.redSpawnPoints.length - 1][0],
+    y: shanghai_json.redSpawnPoints[shanghai_json.redSpawnPoints.length - 1][1],
+  },
+  BestTime: bestTimes.shanghai,
+  MainColor: [0xd6001d],
+  AvatarColor: 0xfae100,
+  Angle: 90,
+  Limit: 5,
+  Votes: 0,
+  pitSpeed: 0.95,
+};
 
 export const SHANGHAI: Circuit = {
-    map: JSON.stringify(shanghai_json),
-    info: SHANGHAI_INFO
-}
+  map: JSON.stringify(shanghai_json),
+  info: SHANGHAI_INFO,
+};

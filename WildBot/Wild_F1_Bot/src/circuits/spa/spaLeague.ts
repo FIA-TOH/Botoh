@@ -48,7 +48,7 @@ const SPALEAGUE_INFO: CircuitInfo = {
     },
     pitlaneStart: {
         minX: -1166,
-        maxX: -1036,
+        maxX: -1134,
         minY: -1107,
         maxY: -953
     },

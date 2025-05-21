@@ -825,6 +825,14 @@ export const MESSAGES = {
         tr: replaceTemplateString(tr_messages.TIME_TO_RACE, {laps: laps.toString()}),
         pt: replaceTemplateString(pt_messages.TIME_TO_RACE, {laps: laps.toString()}),
     }),
+
+    PRESENTATION_LAP: (): LocalizedMessageFunction => ({
+        en: replaceTemplateString(en_messages.PRESENTATION_LAP, {}),
+        es: replaceTemplateString(es_messages.PRESENTATION_LAP, {}),
+        fr: replaceTemplateString(fr_messages.PRESENTATION_LAP, {}),
+        tr: replaceTemplateString(tr_messages.PRESENTATION_LAP, {}),
+        pt: replaceTemplateString(pt_messages.PRESENTATION_LAP, {}),
+    }),
     
     WORSE_TIME: (lapTime: number, diferenca: number): LocalizedMessageFunction => ({
         en: replaceTemplateString(en_messages.WORSE_TIME, { lapTime:lapTime.toString(), diferenca: diferenca.toString() }),
@@ -848,5 +856,12 @@ export const MESSAGES = {
         tr: tr_messages.CODE_WRONG,
         pt: pt_messages.CODE_WRONG,
     }),
+    SECONDS_TO_FINISH: (seconds:number):LocalizedMessageFunction=>({
+        en: replaceTemplateString(en_messages. SECONDS_TO_FINISH, { seconds:seconds.toString()}),
+        es: replaceTemplateString(es_messages. SECONDS_TO_FINISH, { seconds:seconds.toString()}),
+        fr: replaceTemplateString(fr_messages. SECONDS_TO_FINISH, { seconds:seconds.toString()}),
+        tr: replaceTemplateString(tr_messages. SECONDS_TO_FINISH, { seconds:seconds.toString()}),
+        pt: replaceTemplateString(pt_messages. SECONDS_TO_FINISH, { seconds:seconds.toString()}),
+    })
     
 };

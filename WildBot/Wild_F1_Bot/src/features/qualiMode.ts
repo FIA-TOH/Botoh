@@ -9,6 +9,8 @@ import {
 import {MESSAGES} from "./messages";
 import {playerList} from "./playerList";
 import { changeLaps } from "./handleCommands";
+import { LEAGUE_MODE } from "./leagueMode";
+import { enableGas, enableSlipstream } from "./handleSlipstream";
 export enum GameMode {
     RACE = "race",
     QUALY = "qualy",
@@ -19,6 +21,7 @@ export enum GameMode {
 export let gameMode: GameMode = GameMode.RACE;
 
 export let qualiTime = 2;
+export let raceTime = LEAGUE_MODE ? 0 : 7
 
 let arrayPlayers:  { name: string, time: number }[] = []
 
@@ -64,20 +67,31 @@ export function setQualiTime(player: PlayerObject, time: number, room: RoomObjec
 }
 export function changeGameMode(newMode: GameMode, room: RoomObject) {
     gameMode = newMode;
-    room.setTimeLimit(newMode === GameMode.QUALY ? qualiTime : 0);
+    console.log(newMode === GameMode.QUALY ? qualiTime : raceTime);
+    
+    room.setTimeLimit(newMode === GameMode.QUALY ? qualiTime : raceTime);
     
     switch (newMode) {
         case GameMode.QUALY:
+            enableGas(false)
+            enableSlipstream(false)
             sendSuccessMessage(room, MESSAGES.TIME_TO_QUALY());
             break;
         case GameMode.TRAINING:
+            enableGas(false)
+            enableSlipstream(false)
             changeLaps("999", undefined, room);
             room.sendAnnouncement("Training mode on");
             break;
         case GameMode.INDY:
+            enableGas(true)
+            enableSlipstream(true)
             room.sendAnnouncement("Indy mode on");
+
             break;
         case GameMode.RACE:
+            enableGas(false)
+            enableSlipstream(false)
             sendSuccessMessage(room, MESSAGES.TIME_TO_RACE(laps));
             break;
     }

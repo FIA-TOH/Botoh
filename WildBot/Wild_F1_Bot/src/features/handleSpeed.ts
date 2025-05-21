@@ -1,17 +1,14 @@
 import { playerList } from "./playerList";
-import { CIRCUITS, currentMapIndex } from "./maps";
-import { getRunningPlayers, inHitbox, vectorSpeed } from "./utils";
-import { sendAlertMessage, sendChatMessage, sendErrorMessage } from "./chat";
-import { MESSAGES } from "./messages";
-import { Teams } from "./teams";
-import { TIRE_STARTING_SPEED, Tires } from "./tires";
+import { getRunningPlayers} from "./utils";
+import { Tires } from "./tires";
 import { grip } from "./rainGrip";
 import { rainEnabled, rainIntensity, isRaining } from "./rain";
-import { handleAvatar } from "./handleAvatar";
-import { handleFlagCommand, tyresActivated } from "./handleCommands";
+import { tyresActivated } from "./handleCommands";
 import { ACTUAL_CIRCUIT, room } from "../room";
-import { LEAGUE_MODE } from "./leagueMode";
-import { laps } from "./laps";
+import { calculateSlipstream, slipstreamEnabled } from "./handleSlipstream";
+import { calculateGripMultiplierForConditions } from "./grip";
+import { constants } from "./constants";
+import { GameMode, gameMode } from "./qualiMode";
 
 
 export const TIRE_AVATAR: {
@@ -27,87 +24,9 @@ export const TIRE_AVATAR: {
 }
 
 export let vsc = false
-
-
 export function changeVSC() {
     vsc = !vsc
 }
-
-
-function distanceFromPointToLine(playerDisc: DiscPropertiesObject, otherDisc: DiscPropertiesObject) {
-
-    const x1 = otherDisc.x;
-    const y1 = otherDisc.y;
-
-    const x2 = otherDisc.x + otherDisc.xspeed;
-    const y2 = otherDisc.y + otherDisc.yspeed;
-
-    const x3 = playerDisc.x;
-    const y3 = playerDisc.y;
-
-    // Calculate the coefficients of the line equation Ax + By + C = 0
-    let A = y2 - y1;
-    let B = x1 - x2;
-    let C = (x2 * y1) - (x1 * y2);
-
-    // Calculate the distance using the point-line distance formula
-    return Math.abs(A * x3 + B * y3 + C) / Math.sqrt(A * A + B * B);
-}
-
-// Function to calculate the slipstream effect
-function calculateSlipstream(player: { p: PlayerObject, disc: DiscPropertiesObject }, others: {
-    p: PlayerObject,
-    disc: DiscPropertiesObject
-}[]) {
-    const disc = player.disc;
-    let maxSlipstream = 0;
-
-    others.forEach(other => {
-        const otherDisc = other.disc;
-        const distance = Math.sqrt((otherDisc.x - disc.x) ** 2 + (otherDisc.y - disc.y) ** 2);
-
-        if (distance > 0) {
-            const angleToOther = Math.atan2(otherDisc.y - disc.y, otherDisc.x - disc.x);
-            const playerDirection = Math.atan2(disc.yspeed, disc.xspeed);
-            const otherDirection = Math.atan2(otherDisc.yspeed, otherDisc.xspeed);
-            const directionDifference = Math.abs(playerDirection - otherDirection);
-
-            // Normalize angle difference to [0, π]
-            const normalizedDirectionDifference = Math.min(directionDifference, Math.abs(2 * Math.PI - directionDifference));
-
-            // Check if the other player is in front (within a 60-degree cone in front)
-            const isInFront = Math.cos(playerDirection - angleToOther) > 0.5;
-
-            if (isInFront && normalizedDirectionDifference < Math.PI / 4) { // They are roughly moving in the same direction
-                const otherSpeed = vectorSpeed(otherDisc.xspeed, otherDisc.yspeed);
-                const distanceToLine = distanceFromPointToLine(disc, otherDisc);
-                const effectModifier = Math.max(0, -(distanceToLine - 1) / 14 + 1); // Ensure the effect modifier is not negative
-                const slipstreamEffect = (otherSpeed / (distance / 10)) * effectModifier;
-                
-                if (slipstreamEffect > maxSlipstream) {
-                    maxSlipstream = slipstreamEffect;
-                }
-            }
-        }
-    });
-
-    const finalSlipstream = Math.min(0.005, maxSlipstream / 100);
-    return finalSlipstream;
-}
-
-export let slipstreamEnabled = false
-
-export function toggleSlipstream() {
-    slipstreamEnabled = !slipstreamEnabled
-}
-
-const NORMAL_SPEED = 1
-const SLIPSTREAM_SPEED_GAIN = 0.0005
-const DRS_SPEED_GAIN = 0.001
-const ERS_PENALTY = -0.006
-const JUMP_START_PENALTY = -0.005
-const DEFAULT_PIT_SPEED = 0.95
-const SAFETY_CAR_SPEED = 0.985
 
 /**
  * Function that sets a players max speed.
@@ -120,74 +39,73 @@ export function controlPlayerSpeed(
 ) {
     const currentTime = room.getScores()?.time || 0;
 
-    playersAndDiscsSubset.forEach((player) => {
-        const p = player.p;
-        const properties = player.disc;
-        const playerInfo = playerList[p.id];
+    const playersAndDiscs = room.getPlayerList().map((p) => ({
+        p,
+        disc: room.getPlayerDiscProperties(p.id),
+    }));
 
-        const { xspeed: x, yspeed: y } = properties;
+    const playersRunning = getRunningPlayers(playersAndDiscs);
+
+    playersAndDiscsSubset.forEach(({ p, disc }) => {
+        const playerInfo = playerList[p.id];
+        const { xspeed: x, yspeed: y } = disc;
         const norm = Math.hypot(x, y);
 
-        let normalX = 0;
-        let normalY = 0;
+        const unitX = norm !== 0 ? x / norm : 0;
+        const unitY = norm !== 0 ? y / norm : 0;
 
-        if (norm !== 0) {
-            normalX = x / norm;
-            normalY = y / norm;
-        }
-
-        let hasSlipstream = false;
+        // Slipstream
         let effectiveSlipstream = 0;
+        let hasSlipstream = false;
 
         if (slipstreamEnabled) {
             const slipstream = calculateSlipstream(
-                player,
-                playersAndDiscsSubset.filter((playerl) => playerl.p.id !== p.id)
+                { p, disc },
+                playersRunning.filter((other) => other.p.id !== p.id)
             );
-            if (slipstream > 0.001 && !playerInfo.inPitlane && !vsc) {
+
+            const isInActiveSlipstream = slipstream > constants.SLIPSTREAM_RESIDUAL_VALUE && !playerInfo.inPitlane && !vsc;
+
+            if (isInActiveSlipstream) {
                 playerInfo.slipstreamEndTime = undefined;
             } else if (playerInfo.slipstreamEndTime === undefined) {
                 playerInfo.slipstreamEndTime = currentTime;
             }
 
-            const withinSlipstreamTime =
+            const withinResidualTime =
                 playerInfo.slipstreamEndTime !== undefined &&
-                currentTime - playerInfo.slipstreamEndTime <= 2;
+                currentTime - playerInfo.slipstreamEndTime <= constants.RESIDUAL_SLIPSTREAM_TIME;
 
-            effectiveSlipstream = withinSlipstreamTime ? 0.001 : slipstream;
+            effectiveSlipstream = withinResidualTime ? constants.SLIPSTREAM_RESIDUAL_VALUE : slipstream;
             hasSlipstream = effectiveSlipstream > 0;
         }
 
-        const isUsingErsInco = playerInfo.kers <= 0 && properties.damping === 0.986;
+        const isUsingErsInco = playerInfo.kers <= 0 && disc.damping === 0.986;
 
         const gripMultiplier = calculateGripMultiplierForConditions(
             p,
             playerInfo.tires,
             playerInfo.wear,
             norm,
-            properties,
-            hasSlipstream,
+            disc,
+            effectiveSlipstream,
             isUsingErsInco
         );
 
-        let gripMultiplierSlow = 0;
+        // Situações especiais (pit lane / VSC)
+        let gripLimiter = 0;
         if (playerInfo.inPitlane) {
-            if(ACTUAL_CIRCUIT.info.pitSpeed){
-                gripMultiplierSlow = ACTUAL_CIRCUIT.info.pitSpeed
-            } else {
-                gripMultiplierSlow = DEFAULT_PIT_SPEED;
-            }
+            gripLimiter = ACTUAL_CIRCUIT.info.pitSpeed ?? constants.DEFAULT_PIT_SPEED;
+            
+        } else if (vsc) {
+            gripLimiter = gameMode === GameMode.INDY ? constants.SAFETY_CAR_INDY_SPEED : constants.SAFETY_CAR_SPEED;
         }
-        if (vsc && !playerInfo.inPitlane) {
-            gripMultiplierSlow = SAFETY_CAR_SPEED;
-        } 
 
-        
-
-        if (gripMultiplierSlow > 0) {
-            // VSC ou Pitlane
-            const newGravityX = -x * (1 - gripMultiplierSlow);
-            const newGravityY = -y * (1 - gripMultiplierSlow);
+        // Aplicar efeitos
+        if (gripLimiter > 0) {
+            // Pitlane ou VSC
+            const newGravityX = -x * (1 - gripLimiter);
+            const newGravityY = -y * (1 - gripLimiter);
 
             room.setPlayerDiscProperties(p.id, {
                 xgravity: newGravityX,
@@ -195,16 +113,16 @@ export function controlPlayerSpeed(
             });
         } else if (
             norm > 0 &&
-            grip(playerInfo.tires, rainIntensity) < playerInfo.gripCounter &&
             rainEnabled &&
             isRaining &&
+            grip(playerInfo.tires, rainIntensity) < playerInfo.gripCounter &&
             gripMultiplier
         ) {
-            const slideFactor = 2.5;
-            // Chuva
+            // Derrapagem na chuva
             playerInfo.gripCounter = 0;
-            const newGravityX = -x * (1 - gripMultiplier) * slideFactor;
-            const newGravityY = -y * (1 - gripMultiplier) * slideFactor;
+
+            const newGravityX = -x * (1 - gripMultiplier) * constants.SLIDE_FACTOR;
+            const newGravityY = -y * (1 - gripMultiplier) * constants.SLIDE_FACTOR;
 
             room.setPlayerDiscProperties(p.id, {
                 xspeed: x,
@@ -213,7 +131,7 @@ export function controlPlayerSpeed(
                 ygravity: newGravityY,
             });
         } else if (tyresActivated && gripMultiplier) {
-            // Normal
+            // Condição normal de pista
             const newGravityX = -x * (1 - gripMultiplier);
             const newGravityY = -y * (1 - gripMultiplier);
 
@@ -223,232 +141,12 @@ export function controlPlayerSpeed(
             });
         }
 
+        // Atualiza playerInfo no playerList
         playerList[p.id] = playerInfo;
     });
 }
 
-export function updateGripCounter(playersAndDiscs: { p: PlayerObject; disc: DiscPropertiesObject }[]) {
-    playersAndDiscs.forEach(player => {
-        const playerInfo = playerList[player.p.id];
-        
-        if (isRaining && rainEnabled) {
-            playerInfo.gripCounter++;
-        }
 
-        playerList[player.p.id] = playerInfo;
-    });
-}
-
-
-
-
-function calculateGripMultiplierForConditions(player: PlayerObject, tyres: Tires, wear: number, norm: Number, playerDisc: DiscPropertiesObject, hasSlipstream: boolean, isUsingErsInco: boolean) {
-    const p = playerList[player.id]
-    if (playerList.inPitLane || vsc) {
-        return;
-    } else if(!tyresActivated){
-        if (hasSlipstream && slipstreamEnabled) {
-            NORMAL_SPEED + SLIPSTREAM_SPEED_GAIN; 
-        }
-        if (isUsingErsInco){
-            NORMAL_SPEED + ERS_PENALTY
-        }
-        return NORMAL_SPEED;
-    }else if(!isRaining) {
-        let grip = calculateGripForDryConditions(tyres, wear, norm) ?? 1;
-        if(p.drs){
-            grip += DRS_SPEED_GAIN
-        }
-        if (hasSlipstream && slipstreamEnabled) {
-            grip += SLIPSTREAM_SPEED_GAIN; 
-        }
-        if (isUsingErsInco){
-            grip += ERS_PENALTY
-        }
-
-        return grip;
-
-    } else {
-      return calculateGripForWetConditions(tyres, wear, norm);
-    }
-}
-
-function calculateGripForDryConditions(tyres: Tires, wear: number, norm: Number) {
-    if (!norm) return;
-    if(laps >= 23){
-        switch (tyres) {
-            case "SOFT":
-                return calculateGripMultiplier(wear, norm, 1.0, 0.993);
-            case "MEDIUM":
-                return calculateGripMultiplier(wear, norm, 0.9999, 0.994);
-            case "HARD":
-                return calculateGripMultiplier(wear, norm, 0.9998, 0.995);
-            case "INTER":
-                return calculateGripMultiplier(wear, norm, 0.998, 0.995);
-            case "WET":
-                return calculateGripMultiplier(wear, norm, 0.997, 0.994);
-            case "FLAT":
-                return 0.99;
-            case "TRAIN":
-                return 1.0;
-        }
-    } else {
-        switch (tyres) {
-            case "SOFT":
-                return calculateGripMultiplier(wear, norm, 1.0, 0.996);
-            case "MEDIUM":
-                return calculateGripMultiplier(wear, norm, 0.99975, 0.9965);
-            case "HARD":
-                return calculateGripMultiplier(wear, norm, 0.9995, 0.997);
-            case "INTER":
-                return calculateGripMultiplier(wear, norm, 0.998, 0.995);
-            case "WET":
-                return calculateGripMultiplier(wear, norm, 0.997, 0.994);
-            case "FLAT":
-                return 0.99;
-            case "TRAIN":
-                return 1.0;
-        }
-    }
-
-}
-
-function calculateGripForWetConditions(tyres: Tires, wear: number, norm: Number) {
-    if (!norm) return;
-
-    const normalizedRain = rainIntensity / 100;
-
-    switch (tyres) {
-        case "TRAIN":
-        case "SOFT":
-        case "MEDIUM":
-        case "HARD": {
-            // Decaimento linear de 0.001 a cada 10% de intensidade de chuva
-            const rainImpact = Math.floor(normalizedRain / 0.1) * 0.001;
-            const maxGrip = 0.998 - rainImpact;
-            const minGrip = 0.995 - rainImpact;
-            return calculateGripMultiplier(wear, norm, maxGrip, minGrip);
-        }
-
-        case "INTER": {
-            if (normalizedRain <= 0.4) {
-                return calculateGripMultiplier(wear, norm, 1, 0.995);
-            } else {
-                const rainImpact = Math.floor((normalizedRain - 0.4) / 0.1) * 0.001;
-                const maxGrip = 1 - rainImpact;
-                const minGrip = 0.995 - rainImpact;
-                return calculateGripMultiplier(wear, norm, maxGrip, minGrip);
-            }
-        }
-
-        case "WET": {
-            if (normalizedRain >= 0.4) {
-                return calculateGripMultiplier(wear, norm, 1, 0.995);
-            } else {
-                const rainImpact = Math.floor((0.4 - normalizedRain) / 0.1) * 0.001;
-                const maxGrip = 1 - rainImpact;
-                const minGrip = 0.995 - rainImpact;
-                return calculateGripMultiplier(wear, norm, maxGrip, minGrip);
-            }
-        }
-
-        case "FLAT":
-            return 0.99;
-
-        default:
-            return;
-    }
-}
-
-function calculateGripMultiplier(wear: number, norm: Number, maxGrip: number, minGrip: number) {
-    // 100% = tyreWear0, 0% = tyreWear100
-    if (wear > 40) {
-        const wearFactor = 0.1 * (1.6 ** ((wear - 40) / 10)) - 0.1;
-        return maxGrip - wearFactor * (maxGrip - minGrip);
-    } else if (wear > 10) {
-      return maxGrip;
-    } else {
-      return maxGrip - 0.0005;
-    }
-  }
-
-export function ifInBoxZone(player: { p: PlayerObject, disc: DiscPropertiesObject }, room: RoomObject) {
-    return room.getScores().time > 0 && inHitbox(player, CIRCUITS[currentMapIndex].info.boxLine)
-}
-
-export function enableShowTires(player: PlayerObject, room: RoomObject) {
-
-    const tires = !playerList[player.id].showTires;
-    const speed = !tires;
-
-    playerList[player.id].showTires = tires;
-    playerList[player.id].speedEnabled = speed;
-
-    handleAvatar(tires ? "ChangeTyre" : "Speed", player, room);
-
-    // Determinar mensagem apropriada
-    const message = tires ? MESSAGES.NOW_SHOWING_TIRES() : MESSAGES.NOW_SHOWING_SPEED();
-    sendChatMessage(room, message, player.id);
-}
-
-export function changeTires(player: { p: PlayerObject, disc: DiscPropertiesObject }, chosen: Tires, room: RoomObject) {
-    if (player.p.team !== Teams.RUNNERS) {
-        sendErrorMessage(room, MESSAGES.NOT_RUNNER(), player.p.id)
-        return false
-    }
-
-    if (room.getScores() === null) {
-        sendErrorMessage(room, MESSAGES.NOT_STARTED(), player.p.id)
-        return false
-    }
-
-    if (!ifInBoxZone(player, room) && room.getScores().time > 0 && chosen != Tires.FLAT) {
-        sendErrorMessage(room, MESSAGES.NOT_IN_BOXES(), player.p.id)
-        return false
-    }
-
-    playerList[player.p.id].wear = 0; 
-    playerList[player.p.id].alertSent = {};
-    playerList[player.p.id].tires = chosen
-    playerList[player.p.id].lapsOnCurrentTire = -1
-    playerList[player.p.id].gripCounter = 0
-    playerList[player.p.id].maxSpeed = TIRE_STARTING_SPEED[chosen]
-    sendChatMessage(room, MESSAGES.CHANGED_TIRES(player.p.name, chosen))
-
-    handleAvatar("ChangeTyre", player.p, room)
-}
-
-function ifInPitlaneStart(player: { p: PlayerObject, disc: DiscPropertiesObject }, room: RoomObject) {
-    return room.getScores().time > 0 && inHitbox(player, CIRCUITS[currentMapIndex].info.pitlaneStart)
-
-}
-
-function ifInPitlaneEnd(player: { p: PlayerObject, disc: DiscPropertiesObject }, room: RoomObject) {
-    return room.getScores().time > 0 && inHitbox(player, CIRCUITS[currentMapIndex].info.pitlaneEnd)
-}
-
-export function handlePitlane(playersAndDiscs: { p: PlayerObject, disc: DiscPropertiesObject }[], room: RoomObject) {
-    const players = getRunningPlayers(playersAndDiscs)
-    players.forEach(player => {
-        const p = player.p
-        if (ifInPitlaneStart(player, room) && !playerList[p.id].inPitlane) {
-            playerList[p.id].pits.pitsNumber += 1
-            playerList[p.id].inPitlane = true
-            if(LEAGUE_MODE && playerList[player.p.id].boxAlert === false){
-                const numero = Math.floor(1000 + Math.random() * 9000);
-                playerList[player.p.id].boxAlert = numero;
-                sendAlertMessage(room, MESSAGES.CODE_BOX(numero), player.p.id)
-            }
-        }
-        if (ifInPitlaneEnd(player, room) && playerList[p.id].inPitlane) {
-            playerList[p.id].inPitlane = false
-            if(LEAGUE_MODE && playerList[player.p.id].boxAlert !== false){
-
-                playerList[player.p.id].boxAlert = false;
-            }
-        }
-    })
-}
 
 // function detectStartJump(
 //     p: PlayerObject, disc: DiscPropertiesObject,

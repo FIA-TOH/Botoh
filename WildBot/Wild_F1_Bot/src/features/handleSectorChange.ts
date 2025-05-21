@@ -1,5 +1,6 @@
 import { sendBlueMessage } from "./chat";
 import { handleAvatar, situacions } from "./handleAvatar";
+import { presentationLap } from "./handleCommands";
 import { positionList, updatePositionList } from "./handleLapChange";
 import { CIRCUITS, currentMapIndex } from "./maps";
 import { MESSAGES } from "./messages";
@@ -44,7 +45,7 @@ function ifInSectorThreeChangeZone(player: { p: PlayerObject, disc: DiscProperti
 
 export function checkPlayerSector(playersAndDiscs: { p: PlayerObject, disc: DiscPropertiesObject }[], room: RoomObject){
     const players = getRunningPlayers(playersAndDiscs)
-
+    if (presentationLap) return
     players.forEach(pad=>{
         const p = pad.p
 
@@ -99,7 +100,6 @@ export function checkBlueFlag(p: PlayerObject, room: RoomObject) {
     const playerInfo = positionList.find(entry => entry.name === p.name);
     if (!playerInfo) return;
     if(gameMode == GameMode.QUALY || gameMode == GameMode.TRAINING) return
-
     
     positionList.forEach(opponent => {
         const opponentInfo =  room.getPlayerList().find(p => p.name === opponent.name);
