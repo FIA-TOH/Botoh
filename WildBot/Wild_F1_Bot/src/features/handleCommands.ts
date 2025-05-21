@@ -56,7 +56,6 @@ import {
 } from "./rain";
 import { Teams } from "./teams";
 import { resetPlayer } from "./players";
-import { ACTUAL_CIRCUIT, getPlayerById } from "../room";
 import { handleAvatar, situacions } from "./handleAvatar";
 import { Circuit } from "../circuits/Circuit";
 import { isOnVoteSession, selectedCircuits } from "./vote";
@@ -74,6 +73,7 @@ import {
 } from "./handleSlipstream";
 import { ifInBoxZone, changeTires } from "./pits";
 import { changeConstant, constants } from "./constants";
+import { ACTUAL_CIRCUIT } from "./roomFeatures/stadiumChange";
 
 export let tyresActivated = true;
 export let qualyForPub = true;

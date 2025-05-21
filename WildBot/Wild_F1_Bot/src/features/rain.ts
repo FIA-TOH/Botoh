@@ -1,34 +1,32 @@
-import { ACTUAL_CIRCUIT, room } from "../room";
+import { room } from "../room";
 import { sendAlertMessage } from "./chat";
 import { handleAvatar, situacions } from "./handleAvatar";
 import { handleRainItensity } from "./handleCommands";
 import { laps } from "./laps";
 import { MESSAGES } from "./messages";
-
+import { ACTUAL_CIRCUIT } from "./roomFeatures/stadiumChange";
 
 // Variáveis globais para armazenar o estado da chuva, os intervalos e o estado do jogo
 export let rainEnabled = false;
 export let rainChance = 0;
-export let rainIntensity = 0
-export let rainStartTime:number = 0;
-export let rainStopTime:number = 0;
+export let rainIntensity = 0;
+export let rainStartTime: number = 0;
+export let rainStopTime: number = 0;
 export let isRaining = false;
 let rainStartAnnounced = false;
 let rainStopAnnounced = false;
 let announcementTime = 0;
 let stopAnnouncementTime = 0;
 
-let rainStartTimeout:number | null;
-let announcementTimeout:number | null;
+let rainStartTimeout: number | null;
+let announcementTimeout: number | null;
 
-let rainStopTimeout:number | null;
-let stopAnnouncementTimeout:number | null;
+let rainStopTimeout: number | null;
+let stopAnnouncementTimeout: number | null;
 
-let rainIntensityInterval: NodeJS.Timeout | null = null ;
+let rainIntensityInterval: NodeJS.Timeout | null = null;
 
-let peakIntensity = 0
-
-
+let peakIntensity = 0;
 
 // Função para definir as chances de chuva e iniciar o processo de decisão
 export function setRainChances(chances: number) {
@@ -40,19 +38,17 @@ export function setRainChances(chances: number) {
   rainEnabled = true;
 }
 
-export function setRainItensity(intensity: number){
+export function setRainItensity(intensity: number) {
   console.log(`Rain intensity defined to: ${intensity}%`);
   resetAllRainEvents();
   rainIntensity = intensity;
-  if(intensity != 0){
+  if (intensity != 0) {
     rainEnabled = true;
-    isRaining = true
+    isRaining = true;
   } else {
     rainEnabled = false;
-    isRaining = false
+    isRaining = false;
   }
-
-  
 }
 
 // Função para decidir se vai chover, quando a chuva vai parar e se vai voltar
@@ -67,31 +63,36 @@ function decideRainEvents(chances: number) {
   const rainPeak = Math.random() * (rainChance + 20) + 10;
   peakIntensity = Math.min(100, rainPeak);
 
-  console.log("picos ",rainPeak, peakIntensity);
-  
+  console.log("picos ", rainPeak, peakIntensity);
 
   // Define em qual volta a chuva vai começar (após a volta 2 e na primeira metade das voltas)
   let rainLap = Math.floor(Math.random() * (laps / 2 - 1)) + 2;
   console.log(`Vai chover na volta ${rainLap}`);
 
   const defaultBestTime = 999.999;
-  const bestTime = (ACTUAL_CIRCUIT.info && ACTUAL_CIRCUIT.info.BestTime && ACTUAL_CIRCUIT.info.BestTime[0]) ?? defaultBestTime;
-  const lapTime = typeof bestTime === 'number' && bestTime !== defaultBestTime ? bestTime + 1.0 : 40.0;
-  
+  const bestTime =
+    (ACTUAL_CIRCUIT.info &&
+      ACTUAL_CIRCUIT.info.BestTime &&
+      ACTUAL_CIRCUIT.info.BestTime[0]) ??
+    defaultBestTime;
+  const lapTime =
+    typeof bestTime === "number" && bestTime !== defaultBestTime
+      ? bestTime + 1.0
+      : 40.0;
 
   // Calcular o tempo para iniciar a chuva (em milissegundos)
   rainStartTime = lapTime * rainLap * 1000;
-  
 
-  
   announcementTime = rainStartTime - 60000; // A chuva começa 60 segundos após o anúncio
 
   console.log(
-    `A chuva vai começar em ${rainStartTime / 1000} segundos (${rainStartTime / 60000
+    `A chuva vai começar em ${rainStartTime / 1000} segundos (${
+      rainStartTime / 60000
     } minutos)`
   );
   console.log(
-    `Tempo de anúncio configurado para ${announcementTime / 1000} segundos (${announcementTime / 60000
+    `Tempo de anúncio configurado para ${announcementTime / 1000} segundos (${
+      announcementTime / 60000
     } minutos)`
   );
 
@@ -117,19 +118,18 @@ function decideRainEvents(chances: number) {
 
   console.log(`A chuva vai parar na volta ${stopLap}`);
   console.log(
-    `Tempo de anúncio pararChuva configurado para ${stopAnnouncementTime / 1000
+    `Tempo de anúncio pararChuva configurado para ${
+      stopAnnouncementTime / 1000
     } segundos (${stopAnnouncementTime / 60000} minutos)`
   );
   console.log(
-    `A chuva vai parar em ${rainStopTime / 1000} segundos (${rainStopTime / 60000
+    `A chuva vai parar em ${rainStopTime / 1000} segundos (${
+      rainStopTime / 60000
     } minutos)`
   );
 
   // Iniciar o temporizador para o anúncio
   stopAnnouncementTimer();
-
-
-
 }
 
 // Função para iniciar o temporizador para o anúncio da chuva
@@ -140,7 +140,7 @@ function startAnnouncementTimer() {
   }
 
   let rainStartTimeAnnounce = room.getScores().time ?? 0;
-  
+
   const checkAnnouncement = () => {
     const currentTime = room.getScores().time ?? 0;
     if (currentTime - rainStartTimeAnnounce >= announcementTime / 1000) {
@@ -174,14 +174,21 @@ function announceRainStart() {
     console.log("🌧️ A chuva vai começar em 1 minuto! 🌧️");
     isRaining = true;
     rainIntensity = 10;
-    sendAlertMessage(room, MESSAGES.RAIN_ONE_MINUTE())
+    sendAlertMessage(room, MESSAGES.RAIN_ONE_MINUTE());
     rainStartAnnounced = true;
 
     players.forEach((player) => {
       const rainEmojis = ["☁️", "🌧️", "⛔"];
       const rainDurations = [2000, 2000, 2000];
-      handleAvatar(situacions.Rain, player, room, undefined, rainEmojis, rainDurations);
-  });
+      handleAvatar(
+        situacions.Rain,
+        player,
+        room,
+        undefined,
+        rainEmojis,
+        rainDurations
+      );
+    });
   }
 }
 
@@ -194,34 +201,37 @@ function startRain() {
   players.forEach((player) => {
     const rainEmojis = ["🌧️", "🌩️", "⛔"];
     const rainDurations = [2000, 2000, 2000];
-    handleAvatar(situacions.Rain, player, room, undefined, rainEmojis, rainDurations);
-});
+    handleAvatar(
+      situacions.Rain,
+      player,
+      room,
+      undefined,
+      rainEmojis,
+      rainDurations
+    );
+  });
 
   // Anúncios com atraso
   setTimeout(() => {
-    
-
-    sendAlertMessage(room, MESSAGES.RAIN_STARTING_IN(3))
-
+    sendAlertMessage(room, MESSAGES.RAIN_STARTING_IN(3));
   }, 0);
 
   setTimeout(() => {
-    sendAlertMessage(room, MESSAGES.RAIN_STARTING_IN(2))
+    sendAlertMessage(room, MESSAGES.RAIN_STARTING_IN(2));
   }, 1000); // Anúncio após 1 segundo
 
   setTimeout(() => {
-    sendAlertMessage(room, MESSAGES.RAIN_STARTING_IN(1))
+    sendAlertMessage(room, MESSAGES.RAIN_STARTING_IN(1));
   }, 2000); // Anúncio após 2 segundos
 
   setTimeout(() => {
     rainStartAnnounced = true;
-    sendAlertMessage(room, MESSAGES.RAIN_STARTED())
-    startRainIntensityMonitor(rainChance, rainStartTime, rainStopTime, room)
+    sendAlertMessage(room, MESSAGES.RAIN_STARTED());
+    startRainIntensityMonitor(rainChance, rainStartTime, rainStopTime, room);
 
     console.log("🌧️ A chuva começou! 🌧️");
   }, 3000); // Anúncio final após 3 segundos
 }
-
 
 function stopAnnouncementTimer() {
   if (stopAnnouncementTime === undefined) {
@@ -243,7 +253,6 @@ function stopAnnouncementTimer() {
 }
 
 function stopRainStopTimer() {
-
   const rainStopTime = room.getScores().time ?? 0;
   const checkRainStop = () => {
     const currentTime = room.getScores().time ?? 0;
@@ -258,16 +267,23 @@ function stopRainStopTimer() {
 
 function announceRainStop() {
   let players = room.getPlayerList();
- 
+
   if (!rainStopAnnounced) {
     console.log("🌦️ A chuva vai parar em 1 minuto! 🌦️");
-    rainIntensity = 10
-    sendAlertMessage(room, MESSAGES.RAIN_STOP_ONE_MINUTE())
-  players.forEach((player) => {
-    const rainEmojis = ["🌧️", "🌤️", "⛔"];
-    const rainDurations = [2000, 2000, 2000];
-    handleAvatar(situacions.Rain, player, room, undefined, rainEmojis, rainDurations);
-});
+    rainIntensity = 10;
+    sendAlertMessage(room, MESSAGES.RAIN_STOP_ONE_MINUTE());
+    players.forEach((player) => {
+      const rainEmojis = ["🌧️", "🌤️", "⛔"];
+      const rainDurations = [2000, 2000, 2000];
+      handleAvatar(
+        situacions.Rain,
+        player,
+        room,
+        undefined,
+        rainEmojis,
+        rainDurations
+      );
+    });
 
     rainStopAnnounced = true;
   }
@@ -276,32 +292,38 @@ function announceRainStop() {
 function stopRain() {
   let players = room.getPlayerList();
   rainStopAnnounced = false;
- 
 
   players.forEach((player) => {
     const rainEmojis = ["🌤️", "☀️", "⛔"];
     const rainDurations = [2000, 2000, 20000];
-    handleAvatar(situacions.Rain, player, room, undefined, rainEmojis, rainDurations);
-});
+    handleAvatar(
+      situacions.Rain,
+      player,
+      room,
+      undefined,
+      rainEmojis,
+      rainDurations
+    );
+  });
 
   // Anúncios com atraso
   setTimeout(() => {
-    sendAlertMessage(room, MESSAGES.RAIN_STOPING_IN(3))
+    sendAlertMessage(room, MESSAGES.RAIN_STOPING_IN(3));
   }, 0); // Anúncio inicial imediatamente
 
   setTimeout(() => {
-    sendAlertMessage(room, MESSAGES.RAIN_STOPING_IN(2))
+    sendAlertMessage(room, MESSAGES.RAIN_STOPING_IN(2));
   }, 1000); // Anúncio após 1 segundo
 
   setTimeout(() => {
-    sendAlertMessage(room, MESSAGES.RAIN_STOPING_IN(1))
+    sendAlertMessage(room, MESSAGES.RAIN_STOPING_IN(1));
   }, 2000); // Anúncio após 2 segundos
 
   setTimeout(() => {
     isRaining = false;
-    rainEnabled = false
+    rainEnabled = false;
     rainStopAnnounced = true;
-    sendAlertMessage(room, MESSAGES.RAIN_STOPPED())
+    sendAlertMessage(room, MESSAGES.RAIN_STOPPED());
     stopRainIntensityMonitor();
     console.log("☀️ A chuva parou! ☀️");
   }, 3000); // Anúncio final após 3 segundos
@@ -311,26 +333,23 @@ export function calculateRainIntensity(
   rainChance: number,
   rainStartTime: number,
   rainStopTime: number | null,
-  roomObject: RoomObject,
+  roomObject: RoomObject
 ) {
   const currentTime = roomObject.getScores().time * 1000;
 
   // Calcula a duração da chuva, considerando infinito se rainStopTime for null ou 0
-  const rainDuration = rainStopTime ? rainStopTime - rainStartTime : 60000*5;
+  const rainDuration = rainStopTime ? rainStopTime - rainStartTime : 60000 * 5;
 
-  const progressiveTime = rainStopTime ? rainDuration / 4 : 60000*2;
+  const progressiveTime = rainStopTime ? rainDuration / 4 : 60000 * 2;
   const peakTime = rainStopTime ? rainDuration / 2 : Infinity;
-
-
 
   const relativeTime = currentTime - rainStartTime;
 
   // console.log(currentTime, rainDuration, progressiveTime, peakTime, relativeTime, peakIntensity);
-  
 
   if (relativeTime <= progressiveTime) {
     const progressFraction = relativeTime / progressiveTime;
-    
+
     rainIntensity = 10 + progressFraction * (peakIntensity - 10);
   } else if (relativeTime <= progressiveTime + peakTime || !rainStopTime) {
     rainIntensity = peakIntensity;
@@ -339,10 +358,7 @@ export function calculateRainIntensity(
     const decreassiveFraction =
       (relativeTime - progressiveTime - peakTime) / decreassiveTime;
     rainIntensity = peakIntensity - decreassiveFraction * (peakIntensity - 10);
-
-    
   }
-
 
   return Math.max(10, Math.min(100, rainIntensity));
 }
@@ -360,19 +376,25 @@ function startRainIntensityMonitor(
 
   rainIntensityInterval = setInterval(() => {
     const currentTime = roomObject.getScores().time * 1000;
-    
-    if (currentTime >= rainStartTime && (!rainStopTime || currentTime <= rainStopTime)) {
+
+    if (
+      currentTime >= rainStartTime &&
+      (!rainStopTime || currentTime <= rainStopTime)
+    ) {
       const intensity = calculateRainIntensity(
         rainChance,
         rainStartTime,
         rainStopTime,
         roomObject
       );
-      rainIntensity = intensity
+      rainIntensity = intensity;
 
       // Mensagens específicas para intensidades-chave
       if ([30, 50, 70, 90].includes(Math.round(intensity))) {
-        sendAlertMessage(room, MESSAGES.RAIN_INTENSITY_LAP(Math.round(intensity)))
+        sendAlertMessage(
+          room,
+          MESSAGES.RAIN_INTENSITY_LAP(Math.round(intensity))
+        );
       }
     } else if (rainStopTime && currentTime > rainStopTime) {
       // Parar o monitoramento se a chuva acabar
@@ -388,11 +410,6 @@ function stopRainIntensityMonitor() {
     console.log("Rain intensity monitor stopped.");
   }
 }
-
-
-
-
-
 
 export function resetAllRainEvents() {
   // Se a chuva não começou, não reinicie o ciclo de avisos
@@ -423,7 +440,6 @@ export function resetAllRainEvents() {
     // Não altere o estado do anúncio de início da chuva
     rainStartAnnounced = false;
     rainStopAnnounced = false;
-    
   } else {
     // Se a chuva começou, pare os temporizadores de parada e de intensidade
     if (stopAnnouncementTimeout) {

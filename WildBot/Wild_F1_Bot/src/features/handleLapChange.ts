@@ -19,7 +19,6 @@ import { MESSAGES } from "./messages";
 import { laps } from "./laps";
 import { drsOn, enableDRS } from "./handleDRSZone";
 import { rainIntensity } from "./rain";
-import { ACTUAL_CIRCUIT } from "../room";
 import { Teams } from "./teams";
 import {
   bestTimes,
@@ -30,6 +29,7 @@ import { LEAGUE_MODE } from "./leagueMode";
 import { presentationLap, printAllPositions } from "./handleCommands";
 import { Tires } from "./tires";
 import { checkBlueFlag } from "./handleSectorChange";
+import { ACTUAL_CIRCUIT } from "./roomFeatures/stadiumChange";
 
 export const timerController: {
   positionTimer: ReturnType<typeof setTimeout> | null;
