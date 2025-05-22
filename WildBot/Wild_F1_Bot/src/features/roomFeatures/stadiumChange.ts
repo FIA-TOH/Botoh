@@ -1,8 +1,8 @@
 import { Circuit } from "../../circuits/Circuit";
-import { sendErrorMessage } from "../chat";
-import { handleChangeMap, CIRCUITS } from "../maps";
-import { MESSAGES } from "../messages";
-import { Teams } from "../teams";
+import { sendErrorMessage } from "../chat/chat";
+import { handleChangeMap, CIRCUITS } from "../zones/maps";
+import { MESSAGES } from "../chat/messages";
+import { Teams } from "../changeGameState/teams";
 
 export let ACTUAL_CIRCUIT: Circuit;
 

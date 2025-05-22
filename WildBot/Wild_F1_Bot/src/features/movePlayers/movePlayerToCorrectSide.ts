@@ -1,6 +1,6 @@
 import { room } from "../../room";
-import { playerList } from "../playerList";
-import { Teams } from "../teams";
+import { playerList } from "../changePlayerState/playerList";
+import { Teams } from "../changeGameState/teams";
 
 export function movePlayersToCorrectSide() {
   const players = room.getPlayerList();

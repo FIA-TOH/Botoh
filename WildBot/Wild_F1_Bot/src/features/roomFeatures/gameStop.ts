@@ -1,16 +1,15 @@
 import { log } from "console";
-import { sendChatMessage } from "../chat";
-import { handleGameStateChange } from "../gameState";
-import { setGhostMode } from "../ghost";
+import { sendChatMessage } from "../chat/chat";
+import { handleGameStateChange } from "../changeGameState/gameState";
 import {
   handleRREnabledCommand,
   printAllPositions,
   changeLaps,
-} from "../handleCommands";
-import { timerController } from "../handleLapChange";
-import { LEAGUE_MODE } from "../leagueMode";
-import { MESSAGES } from "../messages";
-import { resetPlayers } from "../players";
+} from "../commands/handleCommands";
+import { timerController } from "../zones/handleLapChange";
+import { LEAGUE_MODE } from "../hostLeague/leagueMode";
+import { MESSAGES } from "../chat/messages";
+import { resetPlayers } from "../changePlayerState/players";
 import {
   gameMode,
   GameMode,
@@ -18,14 +17,15 @@ import {
   reorderPlayersInRoom,
   changeGameMode,
   clearPlayers,
-} from "../qualiMode";
-import { resetAllRainEvents, setRainChances } from "../rain";
-import { voteSession } from "../vote";
+} from "../changeGameState/qualiMode";
+import { resetAllRainEvents, setRainChances } from "../rain/rain";
+import { voteSession } from "../changeGameState/vote";
 import {
   changeGameStoppedNaturally,
   gameStopedNaturally,
 } from "../changeGameState/gameStopeedNaturally";
 import { movePlayersToCorrectSide } from "../movePlayers/movePlayerToCorrectSide";
+import { setGhostMode } from "../changePlayerState/ghost";
 
 export function GameStop(room: RoomObject) {
   room.onGameStop = function (byPlayer) {

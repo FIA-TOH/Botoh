@@ -1,9 +1,9 @@
 import { sha256 } from "js-sha256";
-import { afkAdmins } from "../afkAdmins";
-import { lapPositions } from "../handleLapChange";
-import { LEAGUE_MODE } from "../leagueMode";
-import { playerList } from "../playerList";
-import { gameMode, GameMode } from "../qualiMode";
+import { afkAdmins } from "../afk/afkAdmins";
+import { lapPositions } from "../zones/handleLapChange";
+import { LEAGUE_MODE } from "../hostLeague/leagueMode";
+import { playerList } from "../changePlayerState/playerList";
+import { gameMode, GameMode } from "../changeGameState/qualiMode";
 import { getRunningPlayers } from "../utils";
 
 export function PlayerLeave(room: RoomObject) {

@@ -1,5 +1,5 @@
-import { LEAGUE_MODE } from "../leagueMode";
-import { gameMode, GameMode, qualiTime, raceTime } from "../qualiMode";
+import { LEAGUE_MODE } from "../hostLeague/leagueMode";
+import { gameMode, GameMode, qualiTime, raceTime } from "./qualiMode";
 import { getRunningPlayers } from "../utils";
 import { changeGameStoppedNaturally } from "./gameStopeedNaturally";
 

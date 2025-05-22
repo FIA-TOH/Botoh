@@ -1,9 +1,8 @@
-import { ghostMode } from "../ghost";
-import { handleAvatar } from "../handleAvatar";
-import { playerList } from "../playerList";
-import { resetPlayer } from "../players";
-import { gameMode, GameMode } from "../qualiMode";
-import { Teams } from "../teams";
+import { ghostMode } from "../changePlayerState/ghost";
+import { playerList } from "../changePlayerState/playerList";
+import { resetPlayer } from "../changePlayerState/players";
+import { gameMode, GameMode } from "../changeGameState/qualiMode";
+import { Teams } from "../changeGameState/teams";
 import { ACTUAL_CIRCUIT } from "./stadiumChange";
 
 export function TeamChange(room: RoomObject) {
@@ -28,4 +27,11 @@ export function TeamChange(room: RoomObject) {
       });
     }
   };
+}
+function handleAvatar(
+  arg0: string,
+  changedPlayer: PlayerObject,
+  room: RoomObject
+) {
+  throw new Error("Function not implemented.");
 }

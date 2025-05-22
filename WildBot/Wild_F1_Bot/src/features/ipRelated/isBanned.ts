@@ -1,5 +1,5 @@
 import { sha256 } from "js-sha256";
-import { LEAGUE_MODE } from "../leagueMode";
+import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { bans } from "../../../roomconfig.json";
 
 const BAN_LIST = bans;

@@ -1,13 +1,13 @@
-import { handleChangeMap } from "./features/maps";
+import { handleChangeMap } from "./features/zones/maps";
 import {
   leagueName,
   maxPlayers,
   publicName,
   roomPassword,
 } from "../roomconfig.json";
-import { LEAGUE_MODE } from "./features/leagueMode";
-import { handleGameStateChange } from "./features/gameState";
-import sendDiscordLink from "./features/pubHost/sendDiscordLink";
+import { LEAGUE_MODE } from "./features/hostLeague/leagueMode";
+import { handleGameStateChange } from "./features/changeGameState/gameState";
+import sendDiscordLink from "./features/hostPub/sendDiscordLink";
 import { PlayerJoin } from "./features/roomFeatures/playerJoin";
 import { TeamChange } from "./features/roomFeatures/teamChange";
 import { GameTick } from "./features/roomFeatures/gameTick";

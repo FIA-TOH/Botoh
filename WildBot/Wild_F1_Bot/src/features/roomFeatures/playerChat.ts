@@ -1,7 +1,7 @@
-import { afkAdmins } from "../afkAdmins";
-import { sendErrorMessage } from "../chat";
-import { mute_mode, COMMANDS } from "../handleCommands";
-import { MESSAGES } from "../messages";
+import { afkAdmins } from "../afk/afkAdmins";
+import { sendErrorMessage } from "../chat/chat";
+import { mute_mode, COMMANDS } from "../commands/handleCommands";
+import { MESSAGES } from "../chat/messages";
 
 export function PlayerChat(room: RoomObject) {
   room.onPlayerChat = function (player, message) {
