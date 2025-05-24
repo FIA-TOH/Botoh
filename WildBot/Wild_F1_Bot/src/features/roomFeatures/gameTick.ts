@@ -10,13 +10,11 @@ import { getRunningPlayers } from "../utils";
 import { updateGripCounter } from "../speed/grip/grip";
 import handleTireWear from "../tires&pits/handleTireWear";
 import { handleSuzukaTp } from "../zones/handleSuzukaTp";
+import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
 
 export function GameTick(room: RoomObject) {
   room.onGameTick = function () {
-    const playersAndDiscs = room.getPlayerList().map((p) => ({
-      p: p,
-      disc: room.getPlayerDiscProperties(p.id),
-    }));
+    const playersAndDiscs = getPlayerAndDiscs(room);
     const players = getRunningPlayers(playersAndDiscs);
     handlePitlane(playersAndDiscs, room);
     distributeSpeed(playersAndDiscs, room);

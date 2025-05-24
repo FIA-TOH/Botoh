@@ -1,4 +1,4 @@
-import { gameMode, GameMode } from "../changeGameState/qualiMode";
+import { gameMode, GameMode } from "../changeGameState/changeGameModes";
 import { playerList } from "../changePlayerState/playerList";
 import { sendAlertMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";

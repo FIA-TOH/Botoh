@@ -5,7 +5,7 @@ import { positionList, updatePositionList } from "./handleLapChange";
 import { CIRCUITS, currentMapIndex } from "./maps";
 import { MESSAGES } from "../chat/messages";
 import { playerList } from "../changePlayerState/playerList";
-import { GameMode, gameMode } from "../changeGameState/qualiMode";
+import { gameMode, GameMode } from "../changeGameState/changeGameModes";
 import { getRunningPlayers, inHitbox } from "../utils";
 
 function serialize(number: number) {

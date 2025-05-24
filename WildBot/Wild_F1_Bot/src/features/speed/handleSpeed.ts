@@ -1,6 +1,7 @@
-import { gameMode, GameMode } from "../changeGameState/qualiMode";
+import { gameMode, GameMode } from "../changeGameState/changeGameModes";
 import { playerList } from "../changePlayerState/playerList";
 import { tyresActivated } from "../commands/handleCommands";
+import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
 import { rainEnabled, isRaining, rainIntensity } from "../rain/rain";
 import { grip } from "../rain/rainGrip";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
@@ -38,10 +39,7 @@ export function controlPlayerSpeed(
 ) {
   const currentTime = room.getScores()?.time || 0;
 
-  const playersAndDiscs = room.getPlayerList().map((p) => ({
-    p,
-    disc: room.getPlayerDiscProperties(p.id),
-  }));
+  const playersAndDiscs = getPlayerAndDiscs(room);
 
   const playersRunning = getRunningPlayers(playersAndDiscs);
 

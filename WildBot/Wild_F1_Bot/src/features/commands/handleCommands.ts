@@ -27,15 +27,7 @@ import {
   publicAdminPassword,
   publicModPassword,
 } from "../../../roomconfig.json";
-import {
-  changeGameMode,
-  gameMode,
-  GameMode,
-  printAllTimes,
-  qualiTime,
-  setQualiTime,
-  updatePlayerTime,
-} from "../changeGameState/qualiMode";
+import { qualiTime, setQualiTime } from "../changeGameState/qualy/qualiMode";
 import en_commands from "../../locales/commands/en";
 import fr_commands from "../../locales/commands/fr";
 import es_commands from "../../locales/commands/es";
@@ -55,7 +47,10 @@ import { Teams } from "../changeGameState/teams";
 import { resetPlayer } from "../changePlayerState/players";
 
 import { Circuit } from "../../circuits/Circuit";
-import { isOnVoteSession, selectedCircuits } from "../changeGameState/vote";
+import {
+  isOnVoteSession,
+  selectedCircuits,
+} from "../changeGameState/vote/vote";
 import { gameState } from "../changeGameState/gameState";
 import {
   clearBestTime,
@@ -76,6 +71,14 @@ import {
 } from "../speed/handleSlipstream";
 import { playerList } from "../changePlayerState/playerList";
 import { Tires } from "../tires&pits/tires";
+import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
+import {
+  changeGameMode,
+  GameMode,
+  gameMode,
+} from "../changeGameState/changeGameModes";
+import { updatePlayerTime } from "../changeGameState/qualy/playerTime";
+import { printAllTimes } from "../changeGameState/qualy/printAllTimes";
 
 export let tyresActivated = true;
 export let qualyForPub = true;
@@ -669,9 +672,8 @@ export function handleAjustPlayerCommand(
   if (!isNaN(Number(value))) {
     valueNumber = Number(value);
   }
-  const playersAndDiscs = room.getPlayerList().map((p) => {
-    return { p: p, disc: room.getPlayerDiscProperties(p.id) };
-  });
+  const playersAndDiscs = getPlayerAndDiscs(room);
+
   const players = getRunningPlayers(playersAndDiscs);
   let playerEscolhido: { p: PlayerObject; disc: DiscPropertiesObject }[] = [];
   if (!playerChoosen) {
@@ -736,9 +738,7 @@ export function handleNerfListCommand(
     playerNumero = Number(playerId);
   }
 
-  const playersAndDiscs = room.getPlayerList().map((p) => {
-    return { p: p, disc: room.getPlayerDiscProperties(p.id) };
-  });
+  const playersAndDiscs = getPlayerAndDiscs(room);
   const players = getRunningPlayers(playersAndDiscs);
 
   let playerEscolhido: { p: PlayerObject; disc: DiscPropertiesObject }[] = [];
@@ -1376,9 +1376,7 @@ export function handleFlagCommand(
     playerNumero = Number(playerChoosen);
   }
 
-  const playersAndDiscs = room.getPlayerList().map((p) => {
-    return { p: p, disc: room.getPlayerDiscProperties(p.id) };
-  });
+  const playersAndDiscs = getPlayerAndDiscs(room);
   let playerEscolhido: { p: PlayerObject; disc: DiscPropertiesObject }[] = [];
   const players = getRunningPlayers(playersAndDiscs);
   if (playerNumero !== undefined) {

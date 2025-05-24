@@ -1,6 +1,6 @@
 import { sha256 } from "js-sha256";
 import { gameState } from "../changeGameState/gameState";
-import { gameMode, GameMode } from "../changeGameState/qualiMode";
+import { gameMode, GameMode } from "../changeGameState/changeGameModes";
 import { Teams } from "../changeGameState/teams";
 import { idToAuth, playerList } from "../changePlayerState/playerList";
 import { createPlayerInfo } from "../changePlayerState/players";

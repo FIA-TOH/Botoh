@@ -1,8 +1,8 @@
 import { DEFAULT_LANGUAGE } from "../chat/language";
 import { playerList } from "../changePlayerState/playerList";
-import { gameMode, GameMode } from "../changeGameState/qualiMode";
 import { handleAvatar } from "./handleAvatar";
 import { Tires, TIRE_STARTING_SPEED } from "../tires&pits/tires";
+import { gameMode, GameMode } from "../changeGameState/changeGameModes";
 
 export function createPlayerInfo(ip?: string) {
   return {

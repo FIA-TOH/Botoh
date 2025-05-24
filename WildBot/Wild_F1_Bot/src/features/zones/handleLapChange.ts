@@ -6,12 +6,6 @@ import {
 } from "../utils";
 import { CIRCUITS, currentMapIndex } from "./maps";
 import {
-  GameMode,
-  gameMode,
-  qualiTime,
-  updatePlayerTime,
-} from "../changeGameState/qualiMode";
-import {
   sendAlertMessage,
   sendBestTimeRace,
   sendChatMessage,
@@ -35,6 +29,9 @@ import { checkBlueFlag } from "./handleSectorChange";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { PitsInfo, playerList } from "../changePlayerState/playerList";
 import { Tires } from "../tires&pits/tires";
+import { gameMode, GameMode } from "../changeGameState/changeGameModes";
+import { updatePlayerTime } from "../changeGameState/qualy/playerTime";
+import { qualiTime } from "../changeGameState/qualy/qualiMode";
 
 export const timerController: {
   positionTimer: ReturnType<typeof setTimeout> | null;

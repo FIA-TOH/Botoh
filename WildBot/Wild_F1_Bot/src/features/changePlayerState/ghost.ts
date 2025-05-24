@@ -1,12 +1,11 @@
+import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
 import { getRunningPlayers } from "../utils";
 
 export let ghostMode = false;
 
 export function setGhostMode(room: RoomObject, enable: boolean) {
   ghostMode = enable;
-  const playersAndDiscs = room.getPlayerList().map((p) => {
-    return { p: p, disc: room.getPlayerDiscProperties(p.id) };
-  });
+  const playersAndDiscs = getPlayerAndDiscs(room);
 
   if (ghostMode) {
     room.sendAnnouncement("Ghost mode enabled");

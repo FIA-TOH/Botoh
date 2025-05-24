@@ -3,8 +3,9 @@ import { afkAdmins } from "../afk/afkAdmins";
 import { lapPositions } from "../zones/handleLapChange";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { playerList } from "../changePlayerState/playerList";
-import { gameMode, GameMode } from "../changeGameState/qualiMode";
 import { getRunningPlayers } from "../utils";
+import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
+import { gameMode, GameMode } from "../changeGameState/changeGameModes";
 
 export function PlayerLeave(room: RoomObject) {
   room.onPlayerLeave = function (player) {
@@ -29,9 +30,7 @@ export function PlayerLeave(room: RoomObject) {
       }
     }
 
-    const playersAndDiscs = room.getPlayerList().map((p) => {
-      return { p: p, disc: room.getPlayerDiscProperties(p.id) };
-    });
+    const playersAndDiscs = getPlayerAndDiscs(room);
 
     if (
       room.getScores() != null &&

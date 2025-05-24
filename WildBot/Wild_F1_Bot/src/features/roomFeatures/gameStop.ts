@@ -10,22 +10,23 @@ import { timerController } from "../zones/handleLapChange";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { MESSAGES } from "../chat/messages";
 import { resetPlayers } from "../changePlayerState/players";
-import {
-  gameMode,
-  GameMode,
-  printAllTimes,
-  reorderPlayersInRoom,
-  changeGameMode,
-  clearPlayers,
-} from "../changeGameState/qualiMode";
+
 import { resetAllRainEvents, setRainChances } from "../rain/rain";
-import { voteSession } from "../changeGameState/vote";
+import { voteSession } from "../changeGameState/vote/vote";
 import {
   changeGameStoppedNaturally,
   gameStopedNaturally,
 } from "../changeGameState/gameStopeedNaturally";
 import { movePlayersToCorrectSide } from "../movePlayers/movePlayerToCorrectSide";
 import { setGhostMode } from "../changePlayerState/ghost";
+import {
+  gameMode,
+  GameMode,
+  changeGameMode,
+} from "../changeGameState/changeGameModes";
+import { clearPlayers } from "../changeGameState/qualy/playerTime";
+import { printAllTimes } from "../changeGameState/qualy/printAllTimes";
+import { reorderPlayersInRoom } from "../playerFeatures/reorderPlayersInRoom";
 
 export function GameStop(room: RoomObject) {
   room.onGameStop = function (byPlayer) {
