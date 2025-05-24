@@ -1,9 +1,9 @@
 import { ghostMode } from "../changePlayerState/ghost";
 import { playerList } from "../changePlayerState/playerList";
 import { resetPlayer } from "../changePlayerState/players";
-import { gameMode, GameMode } from "../changeGameState/changeGameModes";
 import { Teams } from "../changeGameState/teams";
 import { ACTUAL_CIRCUIT } from "./stadiumChange";
+import { gameMode, GameMode } from "../changeGameState/changeGameModes";
 
 export function TeamChange(room: RoomObject) {
   room.onPlayerTeamChange = function (changedPlayer: PlayerObject) {

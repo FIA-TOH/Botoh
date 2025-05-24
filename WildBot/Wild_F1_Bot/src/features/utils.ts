@@ -63,3 +63,17 @@ export function checkIfTrolling(
 export function decodeIPFromConn(conn: string): string {
   return decodeURIComponent(conn.replace(/(..)/g, "%$1"));
 }
+
+export function serialize(number: number) {
+  return parseFloat(number.toFixed(3));
+}
+
+export function someArray(array: number[]): number {
+  return array.reduce((acc, value) => acc + value, 0);
+}
+
+export const timerController: {
+  positionTimer: ReturnType<typeof setTimeout> | null;
+} = {
+  positionTimer: null,
+};

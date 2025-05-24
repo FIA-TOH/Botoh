@@ -1,6 +1,5 @@
 import { sha256 } from "js-sha256";
 import { gameState } from "../changeGameState/gameState";
-import { gameMode, GameMode } from "../changeGameState/changeGameModes";
 import { Teams } from "../changeGameState/teams";
 import { idToAuth, playerList } from "../changePlayerState/playerList";
 import { createPlayerInfo } from "../changePlayerState/players";
@@ -9,6 +8,7 @@ import { MESSAGES } from "../chat/messages";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { isBanned } from "../ipRelated/isBanned";
 import { decodeIPFromConn, banPlayer, kickPlayer } from "../utils";
+import { gameMode, GameMode } from "../changeGameState/changeGameModes";
 
 function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
   if (room.getPlayerList().length > 1) {

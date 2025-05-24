@@ -1,12 +1,9 @@
 import { handleGameStateChange } from "../changeGameState/gameState";
-import {
-  finishList,
-  positionList,
-  lapPositions,
-} from "../zones/handleLapChange";
 import { laps } from "../zones/laps";
 import { resetPlayer } from "../changePlayerState/players";
 import { resetAllRainEvents } from "../rain/rain";
+import { positionList } from "../changeGameState/race/positionList";
+import { finishList, lapPositions } from "../zones/laps/handleLapChange";
 
 export function GameStart(room: RoomObject) {
   room.onGameStart = function (byPlayer) {

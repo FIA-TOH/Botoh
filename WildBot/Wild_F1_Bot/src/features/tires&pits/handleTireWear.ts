@@ -5,7 +5,7 @@ import { MESSAGES } from "../chat/messages";
 import { tyresActivated, playerNerfList } from "../commands/handleCommands";
 import { vsc } from "../speed/handleSpeed";
 import { laps } from "../zones/laps";
-import { changeTires } from "./pits";
+import { changeTires } from "./changeTires";
 import { TYRE_DURABILITY, Tires } from "./tires";
 
 export default function HandleTireWear(player: PlayerObject, room: RoomObject) {

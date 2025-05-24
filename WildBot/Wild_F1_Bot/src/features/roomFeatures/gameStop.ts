@@ -6,7 +6,6 @@ import {
   printAllPositions,
   changeLaps,
 } from "../commands/handleCommands";
-import { timerController } from "../zones/handleLapChange";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { MESSAGES } from "../chat/messages";
 import { resetPlayers } from "../changePlayerState/players";
@@ -26,7 +25,8 @@ import {
 } from "../changeGameState/changeGameModes";
 import { clearPlayers } from "../changeGameState/qualy/playerTime";
 import { printAllTimes } from "../changeGameState/qualy/printAllTimes";
-import { reorderPlayersInRoom } from "../playerFeatures/reorderPlayersInRoom";
+import { reorderPlayersInRoom } from "../movePlayers/reorderPlayersInRoom";
+import { timerController } from "../utils";
 
 export function GameStop(room: RoomObject) {
   room.onGameStop = function (byPlayer) {

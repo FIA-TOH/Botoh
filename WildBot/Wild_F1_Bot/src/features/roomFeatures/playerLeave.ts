@@ -1,6 +1,6 @@
 import { sha256 } from "js-sha256";
 import { afkAdmins } from "../afk/afkAdmins";
-import { lapPositions } from "../zones/handleLapChange";
+import { lapPositions } from "../zones/laps/handleLapChange";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { playerList } from "../changePlayerState/playerList";
 import { getRunningPlayers } from "../utils";

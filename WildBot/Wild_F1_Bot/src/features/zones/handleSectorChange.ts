@@ -1,12 +1,15 @@
-import { handleAvatar, situacions } from "../changePlayerState/handleAvatar";
-import { sendBlueMessage } from "../chat/chat";
-import { presentationLap } from "../commands/handleCommands";
-import { positionList, updatePositionList } from "./handleLapChange";
-import { CIRCUITS, currentMapIndex } from "./maps";
-import { MESSAGES } from "../chat/messages";
-import { playerList } from "../changePlayerState/playerList";
 import { gameMode, GameMode } from "../changeGameState/changeGameModes";
-import { getRunningPlayers, inHitbox } from "../utils";
+import {
+  updatePositionList,
+  positionList,
+} from "../changeGameState/race/positionList";
+import { handleAvatar, situacions } from "../changePlayerState/handleAvatar";
+import { playerList } from "../changePlayerState/playerList";
+import { sendBlueMessage } from "../chat/chat";
+import { MESSAGES } from "../chat/messages";
+import { presentationLap } from "../commands/handleCommands";
+import { inHitbox, getRunningPlayers } from "../utils";
+import { CIRCUITS, currentMapIndex } from "./maps";
 
 function serialize(number: number) {
   return parseFloat(number.toFixed(3));

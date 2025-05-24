@@ -20,7 +20,6 @@ import {
 } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { CIRCUITS, currentMapIndex, handleChangeMap } from "../zones/maps";
-import { lapPositions, positionList } from "../zones/handleLapChange";
 import { changeVSC, vsc } from "../speed/handleSpeed";
 import {
   leagueAdminPassword,
@@ -58,7 +57,6 @@ import {
   updateBestTime,
 } from "../../circuits/bestTimes";
 
-import { ifInBoxZone, changeTires } from "../tires&pits/pits";
 import { changeConstant, constants } from "../speed/constants";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { setGhostMode } from "../changePlayerState/ghost";
@@ -69,7 +67,7 @@ import {
   gasEnabled,
   enableGas,
 } from "../speed/handleSlipstream";
-import { playerList } from "../changePlayerState/playerList";
+import { PlayerInfo, playerList } from "../changePlayerState/playerList";
 import { Tires } from "../tires&pits/tires";
 import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
 import {
@@ -79,6 +77,10 @@ import {
 } from "../changeGameState/changeGameModes";
 import { updatePlayerTime } from "../changeGameState/qualy/playerTime";
 import { printAllTimes } from "../changeGameState/qualy/printAllTimes";
+import { changeTires } from "../tires&pits/changeTires";
+import { ifInBoxZone } from "../tires&pits/pits";
+import { positionList } from "../changeGameState/race/positionList";
+import { lapPositions } from "../zones/laps/handleLapChange";
 
 export let tyresActivated = true;
 export let qualyForPub = true;
