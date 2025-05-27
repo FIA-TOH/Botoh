@@ -59,6 +59,7 @@ import { MONZALEAGUE } from "../../circuits/monza/monzaLeague";
 import { CANADALEAGUE } from "../../circuits/canada/canadaLeague";
 import { AUSTINLEAGUE } from "../../circuits/austin/austinLeague";
 import { SHANGHAILEAGUE } from "../../circuits/shanghai/shanghaiLeague";
+import { SUZUKALEAGUE } from "../../circuits/suzuka/suzukaLeague";
 
 // import {DAYTONA} from "../circuits/daytona/daytona";
 // import {BARCELONA} from "../circuits/barcelona/barcelona";
@@ -103,7 +104,7 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
       MIAMI,
       NURBURGRINGNANO,
       HUNGARYNANO,
-      SHANGHAILEAGUE,
+      SUZUKALEAGUE,
       INDIANAPOLIS,
       PODIUM,
     ]

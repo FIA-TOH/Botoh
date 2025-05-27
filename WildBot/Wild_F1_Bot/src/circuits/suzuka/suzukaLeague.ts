@@ -1,8 +1,8 @@
 import { bestTimes } from "../bestTimes";
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
-import suzuka_json from "./suzuka.json";
+import suzukaLeague_json from "./suzukaLeague.json";
 
-const SUZUKA_INFO: CircuitInfo = {
+const SUZUKALEAGUE_INFO: CircuitInfo = {
   finishLine: {
     bounds: {
       minX: 1973,
@@ -76,8 +76,12 @@ const SUZUKA_INFO: CircuitInfo = {
   ],
   checkpoints: [],
   lastPlace: {
-    x: suzuka_json.redSpawnPoints[suzuka_json.redSpawnPoints.length - 1][0],
-    y: suzuka_json.redSpawnPoints[suzuka_json.redSpawnPoints.length - 1][1],
+    x: suzukaLeague_json.redSpawnPoints[
+      suzukaLeague_json.redSpawnPoints.length - 1
+    ][0],
+    y: suzukaLeague_json.redSpawnPoints[
+      suzukaLeague_json.redSpawnPoints.length - 1
+    ][1],
   },
   BestTime: bestTimes.suzuka,
   MainColor: [0xffffff],
@@ -88,7 +92,7 @@ const SUZUKA_INFO: CircuitInfo = {
   pitSpeed: 0.94,
 };
 
-export const SUZUKA: Circuit = {
-  map: JSON.stringify(suzuka_json),
-  info: SUZUKA_INFO,
+export const SUZUKALEAGUE: Circuit = {
+  map: JSON.stringify(suzukaLeague_json),
+  info: SUZUKALEAGUE_INFO,
 };

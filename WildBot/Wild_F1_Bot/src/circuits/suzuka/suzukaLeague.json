@@ -1746,14 +1746,6 @@
       "bias": 0
     },
     {
-      "x": -1694,
-      "y": 980,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "bias": 0
-    },
-    {
       "x": -765,
       "y": 852,
       "bCoef": 0,
@@ -1855,15 +1847,6 @@
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["wall"],
-      "bias": 0
-    },
-    {
-      "x": 506,
-      "y": -688,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "curve": 0,
       "bias": 0
     },
     {
@@ -2921,34 +2904,6 @@
       "bias": 0
     },
     {
-      "v0": 118,
-      "v1": 151,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "bias": 0
-    },
-    {
-      "v0": 152,
-      "v1": 145,
-      "curve": 33.45529919426347,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "bias": 0
-    },
-    {
-      "v0": 153,
-      "v1": 154,
-      "color": "777777",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "bias": 0
-    },
-    {
       "v0": 155,
       "v1": 156,
       "curve": 0,
@@ -3363,15 +3318,6 @@
       "bias": 0
     },
     {
-      "v0": 118,
-      "v1": 194,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "bias": 0
-    },
-    {
       "v0": 127,
       "v1": 118,
       "curve": -38.135020439674726,
@@ -3386,46 +3332,6 @@
       "v1": 144,
       "curve": -236.037250187381,
       "color": "777777",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "bias": 0
-    },
-    {
-      "v0": 195,
-      "v1": 127,
-      "curve": -63.20811466812984,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "bias": 0
-    },
-    {
-      "v0": 145,
-      "v1": 196,
-      "curve": -189.9380974481304,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "bias": 0
-    },
-    {
-      "v0": 128,
-      "v1": 197,
-      "curve": 162.52936609719842,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "bias": 0
-    },
-    {
-      "v0": 147,
-      "v1": 198,
-      "curve": -76.07043073458215,
-      "color": "999999",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["wall"],
@@ -3492,16 +3398,6 @@
       "bias": 0
     },
     {
-      "v0": 202,
-      "v1": 203,
-      "curve": 0,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "bias": 0
-    },
-    {
       "v0": 203,
       "v1": 204,
       "curve": 0,
@@ -3512,10 +3408,10 @@
       "bias": 0
     },
     {
-      "v0": 133,
+      "v0": 125,
       "v1": 205,
-      "curve": 89.12894905345628,
-      "color": "999999",
+      "curve": -12.144417933342732,
+      "color": "777777",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["wall"],
@@ -3523,18 +3419,8 @@
     },
     {
       "v0": 205,
-      "v1": 134,
-      "curve": 68.22491839814907,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "bias": 0
-    },
-    {
-      "v0": 125,
       "v1": 206,
-      "curve": -12.144417933342732,
+      "curve": 0,
       "color": "777777",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -3544,7 +3430,7 @@
     {
       "v0": 206,
       "v1": 207,
-      "curve": 0,
+      "curve": 29.578904956621322,
       "color": "777777",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -3554,7 +3440,7 @@
     {
       "v0": 207,
       "v1": 208,
-      "curve": 29.578904956621322,
+      "curve": 93.23445096973192,
       "color": "777777",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -3564,16 +3450,6 @@
     {
       "v0": 208,
       "v1": 209,
-      "curve": 93.23445096973192,
-      "color": "777777",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "bias": 0
-    },
-    {
-      "v0": 209,
-      "v1": 210,
       "curve": 91.41463873708847,
       "color": "777777",
       "bCoef": 0,
@@ -3582,38 +3458,8 @@
       "bias": 0
     },
     {
-      "v0": 211,
-      "v1": 210,
-      "curve": 84.8004871810971,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "bias": 0
-    },
-    {
-      "v0": 209,
-      "v1": 212,
-      "curve": -129.43157676926842,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "bias": 0
-    },
-    {
-      "v0": 212,
-      "v1": 208,
-      "curve": -39.88768852709302,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "bias": 0
-    },
-    {
       "v0": 135,
-      "v1": 213,
+      "v1": 212,
       "curve": 0,
       "color": "777777",
       "bCoef": 0,
@@ -3622,7 +3468,7 @@
       "bias": 0
     },
     {
-      "v0": 213,
+      "v0": 212,
       "v1": 123,
       "curve": -63.866122635478234,
       "color": "777777",
@@ -3676,7 +3522,7 @@
     },
     {
       "v0": 126,
-      "v1": 214,
+      "v1": 213,
       "curve": -7.644523971667176,
       "color": "777777",
       "bCoef": 0,
@@ -3686,7 +3532,7 @@
     },
     {
       "v0": 201,
-      "v1": 214,
+      "v1": 213,
       "curve": 10.51295847860338,
       "color": "777777",
       "bCoef": 0,
@@ -3695,8 +3541,8 @@
       "bias": 0
     },
     {
-      "v0": 214,
-      "v1": 215,
+      "v0": 213,
+      "v1": 214,
       "curve": 93.4657357666808,
       "color": "777777",
       "bCoef": 0,
@@ -3705,7 +3551,7 @@
       "bias": 0
     },
     {
-      "v0": 215,
+      "v0": 214,
       "v1": 143,
       "curve": 34.41525482703412,
       "color": "777777",
@@ -3715,69 +3561,25 @@
       "bias": 0
     },
     {
-      "v0": 216,
-      "v1": 153,
-      "curve": -15.158931422347607,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "bias": 0
-    },
-    {
-      "v0": 214,
-      "v1": 217,
-      "curve": -36.56106095209474,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "bias": 0
-    },
-    {
-      "v0": 199,
-      "v1": 218,
-      "curve": 94.59096040023854,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "bias": 0
-    },
-    {
-      "v0": 218,
-      "v1": 219,
-      "curve": 48.96566849750407,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "bias": 0
-    },
-    {
-      "v0": 219,
-      "v1": 141,
+      "v0": 32,
+      "v1": 220,
       "curve": 0,
-      "color": "999999",
-      "bCoef": 0,
+      "color": "333333",
       "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "bias": 0
+      "cGroup": ["redKO", "blueKO"]
     },
     {
       "v0": 220,
       "v1": 221,
-      "curve": 152.67472270037993,
-      "color": "999999",
-      "bCoef": 0,
+      "curve": 93.47140917785681,
+      "color": "333333",
       "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "bias": 0
+      "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 32,
+      "v0": 221,
       "v1": 222,
-      "curve": 0,
+      "curve": 25.910638562531574,
       "color": "333333",
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["redKO", "blueKO"]
@@ -3785,22 +3587,6 @@
     {
       "v0": 222,
       "v1": 223,
-      "curve": 93.47140917785681,
-      "color": "333333",
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["redKO", "blueKO"]
-    },
-    {
-      "v0": 223,
-      "v1": 224,
-      "curve": 25.910638562531574,
-      "color": "333333",
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["redKO", "blueKO"]
-    },
-    {
-      "v0": 224,
-      "v1": 225,
       "curve": -108.26298109076738,
       "color": "333333",
       "cMask": ["red", "blue", "ball", "c0"],
@@ -3808,6 +3594,22 @@
     },
     {
       "v0": 37,
+      "v1": 224,
+      "curve": 0,
+      "color": "333333",
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 224,
+      "v1": 225,
+      "curve": 95.94347684522211,
+      "color": "333333",
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["redKO", "blueKO"]
+    },
+    {
+      "v0": 225,
       "v1": 226,
       "curve": 0,
       "color": "333333",
@@ -3816,22 +3618,6 @@
     },
     {
       "v0": 226,
-      "v1": 227,
-      "curve": 95.94347684522211,
-      "color": "333333",
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["redKO", "blueKO"]
-    },
-    {
-      "v0": 227,
-      "v1": 228,
-      "curve": 0,
-      "color": "333333",
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["redKO", "blueKO"]
-    },
-    {
-      "v0": 228,
       "v1": 29,
       "curve": -75.41174698282305,
       "color": "333333",
@@ -3856,29 +3642,9 @@
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 229,
-      "v1": 230,
-      "curve": 34.41525482703412,
-      "color": "777777",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "bias": 0
-    },
-    {
-      "v0": 29,
-      "v1": 215,
-      "curve": -92.21742505779474,
-      "color": "777777",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "bias": 0
-    },
-    {
-      "v0": 231,
-      "v1": 29,
-      "curve": -62.28805377543604,
+      "v0": 218,
+      "v1": 141,
+      "curve": 0,
       "color": "777777",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
