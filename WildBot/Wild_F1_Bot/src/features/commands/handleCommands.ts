@@ -81,6 +81,7 @@ import { changeTires } from "../tires&pits/changeTires";
 import { ifInBoxZone } from "../tires&pits/pits";
 import { positionList } from "../changeGameState/race/positionList";
 import { lapPositions } from "../zones/laps/handleLapChange";
+import { LeagueTeam } from "../teams/teams";
 
 export let tyresActivated = true;
 export let qualyForPub = true;
@@ -327,6 +328,16 @@ export type CommandFunction = (
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject
+  ) => void,
+  handleSetTeam: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
+  ) => void,
+  handleSeeTeams: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
   ) => void
 ) => Commands;
 
@@ -384,7 +395,9 @@ function importCommandsByLanguage(commandFunctions: {
         handleAjustPlayerCommand,
         handleNerfListCommand,
         handlePresentationLapCommand,
-        handleChangePropierties
+        handleChangePropierties,
+        handleSetTeam,
+        handleSeeTeams
       ),
     }),
     {}
@@ -443,7 +456,9 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
         handleAjustPlayerCommand,
         handleNerfListCommand,
         handlePresentationLapCommand,
-        handleChangePropierties
+        handleChangePropierties,
+        handleSetTeam,
+        handleSeeTeams
       ),
     }),
     {}
@@ -1767,6 +1782,11 @@ export function handleChangePropierties(
   const key = args[0].toUpperCase() as keyof typeof constants;
   const value = Number(args[1]);
 
+  if (!value || !key) {
+    room.sendAnnouncement("Error", byPlayer.id, 0xff0000);
+    return;
+  }
+
   if (!(key in constants)) {
     room.sendAnnouncement(`Constant "${args[0]}" not found.`, byPlayer.id);
     return;
@@ -1779,4 +1799,73 @@ export function handleChangePropierties(
 
   changeConstant(key, value);
   room.sendAnnouncement(`${key} changed to: ${value}`, byPlayer.id);
+}
+export function handleSetTeam(
+  byPlayer: PlayerObject,
+  args: string[],
+  room: RoomObject
+) {
+  if (!LEAGUE_MODE) {
+    sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id);
+    return;
+  }
+
+  const value = args[0];
+  const player = playerList[byPlayer.id];
+
+  if (!value) {
+    room.sendAnnouncement("Error: !team [XX]", byPlayer.id, 0xff0000);
+    return;
+  }
+
+  if (value in LeagueTeam) {
+    const teamKey = value as keyof typeof LeagueTeam;
+    player.leagueTeam = teamKey as string;
+
+    sendSuccessMessage(
+      room,
+      MESSAGES.TEAM_DEFINED(
+        LeagueTeam[teamKey].name.toString(),
+        LeagueTeam[teamKey].tag.toString()
+      ),
+      byPlayer.id
+    );
+
+    return;
+  }
+
+  const teamEntry = Object.entries(LeagueTeam).find(
+    ([, team]) => team.tag.toLowerCase() === value.toLowerCase()
+  );
+
+  if (teamEntry) {
+    const [teamKey, team] = teamEntry;
+    player.leagueTeam = teamKey as string;
+    sendSuccessMessage(
+      room,
+      MESSAGES.TEAM_DEFINED(team.name.toString(), team.tag.toString()),
+      byPlayer.id
+    );
+    return;
+  }
+  console.log("Value: ", value);
+
+  sendErrorMessage(room, MESSAGES.TEAM_ERROR(value.toString()), byPlayer.id);
+}
+
+export function handleSeeTeams(
+  byPlayer: PlayerObject,
+  args: string[],
+  room: RoomObject
+) {
+  let message = "Name | Tag\n-------------\n";
+
+  for (const teamKey in LeagueTeam) {
+    if (Object.prototype.hasOwnProperty.call(LeagueTeam, teamKey)) {
+      const team = LeagueTeam[teamKey];
+      message += `${team.name} | ${team.tag}\n`;
+    }
+  }
+
+  room.sendAnnouncement(message, byPlayer.id);
 }

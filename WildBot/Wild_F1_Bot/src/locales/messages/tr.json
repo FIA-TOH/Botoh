@@ -106,5 +106,7 @@
   "CODE_BOX": "PitStop kodunuz {{codigo}}, lastik tipinden sonra ters olarak girin.",
   "CODE_WRONG": "Hatalı kod! Doğru kodu ters olarak girin.",
   "PRESENTATION_LAP": "Tanıtım turu! Yavaşça ilerleyin ve yeşil bayrak verilene kadar geçiş yapmayın.",
-  "SECONDS_TO_FINISH": "Yarış {{segundos}} saniye içinde bitiyor"
+  "SECONDS_TO_FINISH": "Yarış {{segundos}} saniye içinde bitiyor",
+  "TEAM_DEFINED": "Takım başarıyla ayarlandı: {{name}} ({{tag}})",
+  "TEAM_ERROR": "Takım bulunamadı: {{value}}. Lütfen etiket veya adı kontrol edin."
 }

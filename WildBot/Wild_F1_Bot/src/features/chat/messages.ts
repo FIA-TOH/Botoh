@@ -1175,4 +1175,34 @@ export const MESSAGES = {
       seconds: seconds.toString(),
     }),
   }),
+
+  TEAM_DEFINED: (name: string, tag: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.TEAM_DEFINED, {
+      name: name,
+      tag: tag,
+    }),
+    es: replaceTemplateString(es_messages.TEAM_DEFINED, {
+      name: name,
+      tag: tag,
+    }),
+    fr: replaceTemplateString(fr_messages.TEAM_DEFINED, {
+      name: name,
+      tag: tag,
+    }),
+    tr: replaceTemplateString(tr_messages.TEAM_DEFINED, {
+      name: name,
+      tag: tag,
+    }),
+    pt: replaceTemplateString(pt_messages.TEAM_DEFINED, {
+      name: name,
+      tag: tag,
+    }),
+  }),
+  TEAM_ERROR: (tag: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.TEAM_ERROR, { tag: tag }),
+    es: replaceTemplateString(es_messages.TEAM_ERROR, { tag: tag }),
+    fr: replaceTemplateString(fr_messages.TEAM_ERROR, { tag: tag }),
+    tr: replaceTemplateString(tr_messages.TEAM_ERROR, { tag: tag }),
+    pt: replaceTemplateString(pt_messages.TEAM_ERROR, { tag: tag }),
+  }),
 };

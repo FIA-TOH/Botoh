@@ -1,4 +1,5 @@
 import { Language } from "../chat/language";
+import { LeagueTeam } from "../teams/teams";
 import { Tires } from "../tires&pits/tires";
 
 export interface PitsInfo {
@@ -9,42 +10,57 @@ export interface PitsInfo {
   }[];
   pitsAttemp: number;
 }
-
 export interface PlayerInfo {
-  totalTime: number;
-  drs: boolean;
+  // Identificação e status de presença
   ip: string;
+  isInTheRoom: boolean;
+  afk: boolean;
+  leagueTeam: string | null;
+
+  // Propriedades de corrida e volta
+  totalTime: number;
   currentLap: number;
   lapChanged: boolean;
   lapTime: number;
   lastLapTimeUpdate: number;
-  speedEnabled: boolean;
-  isInTheRoom: boolean;
-  inPitlane: boolean;
-  boxAlert: boolean | number;
-  tires: Tires;
-  wear: number;
-  lapsOnCurrentTire: number;
-  showTires: boolean;
-  pits: PitsInfo;
-  language: Language;
   bestTime: number;
-  gripCounter: number;
-  maxSpeed: number;
-  lastCheckTime: number;
-  alertSent: { [key: number]: boolean };
-  slipstreamEndTime: number | undefined;
-  kers: number;
-  gas: number;
-  prevGas: number;
-  penaltyCounter: number;
-  afk: boolean;
-  everyoneLaps: boolean;
-  voted: boolean;
+
+  // Setores
   currentSector: number;
   sectorChanged: boolean;
   sectorTime: number[];
   sectorTimeCounter: number;
+
+  // Pneus
+  tires: Tires;
+  wear: number;
+  lapsOnCurrentTire: number;
+  showTires: boolean;
+  maxSpeed: number;
+  gripCounter: number;
+
+  // Pit stop
+  inPitlane: boolean;
+  boxAlert: boolean | number;
+  pits: PitsInfo;
+
+  // Recursos de corrida
+  speedEnabled: boolean;
+  drs: boolean;
+  kers: number;
+  gas: number;
+  prevGas: number;
+  slipstreamEndTime: number | undefined;
+
+  // Penalidades e alertas
+  penaltyCounter: number;
+  alertSent: { [key: number]: boolean };
+  lastCheckTime: number;
+
+  // Preferências e estado geral
+  language: Language;
+  everyoneLaps: boolean;
+  voted: boolean;
 }
 
 type PlayerList = {

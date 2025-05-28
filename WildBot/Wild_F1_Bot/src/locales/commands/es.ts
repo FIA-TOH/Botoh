@@ -240,6 +240,16 @@ export default function es_commands(
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject
+  ) => void,
+  handleSetTeam: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
+  ) => void,
+  handleSeeTeams: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
   ) => void
 ): Commands {
   return {
@@ -295,5 +305,7 @@ export default function es_commands(
     "!nerf": handleNerfListCommand,
     "!presentation": handlePresentationLapCommand,
     "!constants": handleChangePropierties,
+    "!team": handleSetTeam,
+    "!ver_equipos": handleSeeTeams,
   };
 }

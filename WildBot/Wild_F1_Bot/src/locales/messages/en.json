@@ -106,5 +106,7 @@
   "CODE_BOX": "Your PitStop code is {{codigo}}, enter it reversed after the tire type.",
   "CODE_WRONG": "Wrong code! Enter the correct code reversed.",
   "PRESENTATION_LAP": "Presentation lap! Follow slowly and do not overtake until the green flag!",
-  "SECONDS_TO_FINISH": "The race ends in {{segundos}} seconds"
+  "SECONDS_TO_FINISH": "The race ends in {{segundos}} seconds",
+  "TEAM_DEFINED": "Team successfully set: {{name}} ({{tag}})",
+  "TEAM_ERROR": "Team not found: {{value}}. Please check the tag or the name."
 }

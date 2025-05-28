@@ -106,5 +106,7 @@
   "CODE_BOX": "Seu código de PitStop é {{codigo}}, digite-o ao contrario após o tipo de pneu.",
   "CODE_WRONG": "Codigo errado! Digite o codigo correto e ao contrario.",
   "PRESENTATION_LAP": "Volta de apresentação! Sigam devagar e não ultrapassem até a bandeira verde.",
-  "SECONDS_TO_FINISH": "A corrida acaba em {{segundos}} segundos"
+  "SECONDS_TO_FINISH": "A corrida acaba em {{segundos}} segundos",
+  "TEAM_DEFINED": "Equipe definida com sucesso: {{name}} ({{tag}})",
+  "TEAM_ERROR": "Equipe não encontrada: {{value}}. Verifique a tag ou o nome."
 }
