@@ -10,7 +10,7 @@ import { lapPositions } from "./handleLapChange";
 import { handleRaceFinish } from "./handleRaceFinish";
 import { notifySpectatorsCurrentLap } from "./notifyCurrentLap";
 
-export function handleEndSession(
+export function processLapAndCheckSessionEnd(
   pad: { p: PlayerObject; disc: DiscPropertiesObject },
   room: RoomObject,
   lapTime: number,

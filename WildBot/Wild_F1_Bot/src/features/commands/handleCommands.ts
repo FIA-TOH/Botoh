@@ -84,6 +84,9 @@ import { lapPositions } from "../zones/laps/handleLapChange";
 import { LeagueTeam } from "../teams/teams";
 import { log } from "../discord/logger";
 import { printAllPositions } from "../changeGameState/race/printAllPositions";
+import { mute_mode, toggleMuteMode } from "../chat/toggleMuteMode";
+import { handleAdminCommand } from "./admin/handleAdminCommand";
+import { handleCommandsCommand } from "./commands/handleCommandsCommand";
 
 export let tyresActivated = true;
 export let qualyForPub = true;
@@ -467,7 +470,7 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
   );
 }
 
-const COMMANDS_BY_LANGUAGE = importCommandsByLanguage({
+export const COMMANDS_BY_LANGUAGE = importCommandsByLanguage({
   en: en_commands,
   es: es_commands,
   fr: fr_commands,
@@ -483,71 +486,7 @@ export const COMMANDS: Commands = importCommands(
   pt_commands
 );
 
-export let mute_mode = false;
 export let playerNerfList: PlayerObject[] = [];
-
-export function toggleMuteMode() {
-  mute_mode = !mute_mode;
-}
-
-export function handleAdminCommand(
-  byPlayer: PlayerObject,
-  args: string[],
-  room: RoomObject
-) {
-  if (byPlayer.admin) {
-    room.setPlayerAdmin(byPlayer.id, false);
-    delete afkAdmins[byPlayer.id];
-    return;
-  }
-
-  const SECRET_PASSWORD = LEAGUE_MODE
-    ? leagueAdminPassword
-    : publicAdminPassword;
-  const SECRET_PASSWORD_MOD = LEAGUE_MODE
-    ? leagueAdminPassword
-    : publicModPassword;
-
-  if (args[0] === SECRET_PASSWORD) {
-    room.setPlayerAdmin(byPlayer.id, true);
-    afkAdmins[byPlayer.id] = 0;
-    return;
-  } else if (args[0] === SECRET_PASSWORD_MOD) {
-    if (getAdmins(room).length === 0 && !LEAGUE_MODE) {
-      room.setPlayerAdmin(byPlayer.id, true);
-      afkAdmins[byPlayer.id] = 0;
-    } else {
-      sendErrorMessage(room, MESSAGES.ADMIN_ALREADY_IN_ROOM(), byPlayer.id);
-    }
-  } else {
-    return;
-  }
-}
-
-export function handleCommandsCommand(
-  byPlayer: PlayerObject,
-  _: string[],
-  room: RoomObject
-) {
-  if (byPlayer.admin) {
-    sendChatMessage(room, MESSAGES.AVAILABLE_COMMANDS(), byPlayer.id);
-    let i = 0;
-    let msg = "";
-    Object.keys(COMMANDS_BY_LANGUAGE[playerList[byPlayer.id].language]).forEach(
-      (command) => {
-        i = (i + 1) % 3;
-        msg += `${command}, `;
-        if (i === 0) {
-          sendNonLocalizedSmallChatMessage(room, msg, byPlayer.id);
-          msg = "";
-        }
-      }
-    );
-    return;
-  }
-
-  sendChatMessage(room, MESSAGES.NON_ADMIN_COMMANDS(), byPlayer.id);
-}
 
 export function handleCircuitCommand(
   byPlayer: PlayerObject,
@@ -1404,7 +1343,6 @@ export function handleFlagCommand(
     if (presentationLap === true) {
       presentationLap = false;
     }
-    mute_mode = false;
     flag = "green";
     sendGreenMessage(room, MESSAGES.GREEN_FLAG());
     sendGreenMessage(room, MESSAGES.GREEN_FLAG_TWO());

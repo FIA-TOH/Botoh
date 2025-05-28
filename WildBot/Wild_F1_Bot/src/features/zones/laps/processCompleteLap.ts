@@ -9,6 +9,7 @@ import {
   sendBestTimeRace,
   sendWorseTime,
   sendChatMessage,
+  sendSuccessMessage,
 } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { log } from "../../discord/logger";
@@ -18,7 +19,7 @@ import { ACTUAL_CIRCUIT } from "../../roomFeatures/stadiumChange";
 import { serialize, someArray } from "../../utils";
 import { drsOn, enableDRS } from "../handleDRSZone";
 import { broadcastLapTimeToPlayers } from "./broadcastTimeToPlayer";
-import { handleEndSession } from "./handleEndSession";
+import { processLapAndCheckSessionEnd } from "./processLapAndCheckSessionEnd";
 
 export function processCompletedLap(
   pad: { p: PlayerObject; disc: DiscPropertiesObject },
@@ -54,6 +55,7 @@ export function processCompletedLap(
     sendBestTimeRace(room, MESSAGES.TRACK_RECORD(p.name, lapTime));
     updatePlayerTime(p.name, lapTime);
   } else if (lapTime < bestTimeP || bestTimeP === undefined) {
+    sendSuccessMessage(room, MESSAGES.LAP_TIME(lapTime), p.id);
     playerData.bestTime = lapTime;
     broadcastLapTimeToPlayers(room, lapTime, p.name);
     updatePlayerTime(p.name, lapTime);
@@ -85,5 +87,5 @@ export function processCompletedLap(
     p.id
   );
 
-  handleEndSession(pad, room, lapTime, playerAndDiscs);
+  processLapAndCheckSessionEnd(pad, room, lapTime, playerAndDiscs);
 }

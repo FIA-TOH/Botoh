@@ -1,10 +1,11 @@
 import { afkAdmins } from "../afk/afkAdmins";
 import { sendErrorMessage } from "../chat/chat";
-import { mute_mode, COMMANDS } from "../commands/handleCommands";
+import { COMMANDS } from "../commands/handleCommands";
 import { MESSAGES } from "../chat/messages";
 import { playerList } from "../changePlayerState/playerList";
 import { LeagueTeam } from "../teams/teams";
 import { log } from "../discord/logger";
+import { mute_mode } from "../chat/toggleMuteMode";
 
 export function PlayerChat(room: RoomObject) {
   room.onPlayerChat = function (player, message) {
