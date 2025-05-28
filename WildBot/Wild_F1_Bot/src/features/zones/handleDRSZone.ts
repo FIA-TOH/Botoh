@@ -2,6 +2,7 @@ import { getRunningPlayers, inHitbox } from "../utils";
 import { playerList } from "../changePlayerState/playerList";
 import { CIRCUITS, currentMapIndex } from "./maps";
 import { sendNonLocalizedSmallChatMessage } from "../chat/chat";
+import { log } from "../discord/logger";
 
 function ifInDRSStartZone(
   player: { p: PlayerObject; disc: DiscPropertiesObject },
@@ -52,12 +53,12 @@ export function checkPlayersDRSZone(
 
     if (ifInDRSEndZone(pad, room) && playerList[pad.p.id].drs) {
       //EXITING DRS ZONE
-      console.log("Exited DRS ZONE: " + pad.p.name);
+      log("Exited DRS ZONE: " + pad.p.name);
       playerList[pad.p.id].drs = false;
     }
     if (ifInDRSStartZone(pad, room) && !playerList[pad.p.id].drs) {
       ///ENTERED DRS ZONE
-      console.log("ENTERED DRS ZONE: " + pad.p.name);
+      log("ENTERED DRS ZONE: " + pad.p.name);
       if (startZoneLastTime < DRS_DELTA) {
         playerList[pad.p.id].drs = true;
       }

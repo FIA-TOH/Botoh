@@ -11,8 +11,6 @@ export function movePlayersToCorrectSide() {
   outsidePlayers.forEach((p) => {
     const player = playerList[p.id];
     if (!player.afk) {
-      console.log(p.name);
-
       room.setPlayerTeam(p.id, Teams.RUNNERS);
     }
   });
@@ -20,7 +18,6 @@ export function movePlayersToCorrectSide() {
   otherPlayers.forEach((p) => {
     const player = playerList[p.id];
     if (!player.afk) {
-      console.log(p.name);
       room.setPlayerTeam(p.id, Teams.RUNNERS);
     }
   });

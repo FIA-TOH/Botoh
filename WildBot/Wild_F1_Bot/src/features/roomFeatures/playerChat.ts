@@ -4,13 +4,12 @@ import { mute_mode, COMMANDS } from "../commands/handleCommands";
 import { MESSAGES } from "../chat/messages";
 import { playerList } from "../changePlayerState/playerList";
 import { LeagueTeam } from "../teams/teams";
+import { log } from "../discord/logger";
 
 export function PlayerChat(room: RoomObject) {
   room.onPlayerChat = function (player, message) {
-    console.log(`${player.name}: ${message}`);
+    log(`${player.name}: ${message}`);
     if (player.admin) afkAdmins[player.id] = 0;
-
-    console.log("Message: ", message);
 
     const command = message.toLowerCase().split(" ")[0];
     const args = message.toLowerCase().split(" ").slice(1);

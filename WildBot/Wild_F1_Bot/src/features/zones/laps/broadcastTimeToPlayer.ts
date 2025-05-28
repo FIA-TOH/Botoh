@@ -7,7 +7,8 @@ import { getPlayerByName } from "../../playerFeatures/getPlayerBy";
 export function broadcastLapTimeToPlayers(
   room: RoomObject,
   lapTime: number,
-  playerName: string
+  playerName: string,
+  showToPlayer?: boolean
 ) {
   const playersAndDiscs = getPlayerAndDiscs(room);
 
@@ -24,5 +25,6 @@ export function broadcastLapTimeToPlayers(
     );
   });
   const p = getPlayerByName(playerName);
-  if (p) sendSuccessMessage(room, MESSAGES.LAP_TIME(lapTime), p.p.id);
+  if (p && showToPlayer)
+    sendSuccessMessage(room, MESSAGES.LAP_TIME(lapTime), p.p.id);
 }

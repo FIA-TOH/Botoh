@@ -23,8 +23,7 @@ export function checkPlayerLaps(
 
   const players = getRunningPlayers(playersAndDiscs);
   const circuit = CIRCUITS[currentMapIndex].info;
-  const sectorOne = circuit.sectorOne;
-  const hasSector = !sectorOne;
+  const hasSector = !!circuit.sectorOne;
 
   players.forEach((pad) => {
     const p = pad.p;
@@ -43,7 +42,6 @@ export function checkPlayerLaps(
 
     if (playerData.lapChanged) return;
 
-    // Verifica se está trolando
     if (
       CHECK_IF_TROLLING &&
       checkIfTrolling(pad, circuit.finishLine.passingDirection)

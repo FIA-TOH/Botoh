@@ -1,6 +1,7 @@
 import { tyresActivated } from "../commands/handleCommands";
 import { TIRE_AVATAR } from "../speed/handleSpeed";
 import { playerList } from "../changePlayerState/playerList";
+import { log } from "../discord/logger";
 
 export interface Situacions {
   ChangeTyre: string;
@@ -30,7 +31,7 @@ export function handleAvatar(
 ): void {
   const p = playerList[player.id];
   if (!p) {
-    console.log("Erro ao mudar o avatar");
+    log("Erro ao mudar o avatar");
     return;
   }
 

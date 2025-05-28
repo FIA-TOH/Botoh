@@ -15,6 +15,7 @@ import { GameStart } from "./features/roomFeatures/gameStart";
 import { PlayerLeave } from "./features/roomFeatures/playerLeave";
 import { StadiumChange } from "./features/roomFeatures/stadiumChange";
 import { PlayerChat } from "./features/roomFeatures/playerChat";
+import { GameStop } from "./features/roomFeatures/gameStop";
 
 const roomName = LEAGUE_MODE ? leagueName : publicName;
 
@@ -39,13 +40,14 @@ handleChangeMap(0, room);
 
 sendDiscordLink(room, 3);
 
-GameTick(room);
-PlayerJoin(room);
 GameStart(room);
-TeamChange(room);
-StadiumChange(room);
-PlayerLeave(room);
+GameStop(room);
+GameTick(room);
 PlayerChat(room);
+PlayerJoin(room);
+PlayerLeave(room);
+StadiumChange(room);
+TeamChange(room);
 
 room.onGamePause = function () {
   handleGameStateChange("paused");

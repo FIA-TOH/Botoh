@@ -14,13 +14,13 @@ import {
   announceSelectedCircuits,
   getWinningCircuit,
 } from "./circuitSelection";
+import { log } from "../../discord/logger";
 
 export let isOnVoteSession = false;
 export let selectedCircuits: Circuit[] = [];
 
 export function voteSession(room: RoomObject) {
   if (isOnVoteSession) {
-    console.log("Sessão de votação já em andamento.");
     return;
   }
 
@@ -70,7 +70,7 @@ export function voteSession(room: RoomObject) {
 
       room.startGame();
     } else {
-      console.log("Circuito vencedor não encontrado no array CIRCUITS.");
+      log("Circuito vencedor não encontrado no array CIRCUITS.");
     }
   }, 20000);
 }

@@ -4,6 +4,7 @@ import { resetPlayer } from "../changePlayerState/players";
 import { Teams } from "../changeGameState/teams";
 import { ACTUAL_CIRCUIT } from "./stadiumChange";
 import { gameMode, GameMode } from "../changeGameState/changeGameModes";
+import { handleAvatar } from "../changePlayerState/handleAvatar";
 
 export function TeamChange(room: RoomObject) {
   room.onPlayerTeamChange = function (changedPlayer: PlayerObject) {
@@ -27,11 +28,4 @@ export function TeamChange(room: RoomObject) {
       });
     }
   };
-}
-function handleAvatar(
-  arg0: string,
-  changedPlayer: PlayerObject,
-  room: RoomObject
-) {
-  throw new Error("Function not implemented.");
 }

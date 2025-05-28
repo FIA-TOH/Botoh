@@ -1,5 +1,6 @@
 import { gameMode, GameMode } from "../../changeGameState/changeGameModes";
 import { qualiTime } from "../../changeGameState/qualy/qualiMode";
+import { printAllPositions } from "../../changeGameState/race/printAllPositions";
 import { playerList } from "../../changePlayerState/playerList";
 import { sendChatMessage, sendSuccessMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
@@ -49,6 +50,7 @@ export function handleEndSession(
             p.id
           );
         } else {
+          printAllPositions(room, 1000);
           notifySpectatorsCurrentLap(room, currentLap, playerAndDiscs);
         }
       } else {

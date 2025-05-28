@@ -11,6 +11,7 @@ import {
   sendChatMessage,
 } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
+import { log } from "../../discord/logger";
 import { getPlayerAndDiscs } from "../../playerFeatures/getPlayerAndDiscs";
 import { rainIntensity } from "../../rain/rain";
 import { ACTUAL_CIRCUIT } from "../../roomFeatures/stadiumChange";
@@ -39,7 +40,7 @@ export function processCompletedLap(
   );
 
   if (!abbreviatedTrackName) {
-    console.log(
+    log(
       `Circuito ${ACTUAL_CIRCUIT.info.name} não encontrado no mapeamento de nomes.`
     );
     return;
@@ -62,7 +63,7 @@ export function processCompletedLap(
       MESSAGES.WORSE_TIME(lapTime, serialize(lapTime - bestTimeP)),
       p.id
     );
-    broadcastLapTimeToPlayers(room, lapTime, p.name);
+    broadcastLapTimeToPlayers(room, lapTime, p.name, false);
   }
 
   if (hasSector) {

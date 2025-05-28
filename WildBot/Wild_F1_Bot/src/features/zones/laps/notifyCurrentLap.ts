@@ -1,7 +1,7 @@
+import { printAllPositions } from "../../changeGameState/race/printAllPositions";
 import { Teams } from "../../changeGameState/teams";
 import { sendChatMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
-import { printAllPositions } from "../../commands/handleCommands";
 import { laps } from "../laps";
 
 export function notifySpectatorsCurrentLap(

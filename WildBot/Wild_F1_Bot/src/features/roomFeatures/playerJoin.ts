@@ -9,6 +9,7 @@ import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { isBanned } from "../ipRelated/isBanned";
 import { decodeIPFromConn, banPlayer, kickPlayer } from "../utils";
 import { gameMode, GameMode } from "../changeGameState/changeGameModes";
+import { log } from "../discord/logger";
 
 function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
   if (room.getPlayerList().length > 1) {
@@ -33,11 +34,11 @@ function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
 export function PlayerJoin(room: RoomObject) {
   room.onPlayerJoin = function (player) {
     const ip = decodeIPFromConn(player.conn);
-    console.log(`The IP ${ip} joined!`);
+    log(`The IP ${ip} joined!`);
 
     if (isBanned(ip)) {
       banPlayer(player.id, `Your ip is banned from this room.`, room);
-      console.log(`The BANNED IP ${ip} tried to join!`);
+      log(`The BANNED IP ${ip} tried to join!`);
       return;
     }
 
@@ -47,7 +48,7 @@ export function PlayerJoin(room: RoomObject) {
         "Your name cannot be bigger than 22 characters",
         room
       );
-      console.log(`BIG NAME! The IP ${ip} tried to join!`);
+      log(`BIG NAME! The IP ${ip} tried to join!`);
       return;
     }
 
@@ -74,9 +75,9 @@ export function PlayerJoin(room: RoomObject) {
     sendSuccessMessage(room, MESSAGES.JOIN_MESSAGE(), player.id);
 
     if (LEAGUE_MODE) {
-      console.log(`${player.name} has joined. (${sha256(ip)})`);
+      log(`${player.name} has joined. (${sha256(ip)})`);
     } else {
-      console.log(`${player.name} has joined. (${ip})`);
+      log(`${player.name} has joined. (${ip})`);
     }
 
     WhatToDoWhenJoin(room, player);

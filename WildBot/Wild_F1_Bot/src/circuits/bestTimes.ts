@@ -1,3 +1,5 @@
+import { log } from "../features/discord/logger";
+
 // Mapeamento dos nomes abreviados para os nomes completos
 const trackNameMapping: { [key: string]: string } = {
   melbourne: "Albert-Park Melbourne Circuit - By Ximb",
@@ -121,13 +123,10 @@ export const updateBestTime = (
     if (currentBestTime === 999.999 || newTime < currentBestTime) {
       const circuitName = trackNameMapping[abbreviatedTrackName]; // Usa o nome completo da pista
       bestTimes[abbreviatedTrackName] = [newTime, driverName, circuitName];
-      console.log(bestTimes[abbreviatedTrackName]);
     } else {
     }
   } else {
-    console.log(
-      `A pista ${abbreviatedTrackName} não foi encontrada no mapeamento.`
-    );
+    log(`A pista ${abbreviatedTrackName} não foi encontrada no mapeamento.`);
   }
 };
 
@@ -142,10 +141,7 @@ export const clearBestTime = (
   if (trackNameMapping.hasOwnProperty(abbreviatedTrackName)) {
     const circuitName = trackNameMapping[abbreviatedTrackName]; // Usa o nome completo da pista
     bestTimes[abbreviatedTrackName] = [newTime, driverName, circuitName];
-    console.log(bestTimes[abbreviatedTrackName]);
   } else {
-    console.log(
-      `A pista ${abbreviatedTrackName} não foi encontrada no mapeamento.`
-    );
+    log(`A pista ${abbreviatedTrackName} não foi encontrada no mapeamento.`);
   }
 };

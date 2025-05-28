@@ -1,4 +1,5 @@
 import { PitsInfo, playerList } from "../../changePlayerState/playerList";
+import { log } from "../../discord/logger";
 
 export const positionList: {
   name: string;
@@ -37,6 +38,7 @@ export function updatePositionList(
       lap: playerData.currentLap,
       active: true,
       currentSector: playerData.currentSector,
+      team: playerData.leagueTeam,
     };
 
     // Atualiza ou adiciona o jogador na lista de posições

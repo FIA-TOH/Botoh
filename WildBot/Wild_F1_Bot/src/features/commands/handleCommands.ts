@@ -82,6 +82,8 @@ import { ifInBoxZone } from "../tires&pits/pits";
 import { positionList } from "../changeGameState/race/positionList";
 import { lapPositions } from "../zones/laps/handleLapChange";
 import { LeagueTeam } from "../teams/teams";
+import { log } from "../discord/logger";
+import { printAllPositions } from "../changeGameState/race/printAllPositions";
 
 export let tyresActivated = true;
 export let qualyForPub = true;
@@ -853,7 +855,6 @@ export function handleQModeCommand(
   }
 
   if (room.getScores() !== null) {
-    console.log("Qualy");
     sendErrorMessage(room, MESSAGES.ALREADY_STARTED(), byPlayer.id);
     return;
   }
@@ -872,7 +873,6 @@ export function handleTModeCommand(
   }
 
   if (room.getScores() !== null) {
-    console.log("training");
     sendErrorMessage(room, MESSAGES.ALREADY_STARTED(), byPlayer.id);
     return;
   }
@@ -891,7 +891,6 @@ export function handleIndyModeCommand(
   }
 
   if (room.getScores() !== null) {
-    console.log("indy");
     sendErrorMessage(room, MESSAGES.ALREADY_STARTED(), byPlayer.id);
     return;
   }
@@ -910,7 +909,6 @@ export function handleQTimeCommand(
   }
 
   if (room.getScores() !== null) {
-    console.log("Qualy Time");
     sendErrorMessage(room, MESSAGES.ALREADY_STARTED(), byPlayer.id);
     return;
   }
@@ -937,7 +935,6 @@ export function handleRModeCommand(
   }
 
   if (room.getScores() !== null) {
-    console.log("Race mode");
     sendErrorMessage(room, MESSAGES.ALREADY_STARTED(), byPlayer.id);
     return;
   }
@@ -1272,7 +1269,7 @@ export function handleAfkCommand(
 ) {
   const player = playerList[byPlayer.id];
   if (!player) {
-    console.log(`Jogador não encontrado: ID ${byPlayer.id}`);
+    log(`Jogador não encontrado: ID ${byPlayer.id}`);
     return;
   }
 
@@ -1398,7 +1395,6 @@ export function handleFlagCommand(
   const players = getRunningPlayers(playersAndDiscs);
   if (playerNumero !== undefined) {
     playerEscolhido = players.filter((p) => p.p.id === playerNumero);
-    console.log(playerEscolhido, players);
   }
 
   if (flagChoosen === "green" && (vsc === true || presentationLap === true)) {
@@ -1682,46 +1678,6 @@ export function handleRRCommand(
   });
 }
 
-export function printAllPositions(room: RoomObject, toPlayerID?: number) {
-  if (gameMode == GameMode.QUALY || gameMode == GameMode.TRAINING) {
-    sendErrorMessage(room, MESSAGES.POSITIONS_IN_QUALI(), toPlayerID);
-    return false;
-  }
-  const headerSpaces = (MAX_PLAYER_NAME - 4) / 2.0;
-  const headerLeftSpaces = " ".repeat(Math.ceil(headerSpaces));
-  const headerRightSpaces = " ".repeat(Math.trunc(headerSpaces));
-  let i = 1;
-
-  sendNonLocalizedSmallChatMessage(
-    room,
-    ` P - ${headerLeftSpaces}Name${headerRightSpaces} | Pits | Best Lap`,
-    toPlayerID
-  );
-  console.log("positionList: ");
-  positionList.forEach((p) => {
-    console.log(p);
-
-    const spaces = (MAX_PLAYER_NAME - p.name.length) / 2.0;
-    const leftSpaces = " ".repeat(Math.ceil(spaces));
-    const rightSpaces = " ".repeat(Math.trunc(spaces));
-
-    const position = i.toString().padStart(2, "0");
-    const pits = p.pits.toString().padStart(2, "0");
-    const time = p.time < 999.999 ? p.time.toFixed(3) : "N/A";
-
-    sendNonLocalizedSmallChatMessage(
-      room,
-      `${position} - ${leftSpaces}${p.name}${rightSpaces} |  ${pits}  | ${time}`,
-      toPlayerID
-    );
-    i++;
-  });
-
-  if (i === 1) {
-    sendErrorMessage(room, MESSAGES.NO_POSITIONS(), toPlayerID);
-  }
-}
-
 export function changeLaps(
   newLapsArg?: string,
   byPlayer?: PlayerObject,
@@ -1736,7 +1692,6 @@ export function changeLaps(
       }
 
       if (room.getScores() !== null) {
-        console.log("laps");
         sendErrorMessage(room, MESSAGES.ALREADY_STARTED(), byPlayer.id);
         return false;
       }
@@ -1848,8 +1803,6 @@ export function handleSetTeam(
     );
     return;
   }
-  console.log("Value: ", value);
-
   sendErrorMessage(room, MESSAGES.TEAM_ERROR(value.toString()), byPlayer.id);
 }
 

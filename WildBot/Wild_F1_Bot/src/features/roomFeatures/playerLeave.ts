@@ -6,6 +6,7 @@ import { playerList } from "../changePlayerState/playerList";
 import { getRunningPlayers } from "../utils";
 import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
 import { gameMode, GameMode } from "../changeGameState/changeGameModes";
+import { log } from "../discord/logger";
 
 export function PlayerLeave(room: RoomObject) {
   room.onPlayerLeave = function (player) {
@@ -15,10 +16,10 @@ export function PlayerLeave(room: RoomObject) {
 
     if (LEAGUE_MODE) {
       const hash = playerObj !== undefined ? sha256(playerObj.ip) : "";
-      console.log(`${player.name} has left. (${hash})`);
+      log(`${player.name} has left. (${hash})`);
     } else {
       const ip = playerObj !== undefined ? playerObj.ip : "";
-      console.log(`${player.name} has left. (${ip})`);
+      log(`${player.name} has left. (${ip})`);
     }
 
     for (let i = 0; i < lapPositions.length; i++) {

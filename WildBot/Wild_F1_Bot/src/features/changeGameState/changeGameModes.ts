@@ -19,8 +19,6 @@ export function changeGameMode(newMode: GameMode, room: RoomObject) {
   const timeLimit = newMode === GameMode.QUALY ? qualiTime : raceTime;
   room.setTimeLimit(timeLimit);
 
-  console.log(timeLimit);
-
   switch (newMode) {
     case GameMode.QUALY:
       return handleQualyMode(room);
