@@ -3850,10 +3850,11 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-2333.0086845721607, 987.3268765451203],
+      "pos": [-2306.0086845721607, 1000.3268765451203],
       "color": "df002b",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"]
+      "cMask": ["red", "blue", "ball", "c0"],
+      "_selected": true
     },
     {
       "radius": 5,
@@ -4324,7 +4325,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-1460, 881],
+      "pos": [-1453, 882],
       "color": "df002b",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"]
@@ -4332,7 +4333,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-1559, 944],
+      "pos": [-1563, 951],
       "color": "df002b",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"]
@@ -4340,7 +4341,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-1687, 997],
+      "pos": [-1683, 1003],
       "color": "df002b",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"]
@@ -4348,7 +4349,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-1826, 1036],
+      "pos": [-1819, 1044],
       "color": "df002b",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"]
@@ -4356,7 +4357,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-1961, 1060],
+      "pos": [-1961, 1065],
       "color": "df002b",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"]
@@ -4364,7 +4365,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-2101, 1061],
+      "pos": [-2096, 1067],
       "color": "df002b",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"]
@@ -4372,7 +4373,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-2247, 1023],
+      "pos": [-2208, 1043],
       "color": "df002b",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"]
