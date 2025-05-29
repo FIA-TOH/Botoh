@@ -1,6 +1,6 @@
 import { gameMode, GameMode } from "../changeGameState/changeGameModes";
 import { playerList } from "../changePlayerState/playerList";
-import { tyresActivated } from "../commands/handleCommands";
+import { tyresActivated } from "../commands/tyres/handleEnableTyresCommand";
 import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
 import { rainEnabled, isRaining, rainIntensity } from "../rain/rain";
 import { grip } from "../rain/rainGrip";

@@ -1,6 +1,5 @@
 import { sendChatMessage } from "../chat/chat";
 import { handleGameStateChange } from "../changeGameState/gameState";
-import { handleRREnabledCommand, changeLaps } from "../commands/handleCommands";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { MESSAGES } from "../chat/messages";
 import { resetPlayers } from "../changePlayerState/players";
@@ -24,6 +23,8 @@ import { reorderPlayersInRoom } from "../movePlayers/reorderPlayersInRoom";
 import { timerController } from "../utils";
 import { printAllPositions } from "../changeGameState/race/printAllPositions";
 import { log } from "../discord/logger";
+import { changeLaps } from "../commands/adminThings/handleChangeLaps";
+import { handleRREnabledCommand } from "../commands/adminThings/handleRREnabledCommand";
 
 export function GameStop(room: RoomObject) {
   room.onGameStop = function (byPlayer) {

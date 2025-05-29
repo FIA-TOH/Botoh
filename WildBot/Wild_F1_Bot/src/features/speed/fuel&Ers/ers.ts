@@ -1,11 +1,12 @@
 import { handleAvatar } from "../../changePlayerState/handleAvatar";
-import { playerNerfList, presentationLap } from "../../commands/handleCommands";
+import { playerNerfList } from "../../commands/handleCommands";
 import { vsc } from "../handleSpeed";
 import { ifInBoxZone } from "../../tires&pits/pits";
 import { playerList } from "../../changePlayerState/playerList";
 import { getRunningPlayers } from "../../utils";
 import { gasEnabled } from "../handleSlipstream";
 import { gameMode, GameMode } from "../../changeGameState/changeGameModes";
+import { presentationLap } from "../../commands/gameState/handlePresentationLapCommand";
 
 export function updateErs(
   playersAndDiscs: { p: PlayerObject; disc: DiscPropertiesObject }[],

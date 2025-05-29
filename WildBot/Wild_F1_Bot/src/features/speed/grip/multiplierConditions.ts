@@ -1,4 +1,3 @@
-import { tyresActivated } from "../../commands/handleCommands";
 import { vsc } from "../handleSpeed";
 
 import { playerList } from "../../changePlayerState/playerList";
@@ -8,6 +7,7 @@ import { constants } from "../constants";
 import { calculateGripForDryConditions } from "./dryCondition";
 import { calculateGripForWetConditions } from "./wetCondition";
 import { slipstreamEnabled, gasEnabled } from "../handleSlipstream";
+import { tyresActivated } from "../../commands/tyres/handleEnableTyresCommand";
 
 export function calculateGripMultiplierForConditions(
   player: PlayerObject,

@@ -1,6 +1,6 @@
 import { sendSuccessMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
-import { changeLaps } from "../commands/handleCommands";
+import { changeLaps } from "../commands/adminThings/handleChangeLaps";
 import { enableGas, enableSlipstream } from "../speed/handleSlipstream";
 import { laps } from "../zones/laps";
 import { qualiTime, raceTime } from "./qualy/qualiMode";

@@ -1,7 +1,6 @@
 import { endRaceSession } from "../changeGameState/EndRaceSession";
 import { distributeSpeed } from "../speed/distributrSpeed";
 import { updateErs } from "../speed/fuel&Ers/ers";
-import { presentationLap } from "../commands/handleCommands";
 import { checkPlayerSector } from "../zones/handleSectorChange";
 
 import { handlePitlane } from "../tires&pits/pits";
@@ -11,6 +10,7 @@ import handleTireWear from "../tires&pits/handleTireWear";
 import { handleSuzukaTp } from "../zones/handleSuzukaTp";
 import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
 import { checkPlayerLaps } from "../zones/laps/checkPlayerLap";
+import { presentationLap } from "../commands/gameState/handlePresentationLapCommand";
 
 export function GameTick(room: RoomObject) {
   room.onGameTick = function () {

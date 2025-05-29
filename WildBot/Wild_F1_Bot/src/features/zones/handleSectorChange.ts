@@ -7,7 +7,7 @@ import { handleAvatar, situacions } from "../changePlayerState/handleAvatar";
 import { playerList } from "../changePlayerState/playerList";
 import { sendBlueMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
-import { presentationLap } from "../commands/handleCommands";
+import { presentationLap } from "../commands/gameState/handlePresentationLapCommand";
 import { inHitbox, getRunningPlayers } from "../utils";
 import { CIRCUITS, currentMapIndex } from "./maps";
 

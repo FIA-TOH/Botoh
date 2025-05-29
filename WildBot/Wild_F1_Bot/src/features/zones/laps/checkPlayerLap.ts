@@ -3,7 +3,7 @@ import { updatePositionList } from "../../changeGameState/race/positionList";
 import { playerList } from "../../changePlayerState/playerList";
 import { sendErrorMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
-import { presentationLap } from "../../commands/handleCommands";
+import { presentationLap } from "../../commands/gameState/handlePresentationLapCommand";
 import {
   getRunningPlayers,
   CHECK_IF_TROLLING,

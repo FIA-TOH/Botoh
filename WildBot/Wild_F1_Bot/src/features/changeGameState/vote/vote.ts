@@ -1,10 +1,6 @@
 import { Circuit } from "../../../circuits/Circuit";
 import { sendAlertMessage, sendSuccessMessage } from "../../chat/chat";
 import { setGhostMode } from "../../changePlayerState/ghost";
-import {
-  handleRREnabledCommand,
-  qualyForPub,
-} from "../../commands/handleCommands";
 import { CIRCUITS, handleChangeMap } from "../../zones/maps";
 import { MESSAGES } from "../../chat/messages";
 import { resetPlayers } from "../../changePlayerState/players";
@@ -15,6 +11,8 @@ import {
   getWinningCircuit,
 } from "./circuitSelection";
 import { log } from "../../discord/logger";
+import { qualyForPub } from "../../commands/gameMode/qualy/handleEnableQualyForPub";
+import { handleRREnabledCommand } from "../../commands/adminThings/handleRREnabledCommand";
 
 export let isOnVoteSession = false;
 export let selectedCircuits: Circuit[] = [];

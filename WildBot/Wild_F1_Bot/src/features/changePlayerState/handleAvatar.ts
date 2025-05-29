@@ -1,7 +1,7 @@
-import { tyresActivated } from "../commands/handleCommands";
 import { TIRE_AVATAR } from "../speed/handleSpeed";
 import { playerList } from "../changePlayerState/playerList";
 import { log } from "../discord/logger";
+import { tyresActivated } from "../commands/tyres/handleEnableTyresCommand";
 
 export interface Situacions {
   ChangeTyre: string;
