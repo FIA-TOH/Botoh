@@ -398,6 +398,41 @@ export const MESSAGES = {
     tr: fr_messages.HELP,
     pt: pt_messages.HELP,
   }),
+  HELP_PART_ONE: (): LocalizedMessageFunction => ({
+    en: en_messages.HELP_PART_ONE,
+    es: es_messages.HELP_PART_ONE,
+    fr: fr_messages.HELP_PART_ONE,
+    tr: fr_messages.HELP_PART_ONE,
+    pt: pt_messages.HELP_PART_ONE,
+  }),
+  HELP_PART_TWO: (): LocalizedMessageFunction => ({
+    en: en_messages.HELP_PART_TWO,
+    es: es_messages.HELP_PART_TWO,
+    fr: fr_messages.HELP_PART_TWO,
+    tr: fr_messages.HELP_PART_TWO,
+    pt: pt_messages.HELP_PART_TWO,
+  }),
+  HELP_PART_THREE: (): LocalizedMessageFunction => ({
+    en: en_messages.HELP_PART_THREE,
+    es: es_messages.HELP_PART_THREE,
+    fr: fr_messages.HELP_PART_THREE,
+    tr: fr_messages.HELP_PART_THREE,
+    pt: pt_messages.HELP_PART_THREE,
+  }),
+  HELP_PART_FOUR: (): LocalizedMessageFunction => ({
+    en: en_messages.HELP_PART_FOUR,
+    es: es_messages.HELP_PART_FOUR,
+    fr: fr_messages.HELP_PART_FOUR,
+    tr: fr_messages.HELP_PART_FOUR,
+    pt: pt_messages.HELP_PART_FOUR,
+  }),
+  HELP_PART_FIVE: (): LocalizedMessageFunction => ({
+    en: en_messages.HELP_PART_FIVE,
+    es: es_messages.HELP_PART_FIVE,
+    fr: fr_messages.HELP_PART_FIVE,
+    tr: fr_messages.HELP_PART_FIVE,
+    pt: pt_messages.HELP_PART_FIVE,
+  }),
 
   CLEARED_BANS: (): LocalizedMessageFunction => ({
     en: en_messages.CLEARED_BANS,
@@ -864,6 +899,13 @@ export const MESSAGES = {
     fr: fr_messages.EXPLAIN_TYRES,
     tr: fr_messages.EXPLAIN_TYRES,
     pt: pt_messages.EXPLAIN_TYRES,
+  }),
+  EXPLAIN_SERVER: (): LocalizedMessageFunction => ({
+    en: en_messages.EXPLAIN_SERVER,
+    es: es_messages.EXPLAIN_SERVER,
+    fr: fr_messages.EXPLAIN_SERVER,
+    tr: fr_messages.EXPLAIN_SERVER,
+    pt: pt_messages.EXPLAIN_SERVER,
   }),
   EXPLAIN_RAIN: (): LocalizedMessageFunction => ({
     en: en_messages.EXPLAIN_RAIN,

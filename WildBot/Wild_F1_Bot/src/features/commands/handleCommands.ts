@@ -55,6 +55,8 @@ import { handleChangePropierties } from "./adminThings/handleChangePropierties";
 import { handleRRCommand } from "./playerState/handleRRCommand";
 import { handleSeeTeams } from "./teams/handleSeeTeams";
 import { handleSetTeam } from "./teams/handleSetTeam";
+import { handleExplainServerCommand } from "./chat/handleExplainServerCommand";
+import { handleDiscordCommand } from "../discord/handleDiscordCommand";
 
 export type CommandFunction = (
   handleAdminCommand: (
@@ -232,6 +234,11 @@ export type CommandFunction = (
     args: string[],
     room: RoomObject
   ) => void,
+  handleExplainServerCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
+  ) => void,
   handleExplainRainCommand: (
     byPlayer: PlayerObject,
     args: string[],
@@ -306,6 +313,11 @@ export type CommandFunction = (
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject
+  ) => void,
+  handleDiscordCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
   ) => void
 ) => Commands;
 
@@ -351,6 +363,7 @@ function importCommandsByLanguage(commandFunctions: {
         handleEnableTyresCommand,
         handleTipsCommands,
         handleExplainTyresCommand,
+        handleExplainServerCommand,
         handleExplainRainCommand,
         handleExplainErsCommand,
         handleEveryoneLapsCommand,
@@ -365,7 +378,8 @@ function importCommandsByLanguage(commandFunctions: {
         handlePresentationLapCommand,
         handleChangePropierties,
         handleSetTeam,
-        handleSeeTeams
+        handleSeeTeams,
+        handleDiscordCommand
       ),
     }),
     {}
@@ -412,6 +426,7 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
         handleEnableTyresCommand,
         handleTipsCommands,
         handleExplainTyresCommand,
+        handleExplainServerCommand,
         handleExplainRainCommand,
         handleExplainErsCommand,
         handleEveryoneLapsCommand,
@@ -426,7 +441,8 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
         handlePresentationLapCommand,
         handleChangePropierties,
         handleSetTeam,
-        handleSeeTeams
+        handleSeeTeams,
+        handleDiscordCommand
       ),
     }),
     {}

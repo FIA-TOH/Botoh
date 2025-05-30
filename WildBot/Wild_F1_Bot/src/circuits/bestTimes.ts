@@ -56,7 +56,7 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   canada: [37.716, "Alberto Ulasscari", trackNameMapping["canada"]],
   austin: [49.783, "Franco ColaSplinter", trackNameMapping["austin"]],
   shanghai: [999.999, "Jean Dany Vergne", trackNameMapping["shanghai"]],
-  suzuka: [999.999, "Ximbastian Vettel", trackNameMapping["suzuka"]],
+  suzuka: [39.35, "Franco ColaSplinter", trackNameMapping["suzuka"]],
   interlagos: [33.3, "Lando Canorris", trackNameMapping["interlagos"]],
   baku: [46.749, "Alberto Ulasscari", trackNameMapping["baku"]],
   argentina: [42.467, "HiroShiryu Fushida", trackNameMapping["argentina"]],

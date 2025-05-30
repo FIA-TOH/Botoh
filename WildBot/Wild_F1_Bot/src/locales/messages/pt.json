@@ -2,8 +2,7 @@
   "CHANGE_MAP_SUCCESS": "Mapa alterado para {{mapName}}",
   "CHANGE_MAP_FAILURE": "Algo deu errado ao carregar o mapa. Por favor, tente novamente!",
   "ADMIN_ALREADY_IN_ROOM": "Um administrador já está na sala",
-  "AVAILABLE_COMMANDS": "Comandos disponíveis:",
-  "NON_ADMIN_COMMANDS": "Comandos disponíveis: !ajuda, !admin, !comandos, !speed, !tires, !bb, !wait_time",
+
   "LAPS_ON_CURRENT_TIRE": "Você completou {{currentLaps}} voltas com os pneus atuais.",
   "FLAT_TYRE": "❗ Seus pneus estão furados, faça o pitstop! (Digite !tyres dentro do BOX) ❗",
   "FIVE_PERCENTAGE_TYRES": "❗ Seus pneus estão quase furados! Apenas 5% restantes! ❗",
@@ -24,9 +23,14 @@
   "INVALID_TIME": "Tempo inválido. Por favor, use um número maior ou igual a 0",
   "QUALIFICATION_MODE": "Agora no modo qualificação",
   "RACING_MODE": "Agora no modo corrida",
-  "JOIN_MESSAGE": "Bem-vindo a FTOH! Digite !ajuda para ver os comandos disponíveis e !lang (es|en|tr|fr) para trocar de idioma!",
+  "JOIN_MESSAGE": "Bem-vindo ao servidor! Digite !help para qualquer dúvida, !comandos para os comandos e !lang (es|en|tr|fr) para trocar de idioma!",
   "QTIME_COMMAND_USAGE": "Uso: !qtime <minutes>",
-  "HELP": "Comandos disponíveis: !dicas, !admin, !comandos, !tyres (s|m|h), !bb, !wait_time",
+  "HELP": "Sobre o que deseja saber?",
+  "HELP_PART_ONE": "Como jogar    | !explain_server",
+  "HELP_PART_TWO": "Pneus         | !explain_tyres",
+  "HELP_PART_THREE": "Turbo         | !explain_ers",
+  "HELP_PART_FOUR": "Chuva         | !explain_rain",
+  "HELP_PART_FIVE": "Mais duvidas? | !discord",
   "CLEARED_BANS": "Todos os bans foram removidos",
   "LAPS_USAGE": "Uso: !laps <laps>. <laps> deve ser divisível por 6.",
   "LANG_USAGE": "Uso: !lang <en|es|fr|tr|pt>",
@@ -83,6 +87,7 @@
   "EXPLAIN_TYRES": "Os seus pneus desgastam com o tempo, quando estiver quase acabando, digite !pneus (s|m|h) dentro dos boxes.",
   "EXPLAIN_RAIN": "Quando a chvua estiver comecando, troque os pneus com !tyres (i|w), chuva fraca = inter, forte = wet",
   "EXPLAIN_ERS": "Ao segurar o botão de chute, aparecerá um número no seu Avatar, este é o Turbo, use com sabedoria.",
+  "EXPLAIN_SERVER": "Bem-vindo à FTOH!, Este é um servidor de corrida de Fórmula 1 no Haxball. Primeiro, acontece a qualificação (qualy), onde você deve fazer o melhor tempo possível. Depois, vem a corrida, composta por 7 voltas. Fique atento aos pneus — eles fazem toda a diferença!",
   "GREEN_FLAG": "🟩🚨🟩 Bandeira VERDE! 🟩🚨🟩",
   "GREEN_FLAG_TWO": "🟩🚨🟩 a pista foi LIBERADA! 🟩🚨🟩",
   "YELLOW_FLAG": "🟨🚨🟨 Bandeira AMARELA! 🟨🚨🟨",
@@ -108,5 +113,7 @@
   "PRESENTATION_LAP": "Volta de apresentação! Sigam devagar e não ultrapassem até a bandeira verde.",
   "SECONDS_TO_FINISH": "A corrida acaba em {{segundos}} segundos",
   "TEAM_DEFINED": "Equipe definida com sucesso: {{name}} ({{tag}})",
-  "TEAM_ERROR": "Equipe não encontrada: {{value}}. Verifique a tag ou o nome."
+  "TEAM_ERROR": "Equipe não encontrada: {{value}}. Verifique a tag ou o nome.",
+  "AVAILABLE_COMMANDS": "Comandos disponíveis:",
+  "NON_ADMIN_COMMANDS": "Comandos disponíveis: !lang, !dicas, !ajuda, !comandos, !tyres, !wait_time, !maps, !times (somente em qualy), !positions (somente em corridas)."
 }

@@ -1,4 +1,9 @@
-import { sendChatMessage } from "../../chat/chat";
+import {
+  FONTS,
+  sendBlackMessage,
+  sendChatMessage,
+  sendMessage,
+} from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 
 export function handleHelpCommand(
@@ -6,5 +11,10 @@ export function handleHelpCommand(
   args: string[],
   room: RoomObject
 ) {
-  sendChatMessage(room, MESSAGES.HELP(), byPlayer.id);
+  sendMessage(room, MESSAGES.HELP(), byPlayer.id, undefined, FONTS.BOLD);
+  sendChatMessage(room, MESSAGES.HELP_PART_ONE(), byPlayer.id);
+  sendChatMessage(room, MESSAGES.HELP_PART_TWO(), byPlayer.id);
+  sendChatMessage(room, MESSAGES.HELP_PART_THREE(), byPlayer.id);
+  sendChatMessage(room, MESSAGES.HELP_PART_FOUR(), byPlayer.id);
+  sendChatMessage(room, MESSAGES.HELP_PART_FIVE(), byPlayer.id);
 }

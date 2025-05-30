@@ -8,7 +8,9 @@ import { playerList } from "../changePlayerState/playerList";
 import { sendBlueMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { presentationLap } from "../commands/gameState/handlePresentationLapCommand";
+import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { inHitbox, getRunningPlayers } from "../utils";
+import { handleChangeCollisionPlayerSuzuka } from "./handleSuzukaTp";
 import { CIRCUITS, currentMapIndex } from "./maps";
 
 function serialize(number: number) {
@@ -109,6 +111,14 @@ export function checkPlayerSector(
         p.id,
         0xff8f00
       );
+      if (
+        room.getScores() &&
+        room.getScores().time > 0 &&
+        ACTUAL_CIRCUIT.info.name === "Suzuka International Circuit - By Ximb"
+      ) {
+        handleChangeCollisionPlayerSuzuka(pad, room);
+      }
+
       playerList[p.id].sectorTimeCounter = 0;
       updatePositionList(players, room);
       checkBlueFlag(p, room);
@@ -123,6 +133,13 @@ export function checkPlayerSector(
         p.id,
         0xff8f00
       );
+      if (
+        room.getScores() &&
+        room.getScores().time > 0 &&
+        ACTUAL_CIRCUIT.info.name === "Suzuka International Circuit - By Ximb"
+      ) {
+        handleChangeCollisionPlayerSuzuka(pad, room);
+      }
       playerList[p.id].sectorTimeCounter = 0;
       updatePositionList(players, room);
       checkBlueFlag(p, room);

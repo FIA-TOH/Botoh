@@ -40,7 +40,7 @@ export enum TeamColors {
   PHM = 0x5ef102,
 }
 
-enum FONTS {
+export enum FONTS {
   NORMAL = "normal",
   BOLD = "bold",
   ITALIC = "italic",

@@ -176,6 +176,11 @@ export default function fr_commands(
     args: string[],
     room: RoomObject
   ) => void,
+  handleExplainServerCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
+  ) => void,
   handleExplainRainCommand: (
     byPlayer: PlayerObject,
     args: string[],
@@ -250,6 +255,11 @@ export default function fr_commands(
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject
+  ) => void,
+  handleDiscordCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
   ) => void
 ): Commands {
   return {
@@ -290,6 +300,7 @@ export default function fr_commands(
     "!enable_tyres": handleEnableTyresCommand,
     "!astuce": handleTipsCommands,
     "!explain_tyres": handleExplainTyresCommand,
+    "!explain_server": handleExplainServerCommand,
     "!explain_rain": handleExplainRainCommand,
     "!explain_ers": handleExplainErsCommand,
     "!everyone_laps": handleEveryoneLapsCommand,
@@ -305,5 +316,6 @@ export default function fr_commands(
     "!constants": handleChangePropierties,
     "!team": handleSetTeam,
     "!voir_equipes": handleSeeTeams,
+    "!discord": handleDiscordCommand,
   };
 }

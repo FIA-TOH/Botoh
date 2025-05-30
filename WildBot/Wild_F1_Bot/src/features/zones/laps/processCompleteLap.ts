@@ -18,6 +18,7 @@ import { rainIntensity } from "../../rain/rain";
 import { ACTUAL_CIRCUIT } from "../../roomFeatures/stadiumChange";
 import { serialize, someArray } from "../../utils";
 import { drsOn, enableDRS } from "../handleDRSZone";
+import { handleChangeCollisionPlayerSuzuka } from "../handleSuzukaTp";
 import { broadcastLapTimeToPlayers } from "./broadcastTimeToPlayer";
 import { processLapAndCheckSessionEnd } from "./processLapAndCheckSessionEnd";
 

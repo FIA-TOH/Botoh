@@ -1,18 +1,7 @@
 import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
-import { getRunningPlayers } from "../utils";
+import { updatePlayerCollision } from "./updatePlayerCollision";
 
 export let ghostMode = false;
-
-function updatePlayerCollision(
-  room: RoomObject,
-  playersAndDiscs: any[],
-  collisionGroup: number
-) {
-  const players = getRunningPlayers(playersAndDiscs);
-  players.forEach((pad) => {
-    room.setPlayerDiscProperties(pad.p.id, { cGroup: collisionGroup });
-  });
-}
 
 export function setGhostMode(room: RoomObject, enable: boolean) {
   ghostMode = enable;

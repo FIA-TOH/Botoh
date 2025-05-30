@@ -7,7 +7,7 @@ import {
 } from "../roomconfig.json";
 import { LEAGUE_MODE } from "./features/hostLeague/leagueMode";
 import { handleGameStateChange } from "./features/changeGameState/gameState";
-import sendDiscordLink from "./features/hostPub/sendDiscordLink";
+import sendDiscordLink from "./features/discord/sendDiscordLink";
 import { PlayerJoin } from "./features/roomFeatures/playerJoin";
 import { TeamChange } from "./features/roomFeatures/teamChange";
 import { GameTick } from "./features/roomFeatures/gameTick";
