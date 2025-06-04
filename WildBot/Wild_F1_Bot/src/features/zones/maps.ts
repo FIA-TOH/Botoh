@@ -66,6 +66,14 @@ import { BAKUPUBLIC } from "../../circuits/baku/bakuPublic";
 import { SPAPUBLIC } from "../../circuits/spa/spaPublic";
 import { IMOLAPUBLIC } from "../../circuits/imola/imolaPublic";
 import { NURBURGRINGPUBLIC } from "../../circuits/nurburgring/nurburgringPublic";
+import { SHANGHAIPUBLIC } from "../../circuits/shanghai/shanghaiPublic";
+import { AUSTINPUBLIC } from "../../circuits/austin/austinPublic";
+import { MONZAPUBLIC } from "../../circuits/monza/monzaPublic";
+import { CANADAPUBLIC } from "../../circuits/canada/canadaPublic";
+import { SEPANGPUBLIC } from "../../circuits/sepang/sepangPublic";
+import { BAHRAINPUBLIC } from "../../circuits/bahrain/bahrainPublic";
+import { VALENCIAPUBLIC } from "../../circuits/valencia/valenciaPublic";
+import { SILVERSTONEPUBLIC } from "../../circuits/silverstone/silverstonePublic";
 
 // import {DAYTONA} from "../circuits/daytona/daytona";
 // import {BARCELONA} from "../circuits/barcelona/barcelona";
@@ -121,14 +129,14 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
       SPAPUBLIC,
       IMOLAPUBLIC,
       NURBURGRINGPUBLIC,
-      SHANGHAI,
-      AUSTIN,
-      MONZA,
-      CANADA,
-      SEPANG,
-      BAHRAIN,
-      VALENCIA,
-      SILVERSTONE,
+      SHANGHAIPUBLIC,
+      AUSTINPUBLIC,
+      MONZAPUBLIC,
+      CANADAPUBLIC,
+      SEPANGPUBLIC,
+      BAHRAINPUBLIC,
+      VALENCIAPUBLIC,
+      SILVERSTONEPUBLIC,
       MONACO,
       SOCHI,
       PAUL_RICARD,

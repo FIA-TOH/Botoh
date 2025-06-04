@@ -5,6 +5,7 @@ import { playerList } from "../changePlayerState/playerList";
 import { sendAlertMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { handleVSCCommand } from "../commands/flagsAndVSC/handleVSCCommand";
+import { presentationLap } from "../commands/gameState/handlePresentationLapCommand";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { vsc } from "../speed/handleSpeed";
 
@@ -25,13 +26,14 @@ export function afkKick(room: RoomObject) {
 
       if (
         room.getScores() != null &&
+        room.getScores().time > 0 &&
         gameState === "running" &&
         gameMode !== GameMode.TRAINING &&
         gameMode !== GameMode.QUALY
       ) {
         if (afkDuration > afkKickTimeMilisseconds) {
           if (LEAGUE_MODE) {
-            if (!vsc) {
+            if (!vsc && !presentationLap) {
               handleVSCCommand(undefined, undefined, room);
             } else {
               updatePlayerActivity(player);
