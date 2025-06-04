@@ -6,11 +6,14 @@ import { playerList } from "../changePlayerState/playerList";
 import { LeagueTeam } from "../teams/teams";
 import { log } from "../discord/logger";
 import { mute_mode } from "../chat/toggleMuteMode";
+import { updatePlayerActivity } from "../afk/afk";
 
 export function PlayerChat(room: RoomObject) {
   room.onPlayerChat = function (player, message) {
     log(`${player.name}: ${message}`);
     if (player.admin) afkAdmins[player.id] = 0;
+
+    updatePlayerActivity(player);
 
     const command = message.toLowerCase().split(" ")[0];
     const args = message.toLowerCase().split(" ").slice(1);

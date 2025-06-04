@@ -7,10 +7,12 @@ import { getRunningPlayers } from "../utils";
 import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
 import { gameMode, GameMode } from "../changeGameState/changeGameModes";
 import { log } from "../discord/logger";
+import { updatePlayerActivity } from "../afk/afk";
 
 export function PlayerLeave(room: RoomObject) {
   room.onPlayerLeave = function (player) {
     if (player.admin) delete afkAdmins[player.id];
+    updatePlayerActivity(player);
 
     const playerObj = playerList[player.id];
 

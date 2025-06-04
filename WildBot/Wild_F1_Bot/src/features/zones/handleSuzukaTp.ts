@@ -24,6 +24,20 @@ const suzukaLeavingTunnelHitBox = {
   maxY: 755,
 };
 
+const suzukaEnteringChangeCGroupHitBox = {
+  minX: -362,
+  maxX: 89,
+  minY: 1023,
+  maxY: 1055,
+};
+
+const suzukaLeavingChangeCGroupHitBox = {
+  minX: -1025,
+  maxX: -391,
+  minY: 723,
+  maxY: 755,
+};
+
 export function handleSuzukaTp(
   player: { p: PlayerObject; disc: DiscPropertiesObject },
   room: RoomObject
@@ -76,16 +90,26 @@ export function handleChangeCollisionPlayerSuzuka(
   player: { p: PlayerObject; disc: DiscPropertiesObject },
   room: RoomObject
 ) {
-  if (player.disc.cGroup === room.CollisionFlags.c1) {
-    console.log("red c0");
-    if (ghostMode) {
-      updatePlayerCollision(room, [player], room.CollisionFlags.c0);
-    } else {
-      updatePlayerCollision(room, [player], room.CollisionFlags.red);
+  if (
+    room.getScores().time > 0 &&
+    ACTUAL_CIRCUIT.info.name === "Suzuka International Circuit - By Ximb"
+  ) {
+    if (
+      inHitbox(player, suzukaEnteringChangeCGroupHitBox) &&
+      player.disc.radius != 5
+    ) {
+      updatePlayerCollision(room, [player], room.CollisionFlags.c1);
     }
-  } else {
-    console.log("c1");
 
-    updatePlayerCollision(room, [player], room.CollisionFlags.c1);
+    if (
+      inHitbox(player, suzukaLeavingChangeCGroupHitBox) &&
+      player.disc.radius === 5
+    ) {
+      if (ghostMode) {
+        updatePlayerCollision(room, [player], room.CollisionFlags.c0);
+      } else {
+        updatePlayerCollision(room, [player], room.CollisionFlags.red);
+      }
+    }
   }
 }

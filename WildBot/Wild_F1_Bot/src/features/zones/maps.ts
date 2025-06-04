@@ -60,6 +60,12 @@ import { CANADALEAGUE } from "../../circuits/canada/canadaLeague";
 import { AUSTINLEAGUE } from "../../circuits/austin/austinLeague";
 import { SHANGHAILEAGUE } from "../../circuits/shanghai/shanghaiLeague";
 import { SUZUKALEAGUE } from "../../circuits/suzuka/suzukaLeague";
+import { SUZUKAPUBLIC } from "../../circuits/suzuka/suzukaPublic";
+import { MELBOURNEPUBLIC } from "../../circuits/melbourne/melbournePublic";
+import { BAKUPUBLIC } from "../../circuits/baku/bakuPublic";
+import { SPAPUBLIC } from "../../circuits/spa/spaPublic";
+import { IMOLAPUBLIC } from "../../circuits/imola/imolaPublic";
+import { NURBURGRINGPUBLIC } from "../../circuits/nurburgring/nurburgringPublic";
 
 // import {DAYTONA} from "../circuits/daytona/daytona";
 // import {BARCELONA} from "../circuits/barcelona/barcelona";
@@ -109,12 +115,12 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
       PODIUM,
     ]
   : [
-      SUZUKA,
-      MELBOURNE,
-      BAKU,
-      SPA,
-      IMOLA,
-      NURBURGRING,
+      SUZUKAPUBLIC,
+      MELBOURNEPUBLIC,
+      BAKUPUBLIC,
+      SPAPUBLIC,
+      IMOLAPUBLIC,
+      NURBURGRINGPUBLIC,
       SHANGHAI,
       AUSTIN,
       MONZA,
@@ -135,8 +141,8 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
       HOCKEN,
       FUJI,
       HUNGARY,
-      AUSTRIA,
-      LAGUNA_SECA,
+      // AUSTRIA,
+      // LAGUNA_SECA,
       MEXICO,
       MIAMI,
     ];

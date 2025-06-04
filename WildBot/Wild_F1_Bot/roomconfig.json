@@ -3,8 +3,10 @@
   "publicModPassword": "mod",
   "leagueAdminPassword": "toh",
   "bans": ["90.94.201.31"],
-  "publicName": "🏎️ Formula 1 - Treinos livres 🏎️",
+  "publicName": "🏎️ Formula 1 - FTOH 🏎️",
   "leagueName": "🏎️ Formula 1 - FTOH 🏎️",
   "maxPlayers": 22,
-  "roomPassword": null
+  "roomPassword": null,
+  "afkKickTime": 20,
+  "afkAlertTime": 10
 }

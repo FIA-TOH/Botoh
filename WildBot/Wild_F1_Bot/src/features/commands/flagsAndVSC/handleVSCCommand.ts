@@ -3,11 +3,14 @@ import { MESSAGES } from "../../chat/messages";
 import { changeVSC, vsc } from "../../speed/handleSpeed";
 
 export function handleVSCCommand(
-  byPlayer: PlayerObject,
-  args: string[],
-  room: RoomObject
+  byPlayer?: PlayerObject,
+  args?: string[],
+  room?: RoomObject
 ) {
-  if (!byPlayer.admin) {
+  if (!room) {
+    return;
+  }
+  if (byPlayer && !byPlayer.admin) {
     sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id);
     return;
   }

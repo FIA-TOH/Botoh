@@ -296,6 +296,7 @@ export default function fr_commands(
     "!rain_intensity": handleRainItensity,
     "!end_rain": handleEndRainCommand,
     "!afk": handleAfkCommand,
+    "!revenir": handleAfkCommand,
     "!enable_qualy_for_pub": handleEnableQualyForPub,
     "!enable_tyres": handleEnableTyresCommand,
     "!astuce": handleTipsCommands,

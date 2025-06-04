@@ -111,13 +111,6 @@ export function checkPlayerSector(
         p.id,
         0xff8f00
       );
-      if (
-        room.getScores() &&
-        room.getScores().time > 0 &&
-        ACTUAL_CIRCUIT.info.name === "Suzuka International Circuit - By Ximb"
-      ) {
-        handleChangeCollisionPlayerSuzuka(pad, room);
-      }
 
       playerList[p.id].sectorTimeCounter = 0;
       updatePositionList(players, room);
@@ -133,13 +126,7 @@ export function checkPlayerSector(
         p.id,
         0xff8f00
       );
-      if (
-        room.getScores() &&
-        room.getScores().time > 0 &&
-        ACTUAL_CIRCUIT.info.name === "Suzuka International Circuit - By Ximb"
-      ) {
-        handleChangeCollisionPlayerSuzuka(pad, room);
-      }
+
       playerList[p.id].sectorTimeCounter = 0;
       updatePositionList(players, room);
       checkBlueFlag(p, room);

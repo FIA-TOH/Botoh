@@ -10,7 +10,11 @@ import handleTireWear from "../tires&pits/handleTireWear";
 import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
 import { checkPlayerLaps } from "../zones/laps/checkPlayerLap";
 import { presentationLap } from "../commands/gameState/handlePresentationLapCommand";
-import { handleChangePlayerSizeSuzuka } from "../zones/handleSuzukaTp";
+import {
+  handleChangeCollisionPlayerSuzuka,
+  handleChangePlayerSizeSuzuka,
+} from "../zones/handleSuzukaTp";
+import { afkKick } from "../afk/afk";
 
 export function GameTick(room: RoomObject) {
   room.onGameTick = function () {
@@ -29,8 +33,10 @@ export function GameTick(room: RoomObject) {
         handleTireWear(p, room);
       }
       handleChangePlayerSizeSuzuka(pad, room);
+      handleChangeCollisionPlayerSuzuka(pad, room);
       // handleSuzukaTp(pad, room);
     });
+    afkKick(room);
     // logPlayerSpeed(playersAndDiscs, room);
     // checkPlayersDRSZone(playersAndDiscs, room);
   };

@@ -1,63 +1,58 @@
-import { sendAlertMessage } from "../chat/chat";
+import { afkKickTime, afkAlertTime } from "../../../roomconfig.json";
+import { GameMode, gameMode } from "../changeGameState/changeGameModes";
 import { gameState } from "../changeGameState/gameState";
-import { MESSAGES } from "../chat/messages";
 import { playerList } from "../changePlayerState/playerList";
-import { Teams } from "../changeGameState/teams";
+import { sendAlertMessage } from "../chat/chat";
+import { MESSAGES } from "../chat/messages";
+import { handleVSCCommand } from "../commands/flagsAndVSC/handleVSCCommand";
+import { LEAGUE_MODE } from "../hostLeague/leagueMode";
+import { vsc } from "../speed/handleSpeed";
 
-let afkSwitch = true;
-const playersAFKTimers: Map<number, NodeJS.Timeout> = new Map();
-const playersAFKWarnings: Map<number, NodeJS.Timeout> = new Map();
+const activities: { [key: number]: number } = {};
 
-export function resetAFKTimer(playerId: number, room: RoomObject) {
-  // const player = room.getPlayerList().find((p) => p.id === playerId);
-  // if (playersAFKTimers.has(playerId)) {
-  //     clearTimeout(playersAFKTimers.get(playerId)!);
-  //     playersAFKTimers.delete(playerId);
-  // }
-  // if (playersAFKWarnings.has(playerId)) {
-  //     clearTimeout(playersAFKWarnings.get(playerId)!);
-  //     playersAFKWarnings.delete(playerId);
-  // }
-  // if (!player || player.team !== Teams.RUNNERS || gameState !== "running" || !afkSwitch) {
-  //     return;
-  // }
-  // const warningTimer = setTimeout(() => {
-  //     sendAFKWarning(playerId, room);
-  // }, 20000);
-  // playersAFKWarnings.set(playerId, warningTimer);
-  // const kickTimer = setTimeout(() => {
-  //     handleAFK(playerId, room);
-  // }, 30000);
-  // playersAFKTimers.set(playerId, kickTimer);
-}
+export function afkKick(room: RoomObject) {
+  const players = room.getPlayerList();
+  const afkKickTimeMilisseconds = afkKickTime * 1000;
+  const afkAlertTimeMilliseconds = afkAlertTime * 1000;
 
-export function resetAFKTimers(room: RoomObject) {
-  // playersAFKTimers.forEach((timer) => clearTimeout(timer));
-  // playersAFKTimers.clear();
-  // playersAFKWarnings.forEach((timer) => clearTimeout(timer));
-  // playersAFKWarnings.clear();
-  // if (gameState === "running" && afkSwitch) {
-  //     room.getPlayerList().forEach((player) => {
-  //         if (player.team === Teams.RUNNERS && player.position) {
-  //             resetAFKTimer(player.id, room);
-  //         }
-  //     });
-  // }
-}
+  for (let id in activities) {
+    for (let i = 0; i < players.length; i++) {
+      const player = players[i];
 
-function sendAFKWarning(playerId: number, room: RoomObject) {
-  const player = room.getPlayerList().find((p) => p.id === playerId);
-  if (player) {
-    sendAlertMessage(room, MESSAGES.AFK_MESSAGE(), playerId);
-  } else {
+      const playerId = player.id;
+      const playerPropierties = playerList[playerId];
+      const afkDuration = Date.now() - activities[playerId];
+
+      if (
+        room.getScores() != null &&
+        gameState === "running" &&
+        gameMode !== GameMode.TRAINING &&
+        gameMode !== GameMode.QUALY
+      ) {
+        if (afkDuration > afkKickTimeMilisseconds) {
+          if (LEAGUE_MODE) {
+            if (!vsc) {
+              handleVSCCommand(undefined, undefined, room);
+            } else {
+              updatePlayerActivity(player);
+            }
+          } else {
+            room.kickPlayer(playerId, "AFK", false);
+          }
+        } else if (
+          afkDuration > afkAlertTimeMilliseconds &&
+          !playerPropierties.afkAlert
+        ) {
+          sendAlertMessage(room, MESSAGES.AFK_MESSAGE(), playerId);
+          playerPropierties.afkAlert = true;
+        }
+      }
+    }
   }
 }
 
-function handleAFK(playerId: number, room: RoomObject) {
-  const player = room.getPlayerList().find((p) => p.id === playerId);
-  if (player) {
-    playerList[player.id].afk = true;
-    room.setPlayerTeam(player.id, Teams.SPECTATORS);
-  } else {
-  }
+export function updatePlayerActivity(player: PlayerObject) {
+  activities[player.id] = Date.now();
+  const playerPropierties = playerList[player.id];
+  playerPropierties.afkAlert = false;
 }

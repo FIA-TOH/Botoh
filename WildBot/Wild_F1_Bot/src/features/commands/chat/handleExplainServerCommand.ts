@@ -6,5 +6,9 @@ export function handleExplainServerCommand(
   _: string[],
   room: RoomObject
 ) {
-  sendMessage(room, MESSAGES.EXPLAIN_SERVER());
+  if (byPlayer.admin) {
+    sendMessage(room, MESSAGES.EXPLAIN_SERVER());
+  } else {
+    sendMessage(room, MESSAGES.EXPLAIN_SERVER(), byPlayer.id);
+  }
 }

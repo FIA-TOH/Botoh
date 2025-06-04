@@ -295,6 +295,7 @@ export default function tr_commands(
     "!rain_intensity": handleRainItensity,
     "!end_rain": handleEndRainCommand,
     "!afk": handleAfkCommand,
+    "!back": handleAfkCommand,
     "!enable_qualy_for_pub": handleEnableQualyForPub,
     "!enable_tyres": handleEnableTyresCommand,
     "!İpucu": handleTipsCommands,

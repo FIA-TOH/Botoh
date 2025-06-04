@@ -6,5 +6,9 @@ export function handleExplainErsCommand(
   _: string[],
   room: RoomObject
 ) {
-  sendMessage(room, MESSAGES.EXPLAIN_ERS());
+  if (byPlayer.admin) {
+    sendMessage(room, MESSAGES.EXPLAIN_ERS());
+  } else {
+    sendMessage(room, MESSAGES.EXPLAIN_ERS(), byPlayer.id);
+  }
 }

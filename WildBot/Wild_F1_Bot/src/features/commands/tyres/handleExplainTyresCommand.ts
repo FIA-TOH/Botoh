@@ -3,8 +3,15 @@ import { MESSAGES } from "../../chat/messages";
 
 export function handleExplainTyresCommand(
   byPlayer: PlayerObject,
-  _: string[],
-  room: RoomObject
+  _?: string[],
+  room?: RoomObject
 ) {
-  sendMessage(room, MESSAGES.EXPLAIN_TYRES());
+  if (!room) {
+    return;
+  }
+  if (byPlayer.admin) {
+    sendMessage(room, MESSAGES.EXPLAIN_TYRES());
+  } else {
+    sendMessage(room, MESSAGES.EXPLAIN_TYRES(), byPlayer.id);
+  }
 }

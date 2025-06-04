@@ -4,6 +4,7 @@ import { CIRCUITS, currentMapIndex } from "../zones/maps";
 import { MESSAGES } from "../chat/messages";
 import { playerList } from "../changePlayerState/playerList";
 import { inHitbox, getRunningPlayers } from "../utils";
+import { handleExplainTyresCommand } from "../commands/tyres/handleExplainTyresCommand";
 
 function ifInPitlaneStart(
   player: { p: PlayerObject; disc: DiscPropertiesObject },
@@ -35,10 +36,17 @@ export function handlePitlane(
     if (ifInPitlaneStart(player, room) && !playerList[p.id].inPitlane) {
       playerList[p.id].pits.pitsNumber += 1;
       playerList[p.id].inPitlane = true;
-      if (LEAGUE_MODE && playerList[player.p.id].boxAlert === false) {
-        const numero = Math.floor(1000 + Math.random() * 9000);
-        playerList[player.p.id].boxAlert = numero;
-        sendAlertMessage(room, MESSAGES.CODE_BOX(numero), player.p.id);
+      if (LEAGUE_MODE) {
+        if (playerList[player.p.id].boxAlert === false) {
+          const numero = Math.floor(1000 + Math.random() * 9000);
+          playerList[player.p.id].boxAlert = numero;
+          sendAlertMessage(room, MESSAGES.CODE_BOX(numero), player.p.id);
+        }
+      } else {
+        if (playerList[player.p.id].boxAlert === false) {
+          handleExplainTyresCommand(player.p, undefined, room);
+          playerList[player.p.id].boxAlert = true;
+        }
       }
     }
     if (ifInPitlaneEnd(player, room) && playerList[p.id].inPitlane) {

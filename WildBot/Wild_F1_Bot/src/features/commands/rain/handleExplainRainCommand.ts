@@ -6,5 +6,9 @@ export function handleExplainRainCommand(
   _: string[],
   room: RoomObject
 ) {
-  sendMessage(room, MESSAGES.EXPLAIN_RAIN());
+  if (byPlayer.admin) {
+    sendMessage(room, MESSAGES.EXPLAIN_RAIN());
+  } else {
+    sendMessage(room, MESSAGES.EXPLAIN_RAIN(), byPlayer.id);
+  }
 }

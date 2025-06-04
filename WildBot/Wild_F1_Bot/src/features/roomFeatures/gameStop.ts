@@ -32,7 +32,7 @@ export function GameStop(room: RoomObject) {
       ? log(`Game stopped`)
       : log(`Game stopped by ${byPlayer.name}`);
 
-    handleGameStateChange(null);
+    handleGameStateChange(null, room);
     resetAllRainEvents();
 
     if (gameStopedNaturally && !LEAGUE_MODE) {

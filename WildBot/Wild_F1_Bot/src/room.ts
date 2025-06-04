@@ -16,6 +16,7 @@ import { PlayerLeave } from "./features/roomFeatures/playerLeave";
 import { StadiumChange } from "./features/roomFeatures/stadiumChange";
 import { PlayerChat } from "./features/roomFeatures/playerChat";
 import { GameStop } from "./features/roomFeatures/gameStop";
+import { PlaerActivity } from "./features/roomFeatures/playerActivitie";
 
 const roomName = LEAGUE_MODE ? leagueName : publicName;
 
@@ -27,9 +28,9 @@ export const room = HBInit({
   password: roomPassword ?? undefined,
   token: "thr1.AAAAAGdDS0jEIWnS04qeVA.1F4ha2154X8",
   geo: {
-    code: "BR",
-    lat: -23.55052,
-    lon: -46.633308,
+    code: "AR",
+    lat: -34.603722,
+    lon: -58.381592,
   },
 });
 
@@ -48,12 +49,13 @@ PlayerJoin(room);
 PlayerLeave(room);
 StadiumChange(room);
 TeamChange(room);
+PlaerActivity(room);
 
 room.onGamePause = function () {
-  handleGameStateChange("paused");
+  handleGameStateChange("paused", room);
 };
 room.onGameUnpause = function () {
-  handleGameStateChange("running");
+  handleGameStateChange("running", room);
 };
 
 const regexPattern = /^\[[A-Z]{2}] \S.*$/;

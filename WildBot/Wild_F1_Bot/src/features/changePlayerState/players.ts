@@ -10,6 +10,7 @@ export function createPlayerInfo(ip?: string) {
     ip: ip || "Not Available",
     isInTheRoom: true,
     afk: false,
+    afkAlert: false,
     leagueTeam: null,
 
     // Propriedades de corrida e volta
@@ -85,6 +86,7 @@ export function resetPlayer(
     playerList[id].tires = Tires.SOFT;
   }
   playerList[id].isInTheRoom = true;
+  playerList[id].afkAlert = false;
 
   playerList[id].totalTime = 0;
   playerList[id].currentLap = 0;

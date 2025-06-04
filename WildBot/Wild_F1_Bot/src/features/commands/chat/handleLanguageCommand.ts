@@ -1,5 +1,5 @@
 import { playerList } from "../../changePlayerState/playerList";
-import { sendErrorMessage } from "../../chat/chat";
+import { sendErrorMessage, sendSuccessMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 
 export function handleLanguageCommand(
@@ -23,6 +23,6 @@ export function handleLanguageCommand(
     sendErrorMessage(room, MESSAGES.LANG_USAGE(), byPlayer.id);
     return;
   }
-
+  sendSuccessMessage(room, MESSAGES.LANG_CHANGED(), byPlayer.id);
   playerList[byPlayer.id].language = lang;
 }

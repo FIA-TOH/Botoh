@@ -298,6 +298,7 @@ export default function pt_commands(
     "!rain_intensity": handleRainItensity,
     "!end_rain": handleEndRainCommand,
     "!afk": handleAfkCommand,
+    "!voltar": handleAfkCommand,
     "!enable_qualy_for_pub": handleEnableQualyForPub,
     "!enable_tyres": handleEnableTyresCommand,
     "!dicas": handleTipsCommands,

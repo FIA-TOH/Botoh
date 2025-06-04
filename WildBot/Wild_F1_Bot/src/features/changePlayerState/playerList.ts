@@ -15,6 +15,7 @@ export interface PlayerInfo {
   ip: string;
   isInTheRoom: boolean;
   afk: boolean;
+  afkAlert: boolean;
   leagueTeam: string | null;
 
   // Propriedades de corrida e volta
