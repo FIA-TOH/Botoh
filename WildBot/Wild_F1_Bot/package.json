@@ -4,7 +4,7 @@
   "description": "## Haxball bot for simulating f1 races.\n",
   "scripts": {
     "build:league": "webpack --env LEAGUE_MODE=true",
-    "build:non-league": "webpack --env LEAGUE_MODE=false",
+    "build:pub": "webpack --env LEAGUE_MODE=false",
     "build:all": "npm run build:league && npm run build:non-league"
   },
   "author": "RicardoPinto26",

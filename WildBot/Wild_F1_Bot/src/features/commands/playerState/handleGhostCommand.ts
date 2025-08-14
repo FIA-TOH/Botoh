@@ -22,5 +22,5 @@ export function handleGhostCommand(
     return;
   }
 
-  setGhostMode(room, boolean);
+  setGhostMode(room, boolean, byPlayer.id);
 }

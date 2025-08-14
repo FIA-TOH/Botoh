@@ -2,7 +2,14 @@ import { sendErrorMessage, sendChatMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { getPlayerAndDiscs } from "../../playerFeatures/getPlayerAndDiscs";
 import { getRunningPlayers } from "../../utils";
-import { playerNerfList } from "../handleCommands";
+
+export let playerNerfList: PlayerObject[] = [];
+export let playerBuffList: PlayerObject[] = [];
+
+export function clearPlayerBuffAndNerfLists() {
+  playerBuffList.length = 0;
+  playerNerfList.length = 0;
+}
 
 export function handleNerfListCommand(
   byPlayer: PlayerObject,
@@ -21,33 +28,57 @@ export function handleNerfListCommand(
     sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id);
     return;
   }
-  const playerId = args[0];
+  const playerBuffId = args[0];
+  const playerNerfId = args[1];
 
-  let playerNumero: number | undefined;
-  if (!isNaN(Number(playerId))) {
-    playerNumero = Number(playerId);
+  let playerBuffNumero: number | undefined;
+  if (!isNaN(Number(playerBuffId))) {
+    playerBuffNumero = Number(playerBuffId);
+  }
+
+  let playerNerfNumero: number | undefined;
+  if (!isNaN(Number(playerNerfId))) {
+    playerNerfNumero = Number(playerNerfId);
   }
 
   const playersAndDiscs = getPlayerAndDiscs(room);
   const players = getRunningPlayers(playersAndDiscs);
 
-  let playerEscolhido: { p: PlayerObject; disc: DiscPropertiesObject }[] = [];
-  if (!playerId) {
+  let playerBuffEscolhido: { p: PlayerObject; disc: DiscPropertiesObject }[] =
+    [];
+  let playerNerfEscolhido: { p: PlayerObject; disc: DiscPropertiesObject }[] =
+    [];
+  if (!playerBuffId) {
     room.sendAnnouncement("Escolha um jogador", byPlayer.id, 0xff0000);
     return;
   }
-  if (playerNumero !== undefined) {
-    playerEscolhido = players.filter((p) => p.p.id === playerNumero);
+  if (playerBuffNumero !== undefined) {
+    const playerEscolhido = players.find((p) => p.p.id === playerBuffNumero);
+    if (playerEscolhido) {
+      playerBuffEscolhido = [playerEscolhido];
+    } else {
+      room.sendAnnouncement("Player buff not found", byPlayer.id, 0xff0000);
+      return;
+    }
   } else {
-    room.sendAnnouncement("Player not found", byPlayer.id, 0xff0000);
+    room.sendAnnouncement("Choose a valid buff player", byPlayer.id, 0xff0000);
     return;
   }
-  if (playerEscolhido?.length === 0) {
-    room.sendAnnouncement("Escolha um jogador válido", byPlayer.id, 0xff0000);
+  if (playerNerfNumero !== undefined) {
+    const playerEscolhido = players.find((p) => p.p.id === playerNerfNumero);
+    if (playerEscolhido) {
+      playerNerfEscolhido = [playerEscolhido];
+    } else {
+      room.sendAnnouncement("Player nerf not found", byPlayer.id, 0xff0000);
+      return;
+    }
+  }
+  if (playerBuffEscolhido?.length === 0) {
+    room.sendAnnouncement("Choose a valid player", byPlayer.id, 0xff0000);
     return;
   }
-
-  playerNerfList.push(playerEscolhido[0].p);
+  playerBuffList.push(playerBuffEscolhido[0]?.p ?? []);
+  playerNerfList.push(playerNerfEscolhido[0]?.p ?? []);
 
   // if(adjust === "wear"){
   //     playerInfo.wear = valueNumber as number

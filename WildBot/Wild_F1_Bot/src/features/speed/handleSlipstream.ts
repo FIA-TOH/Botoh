@@ -94,6 +94,6 @@ function calculateSlipstream(
     constants.MAX_SLIPSTREAM,
     minSlipstream / 100
   );
-  // console.log(`\n✅ Final slipstream aplicado ao player ${player.p.id}: ${finalSlipstream.toFixed(5)}\n`);
+  // console.log(`\n Final slipstream to the player ${player.p.id}: ${finalSlipstream.toFixed(5)}\n`);
   return finalSlipstream;
 }

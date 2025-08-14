@@ -77,3 +77,7 @@ export const timerController: {
 } = {
   positionTimer: null,
 };
+
+export function delay(segundos: number) {
+  return new Promise((resolve) => setTimeout(resolve, segundos * 1000));
+}

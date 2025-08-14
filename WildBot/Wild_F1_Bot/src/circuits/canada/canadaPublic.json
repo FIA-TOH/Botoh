@@ -1531,7 +1531,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ff0000",
+      "color": "ff0001",
       "curve": 180
     },
     {
@@ -1542,7 +1542,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ff0000",
+      "color": "ff0001",
       "curve": 180
     },
     {
@@ -1553,7 +1553,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -1564,7 +1564,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -1575,7 +1575,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -1586,7 +1586,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -1597,7 +1597,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -1608,7 +1608,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -1619,7 +1619,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -1630,95 +1630,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2621,
-      "y": 375,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2621,
-      "y": 365,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2560,
-      "y": 375,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2560,
-      "y": 365,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2500,
-      "y": 375,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2500,
-      "y": 365,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2439,
-      "y": 375,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2439,
-      "y": 365,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -1729,7 +1641,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -1740,7 +1652,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -1751,7 +1663,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -1762,7 +1674,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -1773,7 +1685,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -1784,7 +1696,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -1795,7 +1707,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -1806,95 +1718,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2381,
-      "y": 375,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2381,
-      "y": 365,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2320,
-      "y": 375,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2320,
-      "y": 365,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2260,
-      "y": 375,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2260,
-      "y": 365,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2199,
-      "y": 375,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2199,
-      "y": 365,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -1905,7 +1729,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -1916,29 +1740,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2111,
-      "y": 315,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2111,
-      "y": 305,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -1949,7 +1751,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -1960,29 +1762,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2139,
-      "y": 375,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2139,
-      "y": 365,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -1993,7 +1773,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -2004,8 +1784,9 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
-      "curve": 180
+      "color": "fffff1",
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": -2591,
@@ -2015,95 +1796,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2591,
-      "y": 306,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2531,
-      "y": 316,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2531,
-      "y": 306,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2470,
-      "y": 316,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2470,
-      "y": 306,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2652,
-      "y": 316,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2652,
-      "y": 306,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2591,
-      "y": 316,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -2114,7 +1807,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -2125,7 +1818,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -2136,7 +1829,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -2147,7 +1840,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -2158,7 +1851,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -2169,7 +1862,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -2180,7 +1873,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -2191,7 +1884,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -2202,7 +1895,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -2213,7 +1906,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -2224,7 +1917,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -2235,7 +1928,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -2246,95 +1939,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2412,
-      "y": 316,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2412,
-      "y": 306,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2351,
-      "y": 316,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2351,
-      "y": 306,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2291,
-      "y": 316,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2291,
-      "y": 306,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2230,
-      "y": 316,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2230,
-      "y": 306,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -2345,7 +1950,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     },
     {
@@ -2356,29 +1961,7 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2170,
-      "y": 316,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
-      "curve": 180
-    },
-    {
-      "x": -2170,
-      "y": 306,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "curve": 180
     }
   ],
@@ -4034,7 +3617,7 @@
       "v1": 208,
       "curve": 326.5825016517914,
       "vis": true,
-      "color": "ff0000",
+      "color": "ff0001",
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
@@ -4045,7 +3628,7 @@
       "v1": 210,
       "curve": 326.5825016517914,
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
@@ -4056,7 +3639,7 @@
       "v1": 212,
       "curve": 326.5825016517914,
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
@@ -4067,7 +3650,7 @@
       "v1": 214,
       "curve": 326.5825016517914,
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
@@ -4078,7 +3661,7 @@
       "v1": 216,
       "curve": 326.5825016517914,
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
@@ -4089,7 +3672,7 @@
       "v1": 218,
       "curve": 326.5825016517914,
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
@@ -4100,7 +3683,7 @@
       "v1": 220,
       "curve": 326.5825016517914,
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
@@ -4111,7 +3694,7 @@
       "v1": 222,
       "curve": 326.5825016517914,
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
@@ -4122,7 +3705,7 @@
       "v1": 224,
       "curve": 326.5825016517914,
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
@@ -4133,7 +3716,7 @@
       "v1": 226,
       "curve": 326.5825016517914,
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
@@ -4144,7 +3727,7 @@
       "v1": 228,
       "curve": 326.5825016517914,
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
@@ -4155,7 +3738,7 @@
       "v1": 230,
       "curve": 326.5825016517914,
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
@@ -4166,7 +3749,7 @@
       "v1": 232,
       "curve": 326.5825016517914,
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
@@ -4177,7 +3760,7 @@
       "v1": 234,
       "curve": 326.5825016517914,
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
@@ -4188,7 +3771,7 @@
       "v1": 236,
       "curve": 326.5825016517914,
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
@@ -4199,7 +3782,7 @@
       "v1": 238,
       "curve": 326.5825016517914,
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
@@ -4210,7 +3793,7 @@
       "v1": 240,
       "curve": 326.5825016517914,
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
@@ -4221,7 +3804,7 @@
       "v1": 242,
       "curve": 326.5825016517914,
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
@@ -4232,7 +3815,7 @@
       "v1": 244,
       "curve": 326.5825016517914,
       "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
@@ -4243,216 +3826,7 @@
       "v1": 246,
       "curve": 326.5825016517914,
       "vis": true,
-      "color": "ffffff",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 247,
-      "v1": 248,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "ffffff",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 249,
-      "v1": 250,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "ffffff",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 251,
-      "v1": 252,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "ffffff",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 253,
-      "v1": 254,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "ffffff",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 255,
-      "v1": 256,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "ffffff",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 257,
-      "v1": 258,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "ffffff",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 259,
-      "v1": 260,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "ffffff",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 261,
-      "v1": 262,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "ffffff",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 263,
-      "v1": 264,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "ffffff",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 265,
-      "v1": 266,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "ffffff",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 267,
-      "v1": 268,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "ffffff",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 269,
-      "v1": 270,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "ffffff",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 271,
-      "v1": 272,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "ffffff",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 273,
-      "v1": 274,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "ffffff",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 275,
-      "v1": 276,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "ffffff",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 277,
-      "v1": 278,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "ffffff",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 279,
-      "v1": 280,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "ffffff",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 281,
-      "v1": 282,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "ffffff",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 283,
-      "v1": 284,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "ffffff",
+      "color": "fffff1",
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],

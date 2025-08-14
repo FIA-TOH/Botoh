@@ -3,7 +3,7 @@ import { MESSAGES } from "../../chat/messages";
 import { LEAGUE_MODE } from "../../hostLeague/leagueMode";
 import { GameMode, gameMode } from "../changeGameModes";
 
-export let qualiTime = 2;
+export let qualiTime = 1;
 export let raceTime = LEAGUE_MODE ? 0 : 7;
 
 export function setQualiTime(

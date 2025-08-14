@@ -464,5 +464,3 @@ export const COMMANDS: Commands = importCommands(
   tr_commands,
   pt_commands
 );
-
-export let playerNerfList: PlayerObject[] = [];

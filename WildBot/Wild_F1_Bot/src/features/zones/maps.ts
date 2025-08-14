@@ -60,6 +60,8 @@ import { CANADALEAGUE } from "../../circuits/canada/canadaLeague";
 import { AUSTINLEAGUE } from "../../circuits/austin/austinLeague";
 import { SHANGHAILEAGUE } from "../../circuits/shanghai/shanghaiLeague";
 import { SUZUKALEAGUE } from "../../circuits/suzuka/suzukaLeague";
+import { ARGENTINALEAGUE } from "../../circuits/argentina/argentinaLeague";
+
 import { SUZUKAPUBLIC } from "../../circuits/suzuka/suzukaPublic";
 import { MELBOURNEPUBLIC } from "../../circuits/melbourne/melbournePublic";
 import { BAKUPUBLIC } from "../../circuits/baku/bakuPublic";
@@ -74,6 +76,20 @@ import { SEPANGPUBLIC } from "../../circuits/sepang/sepangPublic";
 import { BAHRAINPUBLIC } from "../../circuits/bahrain/bahrainPublic";
 import { VALENCIAPUBLIC } from "../../circuits/valencia/valenciaPublic";
 import { SILVERSTONEPUBLIC } from "../../circuits/silverstone/silverstonePublic";
+import { MONACOPUBLIC } from "../../circuits/monaco/monacoPublic";
+import { SOCHIPUBLIC } from "../../circuits/sochi/sochiPublic";
+import { PAUL_RICARDPUBLIC } from "../../circuits/paul_ricard/paul_ricardPublic";
+import { ARGENTINAPUBLIC } from "../../circuits/argentina/argentinaPublic";
+import { ISTANBULPUBLIC } from "../../circuits/istanbul/istanbulPublic";
+import { MARINA_BAYPUBLIC } from "../../circuits/marina_bay/marina_bayPublic";
+import { JEDDAHPUBLIC } from "../../circuits/jeddah/jeddahPublic";
+import { ABU_DHABIPUBLIC } from "../../circuits/abu_dhabi/abu_dhabiPublic";
+import { HOCKENPUBLIC } from "../../circuits/hocken/hockenPublic";
+import { INTERLAGOSLEAGUE } from "../../circuits/interlagos/interlagosLeague";
+import { WAITROOM } from "../../circuits/waitRoom/waitRoom";
+
+import { WAITROOMQUALY } from "../../circuits/waitRoom/waitRoomQualy";
+import { gameMode, GameMode } from "../changeGameState/changeGameModes";
 
 // import {DAYTONA} from "../circuits/daytona/daytona";
 // import {BARCELONA} from "../circuits/barcelona/barcelona";
@@ -118,9 +134,10 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
       MIAMI,
       NURBURGRINGNANO,
       HUNGARYNANO,
-      SUZUKALEAGUE,
+      INTERLAGOSLEAGUE,
       INDIANAPOLIS,
       PODIUM,
+      WAITROOM,
     ]
   : [
       SUZUKAPUBLIC,
@@ -137,37 +154,39 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
       BAHRAINPUBLIC,
       VALENCIAPUBLIC,
       SILVERSTONEPUBLIC,
-      MONACO,
-      SOCHI,
-      PAUL_RICARD,
-      ISTANBUL,
+      MONACOPUBLIC,
+      SOCHIPUBLIC,
+      PAUL_RICARDPUBLIC,
+      ISTANBULPUBLIC,
       INTERLAGOS,
-      ARGENTINA,
-      MARINA_BAY,
-      JEDDAH,
-      ABU_DHABI,
-      HOCKEN,
+      ARGENTINAPUBLIC,
+      MARINA_BAYPUBLIC,
+      JEDDAHPUBLIC,
+      ABU_DHABIPUBLIC,
+      HOCKENPUBLIC,
       FUJI,
       HUNGARY,
       // AUSTRIA,
       // LAGUNA_SECA,
       MEXICO,
       MIAMI,
+      WAITROOM,
+      WAITROOMQUALY,
+      // BALATON
     ];
 
 export let currentMapIndex = 0;
-
 function handleMapError(room: RoomObject) {
   const admins = room.getPlayerList().filter((p) => p.admin);
+
   if (admins.length >= 1) {
-    admins.forEach((p) =>
-      sendErrorMessage(room, MESSAGES.CHANGE_MAP_FAILURE(), p.id)
-    );
+    admins.forEach((p) => {
+      sendErrorMessage(room, MESSAGES.CHANGE_MAP_FAILURE(), p.id);
+    });
     return;
   }
   sendErrorMessage(room, MESSAGES.CHANGE_MAP_FAILURE());
 }
-
 export function handleChangeMap(index: number, room: RoomObject) {
   if (index < 0 || index >= CIRCUITS.length) {
     handleMapError(room);
@@ -176,12 +195,16 @@ export function handleChangeMap(index: number, room: RoomObject) {
 
   try {
     currentMapIndex = index;
+
     room.setCustomStadium(CIRCUITS[currentMapIndex].map);
-    sendSuccessMessage(
-      room,
-      MESSAGES.CHANGE_MAP_SUCCESS(CIRCUITS[currentMapIndex].info.name)
-    );
-  } catch {
+
+    if (gameMode !== GameMode.WAITING) {
+      sendSuccessMessage(
+        room,
+        MESSAGES.CHANGE_MAP_SUCCESS(CIRCUITS[currentMapIndex].info.name)
+      );
+    }
+  } catch (error) {
     handleMapError(room);
   }
 }

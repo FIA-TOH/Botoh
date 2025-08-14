@@ -1,18 +1,14 @@
 import { Circuit } from "../../../circuits/Circuit";
 import { sendAlertMessage, sendSuccessMessage } from "../../chat/chat";
-import { setGhostMode } from "../../changePlayerState/ghost";
 import { CIRCUITS, handleChangeMap } from "../../zones/maps";
 import { MESSAGES } from "../../chat/messages";
-import { resetPlayers } from "../../changePlayerState/players";
-import { changeGameMode, GameMode } from "../changeGameModes";
 import { resetVotes } from "./resetVote";
 import {
   announceSelectedCircuits,
   getWinningCircuit,
 } from "./circuitSelection";
 import { log } from "../../discord/logger";
-import { qualyForPub } from "../../commands/gameMode/qualy/handleEnableQualyForPub";
-import { handleRREnabledCommand } from "../../commands/adminThings/handleRREnabledCommand";
+import { lastWinningVotes } from "../publicGameFlow/publicGameFLow";
 
 export let isOnVoteSession = false;
 export let selectedCircuits: Circuit[] = [];
@@ -25,50 +21,49 @@ export function voteSession(room: RoomObject) {
   isOnVoteSession = true;
   const players = room.getPlayerList();
 
-  selectedCircuits = [...CIRCUITS].sort(() => Math.random() - 0.5).slice(0, 3);
+  selectedCircuits = [...CIRCUITS]
+    .slice(0, -2)
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 3);
 
   sendAlertMessage(room, MESSAGES.TIME_TO_VOTE());
   announceSelectedCircuits(room);
   resetVotes(players);
+}
 
-  setTimeout(() => {
-    const winnerCircuit = getWinningCircuit();
-    const winnerInfo = winnerCircuit.info;
+export function changeMapBasedOnVote(
+  room: RoomObject,
+  dontAnnouceVotes?: boolean
+) {
+  const winnerCircuit = getWinningCircuit();
+  const winnerInfo = winnerCircuit.info;
+  const players = room.getPlayerList();
 
+  const winnerIndex = CIRCUITS.findIndex(
+    (c) => c.info?.name === winnerInfo?.name
+  );
+
+  resetVotes(players);
+  isOnVoteSession = false;
+
+  if (winnerIndex !== -1) {
+    handleChangeMap(winnerIndex, room);
+  } else {
+    log("Circuito vencedor não encontrado no array CIRCUITS.");
+  }
+  if (!dontAnnouceVotes) {
     sendSuccessMessage(
       room,
       MESSAGES.CIRCUIT_CHOOSED(
-        winnerInfo?.name || "Nome não definido",
-        winnerInfo?.Votes ?? 0
+        winnerInfo?.name || "Name not defined",
+        lastWinningVotes ?? 0
       )
     );
+  }
 
-    if (winnerInfo.BestTime && winnerInfo.BestTime.length > 1) {
-      room.sendAnnouncement(
-        `Recorde: ${winnerInfo.BestTime[0]} - ${winnerInfo.BestTime[1]}`
-      );
-    }
-
-    const winnerIndex = CIRCUITS.findIndex(
-      (c) => c.info?.name === winnerInfo?.name
+  if (winnerInfo.BestTime && winnerInfo.BestTime.length > 1) {
+    room.sendAnnouncement(
+      `Best Time: ${winnerInfo.BestTime[0]} - ${winnerInfo.BestTime[1]}`
     );
-
-    resetVotes(players);
-    isOnVoteSession = false;
-
-    if (winnerIndex !== -1) {
-      handleChangeMap(winnerIndex, room);
-      resetPlayers(room);
-
-      if (qualyForPub) {
-        changeGameMode(GameMode.QUALY, room);
-        setGhostMode(room, true);
-        handleRREnabledCommand(undefined, ["true"], room);
-      }
-
-      room.startGame();
-    } else {
-      log("Circuito vencedor não encontrado no array CIRCUITS.");
-    }
-  }, 20000);
+  }
 }

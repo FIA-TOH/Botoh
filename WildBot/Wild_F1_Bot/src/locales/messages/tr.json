@@ -115,5 +115,9 @@
   "PRESENTATION_LAP": "Tanıtım turu! Yavaşça ilerleyin ve yeşil bayrak verilene kadar geçiş yapmayın.",
   "SECONDS_TO_FINISH": "Yarış {{segundos}} saniye içinde bitiyor",
   "TEAM_DEFINED": "Takım başarıyla ayarlandı: {{name}} ({{tag}})",
-  "TEAM_ERROR": "Takım bulunamadı: {{value}}. Lütfen etiket veya adı kontrol edin."
+  "TEAM_ERROR": "Takım bulunamadı: {{value}}. Lütfen etiket veya adı kontrol edin.",
+  "QUALY_STARTING": "{{segundos}} saniye içinde sıralama başlayacak.",
+  "RACE_STARTING": "{{segundos}} saniye içinde yarış başlayacak.",
+  "CHAT_MUTED": "SESSİZLİK! Sohbet şimdi susturuldu!",
+  "CHAT_FREE": "ÖZGÜRLÜK! Sohbet şimdi serbest!"
 }

@@ -1,7 +1,14 @@
+import { setGhostMode } from "../changePlayerState/ghost";
 import { sendSuccessMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { changeLaps } from "../commands/adminThings/handleChangeLaps";
+import { handleRREnabledCommand } from "../commands/adminThings/handleRREnabledCommand";
+import {
+  handleEnableTyresCommand,
+  tyresActivated,
+} from "../commands/tyres/handleEnableTyresCommand";
 import { enableGas, enableSlipstream } from "../speed/handleSlipstream";
+import HandleTireWear from "../tires&pits/handleTireWear";
 import { laps } from "../zones/laps";
 import { qualiTime, raceTime } from "./qualy/qualiMode";
 
@@ -10,6 +17,7 @@ export enum GameMode {
   QUALY = "qualy",
   TRAINING = "training",
   INDY = "indy",
+  WAITING = "waiting",
 }
 
 export let gameMode: GameMode = GameMode.RACE;
@@ -26,6 +34,8 @@ export function changeGameMode(newMode: GameMode, room: RoomObject) {
       return handleTrainingMode(room);
     case GameMode.INDY:
       return handleIndyMode(room);
+    case GameMode.WAITING:
+      return handleWaintingRoom(room);
     case GameMode.RACE:
       return handleRaceMode(room);
   }
@@ -34,25 +44,40 @@ export function changeGameMode(newMode: GameMode, room: RoomObject) {
 function handleQualyMode(room: RoomObject) {
   enableGas(false);
   enableSlipstream(false);
+  setGhostMode(room, true);
+  handleRREnabledCommand(undefined, ["true"], room);
   sendSuccessMessage(room, MESSAGES.TIME_TO_QUALY());
+  handleEnableTyresCommand(undefined, ["true"], room);
 }
 
-//to-do: melhorar a mensagem de quando muda o modo
 function handleTrainingMode(room: RoomObject) {
   enableGas(false);
   enableSlipstream(false);
   changeLaps("999", undefined, room);
   room.sendAnnouncement("Training mode on");
+  handleEnableTyresCommand(undefined, ["true"], room);
 }
 
 function handleIndyMode(room: RoomObject) {
   enableGas(true);
   enableSlipstream(true);
   room.sendAnnouncement("Indy mode on");
+  handleEnableTyresCommand(undefined, ["true"], room);
 }
 
 function handleRaceMode(room: RoomObject) {
   enableGas(false);
   enableSlipstream(false);
+  setGhostMode(room, false);
+  handleRREnabledCommand(undefined, ["false"], room);
   sendSuccessMessage(room, MESSAGES.TIME_TO_RACE(laps));
+  handleEnableTyresCommand(undefined, ["true"], room);
+}
+
+function handleWaintingRoom(room: RoomObject) {
+  enableGas(false);
+  enableSlipstream(false);
+  setGhostMode(room, false);
+  handleRREnabledCommand(undefined, ["false"], room);
+  handleEnableTyresCommand(undefined, ["false"], room);
 }

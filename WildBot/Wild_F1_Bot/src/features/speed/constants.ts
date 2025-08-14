@@ -19,12 +19,12 @@ export const constants = {
   // ===============================
   // Slipstream (vácuo)
   // ===============================
-  // Quando mudar MAX_SLIPSTREAM, mudar também a velocidade segurando X em indianapolis
-  MAX_SLIPSTREAM: 0.0001, // Ganho máximo possível com slipstream
-  RESIDUAL_SLIPSTREAM_TIME: 2, // Tempo (s) de slipstream residual
-  SLIPSTREAM_RESIDUAL_VALUE: 0.0002 * 0.2, // Valor do efeito residual
-  SLIPSTREAM_ACTIVATION_DISTANCE: 500, // Distância máxima para ativar efeito
-  SLIPSTREAM_LATERAL_TOLERANCE: 38, // Largura lateral máxima para efeito
+  // When change MAX_SLIPSTREAM, change the max speed pressing X in Indianapolis too
+  MAX_SLIPSTREAM: 0.0001, // Max of speed gains with full slipstream
+  RESIDUAL_SLIPSTREAM_TIME: 2, // How much time does it take to the slipstream to end
+  SLIPSTREAM_RESIDUAL_VALUE: 0.0002 * 0.2, // How much powerfull is the slipstream when you are closer
+  SLIPSTREAM_ACTIVATION_DISTANCE: 500, // The distance you have to be to the slipstream start to act
+  SLIPSTREAM_LATERAL_TOLERANCE: 38, // The width of the slipstream effect
 
   // ===============================
   // Chuva e Aderência

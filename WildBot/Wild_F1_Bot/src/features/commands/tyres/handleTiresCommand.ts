@@ -7,7 +7,10 @@ import { LEAGUE_MODE } from "../../hostLeague/leagueMode";
 import { changeTires } from "../../tires&pits/changeTires";
 import { ifInBoxZone } from "../../tires&pits/pits";
 import { Tires } from "../../tires&pits/tires";
-import { playerNerfList } from "../handleCommands";
+import {
+  playerBuffList,
+  playerNerfList,
+} from "../adjustThings/handleNerfListCommand";
 
 export function handleTiresCommand(
   byPlayer: PlayerObject,
@@ -39,7 +42,7 @@ export function handleTiresCommand(
 
       if (
         (args[1] !== boxAlertReversed || args.length !== 2) &&
-        !playerNerfList.some((player) => player.name === byPlayer.name)
+        !playerBuffList.some((player) => player.name === byPlayer.name)
       ) {
         sendErrorMessage(room, MESSAGES.CODE_WRONG(), byPlayer.id);
         return;
@@ -56,14 +59,19 @@ export function handleTiresCommand(
 
     // console.log("PlayerInfo", playerList[byPlayer.id]);
 
-    // if (
-    //     playerNerfList.some(player => player.name === byPlayer.name) &&
-    //     playerList[byPlayer.id].pits.pitsAttemp < 2
-    // ) {
-    //     playerList[byPlayer.id].pits.pitsAttemp++;
-    //     sendErrorMessage(room, MESSAGES.CODE_WRONG(), byPlayer.id);
-    //     return;
-    // }
+    const isNerfed = playerNerfList.some(
+      (nerfPlayer) => nerfPlayer.name === byPlayer.name
+    );
+
+    if (
+      isNerfed &&
+      playerList[byPlayer.id].pits.pitsAttemp < 2 &&
+      room.getScores().time > 0
+    ) {
+      playerList[byPlayer.id].pits.pitsAttemp++;
+      sendErrorMessage(room, MESSAGES.CODE_WRONG(), byPlayer.id);
+      return;
+    }
 
     for (let tiresKey in Tires) {
       if (tiresKey === tiresStr || tiresKey[0] === tiresStr) {

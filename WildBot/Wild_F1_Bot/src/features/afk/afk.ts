@@ -1,6 +1,7 @@
 import { afkKickTime, afkAlertTime } from "../../../roomconfig.json";
 import { GameMode, gameMode } from "../changeGameState/changeGameModes";
 import { gameState } from "../changeGameState/gameState";
+import { Teams } from "../changeGameState/teams";
 import { playerList } from "../changePlayerState/playerList";
 import { sendAlertMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
@@ -28,8 +29,10 @@ export function afkKick(room: RoomObject) {
         room.getScores() != null &&
         room.getScores().time > 0 &&
         gameState === "running" &&
+        gameMode !== GameMode.WAITING &&
         gameMode !== GameMode.TRAINING &&
-        gameMode !== GameMode.QUALY
+        gameMode !== GameMode.QUALY &&
+        player.team === Teams.RUNNERS
       ) {
         if (afkDuration > afkKickTimeMilisseconds) {
           if (LEAGUE_MODE) {
@@ -56,5 +59,7 @@ export function afkKick(room: RoomObject) {
 export function updatePlayerActivity(player: PlayerObject) {
   activities[player.id] = Date.now();
   const playerPropierties = playerList[player.id];
-  playerPropierties.afkAlert = false;
+  if (playerPropierties) {
+    playerPropierties.afkAlert = false;
+  }
 }

@@ -116,5 +116,10 @@
   "TEAM_DEFINED": "Equipe definida com sucesso: {{name}} ({{tag}})",
   "TEAM_ERROR": "Equipe não encontrada: {{value}}. Verifique a tag ou o nome.",
   "AVAILABLE_COMMANDS": "Comandos disponíveis:",
+  "QUALY_STARTING": "Em {{segundos}}s a qualificatória iniciará.",
+  "RACE_STARTING": "Em {{segundos}}s a corrida iniciará.",
+  "CHAT_MUTED": "SILENCIO! O chat agora está mutado!",
+  "CHAT_FREE": "LIBERDADE! O chat agora está liberado!",
+
   "NON_ADMIN_COMMANDS": "Comandos disponíveis: !lang, !dicas, !ajuda, !comandos, !tyres, !wait_time, !maps, !times (somente em qualy), !positions (somente em corridas)."
 }

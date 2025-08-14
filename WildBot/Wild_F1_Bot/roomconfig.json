@@ -7,6 +7,6 @@
   "leagueName": "🏎️ Formula 1 - FTOH 🏎️",
   "maxPlayers": 22,
   "roomPassword": null,
-  "afkKickTime": 20,
-  "afkAlertTime": 10
+  "afkKickTime": 27,
+  "afkAlertTime": 23
 }

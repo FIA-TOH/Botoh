@@ -17,10 +17,14 @@ export function handleRREnabledCommand(
     }
     if (args && args[0] === "true") {
       rrEnabled = true;
-      room.sendAnnouncement("RR mode!");
+      if (byPlayer) {
+        room.sendAnnouncement("RR mode!");
+      }
     } else if (args && args[0] === "false") {
       rrEnabled = false;
-      room.sendAnnouncement("No RR mode!");
+      if (byPlayer) {
+        room.sendAnnouncement("No RR mode!");
+      }
     } else if (byPlayer) {
       sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id);
       return;

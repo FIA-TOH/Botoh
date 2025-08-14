@@ -20,16 +20,19 @@ import {
 let flag = "green";
 
 export function handleFlagCommand(
-  byPlayer: PlayerObject,
-  args: string[],
-  room: RoomObject
+  byPlayer?: PlayerObject,
+  args?: string[],
+  room?: RoomObject
 ) {
-  if (!byPlayer.admin) {
+  if (!room || !args) {
+    return;
+  }
+  if (byPlayer && !byPlayer.admin) {
     sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id);
     return;
   }
 
-  if (!args[0]) {
+  if (byPlayer && !args[0]) {
     room.sendAnnouncement(
       "Uso correto: !flag color [playerName]",
       byPlayer.id,
@@ -53,7 +56,18 @@ export function handleFlagCommand(
     playerEscolhido = players.filter((p) => p.p.id === playerNumero);
   }
 
-  if (flagChoosen === "green" && (vsc === true || presentationLap === true)) {
+  if (flagChoosen === "reset") {
+    if (vsc === true) {
+      changeVSC();
+    }
+    if (presentationLap === true) {
+      handlePresentationLapCommand(undefined, ["false"], room);
+    }
+    flag = "green";
+  } else if (
+    flagChoosen === "green" &&
+    (vsc === true || presentationLap === true)
+  ) {
     if (vsc === true) {
       changeVSC();
     }
@@ -87,11 +101,11 @@ export function handleFlagCommand(
       handleAvatar(situacions.Flag, player.p, room, undefined, ["🟥"], [5000]);
     });
   } else if (flagChoosen === "blue") {
-    if (!playerChoosen) {
+    if (byPlayer && !playerChoosen) {
       room.sendAnnouncement("Escolha um jogador", byPlayer.id, 0xff0000);
       return;
     }
-    if (playerEscolhido?.length === 0) {
+    if (byPlayer && playerEscolhido?.length === 0) {
       room.sendAnnouncement("Escolha um jogador válido", byPlayer.id, 0xff0000);
       return;
     }
@@ -114,11 +128,11 @@ export function handleFlagCommand(
       [5000]
     );
   } else if (flagChoosen === "black") {
-    if (!playerChoosen) {
+    if (byPlayer && !playerChoosen) {
       room.sendAnnouncement("Escolha um jogador", byPlayer.id, 0xff0000);
       return;
     }
-    if (playerEscolhido?.length === 0 || !playerEscolhido) {
+    if (byPlayer && (playerEscolhido?.length === 0 || !playerEscolhido)) {
       room.sendAnnouncement("Escolha um jogador válido", byPlayer.id, 0xff0000);
       return;
     }

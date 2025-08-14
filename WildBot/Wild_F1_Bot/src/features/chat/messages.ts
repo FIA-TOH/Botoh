@@ -1131,6 +1131,40 @@ export const MESSAGES = {
     tr: replaceTemplateString(tr_messages.TIME_TO_QUALY, {}),
     pt: replaceTemplateString(pt_messages.TIME_TO_QUALY, {}),
   }),
+  QUALY_STARTING: (segundos: number): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.QUALY_STARTING, {
+      segundos: segundos.toString(),
+    }),
+    es: replaceTemplateString(es_messages.QUALY_STARTING, {
+      segundos: segundos.toString(),
+    }),
+    fr: replaceTemplateString(fr_messages.QUALY_STARTING, {
+      segundos: segundos.toString(),
+    }),
+    tr: replaceTemplateString(tr_messages.QUALY_STARTING, {
+      segundos: segundos.toString(),
+    }),
+    pt: replaceTemplateString(pt_messages.QUALY_STARTING, {
+      segundos: segundos.toString(),
+    }),
+  }),
+  RACE_STARTING: (segundos: number): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.RACE_STARTING, {
+      segundos: segundos.toString(),
+    }),
+    es: replaceTemplateString(es_messages.RACE_STARTING, {
+      segundos: segundos.toString(),
+    }),
+    fr: replaceTemplateString(fr_messages.RACE_STARTING, {
+      segundos: segundos.toString(),
+    }),
+    tr: replaceTemplateString(tr_messages.RACE_STARTING, {
+      segundos: segundos.toString(),
+    }),
+    pt: replaceTemplateString(pt_messages.RACE_STARTING, {
+      segundos: segundos.toString(),
+    }),
+  }),
 
   TIME_TO_RACE: (laps: number): LocalizedMessageFunction => ({
     en: replaceTemplateString(en_messages.TIME_TO_RACE, {
@@ -1157,7 +1191,20 @@ export const MESSAGES = {
     tr: replaceTemplateString(tr_messages.PRESENTATION_LAP, {}),
     pt: replaceTemplateString(pt_messages.PRESENTATION_LAP, {}),
   }),
-
+  CHAT_MUTED: (): LocalizedMessageFunction => ({
+    en: en_messages.CHAT_MUTED,
+    es: es_messages.CHAT_MUTED,
+    fr: fr_messages.CHAT_MUTED,
+    tr: tr_messages.CHAT_MUTED,
+    pt: pt_messages.CHAT_MUTED,
+  }),
+  CHAT_FREE: (): LocalizedMessageFunction => ({
+    en: en_messages.CHAT_FREE,
+    es: es_messages.CHAT_FREE,
+    fr: fr_messages.CHAT_FREE,
+    tr: tr_messages.CHAT_FREE,
+    pt: pt_messages.CHAT_FREE,
+  }),
   WORSE_TIME: (
     lapTime: number,
     diferenca: number

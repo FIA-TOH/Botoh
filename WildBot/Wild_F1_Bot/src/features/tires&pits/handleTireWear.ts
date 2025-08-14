@@ -2,7 +2,7 @@ import { gameMode, GameMode } from "../changeGameState/changeGameModes";
 import { playerList } from "../changePlayerState/playerList";
 import { sendAlertMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
-import { playerNerfList } from "../commands/handleCommands";
+import { playerBuffList } from "../commands/adjustThings/handleNerfListCommand";
 import { tyresActivated } from "../commands/tyres/handleEnableTyresCommand";
 import { vsc } from "../speed/handleSpeed";
 import { laps } from "../zones/laps";
@@ -12,7 +12,11 @@ import { TYRE_DURABILITY, Tires } from "./tires";
 export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
   const p = playerList[player.id];
 
-  if (!tyresActivated || gameMode == GameMode.QUALY) {
+  if (
+    !tyresActivated ||
+    gameMode == GameMode.QUALY ||
+    gameMode === GameMode.WAITING
+  ) {
     p.wear = 20;
     return;
   }
@@ -25,13 +29,13 @@ export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
   const timeElapsed = currentTime - p.lastCheckTime;
   p.lastCheckTime = currentTime;
 
-  const isNerfed = playerNerfList.some(
-    (nerfPlayer) => nerfPlayer.name === player.name
+  const isBuffed = playerBuffList.some(
+    (buffPlayer) => buffPlayer.name === player.name
   );
   const wearReductionFactor = vsc ? 0.25 : 1;
   const wearIncrementPerSecond = (100 / totalDurability) * wearReductionFactor;
 
-  if (isNerfed && 100 - p.wear <= 50) {
+  if (isBuffed && 100 - p.wear <= 50) {
     return;
   } else {
     p.wear = Math.min(100, p.wear + wearIncrementPerSecond * timeElapsed);
@@ -64,7 +68,7 @@ export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
     p.alertSent = {};
   }
 
-  if (remainingPercentage === 0 && !p.alertSent[0]) {
+  if (remainingPercentage === 0 && !p.alertSent[0] && tyresActivated) {
     sendAlertMessage(room, MESSAGES.WEAR_ON_CURRENT_TIRE(0), player.id);
     p.alertSent[0] = true;
     return;

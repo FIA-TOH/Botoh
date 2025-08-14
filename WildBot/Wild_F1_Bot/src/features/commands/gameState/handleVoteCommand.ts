@@ -1,5 +1,7 @@
-import { gameState } from "../../changeGameState/gameState";
-import { selectedCircuits } from "../../changeGameState/vote/vote";
+import {
+  isOnVoteSession,
+  selectedCircuits,
+} from "../../changeGameState/vote/vote";
 import { playerList } from "../../changePlayerState/playerList";
 import { sendErrorMessage, sendSuccessMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
@@ -9,7 +11,7 @@ export function handleVoteCommand(
   args: string[],
   room: RoomObject
 ) {
-  if (gameState !== null) {
+  if (!isOnVoteSession) {
     sendErrorMessage(room, MESSAGES.NOT_VOTE(), byPlayer.id);
   }
   if (playerList[byPlayer.id]?.voted) {

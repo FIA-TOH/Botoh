@@ -4,8 +4,7 @@ import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { MESSAGES } from "../chat/messages";
 import { resetPlayers } from "../changePlayerState/players";
 
-import { resetAllRainEvents, setRainChances } from "../rain/rain";
-import { voteSession } from "../changeGameState/vote/vote";
+import { rainEnabled, resetAllRainEvents, setRainChances } from "../rain/rain";
 import {
   changeGameStoppedNaturally,
   gameStopedNaturally,
@@ -19,12 +18,15 @@ import {
 } from "../changeGameState/changeGameModes";
 import { clearPlayers } from "../changeGameState/qualy/playerTime";
 import { printAllTimes } from "../changeGameState/qualy/printAllTimes";
-import { reorderPlayersInRoom } from "../movePlayers/reorderPlayersInRoom";
+import { reorderPlayersInRoomRace } from "../movePlayers/reorderPlayersInRoom";
 import { timerController } from "../utils";
 import { printAllPositions } from "../changeGameState/race/printAllPositions";
 import { log } from "../discord/logger";
 import { changeLaps } from "../commands/adminThings/handleChangeLaps";
 import { handleRREnabledCommand } from "../commands/adminThings/handleRREnabledCommand";
+import { handleFlagCommand } from "../commands/flagsAndVSC/handleFlagCommand";
+import { clearPlayerBuffAndNerfLists } from "../commands/adjustThings/handleNerfListCommand";
+import PublicGameFlow from "../changeGameState/publicGameFlow/publicGameFLow";
 
 export function GameStop(room: RoomObject) {
   room.onGameStop = function (byPlayer) {
@@ -32,60 +34,53 @@ export function GameStop(room: RoomObject) {
       ? log(`Game stopped`)
       : log(`Game stopped by ${byPlayer.name}`);
 
-    handleGameStateChange(null, room);
     resetAllRainEvents();
+    if (gameMode !== GameMode.WAITING) {
+      console.log("gameStopedNaturally", gameStopedNaturally, gameMode);
 
-    if (gameStopedNaturally && !LEAGUE_MODE) {
-      if (gameMode == GameMode.QUALY) {
-        printAllTimes(room);
-        room.stopGame();
-        reorderPlayersInRoom(room);
-        movePlayersToCorrectSide();
-        setTimeout(() => {
+      if (gameStopedNaturally && !LEAGUE_MODE) {
+        PublicGameFlow(room);
+        changeGameStoppedNaturally(false);
+      } else {
+        handleGameStateChange(null, room);
+        if (gameMode == GameMode.QUALY) {
+          console.log("baaaa");
+
+          printAllTimes(room);
+          reorderPlayersInRoomRace(room);
+          movePlayersToCorrectSide();
           changeGameMode(GameMode.RACE, room);
+          changeLaps("7", undefined, room);
           resetPlayers(room);
           setGhostMode(room, false);
           handleRREnabledCommand(undefined, ["false"], room);
-          sendChatMessage(room, MESSAGES.EXPLAIN_TYRES());
-          sendChatMessage(room, MESSAGES.EXPLAIN_ERS());
-          setTimeout(() => {
-            room.startGame();
-          }, 5000);
-        }, 5000);
-      } else {
-        room.stopGame();
-        printAllPositions(room);
-        movePlayersToCorrectSide();
-        sendChatMessage(room, MESSAGES.DISCORD_INVITE());
-        voteSession(room);
+        } else if (gameMode == GameMode.TRAINING) {
+          console.log("cccc");
+          printAllTimes(room);
+          reorderPlayersInRoomRace(room);
+          movePlayersToCorrectSide();
+          resetPlayers(room);
+          setGhostMode(room, false);
+          handleRREnabledCommand(undefined, ["false"], room);
+        } else {
+          printAllPositions(room);
+          movePlayersToCorrectSide();
+          resetPlayers(room);
+          sendChatMessage(room, MESSAGES.DISCORD_INVITE());
+        }
       }
-      changeGameStoppedNaturally(false);
-    } else {
-      if (gameMode == GameMode.QUALY) {
-        printAllTimes(room);
-        reorderPlayersInRoom(room);
-        movePlayersToCorrectSide();
-        changeGameMode(GameMode.RACE, room);
-        changeLaps("7", undefined, room);
-        resetPlayers(room);
-        setGhostMode(room, false);
-      } else if (gameMode == GameMode.TRAINING) {
-        printAllTimes(room);
-        reorderPlayersInRoom(room);
-        movePlayersToCorrectSide();
-        resetPlayers(room);
-      } else {
-        printAllPositions(room);
-        movePlayersToCorrectSide();
-        resetPlayers(room);
+      clearPlayers();
+      if (rainEnabled) {
+        setRainChances(0);
       }
     }
-    clearPlayers();
-    setRainChances(0);
+
     if (timerController.positionTimer !== null) {
       clearTimeout(timerController.positionTimer);
       timerController.positionTimer = null;
       log("Temporizador cancelado por onGameStop");
     }
+    handleFlagCommand(undefined, ["reset"], room);
+    clearPlayerBuffAndNerfLists();
   };
 }

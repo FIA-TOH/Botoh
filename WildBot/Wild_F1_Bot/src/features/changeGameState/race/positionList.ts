@@ -1,5 +1,4 @@
 import { PitsInfo, playerList } from "../../changePlayerState/playerList";
-import { log } from "../../discord/logger";
 
 export const positionList: {
   name: string;

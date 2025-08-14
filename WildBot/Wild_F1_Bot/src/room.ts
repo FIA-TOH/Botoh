@@ -28,9 +28,9 @@ export const room = HBInit({
   password: roomPassword ?? undefined,
   token: "thr1.AAAAAGdDS0jEIWnS04qeVA.1F4ha2154X8",
   geo: {
-    code: "AR",
-    lat: -34.603722,
-    lon: -58.381592,
+    code: "BR",
+    lat: -23.5505,
+    lon: -46.6333,
   },
 });
 
