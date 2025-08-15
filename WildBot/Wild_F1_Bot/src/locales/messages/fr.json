@@ -119,5 +119,10 @@
   "QUALY_STARTING": "Dans {{segundos}}s, la qualification commencera.",
   "RACE_STARTING": "Dans {{segundos}}s, la course commencera.",
   "CHAT_MUTED": "SILENCE ! Le chat est maintenant muet !",
-  "CHAT_FREE": "LIBERTÉ ! Le chat est maintenant libre !"
+  "CHAT_FREE": "LIBERTÉ ! Le chat est maintenant libre !",
+  "STARTING_LAP": "Course commencée, bonne chance pilote !",
+  "STARTING_QUALY_LAP": "Début du tour de qualification, envole-toi !",
+  "POSITION_QUALY": "Vous êtes à la {{position}}ᵉ place !",
+  "ERROR_POSITION_QUALY": "Vous n'avez pas encore terminé un tour.",
+  "EARLY_LAP_ERROR": "Tu as franchi la ligne d'arrivée avant que le chronomètre ne commence, utilise !rr pour revenir au départ, sinon le tour ne sera pas validé."
 }

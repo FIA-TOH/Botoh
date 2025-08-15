@@ -120,6 +120,10 @@
   "RACE_STARTING": "Em {{segundos}}s a corrida iniciará.",
   "CHAT_MUTED": "SILENCIO! O chat agora está mutado!",
   "CHAT_FREE": "LIBERDADE! O chat agora está liberado!",
-
+  "STARTING_LAP": "Corrida iniciada, boa sorte piloto!",
+  "STARTING_QUALY_LAP": "Iniciando volta de qualificação, voa!",
+  "POSITION_QUALY": "Você está na {{position}}ª colocação!",
+  "ERROR_POSITION_QUALY": "Você ainda não registrou uma volta.",
+  "EARLY_LAP_ERROR": "Atravessaste a linha de chegada antes do timer iniciar, use !rr para voltar ao inicio, ou seja volta não será validada.",
   "NON_ADMIN_COMMANDS": "Comandos disponíveis: !lang, !dicas, !ajuda, !comandos, !tyres, !wait_time, !maps, !times (somente em qualy), !positions (somente em corridas)."
 }

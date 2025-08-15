@@ -14,7 +14,7 @@ import {
 import { MESSAGES } from "../../chat/messages";
 import { log } from "../../discord/logger";
 import { getPlayerAndDiscs } from "../../playerFeatures/getPlayerAndDiscs";
-import { rainIntensity } from "../../rain/rain";
+import { rainEnabled, rainIntensity } from "../../rain/rain";
 import { ACTUAL_CIRCUIT } from "../../roomFeatures/stadiumChange";
 import { serialize, someArray } from "../../utils";
 import { drsOn, enableDRS } from "../handleDRSZone";
@@ -54,12 +54,12 @@ export function processCompletedLap(
     updateBestTime(ACTUAL_CIRCUIT.info.name, lapTime, p.name);
     playerData.bestTime = lapTime;
     sendBestTimeRace(room, MESSAGES.TRACK_RECORD(p.name, lapTime));
-    updatePlayerTime(p.name, lapTime);
+    updatePlayerTime(p.name, lapTime, p.id);
   } else if (lapTime < bestTimeP || bestTimeP === undefined) {
     sendSuccessMessage(room, MESSAGES.LAP_TIME(lapTime), p.id);
     playerData.bestTime = lapTime;
     broadcastLapTimeToPlayers(room, lapTime, p.name);
-    updatePlayerTime(p.name, lapTime);
+    updatePlayerTime(p.name, lapTime, p.id);
   } else {
     sendWorseTime(
       room,
@@ -76,12 +76,14 @@ export function processCompletedLap(
       0xff8f00
     );
   }
+  if (rainEnabled) {
+    sendChatMessage(
+      room,
+      MESSAGES.RAIN_INTENSITY_LAP(Math.round(rainIntensity)),
+      p.id
+    );
+  }
 
-  sendChatMessage(
-    room,
-    MESSAGES.RAIN_INTENSITY_LAP(Math.round(rainIntensity)),
-    p.id
-  );
   sendChatMessage(
     room,
     MESSAGES.TYRE_WEAR_LAP(100 - Math.round(playerData.wear)),

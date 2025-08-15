@@ -36,7 +36,7 @@ export function handleClearTimeCommand(
     );
   }
 
-  updatePlayerTime(argsString, Number.MAX_VALUE);
+  updatePlayerTime(argsString, Number.MAX_VALUE, Number.MAX_VALUE);
 
   sendNonLocalizedSmallChatMessage(
     room,

@@ -119,5 +119,10 @@
   "QUALY_STARTING": "{{segundos}} saniye içinde sıralama başlayacak.",
   "RACE_STARTING": "{{segundos}} saniye içinde yarış başlayacak.",
   "CHAT_MUTED": "SESSİZLİK! Sohbet şimdi susturuldu!",
-  "CHAT_FREE": "ÖZGÜRLÜK! Sohbet şimdi serbest!"
+  "CHAT_FREE": "ÖZGÜRLÜK! Sohbet şimdi serbest!",
+  "STARTING_LAP": "Yarış başladı, iyi şanslar sürücü!",
+  "STARTING_QUALY_LAP": "Sıralama turu başlıyor, uç!",
+  "POSITION_QUALY": "{{position}}. sıradasınız!",
+  "ERROR_POSITION_QUALY": "Henüz bir tur tamamlamadınız.",
+  "EARLY_LAP_ERROR": "Zamanlayıcı başlamadan bitiş çizgisini geçtin, başlangıca dönmek için !rr kullan, aksi takdirde tur geçerli sayılmayacak."
 }

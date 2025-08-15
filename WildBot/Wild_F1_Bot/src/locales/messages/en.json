@@ -119,5 +119,10 @@
   "QUALY_STARTING": "In {{segundos}}s the qualifying will start.",
   "RACE_STARTING": "In {{segundos}}s the race will start.",
   "CHAT_MUTED": "SILENCE! The chat is now muted!",
-  "CHAT_FREE": "FREEDOM! The chat is now free!"
+  "CHAT_FREE": "FREEDOM! The chat is now free!",
+  "STARTING_LAP": "Race started, good luck driver!",
+  "STARTING_QUALY_LAP": "Starting qualifying lap, fly!",
+  "POSITION_QUALY": "You are in {{position}} position!",
+  "ERROR_POSITION_QUALY": "You haven't completed a lap yet.",
+  "EARLY_LAP_ERROR": "You crossed the finish line before the timer started, use !rr to return to the start, otherwise the lap will not be validated."
 }

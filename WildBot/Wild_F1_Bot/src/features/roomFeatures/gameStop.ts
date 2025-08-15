@@ -30,22 +30,28 @@ import PublicGameFlow from "../changeGameState/publicGameFlow/publicGameFLow";
 
 export function GameStop(room: RoomObject) {
   room.onGameStop = function (byPlayer) {
-    byPlayer == null
-      ? log(`Game stopped`)
-      : log(`Game stopped by ${byPlayer.name}`);
+    if (byPlayer == null) {
+      log(`Game stopped`);
+    } else {
+      changeGameStoppedNaturally(false);
+      log(`Game stopped by ${byPlayer.name}`);
+    }
+
+    if (timerController.positionTimer !== null) {
+      clearTimeout(timerController.positionTimer);
+      timerController.positionTimer = null;
+      log("Temporizador cancelado por onGameStop");
+    }
+    console.log("gameStopedNaturally", gameStopedNaturally);
 
     resetAllRainEvents();
     if (gameMode !== GameMode.WAITING) {
-      console.log("gameStopedNaturally", gameStopedNaturally, gameMode);
-
       if (gameStopedNaturally && !LEAGUE_MODE) {
         PublicGameFlow(room);
         changeGameStoppedNaturally(false);
       } else {
         handleGameStateChange(null, room);
         if (gameMode == GameMode.QUALY) {
-          console.log("baaaa");
-
           printAllTimes(room);
           reorderPlayersInRoomRace(room);
           movePlayersToCorrectSide();
@@ -55,7 +61,6 @@ export function GameStop(room: RoomObject) {
           setGhostMode(room, false);
           handleRREnabledCommand(undefined, ["false"], room);
         } else if (gameMode == GameMode.TRAINING) {
-          console.log("cccc");
           printAllTimes(room);
           reorderPlayersInRoomRace(room);
           movePlayersToCorrectSide();
@@ -75,11 +80,6 @@ export function GameStop(room: RoomObject) {
       }
     }
 
-    if (timerController.positionTimer !== null) {
-      clearTimeout(timerController.positionTimer);
-      timerController.positionTimer = null;
-      log("Temporizador cancelado por onGameStop");
-    }
     handleFlagCommand(undefined, ["reset"], room);
     clearPlayerBuffAndNerfLists();
   };

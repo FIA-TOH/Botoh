@@ -22,7 +22,11 @@ export function handleAfkCommand(
     player.afk = true;
     sendAlertMessage(room, MESSAGES.NOW_AFK(), byPlayer.id);
     resetPlayer(byPlayer, room, byPlayer.id);
-  } else if (gameMode == GameMode.QUALY || gameMode == GameMode.TRAINING) {
+  } else if (
+    gameMode == GameMode.QUALY ||
+    gameMode == GameMode.TRAINING ||
+    gameMode === GameMode.WAITING
+  ) {
     room.setPlayerTeam(byPlayer.id, Teams.RUNNERS);
     player.afk = false;
     resetPlayer(byPlayer, room, byPlayer.id);

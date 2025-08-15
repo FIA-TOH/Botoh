@@ -119,5 +119,10 @@
   "QUALY_STARTING": "En {{segundos}}s comenzará la clasificación.",
   "RACE_STARTING": "En {{segundos}}s comenzará la carrera.",
   "CHAT_MUTED": "¡SILENCIO! ¡El chat ahora está silenciado!",
-  "CHAT_FREE": "¡LIBERTAD! ¡El chat ahora está libre!"
+  "CHAT_FREE": "¡LIBERTAD! ¡El chat ahora está libre!",
+  "STARTING_LAP": "¡Carrera iniciada, buena suerte piloto!",
+  "STARTING_QUALY_LAP": "Iniciando vuelta de clasificación, ¡vuela!",
+  "POSITION_QUALY": "¡Estás en la posición {{position}}!",
+  "ERROR_POSITION_QUALY": "Aún no has registrado una vuelta.",
+  "EARLY_LAP_ERROR": "Cruzaste la línea de meta antes de que comenzara el cronómetro, usa !rr para volver al inicio, de lo contrario la vuelta no será válida."
 }

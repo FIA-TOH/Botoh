@@ -1,7 +1,8 @@
 import { gameMode, GameMode } from "../../changeGameState/changeGameModes";
 import { updatePositionList } from "../../changeGameState/race/positionList";
+import { Teams } from "../../changeGameState/teams";
 import { playerList } from "../../changePlayerState/playerList";
-import { sendErrorMessage } from "../../chat/chat";
+import { sendErrorMessage, sendSmallChatMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { presentationLap } from "../../commands/gameState/handlePresentationLapCommand";
 import {
@@ -30,7 +31,6 @@ export function checkPlayerLaps(
     const playerData = playerList[p.id];
     const now = performance.now();
     const delta = (now - playerData.lastLapTimeUpdate) / 1000;
-
     playerData.lapTime += delta;
     playerData.sectorTimeCounter += delta;
     playerData.lastLapTimeUpdate = now;
@@ -39,15 +39,26 @@ export function checkPlayerLaps(
       playerData.lapChanged = false;
       return;
     }
+    if (room.getScores().time === 0) {
+      sendErrorMessage(room, MESSAGES.EARLY_LAP_ERROR(), p.id);
+    }
 
     if (playerData.lapChanged) return;
+
+    if (playerData.currentLap === 0) {
+      if (gameMode === GameMode.RACE || gameMode === GameMode.INDY) {
+        sendSmallChatMessage(room, MESSAGES.STARTING_LAP(), p.id);
+      } else if (gameMode === GameMode.QUALY) {
+        sendSmallChatMessage(room, MESSAGES.STARTING_QUALY_LAP(), p.id);
+      }
+    }
 
     if (
       CHECK_IF_TROLLING &&
       checkIfTrolling(pad, circuit.finishLine.passingDirection)
     ) {
       sendErrorMessage(room, MESSAGES.TROLLING_DETECTED(), p.id);
-      if (!hasSector) room.setPlayerTeam(p.id, 0);
+      if (!hasSector) room.setPlayerTeam(p.id, Teams.OUTSIDE);
       return;
     }
 

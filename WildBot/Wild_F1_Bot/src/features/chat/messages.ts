@@ -1255,21 +1255,21 @@ export const MESSAGES = {
     tr: tr_messages.CODE_WRONG,
     pt: pt_messages.CODE_WRONG,
   }),
-  SECONDS_TO_FINISH: (seconds: number): LocalizedMessageFunction => ({
+  SECONDS_TO_FINISH: (segundos: number): LocalizedMessageFunction => ({
     en: replaceTemplateString(en_messages.SECONDS_TO_FINISH, {
-      seconds: seconds.toString(),
+      segundos: segundos.toString(),
     }),
     es: replaceTemplateString(es_messages.SECONDS_TO_FINISH, {
-      seconds: seconds.toString(),
+      segundos: segundos.toString(),
     }),
     fr: replaceTemplateString(fr_messages.SECONDS_TO_FINISH, {
-      seconds: seconds.toString(),
+      segundos: segundos.toString(),
     }),
     tr: replaceTemplateString(tr_messages.SECONDS_TO_FINISH, {
-      seconds: seconds.toString(),
+      segundos: segundos.toString(),
     }),
     pt: replaceTemplateString(pt_messages.SECONDS_TO_FINISH, {
-      seconds: seconds.toString(),
+      segundos: segundos.toString(),
     }),
   }),
 
@@ -1301,5 +1301,50 @@ export const MESSAGES = {
     fr: replaceTemplateString(fr_messages.TEAM_ERROR, { tag: tag }),
     tr: replaceTemplateString(tr_messages.TEAM_ERROR, { tag: tag }),
     pt: replaceTemplateString(pt_messages.TEAM_ERROR, { tag: tag }),
+  }),
+  STARTING_LAP: (): LocalizedMessageFunction => ({
+    en: en_messages.STARTING_LAP,
+    es: es_messages.STARTING_LAP,
+    fr: fr_messages.STARTING_LAP,
+    tr: tr_messages.STARTING_LAP,
+    pt: pt_messages.STARTING_LAP,
+  }),
+  STARTING_QUALY_LAP: (): LocalizedMessageFunction => ({
+    en: en_messages.STARTING_QUALY_LAP,
+    es: es_messages.STARTING_QUALY_LAP,
+    fr: fr_messages.STARTING_QUALY_LAP,
+    tr: tr_messages.STARTING_QUALY_LAP,
+    pt: pt_messages.STARTING_QUALY_LAP,
+  }),
+  EARLY_LAP_ERROR: (): LocalizedMessageFunction => ({
+    en: en_messages.EARLY_LAP_ERROR,
+    es: es_messages.EARLY_LAP_ERROR,
+    fr: fr_messages.EARLY_LAP_ERROR,
+    tr: tr_messages.EARLY_LAP_ERROR,
+    pt: pt_messages.EARLY_LAP_ERROR,
+  }),
+  POSITION_QUALY: (position: number): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.POSITION_QUALY, {
+      position: position.toString(),
+    }),
+    es: replaceTemplateString(es_messages.POSITION_QUALY, {
+      position: position.toString(),
+    }),
+    fr: replaceTemplateString(fr_messages.POSITION_QUALY, {
+      position: position.toString(),
+    }),
+    tr: replaceTemplateString(tr_messages.POSITION_QUALY, {
+      position: position.toString(),
+    }),
+    pt: replaceTemplateString(pt_messages.POSITION_QUALY, {
+      position: position.toString(),
+    }),
+  }),
+  ERROR_POSITION_QUALY: (): LocalizedMessageFunction => ({
+    en: en_messages.ERROR_POSITION_QUALY,
+    es: es_messages.ERROR_POSITION_QUALY,
+    fr: fr_messages.ERROR_POSITION_QUALY,
+    tr: tr_messages.ERROR_POSITION_QUALY,
+    pt: pt_messages.ERROR_POSITION_QUALY,
   }),
 };

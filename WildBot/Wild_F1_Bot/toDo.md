@@ -1,19 +1,13 @@
 TESTAR
-ver se a sala rr dps de 3 min do primeiro colocado ou 7 min dps de tanto faz
-ordem após qualy e corrida
-nao ter tempo em tela de espera durante a troca de waitroom para o mapa certo
+
+Testar com bastante gente: Texto de posicao de qualy e posicao podio e grid reorganizado
 
 TO-DO
-
-Ver pq quem entra no red sala de espera vai la pra longe
-Ver pq aparece pneu aquecido na sala de espera
-Bug 1 pessoa ficando afk
-
-Durante a qualy mostra a posicao que a pessoa está quando faz uma volta
-
-Mensagem mostrando que iniciou volta rapida ou a volta 0
+Ver pq as vezes a corrida vai com pista diferente da qualy
 
 Camera
+
+Se tiver 0 players, para o flow e volta quando alguem volta
 
 Mensagens discord
 room.aanoucement ir para discord tmb

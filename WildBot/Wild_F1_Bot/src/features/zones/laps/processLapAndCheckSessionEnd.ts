@@ -1,5 +1,6 @@
 import { gameMode, GameMode } from "../../changeGameState/changeGameModes";
 import { qualiTime } from "../../changeGameState/qualy/qualiMode";
+import { showPlayerQualiPosition } from "../../changeGameState/qualy/showPositionQualy";
 import { printAllPositions } from "../../changeGameState/race/printAllPositions";
 import { playerList } from "../../changePlayerState/playerList";
 import { sendChatMessage, sendSuccessMessage } from "../../chat/chat";
@@ -54,10 +55,12 @@ export function processLapAndCheckSessionEnd(
           notifySpectatorsCurrentLap(room, currentLap, playerAndDiscs);
         }
       } else {
-        handleRaceFinish(p, room, lapTime);
+        handleRaceFinish(p, room, lapTime, position === 1);
       }
     }
   } else {
+    showPlayerQualiPosition(room, p.id);
+
     if (room.getScores().time >= qualiTime * 60) {
       sendSuccessMessage(room, MESSAGES.FINISH_QUALI(), p.id);
       room.setPlayerTeam(p.id, 0);

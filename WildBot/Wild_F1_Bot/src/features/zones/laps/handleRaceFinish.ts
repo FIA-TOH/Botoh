@@ -7,10 +7,13 @@ import { getPlayerAndDiscs } from "../../playerFeatures/getPlayerAndDiscs";
 import { getRunningPlayers, timerController } from "../../utils";
 import { lapPositions, finishList } from "./handleLapChange";
 
+const SECONDS_AFTER_FIRST_END = 30;
+
 export function handleRaceFinish(
   p: PlayerObject,
   room: RoomObject,
-  lapTime: number
+  lapTime: number,
+  isWinner: boolean
 ) {
   const playersAndDiscs = getPlayerAndDiscs(room);
   const fullTime =
@@ -31,13 +34,13 @@ export function handleRaceFinish(
   updatePositionList(getRunningPlayers(playersAndDiscs), room);
   room.setPlayerTeam(p.id, 0);
 
-  if (lapPositions[lapPositions.length - 1].length === 1 && !LEAGUE_MODE) {
+  if (isWinner && !LEAGUE_MODE) {
+    sendAlertMessage(room, MESSAGES.SECONDS_TO_FINISH(SECONDS_AFTER_FIRST_END));
     timerController.positionTimer = setTimeout(() => {
       getRunningPlayers(playersAndDiscs).forEach((fp) =>
         room.setPlayerTeam(fp.p.id, 0)
       );
       timerController.positionTimer = null;
-    }, 30000);
-    sendAlertMessage(room, MESSAGES.SECONDS_TO_FINISH(30));
+    }, SECONDS_AFTER_FIRST_END * 1000);
   }
 }
