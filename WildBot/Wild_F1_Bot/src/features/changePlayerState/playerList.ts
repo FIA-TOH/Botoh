@@ -62,6 +62,8 @@ export interface PlayerInfo {
   language: Language;
   everyoneLaps: boolean;
   voted: boolean;
+
+  cameraFollowing: boolean;
 }
 
 type PlayerList = {

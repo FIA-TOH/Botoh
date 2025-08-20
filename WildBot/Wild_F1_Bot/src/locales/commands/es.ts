@@ -260,6 +260,21 @@ export default function es_commands(
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject
+  ) => void,
+  handleCameraProperties: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
+  ) => void,
+  handleCameraPlayerFollow: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
+  ) => void,
+  handleCameraPositionFollow: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
   ) => void
 ): Commands {
   return {
@@ -320,5 +335,8 @@ export default function es_commands(
     "!team": handleSetTeam,
     "!ver_equipos": handleSeeTeams,
     "!discord": handleDiscordCommand,
+    "!camera_properties": handleCameraProperties,
+    "!camera_id": handleCameraPlayerFollow,
+    "!camera_position": handleCameraPositionFollow,
   };
 }

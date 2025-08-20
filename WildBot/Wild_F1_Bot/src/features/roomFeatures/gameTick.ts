@@ -15,6 +15,7 @@ import {
   handleChangePlayerSizeSuzuka,
 } from "../zones/handleSuzukaTp";
 import { afkKick } from "../afk/afk";
+import { setBallPosition } from "../camera/setBallPosition";
 
 export function GameTick(room: RoomObject) {
   room.onGameTick = function () {
@@ -27,6 +28,7 @@ export function GameTick(room: RoomObject) {
     endRaceSession(playersAndDiscs, room);
     updateGripCounter(playersAndDiscs);
     updateErs(playersAndDiscs, room);
+    setBallPosition(room);
     players.forEach((pad) => {
       const p = pad.p;
       if (!presentationLap) {

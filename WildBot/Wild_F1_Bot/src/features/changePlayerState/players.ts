@@ -61,6 +61,8 @@ export function createPlayerInfo(ip?: string) {
     language: DEFAULT_LANGUAGE,
     everyoneLaps: false,
     voted: false,
+
+    cameraFollowing: false,
   };
 }
 
@@ -123,5 +125,7 @@ export function resetPlayer(
   playerList[id].alertSent = {};
 
   playerList[id].voted = false;
+
+  playerList[id].cameraFollowing = false;
   handleAvatar("ChangeTyre", player, room);
 }

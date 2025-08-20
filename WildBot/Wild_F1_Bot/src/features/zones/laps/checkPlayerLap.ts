@@ -58,7 +58,7 @@ export function checkPlayerLaps(
       checkIfTrolling(pad, circuit.finishLine.passingDirection)
     ) {
       sendErrorMessage(room, MESSAGES.TROLLING_DETECTED(), p.id);
-      if (!hasSector) room.setPlayerTeam(p.id, Teams.OUTSIDE);
+      if (!hasSector) room.setPlayerTeam(p.id, Teams.SPECTATORS);
       return;
     }
 

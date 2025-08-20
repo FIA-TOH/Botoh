@@ -57,6 +57,9 @@ import { handleSeeTeams } from "./teams/handleSeeTeams";
 import { handleSetTeam } from "./teams/handleSetTeam";
 import { handleExplainServerCommand } from "./chat/handleExplainServerCommand";
 import { handleDiscordCommand } from "../discord/handleDiscordCommand";
+import { handleCameraPlayerFollow } from "./camera/handleCameraPlayerFollow";
+import { handleCameraPositionFollow } from "./camera/handleCameraPositionFollow";
+import { handleCameraProperties } from "./camera/handleCameraProperties";
 
 export type CommandFunction = (
   handleAdminCommand: (
@@ -318,6 +321,21 @@ export type CommandFunction = (
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject
+  ) => void,
+  handleCameraProperties: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
+  ) => void,
+  handleCameraPlayerFollow: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
+  ) => void,
+  handleCameraPositionFollow: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
   ) => void
 ) => Commands;
 
@@ -379,7 +397,10 @@ function importCommandsByLanguage(commandFunctions: {
         handleChangePropierties,
         handleSetTeam,
         handleSeeTeams,
-        handleDiscordCommand
+        handleDiscordCommand,
+        handleCameraProperties,
+        handleCameraPlayerFollow,
+        handleCameraPositionFollow
       ),
     }),
     {}
@@ -442,7 +463,10 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
         handleChangePropierties,
         handleSetTeam,
         handleSeeTeams,
-        handleDiscordCommand
+        handleDiscordCommand,
+        handleCameraProperties,
+        handleCameraPlayerFollow,
+        handleCameraPositionFollow
       ),
     }),
     {}

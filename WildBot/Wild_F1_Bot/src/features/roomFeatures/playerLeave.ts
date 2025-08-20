@@ -8,6 +8,7 @@ import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
 import { gameMode, GameMode } from "../changeGameState/changeGameModes";
 import { log } from "../discord/logger";
 import { updatePlayerActivity } from "../afk/afk";
+import { followPlayerId } from "../camera/cameraFollow";
 
 export function PlayerLeave(room: RoomObject) {
   room.onPlayerLeave = function (player) {
@@ -33,14 +34,19 @@ export function PlayerLeave(room: RoomObject) {
       }
     }
 
-    const playersAndDiscs = getPlayerAndDiscs(room);
-
-    if (
-      room.getScores() != null &&
-      getRunningPlayers(playersAndDiscs).length === 0 &&
-      gameMode !== GameMode.TRAINING
-    ) {
-      room.stopGame();
+    if (player.id === followPlayerId && playerObj?.cameraFollowing) {
+      console.log(
+        `Jogador seguido (${player.name}) saiu, câmera ficará estática`
+      );
+    } else {
+      const playersAndDiscs = getPlayerAndDiscs(room);
+      if (
+        room.getScores() != null &&
+        getRunningPlayers(playersAndDiscs).length === 0 &&
+        gameMode !== GameMode.TRAINING
+      ) {
+        room.stopGame();
+      }
     }
   };
 }

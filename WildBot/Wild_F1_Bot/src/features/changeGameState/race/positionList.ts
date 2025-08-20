@@ -1,6 +1,7 @@
 import { PitsInfo, playerList } from "../../changePlayerState/playerList";
 
 export const positionList: {
+  id: number;
   name: string;
   pitsInfo: PitsInfo;
   pits: number;
@@ -29,6 +30,7 @@ export function updatePositionList(
 
     // Monta o objeto com as informações atuais do jogador
     const playerInfo = {
+      id: p.id,
       name: p.name,
       pitsInfo: playerData.pits,
       pits: playerData.pits.pitsNumber,

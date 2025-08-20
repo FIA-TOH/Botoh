@@ -1,5 +1,5 @@
 export enum Teams {
-    OUTSIDE = 0,
-    RUNNERS = 1,
-    SPECTATORS = 2
+  OUTSIDE = 2,
+  RUNNERS = 1,
+  SPECTATORS = 0,
 }
