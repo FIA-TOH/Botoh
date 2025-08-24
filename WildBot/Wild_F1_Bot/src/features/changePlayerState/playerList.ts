@@ -1,5 +1,8 @@
 import { Language } from "../chat/language";
 import { LeagueTeam } from "../teams/teams";
+import { PitStep } from "../tires&pits/pitMessaging";
+import { PitResult } from "../tires&pits/pitStopFunctions";
+
 import { Tires } from "../tires&pits/tires";
 
 export interface PitsInfo {
@@ -42,8 +45,14 @@ export interface PlayerInfo {
 
   // Pit stop
   inPitlane: boolean;
+  inPitStop: boolean;
   boxAlert: boolean | number;
   pits: PitsInfo;
+  pitCountdown?: number;
+  pitTargetTires?: Tires;
+  pitInitialPos?: { x: number; y: number };
+  pitFailures?: PitResult;
+  pitSteps?: PitStep[] | undefined;
 
   // Recursos de corrida
   speedEnabled: boolean;

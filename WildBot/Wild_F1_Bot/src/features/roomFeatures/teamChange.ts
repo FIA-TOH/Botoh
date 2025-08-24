@@ -17,10 +17,6 @@ export function TeamChange(room: RoomObject) {
       changedPlayer.id === followPlayerId &&
       changedPlayer.team !== Teams.RUNNERS
     ) {
-      console.log(
-        `Jogador seguido (${changedPlayer.name}) saiu do time RUNNERS, câmera ficará estática`
-      );
-
       return;
     }
 

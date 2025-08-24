@@ -16,6 +16,7 @@ import {
 } from "../zones/handleSuzukaTp";
 import { afkKick } from "../afk/afk";
 import { setBallPosition } from "../camera/setBallPosition";
+import { detectPitPerTick } from "../tires&pits/performPitStop";
 
 export function GameTick(room: RoomObject) {
   room.onGameTick = function () {
@@ -36,6 +37,7 @@ export function GameTick(room: RoomObject) {
       }
       handleChangePlayerSizeSuzuka(pad, room);
       handleChangeCollisionPlayerSuzuka(pad, room);
+      detectPitPerTick(pad, room);
       // handleSuzukaTp(pad, room);
     });
     afkKick(room);

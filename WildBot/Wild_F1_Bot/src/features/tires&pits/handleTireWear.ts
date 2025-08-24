@@ -69,7 +69,6 @@ export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
   }
 
   if (remainingPercentage === 0 && !p.alertSent[0] && tyresActivated) {
-    console.log("vendoGameMode do tyresWear", gameMode);
     sendAlertMessage(room, MESSAGES.WEAR_ON_CURRENT_TIRE(0), player.id);
     p.alertSent[0] = true;
     return;

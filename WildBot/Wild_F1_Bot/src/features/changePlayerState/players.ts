@@ -37,12 +37,18 @@ export function createPlayerInfo(ip?: string) {
 
     // Pit stop
     inPitlane: false,
+    inPitStop: false,
     boxAlert: false,
     pits: {
       pitsNumber: 0,
       pit: [],
       pitsAttemp: 0,
     },
+    pitCountdown: 0,
+    pitTargetTires: Tires.SOFT,
+    pitInitialPos: { x: 0, y: 0 },
+    pitFailures: undefined,
+    pitSteps: undefined,
 
     // Recursos de corrida
     speedEnabled: false,
@@ -107,14 +113,20 @@ export function resetPlayer(
   playerList[id].gripCounter = 0;
 
   playerList[id].inPitlane = false;
+  playerList[id].inPitStop = false;
   playerList[id].boxAlert = false;
+  playerList[id].pitFailures = undefined;
+  playerList[id].pitSteps = undefined;
+
   playerList[id].pits = {
     pitsNumber: 0,
     pit: [],
     pitsAttemp: 0,
   };
-
-  playerList[id].drs = false;
+  (playerList[id].pitCountdown = 0),
+    (playerList[id].pitTargetTires = Tires.SOFT),
+    (playerList[id].pitInitialPos = { x: 0, y: 0 }),
+    (playerList[id].drs = false);
   playerList[id].kers = 100;
   playerList[id].gas = 100;
   playerList[id].prevGas = 100;

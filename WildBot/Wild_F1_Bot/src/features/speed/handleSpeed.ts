@@ -45,6 +45,17 @@ export function controlPlayerSpeed(
 
   playersAndDiscsSubset.forEach(({ p, disc }) => {
     const playerInfo = playerList[p.id];
+
+    if (playerInfo.inPitStop) {
+      // anula qualquer cálculo de velocidade e gravidade
+      room.setPlayerDiscProperties(p.id, {
+        xspeed: 0,
+        yspeed: 0,
+        xgravity: 0,
+        ygravity: 0,
+      });
+      return; // sai sem aplicar grip/slipstream
+    }
     const { xspeed: x, yspeed: y } = disc;
     const norm = Math.hypot(x, y);
 
@@ -97,6 +108,7 @@ export function controlPlayerSpeed(
 
     // Situações especiais (pit lane / VSC)
     let gripLimiter = 0;
+
     if (playerInfo.inPitlane) {
       gripLimiter = ACTUAL_CIRCUIT.info.pitSpeed ?? constants.DEFAULT_PIT_SPEED;
     } else if (vsc) {

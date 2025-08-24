@@ -5,6 +5,7 @@ import { MESSAGES } from "../chat/messages";
 import { playerList } from "../changePlayerState/playerList";
 import { inHitbox, getRunningPlayers } from "../utils";
 import { handleExplainTyresCommand } from "../commands/tyres/handleExplainTyresCommand";
+import { generatePitResult } from "./pitStopFunctions";
 
 function ifInPitlaneStart(
   player: { p: PlayerObject; disc: DiscPropertiesObject },
@@ -34,26 +35,33 @@ export function handlePitlane(
   players.forEach((player) => {
     const p = player.p;
     if (ifInPitlaneStart(player, room) && !playerList[p.id].inPitlane) {
+      playerList[p.id].pitFailures = generatePitResult(p);
+
       playerList[p.id].pits.pitsNumber += 1;
       playerList[p.id].inPitlane = true;
       if (LEAGUE_MODE) {
-        if (playerList[player.p.id].boxAlert === false) {
-          const numero = Math.floor(1000 + Math.random() * 9000);
-          playerList[player.p.id].boxAlert = numero;
-          sendAlertMessage(room, MESSAGES.CODE_BOX(numero), player.p.id);
-        }
+        //Code system for box
+        // if (playerList[player.p.id].boxAlert === false) {
+        //   const numero = Math.floor(1000 + Math.random() * 9000);
+        //   playerList[player.p.id].boxAlert = numero;
+        //   sendAlertMessage(room, MESSAGES.CODE_BOX(numero), player.p.id);
+        // }
       } else {
-        if (playerList[player.p.id].boxAlert === false) {
-          handleExplainTyresCommand(player.p, undefined, room);
-          playerList[player.p.id].boxAlert = true;
-        }
+        //Code system for box
+        // if (playerList[player.p.id].boxAlert === false) {
+        handleExplainTyresCommand(player.p, undefined, room);
+        //   playerList[player.p.id].boxAlert = true;
+        // }
       }
     }
+
+    //Code system for box
     if (ifInPitlaneEnd(player, room) && playerList[p.id].inPitlane) {
       playerList[p.id].inPitlane = false;
-      if (LEAGUE_MODE && playerList[player.p.id].boxAlert !== false) {
-        playerList[player.p.id].boxAlert = false;
-      }
+
+      // if (LEAGUE_MODE && playerList[player.p.id].boxAlert !== false) {
+      //   playerList[player.p.id].boxAlert = false;
+      // }
     }
   });
 }

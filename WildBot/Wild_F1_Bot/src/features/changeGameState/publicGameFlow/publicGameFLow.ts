@@ -24,7 +24,10 @@ import { handleGameStateChange } from "../gameState";
 import { changeGameStoppedNaturally } from "../gameStopeedNaturally";
 import { printAllTimes } from "../qualy/printAllTimes";
 import { printAllPositions } from "../race/printAllPositions";
-import { getWinningCircuit } from "../vote/circuitSelection";
+import {
+  finalizeVoteAndLockWinner,
+  getLockedWinnerVotes,
+} from "../vote/circuitSelection";
 import { changeMapBasedOnVote, voteSession } from "../vote/vote";
 
 export let lastWinningVotes: number = 0;
@@ -75,9 +78,8 @@ export default async function PublicGameFlow(room: RoomObject) {
     handleMuteCommand(undefined, undefined, room);
     await delay(12);
 
-    const winnerCircuit = getWinningCircuit();
-    const winnerInfo = winnerCircuit.info;
-    lastWinningVotes = winnerInfo.Votes ?? 0;
+    const winnerCircuit = finalizeVoteAndLockWinner();
+    lastWinningVotes = getLockedWinnerVotes();
 
     changeGameStoppedNaturally(true);
     room.stopGame();

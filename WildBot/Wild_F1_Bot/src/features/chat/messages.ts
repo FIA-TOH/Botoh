@@ -225,26 +225,52 @@ export const MESSAGES = {
     tr: tr_messages.INVALID_TIRES,
     pt: pt_messages.INVALID_TIRES,
   }),
-  CHANGED_TIRES: (name: string, tires: string): LocalizedMessageFunction => ({
+  CHANGED_TIRES: (
+    name: string,
+    tires: string,
+    seconds: number
+  ): LocalizedMessageFunction => ({
     en: replaceTemplateString(en_messages.CHANGED_TIRES, {
       name: name,
       tires: tires,
+      seconds: seconds.toString(),
     }),
     es: replaceTemplateString(es_messages.CHANGED_TIRES, {
       name: name,
       tires: tires,
+      seconds: seconds.toString(),
     }),
     fr: replaceTemplateString(fr_messages.CHANGED_TIRES, {
       name: name,
       tires: tires,
+      seconds: seconds.toString(),
     }),
     tr: replaceTemplateString(tr_messages.CHANGED_TIRES, {
       name: name,
       tires: tires,
+      seconds: seconds.toString(),
     }),
     pt: replaceTemplateString(pt_messages.CHANGED_TIRES, {
       name: name,
       tires: tires,
+      seconds: seconds.toString(),
+    }),
+  }),
+  TYRE_BLOW: (name: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.TYRE_BLOW, {
+      name: name,
+    }),
+    es: replaceTemplateString(es_messages.TYRE_BLOW, {
+      name: name,
+    }),
+    fr: replaceTemplateString(fr_messages.TYRE_BLOW, {
+      name: name,
+    }),
+    tr: replaceTemplateString(tr_messages.TYRE_BLOW, {
+      name: name,
+    }),
+    pt: replaceTemplateString(pt_messages.TYRE_BLOW, {
+      name: name,
     }),
   }),
   ALREADY_STARTED: (): LocalizedMessageFunction => ({
@@ -907,6 +933,124 @@ export const MESSAGES = {
     fr: fr_messages.EXPLAIN_TYRES,
     tr: tr_messages.EXPLAIN_TYRES,
     pt: pt_messages.EXPLAIN_TYRES,
+  }),
+  TYRE_STEP_CHANGING: (
+    fltstatus: string,
+    frtstatus: string,
+    bltstatus: string,
+    brtstatus: string
+  ): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.TYRE_STEP_CHANGING, {
+      fltstatus,
+      frtstatus,
+      bltstatus,
+      brtstatus,
+    }),
+    es: replaceTemplateString(es_messages.TYRE_STEP_CHANGING, {
+      fltstatus,
+      frtstatus,
+      bltstatus,
+      brtstatus,
+    }),
+    fr: replaceTemplateString(fr_messages.TYRE_STEP_CHANGING, {
+      fltstatus,
+      frtstatus,
+      bltstatus,
+      brtstatus,
+    }),
+    tr: replaceTemplateString(tr_messages.TYRE_STEP_CHANGING, {
+      fltstatus,
+      frtstatus,
+      bltstatus,
+      brtstatus,
+    }),
+    pt: replaceTemplateString(pt_messages.TYRE_STEP_CHANGING, {
+      fltstatus,
+      frtstatus,
+      bltstatus,
+      brtstatus,
+    }),
+  }),
+  TYRE_STEP_ERROR: (
+    fltstatus: string,
+    frtstatus: string,
+    bltstatus: string,
+    brtstatus: string
+  ): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.TYRE_STEP_ERROR, {
+      fltstatus,
+      frtstatus,
+      bltstatus,
+      brtstatus,
+    }),
+    es: replaceTemplateString(es_messages.TYRE_STEP_ERROR, {
+      fltstatus,
+      frtstatus,
+      bltstatus,
+      brtstatus,
+    }),
+    fr: replaceTemplateString(fr_messages.TYRE_STEP_ERROR, {
+      fltstatus,
+      frtstatus,
+      bltstatus,
+      brtstatus,
+    }),
+    tr: replaceTemplateString(tr_messages.TYRE_STEP_ERROR, {
+      fltstatus,
+      frtstatus,
+      bltstatus,
+      brtstatus,
+    }),
+    pt: replaceTemplateString(pt_messages.TYRE_STEP_ERROR, {
+      fltstatus,
+      frtstatus,
+      bltstatus,
+      brtstatus,
+    }),
+  }),
+  TYRE_STEP_SUCCESS: (
+    fltstatus: string,
+    frtstatus: string,
+    bltstatus: string,
+    brtstatus: string
+  ): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.TYRE_STEP_SUCCESS, {
+      fltstatus,
+      frtstatus,
+      bltstatus,
+      brtstatus,
+    }),
+    es: replaceTemplateString(es_messages.TYRE_STEP_SUCCESS, {
+      fltstatus,
+      frtstatus,
+      bltstatus,
+      brtstatus,
+    }),
+    fr: replaceTemplateString(fr_messages.TYRE_STEP_SUCCESS, {
+      fltstatus,
+      frtstatus,
+      bltstatus,
+      brtstatus,
+    }),
+    tr: replaceTemplateString(tr_messages.TYRE_STEP_SUCCESS, {
+      fltstatus,
+      frtstatus,
+      bltstatus,
+      brtstatus,
+    }),
+    pt: replaceTemplateString(pt_messages.TYRE_STEP_SUCCESS, {
+      fltstatus,
+      frtstatus,
+      bltstatus,
+      brtstatus,
+    }),
+  }),
+  CANCELED_CHANGE_TYRES: (): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.CANCELED_CHANGE_TYRES, {}),
+    es: replaceTemplateString(es_messages.CANCELED_CHANGE_TYRES, {}),
+    fr: replaceTemplateString(fr_messages.CANCELED_CHANGE_TYRES, {}),
+    tr: replaceTemplateString(tr_messages.CANCELED_CHANGE_TYRES, {}),
+    pt: replaceTemplateString(pt_messages.CANCELED_CHANGE_TYRES, {}),
   }),
   EXPLAIN_SERVER: (): LocalizedMessageFunction => ({
     en: en_messages.EXPLAIN_SERVER,

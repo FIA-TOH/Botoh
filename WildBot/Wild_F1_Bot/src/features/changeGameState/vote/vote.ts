@@ -5,20 +5,24 @@ import { MESSAGES } from "../../chat/messages";
 import { resetVotes } from "./resetVote";
 import {
   announceSelectedCircuits,
-  getWinningCircuit,
+  clearLockedWinner,
+  finalizeVoteAndLockWinner,
+  getWinnerCircuit,
+  getLockedWinnerVotes,
 } from "./circuitSelection";
 import { log } from "../../discord/logger";
-import { lastWinningVotes } from "../publicGameFlow/publicGameFLow";
 
 export let isOnVoteSession = false;
 export let selectedCircuits: Circuit[] = [];
 
 export function voteSession(room: RoomObject) {
-  if (isOnVoteSession) {
-    return;
-  }
+  if (isOnVoteSession) return;
 
   isOnVoteSession = true;
+
+  // Nova votação -> zera vencedor travado
+  clearLockedWinner();
+
   const players = room.getPlayerList();
 
   selectedCircuits = [...CIRCUITS]
@@ -35,7 +39,14 @@ export function changeMapBasedOnVote(
   room: RoomObject,
   dontAnnouceVotes?: boolean
 ) {
-  const winnerCircuit = getWinningCircuit();
+  // Usa SEMPRE o vencedor travado; se não houver, trava agora como fallback
+  let winnerCircuit: Circuit;
+  try {
+    winnerCircuit = getWinnerCircuit();
+  } catch {
+    winnerCircuit = finalizeVoteAndLockWinner();
+  }
+
   const winnerInfo = winnerCircuit.info;
   const players = room.getPlayerList();
 
@@ -51,12 +62,14 @@ export function changeMapBasedOnVote(
   } else {
     log("Circuito vencedor não encontrado no array CIRCUITS.");
   }
+
   if (!dontAnnouceVotes) {
+    const wonVotes = getLockedWinnerVotes();
     sendSuccessMessage(
       room,
       MESSAGES.CIRCUIT_CHOOSED(
         winnerInfo?.name || "Name not defined",
-        lastWinningVotes ?? 0
+        wonVotes ?? 0
       )
     );
   }

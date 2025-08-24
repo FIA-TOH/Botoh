@@ -1,3 +1,5 @@
+import { gameMode, GameMode } from "../changeGameState/changeGameModes";
+import { getPlayersOrderedByQualiTime } from "../changeGameState/qualy/playerTime";
 import { positionList } from "../changeGameState/race/positionList";
 import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
 
@@ -50,8 +52,23 @@ export function updateFollowPlayerId(room: RoomObject) {
 
   if (mode === "position" && followPositionIndex != null) {
     const index = followPositionIndex - 1;
-    if (index >= 0 && positionList[index]) {
-      followPlayerId = positionList[index].id;
+    if (gameMode === GameMode.RACE || gameMode === GameMode.INDY) {
+      if (index >= 0 && positionList[index]) {
+        followPlayerId = positionList[index].id;
+      } else {
+        setCameraAuto();
+        updateFollowPlayerId(room);
+      }
+    } else if (gameMode === GameMode.QUALY) {
+      const orderedList = getPlayersOrderedByQualiTime();
+      //to-do: remover
+      console.log(orderedList);
+      if (index >= 0 && orderedList[index]) {
+        followPlayerId = orderedList[index].id;
+      } else {
+        setCameraAuto();
+        updateFollowPlayerId(room);
+      }
     } else {
       setCameraAuto();
       updateFollowPlayerId(room);

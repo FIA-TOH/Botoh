@@ -30,13 +30,21 @@ export function changeTires(
     return false;
   }
 
+  const pitTime = playerList[player.p.id]?.pitFailures?.totalTime ?? 0;
   playerList[player.p.id].wear = 0;
   playerList[player.p.id].alertSent = {};
   playerList[player.p.id].tires = chosen;
   playerList[player.p.id].lapsOnCurrentTire = -1;
   playerList[player.p.id].gripCounter = 0;
   playerList[player.p.id].maxSpeed = TIRE_STARTING_SPEED[chosen];
-  sendChatMessage(room, MESSAGES.CHANGED_TIRES(player.p.name, chosen));
+  if (chosen === Tires.FLAT) {
+    sendChatMessage(room, MESSAGES.TYRE_BLOW(player.p.name));
+  } else {
+    sendChatMessage(
+      room,
+      MESSAGES.CHANGED_TIRES(player.p.name, chosen, pitTime)
+    );
+  }
 
   handleAvatar("ChangeTyre", player.p, room);
 }

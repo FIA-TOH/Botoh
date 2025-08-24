@@ -59,6 +59,9 @@ export function checkIfTrolling(
       return properties.yspeed < 0;
   }
 }
+export function randomInRange(min: number, max: number): number {
+  return Math.random() * (max - min) + min;
+}
 
 export function decodeIPFromConn(conn: string): string {
   return decodeURIComponent(conn.replace(/(..)/g, "%$1"));

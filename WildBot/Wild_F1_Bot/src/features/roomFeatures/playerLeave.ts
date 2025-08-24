@@ -35,9 +35,6 @@ export function PlayerLeave(room: RoomObject) {
     }
 
     if (player.id === followPlayerId && playerObj?.cameraFollowing) {
-      console.log(
-        `Jogador seguido (${player.name}) saiu, câmera ficará estática`
-      );
     } else {
       const playersAndDiscs = getPlayerAndDiscs(room);
       if (

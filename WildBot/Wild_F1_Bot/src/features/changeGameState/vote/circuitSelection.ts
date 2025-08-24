@@ -1,6 +1,9 @@
 import { Circuit } from "../../../circuits/Circuit";
 import { selectedCircuits } from "./vote";
 
+let lockedWinner: Circuit | null = null;
+let lockedWinnerVotes: number = 0;
+
 export function announceSelectedCircuits(room: RoomObject) {
   selectedCircuits.forEach((circuit, index) => {
     room.sendAnnouncement(
@@ -9,9 +12,36 @@ export function announceSelectedCircuits(room: RoomObject) {
   });
 }
 
-export function getWinningCircuit(): Circuit {
-  return selectedCircuits.reduce((prev, curr) => {
-    if (!prev.info || !curr.info) return prev;
-    return (prev.info.Votes ?? 0) >= (curr.info.Votes ?? 0) ? prev : curr;
-  });
+export function clearLockedWinner() {
+  lockedWinner = null;
+  lockedWinnerVotes = 0;
+}
+
+function computeWinningCircuit(): Circuit {
+  if (selectedCircuits.length === 0) {
+    throw new Error("Nenhum circuito disponível para votação.");
+  }
+  const maxVotes = Math.max(...selectedCircuits.map((c) => c.info?.Votes ?? 0));
+  const tied = selectedCircuits.filter(
+    (c) => (c.info?.Votes ?? 0) === maxVotes
+  );
+  return tied[Math.floor(Math.random() * tied.length)];
+}
+
+export function finalizeVoteAndLockWinner(): Circuit {
+  const winner = computeWinningCircuit();
+  lockedWinner = winner;
+  lockedWinnerVotes = winner.info?.Votes ?? 0;
+  return winner;
+}
+export function getWinnerCircuit(): Circuit {
+  if (!lockedWinner)
+    throw new Error(
+      "Vencedor ainda não definido (finalizeVoteAndLockWinner não foi chamado)."
+    );
+  return lockedWinner;
+}
+
+export function getLockedWinnerVotes(): number {
+  return lockedWinnerVotes;
 }

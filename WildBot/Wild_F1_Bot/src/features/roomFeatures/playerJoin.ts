@@ -18,8 +18,7 @@ function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
         gameState === "running" &&
         gameMode !== GameMode.QUALY &&
         gameMode !== GameMode.TRAINING &&
-        gameMode !== GameMode.WAITING &&
-        room.getScores().time !== 0
+        gameMode !== GameMode.WAITING
       ) {
         room.setPlayerTeam(player.id, Teams.SPECTATORS);
       } else {
