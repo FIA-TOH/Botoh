@@ -6,6 +6,7 @@ import { positionList } from "../changeGameState/race/positionList";
 import { finishList, lapPositions } from "../zones/laps/handleLapChange";
 import { log } from "../discord/logger";
 import { updatePlayerActivity } from "../afk/afk";
+import { setCameraAuto } from "../camera/cameraFollow";
 
 export function GameStart(room: RoomObject) {
   room.onGameStart = function (byPlayer) {
@@ -15,6 +16,7 @@ export function GameStart(room: RoomObject) {
     handleGameStateChange("running", room);
 
     resetAllRainEvents();
+    setCameraAuto();
     room.getPlayerList().forEach((p) => {
       resetPlayer(p, room, p.id, true);
       updatePlayerActivity(p);

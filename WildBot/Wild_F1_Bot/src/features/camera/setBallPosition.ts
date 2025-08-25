@@ -58,20 +58,9 @@ export function setBallPosition(room: RoomObject) {
   tickCounter++;
   if (tickCounter < 15) return;
   tickCounter = 0;
-
-  if (!isFollowPlayerValid(room, followPlayerId)) {
-    room.setDiscProperties(0, {
-      xspeed: 0,
-      yspeed: 0,
-      xgravity: 0,
-      ygravity: 0,
-    });
-    return;
-  }
+  updateFollowPlayerId(room);
 
   if (followPlayerId == null) return;
-
-  updateFollowPlayerId(room);
 
   const ball = room.getDiscProperties(0);
   if (!ball) return;
