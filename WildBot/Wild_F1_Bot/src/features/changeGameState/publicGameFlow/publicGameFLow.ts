@@ -13,7 +13,7 @@ import {
   reorderPlayersInRoomRace,
 } from "../../movePlayers/reorderPlayersInRoom";
 import { rainEnabled } from "../../rain/rain";
-import { cancellableDelay, delay } from "../../utils";
+import { delay } from "../../utils";
 import { CIRCUITS, handleChangeMap } from "../../zones/maps";
 import { changeGameMode, GameMode, gameMode } from "../changeGameModes";
 import { changeGameStoppedNaturally } from "../gameStopeedNaturally";
@@ -27,20 +27,13 @@ import { changeMapBasedOnVote, voteSession } from "../vote/vote";
 
 export let lastWinningVotes: number = 0;
 
-export default async function PublicGameFlow(
-  room: RoomObject,
-  cancelToken: { cancelled: boolean }
-) {
+export default async function PublicGameFlow(room: RoomObject) {
   const waitRoomIndex = CIRCUITS.findIndex(
     (c) => c.info?.name === "Wait Room - By Ximb"
   );
   const waitRoomQualyIndex = CIRCUITS.findIndex(
     (c) => c.info?.name === "Wait Qualy Room - By Ximb"
   );
-
-  function checkCancel() {
-    if (cancelToken.cancelled) throw new Error("Flow cancelled");
-  }
 
   if (gameMode === GameMode.RACE) {
     printAllPositions(room);
@@ -50,51 +43,42 @@ export default async function PublicGameFlow(
 
     handleChangeMap(waitRoomIndex, room);
     room.startGame();
-    await cancellableDelay(5, cancelToken);
-    checkCancel();
+    await delay(5);
 
     voteSession(room);
-    await cancellableDelay(10, cancelToken);
-    checkCancel();
+    await delay(10);
 
     sendChatMessage(room, MESSAGES.DISCORD_INVITE());
-    await cancellableDelay(10, cancelToken);
-    checkCancel();
+    await delay(10);
 
     handleMuteCommand(undefined, undefined, room);
     if (tyresActivated) {
       handleExplainTyresCommand(undefined, undefined, room);
-      await cancellableDelay(5, cancelToken);
-      checkCancel();
+      await delay(5);
     }
     if (rainEnabled) {
       handleExplainRainCommand(undefined, undefined, room);
-      await cancellableDelay(5, cancelToken);
-      checkCancel();
+      await delay(5);
     }
     handleExplainErsCommand(undefined, undefined, room);
-    await cancellableDelay(5, cancelToken);
-    checkCancel();
+    await delay(5);
 
     if (qualyForPub) {
       sendChatMessage(room, MESSAGES.QUALY_STARTING(15));
     } else {
       sendChatMessage(room, MESSAGES.RACE_STARTING(15));
     }
-    await cancellableDelay(3, cancelToken);
-    checkCancel();
+    await delay(3);
 
     handleMuteCommand(undefined, undefined, room);
-    await cancellableDelay(12, cancelToken);
-    checkCancel();
+    await delay(12);
 
     const winnerCircuit = finalizeVoteAndLockWinner();
     lastWinningVotes = getLockedWinnerVotes();
 
     changeGameStoppedNaturally(true);
     room.stopGame();
-    await cancellableDelay(1, cancelToken);
-    checkCancel();
+    await delay(1);
 
     changeMapBasedOnVote(room);
     resetPlayers(room);
@@ -117,37 +101,30 @@ export default async function PublicGameFlow(
 
     handleChangeMap(waitRoomQualyIndex, room);
     room.startGame();
-    await cancellableDelay(5, cancelToken);
-    checkCancel();
+    await delay(5);
 
     sendChatMessage(room, MESSAGES.DISCORD_INVITE());
-    await cancellableDelay(10, cancelToken);
-    checkCancel();
+    await delay(10);
 
     handleMuteCommand(undefined, undefined, room);
     if (tyresActivated) {
       handleExplainTyresCommand(undefined, undefined, room);
-      await cancellableDelay(5, cancelToken);
-      checkCancel();
+      await delay(5);
     }
     if (rainEnabled) {
       handleExplainRainCommand(undefined, undefined, room);
-      await cancellableDelay(5, cancelToken);
-      checkCancel();
+      await delay(5);
     }
     handleExplainErsCommand(undefined, undefined, room);
-    await cancellableDelay(5, cancelToken);
-    checkCancel();
+    await delay(5);
 
     sendChatMessage(room, MESSAGES.RACE_STARTING(5));
     handleMuteCommand(undefined, undefined, room);
-    await cancellableDelay(5, cancelToken);
-    checkCancel();
+    await delay(5);
 
     changeGameStoppedNaturally(true);
     room.stopGame();
-    await cancellableDelay(1, cancelToken);
-    checkCancel();
+    await delay(1);
 
     changeGameMode(GameMode.RACE, room);
 

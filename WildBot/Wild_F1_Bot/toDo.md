@@ -11,12 +11,9 @@ ver todos os mapas q tao com grid ruim
 ver mapas com muitas bolas
 
 Mensagens discord
-room.aanoucement ir para discord tmb
+room.annoucement ir para discord tmb
 
 Detectar corte de curva
-
-Se tiver 0 players, para o flow e volta quando alguem volta, tratar bem isso
-comando de iniciar flow
 
 ---
 
