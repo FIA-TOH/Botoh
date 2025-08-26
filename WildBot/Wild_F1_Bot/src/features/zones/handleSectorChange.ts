@@ -3,7 +3,7 @@ import {
   updatePositionList,
   positionList,
 } from "../changeGameState/race/positionList";
-import { handleAvatar, situacions } from "../changePlayerState/handleAvatar";
+import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
 import { playerList } from "../changePlayerState/playerList";
 import { sendBlueMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
@@ -157,7 +157,7 @@ export function checkBlueFlag(p: PlayerObject, room: RoomObject) {
         opponentInfo.id
       );
       handleAvatar(
-        situacions.Flag,
+        Situacions.Flag,
         opponentInfo,
         room,
         undefined,

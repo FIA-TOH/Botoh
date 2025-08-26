@@ -1,5 +1,5 @@
 import { Teams } from "../../changeGameState/teams";
-import { handleAvatar, situacions } from "../../changePlayerState/handleAvatar";
+import { handleAvatar, Situacions } from "../../changePlayerState/handleAvatar";
 import {
   sendErrorMessage,
   sendGreenMessage,
@@ -79,7 +79,7 @@ export function handleFlagCommand(
     sendGreenMessage(room, MESSAGES.GREEN_FLAG_TWO());
 
     players.forEach((player) => {
-      handleAvatar(situacions.Flag, player.p, room, undefined, ["🟩"], [5000]);
+      handleAvatar(Situacions.Flag, player.p, room, undefined, ["🟩"], [5000]);
     });
   } else if (flagChoosen === "yellow" && vsc === false) {
     changeVSC();
@@ -89,7 +89,7 @@ export function handleFlagCommand(
     sendYellowMessage(room, MESSAGES.YELLOW_FLAG_TWO());
 
     players.forEach((player) => {
-      handleAvatar(situacions.Flag, player.p, room, undefined, ["🟨"], [5000]);
+      handleAvatar(Situacions.Flag, player.p, room, undefined, ["🟨"], [5000]);
     });
   } else if (flagChoosen === "red") {
     flag = "red";
@@ -98,7 +98,7 @@ export function handleFlagCommand(
     sendRedMessage(room, MESSAGES.RED_FLAG_TWO());
 
     players.forEach((player) => {
-      handleAvatar(situacions.Flag, player.p, room, undefined, ["🟥"], [5000]);
+      handleAvatar(Situacions.Flag, player.p, room, undefined, ["🟥"], [5000]);
     });
   } else if (flagChoosen === "blue") {
     if (byPlayer && !playerChoosen) {
@@ -120,7 +120,7 @@ export function handleFlagCommand(
     );
 
     handleAvatar(
-      situacions.Flag,
+      Situacions.Flag,
       playerEscolhido[0].p,
       room,
       undefined,
@@ -148,7 +148,7 @@ export function handleFlagCommand(
     room.setPlayerTeam(playerEscolhido[0].p.id, Teams.SPECTATORS);
 
     handleAvatar(
-      situacions.Flag,
+      Situacions.Flag,
       playerEscolhido[0].p,
       room,
       undefined,

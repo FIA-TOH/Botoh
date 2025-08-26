@@ -1,5 +1,5 @@
 import { room } from "../../room";
-import { handleAvatar, situacions } from "../changePlayerState/handleAvatar";
+import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
 import { sendAlertMessage } from "../chat/chat";
 import { laps } from "../zones/laps";
 import { MESSAGES } from "../chat/messages";
@@ -181,7 +181,7 @@ function announceRainStart() {
       const rainEmojis = ["☁️", "🌧️", "⛔"];
       const rainDurations = [2000, 2000, 2000];
       handleAvatar(
-        situacions.Rain,
+        Situacions.Rain,
         player,
         room,
         undefined,
@@ -202,7 +202,7 @@ function startRain() {
     const rainEmojis = ["🌧️", "🌩️", "⛔"];
     const rainDurations = [2000, 2000, 2000];
     handleAvatar(
-      situacions.Rain,
+      Situacions.Rain,
       player,
       room,
       undefined,
@@ -276,7 +276,7 @@ function announceRainStop() {
       const rainEmojis = ["🌧️", "🌤️", "⛔"];
       const rainDurations = [2000, 2000, 2000];
       handleAvatar(
-        situacions.Rain,
+        Situacions.Rain,
         player,
         room,
         undefined,
@@ -297,7 +297,7 @@ function stopRain() {
     const rainEmojis = ["🌤️", "☀️", "⛔"];
     const rainDurations = [2000, 2000, 20000];
     handleAvatar(
-      situacions.Rain,
+      Situacions.Rain,
       player,
       room,
       undefined,

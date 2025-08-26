@@ -48,7 +48,7 @@ export function GameStop(room: RoomObject) {
     resetAllRainEvents();
     if (gameMode !== GameMode.WAITING) {
       if (gameStopedNaturally && !LEAGUE_MODE) {
-        PublicGameFlow(room, { cancelled: false });
+        PublicGameFlow(room);
         changeGameStoppedNaturally(false);
       } else {
         handleGameStateChange(null, room);

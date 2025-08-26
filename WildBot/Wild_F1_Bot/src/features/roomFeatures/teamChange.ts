@@ -4,7 +4,7 @@ import { resetPlayer } from "../changePlayerState/players";
 import { Teams } from "../changeGameState/teams";
 import { ACTUAL_CIRCUIT } from "./stadiumChange";
 import { gameMode, GameMode } from "../changeGameState/changeGameModes";
-import { handleAvatar } from "../changePlayerState/handleAvatar";
+import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
 import { updatePlayerActivity } from "../afk/afk";
 import { followPlayerId } from "../camera/cameraFollow";
 
@@ -21,7 +21,7 @@ export function TeamChange(room: RoomObject) {
     }
 
     if (changedPlayer.team === Teams.RUNNERS && room.getScores()) {
-      handleAvatar("ChangeTyre", changedPlayer, room);
+      handleAvatar(Situacions.ChangeTyre, changedPlayer, room);
       if (room.getScores().time > 0 && gameMode !== GameMode.QUALY) {
         const boxLine = ACTUAL_CIRCUIT.info.boxLine;
         const middleX = (boxLine.minX + boxLine.maxX) / 2;

@@ -1,4 +1,4 @@
-import { handleAvatar } from "../changePlayerState/handleAvatar";
+import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
 import { playerList } from "../changePlayerState/playerList";
 import { sendChatMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
@@ -10,7 +10,7 @@ export function enableShowTires(player: PlayerObject, room: RoomObject) {
   playerList[player.id].showTires = tires;
   playerList[player.id].speedEnabled = speed;
 
-  handleAvatar(tires ? "ChangeTyre" : "Speed", player, room);
+  handleAvatar(tires ? Situacions.ChangeTyre : Situacions.Speed, player, room);
   const message = tires
     ? MESSAGES.NOW_SHOWING_TIRES()
     : MESSAGES.NOW_SHOWING_SPEED();

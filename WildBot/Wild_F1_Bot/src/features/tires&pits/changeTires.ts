@@ -1,5 +1,5 @@
 import { Teams } from "../changeGameState/teams";
-import { handleAvatar } from "../changePlayerState/handleAvatar";
+import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
 import { playerList } from "../changePlayerState/playerList";
 import { sendErrorMessage, sendChatMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
@@ -46,5 +46,5 @@ export function changeTires(
     );
   }
 
-  handleAvatar("ChangeTyre", player.p, room);
+  handleAvatar(Situacions.ChangeTyre, player.p, room);
 }

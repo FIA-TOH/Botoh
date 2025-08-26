@@ -3,8 +3,6 @@ Testar camera
 
 TO-DO
 
-sistema de emoji
-
 Spawn errado sochi
 Remover lugar de spec nos mapas
 ver todos os mapas q tao com grid ruim

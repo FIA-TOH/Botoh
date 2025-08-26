@@ -1,4 +1,4 @@
-import { handleAvatar } from "../../changePlayerState/handleAvatar";
+import { handleAvatar, Situacions } from "../../changePlayerState/handleAvatar";
 import { vsc } from "../handleSpeed";
 import { ifInBoxZone } from "../../tires&pits/pits";
 import { playerList } from "../../changePlayerState/playerList";
@@ -7,6 +7,9 @@ import { gasEnabled } from "../handleSlipstream";
 import { gameMode, GameMode } from "../../changeGameState/changeGameModes";
 import { presentationLap } from "../../commands/gameState/handlePresentationLapCommand";
 import { playerBuffList } from "../../commands/adjustThings/handleNerfListCommand";
+
+const ERS_DURATION_SECONDS = 7;
+const ERS_RECHARGE_MINUTES = 2;
 
 export function updateErs(
   playersAndDiscs: { p: PlayerObject; disc: DiscPropertiesObject }[],
@@ -43,10 +46,14 @@ function handleERS(
 ) {
   if (room.getScores()?.time > 0) {
     if (properties.damping === 0.986) {
-      handleAvatar("Ers", p, room);
+      handleAvatar(Situacions.Ers, p, room);
+      if (playerInfo.kers > 0) {
+        playerInfo.kers -= 100 / (ERS_DURATION_SECONDS * 60);
+        if (playerInfo.kers < 0) playerInfo.kers = 0;
+      }
     } else {
       if (playerInfo.kers < 100) {
-        const baseRecharge = 100 / (2 * 60 * 60);
+        const baseRecharge = 100 / (ERS_RECHARGE_MINUTES * 60 * 60);
         const rechargeRate = isNerfed ? baseRecharge * 1.25 : baseRecharge;
 
         playerInfo.kers += rechargeRate;

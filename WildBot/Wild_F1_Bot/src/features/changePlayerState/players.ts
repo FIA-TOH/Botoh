@@ -1,6 +1,6 @@
 import { DEFAULT_LANGUAGE } from "../chat/language";
 import { playerList } from "../changePlayerState/playerList";
-import { handleAvatar } from "./handleAvatar";
+import { handleAvatar, Situacions } from "./handleAvatar";
 import { Tires, TIRE_STARTING_SPEED } from "../tires&pits/tires";
 import { gameMode, GameMode } from "../changeGameState/changeGameModes";
 
@@ -139,5 +139,5 @@ export function resetPlayer(
   playerList[id].voted = false;
 
   playerList[id].cameraFollowing = false;
-  handleAvatar("ChangeTyre", player, room);
+  handleAvatar(Situacions.ChangeTyre, player, room);
 }

@@ -1,6 +1,6 @@
 import { getRunningPlayers, vectorSpeed } from "../utils";
 
-import { handleAvatar } from "../changePlayerState/handleAvatar";
+import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
 import { playerList } from "../changePlayerState/playerList";
 
 export function logPlayerSpeed(
@@ -13,6 +13,6 @@ export function logPlayerSpeed(
 
   players.forEach((pad) => {
     const speed = vectorSpeed(pad.disc.xspeed, pad.disc.yspeed);
-    handleAvatar("Speed", pad.p, room, speed.toString());
+    handleAvatar(Situacions.Speed, pad.p, room, speed.toString());
   });
 }
