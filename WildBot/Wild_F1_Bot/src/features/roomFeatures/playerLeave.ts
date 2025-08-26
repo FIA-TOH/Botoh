@@ -9,6 +9,7 @@ import { gameMode, GameMode } from "../changeGameState/changeGameModes";
 import { log } from "../discord/logger";
 import { updatePlayerActivity } from "../afk/afk";
 import { followPlayerId } from "../camera/cameraFollow";
+import { checkRunningPlayers } from "../changeGameState/publicGameFlow/startStopGameFlow";
 
 export function PlayerLeave(room: RoomObject) {
   room.onPlayerLeave = function (player) {
@@ -23,6 +24,7 @@ export function PlayerLeave(room: RoomObject) {
     } else {
       const ip = playerObj !== undefined ? playerObj.ip : "";
       log(`${player.name} has left. (${ip})`);
+      checkRunningPlayers(room);
     }
 
     for (let i = 0; i < lapPositions.length; i++) {

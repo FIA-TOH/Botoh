@@ -6,6 +6,26 @@ export function vectorSpeed(xSpeed: number, ySpeed: number): number {
   return Math.floor(10 * Math.hypot(xSpeed, ySpeed));
 }
 
+export function cancellableDelay(
+  ms: number,
+  cancelRef: { cancelled: boolean }
+) {
+  return new Promise<void>((resolve, reject) => {
+    const id = setTimeout(() => {
+      if (cancelRef.cancelled) {
+        reject(new Error("Flow cancelled"));
+      } else {
+        resolve();
+      }
+    }, ms * 1000);
+
+    if (cancelRef.cancelled) {
+      clearTimeout(id);
+      reject(new Error("Flow cancelled"));
+    }
+  });
+}
+
 export function getRunningPlayers(
   playersAndDiscs: { p: PlayerObject; disc: DiscPropertiesObject }[]
 ): { p: PlayerObject; disc: DiscPropertiesObject }[] {

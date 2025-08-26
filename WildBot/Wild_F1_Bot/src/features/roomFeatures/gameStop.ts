@@ -36,6 +36,7 @@ export function GameStop(room: RoomObject) {
       changeGameStoppedNaturally(false);
       log(`Game stopped by ${byPlayer.name}`);
     }
+    handleGameStateChange(null, room);
 
     if (timerController.positionTimer !== null) {
       clearTimeout(timerController.positionTimer);
@@ -47,7 +48,7 @@ export function GameStop(room: RoomObject) {
     resetAllRainEvents();
     if (gameMode !== GameMode.WAITING) {
       if (gameStopedNaturally && !LEAGUE_MODE) {
-        PublicGameFlow(room);
+        PublicGameFlow(room, { cancelled: false });
         changeGameStoppedNaturally(false);
       } else {
         handleGameStateChange(null, room);

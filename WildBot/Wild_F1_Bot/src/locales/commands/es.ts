@@ -275,6 +275,11 @@ export default function es_commands(
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject
+  ) => void,
+  handleChangeGameFLow: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
   ) => void
 ): Commands {
   return {
@@ -338,5 +343,6 @@ export default function es_commands(
     "!camera_properties": handleCameraProperties,
     "!camera_id": handleCameraPlayerFollow,
     "!camera_position": handleCameraPositionFollow,
+    "!game_flow": handleChangeGameFLow,
   };
 }

@@ -7,6 +7,8 @@ import { finishList, lapPositions } from "../zones/laps/handleLapChange";
 import { log } from "../discord/logger";
 import { updatePlayerActivity } from "../afk/afk";
 import { setCameraAuto } from "../camera/cameraFollow";
+import { LEAGUE_MODE } from "../hostLeague/leagueMode";
+import { checkRunningPlayers } from "../changeGameState/publicGameFlow/startStopGameFlow";
 
 export function GameStart(room: RoomObject) {
   room.onGameStart = function (byPlayer) {
@@ -25,6 +27,9 @@ export function GameStart(room: RoomObject) {
     positionList.splice(0, positionList.length);
     for (let i = 0; i < laps; i++) {
       lapPositions[i] = [];
+    }
+    if (!LEAGUE_MODE) {
+      checkRunningPlayers(room);
     }
   };
 }

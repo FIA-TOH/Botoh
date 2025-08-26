@@ -18,6 +18,7 @@ import { PlayerChat } from "./features/roomFeatures/playerChat";
 import { GameStop } from "./features/roomFeatures/gameStop";
 import { PlaerActivity } from "./features/roomFeatures/playerActivitie";
 import { ballFeatures } from "./features/camera/ballFeatures";
+import { log } from "./features/discord/logger";
 
 const roomName = LEAGUE_MODE ? leagueName : publicName;
 
@@ -52,10 +53,16 @@ StadiumChange(room);
 TeamChange(room);
 PlaerActivity(room);
 
-room.onGamePause = function () {
+room.onGamePause = function (byPlayer) {
+  byPlayer == null
+    ? log(`Game paused`)
+    : log(`Game paused by ${byPlayer.name}`);
   handleGameStateChange("paused", room);
 };
-room.onGameUnpause = function () {
+room.onGameUnpause = function (byPlayer) {
+  byPlayer == null
+    ? log(`Game unpaused`)
+    : log(`Game unpaused by ${byPlayer.name}`);
   handleGameStateChange("running", room);
 };
 

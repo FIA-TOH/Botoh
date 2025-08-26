@@ -60,6 +60,7 @@ import { handleDiscordCommand } from "../discord/handleDiscordCommand";
 import { handleCameraPlayerFollow } from "./camera/handleCameraPlayerFollow";
 import { handleCameraPositionFollow } from "./camera/handleCameraPositionFollow";
 import { handleCameraProperties } from "./camera/handleCameraProperties";
+import { handleChangeGameFLow } from "./gameState/gameFlow";
 
 export type CommandFunction = (
   handleAdminCommand: (
@@ -336,6 +337,11 @@ export type CommandFunction = (
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject
+  ) => void,
+  handleChangeGameFLow: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
   ) => void
 ) => Commands;
 
@@ -400,7 +406,8 @@ function importCommandsByLanguage(commandFunctions: {
         handleDiscordCommand,
         handleCameraProperties,
         handleCameraPlayerFollow,
-        handleCameraPositionFollow
+        handleCameraPositionFollow,
+        handleChangeGameFLow
       ),
     }),
     {}
@@ -466,7 +473,8 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
         handleDiscordCommand,
         handleCameraProperties,
         handleCameraPlayerFollow,
-        handleCameraPositionFollow
+        handleCameraPositionFollow,
+        handleChangeGameFLow
       ),
     }),
     {}
