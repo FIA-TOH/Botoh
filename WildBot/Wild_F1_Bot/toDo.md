@@ -1,12 +1,7 @@
-TESTAR
-Testar camera
-
 TO-DO
+Conferir se o jogo acabou depois de Recorde da pista X laps x 2
 
-Spawn errado sochi
-Remover lugar de spec nos mapas
-ver todos os mapas q tao com grid ruim
-ver mapas com muitas bolas
+To do dos Mapas
 
 Mensagens discord
 room.annoucement ir para discord tmb

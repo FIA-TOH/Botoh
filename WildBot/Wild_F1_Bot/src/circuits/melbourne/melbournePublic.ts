@@ -13,6 +13,33 @@ const MELBOURNEPUBLIC_INFO: CircuitInfo = {
     passingDirection: Direction.LEFT,
   },
   name: "Albert-Park Melbourne Circuit - By Ximb",
+  sectorOne: {
+    bounds: {
+      minX: 75,
+      maxX: 105,
+      minY: -75,
+      maxY: 275,
+    },
+    passingDirection: Direction.LEFT,
+  },
+  sectorTwo: {
+    bounds: {
+      minX: -2691,
+      maxX: -2377,
+      minY: -2114,
+      maxY: -2084,
+    },
+    passingDirection: Direction.UP,
+  },
+  sectorThree: {
+    bounds: {
+      minX: 98,
+      maxX: 128,
+      minY: -983,
+      maxY: -793,
+    },
+    passingDirection: Direction.RIGHT,
+  },
   boxLine: {
     minX: 100,
     maxX: 800,

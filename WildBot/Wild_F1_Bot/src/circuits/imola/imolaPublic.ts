@@ -13,6 +13,33 @@ const IMOLAPUBLIC_INFO: CircuitInfo = {
     passingDirection: Direction.RIGHT,
   },
   name: "Autodromo Imola - By Ximb",
+  sectorOne: {
+    bounds: {
+      minX: -150,
+      maxX: -120,
+      minY: 407,
+      maxY: 760,
+    },
+    passingDirection: Direction.RIGHT,
+  },
+  sectorTwo: {
+    bounds: {
+      minX: 2161,
+      maxX: 2813,
+      minY: -1767,
+      maxY: -1797,
+    },
+    passingDirection: Direction.UP,
+  },
+  sectorThree: {
+    bounds: {
+      minX: -166,
+      maxX: -136,
+      minY: -455,
+      maxY: -147,
+    },
+    passingDirection: Direction.LEFT,
+  },
   boxLine: {
     minX: -1150,
     maxX: -150,
