@@ -9,6 +9,7 @@ import { updatePlayerActivity } from "../afk/afk";
 import { setCameraAuto } from "../camera/cameraFollow";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { checkRunningPlayers } from "../changeGameState/publicGameFlow/startStopGameFlow";
+import { ACTUAL_CIRCUIT } from "./stadiumChange";
 
 export function GameStart(room: RoomObject) {
   room.onGameStart = function (byPlayer) {
@@ -17,6 +18,7 @@ export function GameStart(room: RoomObject) {
       : log(`Game started by ${byPlayer.name}`);
     handleGameStateChange("running", room);
 
+    room.startRecording();
     resetAllRainEvents();
     setCameraAuto();
     room.getPlayerList().forEach((p) => {

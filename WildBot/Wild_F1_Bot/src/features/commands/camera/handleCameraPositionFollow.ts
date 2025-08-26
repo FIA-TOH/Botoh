@@ -37,7 +37,6 @@ export function handleCameraPositionFollow(
     }
     return;
   }
-  console.log(positionList);
 
   setFollowPosition(pos);
   if (byPlayer) {

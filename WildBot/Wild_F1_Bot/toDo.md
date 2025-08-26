@@ -3,12 +3,9 @@ Conferir se o jogo acabou depois de Recorde da pista X laps x 2
 
 To do dos Mapas
 
-Mensagens discord
-room.annoucement ir para discord tmb
-
 Detectar corte de curva
 
----
+## Enviar resultado de corridas e qualy bonitinho
 
 Damping modifier
 Rain system

@@ -5,7 +5,7 @@
   "scripts": {
     "build:league": "webpack --env LEAGUE_MODE=true",
     "build:pub": "webpack --env LEAGUE_MODE=false",
-    "build:all": "npm run build:league && npm run build:non-league"
+    "build:all": "npm run build:league && npm run build:pub"
   },
   "author": "RicardoPinto26",
   "license": "",

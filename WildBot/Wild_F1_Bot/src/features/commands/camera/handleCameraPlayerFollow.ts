@@ -1,6 +1,7 @@
 import { sendErrorMessage, sendChatMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { setFollowPlayer } from "../../camera/cameraFollow";
+import { log } from "../../discord/logger";
 
 export function handleCameraPlayerFollow(
   byPlayer?: PlayerObject,
@@ -58,5 +59,5 @@ export function handleCameraPlayerFollow(
     );
   }
 
-  console.log(`[CameraFollow] Agora seguindo o player ID ${playerId}`);
+  log(`[CameraFollow] Agora seguindo o player ID ${playerId}`);
 }

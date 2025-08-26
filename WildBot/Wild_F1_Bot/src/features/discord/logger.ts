@@ -1,4 +1,5 @@
-import { sendDiscordMessage } from "./discord";
+import { LEAGUE_MODE } from "../hostLeague/leagueMode";
+import { sendDiscordLog } from "./discord";
 
 export function log(...messages: any[]) {
   for (const msg of messages) {
@@ -8,7 +9,7 @@ export function log(...messages: any[]) {
       type === "string" ||
       type === "number" ||
       type === "boolean" ||
-      type === "object" || // permite arrays e objetos
+      type === "object" ||
       type === "undefined";
 
     if (!isLoggable) {
@@ -19,5 +20,6 @@ export function log(...messages: any[]) {
   }
 
   console.log(...messages);
-  // sendDiscordMessage(messages.map(m => String(m)).join(' '));
+
+  sendDiscordLog(messages.map((m) => String(m)).join(" "));
 }

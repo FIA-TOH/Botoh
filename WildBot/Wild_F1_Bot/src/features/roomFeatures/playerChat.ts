@@ -7,10 +7,13 @@ import { LeagueTeam } from "../teams/teams";
 import { log } from "../discord/logger";
 import { mute_mode } from "../chat/toggleMuteMode";
 import { updatePlayerActivity } from "../afk/afk";
+import { getTimestamp } from "../utils";
+import { sendDiscordChat } from "../discord/discord";
 
 export function PlayerChat(room: RoomObject) {
   room.onPlayerChat = function (player, message) {
     log(`${player.name}: ${message}`);
+    sendDiscordChat(`${player.name}: ${message} - ${getTimestamp()}`);
     if (player.admin) afkAdmins[player.id] = 0;
 
     updatePlayerActivity(player);

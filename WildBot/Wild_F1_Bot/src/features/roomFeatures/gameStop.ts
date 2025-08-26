@@ -27,6 +27,7 @@ import { handleRREnabledCommand } from "../commands/adminThings/handleRREnabledC
 import { handleFlagCommand } from "../commands/flagsAndVSC/handleFlagCommand";
 import { clearPlayerBuffAndNerfLists } from "../commands/adjustThings/handleNerfListCommand";
 import PublicGameFlow from "../changeGameState/publicGameFlow/publicGameFLow";
+import { sendDiscordReplay } from "../discord/discord";
 
 export function GameStop(room: RoomObject) {
   room.onGameStop = function (byPlayer) {
@@ -37,13 +38,16 @@ export function GameStop(room: RoomObject) {
       log(`Game stopped by ${byPlayer.name}`);
     }
     handleGameStateChange(null, room);
+    const replay = room.stopRecording();
 
+    if (replay) {
+      sendDiscordReplay(replay);
+    }
     if (timerController.positionTimer !== null) {
       clearTimeout(timerController.positionTimer);
       timerController.positionTimer = null;
       log("Temporizador cancelado por onGameStop");
     }
-    console.log("gameStopedNaturally", gameStopedNaturally);
 
     resetAllRainEvents();
     if (gameMode !== GameMode.WAITING) {

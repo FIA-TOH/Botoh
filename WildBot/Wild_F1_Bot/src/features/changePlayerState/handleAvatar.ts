@@ -102,8 +102,6 @@ const situationHandlers: Record<
   [Situacions.Ers]: (player, room) => {
     const p = playerList[player.id];
     if (!p || p.speedEnabled) return;
-    console.log(p.kers);
-
     room.setPlayerAvatar(player.id, Math.floor(p.kers).toString());
 
     playerTimers[player.id].timeout = setTimeout(() => {
