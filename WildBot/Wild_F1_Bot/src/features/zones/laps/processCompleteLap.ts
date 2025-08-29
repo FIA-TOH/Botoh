@@ -21,7 +21,6 @@ import { ACTUAL_CIRCUIT } from "../../roomFeatures/stadiumChange";
 import { Tires } from "../../tires&pits/tires";
 import { serialize, someArray } from "../../utils";
 import { drsOn, enableDRS } from "../handleDRSZone";
-import { handleChangeCollisionPlayerSuzuka } from "../handleSuzukaTp";
 import { broadcastLapTimeToPlayers } from "./broadcastTimeToPlayer";
 import { processLapAndCheckSessionEnd } from "./processLapAndCheckSessionEnd";
 

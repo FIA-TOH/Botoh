@@ -8,6 +8,7 @@ export const constants = {
   JUMP_START_PENALTY: -0.005,
   FULL_GAS_SPEED: 0.00025,
   ZERO_GAS_PENALTY: 0.005,
+  PENALTY_SPEED: 0.97,
 
   // ===============================
   // Pitlane e Safety Car

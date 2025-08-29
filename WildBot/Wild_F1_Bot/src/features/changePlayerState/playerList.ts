@@ -73,6 +73,9 @@ export interface PlayerInfo {
   voted: boolean;
 
   cameraFollowing: boolean;
+
+  cutPenaltyEndTime?: number;
+  cutPenaltyMultiplier?: number;
 }
 
 type PlayerList = {

@@ -17,11 +17,18 @@ import {
 import { afkKick } from "../afk/afk";
 import { setBallPosition } from "../camera/setBallPosition";
 import { detectPitPerTick } from "../tires&pits/performPitStop";
+import { detectCut } from "../detectCut/detectCut";
+
+const detectCutThrottledByPlayer: Map<
+  number,
+  ReturnType<typeof throttlePerSecond>
+> = new Map();
 
 export function GameTick(room: RoomObject) {
   room.onGameTick = function () {
     const playersAndDiscs = getPlayerAndDiscs(room);
     const players = getRunningPlayers(playersAndDiscs);
+
     handlePitlane(playersAndDiscs, room);
     distributeSpeed(playersAndDiscs, room);
     checkPlayerSector(playersAndDiscs, room);
@@ -30,18 +37,40 @@ export function GameTick(room: RoomObject) {
     updateGripCounter(playersAndDiscs);
     updateErs(playersAndDiscs, room);
     setBallPosition(room);
+
     players.forEach((pad) => {
       const p = pad.p;
-      if (!presentationLap) {
-        handleTireWear(p, room);
-      }
+      if (!presentationLap) handleTireWear(p, room);
+
       handleChangePlayerSizeSuzuka(pad, room);
       handleChangeCollisionPlayerSuzuka(pad, room);
       detectPitPerTick(pad, room);
-      // handleSuzukaTp(pad, room);
+
+      if (!detectCutThrottledByPlayer.has(pad.p.id)) {
+        detectCutThrottledByPlayer.set(
+          pad.p.id,
+          throttlePerSecond(detectCut, 20)
+        );
+      }
+      detectCutThrottledByPlayer.get(pad.p.id)!(pad, room);
     });
+
     afkKick(room);
-    // logPlayerSpeed(playersAndDiscs, room);
-    // checkPlayersDRSZone(playersAndDiscs, room);
+  };
+}
+
+export function throttlePerSecond<T extends any[]>(
+  fn: (...args: T) => void,
+  perSecond: number
+) {
+  const tickInterval = Math.floor(60 / perSecond); // ticks entre execuções
+  let tickCount = 0;
+
+  return (...args: T) => {
+    tickCount++;
+    if (tickCount >= tickInterval) {
+      tickCount = 0;
+      fn(...args);
+    }
   };
 }

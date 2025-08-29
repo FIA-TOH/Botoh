@@ -129,5 +129,6 @@
   "STARTING_QUALY_LAP": "Sıralama turu başlıyor, uç!",
   "POSITION_QUALY": "{{position}}. sıradasınız!",
   "ERROR_POSITION_QUALY": "Henüz bir tur tamamlamadınız.",
-  "EARLY_LAP_ERROR": "Zamanlayıcı başlamadan bitiş çizgisini geçtin, başlangıca dönmek için !rr kullan, aksi takdirde tur geçerli sayılmayacak."
+  "EARLY_LAP_ERROR": "Zamanlayıcı başlamadan bitiş çizgisini geçtin, başlangıca dönmek için !rr kullan, aksi takdirde tur geçerli sayılmayacak.",
+  "CUTTED_TRACK": "⚠️ Yolu kestiniz! Hızınız {{seconds}} saniye boyunca düşürülecek."
 }

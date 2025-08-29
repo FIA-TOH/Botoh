@@ -1790,20 +1790,8 @@
       "cGroup": ["wall"]
     },
     {
-      "x": 1390,
-      "y": 525,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
       "x": 1382,
       "y": 306,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "x": 1332,
-      "y": 318,
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["wall"]
     },
@@ -1822,12 +1810,6 @@
     {
       "x": -426,
       "y": -288,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "x": -244,
-      "y": -798,
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["wall"]
     },
@@ -1874,12 +1856,6 @@
     {
       "x": -3066,
       "y": -1050,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "x": -3047,
-      "y": -1104,
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["wall"]
     }
@@ -3626,145 +3602,9 @@
       "cGroup": ["wall"]
     },
     {
-      "v0": 211,
-      "v1": 144,
-      "vis": true,
-      "color": "999999",
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 213,
-      "v1": 149,
-      "vis": true,
-      "color": "999999",
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 217,
-      "v1": 169,
-      "vis": true,
-      "color": "999999",
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 218,
-      "v1": 170,
-      "vis": true,
-      "color": "999999",
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 219,
-      "v1": 171,
-      "vis": true,
-      "color": "999999",
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 220,
-      "v1": 174,
-      "vis": true,
-      "color": "999999",
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 221,
-      "v1": 177,
-      "vis": true,
-      "color": "999999",
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 223,
-      "v1": 224,
-      "vis": true,
-      "color": "999999",
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 225,
-      "v1": 226,
-      "vis": true,
-      "color": "999999",
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 227,
-      "v1": 185,
-      "vis": true,
-      "color": "999999",
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 228,
-      "v1": 185,
-      "vis": true,
-      "color": "999999",
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 229,
-      "v1": 230,
-      "vis": true,
-      "color": "999999",
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 231,
-      "v1": 230,
-      "vis": true,
-      "color": "999999",
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 232,
-      "v1": 139,
-      "vis": true,
-      "color": "999999",
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
       "v0": 137,
-      "v1": 233,
+      "v1": 230,
       "curve": 158.7142585105929,
-      "vis": true,
-      "color": "999999",
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 234,
-      "v1": 179,
-      "vis": true,
-      "color": "999999",
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 222,
-      "v1": 178,
-      "vis": true,
-      "color": "999999",
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 235,
-      "v1": 178,
       "vis": true,
       "color": "999999",
       "cMask": ["red", "blue", "ball", "c0"],
@@ -3776,15 +3616,6 @@
       "curve": -175.487832906832,
       "vis": true,
       "color": "777777",
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 210,
-      "v1": 145,
-      "curve": -1.0795227899275373,
-      "vis": true,
-      "color": "999999",
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["wall"]
     },
@@ -3809,42 +3640,8 @@
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 212,
-      "v1": 148,
-      "vis": true,
-      "color": "999999",
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 236,
-      "v1": 154,
-      "vis": true,
-      "color": "999999",
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 153,
-      "v1": 214,
-      "curve": -49.01286780240231,
-      "vis": true,
-      "color": "999999",
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 157,
-      "v1": 216,
-      "curve": -24.80809690350584,
-      "vis": true,
-      "color": "999999",
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 237,
-      "v1": 238,
+      "v0": 234,
+      "v1": 235,
       "vis": true,
       "color": "ffffff",
       "bCoef": 0.25,
@@ -3859,7 +3656,7 @@
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 239,
+      "v0": 236,
       "v1": 124,
       "curve": -148.4865665235211,
       "vis": true,
@@ -3867,21 +3664,12 @@
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 239,
-      "v1": 240,
+      "v0": 236,
+      "v1": 237,
       "curve": 13.065700793445808,
       "vis": true,
       "color": "ffffff",
       "cGroup": ["redKO", "blueKO"]
-    },
-    {
-      "v0": 241,
-      "v1": 242,
-      "curve": -1.0795227899275373,
-      "vis": true,
-      "color": "999999",
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
     }
   ],
 

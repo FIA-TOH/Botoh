@@ -5,7 +5,12 @@ To do dos Mapas
 
 Detectar corte de curva
 
-## Enviar resultado de corridas e qualy bonitinho
+Avaliar outras funcoes por tick em menos tick e a consequencia
+Nao enviando video aparentemente
+Comando de linugagem invertido
+primeira volta cortar caminho punicao menor
+
+Enviar resultado de corridas e qualy bonitinho
 
 Damping modifier
 Rain system

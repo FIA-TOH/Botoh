@@ -8,9 +8,7 @@ import { playerList } from "../changePlayerState/playerList";
 import { sendBlueMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { presentationLap } from "../commands/gameState/handlePresentationLapCommand";
-import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { inHitbox, getRunningPlayers } from "../utils";
-import { handleChangeCollisionPlayerSuzuka } from "./handleSuzukaTp";
 import { CIRCUITS, currentMapIndex } from "./maps";
 
 function serialize(number: number) {

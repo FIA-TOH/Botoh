@@ -69,6 +69,9 @@ export function createPlayerInfo(ip?: string) {
     voted: false,
 
     cameraFollowing: false,
+
+    cutPenaltyEndTime: undefined,
+    cutPenaltyMultiplier: 1,
   };
 }
 
@@ -139,5 +142,8 @@ export function resetPlayer(
   playerList[id].voted = false;
 
   playerList[id].cameraFollowing = false;
+
+  playerList[id].cutPenaltyEndTime = undefined;
+  playerList[id].cutPenaltyMultiplier = 1;
   handleAvatar(Situacions.ChangeTyre, player, room);
 }

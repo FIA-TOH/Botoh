@@ -96,7 +96,7 @@ export function controlPlayerSpeed(
 
     const isUsingErsInco = playerInfo.kers <= 0 && disc.damping === 0.986;
 
-    const gripMultiplier = calculateGripMultiplierForConditions(
+    let gripMultiplier = calculateGripMultiplierForConditions(
       p,
       playerInfo.tires,
       playerInfo.wear,
@@ -119,6 +119,19 @@ export function controlPlayerSpeed(
     }
 
     // Aplicar efeitos
+    //Punicao
+    if (
+      playerInfo.cutPenaltyEndTime &&
+      currentTime <= playerInfo.cutPenaltyEndTime
+    ) {
+      const multiplier =
+        playerInfo.cutPenaltyMultiplier ?? constants.PENALTY_SPEED;
+      gripMultiplier = (gripMultiplier ?? 1) * multiplier;
+    } else {
+      playerInfo.cutPenaltyEndTime = undefined;
+      playerInfo.cutPenaltyMultiplier = undefined;
+    }
+
     if (gripLimiter > 0) {
       // Pitlane ou VSC
       const newGravityX = -x * (1 - gripLimiter);

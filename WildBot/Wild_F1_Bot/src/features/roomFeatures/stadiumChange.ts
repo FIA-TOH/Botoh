@@ -4,6 +4,7 @@ import { handleChangeMap, CIRCUITS } from "../zones/maps";
 import { MESSAGES } from "../chat/messages";
 import { Teams } from "../changeGameState/teams";
 import { log } from "../discord/logger";
+import { loadCutSegmentsFromCircuit } from "../detectCut/detectCut";
 
 export let ACTUAL_CIRCUIT: Circuit;
 
@@ -17,6 +18,7 @@ export function StadiumChange(room: RoomObject) {
 
     let c = CIRCUITS.find((x) => x.info.name == newStadiumName);
     if (c) {
+      loadCutSegmentsFromCircuit(c);
       ACTUAL_CIRCUIT = c;
     }
 

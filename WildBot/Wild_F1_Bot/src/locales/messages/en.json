@@ -129,5 +129,6 @@
   "STARTING_QUALY_LAP": "Starting qualifying lap, fly!",
   "POSITION_QUALY": "You are in {{position}} position!",
   "ERROR_POSITION_QUALY": "You haven't completed a lap yet.",
-  "EARLY_LAP_ERROR": "You crossed the finish line before the timer started, use !rr to return to the start, otherwise the lap will not be validated."
+  "EARLY_LAP_ERROR": "You crossed the finish line before the timer started, use !rr to return to the start, otherwise the lap will not be validated.",
+  "CUTTED_TRACK": "⚠️ You cut the track! Your speed will be reduced for {{seconds}} seconds."
 }

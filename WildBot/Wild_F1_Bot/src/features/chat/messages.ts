@@ -1491,4 +1491,21 @@ export const MESSAGES = {
     tr: tr_messages.ERROR_POSITION_QUALY,
     pt: pt_messages.ERROR_POSITION_QUALY,
   }),
+  CUTTED_TRACK: (seconds: number): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.CUTTED_TRACK, {
+      seconds: seconds.toString(),
+    }),
+    es: replaceTemplateString(es_messages.CUTTED_TRACK, {
+      seconds: seconds.toString(),
+    }),
+    fr: replaceTemplateString(fr_messages.CUTTED_TRACK, {
+      seconds: seconds.toString(),
+    }),
+    tr: replaceTemplateString(tr_messages.CUTTED_TRACK, {
+      seconds: seconds.toString(),
+    }),
+    pt: replaceTemplateString(pt_messages.CUTTED_TRACK, {
+      seconds: seconds.toString(),
+    }),
+  }),
 };
