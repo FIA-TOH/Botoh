@@ -7,6 +7,14 @@ export function handleRecordCommand(
   room: RoomObject
 ) {
   if (ACTUAL_CIRCUIT && ACTUAL_CIRCUIT.info.BestTime) {
-    getBestTime(ACTUAL_CIRCUIT.info.name, room, byPlayer);
+    const record = getBestTime(ACTUAL_CIRCUIT.info.name);
+
+    if (record) {
+      const [bestTime, driver, track] = record;
+      room.sendAnnouncement(
+        `Record on ${track}: ${bestTime} - ${driver}`,
+        byPlayer.id
+      );
+    }
   }
 }

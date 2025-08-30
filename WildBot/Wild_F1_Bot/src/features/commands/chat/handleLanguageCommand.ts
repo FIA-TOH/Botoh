@@ -23,6 +23,7 @@ export function handleLanguageCommand(
     sendErrorMessage(room, MESSAGES.LANG_USAGE(), byPlayer.id);
     return;
   }
-  sendSuccessMessage(room, MESSAGES.LANG_CHANGED(), byPlayer.id);
+
   playerList[byPlayer.id].language = lang;
+  sendSuccessMessage(room, MESSAGES.LANG_CHANGED(), byPlayer.id);
 }

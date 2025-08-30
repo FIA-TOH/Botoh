@@ -63,7 +63,7 @@ export function throttlePerSecond<T extends any[]>(
   fn: (...args: T) => void,
   perSecond: number
 ) {
-  const tickInterval = Math.floor(60 / perSecond); // ticks entre execuções
+  const tickInterval = Math.floor(60 / perSecond);
   let tickCount = 0;
 
   return (...args: T) => {

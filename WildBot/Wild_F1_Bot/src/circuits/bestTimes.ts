@@ -89,22 +89,15 @@ export const getAbbreviatedTrackName = (
 };
 
 export const getBestTime = (
-  trackName: string,
-  room: RoomObject,
-  byPlayer: PlayerObject
-) => {
+  trackName: string
+): [number, string, string] | null => {
   const abbreviatedTrackName = getAbbreviatedTrackName(trackName) || trackName;
 
   if (trackNameMapping.hasOwnProperty(abbreviatedTrackName)) {
-    const bestTime = bestTimes[abbreviatedTrackName][0];
-    const driver = bestTimes[abbreviatedTrackName][1];
-
-    if (bestTime && driver) {
-      room.sendAnnouncement(`Record: ${bestTime} - ${driver}`, byPlayer.id);
-      return;
-    }
-    return;
+    return bestTimes[abbreviatedTrackName];
   }
+
+  return null;
 };
 
 // Atualizando a função para usar o nome completo

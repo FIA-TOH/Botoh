@@ -101,11 +101,15 @@ export function detectCut(
     );
 
     if (dist < pad.disc.radius && !lastSet.has(seg.index)) {
+      let realPeanlty = seg.penalty;
+      if (room.getScores().time < 30) {
+        realPeanlty = seg.penalty / 2;
+      }
       log(`${pad.p.name} cutted the track at ${getTimestamp()}`);
-      sendAlertMessage(room, MESSAGES.CUTTED_TRACK(seg.penalty), pad.p.id);
+      sendAlertMessage(room, MESSAGES.CUTTED_TRACK(realPeanlty || 5), pad.p.id);
 
       lastSet.add(seg.index);
-      applyCutPenalty(pad, seg.penalty || 5, room);
+      applyCutPenalty(pad, realPeanlty || 5, room);
     }
 
     if (dist >= pad.disc.radius && lastSet.has(seg.index)) {
