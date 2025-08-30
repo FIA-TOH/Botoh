@@ -20,7 +20,7 @@ export function handleCameraPlayerFollow(
 
   if (!args || args.length === 0) {
     if (byPlayer) {
-      room.sendAnnouncement("Uso correto: !camera_id [player id]", byPlayer.id);
+      room.sendAnnouncement("Correct use: !camera_id [player id]", byPlayer.id);
     }
     return;
   }
@@ -35,7 +35,7 @@ export function handleCameraPlayerFollow(
 
   if (isNaN(playerId)) {
     if (byPlayer) {
-      room.sendAnnouncement("Uso correto: !camera_id [player id]", byPlayer.id);
+      room.sendAnnouncement("Correct use: !camera_id [player id]", byPlayer.id);
     }
     return;
   }
@@ -44,7 +44,7 @@ export function handleCameraPlayerFollow(
   if (!targetPlayer) {
     if (byPlayer) {
       room.sendAnnouncement(
-        `Jogador com id ${playerId} não encontrado.`,
+        `Player with ID ${playerId} not found.`,
         byPlayer.id
       );
     }
@@ -54,10 +54,10 @@ export function handleCameraPlayerFollow(
   setFollowPlayer(playerId);
   if (byPlayer) {
     room.sendAnnouncement(
-      `agora seguindo o jogador: ${targetPlayer.name} (id: ${playerId})`,
+      `Now following the player: ${targetPlayer.name} (ID: ${playerId}).`,
       byPlayer.id
     );
   }
 
-  log(`[CameraFollow] Agora seguindo o player ID ${playerId}`);
+  log(`[CameraFollow] Now following the player ID ${playerId}`);
 }

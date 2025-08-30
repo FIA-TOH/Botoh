@@ -18,7 +18,7 @@ export function handleTpCommand(
 
   // Verificar se os argumentos necessários foram fornecidos
   if (args.length < 2) {
-    room.sendAnnouncement("Uso correto: !tp [X] [Y]", byPlayer.id, 0xff0000);
+    room.sendAnnouncement("Correct use: !tp [X] [Y]", byPlayer.id, 0xff0000);
     return false;
   }
 
@@ -31,10 +31,10 @@ export function handleTpCommand(
     if (!integerPattern.test(pos)) {
       const errorMessage =
         pos.includes(",") || pos.includes(".")
-          ? `${axis} não pode conter vírgula ou ponto.`
-          : `${axis} deve ser um número inteiro positivo, negativo ou zero.`;
+          ? `${axis} cannot contain comma or period.`
+          : `${axis} must be an positve or negative integer, or zero.`;
 
-      room.sendAnnouncement(`Aviso: ${errorMessage}`, byPlayer.id, 0xff0000);
+      room.sendAnnouncement(`Warning: ${errorMessage}`, byPlayer.id, 0xff0000);
       return false;
     }
     return true;
@@ -56,7 +56,7 @@ export function handleTpCommand(
     const newY = byPlayer.position.y + yPos;
 
     room.sendAnnouncement(
-      `Teleportado para (${newX}, ${newY}).`,
+      `Teleported to (${newX}, ${newY}).`,
       byPlayer.id,
       0xffff00
     );
@@ -67,7 +67,7 @@ export function handleTpCommand(
     });
   } else {
     room.sendAnnouncement(
-      "Erro: Não foi possível obter a posição atual do jogador.",
+      "Error: It wasn't possible to obtain the position of the player.",
       byPlayer.id,
       0xff0000
     );

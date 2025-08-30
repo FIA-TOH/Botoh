@@ -13,7 +13,7 @@ export function handleAfkCommand(
 ) {
   const player = playerList[byPlayer.id];
   if (!player) {
-    log(`Jogador não encontrado: ID ${byPlayer.id}`);
+    log(`Player not found to give AFK. ${byPlayer.name}`);
     return;
   }
 

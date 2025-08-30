@@ -7,7 +7,7 @@ let lockedWinnerVotes: number = 0;
 export function announceSelectedCircuits(room: RoomObject) {
   selectedCircuits.forEach((circuit, index) => {
     room.sendAnnouncement(
-      `${index + 1}: ${circuit.info?.name || "Nome não definido"}`
+      `${index + 1}: ${circuit.info?.name || "Name not defined"}`
     );
   });
 }
@@ -19,7 +19,7 @@ export function clearLockedWinner() {
 
 function computeWinningCircuit(): Circuit {
   if (selectedCircuits.length === 0) {
-    throw new Error("Nenhum circuito disponível para votação.");
+    throw new Error("No circuit avaiable to the vote.");
   }
   const maxVotes = Math.max(...selectedCircuits.map((c) => c.info?.Votes ?? 0));
   const tied = selectedCircuits.filter(

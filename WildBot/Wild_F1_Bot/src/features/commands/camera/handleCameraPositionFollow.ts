@@ -18,7 +18,7 @@ export function handleCameraPositionFollow(
   if (!args || args.length === 0) {
     if (byPlayer) {
       room.sendAnnouncement(
-        "Uso correto: !camera_position [posição]",
+        "Correct use: !camera_position [posição]",
         byPlayer.id
       );
     }
@@ -33,7 +33,7 @@ export function handleCameraPositionFollow(
   const pos = Number(args[0]);
   if (isNaN(pos) || pos <= 0 || pos > positionList.length) {
     if (byPlayer) {
-      room.sendAnnouncement(`Posição inválida.`, byPlayer.id);
+      room.sendAnnouncement(`Invalid position.`, byPlayer.id);
     }
     return;
   }
@@ -41,7 +41,7 @@ export function handleCameraPositionFollow(
   setFollowPosition(pos);
   if (byPlayer) {
     room.sendAnnouncement(
-      `Câmera agora seguindo a posição ${pos}`,
+      `Camera now following the position ${pos}.`,
       byPlayer.id
     );
   }

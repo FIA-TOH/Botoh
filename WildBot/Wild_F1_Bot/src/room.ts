@@ -17,7 +17,6 @@ import { StadiumChange } from "./features/roomFeatures/stadiumChange";
 import { PlayerChat } from "./features/roomFeatures/playerChat";
 import { GameStop } from "./features/roomFeatures/gameStop";
 import { PlaerActivity } from "./features/roomFeatures/playerActivitie";
-import { ballFeatures } from "./features/camera/ballFeatures";
 import { log } from "./features/discord/logger";
 
 const roomName = LEAGUE_MODE ? leagueName : publicName;

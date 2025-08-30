@@ -1,6 +1,5 @@
 import { log } from "../features/discord/logger";
 
-// Mapeamento dos nomes abreviados para os nomes completos
 const trackNameMapping: { [key: string]: string } = {
   melbourne: "Albert-Park Melbourne Circuit - By Ximb",
   imola: "Autodromo Imola - By Ximb",
@@ -38,7 +37,6 @@ const trackNameMapping: { [key: string]: string } = {
   miami: "Miami by Rodri",
 };
 
-// Atualizando o objeto bestTimes com os nomes completos
 export const bestTimes: { [key: string]: [number, string, string] } = {
   melbourne: [27.6, "Lando Canorris", trackNameMapping["melbourne"]],
   imola: [31.867, "Lib Wallard", trackNameMapping["imola"]],
@@ -79,7 +77,6 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   indianapolis: [30.5, "Gabriel Schumacchio", trackNameMapping["indianapolis"]],
   miami: [999.999, "undefined", trackNameMapping["miami"]],
 };
-// Função para converter nome completo para abreviado
 export const getAbbreviatedTrackName = (
   fullTrackName: string
 ): string | undefined => {
@@ -100,26 +97,25 @@ export const getBestTime = (
   return null;
 };
 
-// Atualizando a função para usar o nome completo
 export const updateBestTime = (
   trackName: string,
   newTime: number,
   driverName: string
 ) => {
-  // Se o nome completo for passado, tenta obter o nome abreviado
   const abbreviatedTrackName = getAbbreviatedTrackName(trackName) || trackName;
 
   if (trackNameMapping.hasOwnProperty(abbreviatedTrackName)) {
     const currentBestTime = bestTimes[abbreviatedTrackName][0];
 
-    // Só atualiza se o tempo atual for maior que o novo tempo ou se for indefinido (999.999)
     if (currentBestTime === 999.999 || newTime < currentBestTime) {
-      const circuitName = trackNameMapping[abbreviatedTrackName]; // Usa o nome completo da pista
+      const circuitName = trackNameMapping[abbreviatedTrackName];
       bestTimes[abbreviatedTrackName] = [newTime, driverName, circuitName];
     } else {
     }
   } else {
-    log(`A pista ${abbreviatedTrackName} não foi encontrada no mapeamento.`);
+    log(
+      `The track ${abbreviatedTrackName} wasn't found on the mapping to update the best time.`
+    );
   }
 };
 
@@ -128,13 +124,14 @@ export const clearBestTime = (
   newTime: number,
   driverName: string
 ) => {
-  // Se o nome completo for passado, tenta obter o nome abreviado
   const abbreviatedTrackName = getAbbreviatedTrackName(trackName) || trackName;
 
   if (trackNameMapping.hasOwnProperty(abbreviatedTrackName)) {
-    const circuitName = trackNameMapping[abbreviatedTrackName]; // Usa o nome completo da pista
+    const circuitName = trackNameMapping[abbreviatedTrackName];
     bestTimes[abbreviatedTrackName] = [newTime, driverName, circuitName];
   } else {
-    log(`A pista ${abbreviatedTrackName} não foi encontrada no mapeamento.`);
+    log(
+      `The track ${abbreviatedTrackName} wasn't found on the mapping to clear the best time.`
+    );
   }
 };

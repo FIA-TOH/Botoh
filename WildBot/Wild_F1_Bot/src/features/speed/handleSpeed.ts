@@ -8,6 +8,7 @@ import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { Tires } from "../tires&pits/tires";
 import { getRunningPlayers } from "../utils";
 import { constants } from "./constants";
+import { applyLateralSlip } from "./damping";
 import { calculateGripMultiplierForConditions } from "./grip/multiplierConditions";
 import { slipstreamEnabled, calculateSlipstream } from "./handleSlipstream";
 
@@ -47,14 +48,13 @@ export function controlPlayerSpeed(
     const playerInfo = playerList[p.id];
 
     if (playerInfo.inPitStop) {
-      // anula qualquer cálculo de velocidade e gravidade
       room.setPlayerDiscProperties(p.id, {
         xspeed: 0,
         yspeed: 0,
         xgravity: 0,
         ygravity: 0,
       });
-      return; // sai sem aplicar grip/slipstream
+      return;
     }
     const { xspeed: x, yspeed: y } = disc;
     const norm = Math.hypot(x, y);
@@ -133,7 +133,6 @@ export function controlPlayerSpeed(
     }
 
     if (gripLimiter > 0) {
-      // Pitlane ou VSC
       const newGravityX = -x * (1 - gripLimiter);
       const newGravityY = -y * (1 - gripLimiter);
 
@@ -141,27 +140,7 @@ export function controlPlayerSpeed(
         xgravity: newGravityX,
         ygravity: newGravityY,
       });
-    } else if (
-      norm > 0 &&
-      rainEnabled &&
-      isRaining &&
-      grip(playerInfo.tires, rainIntensity) < playerInfo.gripCounter &&
-      gripMultiplier
-    ) {
-      // Derrapagem na chuva
-      playerInfo.gripCounter = 0;
-
-      const newGravityX = -x * (1 - gripMultiplier) * constants.SLIDE_FACTOR;
-      const newGravityY = -y * (1 - gripMultiplier) * constants.SLIDE_FACTOR;
-
-      room.setPlayerDiscProperties(p.id, {
-        xspeed: x,
-        yspeed: y,
-        xgravity: newGravityX,
-        ygravity: newGravityY,
-      });
     } else if (tyresActivated && gripMultiplier) {
-      // Condição normal de pista
       const newGravityX = -x * (1 - gripMultiplier);
       const newGravityY = -y * (1 - gripMultiplier);
 

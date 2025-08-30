@@ -19,5 +19,5 @@ export function handleClearCommand(
   players.forEach((p) => {
     playerList[p.id].bestTime === 999.999;
   });
-  room.sendAnnouncement("Recorde Resetado");
+  room.sendAnnouncement("Record cleared");
 }

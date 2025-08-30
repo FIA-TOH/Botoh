@@ -49,7 +49,7 @@ export function handleNerfListCommand(
   let playerNerfEscolhido: { p: PlayerObject; disc: DiscPropertiesObject }[] =
     [];
   if (!playerBuffId) {
-    room.sendAnnouncement("Escolha um jogador", byPlayer.id, 0xff0000);
+    room.sendAnnouncement("Choose a player.", byPlayer.id, 0xff0000);
     return;
   }
   if (playerBuffNumero !== undefined) {

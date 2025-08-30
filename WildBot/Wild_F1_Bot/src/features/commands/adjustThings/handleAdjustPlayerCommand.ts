@@ -41,27 +41,6 @@ export function handleAjustPlayerCommand(
 
   const players = getRunningPlayers(playersAndDiscs);
   let playerEscolhido: { p: PlayerObject; disc: DiscPropertiesObject }[] = [];
-  if (!playerChoosen) {
-    room.sendAnnouncement("Escolha um jogador", byPlayer.id, 0xff0000);
-    return;
-  }
-
-  if (playerNumero !== undefined) {
-    playerEscolhido = players.filter((p) => p.p.id === playerNumero);
-  } else {
-    room.sendAnnouncement("Player not found", byPlayer.id, 0xff0000);
-    return;
-  }
-  if (valueNumber !== undefined) {
-    playerEscolhido = players.filter((p) => p.p.id === playerNumero);
-  } else {
-    room.sendAnnouncement("Value must be a number", byPlayer.id, 0xff0000);
-  }
-
-  if (playerEscolhido?.length === 0) {
-    room.sendAnnouncement("Escolha um jogador válido", byPlayer.id, 0xff0000);
-    return;
-  }
   const playerInfo = playerList[playerEscolhido[0].p.id];
 
   if (adjust === "wear") {
@@ -71,10 +50,31 @@ export function handleAjustPlayerCommand(
     playerInfo.currentSector = 3 as number;
   } else {
     room.sendAnnouncement(
-      "Now you can only change wear or laps",
+      "Now you can only change wear or laps.",
       byPlayer.id,
       0xff0000
     );
+    return;
+  }
+  if (!playerChoosen) {
+    room.sendAnnouncement("Choose a player.", byPlayer.id, 0xff0000);
+    return;
+  }
+
+  if (playerNumero !== undefined) {
+    playerEscolhido = players.filter((p) => p.p.id === playerNumero);
+  } else {
+    room.sendAnnouncement("Player not found.", byPlayer.id, 0xff0000);
+    return;
+  }
+  if (valueNumber !== undefined) {
+    playerEscolhido = players.filter((p) => p.p.id === playerNumero);
+  } else {
+    room.sendAnnouncement("Value must be a number.", byPlayer.id, 0xff0000);
+  }
+
+  if (playerEscolhido?.length === 0) {
+    room.sendAnnouncement("Choose a valid player.", byPlayer.id, 0xff0000);
     return;
   }
 }

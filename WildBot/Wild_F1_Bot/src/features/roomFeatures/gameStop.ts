@@ -46,7 +46,7 @@ export function GameStop(room: RoomObject) {
     if (timerController.positionTimer !== null) {
       clearTimeout(timerController.positionTimer);
       timerController.positionTimer = null;
-      log("Temporizador cancelado por onGameStop");
+      log("Temporizer canceled by onGameStop");
     }
 
     resetAllRainEvents();

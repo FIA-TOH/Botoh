@@ -13,6 +13,12 @@ export interface PitsInfo {
   }[];
   pitsAttemp: number;
 }
+
+type Direction = {
+  x: number;
+  y: number;
+};
+
 export interface PlayerInfo {
   // Identificação e status de presença
   ip: string;
@@ -76,6 +82,10 @@ export interface PlayerInfo {
 
   cutPenaltyEndTime?: number;
   cutPenaltyMultiplier?: number;
+
+  lastDir?: Direction;
+  slipTicks?: number;
+  slipDir?: Direction;
 }
 
 type PlayerList = {

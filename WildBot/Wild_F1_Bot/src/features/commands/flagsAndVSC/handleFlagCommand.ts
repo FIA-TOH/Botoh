@@ -34,7 +34,7 @@ export function handleFlagCommand(
 
   if (byPlayer && !args[0]) {
     room.sendAnnouncement(
-      "Uso correto: !flag color [playerName]",
+      "Correct use !flag color [playerName]",
       byPlayer.id,
       0xff0000
     );
@@ -102,11 +102,11 @@ export function handleFlagCommand(
     });
   } else if (flagChoosen === "blue") {
     if (byPlayer && !playerChoosen) {
-      room.sendAnnouncement("Escolha um jogador", byPlayer.id, 0xff0000);
+      room.sendAnnouncement("Choose a player.", byPlayer.id, 0xff0000);
       return;
     }
     if (byPlayer && playerEscolhido?.length === 0) {
-      room.sendAnnouncement("Escolha um jogador válido", byPlayer.id, 0xff0000);
+      room.sendAnnouncement("Choose a valid player.", byPlayer.id, 0xff0000);
       return;
     }
     flag = "blue";
@@ -129,11 +129,11 @@ export function handleFlagCommand(
     );
   } else if (flagChoosen === "black") {
     if (byPlayer && !playerChoosen) {
-      room.sendAnnouncement("Escolha um jogador", byPlayer.id, 0xff0000);
+      room.sendAnnouncement("Choose a player.", byPlayer.id, 0xff0000);
       return;
     }
     if (byPlayer && (playerEscolhido?.length === 0 || !playerEscolhido)) {
-      room.sendAnnouncement("Escolha um jogador válido", byPlayer.id, 0xff0000);
+      room.sendAnnouncement("Choose a valid player.", byPlayer.id, 0xff0000);
       return;
     }
     flag = "black";

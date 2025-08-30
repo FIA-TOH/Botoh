@@ -65,12 +65,11 @@ export function sendMessage(
 ) {
   if (toPlayerID) {
     const language = getPlayerLanguage(toPlayerID);
-    // console.log(language, message, message[language])
     room.sendAnnouncement(message[language], toPlayerID, color, font, sound);
   } else {
     room.getPlayerList().forEach((player) => {
       const language = getPlayerLanguage(player.id);
-      // console.log(language, message, message[language])
+
       room.sendAnnouncement(message[language], player.id, color, font, sound);
     });
   }

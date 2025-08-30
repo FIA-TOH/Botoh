@@ -17,7 +17,10 @@ export function handleEnableTyresCommand(
     const isActivateTyres = args[0];
 
     if (isActivateTyres !== "true" && isActivateTyres !== "false" && byPlayer) {
-      room.sendAnnouncement("!enable_tyres [true|false]", byPlayer.id);
+      room.sendAnnouncement(
+        "Correct use: !enable_tyres [true|false]",
+        byPlayer.id
+      );
       return;
     }
     tyresActivated = isActivateTyres as unknown as boolean;

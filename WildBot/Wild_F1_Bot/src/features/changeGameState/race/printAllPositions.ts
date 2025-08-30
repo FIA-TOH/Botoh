@@ -23,10 +23,9 @@ export function printAllPositions(room: RoomObject, toPlayerID?: number) {
     ` P - ${headerLeftSpaces}Name${headerRightSpaces} | Pits | Best Lap`,
     toPlayerID
   );
+  //to-do: ver de remover
   log("positionList: ");
   positionList.forEach((p) => {
-    log(p);
-
     const spaces = (MAX_PLAYER_NAME - p.name.length) / 2.0;
     const leftSpaces = " ".repeat(Math.ceil(spaces));
     const rightSpaces = " ".repeat(Math.trunc(spaces));

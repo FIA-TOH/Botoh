@@ -129,7 +129,7 @@ export function handleAvatar(
 ): void {
   const p = playerList[player.id];
   if (!p) {
-    log("Erro ao mudar o avatar");
+    log("Error on chaning the avatar.");
     return;
   }
 

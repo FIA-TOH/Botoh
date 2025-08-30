@@ -14,7 +14,7 @@ export function StadiumChange(room: RoomObject) {
       sendErrorMessage(room, MESSAGES.NO_MANUAL_MAPS(), byPlayer.id);
       handleChangeMap(0, room);
     }
-    log(newStadiumName);
+    log("New circuit loaded: ", newStadiumName);
 
     let c = CIRCUITS.find((x) => x.info.name == newStadiumName);
     if (c) {

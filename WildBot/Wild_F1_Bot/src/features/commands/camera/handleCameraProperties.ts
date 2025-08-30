@@ -35,7 +35,7 @@ export function handleCameraProperties(
   ) {
     if (byPlayer) {
       room.sendAnnouncement(
-        "Uso correto: !camera_properties [attraction|maxspeed|deadzone] [number]",
+        "Correct use: !camera_properties [attraction|maxspeed|deadzone] [number]",
         byPlayer.id
       );
     }

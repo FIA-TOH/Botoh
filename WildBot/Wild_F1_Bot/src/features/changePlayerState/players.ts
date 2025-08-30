@@ -72,6 +72,10 @@ export function createPlayerInfo(ip?: string) {
 
     cutPenaltyEndTime: undefined,
     cutPenaltyMultiplier: 1,
+
+    lastDir: undefined,
+    slipTicks: undefined,
+    slipDir: undefined,
   };
 }
 
@@ -146,4 +150,8 @@ export function resetPlayer(
   playerList[id].cutPenaltyEndTime = undefined;
   playerList[id].cutPenaltyMultiplier = 1;
   handleAvatar(Situacions.ChangeTyre, player, room);
+
+  playerList[id].lastDir = undefined;
+  playerList[id].slipTicks = undefined;
+  playerList[id].slipDir = undefined;
 }

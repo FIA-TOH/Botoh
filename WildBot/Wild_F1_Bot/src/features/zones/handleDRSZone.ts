@@ -1,7 +1,6 @@
 import { getRunningPlayers, inHitbox } from "../utils";
 import { playerList } from "../changePlayerState/playerList";
 import { CIRCUITS, currentMapIndex } from "./maps";
-import { sendNonLocalizedSmallChatMessage } from "../chat/chat";
 import { log } from "../discord/logger";
 
 function ifInDRSStartZone(

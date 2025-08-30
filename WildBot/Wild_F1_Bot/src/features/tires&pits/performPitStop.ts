@@ -2,6 +2,8 @@ import { playerList } from "../changePlayerState/playerList";
 import { changeTires } from "./changeTires";
 import { Tires } from "./tires";
 import { emitPitMessage } from "./pitMessaging";
+import { sendAlertMessage } from "../chat/chat";
+import { MESSAGES } from "../chat/messages";
 
 export function performPitStop(
   room: RoomObject,
@@ -43,7 +45,7 @@ export function detectPitPerTick(
     delete state.pitInitialPos;
     delete state.pitSteps;
     state.inPitStop = false;
-    room.sendAnnouncement("Ação de pit cancelada por movimento!", pad.p.id);
+    sendAlertMessage(room, MESSAGES.CANCELED_CHANGE_TYRES(), pad.p.id);
     return;
   }
 

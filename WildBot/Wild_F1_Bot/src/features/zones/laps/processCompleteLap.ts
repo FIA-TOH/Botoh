@@ -44,9 +44,7 @@ export function processCompletedLap(
   );
 
   if (!abbreviatedTrackName) {
-    log(
-      `Circuito ${ACTUAL_CIRCUIT.info.name} não encontrado no mapeamento de nomes.`
-    );
+    log(`Circuit ${ACTUAL_CIRCUIT.info.name} not found on the name mapping.`);
     return;
   }
 

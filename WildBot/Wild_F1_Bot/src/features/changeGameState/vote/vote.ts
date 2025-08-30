@@ -60,7 +60,7 @@ export function changeMapBasedOnVote(
   if (winnerIndex !== -1) {
     handleChangeMap(winnerIndex, room);
   } else {
-    log("Circuito vencedor não encontrado no array CIRCUITS.");
+    log("Circuit not found on the array.");
   }
 
   if (!dontAnnouceVotes) {
