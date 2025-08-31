@@ -28,6 +28,10 @@ import { handleFlagCommand } from "../commands/flagsAndVSC/handleFlagCommand";
 import { clearPlayerBuffAndNerfLists } from "../commands/adjustThings/handleNerfListCommand";
 import PublicGameFlow from "../changeGameState/publicGameFlow/publicGameFLow";
 import { sendDiscordReplay } from "../discord/discord";
+import {
+  sendQualiResultsToDiscord,
+  sendRaceResultsToDiscord,
+} from "../discord/logResults";
 
 export function GameStop(room: RoomObject) {
   room.onGameStop = function (byPlayer) {
@@ -57,6 +61,7 @@ export function GameStop(room: RoomObject) {
       } else {
         handleGameStateChange(null, room);
         if (gameMode == GameMode.QUALY) {
+          sendQualiResultsToDiscord();
           printAllTimes(room);
           reorderPlayersInRoomRace(room);
           movePlayersToCorrectSide();
@@ -66,6 +71,7 @@ export function GameStop(room: RoomObject) {
           setGhostMode(room, false);
           handleRREnabledCommand(undefined, ["false"], room);
         } else if (gameMode == GameMode.TRAINING) {
+          sendQualiResultsToDiscord();
           printAllTimes(room);
           reorderPlayersInRoomRace(room);
           movePlayersToCorrectSide();
@@ -73,6 +79,7 @@ export function GameStop(room: RoomObject) {
           setGhostMode(room, false);
           handleRREnabledCommand(undefined, ["false"], room);
         } else {
+          sendRaceResultsToDiscord();
           printAllPositions(room);
           movePlayersToCorrectSide();
           resetPlayers(room);

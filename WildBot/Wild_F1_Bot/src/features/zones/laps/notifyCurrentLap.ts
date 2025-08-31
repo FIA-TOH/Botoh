@@ -13,6 +13,6 @@ export function notifySpectatorsCurrentLap(
     .filter((pla) => pla.p.team !== Teams.RUNNERS)
     .forEach((pla) => {
       sendChatMessage(room, MESSAGES.CURRENT_LAP(currentLap, laps), pla.p.id);
-      printAllPositions(room, pla.p.id);
+      printAllPositions(room, pla.p.id, false);
     });
 }

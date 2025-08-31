@@ -54,12 +54,12 @@ export function processCompletedLap(
     updateBestTime(ACTUAL_CIRCUIT.info.name, lapTime, p.name);
     playerData.bestTime = lapTime;
     sendBestTimeRace(room, MESSAGES.TRACK_RECORD(p.name, lapTime));
-    updatePlayerTime(p.name, lapTime, p.id);
+    updatePlayerTime(p.name, lapTime, p.id, playerData.leagueTeam);
   } else if (lapTime < bestTimeP || bestTimeP === undefined) {
     sendSuccessMessage(room, MESSAGES.LAP_TIME(lapTime), p.id);
     playerData.bestTime = lapTime;
     broadcastLapTimeToPlayers(room, lapTime, p.name);
-    updatePlayerTime(p.name, lapTime, p.id);
+    updatePlayerTime(p.name, lapTime, p.id, playerData.leagueTeam);
   } else {
     sendWorseTime(
       room,

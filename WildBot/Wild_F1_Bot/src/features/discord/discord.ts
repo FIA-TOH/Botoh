@@ -19,45 +19,57 @@ const LEAGUE_REPLAY_URL =
 const PUBLIC_REPLAY_URL =
   "https://discord.com/api/webhooks/1409983406971945080/z_HnlNnCnRQlD7nTfAPyjkMUYpGYYKM8j9jQutjGbXmo2jmIJmPdSrwXBtp27FxaCtBe";
 
-export function sendDiscordLog(message: string) {
-  const LOG_URL = LEAGUE_MODE ? LEAGUE_LOG_URL : PUBLIC_LOG_URL;
-  const request = new XMLHttpRequest();
-  const sanitizedMessage = message.replace(/@(?=[a-zA-Z])/g, "@ ");
-  const timestampedMessage = `${sanitizedMessage} - ${getTimestamp()}`;
-
-  request.open("POST", LOG_URL);
-  request.setRequestHeader("Content-type", "application/json");
-  const params = {
-    content: timestampedMessage,
-  };
-  request.send(JSON.stringify(params));
+function splitMessage(msg: string, size = 2000): string[] {
+  const chunks: string[] = [];
+  for (let i = 0; i < msg.length; i += size) {
+    chunks.push(msg.slice(i, i + size));
+  }
+  return chunks;
 }
 
+export function sendDiscordLog(message: string) {
+  const LOG_URL = LEAGUE_MODE ? LEAGUE_LOG_URL : PUBLIC_LOG_URL;
+  const sanitizedMessage = message.replace(/@(?=[a-zA-Z])/g, "@ ");
+  const timestampedMessage = `${sanitizedMessage} - ${getTimestamp()}`;
+  const parts = splitMessage(timestampedMessage);
+
+  parts.forEach((part) => {
+    sendRequestWithRetry(LOG_URL, { content: part }, "LOG");
+  });
+}
 export function sendDiscordChat(message: string) {
   const MESSAGES_URL = LEAGUE_MODE ? LEAGUE_CHAT_URL : PUBLIC_CHAT_URL;
   const request = new XMLHttpRequest();
   const sanitizedMessage = message.replace(/@(?=[a-zA-Z])/g, "@ ");
   request.open("POST", MESSAGES_URL);
   request.setRequestHeader("Content-type", "application/json");
-  const params = {
-    content: sanitizedMessage,
-  };
-  request.send(JSON.stringify(params));
+  const parts = splitMessage(sanitizedMessage);
+  parts.forEach((part) => {
+    sendRequestWithRetry(MESSAGES_URL, { content: part }, "CHAT");
+  });
 }
+export function sendDiscordResult(message: string) {
+  const LOG_URL = LEAGUE_MODE ? LEAGUE_REPLAY_URL : PUBLIC_REPLAY_URL;
+  const sanitizedMessage = message.replace(/@(?=[a-zA-Z])/g, "@ ");
+  const timestampedMessage = `${sanitizedMessage} - ${getTimestamp()}`;
+  const parts = splitMessage(timestampedMessage);
 
+  parts.forEach((part) => {
+    sendRequestWithRetry(LOG_URL, { content: part }, "RESULT");
+  });
+}
 function generateFileName() {
   const now = new Date();
   const day = now.getDate().toString().padStart(2, "0");
-  const month = (now.getMonth() + 1).toString().padStart(2, "0"); // January is 0!
+  const month = (now.getMonth() + 1).toString().padStart(2, "0");
   const year = now.getFullYear();
   const hours = now.getHours().toString().padStart(2, "0");
   const minutes = now.getMinutes().toString().padStart(2, "0");
   return `HBReplay-${day}-${month}-${year}-${hours}h${minutes}m - [${ACTUAL_CIRCUIT.info.name}].hbr2`;
 }
+
 export function sendDiscordReplay(replay: Uint8Array) {
   const REPLAYS_URL = LEAGUE_MODE ? LEAGUE_REPLAY_URL : PUBLIC_REPLAY_URL;
-  const request = new XMLHttpRequest();
-  request.open("POST", REPLAYS_URL);
 
   const arrayBuffer: ArrayBuffer = replay.buffer.slice(
     replay.byteOffset,
@@ -69,5 +81,54 @@ export function sendDiscordReplay(replay: Uint8Array) {
   const formData = new FormData();
   formData.append("file", blob, generateFileName());
 
-  request.send(formData);
+  sendRequestWithRetry(REPLAYS_URL, formData, "REPLAY", 1000, true);
+}
+function sendRequestWithRetry(
+  url: string,
+  body: any,
+  source: string,
+  delay = 1000,
+  isFormData = false
+) {
+  const request = new XMLHttpRequest();
+
+  request.open("POST", url);
+  if (!isFormData) {
+    request.setRequestHeader("Content-type", "application/json");
+  }
+
+  request.onload = () => {
+    if (request.status >= 200 && request.status < 300) {
+      // sucesso silencioso (não loga nada)
+      return;
+    } else if (request.status === 429) {
+      const preview = !isFormData
+        ? JSON.stringify(body).slice(0, 100)
+        : "[file upload]";
+      console.warn(
+        `[Discord RATE LIMIT] (${source}) Retentando em ${delay}ms\nConteúdo: ${preview}\nStack:`,
+        new Error().stack
+      );
+      setTimeout(
+        () => sendRequestWithRetry(url, body, source, delay * 2, isFormData),
+        delay
+      );
+    } else {
+      console.error(
+        `[Discord ERROR ${request.status}] (${source}):`,
+        request.responseText,
+        new Error().stack
+      );
+    }
+  };
+
+  request.onerror = () => {
+    console.error(`[Discord NETWORK ERROR] (${source})`, new Error().stack);
+  };
+
+  if (isFormData) {
+    request.send(body);
+  } else {
+    request.send(JSON.stringify(body));
+  }
 }

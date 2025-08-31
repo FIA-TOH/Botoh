@@ -10,6 +10,7 @@ export const positionList: {
   lap: number;
   active: boolean;
   currentSector: number;
+  team: string | null;
 }[] = [];
 
 export function updatePositionList(

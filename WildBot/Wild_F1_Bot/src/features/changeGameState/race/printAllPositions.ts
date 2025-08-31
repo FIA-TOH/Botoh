@@ -8,7 +8,11 @@ import { log } from "../../discord/logger";
 import { gameMode, GameMode } from "../changeGameModes";
 import { positionList } from "./positionList";
 
-export function printAllPositions(room: RoomObject, toPlayerID?: number) {
+export function printAllPositions(
+  room: RoomObject,
+  toPlayerID?: number,
+  sendToDiscord?: boolean
+) {
   if (gameMode == GameMode.QUALY || gameMode == GameMode.TRAINING) {
     sendErrorMessage(room, MESSAGES.POSITIONS_IN_QUALI(), toPlayerID);
     return false;
@@ -23,8 +27,9 @@ export function printAllPositions(room: RoomObject, toPlayerID?: number) {
     ` P - ${headerLeftSpaces}Name${headerRightSpaces} | Pits | Best Lap`,
     toPlayerID
   );
-  //to-do: ver de remover
-  log("positionList: ");
+  log("positionList: ", { sendToDiscord: sendToDiscord ?? true });
+  console.log(positionList);
+
   positionList.forEach((p) => {
     const spaces = (MAX_PLAYER_NAME - p.name.length) / 2.0;
     const leftSpaces = " ".repeat(Math.ceil(spaces));

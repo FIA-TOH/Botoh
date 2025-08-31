@@ -7,6 +7,10 @@ import { qualyForPub } from "../../commands/gameMode/qualy/handleEnableQualyForP
 import { handleExplainRainCommand } from "../../commands/rain/handleExplainRainCommand";
 import { tyresActivated } from "../../commands/tyres/handleEnableTyresCommand";
 import { handleExplainTyresCommand } from "../../commands/tyres/handleExplainTyresCommand";
+import {
+  sendQualiResultsToDiscord,
+  sendRaceResultsToDiscord,
+} from "../../discord/logResults";
 import { movePlayersToCorrectSide } from "../../movePlayers/movePlayerToCorrectSide";
 import {
   reorderPlayersByRacePosition,
@@ -36,6 +40,7 @@ export default async function PublicGameFlow(room: RoomObject) {
   );
 
   if (gameMode === GameMode.RACE) {
+    sendRaceResultsToDiscord();
     printAllPositions(room);
     resetPlayers(room);
     reorderPlayersByRacePosition(room);
@@ -93,6 +98,7 @@ export default async function PublicGameFlow(room: RoomObject) {
   }
 
   if (gameMode === GameMode.QUALY) {
+    sendQualiResultsToDiscord();
     printAllTimes(room);
     reorderPlayersInRoomRace(room);
     movePlayersToCorrectSide();

@@ -54,14 +54,12 @@ function handleTrainingMode(room: RoomObject) {
   enableGas(false);
   enableSlipstream(false);
   changeLaps("999", undefined, room);
-  room.sendAnnouncement("Training mode on");
   handleEnableTyresCommand(undefined, ["true"], room);
 }
 
 function handleIndyMode(room: RoomObject) {
   enableGas(true);
   enableSlipstream(true);
-  room.sendAnnouncement("Indy mode on");
   handleEnableTyresCommand(undefined, ["true"], room);
 }
 

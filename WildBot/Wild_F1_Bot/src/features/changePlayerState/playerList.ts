@@ -8,7 +8,7 @@ import { Tires } from "../tires&pits/tires";
 export interface PitsInfo {
   pitsNumber: number;
   pit: {
-    tyre: string;
+    tyre: Tires;
     lap: number;
   }[];
   pitsAttemp: number;
