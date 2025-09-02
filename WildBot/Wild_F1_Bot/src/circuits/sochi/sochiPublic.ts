@@ -89,6 +89,68 @@ const SOCHIPUBLIC_INFO: CircuitInfo = {
   Angle: 90,
   Limit: 5,
   Votes: 0,
+  CutDetectSegments: [
+    {
+      v0: [1113, 812],
+      v1: [1265, 872],
+      index: 170,
+      penalty: 5,
+    },
+    {
+      v0: [-225, 656],
+      v1: [-55, 648],
+      index: 193,
+      penalty: 5,
+    },
+    {
+      v0: [-292, 398],
+      v1: [-483, 259],
+      index: 194,
+      penalty: 5,
+    },
+    {
+      v0: [-1690, -150],
+      v1: [-1715, -345],
+      index: 195,
+      penalty: 5,
+    },
+    {
+      v0: [-2651, -840],
+      v1: [-2612, -843],
+      index: 196,
+      penalty: 5,
+    },
+    {
+      v0: [-1773, -1386],
+      v1: [-1785, -1364],
+      index: 197,
+      penalty: 5,
+    },
+    {
+      v0: [-1301, -974],
+      v1: [-1284, -1009],
+      index: 198,
+      penalty: 5,
+    },
+    {
+      v0: [-915, -1177],
+      v1: [-934, -1211],
+      index: 199,
+      penalty: 5,
+    },
+    {
+      v0: [-482, -1851],
+      v1: [-479, -1824],
+      index: 200,
+      penalty: 5,
+    },
+    {
+      v0: [2157, 978],
+      v1: [2190, 1005],
+      index: 202,
+      penalty: 5,
+    },
+  ],
 };
 
 export const SOCHIPUBLIC: Circuit = {

@@ -953,20 +953,23 @@
       "x": -2347,
       "y": -185,
       "cMask": ["red", "blue", "ball", "c0"],
-      "color": "fcd014"
+      "color": "696969",
+      "curve": 0
     },
     { "x": -1995, "y": -186, "cMask": ["red", "blue", "ball", "c0"] },
     {
       "x": -1659,
       "y": -669,
       "cMask": ["red", "blue", "ball", "c0"],
-      "color": "fcd014"
+      "color": "696969",
+      "curve": 0
     },
     {
       "x": -1829,
       "y": -1372,
       "cMask": ["red", "blue", "ball", "c0"],
-      "color": "fcd014"
+      "color": "696969",
+      "curve": 0
     },
     {
       "x": -1492,
@@ -986,7 +989,8 @@
       "x": 1504,
       "y": -435,
       "cMask": ["red", "blue", "ball", "c0"],
-      "color": "fcd014"
+      "color": "696969",
+      "curve": 0
     },
     { "x": 2060, "y": 318, "cMask": ["red", "blue", "ball", "c0"], "curve": 0 },
     { "x": -84, "y": 466, "cMask": ["red", "blue", "ball", "c0"], "curve": 0 },
@@ -1020,7 +1024,8 @@
       "x": -1428,
       "y": 823,
       "cMask": ["red", "blue", "ball", "c0"],
-      "color": "fcd014"
+      "color": "696969",
+      "curve": 0
     },
     { "x": -2002, "y": 621, "cMask": ["red", "blue", "ball", "c0"] },
     {
@@ -1052,118 +1057,12 @@
       "cGroup": ["wall"]
     },
     {
-      "x": 1749,
-      "y": -82,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "color": "fcd014"
-    },
-    {
-      "x": 2026,
-      "y": -120,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "color": "fcd014"
-    },
-    {
-      "x": -2437,
-      "y": -304,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "color": "fcd014"
-    },
-    {
-      "x": -2425,
-      "y": -243,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "color": "fcd014"
-    },
-    {
-      "x": -2332,
-      "y": -383,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "color": "fcd014"
-    },
-    {
-      "x": -1978,
-      "y": -907,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "color": "fcd014"
-    },
-    {
-      "x": -1851,
-      "y": -1466,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "color": "fcd014"
-    },
-    {
-      "x": 196,
-      "y": -1940,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "color": "fcd014"
-    },
-    {
       "x": 130,
       "y": -1842,
       "cMask": ["red", "blue", "ball", "c0"],
-      "color": "fcd014"
-    },
-    {
-      "x": 1462,
-      "y": -930,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "color": "fcd014"
-    },
-    {
-      "x": 1549,
-      "y": -938,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "color": "fcd014"
-    },
-    {
-      "x": 1694,
-      "y": -879,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "color": "fcd014"
-    },
-    {
-      "x": 2316,
-      "y": 3,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "color": "fcd014"
-    },
-    {
-      "x": -1153,
-      "y": 894,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "color": "fcd014"
-    },
-    {
-      "x": -1477,
-      "y": 979,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "color": "fcd014"
-    },
-    {
-      "x": 1428,
-      "y": 361,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["redKO", "blueKO"],
+      "color": "696969",
       "curve": 0
     },
-    {
-      "x": 1333,
-      "y": 283,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    { "x": 455, "y": -1577, "cMask": ["red", "blue", "ball", "c0"] },
-    { "x": 586, "y": -1580, "cMask": ["red", "blue", "ball", "c0"] },
     { "x": -1439, "y": -138, "cGroup": ["redKO", "blueKO"] },
     { "x": -653, "y": -138, "cGroup": ["redKO", "blueKO"] },
     { "x": -1105, "y": -176, "cGroup": ["redKO", "blueKO"] },
@@ -1184,7 +1083,6 @@
     { "x": -563, "y": -176, "cGroup": ["redKO", "blueKO"] },
     { "x": -517, "y": -176, "cGroup": ["redKO", "blueKO"] },
     { "x": -485, "y": -176, "cGroup": ["redKO", "blueKO"] },
-    { "x": 774, "y": 338, "cMask": ["red", "blue", "ball", "c0"] },
     {
       "x": 677,
       "y": 441,
@@ -1199,8 +1097,6 @@
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"]
     },
-    { "x": 2261, "y": -497, "cMask": ["red", "blue", "ball", "c0"] },
-    { "x": 2297, "y": -645, "cMask": ["red", "blue", "ball", "c0"] },
 
     {
       "x": 214,
@@ -1211,8 +1107,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "CC0000",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 214,
@@ -1223,8 +1118,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "CC0000",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 274,
@@ -1235,8 +1129,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 274,
@@ -1247,8 +1140,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 335,
@@ -1259,8 +1151,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 335,
@@ -1271,8 +1162,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 394,
@@ -1283,8 +1173,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 394,
@@ -1295,8 +1184,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 454,
@@ -1307,8 +1195,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 454,
@@ -1319,8 +1206,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 515,
@@ -1331,8 +1217,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 515,
@@ -1343,8 +1228,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 574,
@@ -1355,8 +1239,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 574,
@@ -1367,8 +1250,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 641,
@@ -1379,8 +1261,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 641,
@@ -1391,8 +1272,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 702,
@@ -1403,8 +1283,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 702,
@@ -1415,8 +1294,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 761,
@@ -1427,8 +1305,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 761,
@@ -1439,8 +1316,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 790,
@@ -1451,8 +1327,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 790,
@@ -1463,8 +1338,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 246,
@@ -1475,8 +1349,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 246,
@@ -1487,8 +1360,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 307,
@@ -1499,8 +1371,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 307,
@@ -1511,8 +1382,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 366,
@@ -1523,8 +1393,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 366,
@@ -1535,8 +1404,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 426,
@@ -1547,8 +1415,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 426,
@@ -1559,8 +1426,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 487,
@@ -1571,8 +1437,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 487,
@@ -1583,8 +1448,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 546,
@@ -1595,8 +1459,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 546,
@@ -1607,8 +1470,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 613,
@@ -1619,8 +1481,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 613,
@@ -1631,8 +1492,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 674,
@@ -1643,8 +1503,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 674,
@@ -1655,8 +1514,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 733,
@@ -1667,8 +1525,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": 733,
@@ -1679,8 +1536,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fcd014",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     }
   ],
 
@@ -2813,104 +2669,14 @@
       "cGroup": ["wall"]
     },
     {
-      "v0": 145,
-      "v1": 146,
-      "curve": 93.3253622142469,
-      "color": "fcd014",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 147,
-      "v1": 123,
-      "curve": 93.3253622142469,
-      "color": "fcd014",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 148,
-      "v1": 123,
-      "curve": 120.69055442333978,
-      "color": "fcd014",
-      "cMask": ["red", "blue", "ball", "c0"]
-    },
-    {
-      "v0": 149,
-      "v1": 123,
-      "curve": 93.3253622142469,
-      "color": "fcd014",
-      "cMask": ["red", "blue", "ball", "c0"]
-    },
-    {
-      "v0": 150,
-      "v1": 125,
-      "curve": -19.349143818090738,
-      "color": "fcd014",
-      "cMask": ["red", "blue", "ball", "c0"]
-    },
-    {
-      "v0": 151,
-      "v1": 126,
-      "curve": -19.349143818090738,
-      "color": "fcd014",
-      "cMask": ["red", "blue", "ball", "c0"]
-    },
-    {
-      "v0": 152,
-      "v1": 153,
-      "curve": -19.349143818090738,
-      "color": "fcd014",
-      "cMask": ["red", "blue", "ball", "c0"]
-    },
-    {
-      "v0": 157,
-      "v1": 146,
-      "curve": -19.349143818090738,
-      "color": "fcd014",
-      "cMask": ["red", "blue", "ball", "c0"]
-    },
-    {
-      "v0": 158,
-      "v1": 139,
-      "curve": -19.349143818090738,
-      "color": "fcd014",
-      "cMask": ["red", "blue", "ball", "c0"]
-    },
-    {
-      "v0": 159,
-      "v1": 139,
-      "curve": -19.349143818090738,
-      "color": "fcd014",
-      "cMask": ["red", "blue", "ball", "c0"]
-    },
-    {
-      "v0": 161,
-      "v1": 160,
-      "curve": 11.666445805311973,
-      "color": "fcd014",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 162,
-      "v1": 163,
-      "curve": -19.349143818090738,
-      "color": "fcd014",
-      "cMask": ["red", "blue", "ball", "c0"]
-    },
-    {
-      "v0": 164,
-      "v1": 165,
+      "v0": 146,
+      "v1": 147,
       "curve": 0,
       "color": "ffffff",
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 165,
+      "v0": 147,
       "v1": 68,
       "curve": -19.129749380994237,
       "color": "ffffff",
@@ -2924,361 +2690,306 @@
       "cGroup": ["redKO", "blueKO"]
     },
     {
+      "v0": 148,
+      "v1": 149,
+      "curve": 0,
+      "color": "ffffff",
+      "cGroup": ["redKO", "blueKO"],
+      "y": -176
+    },
+    {
+      "v0": 150,
+      "v1": 151,
+      "curve": 0,
+      "color": "ffffff",
+      "cGroup": ["redKO", "blueKO"],
+      "y": -176
+    },
+    {
+      "v0": 152,
+      "v1": 153,
+      "curve": 0,
+      "color": "ffffff",
+      "cGroup": ["redKO", "blueKO"],
+      "y": -176
+    },
+    {
+      "v0": 154,
+      "v1": 155,
+      "curve": 0,
+      "color": "ffffff",
+      "cGroup": ["redKO", "blueKO"],
+      "y": -176
+    },
+    {
+      "v0": 156,
+      "v1": 157,
+      "curve": 0,
+      "color": "ffffff",
+      "cGroup": ["redKO", "blueKO"],
+      "y": -176
+    },
+    {
+      "v0": 158,
+      "v1": 159,
+      "curve": 0,
+      "color": "ffffff",
+      "cGroup": ["redKO", "blueKO"],
+      "y": -176
+    },
+    {
+      "v0": 160,
+      "v1": 161,
+      "curve": 0,
+      "color": "ffffff",
+      "cGroup": ["redKO", "blueKO"],
+      "y": -176
+    },
+    {
+      "v0": 162,
+      "v1": 163,
+      "curve": 0,
+      "color": "ffffff",
+      "cGroup": ["redKO", "blueKO"],
+      "y": -176
+    },
+    {
+      "v0": 164,
+      "v1": 165,
+      "curve": 0,
+      "color": "ffffff",
+      "cGroup": ["redKO", "blueKO"],
+      "y": -176
+    },
+    {
       "v0": 166,
       "v1": 167,
-      "curve": 0,
-      "color": "ffffff",
-      "cGroup": ["redKO", "blueKO"],
-      "y": -176
-    },
-    {
-      "v0": 168,
-      "v1": 169,
-      "curve": 0,
-      "color": "ffffff",
-      "cGroup": ["redKO", "blueKO"],
-      "y": -176
-    },
-    {
-      "v0": 170,
-      "v1": 171,
-      "curve": 0,
-      "color": "ffffff",
-      "cGroup": ["redKO", "blueKO"],
-      "y": -176
-    },
-    {
-      "v0": 172,
-      "v1": 173,
-      "curve": 0,
-      "color": "ffffff",
-      "cGroup": ["redKO", "blueKO"],
-      "y": -176
-    },
-    {
-      "v0": 174,
-      "v1": 175,
-      "curve": 0,
-      "color": "ffffff",
-      "cGroup": ["redKO", "blueKO"],
-      "y": -176
-    },
-    {
-      "v0": 176,
-      "v1": 177,
-      "curve": 0,
-      "color": "ffffff",
-      "cGroup": ["redKO", "blueKO"],
-      "y": -176
-    },
-    {
-      "v0": 178,
-      "v1": 179,
-      "curve": 0,
-      "color": "ffffff",
-      "cGroup": ["redKO", "blueKO"],
-      "y": -176
-    },
-    {
-      "v0": 180,
-      "v1": 181,
-      "curve": 0,
-      "color": "ffffff",
-      "cGroup": ["redKO", "blueKO"],
-      "y": -176
-    },
-    {
-      "v0": 182,
-      "v1": 183,
-      "curve": 0,
-      "color": "ffffff",
-      "cGroup": ["redKO", "blueKO"],
-      "y": -176
-    },
-    {
-      "v0": 184,
-      "v1": 160,
-      "curve": 11.666445805311973,
-      "color": "fcd014",
-      "cMask": ["red", "blue", "ball", "c0"]
-    },
-    {
-      "v0": 185,
-      "v1": 186,
       "curve": 0,
       "color": "ffffff",
       "bCoef": 0.25,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"]
     },
-    {
-      "v0": 187,
-      "v1": 188,
-      "curve": -19.349143818090738,
-      "color": "fcd014",
-      "cMask": ["red", "blue", "ball", "c0"]
-    },
-    {
-      "v0": 154,
-      "v1": 131,
-      "curve": -19.349143818090738,
-      "color": "fcd014",
-      "cMask": ["red", "blue", "ball", "c0"]
-    },
-    {
-      "v0": 155,
-      "v1": 131,
-      "curve": -19.349143818090738,
-      "color": "fcd014",
-      "cMask": ["red", "blue", "ball", "c0"]
-    },
-    {
-      "v0": 156,
-      "v1": 131,
-      "curve": -19.349143818090738,
-      "color": "fcd014",
-      "cMask": ["red", "blue", "ball", "c0"]
-    },
 
     {
-      "v0": 189,
-      "v1": 190,
+      "v0": 168,
+      "v1": 169,
       "curve": 324.28463818888486,
       "vis": true,
       "color": "CC0000",
       "bCoef": 0.25,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "_selected": true
+      "trait": "kickOffBarrier"
     },
     {
-      "v0": 191,
-      "v1": 192,
+      "v0": 170,
+      "v1": 171,
       "curve": 324.28463818888486,
       "vis": true,
       "color": "fcd014",
       "bCoef": 0.25,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "_selected": true
+      "trait": "kickOffBarrier"
     },
     {
-      "v0": 193,
-      "v1": 194,
+      "v0": 172,
+      "v1": 173,
       "curve": 324.28463818888486,
       "vis": true,
       "color": "fcd014",
       "bCoef": 0.25,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "_selected": true
+      "trait": "kickOffBarrier"
     },
     {
-      "v0": 195,
-      "v1": 196,
+      "v0": 174,
+      "v1": 175,
       "curve": 324.28463818888486,
       "vis": true,
       "color": "fcd014",
       "bCoef": 0.25,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "_selected": true
+      "trait": "kickOffBarrier"
     },
     {
-      "v0": 197,
-      "v1": 198,
+      "v0": 176,
+      "v1": 177,
       "curve": 324.28463818888486,
       "vis": true,
       "color": "fcd014",
       "bCoef": 0.25,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "_selected": true
+      "trait": "kickOffBarrier"
     },
     {
-      "v0": 199,
-      "v1": 200,
+      "v0": 178,
+      "v1": 179,
       "curve": 324.28463818888486,
       "vis": true,
       "color": "fcd014",
       "bCoef": 0.25,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "_selected": true
+      "trait": "kickOffBarrier"
     },
     {
-      "v0": 201,
-      "v1": 202,
+      "v0": 180,
+      "v1": 181,
       "curve": 324.28463818888486,
       "vis": true,
       "color": "fcd014",
       "bCoef": 0.25,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "_selected": true
+      "trait": "kickOffBarrier"
     },
     {
-      "v0": 203,
-      "v1": 204,
+      "v0": 182,
+      "v1": 183,
       "curve": 324.28463818888486,
       "vis": true,
       "color": "fcd014",
       "bCoef": 0.25,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "_selected": true
+      "trait": "kickOffBarrier"
     },
     {
-      "v0": 205,
-      "v1": 206,
+      "v0": 184,
+      "v1": 185,
       "curve": 324.28463818888486,
       "vis": true,
       "color": "fcd014",
       "bCoef": 0.25,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "_selected": true
+      "trait": "kickOffBarrier"
     },
     {
-      "v0": 207,
-      "v1": 208,
+      "v0": 186,
+      "v1": 187,
       "curve": 324.28463818888486,
       "vis": true,
       "color": "fcd014",
       "bCoef": 0.25,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "_selected": true
+      "trait": "kickOffBarrier"
     },
     {
-      "v0": 209,
-      "v1": 210,
+      "v0": 188,
+      "v1": 189,
       "curve": 324.28463818888486,
       "vis": true,
       "color": "fcd014",
       "bCoef": 0.25,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "_selected": true
+      "trait": "kickOffBarrier"
     },
     {
-      "v0": 211,
-      "v1": 212,
+      "v0": 190,
+      "v1": 191,
       "curve": 324.28463818888486,
       "vis": true,
       "color": "fcd014",
       "bCoef": 0.25,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "_selected": true
+      "trait": "kickOffBarrier"
     },
     {
-      "v0": 213,
-      "v1": 214,
+      "v0": 192,
+      "v1": 193,
       "curve": 324.28463818888486,
       "vis": true,
       "color": "fcd014",
       "bCoef": 0.25,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "_selected": true
+      "trait": "kickOffBarrier"
     },
     {
-      "v0": 215,
-      "v1": 216,
+      "v0": 194,
+      "v1": 195,
       "curve": 324.28463818888486,
       "vis": true,
       "color": "fcd014",
       "bCoef": 0.25,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "_selected": true
+      "trait": "kickOffBarrier"
     },
     {
-      "v0": 217,
-      "v1": 218,
+      "v0": 196,
+      "v1": 197,
       "curve": 324.28463818888486,
       "vis": true,
       "color": "fcd014",
       "bCoef": 0.25,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "_selected": true
+      "trait": "kickOffBarrier"
     },
     {
-      "v0": 219,
-      "v1": 220,
+      "v0": 198,
+      "v1": 199,
       "curve": 324.28463818888486,
       "vis": true,
       "color": "fcd014",
       "bCoef": 0.25,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "_selected": true
+      "trait": "kickOffBarrier"
     },
     {
-      "v0": 221,
-      "v1": 222,
+      "v0": 200,
+      "v1": 201,
       "curve": 324.28463818888486,
       "vis": true,
       "color": "fcd014",
       "bCoef": 0.25,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "_selected": true
+      "trait": "kickOffBarrier"
     },
     {
-      "v0": 223,
-      "v1": 224,
+      "v0": 202,
+      "v1": 203,
       "curve": 324.28463818888486,
       "vis": true,
       "color": "fcd014",
       "bCoef": 0.25,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "_selected": true
+      "trait": "kickOffBarrier"
     },
     {
-      "v0": 225,
-      "v1": 226,
+      "v0": 204,
+      "v1": 205,
       "curve": 324.28463818888486,
       "vis": true,
       "color": "fcd014",
       "bCoef": 0.25,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "_selected": true
+      "trait": "kickOffBarrier"
     },
     {
-      "v0": 227,
-      "v1": 228,
+      "v0": 206,
+      "v1": 207,
       "curve": 324.28463818888486,
       "vis": true,
       "color": "fcd014",
       "bCoef": 0.25,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier",
-      "_selected": true
+      "trait": "kickOffBarrier"
     }
   ],
 

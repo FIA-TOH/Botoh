@@ -48,7 +48,7 @@ import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 
 import { ISTANBULLEAGUE } from "../../circuits/istanbulLeague/istanbulLeague";
 import { FUJILEAGUE } from "../../circuits/fuji/fujiLeague";
-import { SOCHILEAGUE } from "../../circuits/sochi/sochiLeague";
+
 import { BAKULEAGUE } from "../../circuits/baku/bakuLeague";
 import { MONACOLEAGUE } from "../../circuits/monaco/monacoLeague";
 import { VALENCIALEAGUE } from "../../circuits/valencia/valenciaLeague";
@@ -59,7 +59,6 @@ import { MONZALEAGUE } from "../../circuits/monza/monzaLeague";
 import { CANADALEAGUE } from "../../circuits/canada/canadaLeague";
 import { AUSTINLEAGUE } from "../../circuits/austin/austinLeague";
 import { SHANGHAILEAGUE } from "../../circuits/shanghai/shanghaiLeague";
-import { SUZUKALEAGUE } from "../../circuits/suzuka/suzukaLeague";
 import { ARGENTINALEAGUE } from "../../circuits/argentina/argentinaLeague";
 
 import { SUZUKAPUBLIC } from "../../circuits/suzuka/suzukaPublic";

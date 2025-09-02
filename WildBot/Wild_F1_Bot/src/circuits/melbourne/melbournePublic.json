@@ -746,7 +746,8 @@
       "y": -197.66422801402223,
       "bCoef": 0.1,
       "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
+      "cGroup": ["wall"],
+      "color": "696969"
     },
     {
       "x": 800,
@@ -958,69 +959,6 @@
       "curve": 0
     },
     {
-      "x": -1987.395569781029,
-      "y": -769.2137377432301,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "x": -2137.790225067317,
-      "y": -833.5238530711781,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "x": 311.97607072092666,
-      "y": -1127.241782248641,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "x": 329.4403800233703,
-      "y": -1020.868261951938,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "x": 666.8190824569424,
-      "y": -1194.7175227353553,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "x": 690.6340496875475,
-      "y": -899.4119290758522,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "x": 1774.215058680079,
-      "y": -959.743179393385,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "x": 1873.4749276024993,
-      "y": -899.1846263272874,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "x": 1068.4981964131484,
-      "y": -260.3769750546156,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
       "x": 77.00172737895645,
       "y": 60.33125031753289,
       "bCoef": 0.1,
@@ -1051,27 +989,6 @@
     { "x": -193, "y": 71, "cGroup": ["redKO", "blueKO"] },
     { "x": -228, "y": 71, "cGroup": ["redKO", "blueKO"] },
     { "x": -263, "y": 71, "cGroup": ["redKO", "blueKO"] },
-    {
-      "x": -2575,
-      "y": -1465,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "x": -2493,
-      "y": -1421,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "x": 661,
-      "y": -392,
-      "bCoef": 0.1,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
 
     {
       "x": 178,
@@ -1081,7 +998,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "FF0000",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 178,
@@ -1091,7 +1009,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "FF0000",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 237,
@@ -1101,7 +1020,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 237,
@@ -1111,7 +1031,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 297,
@@ -1121,7 +1042,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 297,
@@ -1131,7 +1053,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 357,
@@ -1141,7 +1064,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 357,
@@ -1151,7 +1075,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 419,
@@ -1161,7 +1086,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 419,
@@ -1171,7 +1097,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 479,
@@ -1181,7 +1108,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 479,
@@ -1191,7 +1119,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 533,
@@ -1201,7 +1130,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 533,
@@ -1211,7 +1141,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 595,
@@ -1221,7 +1152,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 595,
@@ -1231,7 +1163,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 656,
@@ -1241,7 +1174,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 656,
@@ -1251,7 +1185,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 714,
@@ -1261,7 +1196,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 714,
@@ -1271,7 +1207,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 773,
@@ -1281,7 +1218,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 773,
@@ -1291,7 +1229,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 209,
@@ -1301,7 +1240,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 209,
@@ -1311,7 +1251,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 267,
@@ -1321,7 +1262,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 267,
@@ -1331,7 +1273,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 389,
@@ -1341,7 +1284,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 389,
@@ -1351,7 +1295,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 328,
@@ -1361,7 +1306,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 328,
@@ -1371,7 +1317,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 450,
@@ -1381,7 +1328,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 450,
@@ -1391,7 +1339,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 507,
@@ -1401,7 +1350,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 507,
@@ -1411,7 +1361,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 564,
@@ -1421,7 +1372,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 564,
@@ -1431,7 +1383,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 624,
@@ -1441,7 +1394,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 624,
@@ -1451,7 +1405,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 683,
@@ -1461,7 +1416,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 683,
@@ -1471,7 +1427,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 740,
@@ -1481,7 +1438,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     },
     {
       "x": 740,
@@ -1491,7 +1449,8 @@
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier",
       "color": "ffffff",
-      "curve": 180
+      "curve": 180,
+      "_selected": true
     }
   ],
 
@@ -2568,59 +2527,14 @@
     {
       "v0": 141,
       "v1": 142,
-      "curve": 0,
       "color": "777777",
       "bCoef": 0.1,
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["wall"]
     },
     {
-      "v0": 143,
-      "v1": 144,
-      "curve": -78.66686913477405,
-      "color": "777777",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 145,
-      "v1": 146,
-      "curve": 28.957641198550135,
-      "color": "777777",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 147,
-      "v1": 148,
-      "curve": -50.81504528053381,
-      "color": "777777",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 149,
-      "v1": 92,
-      "curve": -24.464739341838957,
-      "color": "777777",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 150,
-      "v1": 151,
-      "color": "777777",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 151,
-      "v1": 152,
+      "v0": 142,
+      "v1": 143,
       "curve": -44.4868457532945,
       "color": "777777",
       "bCoef": 0.1,
@@ -2629,57 +2543,106 @@
     },
     { "v0": 0, "v1": 97, "color": "fffff9", "cGroup": ["redKO", "blueKO"] },
     { "v0": 98, "v1": 1, "color": "fffff9", "cGroup": ["redKO", "blueKO"] },
-    { "v0": 153, "v1": 154, "color": "fffff9", "cGroup": ["redKO", "blueKO"] },
-    { "v0": 155, "v1": 156, "color": "fffff9", "cGroup": ["redKO", "blueKO"] },
+    { "v0": 144, "v1": 145, "color": "fffff9", "cGroup": ["redKO", "blueKO"] },
+    { "v0": 146, "v1": 147, "color": "fffff9", "cGroup": ["redKO", "blueKO"] },
     {
-      "v0": 157,
-      "v1": 158,
+      "v0": 148,
+      "v1": 149,
       "color": "fffff9",
       "cGroup": ["redKO", "blueKO"],
       "y": 71
     },
     {
-      "v0": 159,
-      "v1": 160,
+      "v0": 150,
+      "v1": 151,
       "color": "fffff9",
       "cGroup": ["redKO", "blueKO"],
       "y": 71
     },
     {
-      "v0": 161,
-      "v1": 162,
+      "v0": 152,
+      "v1": 153,
       "color": "fffff9",
       "cGroup": ["redKO", "blueKO"],
       "y": 71
-    },
-    {
-      "v0": 163,
-      "v1": 164,
-      "curve": 0,
-      "color": "777777",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 119,
-      "v1": 165,
-      "curve": -17.96208553936784,
-      "color": "777777",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
     },
 
     {
-      "v0": 166,
-      "v1": 167,
+      "v0": 154,
+      "v1": 155,
       "curve": 326.58250165179123,
       "color": "FF0000",
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
+      "trait": "kickOffBarrier",
+      "_selected": true
+    },
+    {
+      "v0": 156,
+      "v1": 157,
+      "curve": 326.58250165179123,
+      "color": "ffffff",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier",
+      "_selected": true
+    },
+    {
+      "v0": 158,
+      "v1": 159,
+      "curve": 326.58250165179123,
+      "color": "ffffff",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier",
+      "_selected": true
+    },
+    {
+      "v0": 160,
+      "v1": 161,
+      "curve": 326.58250165179123,
+      "color": "ffffff",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier",
+      "_selected": true
+    },
+    {
+      "v0": 162,
+      "v1": 163,
+      "curve": 326.58250165179123,
+      "color": "ffffff",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier",
+      "_selected": true
+    },
+    {
+      "v0": 164,
+      "v1": 165,
+      "curve": 326.58250165179123,
+      "color": "ffffff",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier",
+      "_selected": true
+    },
+    {
+      "v0": 166,
+      "v1": 167,
+      "curve": 326.58250165179123,
+      "color": "ffffff",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier",
+      "_selected": true
     },
     {
       "v0": 168,
@@ -2689,7 +2652,8 @@
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
+      "trait": "kickOffBarrier",
+      "_selected": true
     },
     {
       "v0": 170,
@@ -2699,7 +2663,8 @@
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
+      "trait": "kickOffBarrier",
+      "_selected": true
     },
     {
       "v0": 172,
@@ -2709,7 +2674,8 @@
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
+      "trait": "kickOffBarrier",
+      "_selected": true
     },
     {
       "v0": 174,
@@ -2719,7 +2685,8 @@
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
+      "trait": "kickOffBarrier",
+      "_selected": true
     },
     {
       "v0": 176,
@@ -2729,7 +2696,8 @@
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
+      "trait": "kickOffBarrier",
+      "_selected": true
     },
     {
       "v0": 178,
@@ -2739,7 +2707,8 @@
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
+      "trait": "kickOffBarrier",
+      "_selected": true
     },
     {
       "v0": 180,
@@ -2749,7 +2718,8 @@
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
+      "trait": "kickOffBarrier",
+      "_selected": true
     },
     {
       "v0": 182,
@@ -2759,7 +2729,8 @@
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
+      "trait": "kickOffBarrier",
+      "_selected": true
     },
     {
       "v0": 184,
@@ -2769,7 +2740,8 @@
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
+      "trait": "kickOffBarrier",
+      "_selected": true
     },
     {
       "v0": 186,
@@ -2779,7 +2751,8 @@
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
+      "trait": "kickOffBarrier",
+      "_selected": true
     },
     {
       "v0": 188,
@@ -2789,7 +2762,8 @@
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
+      "trait": "kickOffBarrier",
+      "_selected": true
     },
     {
       "v0": 190,
@@ -2799,7 +2773,8 @@
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
+      "trait": "kickOffBarrier",
+      "_selected": true
     },
     {
       "v0": 192,
@@ -2809,7 +2784,8 @@
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
+      "trait": "kickOffBarrier",
+      "_selected": true
     },
     {
       "v0": 194,
@@ -2819,67 +2795,8 @@
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 196,
-      "v1": 197,
-      "curve": 326.58250165179123,
-      "color": "ffffff",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 198,
-      "v1": 199,
-      "curve": 326.58250165179123,
-      "color": "ffffff",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 200,
-      "v1": 201,
-      "curve": 326.58250165179123,
-      "color": "ffffff",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 202,
-      "v1": 203,
-      "curve": 326.58250165179123,
-      "color": "ffffff",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 204,
-      "v1": 205,
-      "curve": 326.58250165179123,
-      "color": "ffffff",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 206,
-      "v1": 207,
-      "curve": 326.58250165179123,
-      "color": "ffffff",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
+      "trait": "kickOffBarrier",
+      "_selected": true
     }
   ],
 
@@ -3523,14 +3440,6 @@
       "radius": 10,
       "invMass": 0,
       "pos": [1942.507493776355, -436.60773256109326],
-      "color": "555555",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"]
-    },
-    {
-      "radius": 10,
-      "invMass": 0,
-      "pos": [662.0560890108214, -393.7407915460041],
       "color": "555555",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"]

@@ -1052,7 +1052,6 @@
       "cGroup": ["wall"],
       "color": "696969",
       "bias": 0,
-      "_selected": "segment",
       "vis": false
     },
     {
@@ -1135,10 +1134,9 @@
       "x": 2002,
       "y": -258,
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0", "c1"],
+      "cMask": ["redKO", "blueKO"],
       "cGroup": ["wall"],
-      "bias": 0,
-      "_selected": true
+      "bias": 0
     },
     {
       "x": 1623,
@@ -1193,10 +1191,9 @@
       "x": -2258.887039248235,
       "y": 939.4756324015625,
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0", "c1"],
+      "cMask": ["redKO", "blueKO"],
       "cGroup": ["wall"],
-      "bias": 0,
-      "_selected": true
+      "bias": 0
     },
     {
       "x": -2096.597184745235,
@@ -1297,10 +1294,9 @@
       "x": 1870,
       "y": 172,
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0", "c1"],
+      "cMask": ["redKO", "blueKO"],
       "cGroup": ["wall"],
-      "bias": 0,
-      "_selected": true
+      "bias": 0
     },
     {
       "x": 1154,
@@ -1314,10 +1310,9 @@
       "x": 1029,
       "y": -129,
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0", "c1"],
+      "cMask": ["redKO", "blueKO"],
       "cGroup": ["wall"],
-      "bias": 0,
-      "_selected": true
+      "bias": 0
     },
     {
       "x": 580,
@@ -1339,10 +1334,9 @@
       "x": 361,
       "y": 741,
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0", "c1"],
+      "cMask": ["redKO", "blueKO"],
       "cGroup": ["wall"],
-      "bias": 0,
-      "_selected": true
+      "bias": 0
     },
     {
       "x": 1032,
@@ -1670,11 +1664,10 @@
       "x": -1050,
       "y": 195,
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0", "c1"],
+      "cMask": ["redKO", "blueKO"],
       "cGroup": ["wall"],
       "color": "999999",
-      "bias": 0,
-      "_selected": true
+      "bias": 0
     },
     {
       "x": -1005,
@@ -1712,10 +1705,9 @@
       "x": -2790,
       "y": 1150,
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0", "c1"],
+      "cMask": ["redKO", "blueKO"],
       "cGroup": ["wall"],
-      "bias": 0,
-      "_selected": true
+      "bias": 0
     },
     {
       "x": -2584,
@@ -1808,42 +1800,9 @@
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["redKO", "blueKO"]
     },
-    {
-      "x": 3227,
-      "y": -332,
-      "bCoef": 0.1,
-      "cMask": ["redKO", "blueKO"],
-      "cGroup": ["redKO", "blueKO"],
-      "_selected": "segment",
-      "color": "696969",
-      "vis": false
-    },
-    { "x": 2663, "y": -187, "cMask": ["redKO", "blueKO"], "_selected": true },
-    { "x": 3457, "y": 267, "cMask": ["redKO", "blueKO"], "_selected": true },
-    { "x": 2376, "y": 43, "cMask": ["redKO", "blueKO"], "_selected": true },
-    { "x": 1954, "y": -31, "_selected": true },
-    { "x": 1542, "y": 161, "_selected": true },
-    { "x": 1502, "y": 49, "_selected": true },
-    { "x": 1153, "y": -143, "_selected": true },
-    { "x": 493, "y": 885, "_selected": true },
-    { "x": -1054, "y": 129, "_selected": true },
-    { "x": -1287, "y": 695, "_selected": true },
-    { "x": -1339, "y": 568, "_selected": true },
-    { "x": -1507, "y": 910, "_selected": true },
-    { "x": -1469, "y": 739, "_selected": true },
-    { "x": -1864, "y": 1048, "_selected": true },
-    { "x": -1815, "y": 943, "_selected": true },
-    { "x": -2210, "y": 1042, "_selected": true },
-    { "x": -2736, "y": 991, "_selected": true },
-    { "x": -2928, "y": 1360, "_selected": true },
-    { "x": -2868, "y": 1427, "_selected": true },
-    { "x": -2750, "y": 1365, "_selected": true },
-    { "x": -211, "y": 404, "_selected": true },
-    { "x": -378, "y": 692, "_selected": true },
-    { "x": 2, "y": -265, "_selected": true },
-    { "x": 307, "y": -28, "_selected": true },
-    { "x": -7, "y": -473, "_selected": true },
-    { "x": 148, "y": -393, "_selected": true }
+    { "x": 3457, "y": 267, "cMask": ["redKO", "blueKO"] },
+    { "x": 1502, "y": 49, "cMask": ["redKO", "blueKO"] },
+    { "x": -2750, "y": 1365, "cMask": ["redKO", "blueKO"] }
   ],
 
   "segments": [
@@ -3602,132 +3561,7 @@
       "bCoef": 0,
       "cMask": ["c1"],
       "cGroup": ["wall"]
-    },
-    {
-      "v0": 118,
-      "v1": 213,
-      "vis": false,
-      "color": "696969",
-      "bCoef": 0.1,
-      "cMask": ["redKO", "blueKO"],
-      "cGroup": ["redKO", "blueKO"],
-      "_selected": true
-    },
-    {
-      "v0": 214,
-      "v1": 215,
-      "vis": false,
-      "color": "696969",
-      "cMask": ["redKO", "blueKO"],
-      "_selected": true
-    },
-    {
-      "v0": 216,
-      "v1": 127,
-      "vis": false,
-      "color": "696969",
-      "cMask": ["redKO", "blueKO"],
-      "_selected": true
-    },
-    {
-      "v0": 217,
-      "v1": 146,
-      "vis": false,
-      "color": "696969",
-      "_selected": true
-    },
-    {
-      "v0": 218,
-      "v1": 219,
-      "vis": false,
-      "color": "696969",
-      "_selected": true
-    },
-    {
-      "v0": 220,
-      "v1": 148,
-      "vis": false,
-      "color": "696969",
-      "_selected": true
-    },
-    {
-      "v0": 151,
-      "v1": 221,
-      "vis": false,
-      "color": "696969",
-      "_selected": true
-    },
-    {
-      "v0": 194,
-      "v1": 222,
-      "vis": false,
-      "color": "696969",
-      "_selected": true
-    },
-    {
-      "v0": 223,
-      "v1": 224,
-      "vis": false,
-      "color": "696969",
-      "_selected": true
-    },
-    {
-      "v0": 225,
-      "v1": 226,
-      "vis": false,
-      "color": "696969",
-      "_selected": true
-    },
-    {
-      "v0": 227,
-      "v1": 228,
-      "vis": false,
-      "color": "696969",
-      "_selected": true
-    },
-    {
-      "v0": 229,
-      "v1": 134,
-      "vis": false,
-      "color": "696969",
-      "_selected": true
-    },
-    {
-      "v0": 230,
-      "v1": 199,
-      "vis": false,
-      "color": "696969",
-      "_selected": true
-    },
-    {
-      "v0": 231,
-      "v1": 199,
-      "vis": false,
-      "color": "696969",
-      "_selected": true
-    },
-    {
-      "v0": 232,
-      "v1": 233,
-      "vis": false,
-      "color": "696969",
-      "_selected": true
-    },
-    {
-      "v0": 234,
-      "v1": 235,
-      "vis": false,
-      "color": "696969",
-      "_selected": true
-    },
-    {
-      "v0": 236,
-      "v1": 237,
-      "vis": false,
-      "color": "696969",
-      "_selected": true
-    },
-    { "v0": 238, "v1": 239, "vis": false, "color": "696969", "_selected": true }
+    }
   ],
 
   "goals": [],
