@@ -49,7 +49,10 @@ export function handlePitlane(
       } else {
         //Code system for box
         // if (playerList[player.p.id].boxAlert === false) {
-        handleExplainTyresCommand(player.p, undefined, room);
+        if (!player.p.admin) {
+          handleExplainTyresCommand(player.p, undefined, room);
+        }
+
         //   playerList[player.p.id].boxAlert = true;
         // }
       }

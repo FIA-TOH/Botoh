@@ -5,10 +5,10 @@ import waitRoomQualy_json from "./waitRoomQualy.json";
 const WAITROOMQUALY_INFO: CircuitInfo = {
   finishLine: {
     bounds: {
-      minX: 9999,
-      maxX: 9999,
-      minY: 9999,
-      maxY: 9999,
+      minX: 0,
+      maxX: 0,
+      minY: 0,
+      maxY: 0,
     },
     passingDirection: Direction.LEFT,
   },
@@ -33,18 +33,18 @@ const WAITROOMQUALY_INFO: CircuitInfo = {
   },
   drsStart: [
     {
-      minX: 0,
-      maxX: 0,
-      minY: 0,
-      maxY: 0,
+      minX: 9999,
+      maxX: 9999,
+      minY: 9999,
+      maxY: 9999,
     },
   ],
   drsEnd: [
     {
-      minX: 0,
-      maxX: 0,
-      minY: 0,
-      maxY: 0,
+      minX: 9999,
+      maxX: 9999,
+      minY: 9999,
+      maxY: 9999,
     },
   ],
   checkpoints: [],

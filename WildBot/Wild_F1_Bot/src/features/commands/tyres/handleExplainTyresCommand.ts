@@ -9,6 +9,7 @@ export function handleExplainTyresCommand(
   if (!room) {
     return;
   }
+  console.log(byPlayer);
 
   if (!byPlayer || byPlayer.admin) {
     sendMessage(room, MESSAGES.EXPLAIN_TYRES());

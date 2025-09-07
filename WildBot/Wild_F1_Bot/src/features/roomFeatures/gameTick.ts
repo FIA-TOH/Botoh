@@ -18,6 +18,7 @@ import { afkKick } from "../afk/afk";
 import { setBallPosition } from "../camera/setBallPosition";
 import { detectPitPerTick } from "../tires&pits/performPitStop";
 import { detectCut } from "../detectCut/detectCut";
+import { GameMode, gameMode } from "../changeGameState/changeGameModes";
 
 const detectCutThrottledByPlayer: Map<
   number,
@@ -29,14 +30,17 @@ export function GameTick(room: RoomObject) {
     const playersAndDiscs = getPlayerAndDiscs(room);
     const players = getRunningPlayers(playersAndDiscs);
 
-    handlePitlane(playersAndDiscs, room);
-    distributeSpeed(playersAndDiscs, room);
-    checkPlayerSector(playersAndDiscs, room);
-    checkPlayerLaps(playersAndDiscs, room);
     endRaceSession(playersAndDiscs, room);
     updateGripCounter(playersAndDiscs);
     updateErs(playersAndDiscs, room);
     setBallPosition(room);
+
+    if (gameMode !== GameMode.WAITING) {
+      handlePitlane(playersAndDiscs, room);
+      distributeSpeed(playersAndDiscs, room);
+      checkPlayerSector(playersAndDiscs, room);
+      checkPlayerLaps(playersAndDiscs, room);
+    }
 
     players.forEach((pad) => {
       const p = pad.p;

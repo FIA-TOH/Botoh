@@ -22,7 +22,11 @@ export function TeamChange(room: RoomObject) {
 
     if (changedPlayer.team === Teams.RUNNERS && room.getScores()) {
       handleAvatar(Situacions.ChangeTyre, changedPlayer, room);
-      if (room.getScores().time > 0 && gameMode !== GameMode.QUALY) {
+      if (
+        room.getScores().time > 0 &&
+        gameMode !== GameMode.QUALY &&
+        gameMode !== GameMode.WAITING
+      ) {
         const boxLine = ACTUAL_CIRCUIT.info.boxLine;
         const middleX = (boxLine.minX + boxLine.maxX) / 2;
         const middleY = (boxLine.minY + boxLine.maxY) / 2;
