@@ -1,7 +1,7 @@
-import { TIRE_AVATAR } from "../speed/handleSpeed";
-import { playerList } from "../changePlayerState/playerList";
-import { log } from "../discord/logger";
 import { tyresActivated } from "../commands/tyres/handleEnableTyresCommand";
+import { log } from "../discord/logger";
+import { TIRE_AVATAR } from "../speed/handleSpeed";
+import { playerList } from "./playerList";
 
 export enum Situacions {
   ChangeTyre = "ChangeTyre",
@@ -12,7 +12,7 @@ export enum Situacions {
   Null = "Null",
 }
 
-export let currentSituacion: Situacions = Situacions.Null;
+const currentSituacion: Record<number, Situacions> = {};
 
 const SITUATION_PRIORITY: Record<Situacions, number> = {
   [Situacions.Rain]: 5,
@@ -79,7 +79,7 @@ const situationHandlers: Record<
     playerTimers[player.id].timeout = setTimeout(
       () => {
         restoreTyreOrCar(player.id, room);
-        currentSituacion = Situacions.Null;
+        currentSituacion[player.id] = Situacions.Null;
       },
       durations.reduce((a, b) => a + b, 0)
     );
@@ -91,7 +91,7 @@ const situationHandlers: Record<
 
     playerTimers[player.id].timeout = setTimeout(() => {
       restoreTyreOrCar(player.id, room);
-      currentSituacion = Situacions.Null;
+      currentSituacion[player.id] = Situacions.Null;
     }, durations[0]);
   },
 
@@ -106,7 +106,7 @@ const situationHandlers: Record<
 
     playerTimers[player.id].timeout = setTimeout(() => {
       restoreTyreOrCar(player.id, room);
-      currentSituacion = Situacions.Null;
+      currentSituacion[player.id] = Situacions.Null;
     }, 6000);
   },
 
@@ -133,12 +133,17 @@ export function handleAvatar(
     return;
   }
 
-  if (SITUATION_PRIORITY[situacion] < SITUATION_PRIORITY[currentSituacion]) {
+  const current = currentSituacion[player.id] ?? Situacions.Null;
+
+  if (
+    situacion !== Situacions.ChangeTyre &&
+    SITUATION_PRIORITY[situacion] < SITUATION_PRIORITY[current]
+  ) {
     return;
   }
 
   clearPlayerTimers(player.id);
-  currentSituacion = situacion;
+  currentSituacion[player.id] = situacion;
 
   const handler = situationHandlers[situacion];
   handler(player, room, arg, emoji, durations);

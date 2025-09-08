@@ -150,7 +150,7 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
       MONZAPUBLIC,
       CANADAPUBLIC,
       SEPANGPUBLIC,
-      // BAHRAINPUBLIC,
+      BAHRAINPUBLIC,
       VALENCIAPUBLIC,
       SILVERSTONEPUBLIC,
       MONACOPUBLIC,
@@ -165,13 +165,15 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
       HOCKENPUBLIC,
       FUJI,
       HUNGARY,
+      // BALATON,
+      // NURBURGRINGNANO,
+      // HUNGARYNANO,
       // AUSTRIA,
       // LAGUNA_SECA,
       MEXICO,
       MIAMI,
       WAITROOM,
       WAITROOMQUALY,
-      // BALATON
     ];
 
 export let currentMapIndex = 0;

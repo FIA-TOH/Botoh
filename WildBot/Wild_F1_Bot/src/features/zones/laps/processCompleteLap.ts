@@ -68,7 +68,6 @@ export function processCompletedLap(
     );
     broadcastLapTimeToPlayers(room, lapTime, p.name, false);
   }
-
   if (hasSector) {
     room.sendAnnouncement(
       `Sector 1: ${playerData.sectorTime[0]} | Sector 2: ${playerData.sectorTime[1]} | Sector 3: ${playerData.sectorTime[2]}`,

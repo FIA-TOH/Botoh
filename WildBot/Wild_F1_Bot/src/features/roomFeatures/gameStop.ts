@@ -42,11 +42,13 @@ export function GameStop(room: RoomObject) {
       log(`Game stopped by ${byPlayer.name}`);
     }
     handleGameStateChange(null, room);
-    const replay = room.stopRecording();
-
-    if (replay) {
-      sendDiscordReplay(replay);
+    if (gameMode !== GameMode.TRAINING) {
+      const replay = room.stopRecording();
+      if (replay) {
+        sendDiscordReplay(replay);
+      }
     }
+
     if (timerController.positionTimer !== null) {
       clearTimeout(timerController.positionTimer);
       timerController.positionTimer = null;

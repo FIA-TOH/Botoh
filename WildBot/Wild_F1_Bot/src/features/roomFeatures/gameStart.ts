@@ -9,6 +9,7 @@ import { updatePlayerActivity } from "../afk/afk";
 import { setCameraAuto } from "../camera/cameraFollow";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { checkRunningPlayers } from "../changeGameState/publicGameFlow/startStopGameFlow";
+import { GameMode, gameMode } from "../changeGameState/changeGameModes";
 
 export function GameStart(room: RoomObject) {
   room.onGameStart = function (byPlayer) {
@@ -17,7 +18,10 @@ export function GameStart(room: RoomObject) {
       : log(`Game started by ${byPlayer.name}`);
     handleGameStateChange("running", room);
 
-    room.startRecording();
+    if (gameMode !== GameMode.TRAINING) {
+      room.startRecording();
+    }
+
     resetAllRainEvents();
     setCameraAuto();
     room.getPlayerList().forEach((p) => {

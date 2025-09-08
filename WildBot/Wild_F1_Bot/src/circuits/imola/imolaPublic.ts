@@ -26,8 +26,8 @@ const IMOLAPUBLIC_INFO: CircuitInfo = {
     bounds: {
       minX: 2161,
       maxX: 2813,
-      minY: -1767,
-      maxY: -1797,
+      minY: -1797,
+      maxY: -1767,
     },
     passingDirection: Direction.UP,
   },

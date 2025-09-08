@@ -1,3 +1,4 @@
+import { clearLockedWinner } from "../../changeGameState/vote/circuitSelection";
 import { isOnVoteSession } from "../../changeGameState/vote/vote";
 import { sendErrorMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
@@ -25,5 +26,6 @@ export function handleCircuitCommand(
     sendErrorMessage(room, MESSAGES.INVALID_CIRCUIT_INDEX(), byPlayer.id);
   } else {
     handleChangeMap(index, room);
+    clearLockedWinner();
   }
 }

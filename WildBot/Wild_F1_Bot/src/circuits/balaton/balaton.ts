@@ -5,18 +5,18 @@ import balaton_json from "./balaton.json";
 const BALATON_INFO: CircuitInfo = {
   finishLine: {
     bounds: {
-      minX: -36,
-      maxX: -4,
-      minY: 409,
+      minX: -34,
+      maxX: -2,
+      minY: -409,
       maxY: 22,
     },
     passingDirection: Direction.LEFT,
   },
   sectorOne: {
     bounds: {
-      minX: -36,
-      maxX: -4,
-      minY: 409,
+      minX: -34,
+      maxX: -2,
+      minY: -409,
       maxY: 22,
     },
     passingDirection: Direction.LEFT,
@@ -33,9 +33,9 @@ const BALATON_INFO: CircuitInfo = {
   sectorThree: {
     bounds: {
       minX: -209,
-      maxX: -177,
-      minY: 4207,
-      maxY: 4629,
+      maxX: 355,
+      minY: 4256,
+      maxY: 4288,
     },
     passingDirection: Direction.RIGHT,
   },

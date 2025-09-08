@@ -12,7 +12,6 @@ const IMOLA_INFO: CircuitInfo = {
     },
     passingDirection: Direction.RIGHT,
   },
-  name: "Autodromo Imola - By Ximb",
   sectorOne: {
     bounds: {
       minX: -150,
@@ -26,8 +25,8 @@ const IMOLA_INFO: CircuitInfo = {
     bounds: {
       minX: 2161,
       maxX: 2813,
-      minY: -1767,
-      maxY: -1797,
+      minY: -1797,
+      maxY: -1767,
     },
     passingDirection: Direction.UP,
   },
@@ -40,6 +39,7 @@ const IMOLA_INFO: CircuitInfo = {
     },
     passingDirection: Direction.LEFT,
   },
+  name: "Autodromo Imola - By Ximb",
   boxLine: {
     minX: -1150,
     maxX: -150,
@@ -80,7 +80,7 @@ const IMOLA_INFO: CircuitInfo = {
     y: imola_json.redSpawnPoints[imola_json.redSpawnPoints.length - 1][1],
   },
   BestTime: bestTimes.imola,
-  MainColor: [0x009246, 0xffffff, 0xce2b37],
+  MainColor: [0x009246, 0xfffff1, 0xce2b37],
   AvatarColor: 0x000001,
   Angle: 0,
   Limit: 5,
