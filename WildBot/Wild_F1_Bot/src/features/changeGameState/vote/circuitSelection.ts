@@ -1,4 +1,5 @@
 import { Circuit } from "../../../circuits/Circuit";
+import { log } from "../../discord/logger";
 import { selectedCircuits } from "./vote";
 
 let lockedWinner: Circuit | null = null;
@@ -6,6 +7,7 @@ let lockedWinnerVotes: number = 0;
 
 export function announceSelectedCircuits(room: RoomObject) {
   selectedCircuits.forEach((circuit, index) => {
+    log(`${index + 1}: ${circuit.info?.name || "Name not defined"}`);
     room.sendAnnouncement(
       `${index + 1}: ${circuit.info?.name || "Name not defined"}`
     );

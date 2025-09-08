@@ -20,7 +20,6 @@ export function voteSession(room: RoomObject) {
 
   isOnVoteSession = true;
 
-  // Nova votação -> zera vencedor travado
   clearLockedWinner();
 
   const players = room.getPlayerList();
@@ -39,7 +38,6 @@ export function changeMapBasedOnVote(
   room: RoomObject,
   dontAnnouceVotes?: boolean
 ) {
-  // Usa SEMPRE o vencedor travado; se não houver, trava agora como fallback
   let winnerCircuit: Circuit;
   try {
     winnerCircuit = getWinnerCircuit();
@@ -75,6 +73,7 @@ export function changeMapBasedOnVote(
   }
 
   if (winnerInfo.BestTime && winnerInfo.BestTime.length > 1) {
+    log(`Best Time: ${winnerInfo.BestTime[0]} - ${winnerInfo.BestTime[1]}`);
     room.sendAnnouncement(
       `Best Time: ${winnerInfo.BestTime[0]} - ${winnerInfo.BestTime[1]}`
     );

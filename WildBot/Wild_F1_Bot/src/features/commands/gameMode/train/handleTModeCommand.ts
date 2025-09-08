@@ -4,6 +4,7 @@ import {
 } from "../../../changeGameState/changeGameModes";
 import { sendErrorMessage } from "../../../chat/chat";
 import { MESSAGES } from "../../../chat/messages";
+import { log } from "../../../discord/logger";
 
 export function handleTModeCommand(
   byPlayer: PlayerObject,
@@ -20,5 +21,6 @@ export function handleTModeCommand(
     return;
   }
   changeGameMode(GameMode.TRAINING, room);
-  room.sendAnnouncement("Training mode on", byPlayer.id);
+  log("Training mode enabled by admin");
+  room.sendAnnouncement("Training mode on");
 }

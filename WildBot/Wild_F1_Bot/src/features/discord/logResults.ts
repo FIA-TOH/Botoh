@@ -7,7 +7,9 @@ import { laps } from "../zones/laps";
 import { sendDiscordLog, sendDiscordResult } from "./discord";
 
 function formatTimeSec(seconds: number): string {
-  if (seconds <= 0) return "--:--.---";
+  if (seconds <= 0 || seconds === Number.MAX_VALUE || !isFinite(seconds)) {
+    return "--:--.---";
+  }
   const minutes = Math.floor(seconds / 60);
   const secs = Math.floor(seconds % 60);
   const millis = Math.floor((seconds - Math.floor(seconds)) * 1000);

@@ -1,5 +1,6 @@
 import { sendErrorMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
+import { log } from "../../discord/logger";
 import {
   slipstreamEnabled,
   enableSlipstream,
@@ -16,9 +17,11 @@ export function handleSlipstreamCommand(
   }
 
   if (slipstreamEnabled) {
+    log("Slipstream mode disabled by admin");
     room.sendAnnouncement("No Slipstream mode!");
     enableSlipstream(false);
   } else {
+    log("Slipstream mode enabled by admin");
     room.sendAnnouncement("Slipstream mode!");
     enableSlipstream(true);
   }

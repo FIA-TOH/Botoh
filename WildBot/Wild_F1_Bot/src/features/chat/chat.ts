@@ -1,4 +1,9 @@
+import { sendDiscordChat } from "../discord/discord";
+import { log } from "../discord/logger";
+import { DEFAULT_LANGUAGE } from "./language";
 import { getPlayerLanguage, LocalizedMessageFunction } from "./messages";
+
+const defaultLang: keyof LocalizedMessageFunction = DEFAULT_LANGUAGE;
 
 export const MAX_PLAYER_NAME = 22;
 
@@ -69,9 +74,10 @@ export function sendMessage(
   } else {
     room.getPlayerList().forEach((player) => {
       const language = getPlayerLanguage(player.id);
-
       room.sendAnnouncement(message[language], player.id, color, font, sound);
     });
+
+    log(message[defaultLang] as string);
   }
 }
 
@@ -80,6 +86,9 @@ export function sendNonLocalizedSmallChatMessage(
   message: string,
   toPlayerID?: number
 ) {
+  if (!toPlayerID) {
+    log(message);
+  }
   room.sendAnnouncement(
     message,
     toPlayerID,

@@ -4,6 +4,7 @@ import {
 } from "../../../changeGameState/changeGameModes";
 import { sendErrorMessage } from "../../../chat/chat";
 import { MESSAGES } from "../../../chat/messages";
+import { log } from "../../../discord/logger";
 
 export function handleIndyModeCommand(
   byPlayer: PlayerObject,
@@ -20,5 +21,6 @@ export function handleIndyModeCommand(
     return;
   }
   changeGameMode(GameMode.INDY, room);
-  room.sendAnnouncement("Indy mode on", byPlayer.id);
+  log("Indy mode enabled by admin");
+  room.sendAnnouncement("Indy mode on");
 }

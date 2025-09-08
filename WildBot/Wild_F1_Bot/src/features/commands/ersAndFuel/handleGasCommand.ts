@@ -1,5 +1,6 @@
 import { sendErrorMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
+import { log } from "../../discord/logger";
 import { gasEnabled, enableGas } from "../../speed/handleSlipstream";
 
 export function handleGasCommand(
@@ -13,9 +14,11 @@ export function handleGasCommand(
   }
 
   if (gasEnabled) {
+    log("Gas mode disabled by admin");
     room.sendAnnouncement("No Gas mode!");
     enableGas(false);
   } else {
+    log("Gas mode enabled by admin");
     room.sendAnnouncement("Gas mode!");
     enableGas(true);
   }

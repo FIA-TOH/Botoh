@@ -10,6 +10,7 @@ import { log } from "../discord/logger";
 import { updatePlayerActivity } from "../afk/afk";
 import { followPlayerId } from "../camera/cameraFollow";
 import { checkRunningPlayers } from "../changeGameState/publicGameFlow/startStopGameFlow";
+import { changeGameStoppedNaturally } from "../changeGameState/gameStopeedNaturally";
 
 export function PlayerLeave(room: RoomObject) {
   room.onPlayerLeave = function (player) {
@@ -44,6 +45,7 @@ export function PlayerLeave(room: RoomObject) {
         getRunningPlayers(playersAndDiscs).length === 0 &&
         gameMode !== GameMode.TRAINING
       ) {
+        changeGameStoppedNaturally(false);
         room.stopGame();
       }
     }

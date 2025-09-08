@@ -32,6 +32,6 @@ export function handleChangeGameFLow(
     return;
   }
 
-  room.sendAnnouncement(`game flow - ${args[0]}`);
+  room.sendAnnouncement(`game flow - ${args[0]}`, byPlayer.id);
   return;
 }

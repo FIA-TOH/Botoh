@@ -1,3 +1,4 @@
+import { log } from "../discord/logger";
 import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
 import { updatePlayerCollision } from "./updatePlayerCollision";
 
@@ -11,6 +12,7 @@ export function setGhostMode(
   ghostMode = enable;
   const message = ghostMode ? "Ghost mode enabled" : "Ghost mode disabled";
   if (playerId) {
+    log(message);
     room.sendAnnouncement(message);
   }
 

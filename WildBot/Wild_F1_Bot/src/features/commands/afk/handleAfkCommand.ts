@@ -37,4 +37,14 @@ export function handleAfkCommand(
     player.afk = true;
     sendAlertMessage(room, MESSAGES.NOW_AFK(), byPlayer.id);
   }
+
+  const allPlayers = room.getPlayerList();
+  if (
+    allPlayers.length > 0 &&
+    allPlayers.every((p) => playerList[p.id]?.afk === true)
+  ) {
+    allPlayers.forEach((p) => {
+      room.kickPlayer(p.id, "afk with no one on the room", false);
+    });
+  }
 }
