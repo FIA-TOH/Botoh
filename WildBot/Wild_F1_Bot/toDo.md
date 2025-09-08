@@ -11,14 +11,6 @@ Fast lap max time nao mostrar nos logs
 
 # To-do rapidos
 
-Room.sendAnnoucements nao mostrar nos logs
-
-Mostrar todos os circuitos de verdade
-
-Ver o problema que alguns mapas Public estao comentados
-
-Liberar os pilotos da qualy do grid
-
 Qualy as vezes sem ghost
 
 As vezes nao troca a cor do player baseado no mapa

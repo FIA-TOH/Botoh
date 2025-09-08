@@ -119,8 +119,7 @@
       "bCoef": 0.1,
       "cMask": ["red", "blue", "c0"],
       "cGroup": ["redKO", "blueKO"],
-      "curve": -10,
-      "_selected": "segment"
+      "curve": -10
     },
     {
       "x": 537.8376347013683,
@@ -128,8 +127,7 @@
       "bCoef": 0.1,
       "cMask": ["red", "blue", "c0"],
       "cGroup": ["redKO", "blueKO"],
-      "curve": 88,
-      "_selected": "segment"
+      "curve": 88
     },
     {
       "x": 212.43838570970297,
@@ -1456,7 +1454,8 @@
       "y": 1790,
       "bCoef": 0.1,
       "cMask": ["red", "blue", "c0"],
-      "cGroup": ["redKO", "blueKO"]
+      "cGroup": ["redKO", "blueKO"],
+      "_selected": "segment"
     },
     {
       "x": -800,
@@ -1527,7 +1526,8 @@
       "bCoef": 0.1,
       "cMask": ["red", "blue", "c0"],
       "cGroup": ["redKO", "blueKO"],
-      "curve": -27.5
+      "curve": -27.5,
+      "_selected": "segment"
     },
     {
       "x": 1300.5144218890514,
@@ -2026,8 +2026,7 @@
       "color": "ffffff",
       "bCoef": 0.1,
       "cMask": ["red", "blue", "c0"],
-      "cGroup": ["redKO", "blueKO"],
-      "_selected": true
+      "cGroup": ["redKO", "blueKO"]
     },
     {
       "v0": 7,
@@ -3646,7 +3645,7 @@
       "vis": true,
       "color": "808080",
       "bCoef": 0.1,
-      "cMask": ["red", "blue"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["redKO", "blueKO"]
     },
     {
@@ -3746,7 +3745,7 @@
       "vis": true,
       "color": "808080",
       "bCoef": 0.1,
-      "cMask": ["red", "blue"]
+      "cMask": ["red", "blue", "c0"]
     },
     {
       "v0": 95,
@@ -3966,7 +3965,8 @@
       "color": "ffe153",
       "bCoef": 0.1,
       "cMask": ["red", "blue", "c0"],
-      "cGroup": ["redKO", "blueKO"]
+      "cGroup": ["redKO", "blueKO"],
+      "_selected": true
     },
     {
       "v0": 113,
@@ -4250,7 +4250,7 @@
       "pos": [-905, 2065],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4261,7 +4261,7 @@
       "pos": [-1085, 2065],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4272,7 +4272,7 @@
       "pos": [-965, 2065],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4283,7 +4283,7 @@
       "pos": [-1025, 2065],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4294,7 +4294,7 @@
       "pos": [-1145, 2065],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4305,7 +4305,7 @@
       "pos": [1577.0312237431388, 1339.9796972862166],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4316,7 +4316,7 @@
       "pos": [1607.7724766400693, 1318.3313386093394],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4327,7 +4327,7 @@
       "pos": [1634.9583965428208, 1298.2176012402263],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4338,7 +4338,7 @@
       "pos": [1657.8584055652286, 1278.8512751202293],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4349,7 +4349,7 @@
       "pos": [1681.0282470007278, 1260.187096441531],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4360,7 +4360,7 @@
       "pos": [1547.880626871798, 1361.0720852241113],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4371,7 +4371,7 @@
       "pos": [1301.6762899234052, 1070.963882035448],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4382,7 +4382,7 @@
       "pos": [1168.0279816186462, -12.53402467438846],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4393,7 +4393,7 @@
       "pos": [1358.6396437837311, -100.5797556708908],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4404,7 +4404,7 @@
       "pos": [423.18774398033855, 1263.531667434087],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4415,7 +4415,7 @@
       "pos": [441.1960769959048, 1308.2875266796161],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4426,7 +4426,7 @@
       "pos": [402.3012922597034, 1209.997174666181],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4437,7 +4437,7 @@
       "pos": [382.915932375573, 1157.0607771715352],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4448,7 +4448,7 @@
       "pos": [458.368371542896, 1351.8347883001297],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4459,7 +4459,7 @@
       "pos": [458.6427824130472, 213.38812406705676],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4470,7 +4470,7 @@
       "pos": [426.19286063852354, 236.77621028263442],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4481,7 +4481,7 @@
       "pos": [491.09270418757086, 190.00003785147908],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4492,7 +4492,7 @@
       "pos": [523.5426259620946, 166.61195163590133],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4503,7 +4503,7 @@
       "pos": [555.9925477366181, 143.22386542032362],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4514,7 +4514,7 @@
       "pos": [588.4424695111419, 119.83577920474593],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4525,7 +4525,7 @@
       "pos": [393.73052359684385, 260.1652421886534],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4536,7 +4536,7 @@
       "pos": [1798.309627558284, -282.99093674939877],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4547,7 +4547,7 @@
       "pos": [1847.0436171111096, -297.1632502586059],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4558,7 +4558,7 @@
       "pos": [-740.9449236008568, 2066.0377397919915],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4569,7 +4569,7 @@
       "pos": [615.3877103707893, 307.87008674449453],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4580,7 +4580,7 @@
       "pos": [1758.3376346305442, -268.11963997927825],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4591,7 +4591,7 @@
       "pos": [1890.1038470831477, -1076.38138548584],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4602,7 +4602,7 @@
       "pos": [1870.2343316842978, -1099.9871997064542],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4613,7 +4613,7 @@
       "pos": [1910.0523708598569, -1052.7293223907036],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4624,7 +4624,7 @@
       "pos": [1930.2986013705665, -1028.310852406525],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4635,7 +4635,7 @@
       "pos": [1950.2471251472762, -1004.658789311389],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4646,7 +4646,7 @@
       "pos": [1970.74722116319, -981.019025545834],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4657,7 +4657,7 @@
       "pos": [1850.807502287841, -1122.4676168024412],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4668,7 +4668,7 @@
       "pos": [-821.04, 955.5600000000001],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4679,7 +4679,7 @@
       "pos": [-850.8095101412424, 1006.6567790338571],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4690,7 +4690,7 @@
       "pos": [-884.5322971929237, 1061.790146460221],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4701,7 +4701,7 @@
       "pos": [-1472.623731084393, 301.26128751872807],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4712,7 +4712,7 @@
       "pos": [-1520.8692469919565, 261.27673278107227],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4723,7 +4723,7 @@
       "pos": [-1569.22320759502, 222.10400981027146],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4734,7 +4734,7 @@
       "pos": [-1425.6215654922598, 339.45735879430026],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4745,7 +4745,7 @@
       "pos": [-743.4318744313279, -1153.1060528110077],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4756,7 +4756,7 @@
       "pos": [-776.2378893504628, -1142.3518249792467],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4767,7 +4767,7 @@
       "pos": [-710.3384262929524, -1172.060545260536],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4778,7 +4778,7 @@
       "pos": [-684.231914759739, -1197.0035513387882],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4789,7 +4789,7 @@
       "pos": [-810.6671536405952, -1134.9927823716596],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4800,7 +4800,7 @@
       "pos": [-1036.3919223673934, -963.7465122021792],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4811,7 +4811,7 @@
       "pos": [962.7235842736155, -1892.4566697047032],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4822,7 +4822,7 @@
       "pos": [931.5058325653332, -1891.209413463822],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4833,7 +4833,7 @@
       "pos": [993.3021726851085, -1886.9158613276397],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4844,7 +4844,7 @@
       "pos": [1022.9465193272291, -1872.8696742047061],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4855,7 +4855,7 @@
       "pos": [1045.228382875436, -1851.7655508013802],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4866,7 +4866,7 @@
       "pos": [-508.42194245602536, -1235.9581036487207],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4877,7 +4877,7 @@
       "pos": [-528.6734535235488, -1200.3768845136503],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4888,7 +4888,7 @@
       "pos": [-482.1012222438444, -1267.1660342316352],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4899,7 +4899,7 @@
       "pos": [-459.55674108467724, -1291.0882781080404],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4910,7 +4910,7 @@
       "pos": [-538.3697264912497, -1161.4607066137858],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4921,7 +4921,7 @@
       "pos": [-1250.8932800132095, -505.51807121191894],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4932,7 +4932,7 @@
       "pos": [-1200.6606827569249, -543.1213473241736],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4943,7 +4943,7 @@
       "pos": [-1151.2658973593573, -580.5532827851189],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4954,7 +4954,7 @@
       "pos": [-1299.7656889891282, -469.8920577290763],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4965,7 +4965,7 @@
       "pos": [-1582.7248065450035, -41.52529564451612],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4976,7 +4976,7 @@
       "pos": [-1588.8509817027684, -111.25688318644762],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4987,7 +4987,7 @@
       "pos": [-1575.996218028959, -171.6471841606362],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -4998,7 +4998,7 @@
       "pos": [-1560.7841331862905, 19.593490494452396],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5009,7 +5009,7 @@
       "pos": [-1551.0362731360074, -228.60449992818513],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5020,7 +5020,7 @@
       "pos": [-1507.4514330822894, -282.8470488927106],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5031,7 +5031,7 @@
       "pos": [-1517.3936399499735, 71.43951413102963],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5042,7 +5042,7 @@
       "pos": [1980.392140155763, -678.7395874263439],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5053,7 +5053,7 @@
       "pos": [1979.5551337039665, -646.2375346362576],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5064,7 +5064,7 @@
       "pos": [1973.740037248682, -611.7792697266021],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5075,7 +5075,7 @@
       "pos": [1962.0914659498173, -579.7636226897888],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5086,7 +5086,7 @@
       "pos": [1947.0067298530676, -548.9620952868742],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5097,7 +5097,7 @@
       "pos": [1963.6472765052206, -751.5047411841475],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5108,7 +5108,7 @@
       "pos": [1926.494977627586, -517.1358052647748],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5119,7 +5119,7 @@
       "pos": [1901.3548489017417, -487.58721709608085],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5130,7 +5130,7 @@
       "pos": [1870.0505527090922, -463.5322970974097],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5141,7 +5141,7 @@
       "pos": [1836.6360369534596, -444.4241980904602],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5152,7 +5152,7 @@
       "pos": [1976.0522008015919, -715.9464796482231],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5163,7 +5163,7 @@
       "pos": [-915.4914468829091, 805.0306240668361],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5174,7 +5174,7 @@
       "pos": [-922.3275214374684, 835.3284996298268],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5185,7 +5185,7 @@
       "pos": [-917.4048362566756, 776.8310964043218],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5196,7 +5196,7 @@
       "pos": [-927.6143714334111, 749.5469454104044],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5207,7 +5207,7 @@
       "pos": [-947.4859417036531, 723.0498182067488],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5218,7 +5218,7 @@
       "pos": [-934.7848063160217, 866.3615893985219],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5229,7 +5229,7 @@
       "pos": [-918.255084244605, 1121.2435138865847],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5240,7 +5240,7 @@
       "pos": [1716.855714084346, 1208.6018169664464],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5251,7 +5251,7 @@
       "pos": [1701.922662875773, 1234.4361256948514],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5262,7 +5262,7 @@
       "pos": [1721.0280988604477, 1177.0689727391916],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5273,7 +5273,7 @@
       "pos": [1719.8418961453017, 1143.410143414855],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5284,7 +5284,7 @@
       "pos": [1712.6761099839246, 1113.5830837917638],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5295,7 +5295,7 @@
       "pos": [1695.7239878967773, 1084.784869633812],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5306,7 +5306,7 @@
       "pos": [1645.738139192366, 1046.2538765219574],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5317,7 +5317,7 @@
       "pos": [1672.4841822481792, 1061.646225343803],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5328,7 +5328,7 @@
       "pos": [1614.6422135387763, 1039.0020424294335],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5339,7 +5339,7 @@
       "pos": [1578.636296959163, 1041.826925752504],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5350,7 +5350,7 @@
       "pos": [1544.471089948273, 1054.0348552832143],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5361,7 +5361,7 @@
       "pos": [1514.4919550490968, 1077.3493121651697],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5372,7 +5372,7 @@
       "pos": [651.522032744308, 1412.4234486091736],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5383,7 +5383,7 @@
       "pos": [676.8775752870215, 1432.1190902931514],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5394,7 +5394,7 @@
       "pos": [705.7305890145259, 1436.9801760306643],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5405,7 +5405,7 @@
       "pos": [329.56426640352214, 525.8005952907379],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5416,7 +5416,7 @@
       "pos": [326.04298595861167, 564.5237927958051],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5427,7 +5427,7 @@
       "pos": [344.3781716513885, 492.7731475750959],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5438,7 +5438,7 @@
       "pos": [-872.550455987714, -1125.0201845729496],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5449,7 +5449,7 @@
       "pos": [-842.0083308414378, -1129.9742012337472],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5460,7 +5460,7 @@
       "pos": [1483.4822451475552, 1105.9514852493564],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5471,7 +5471,7 @@
       "pos": [1441.9177441782726, 1139.9418679541789],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5482,7 +5482,7 @@
       "pos": [-524.1419517340731, 2067.2079216938073],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5493,7 +5493,7 @@
       "pos": [-224.14332656787323, 2068.116160863723],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5504,7 +5504,7 @@
       "pos": [75.85529859832715, 2069.024400033639],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5515,7 +5515,7 @@
       "pos": [-1191.5896488254036, 1778.3956240326966],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5526,7 +5526,7 @@
       "pos": [-1206.0736250021419, 1759.860341546086],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5537,7 +5537,7 @@
       "pos": [1739.025374636418, 1464.3289665354675],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5548,7 +5548,7 @@
       "pos": [1504.966664715236, 1648.1861798140749],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5559,7 +5559,7 @@
       "pos": [1249.6598970891737, 1822.4517281569194],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5570,7 +5570,7 @@
       "pos": [685.0235605039568, -1977.3633675047822],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5581,7 +5581,7 @@
       "pos": [160.1113121451176, -1772.1650130357048],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5592,7 +5592,7 @@
       "pos": [628.8958088627958, -1964.4017219738594],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5603,7 +5603,7 @@
       "pos": [564.1280572216347, -1947.1200764429366],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5614,7 +5614,7 @@
       "pos": [-238.29212353272726, -1562.216624527101],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5625,7 +5625,7 @@
       "pos": [281.25753515801756, 877.5938944166775],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5636,7 +5636,7 @@
       "pos": [250.15542838735985, 796.5021733001738],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5647,7 +5647,7 @@
       "pos": [220.73576510263985, 718.7004330540805],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5658,7 +5658,7 @@
       "pos": [191.79473386999004, 644.3455019081188],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5669,7 +5669,7 @@
       "pos": [1986.6173232141118, -1107.977581522794],
       "color": "eccca4",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5680,7 +5680,7 @@
       "pos": [1980.8571843504947, -1034.0508077067866],
       "color": "eccca4",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5691,7 +5691,7 @@
       "pos": [1905.4477049154707, -1113.5318561092831],
       "color": "eccca4",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5702,7 +5702,7 @@
       "pos": [2061.7723735529203, -1010.9486184389593],
       "color": "eccca4",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5713,7 +5713,7 @@
       "pos": [1895.2375775185246, -1186.3376295224634],
       "color": "eccca4",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5724,7 +5724,7 @@
       "pos": [1720.4310540944819, -251.6680759890143],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5735,7 +5735,7 @@
       "pos": [1678.8158006033307, -228.60691418226958],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5746,7 +5746,7 @@
       "pos": [792.9643928661794, 191.89559073322877],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5757,7 +5757,7 @@
       "pos": [978.5937129748403, 81.93172856553],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5768,7 +5768,7 @@
       "pos": [372.528934290939, 2050.3106202834388],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5779,7 +5779,7 @@
       "pos": [667.7285369046047, 2006.2946264385337],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5790,7 +5790,7 @@
       "pos": [957.756659018691, 1934.3562880817792],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5801,7 +5801,7 @@
       "pos": [161.84952989627615, 568.545306968822],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5812,7 +5812,7 @@
       "pos": [-1009.6815895457296, 480.99667205579743],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5823,7 +5823,7 @@
       "pos": [-963.4015474628811, 517.6225180667925],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5834,7 +5834,7 @@
       "pos": [-1059.3747418062615, 440.4260261723125],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5845,7 +5845,7 @@
       "pos": [-1108.322815647458, 402.51997754437457],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5856,7 +5856,7 @@
       "pos": [-917.7609329493687, 551.180153591956],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5867,7 +5867,7 @@
       "pos": [-804.6757747428782, -1228.6267413347316],
       "color": "eccca4",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5878,7 +5878,7 @@
       "pos": [-461.79524228378085, -1192.2646369844726],
       "color": "eccca4",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5889,7 +5889,7 @@
       "pos": [-708.5950508966376, -1228.8372141258997],
       "color": "eccca4",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5900,7 +5900,7 @@
       "pos": [-982.4864294052885, -983.0783120060715],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5911,7 +5911,7 @@
       "pos": [-1002.046485299893, -980.9209494032741],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5922,7 +5922,7 @@
       "pos": [-1021.6065411944974, -978.7635868004768],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5933,7 +5933,7 @@
       "pos": [-1039.5956654844954, -942.1479218130146],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5944,7 +5944,7 @@
       "pos": [-1030.535917746166, -924.6787784190806],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5955,7 +5955,7 @@
       "pos": [-1021.0804874049319, -906.4462008320916],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5966,7 +5966,7 @@
       "pos": [-1129.7001761738973, -789.4059420787949],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5977,7 +5977,7 @@
       "pos": [-1151.2144711873614, -852.8391192497164],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5988,7 +5988,7 @@
       "pos": [-1163.895295999107, -873.4818492576729],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -5999,7 +5999,7 @@
       "pos": [-1140.7024699447063, -761.8995424297394],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -6010,7 +6010,7 @@
       "pos": [-1131.6351478844922, -812.4031873879078],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -6021,7 +6021,7 @@
       "pos": [-1139.0509569895053, -832.9587801894402],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -6032,7 +6032,7 @@
       "pos": [-874.9150508966377, -1159.7172141258998],
       "color": "eccca4",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -6043,7 +6043,7 @@
       "pos": [-455.95993458581944, -1255.8110436022741],
       "color": "eccca4",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -6054,7 +6054,7 @@
       "pos": [-939.9632176415184, -987.472386743129],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -6065,7 +6065,7 @@
       "pos": [-962.95262881733, -986.1723629606333],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -6076,7 +6076,7 @@
       "pos": [-1353.7263104655124, 1547.586332819931],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -6087,7 +6087,7 @@
       "pos": [-1292.1369158838374, 1444.5972728423649],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -6098,7 +6098,7 @@
       "pos": [-1322.9316131746748, 1496.0918028311478],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -6109,7 +6109,7 @@
       "pos": [-1384.3194239246122, 1597.6406641017775],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -6120,7 +6120,7 @@
       "pos": [-1161.14623245133, 1518.8969835920389],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -6131,7 +6131,7 @@
       "pos": [2135.8038621712703, -1085.0788506815347],
       "color": "eccca4",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -6142,7 +6142,7 @@
       "pos": [2140.519839646202, -1018.8438712685077],
       "color": "eccca4",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -6153,7 +6153,7 @@
       "pos": [2068.849781721997, -1090.6086444383586],
       "color": "eccca4",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -6164,7 +6164,7 @@
       "pos": [2056.0335462521916, -1149.6946584043978],
       "color": "eccca4",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -6175,7 +6175,7 @@
       "pos": [1971.5300983576358, -1190.4472638061698],
       "color": "eccca4",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -6186,7 +6186,7 @@
       "pos": [1229.9088509629676, 1142.7204326596566],
       "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -6197,7 +6197,7 @@
       "pos": [1265.8401708362678, 1106.4918810662416],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -6208,7 +6208,7 @@
       "pos": [1191.1045826255477, 1173.751496605087],
       "color": "749cbc",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "speed": [0, 0],
       "gravity": [0, 0]
@@ -6228,7 +6228,7 @@
       "pos": [-650, 2100],
       "color": "ffff00",
       "bCoef": 0,
-      "cMask": ["ball", "wall"],
+      "cMask": ["red", "blue", "c0"],
       "cGroup": ["ball"],
       "damping": 1,
       "speed": [1, 0]

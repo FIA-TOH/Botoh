@@ -6,9 +6,41 @@ import { updatePlayerCollision } from "../../changePlayerState/updatePlayerColli
 import { sendErrorMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { getPlayerAndDiscs } from "../../playerFeatures/getPlayerAndDiscs";
-import { getPlayerById } from "../../playerFeatures/getPlayerBy";
+import { getRunningPlayers } from "../../utils";
 import { CIRCUITS, currentMapIndex } from "../../zones/maps";
 import { rrEnabled } from "../adminThings/handleRREnabledCommand";
+
+export function handleRRAllCommand(room: RoomObject) {
+  const playersAndDiscs = getPlayerAndDiscs(room);
+  const runningPlayers = getRunningPlayers(playersAndDiscs);
+
+  runningPlayers.forEach((player) => {
+    const pad = getPlayerAndDiscs(room).filter((p) => p.p.id === player.p.id);
+
+    resetPlayer(player.p, room, player.p.id);
+
+    if (gameMode === GameMode.QUALY || gameMode === GameMode.TRAINING) {
+      playerList[player.p.id].kers = 100;
+      playerList[player.p.id].wear = 20;
+    }
+
+    if (ghostMode) {
+      updatePlayerCollision(room, pad, room.CollisionFlags.c0);
+    } else {
+      updatePlayerCollision(room, pad, room.CollisionFlags.red);
+    }
+
+    room.setPlayerDiscProperties(player.p.id, { radius: 15 });
+    room.setPlayerDiscProperties(player.p.id, {
+      xspeed: 0,
+      yspeed: 0,
+      xgravity: 0,
+      ygravity: 0,
+      x: CIRCUITS[currentMapIndex].info.lastPlace.x,
+      y: CIRCUITS[currentMapIndex].info.lastPlace.y,
+    });
+  });
+}
 
 export function handleRRCommand(
   byPlayer: PlayerObject,
