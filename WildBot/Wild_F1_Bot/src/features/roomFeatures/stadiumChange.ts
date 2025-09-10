@@ -24,7 +24,7 @@ export function StadiumChange(room: RoomObject) {
 
     if (
       c &&
-      c.info.Angle &&
+      c.info.Angle !== undefined &&
       c.info.AvatarColor !== undefined &&
       c.info.AvatarColor !== 0 &&
       c.info.MainColor

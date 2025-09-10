@@ -2,8 +2,10 @@ import { getPlayersOrderedByQualiTime } from "../changeGameState/qualy/playerTim
 import { positionList } from "../changeGameState/race/positionList";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { TIRE_AVATAR } from "../speed/handleSpeed";
+import { getBestPit } from "../tires&pits/trackBestPit";
 import { getTimestamp } from "../utils";
 import { laps } from "../zones/laps";
+import { getBestLap } from "../zones/laps/trackBestLap";
 import { sendDiscordLog, sendDiscordResult } from "./discord";
 
 function formatTimeSec(seconds: number): string {
@@ -53,14 +55,13 @@ export function sendQualiResultsToDiscord() {
   const footer = "\n```";
   sendDiscordResult(header + body + footer);
 }
-
 export function sendRaceResultsToDiscord() {
   if (positionList.length === 0) return;
 
   const winner = positionList[0];
   const header =
     "```" +
-    `\n🏁 FINAL RACE RESULTS - ${ACTUAL_CIRCUIT.info.name}🏁` +
+    `\n🏁 FINAL RACE RESULTS - ${ACTUAL_CIRCUIT.info.name} 🏁` +
     `\nTime: ${getTimestamp()}` +
     `\nLaps: ${laps}` +
     "\nPos | Driver (Team)     | Gap       | Total Time  | Fast Lap  | Laps | Pits" +
@@ -73,7 +74,7 @@ export function sendRaceResultsToDiscord() {
     const nameWithTeam = `${p.name.trim()} ${team}`.padEnd(20, " ");
     const totalTime = formatTimeSec(p.totalTime);
     const fastLap = formatTimeSec(p.time);
-    const laps = p.lap.toString().padStart(2, "0");
+    const lapsStr = p.lap.toString().padStart(2, "0");
 
     let gap = "--";
     if (idx > 0 && p.totalTime > 0 && winner.totalTime > 0) {
@@ -81,7 +82,6 @@ export function sendRaceResultsToDiscord() {
       gap = "+" + formatTimeSec(diff);
     }
 
-    // Formatar boxes
     let pitsVisual = "";
     if (p.pitsInfo?.pit && p.pitsInfo.pit.length > 0) {
       const tyres = p.pitsInfo.pit.map((pit) => TIRE_AVATAR[pit.tyre]);
@@ -93,10 +93,24 @@ export function sendRaceResultsToDiscord() {
       9
     )} | ${totalTime.padEnd(10)} | ${fastLap.padEnd(
       9
-    )} | ${laps}  | ${pitsVisual}`;
+    )} | ${lapsStr}  | ${pitsVisual}`;
   });
 
-  const footer = "\n```";
+  const bestLap = getBestLap();
+  const bestPit = getBestPit();
 
+  if (bestLap) {
+    body += `\n\n⚡ Fastest Lap: ${bestLap.playerName} - ${formatTimeSec(
+      bestLap.lapTime
+    )} (Lap ${bestLap.lapNumber})`;
+  }
+
+  if (bestPit) {
+    body += `\n🔧 Fastest Pit: ${
+      bestPit.playerName
+    } - ${bestPit.pitTime.toFixed(3)}s (Stop ${bestPit.pitNumber})`;
+  }
+
+  const footer = "\n```";
   sendDiscordResult(header + body + footer);
 }

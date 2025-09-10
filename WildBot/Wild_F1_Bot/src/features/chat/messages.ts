@@ -256,6 +256,32 @@ export const MESSAGES = {
       seconds: seconds.toString(),
     }),
   }),
+  FASTEST_PIT: (
+    name: string,
+
+    seconds: number
+  ): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.FASTEST_PIT, {
+      name: name,
+      seconds: seconds.toString(),
+    }),
+    es: replaceTemplateString(es_messages.FASTEST_PIT, {
+      name: name,
+      seconds: seconds.toString(),
+    }),
+    fr: replaceTemplateString(fr_messages.FASTEST_PIT, {
+      name: name,
+      seconds: seconds.toString(),
+    }),
+    tr: replaceTemplateString(tr_messages.FASTEST_PIT, {
+      name: name,
+      seconds: seconds.toString(),
+    }),
+    pt: replaceTemplateString(pt_messages.FASTEST_PIT, {
+      name: name,
+      seconds: seconds.toString(),
+    }),
+  }),
   TYRE_BLOW: (name: string): LocalizedMessageFunction => ({
     en: replaceTemplateString(en_messages.TYRE_BLOW, {
       name: name,
@@ -671,6 +697,28 @@ export const MESSAGES = {
       time: time.toString(),
     }),
     pt: replaceTemplateString(pt_messages.TRACK_RECORD, {
+      name: name,
+      time: time.toString(),
+    }),
+  }),
+  FASTEST_LAP: (name: string, time: number): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.FASTEST_LAP, {
+      name: name,
+      time: time.toString(),
+    }),
+    es: replaceTemplateString(es_messages.FASTEST_LAP, {
+      name: name,
+      time: time.toString(),
+    }),
+    fr: replaceTemplateString(fr_messages.FASTEST_LAP, {
+      name: name,
+      time: time.toString(),
+    }),
+    tr: replaceTemplateString(tr_messages.FASTEST_LAP, {
+      name: name,
+      time: time.toString(),
+    }),
+    pt: replaceTemplateString(pt_messages.FASTEST_LAP, {
       name: name,
       time: time.toString(),
     }),

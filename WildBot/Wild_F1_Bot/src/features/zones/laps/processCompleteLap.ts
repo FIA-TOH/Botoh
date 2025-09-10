@@ -8,12 +8,14 @@ import { updatePlayerTime } from "../../changeGameState/qualy/playerTime";
 import { playerList } from "../../changePlayerState/playerList";
 import {
   sendBestTimeRace,
+  sendBestTimeEver,
   sendWorseTime,
   sendChatMessage,
   sendSuccessMessage,
 } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { tyresActivated } from "../../commands/tyres/handleEnableTyresCommand";
+import { sendDiscordTrackRecord } from "../../discord/discord";
 import { log } from "../../discord/logger";
 import { getPlayerAndDiscs } from "../../playerFeatures/getPlayerAndDiscs";
 import { rainEnabled, rainIntensity } from "../../rain/rain";
@@ -23,6 +25,7 @@ import { serialize, someArray } from "../../utils";
 import { drsOn, enableDRS } from "../handleDRSZone";
 import { broadcastLapTimeToPlayers } from "./broadcastTimeToPlayer";
 import { processLapAndCheckSessionEnd } from "./processLapAndCheckSessionEnd";
+import { trySetBestLap } from "./trackBestLap";
 
 export function processCompletedLap(
   pad: { p: PlayerObject; disc: DiscPropertiesObject },
@@ -49,24 +52,37 @@ export function processCompletedLap(
   }
 
   const circuitBestTime = bestTimes[abbreviatedTrackName]?.[0] ?? 999.999;
+  const isFastestLapRace = trySetBestLap(
+    p.name,
+    lapTime,
+    playerData.currentLap - 1
+  );
 
   if (typeof circuitBestTime === "number" && lapTime < circuitBestTime) {
     updateBestTime(ACTUAL_CIRCUIT.info.name, lapTime, p.name);
     playerData.bestTime = lapTime;
-    sendBestTimeRace(room, MESSAGES.TRACK_RECORD(p.name, lapTime));
-    updatePlayerTime(p.name, lapTime, p.id, playerData.leagueTeam);
-  } else if (lapTime < bestTimeP || bestTimeP === undefined) {
-    sendSuccessMessage(room, MESSAGES.LAP_TIME(lapTime), p.id);
-    playerData.bestTime = lapTime;
-    broadcastLapTimeToPlayers(room, lapTime, p.name);
+
+    sendBestTimeEver(room, MESSAGES.TRACK_RECORD(p.name, lapTime));
+    sendDiscordTrackRecord(p.name, lapTime);
     updatePlayerTime(p.name, lapTime, p.id, playerData.leagueTeam);
   } else {
-    sendWorseTime(
-      room,
-      MESSAGES.WORSE_TIME(lapTime, serialize(lapTime - bestTimeP)),
-      p.id
-    );
-    broadcastLapTimeToPlayers(room, lapTime, p.name, false);
+    if (isFastestLapRace) {
+      sendBestTimeRace(room, MESSAGES.FASTEST_LAP(p.name, lapTime));
+    }
+
+    if (lapTime < bestTimeP || bestTimeP === undefined) {
+      sendSuccessMessage(room, MESSAGES.LAP_TIME(lapTime), p.id);
+      playerData.bestTime = lapTime;
+      broadcastLapTimeToPlayers(room, lapTime, p.name);
+      updatePlayerTime(p.name, lapTime, p.id, playerData.leagueTeam);
+    } else {
+      sendWorseTime(
+        room,
+        MESSAGES.WORSE_TIME(lapTime, serialize(lapTime - bestTimeP)),
+        p.id
+      );
+      broadcastLapTimeToPlayers(room, lapTime, p.name, false);
+    }
   }
   if (hasSector) {
     room.sendAnnouncement(

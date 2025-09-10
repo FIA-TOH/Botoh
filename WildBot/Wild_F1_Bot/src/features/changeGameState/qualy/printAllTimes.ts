@@ -9,6 +9,8 @@ import { MESSAGES } from "../../chat/messages";
 import { GameMode, gameMode } from "../changeGameModes";
 import { getPlayersOrderedByQualiTime } from "./playerTime";
 
+const HAXBALL_MSG_LIMIT = 124;
+
 export function printAllTimes(room: RoomObject, toPlayerID?: number) {
   if (![GameMode.QUALY, GameMode.TRAINING].includes(gameMode)) {
     sendErrorMessage(room, MESSAGES.TIMES_IN_RACE(), toPlayerID);
@@ -22,22 +24,27 @@ export function printAllTimes(room: RoomObject, toPlayerID?: number) {
     return;
   }
 
-  sendNonLocalizedSmallChatMessage(
-    room,
-    ` P -       Name       | Best Lap`,
-    toPlayerID
-  );
+  let messageBuffer = ` P - ${centerText(
+    "Name",
+    MAX_PLAYER_NAME
+  )} | Best Lap\n`;
 
   orderedList.forEach((p, index: number) => {
     const position = String(index + 1).padStart(2, "0");
     const nameCentered = centerText(p.name, MAX_PLAYER_NAME);
     const displayedTime =
       p.time === Number.MAX_VALUE ? "N/A" : p.time.toFixed(3);
+    const line = `${position} - ${nameCentered} | ${displayedTime}\n`;
 
-    sendNonLocalizedSmallChatMessage(
-      room,
-      `${position} - ${nameCentered} | ${displayedTime}`,
-      toPlayerID
-    );
+    if (messageBuffer.length + line.length > HAXBALL_MSG_LIMIT) {
+      sendNonLocalizedSmallChatMessage(room, messageBuffer, toPlayerID);
+      messageBuffer = "";
+    }
+
+    messageBuffer += line;
   });
+
+  if (messageBuffer.length > 0) {
+    sendNonLocalizedSmallChatMessage(room, messageBuffer, toPlayerID);
+  }
 }

@@ -11,6 +11,8 @@ import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { checkRunningPlayers } from "../changeGameState/publicGameFlow/startStopGameFlow";
 import { GameMode, gameMode } from "../changeGameState/changeGameModes";
 import { handleRRAllCommand } from "../commands/playerState/handleRRCommand";
+import { resetBestPit } from "../tires&pits/trackBestPit";
+import { resetBestLap } from "../zones/laps/trackBestLap";
 
 export function GameStart(room: RoomObject) {
   room.onGameStart = function (byPlayer) {
@@ -22,6 +24,8 @@ export function GameStart(room: RoomObject) {
     if (gameMode !== GameMode.TRAINING) {
       room.startRecording();
     }
+    resetBestLap();
+    resetBestPit();
 
     resetAllRainEvents();
     setCameraAuto();

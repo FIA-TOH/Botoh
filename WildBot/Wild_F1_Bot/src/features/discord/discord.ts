@@ -1,3 +1,5 @@
+import { playerList } from "../changePlayerState/playerList";
+import { getPlayerTeam } from "../commands/teams/getTeam";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { getTimestamp } from "../utils";
@@ -18,6 +20,9 @@ const LEAGUE_REPLAY_URL =
 
 const PUBLIC_REPLAY_URL =
   "https://discord.com/api/webhooks/1409983406971945080/z_HnlNnCnRQlD7nTfAPyjkMUYpGYYKM8j9jQutjGbXmo2jmIJmPdSrwXBtp27FxaCtBe";
+
+const TRACK_RECORDS_URL =
+  "https://discord.com/api/webhooks/1415118391546613810/O49b609XYQkYj1Y6G5KOkkkuifHiNevGRcb3SqK0hNVgJmzf9976ByNc7UdznUYQceZg";
 
 function splitMessage(msg: string, size = 2000): string[] {
   const chunks: string[] = [];
@@ -48,6 +53,34 @@ export function sendDiscordChat(message: string) {
     sendRequestWithRetry(MESSAGES_URL, { content: part }, "CHAT");
   });
 }
+export function sendDiscordPlayerChat(userInfo: PlayerObject, message: string) {
+  const MESSAGES_URL = LEAGUE_MODE ? LEAGUE_CHAT_URL : PUBLIC_CHAT_URL;
+  const sanitizedMessage = message.replace(/@(?=[a-zA-Z])/g, "@ ");
+
+  const team = getPlayerTeam(playerList[userInfo.id]);
+
+  const embedColor = team ? team.color : 0xb3b3b3;
+
+  const parts = splitMessage(sanitizedMessage);
+
+  parts.forEach((part) => {
+    const embed = {
+      username: userInfo.name,
+      embeds: [
+        {
+          color: embedColor,
+          description: part,
+          footer: {
+            text: getTimestamp(),
+          },
+        },
+      ],
+    };
+
+    sendRequestWithRetry(MESSAGES_URL, embed, "PLAYER_CHAT_EMBED");
+  });
+}
+
 export function sendDiscordResult(message: string) {
   const LOG_URL = LEAGUE_MODE ? LEAGUE_REPLAY_URL : PUBLIC_REPLAY_URL;
   const sanitizedMessage = message.replace(/@(?=[a-zA-Z])/g, "@ ");
@@ -58,6 +91,32 @@ export function sendDiscordResult(message: string) {
     sendRequestWithRetry(LOG_URL, { content: part }, "RESULT");
   });
 }
+export function sendDiscordTrackRecord(playerName: string, lapTime: number) {
+  const embed = {
+    username: "Records de Pista",
+    embeds: [
+      {
+        color: 0xff75d1,
+        title: "New track record! 🏆",
+        fields: [
+          { name: "🏎️ Driver:", value: playerName, inline: false },
+          {
+            name: "🌍 Circuit:",
+            value: ACTUAL_CIRCUIT.info.name + " - By Ximb",
+            inline: false,
+          },
+          { name: "⏱️ Time:", value: lapTime.toFixed(3) + "s", inline: false },
+        ],
+        footer: {
+          text: getTimestamp(),
+        },
+      },
+    ],
+  };
+
+  sendRequestWithRetry(TRACK_RECORDS_URL, embed, "TRACK_RECORD_EMBED");
+}
+
 function generateFileName() {
   const now = new Date();
   const day = now.getDate().toString().padStart(2, "0");

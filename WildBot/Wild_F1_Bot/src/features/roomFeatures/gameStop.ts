@@ -10,7 +10,6 @@ import {
   gameStopedNaturally,
 } from "../changeGameState/gameStopeedNaturally";
 import { movePlayersToCorrectSide } from "../movePlayers/movePlayerToCorrectSide";
-import { setGhostMode } from "../changePlayerState/ghost";
 import {
   gameMode,
   GameMode,
@@ -41,6 +40,7 @@ export function GameStop(room: RoomObject) {
       changeGameStoppedNaturally(false);
       log(`Game stopped by ${byPlayer.name}`);
     }
+
     handleGameStateChange(null, room);
     if (gameMode !== GameMode.TRAINING) {
       const replay = room.stopRecording();
@@ -70,7 +70,6 @@ export function GameStop(room: RoomObject) {
           changeGameMode(GameMode.RACE, room);
           changeLaps("7", undefined, room);
           resetPlayers(room);
-          setGhostMode(room, false);
           handleRREnabledCommand(undefined, ["false"], room);
         } else if (gameMode == GameMode.TRAINING) {
           sendQualiResultsToDiscord();
@@ -78,7 +77,6 @@ export function GameStop(room: RoomObject) {
           reorderPlayersInRoomRace(room);
           movePlayersToCorrectSide();
           resetPlayers(room);
-          setGhostMode(room, false);
           handleRREnabledCommand(undefined, ["false"], room);
         } else {
           sendRaceResultsToDiscord();

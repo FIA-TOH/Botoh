@@ -1,4 +1,3 @@
-import { sendDiscordChat } from "../discord/discord";
 import { log } from "../discord/logger";
 import { DEFAULT_LANGUAGE } from "./language";
 import { getPlayerLanguage, LocalizedMessageFunction } from "./messages";
@@ -12,7 +11,7 @@ enum COLORS {
   GREEN = 0x65ff33,
   CYAN = 0x00ffff,
   RED = 0xff0000,
-  MAGENTA = 0xff00ff,
+  MAGENTA = 0xff75d1,
   YELLOW = 0xffff00,
   WHITE = 0xffffff,
   ORANGE = 0xf78b2d,
@@ -20,29 +19,6 @@ enum COLORS {
   PURPLE = 0xff33d0,
   DARK_GREEN = 0x00ff04,
   BLACK = 0x000001,
-}
-
-export enum TeamColors {
-  PENSHIRYU = 0xb45568,
-  ASTONMAIA = 0x059988,
-  RUBYBISON = 0x4458a2,
-  MCLARPER = 0xff8700,
-  HAAX = 0xe6002b,
-  MOTORFORCE = 0x06529d,
-  SART = 0x40c3ff,
-  KONARDI = 0x1d618c,
-  LENAULTMOREO = 0xba3232,
-  QUESTI = 0x4b56cc,
-  SIXDENT = 0x9c7efc,
-  JEANBORGHINI = 0xffd500,
-  PEJO = 0xbdbdbd,
-  BRAWNDESCO = 0xddff09,
-  INTERFORCE = 0x83abc9,
-  ALPINO = 0xddbc5f,
-  TOYOSSI = 0x858585,
-  BMW = 0x0066b1,
-  BRACCHIARI = 0xec1c24,
-  PHM = 0x5ef102,
 }
 
 export enum FONTS {
@@ -173,7 +149,7 @@ export function sendSmallChatMessage(
   );
 }
 
-export function sendBestTimeRace(
+export function sendBestTimeEver(
   room: RoomObject,
   message: LocalizedMessageFunction,
   toPlayerID?: number
@@ -183,6 +159,21 @@ export function sendBestTimeRace(
     message,
     toPlayerID,
     COLORS.PURPLE,
+    FONTS.NORMAL,
+    SOUNDS.NOTIFICATION
+  );
+}
+
+export function sendBestTimeRace(
+  room: RoomObject,
+  message: LocalizedMessageFunction,
+  toPlayerID?: number
+) {
+  sendMessage(
+    room,
+    message,
+    toPlayerID,
+    COLORS.MAGENTA,
     FONTS.NORMAL,
     SOUNDS.NOTIFICATION
   );

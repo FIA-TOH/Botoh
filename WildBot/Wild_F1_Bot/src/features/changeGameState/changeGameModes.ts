@@ -52,14 +52,18 @@ function handleQualyMode(room: RoomObject) {
 
 function handleTrainingMode(room: RoomObject) {
   enableGas(false);
+  setGhostMode(room, true);
   enableSlipstream(false);
   changeLaps("999", undefined, room);
+  handleRREnabledCommand(undefined, ["true"], room);
   handleEnableTyresCommand(undefined, ["true"], room);
 }
 
 function handleIndyMode(room: RoomObject) {
   enableGas(true);
+  setGhostMode(room, false);
   enableSlipstream(true);
+  handleRREnabledCommand(undefined, ["false"], room);
   handleEnableTyresCommand(undefined, ["true"], room);
 }
 
