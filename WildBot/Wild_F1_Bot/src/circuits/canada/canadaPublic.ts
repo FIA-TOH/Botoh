@@ -90,6 +90,98 @@ const CANADAPUBLIC_INFO: CircuitInfo = {
   Limit: 5,
   Votes: 0,
   pitSpeed: 0.96,
+  CutDetectSegments: [
+    {
+      v0: [-612, 543],
+      v1: [-499, 392],
+      index: 113,
+      penalty: 5,
+    },
+    {
+      v0: [-2891, -496],
+      v1: [-2868, -557],
+      index: 114,
+      penalty: 5,
+    },
+    {
+      v0: [-812, -890],
+      v1: [-745, -844],
+      index: 115,
+      penalty: 5,
+    },
+    {
+      v0: [-3673, 547],
+      v1: [-3602, 177],
+      index: 158,
+      penalty: 5,
+    },
+    {
+      v0: [1215, -700],
+      v1: [1323, -635],
+      index: 179,
+      penalty: 5,
+    },
+    {
+      v0: [1370, -284],
+      v1: [1507, -221],
+      index: 180,
+      penalty: 5,
+    },
+    {
+      v0: [3271, 218],
+      v1: [3284, 359],
+      index: 185,
+      penalty: 5,
+    },
+    {
+      v0: [-3448, 585],
+      v1: [-3417, 686],
+      index: 190,
+      penalty: 5,
+    },
+    {
+      v0: [-3968, 454],
+      v1: [-3803, -239],
+      index: 203,
+      penalty: 5,
+    },
+    {
+      v0: [-3968, 454],
+      v1: [-4116, 288],
+      index: 204,
+      penalty: 5,
+    },
+    {
+      v0: [-4116, 288],
+      v1: [-4073, 66],
+      index: 205,
+      penalty: 5,
+    },
+    {
+      v0: [-249, -1245],
+      v1: [-474, -1237],
+      index: 206,
+      penalty: 5,
+    },
+    {
+      v0: [-474, -1237],
+      v1: [-579, -1065],
+      index: 207,
+      penalty: 5,
+    },
+    {
+      v0: [3271, 218],
+      v1: [3214, 286],
+      index: 208,
+      penalty: 5,
+    },
+    {
+      v0: [2591, 454],
+      v1: [2494, 549],
+      index: 209,
+      penalty: 5,
+    },
+  ],
 };
 
 export const CANADAPUBLIC: Circuit = {

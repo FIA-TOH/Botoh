@@ -845,13 +845,6 @@
       "cGroup": ["wall"]
     },
     {
-      "x": -812,
-      "y": -890,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
       "x": 1671,
       "y": -683,
       "bCoef": 0,
@@ -863,7 +856,8 @@
       "y": -221,
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
+      "cGroup": ["wall"],
+      "color": "696969"
     },
     {
       "x": 3298,
@@ -946,7 +940,8 @@
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["wall"],
-      "curve": 0
+      "curve": 0,
+      "color": "696969"
     },
     {
       "x": 1052,
@@ -977,66 +972,8 @@
       "cGroup": ["wall"]
     },
     {
-      "x": -612,
-      "y": 543,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "color": "999999"
-    },
-    {
-      "x": -499,
-      "y": 392,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "color": "999999"
-    },
-    {
-      "x": -2891,
-      "y": -496,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "x": -2868,
-      "y": -557,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "x": -745,
-      "y": -844,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "x": -562,
-      "y": -1155,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
       "x": 1344,
       "y": -613,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "x": 3271,
-      "y": 218,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "x": 3284,
-      "y": 359,
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["wall"]
@@ -1252,35 +1189,11 @@
       "cGroup": ["wall"]
     },
     {
-      "x": -3602,
-      "y": 177,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "color": "999999"
-    },
-    {
-      "x": -3673,
-      "y": 547,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "color": "999999"
-    },
-    {
       "x": -3803,
       "y": -239,
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["wall"]
-    },
-    {
-      "x": -3867,
-      "y": 372,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "color": "999999"
     },
     {
       "x": -4126,
@@ -1343,13 +1256,6 @@
       "cGroup": ["wall"]
     },
     {
-      "x": -333,
-      "y": -1268,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
       "x": 438,
       "y": -1086,
       "bCoef": 0,
@@ -1386,20 +1292,6 @@
       "cGroup": ["wall"]
     },
     {
-      "x": 1323,
-      "y": -635,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "x": 1370,
-      "y": -284,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
       "x": 3150,
       "y": 349,
       "bCoef": 0,
@@ -1412,14 +1304,6 @@
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["wall"]
-    },
-    {
-      "x": 2592,
-      "y": 460,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "color": "999999"
     },
     {
       "x": -832,
@@ -1445,20 +1329,6 @@
     {
       "x": -1151,
       "y": 573,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "x": -3448,
-      "y": 585,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "x": -3417,
-      "y": 686,
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["wall"]
@@ -1500,20 +1370,6 @@
       "bCoef": 0.1,
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["redKO", "blueKO"]
-    },
-    {
-      "x": -4106,
-      "y": 144,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "x": -4007,
-      "y": 418,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
     },
     {
       "x": 1738,
@@ -1785,8 +1641,7 @@
       "trait": "kickOffBarrier",
       "vis": true,
       "color": "fffff1",
-      "curve": 180,
-      "_selected": true
+      "curve": 180
     },
     {
       "x": -2591,
@@ -2669,9 +2524,18 @@
       "cGroup": ["wall"]
     },
     {
-      "v0": 107,
-      "v1": 106,
+      "v0": 106,
+      "v1": 105,
       "curve": -3.9733042159803773,
+      "color": "777777",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["wall"]
+    },
+    {
+      "v0": 106,
+      "v1": 107,
+      "curve": -29.541853895112787,
       "color": "777777",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -2680,15 +2544,6 @@
     {
       "v0": 107,
       "v1": 108,
-      "curve": -29.541853895112787,
-      "color": "777777",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 108,
-      "v1": 109,
       "curve": 190.1221408892465,
       "color": "777777",
       "bCoef": 0,
@@ -2696,8 +2551,8 @@
       "cGroup": ["wall"]
     },
     {
-      "v0": 110,
-      "v1": 111,
+      "v0": 109,
+      "v1": 110,
       "curve": 0.9970647045837319,
       "color": "777777",
       "bCoef": 0,
@@ -2706,8 +2561,16 @@
     },
     {
       "v0": 101,
-      "v1": 111,
+      "v1": 110,
       "curve": 0,
+      "color": "777777",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["wall"]
+    },
+    {
+      "v0": 111,
+      "v1": 112,
       "color": "777777",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -2716,6 +2579,7 @@
     {
       "v0": 112,
       "v1": 113,
+      "curve": 23.812195064814063,
       "color": "777777",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -2724,15 +2588,6 @@
     {
       "v0": 113,
       "v1": 114,
-      "curve": 23.812195064814063,
-      "color": "777777",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 114,
-      "v1": 115,
       "curve": -24.00810863325435,
       "color": "777777",
       "bCoef": 0,
@@ -2740,9 +2595,17 @@
       "cGroup": ["wall"]
     },
     {
-      "v0": 118,
-      "v1": 119,
+      "v0": 117,
+      "v1": 118,
       "curve": 0.3222355469800332,
+      "color": "777777",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["wall"]
+    },
+    {
+      "v0": 119,
+      "v1": 120,
       "color": "777777",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -2757,57 +2620,16 @@
       "cGroup": ["wall"]
     },
     {
-      "v0": 121,
-      "v1": 122,
+      "v0": 111,
+      "v1": 121,
       "color": "777777",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 112,
-      "v1": 122,
-      "color": "777777",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 123,
-      "v1": 124,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 125,
-      "v1": 126,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 105,
-      "v1": 127,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 128,
-      "v1": 117,
-      "curve": 64.79070821888396,
-      "color": "999999",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["wall"]
     },
     {
       "v0": 7,
-      "v1": 132,
+      "v1": 123,
       "curve": -91.48170481877861,
       "color": "ffffff",
       "bCoef": 0.1,
@@ -2834,7 +2656,7 @@
     },
     {
       "v0": 51,
-      "v1": 133,
+      "v1": 124,
       "curve": 34.525992931558356,
       "color": "ff0000",
       "bCoef": 0.1,
@@ -2842,8 +2664,8 @@
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 133,
-      "v1": 134,
+      "v0": 124,
+      "v1": 125,
       "curve": 54.993215550310936,
       "color": "ff0000",
       "bCoef": 0.1,
@@ -2852,7 +2674,7 @@
     },
     {
       "v0": 54,
-      "v1": 135,
+      "v1": 126,
       "curve": 35.13258222104136,
       "color": "ff0000",
       "bCoef": 0.1,
@@ -2860,7 +2682,7 @@
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 135,
+      "v0": 126,
       "v1": 53,
       "curve": -23.04668779096528,
       "color": "ffffff",
@@ -2869,8 +2691,8 @@
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 136,
-      "v1": 137,
+      "v0": 127,
+      "v1": 128,
       "curve": 69.51671218730752,
       "color": "ffffff",
       "bCoef": 0.1,
@@ -2878,8 +2700,8 @@
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 137,
-      "v1": 138,
+      "v0": 128,
+      "v1": 129,
       "curve": 39.397576919124525,
       "color": "ffffff",
       "bCoef": 0.1,
@@ -2887,8 +2709,8 @@
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 138,
-      "v1": 139,
+      "v0": 129,
+      "v1": 130,
       "curve": -17.07185886949704,
       "color": "ffffff",
       "bCoef": 0.1,
@@ -2896,7 +2718,7 @@
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 139,
+      "v0": 130,
       "v1": 55,
       "curve": 22.63883195740953,
       "color": "ffffff",
@@ -2906,7 +2728,7 @@
     },
     {
       "v0": 65,
-      "v1": 140,
+      "v1": 131,
       "curve": -35.34886009158226,
       "color": "ffffff",
       "bCoef": 0.1,
@@ -2915,7 +2737,7 @@
     },
     {
       "v0": 67,
-      "v1": 141,
+      "v1": 132,
       "curve": -43.60281897270362,
       "color": "ffffff",
       "bCoef": 0.1,
@@ -2923,8 +2745,8 @@
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 141,
-      "v1": 142,
+      "v0": 132,
+      "v1": 133,
       "curve": 66.40810765445829,
       "color": "ffffff",
       "bCoef": 0.1,
@@ -2932,7 +2754,7 @@
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 142,
+      "v0": 133,
       "v1": 64,
       "curve": 35.369698904652914,
       "color": "ffffff",
@@ -2941,8 +2763,8 @@
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 143,
-      "v1": 144,
+      "v0": 134,
+      "v1": 135,
       "curve": 38.1329854625403,
       "color": "ffffff",
       "bCoef": 0.1,
@@ -2950,7 +2772,7 @@
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 144,
+      "v0": 135,
       "v1": 62,
       "curve": -44.365711032407106,
       "color": "ffffff",
@@ -2959,8 +2781,8 @@
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 140,
-      "v1": 143,
+      "v0": 131,
+      "v1": 134,
       "curve": 61.65019209535507,
       "color": "ffffff",
       "bCoef": 0.1,
@@ -2969,7 +2791,7 @@
     },
     {
       "v0": 41,
-      "v1": 145,
+      "v1": 136,
       "curve": 0,
       "color": "ffffff",
       "bCoef": 0.1,
@@ -2977,8 +2799,8 @@
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 145,
-      "v1": 146,
+      "v0": 136,
+      "v1": 137,
       "curve": 12.48984491848691,
       "color": "ffffff",
       "bCoef": 0.1,
@@ -2986,7 +2808,7 @@
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 146,
+      "v0": 137,
       "v1": 37,
       "curve": 0,
       "color": "ffffff",
@@ -2996,7 +2818,7 @@
     },
     {
       "v0": 40,
-      "v1": 147,
+      "v1": 138,
       "curve": 0,
       "color": "ffffff",
       "bCoef": 0.1,
@@ -3004,8 +2826,8 @@
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 147,
-      "v1": 148,
+      "v0": 138,
+      "v1": 139,
       "curve": 14.530120825267941,
       "color": "ffffff",
       "bCoef": 0.1,
@@ -3013,7 +2835,7 @@
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 148,
+      "v0": 139,
       "v1": 39,
       "curve": 0,
       "color": "ffffff",
@@ -3032,8 +2854,8 @@
       "y": 560
     },
     {
-      "v0": 149,
-      "v1": 150,
+      "v0": 140,
+      "v1": 141,
       "curve": 0,
       "color": "ffffff",
       "cMask": ["red", "blue", "ball", "c0"],
@@ -3041,14 +2863,14 @@
     },
     {
       "v0": 73,
-      "v1": 151,
+      "v1": 142,
       "curve": 0,
       "color": "ffffff",
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 151,
+      "v0": 142,
       "v1": 77,
       "curve": 52.83617082100205,
       "color": "ffffff",
@@ -3057,7 +2879,7 @@
     },
     {
       "v0": 72,
-      "v1": 152,
+      "v1": 143,
       "curve": 0,
       "color": "ffffff",
       "cMask": ["red", "blue", "ball", "c0"],
@@ -3065,78 +2887,78 @@
     },
     {
       "v0": 79,
-      "v1": 153,
+      "v1": 144,
       "curve": 0,
       "color": "ffffff",
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 153,
-      "v1": 154,
+      "v0": 144,
+      "v1": 145,
       "curve": -37.403812104041975,
       "color": "ffffff",
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 154,
-      "v1": 150,
+      "v0": 145,
+      "v1": 141,
       "curve": 38.72869384080394,
       "color": "ffffff",
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 155,
-      "v1": 156,
+      "v0": 146,
+      "v1": 147,
       "curve": 0,
       "color": "ffffff",
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 156,
-      "v1": 157,
+      "v0": 147,
+      "v1": 148,
       "curve": -31.00507758326323,
       "color": "ffffff",
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 157,
-      "v1": 152,
+      "v0": 148,
+      "v1": 143,
       "curve": 37.42347575019953,
       "color": "ffffff",
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 155,
-      "v1": 158,
+      "v0": 146,
+      "v1": 149,
       "curve": 0,
       "color": "ffffff",
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 158,
-      "v1": 159,
+      "v0": 149,
+      "v1": 150,
       "curve": 41.630131932734635,
       "color": "ffffff",
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 160,
-      "v1": 161,
+      "v0": 151,
+      "v1": 152,
       "curve": 0,
       "color": "ffffff",
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 155,
+      "v0": 146,
       "v1": 52,
       "curve": -28.782857316916385,
       "color": "ffffff",
@@ -3145,8 +2967,8 @@
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 136,
-      "v1": 149,
+      "v0": 127,
+      "v1": 140,
       "curve": -31.86361808667421,
       "color": "ffffff",
       "bCoef": 0.1,
@@ -3154,7 +2976,7 @@
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 134,
+      "v0": 125,
       "v1": 54,
       "curve": 80.95509170719599,
       "color": "ff0000",
@@ -3164,24 +2986,15 @@
     },
     {
       "v0": 78,
-      "v1": 162,
+      "v1": 153,
       "color": "777777",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["wall"]
     },
     {
-      "v0": 164,
-      "v1": 163,
-      "curve": -21.054452134369207,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 115,
-      "v1": 165,
+      "v0": 114,
+      "v1": 154,
       "curve": 114.25261770845131,
       "color": "777777",
       "bCoef": 0,
@@ -3189,17 +3002,8 @@
       "cGroup": ["wall"]
     },
     {
-      "v0": 166,
-      "v1": 115,
-      "curve": 167.84705808701926,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
       "v0": 80,
-      "v1": 167,
+      "v1": 155,
       "curve": 11.45382104505666,
       "color": "777777",
       "bCoef": 0,
@@ -3207,23 +3011,23 @@
       "cGroup": ["wall"]
     },
     {
-      "v0": 168,
-      "v1": 167,
+      "v0": 156,
+      "v1": 155,
       "curve": -81.21652612099786,
       "color": "777777",
       "bCoef": 0,
       "cGroup": ["wall"]
     },
     {
-      "v0": 165,
-      "v1": 169,
+      "v0": 154,
+      "v1": 157,
       "curve": 33.55013243115238,
       "color": "777777",
       "bCoef": 0,
       "cGroup": ["wall"]
     },
     {
-      "v0": 168,
+      "v0": 156,
       "v1": 102,
       "curve": 45.51632740891776,
       "color": "777777",
@@ -3231,16 +3035,16 @@
       "cGroup": ["wall"]
     },
     {
-      "v0": 169,
-      "v1": 170,
+      "v0": 157,
+      "v1": 158,
       "curve": 87.29627624888158,
       "color": "777777",
       "bCoef": 0,
       "cGroup": ["wall"]
     },
     {
-      "v0": 170,
-      "v1": 171,
+      "v0": 158,
+      "v1": 159,
       "curve": -134.0692309967228,
       "color": "777777",
       "bCoef": 0,
@@ -3248,15 +3052,15 @@
     },
     {
       "v0": 104,
-      "v1": 172,
+      "v1": 160,
       "color": "777777",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["wall"]
     },
     {
-      "v0": 173,
-      "v1": 174,
+      "v0": 161,
+      "v1": 162,
       "curve": 65.01752383953284,
       "color": "777777",
       "bCoef": 0,
@@ -3264,8 +3068,8 @@
       "cGroup": ["wall"]
     },
     {
-      "v0": 174,
-      "v1": 175,
+      "v0": 162,
+      "v1": 163,
       "curve": 37.2415848244359,
       "color": "777777",
       "bCoef": 0,
@@ -3273,9 +3077,99 @@
       "cGroup": ["wall"]
     },
     {
-      "v0": 175,
-      "v1": 176,
+      "v0": 163,
+      "v1": 164,
       "curve": -39.06149232251493,
+      "color": "777777",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["wall"]
+    },
+    {
+      "v0": 160,
+      "v1": 161,
+      "curve": -31.430207782909036,
+      "color": "777777",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["wall"]
+    },
+    {
+      "v0": 164,
+      "v1": 165,
+      "curve": -2.778620606454605,
+      "color": "777777",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["wall"]
+    },
+    {
+      "v0": 165,
+      "v1": 166,
+      "curve": 120.45512160595848,
+      "color": "777777",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["wall"]
+    },
+    {
+      "v0": 116,
+      "v1": 167,
+      "curve": 2.107508699862791,
+      "color": "777777",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["wall"]
+    },
+    {
+      "v0": 167,
+      "v1": 168,
+      "curve": 12.42969414565924,
+      "color": "777777",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["wall"]
+    },
+    {
+      "v0": 168,
+      "v1": 117,
+      "curve": 0,
+      "color": "777777",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["wall"]
+    },
+    {
+      "v0": 166,
+      "v1": 169,
+      "curve": 2.107508699862791,
+      "color": "777777",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["wall"]
+    },
+    {
+      "v0": 169,
+      "v1": 170,
+      "curve": 15.29583601266306,
+      "color": "777777",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["wall"]
+    },
+    {
+      "v0": 170,
+      "v1": 105,
+      "curve": 2.107508699862791,
+      "color": "777777",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["wall"]
+    },
+    {
+      "v0": 171,
+      "v1": 172,
+      "curve": 185.4847182152558,
       "color": "777777",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -3284,112 +3178,6 @@
     {
       "v0": 172,
       "v1": 173,
-      "curve": -31.430207782909036,
-      "color": "777777",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 176,
-      "v1": 177,
-      "curve": -2.778620606454605,
-      "color": "777777",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 177,
-      "v1": 178,
-      "curve": 120.45512160595848,
-      "color": "777777",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 117,
-      "v1": 180,
-      "curve": 2.107508699862791,
-      "color": "777777",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 180,
-      "v1": 181,
-      "curve": 12.42969414565924,
-      "color": "777777",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 181,
-      "v1": 118,
-      "curve": 0,
-      "color": "777777",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 178,
-      "v1": 182,
-      "curve": 2.107508699862791,
-      "color": "777777",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 182,
-      "v1": 183,
-      "curve": 15.29583601266306,
-      "color": "777777",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 183,
-      "v1": 106,
-      "curve": 2.107508699862791,
-      "color": "777777",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 118,
-      "v1": 185,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 186,
-      "v1": 107,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 184,
-      "v1": 187,
-      "curve": 185.4847182152558,
-      "color": "777777",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 187,
-      "v1": 188,
       "curve": 21.307846165565532,
       "color": "777777",
       "bCoef": 0,
@@ -3397,8 +3185,8 @@
       "cGroup": ["wall"]
     },
     {
-      "v0": 188,
-      "v1": 120,
+      "v0": 173,
+      "v1": 119,
       "curve": -25.21665981170434,
       "color": "777777",
       "bCoef": 0,
@@ -3406,51 +3194,24 @@
       "cGroup": ["wall"]
     },
     {
-      "v0": 110,
-      "v1": 109,
+      "v0": 109,
+      "v1": 108,
       "color": "777777",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["wall"]
     },
     {
-      "v0": 189,
-      "v1": 110,
-      "curve": 7.552312545044451,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 130,
-      "v1": 131,
-      "curve": 27.2010850333175,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 184,
-      "v1": 130,
-      "curve": -6.009132910303754,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 190,
-      "v1": 191,
+      "v0": 174,
+      "v1": 175,
       "color": "777777",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["wall"]
     },
     {
-      "v0": 191,
-      "v1": 192,
+      "v0": 175,
+      "v1": 176,
       "curve": 141.3113414557577,
       "color": "777777",
       "bCoef": 0,
@@ -3459,7 +3220,7 @@
     },
     {
       "v0": 100,
-      "v1": 193,
+      "v1": 177,
       "curve": -45.12385652696538,
       "color": "777777",
       "bCoef": 0,
@@ -3467,7 +3228,7 @@
       "cGroup": ["wall"]
     },
     {
-      "v0": 193,
+      "v0": 177,
       "v1": 81,
       "curve": -11.411430347307622,
       "color": "777777",
@@ -3476,17 +3237,8 @@
       "cGroup": ["wall"]
     },
     {
-      "v0": 194,
-      "v1": 195,
-      "curve": -21.054452134369207,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 171,
-      "v1": 196,
+      "v0": 159,
+      "v1": 178,
       "curve": -2.7858719042766573,
       "color": "777777",
       "bCoef": 0,
@@ -3494,40 +3246,40 @@
       "cGroup": ["wall"]
     },
     {
-      "v0": 196,
-      "v1": 197,
+      "v0": 178,
+      "v1": 179,
       "curve": -44.53968484212668,
       "color": "777777",
       "bCoef": 0,
       "cGroup": ["wall"]
     },
     {
-      "v0": 197,
-      "v1": 198,
+      "v0": 179,
+      "v1": 180,
       "curve": 65.95324490246303,
       "color": "777777",
       "bCoef": 0,
       "cGroup": ["wall"]
     },
     {
-      "v0": 198,
-      "v1": 199,
+      "v0": 180,
+      "v1": 181,
       "curve": 35.11861491913845,
       "color": "777777",
       "bCoef": 0,
       "cGroup": ["wall"]
     },
     {
-      "v0": 199,
-      "v1": 116,
+      "v0": 181,
+      "v1": 115,
       "curve": -37.491447840980214,
       "color": "777777",
       "bCoef": 0,
       "cGroup": ["wall"]
     },
     {
-      "v0": 116,
-      "v1": 117,
+      "v0": 115,
+      "v1": 116,
       "curve": -73.27769751344958,
       "color": "777777",
       "bCoef": 0,
@@ -3536,7 +3288,7 @@
     },
     {
       "v0": 10,
-      "v1": 200,
+      "v1": 182,
       "color": "ffffff",
       "bCoef": 0.1,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -3544,15 +3296,15 @@
     },
     {
       "v0": 11,
-      "v1": 201,
+      "v1": 183,
       "color": "ffffff",
       "bCoef": 0.1,
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 202,
-      "v1": 203,
+      "v0": 184,
+      "v1": 185,
       "color": "ffffff",
       "bCoef": 0.1,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -3567,35 +3319,8 @@
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 115,
-      "v1": 204,
-      "curve": -92.19572662755876,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 204,
-      "v1": 205,
-      "curve": -72.86570300437093,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 205,
-      "v1": 166,
-      "curve": -94.13662713085462,
-      "color": "999999",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "v0": 184,
-      "v1": 206,
+      "v0": 171,
+      "v1": 186,
       "curve": 17.503841973222446,
       "color": "777777",
       "bCoef": 0,
@@ -3603,9 +3328,9 @@
       "cGroup": ["wall"]
     },
     {
-      "v0": 119,
-      "v1": 206,
-      "curve": -85.76237436636536,
+      "v0": 118,
+      "v1": 186,
+      "curve": -156.89426936894273,
       "color": "777777",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -3613,11 +3338,121 @@
     },
 
     {
+      "v0": 187,
+      "v1": 188,
+      "curve": 326.5825016517914,
+      "vis": true,
+      "color": "ff0001",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "v0": 189,
+      "v1": 190,
+      "curve": 326.5825016517914,
+      "vis": true,
+      "color": "fffff1",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "v0": 191,
+      "v1": 192,
+      "curve": 326.5825016517914,
+      "vis": true,
+      "color": "fffff1",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "v0": 193,
+      "v1": 194,
+      "curve": 326.5825016517914,
+      "vis": true,
+      "color": "fffff1",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "v0": 195,
+      "v1": 196,
+      "curve": 326.5825016517914,
+      "vis": true,
+      "color": "fffff1",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "v0": 197,
+      "v1": 198,
+      "curve": 326.5825016517914,
+      "vis": true,
+      "color": "fffff1",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "v0": 199,
+      "v1": 200,
+      "curve": 326.5825016517914,
+      "vis": true,
+      "color": "fffff1",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "v0": 201,
+      "v1": 202,
+      "curve": 326.5825016517914,
+      "vis": true,
+      "color": "fffff1",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "v0": 203,
+      "v1": 204,
+      "curve": 326.5825016517914,
+      "vis": true,
+      "color": "fffff1",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "v0": 205,
+      "v1": 206,
+      "curve": 326.5825016517914,
+      "vis": true,
+      "color": "fffff1",
+      "bCoef": 0.1,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
       "v0": 207,
       "v1": 208,
       "curve": 326.5825016517914,
       "vis": true,
-      "color": "ff0001",
+      "color": "fffff1",
       "bCoef": 0.1,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
@@ -3714,116 +3549,6 @@
     {
       "v0": 225,
       "v1": 226,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "fffff1",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 227,
-      "v1": 228,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "fffff1",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 229,
-      "v1": 230,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "fffff1",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 231,
-      "v1": 232,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "fffff1",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 233,
-      "v1": 234,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "fffff1",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 235,
-      "v1": 236,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "fffff1",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 237,
-      "v1": 238,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "fffff1",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 239,
-      "v1": 240,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "fffff1",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 241,
-      "v1": 242,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "fffff1",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 243,
-      "v1": 244,
-      "curve": 326.5825016517914,
-      "vis": true,
-      "color": "fffff1",
-      "bCoef": 0.1,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 245,
-      "v1": 246,
       "curve": 326.5825016517914,
       "vis": true,
       "color": "fffff1",
@@ -3979,7 +3704,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-587, -1001],
+      "pos": [-592, -1030],
       "color": "ff0000",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -3988,7 +3713,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-592, -1045],
+      "pos": [-585, -1108],
       "color": "ff0000",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -3997,34 +3722,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-588, -1083],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-579, -1121],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-562, -1156],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-541, -1185],
+      "pos": [-557, -1175],
       "color": "ff0000",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4159,16 +3857,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-837, 244],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-917, 244],
+      "pos": [-970, 248],
       "color": "ffffff",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4177,7 +3866,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-980, 244],
+      "pos": [-1091, 249],
       "color": "ff0000",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4186,7 +3875,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-1041, 245],
+      "pos": [-1209, 248],
       "color": "ffffff",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4195,16 +3884,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-1102, 245],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-1168, 245],
+      "pos": [-1482, 247],
       "color": "ffffff",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4213,7 +3893,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-1241, 246],
+      "pos": [-1623, 248],
       "color": "ff0000",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4222,35 +3902,8 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-1542, 249],
+      "pos": [-1760, 250],
       "color": "ffffff",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-1633, 249],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-1722, 252],
-      "color": "ffffff",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-1805, 250],
-      "color": "ff0000",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["wall"]
@@ -4267,16 +3920,7 @@
     {
       "radius": 10,
       "invMass": 0,
-      "pos": [-188, -1407],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 10,
-      "invMass": 0,
-      "pos": [-111, -1391],
+      "pos": [-165, -1406],
       "color": "ffffff",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4285,16 +3929,7 @@
     {
       "radius": 10,
       "invMass": 0,
-      "pos": [-44, -1373],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 10,
-      "invMass": 0,
-      "pos": [31, -1354],
+      "pos": [-53, -1378],
       "color": "ffffff",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4303,26 +3938,8 @@
     {
       "radius": 10,
       "invMass": 0,
-      "pos": [116, -1334],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 10,
-      "invMass": 0,
-      "pos": [203, -1315],
+      "pos": [58, -1350],
       "color": "ffffff",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 10,
-      "invMass": 0,
-      "pos": [290, -1292],
-      "color": "ff0000",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["wall"]
@@ -4339,7 +3956,7 @@
     {
       "radius": 10,
       "invMass": 0,
-      "pos": [369, -1272],
+      "pos": [242, -1301],
       "color": "ffffff",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4355,64 +3972,10 @@
       "cGroup": ["wall"]
     },
     {
-      "radius": 10,
-      "invMass": 0,
-      "pos": [1370, -835],
-      "color": "ffffff",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 10,
-      "invMass": 0,
-      "pos": [1556, 92],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
       "radius": 9,
       "invMass": 0,
       "pos": [1772, 60],
       "color": "ffffff",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 10,
-      "invMass": 0,
-      "pos": [1429, 82],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 10,
-      "invMass": 0,
-      "pos": [1495, 89],
-      "color": "ffffff",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 10,
-      "invMass": 0,
-      "pos": [1628, 82],
-      "color": "ffffff",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 10,
-      "invMass": 0,
-      "pos": [1685, 66],
-      "color": "ff0000",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["wall"]
@@ -4474,16 +4037,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [2406, 325],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [2302, 353],
+      "pos": [2379, 332],
       "color": "ffffff",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4501,16 +4055,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [2104, 407],
-      "color": "ffffff",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [2008, 435],
+      "pos": [1872, 472],
       "color": "ff0000",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4519,17 +4064,8 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [1910, 462],
+      "pos": [2049, 424],
       "color": "ffffff",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [1800, 491],
-      "color": "ff0000",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["wall"]
@@ -4538,24 +4074,6 @@
       "radius": 5,
       "invMass": 0,
       "pos": [1685, 523],
-      "color": "ffffff",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 10,
-      "invMass": 0,
-      "pos": [2256, 568],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 10,
-      "invMass": 0,
-      "pos": [1904, 659],
       "color": "ffffff",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4573,7 +4091,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [1381, 732],
+      "pos": [1276, 731],
       "color": "ffffff",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4582,7 +4100,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [1266, 729],
+      "pos": [1026, 732],
       "color": "ff0000",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4591,7 +4109,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [1143, 728],
+      "pos": [786, 731],
       "color": "ffffff",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4600,7 +4118,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [634, 732],
+      "pos": [-83, 732],
       "color": "ffffff",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4609,7 +4127,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [452, 732],
+      "pos": [-455, 731],
       "color": "ffffff",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4618,43 +4136,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [268, 733],
-      "color": "ffffff",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [56, 732],
-      "color": "ffffff",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-162, 732],
-      "color": "ffffff",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-349, 732],
-      "color": "ffffff",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-447, 733],
+      "pos": [141, 731],
       "color": "ff0000",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4663,52 +4145,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-263, 733],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-60, 733],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [160, 732],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [360, 733],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [753, 733],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [533, 731],
+      "pos": [-275, 732],
       "color": "ff0000",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4726,7 +4163,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-3887, 410],
+      "pos": [-3885, 420],
       "color": "ff0000",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4735,7 +4172,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-3917, 434],
+      "pos": [-3920, 444],
       "color": "ff0000",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4744,7 +4181,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-3952, 450],
+      "pos": [-4065, 405],
       "color": "ff0000",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4753,7 +4190,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-3992, 446],
+      "pos": [-4101, 354],
       "color": "ff0000",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4762,7 +4199,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-4024, 430],
+      "pos": [-4126, 290],
       "color": "ff0000",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4771,7 +4208,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-4056, 405],
+      "pos": [-4138, 216],
       "color": "ff0000",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4780,7 +4217,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-4084, 373],
+      "pos": [-4117, 135],
       "color": "ff0000",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4789,88 +4226,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-4105, 340],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-4127, 298],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-4135, 263],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-4140, 224],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-4134, 181],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-4120, 138],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-4101, 98],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-4082, 57],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-4048, 16],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-4019, -19],
+      "pos": [-4086, 65],
       "color": "ff0000",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4906,7 +4262,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-517, -1215],
+      "pos": [-512, -1225],
       "color": "ff0000",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -4915,34 +4271,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-476, -1243],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-431, -1260],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-383, -1271],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-332, -1266],
+      "pos": [-447, -1261],
       "color": "ff0000",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -5113,35 +4442,8 @@
     {
       "radius": 10,
       "invMass": 0,
-      "pos": [-2182, -981],
-      "color": "ffffff",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 10,
-      "invMass": 0,
-      "pos": [-1741, -1041],
-      "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 10,
-      "invMass": 0,
       "pos": [-1258, -659],
       "color": "ff0000",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 10,
-      "invMass": 0,
-      "pos": [-487, -1433],
-      "color": "ffffff",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["wall"]
@@ -5212,7 +4514,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [886, 733],
+      "pos": [340, 732],
       "color": "ffffff",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -5221,7 +4523,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [1015, 730],
+      "pos": [535, 732],
       "color": "ff0000",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -5230,8 +4532,8 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-1326, 247],
-      "color": "ffffff",
+      "pos": [-1345, 247],
+      "color": "ff0000",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
       "cGroup": ["wall"]
@@ -5239,7 +4541,34 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-1447, 248],
+      "pos": [-3969, 456],
+      "color": "ff0000",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["wall"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-4022, 438],
+      "color": "ff0000",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["wall"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-4041, 6],
+      "color": "ff0000",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "ball", "c0"],
+      "cGroup": ["wall"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-370, -1278],
       "color": "ff0000",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -5248,7 +4577,7 @@
     {
       "radius": 10,
       "invMass": 0,
-      "pos": [1371, 66],
+      "pos": [411, -1258],
       "color": "ffffff",
       "bCoef": 0,
       "cMask": ["red", "blue", "ball", "c0"],
@@ -5268,7 +4597,8 @@
       "normal": [-1, 0],
       "dist": 1872,
       "bCoef": 0,
-      "cGroup": ["redKO", "blueKO"]
+      "cGroup": ["redKO", "blueKO"],
+      "_selected": true
     }
   ],
 
