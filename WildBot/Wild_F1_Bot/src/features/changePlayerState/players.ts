@@ -41,8 +41,13 @@ export function createPlayerInfo(ip?: string) {
     boxAlert: false,
     pits: {
       pitsNumber: 0,
-      pit: [],
-      pitsAttemp: 0,
+      pit: [
+        {
+          tyre: Tires.SOFT,
+          lap: 0,
+          time: 0,
+        },
+      ],
     },
     pitCountdown: 0,
     pitTargetTires: Tires.SOFT,
@@ -127,8 +132,13 @@ export function resetPlayer(
 
   playerList[id].pits = {
     pitsNumber: 0,
-    pit: [],
-    pitsAttemp: 0,
+    pit: [
+      {
+        tyre: Tires.SOFT,
+        lap: 0,
+        time: 0,
+      },
+    ],
   };
   (playerList[id].pitCountdown = 0),
     (playerList[id].pitTargetTires = Tires.SOFT),

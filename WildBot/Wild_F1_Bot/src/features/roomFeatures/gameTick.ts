@@ -25,6 +25,11 @@ const detectCutThrottledByPlayer: Map<
   ReturnType<typeof throttlePerSecond>
 > = new Map();
 
+export let gameStarted = false;
+export function setGameStarted(value: boolean) {
+  gameStarted = value;
+}
+
 export function GameTick(room: RoomObject) {
   room.onGameTick = function () {
     const playersAndDiscs = getPlayerAndDiscs(room);
@@ -60,6 +65,10 @@ export function GameTick(room: RoomObject) {
     });
 
     afkKick(room);
+
+    if (room.getScores()?.time && room.getScores().time > 0) {
+      gameStarted = true;
+    }
   };
 }
 

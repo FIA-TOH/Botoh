@@ -15,10 +15,13 @@ import {
   GameMode,
   changeGameMode,
 } from "../changeGameState/changeGameModes";
-import { clearPlayers } from "../changeGameState/qualy/playerTime";
+import {
+  clearPlayers,
+  getPlayersOrderedByQualiTime,
+} from "../changeGameState/qualy/playerTime";
 import { printAllTimes } from "../changeGameState/qualy/printAllTimes";
 import { reorderPlayersInRoomRace } from "../movePlayers/reorderPlayersInRoom";
-import { timerController } from "../utils";
+import { getTimestamp, timerController } from "../utils";
 import { printAllPositions } from "../changeGameState/race/printAllPositions";
 import { log } from "../discord/logger";
 import { changeLaps } from "../commands/adminThings/handleChangeLaps";
@@ -26,11 +29,13 @@ import { handleRREnabledCommand } from "../commands/adminThings/handleRREnabledC
 import { handleFlagCommand } from "../commands/flagsAndVSC/handleFlagCommand";
 import { clearPlayerBuffAndNerfLists } from "../commands/adjustThings/handleNerfListCommand";
 import PublicGameFlow from "../changeGameState/publicGameFlow/publicGameFLow";
-import { sendDiscordReplay } from "../discord/discord";
+import { sendDiscordFile, sendDiscordReplay } from "../discord/discord";
 import {
   sendQualiResultsToDiscord,
   sendRaceResultsToDiscord,
 } from "../discord/logResults";
+import { gameStarted, setGameStarted } from "./gameTick";
+import { positionList } from "../changeGameState/race/positionList";
 
 export function GameStop(room: RoomObject) {
   room.onGameStop = function (byPlayer) {
@@ -44,15 +49,32 @@ export function GameStop(room: RoomObject) {
     handleGameStateChange(null, room);
     if (gameMode !== GameMode.TRAINING) {
       const replay = room.stopRecording();
-      if (replay) {
+
+      if (replay && gameStarted) {
         sendDiscordReplay(replay);
+      } else {
+        log("Replay discarted");
       }
     }
+    setGameStarted(false);
 
     if (timerController.positionTimer !== null) {
       clearTimeout(timerController.positionTimer);
       timerController.positionTimer = null;
       log("Temporizer canceled by onGameStop");
+    }
+
+    if (positionList.length > 0) {
+      const fileName = `RaceResults-${getTimestamp()}.json`;
+
+      sendDiscordFile(positionList, fileName, "RACE_RESULTS");
+    }
+
+    const qualiResults = getPlayersOrderedByQualiTime();
+    if (qualiResults.length > 0) {
+      const fileName = `QualiResults-${getTimestamp()}.json`;
+
+      sendDiscordFile(qualiResults, fileName, "QUALI_RESULTS");
     }
 
     resetAllRainEvents();

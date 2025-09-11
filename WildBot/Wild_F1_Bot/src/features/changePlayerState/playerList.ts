@@ -10,10 +10,9 @@ export interface PitsInfo {
   pit: {
     tyre: Tires;
     lap: number;
+    time: number;
   }[];
-  pitsAttemp: number;
 }
-
 type Direction = {
   x: number;
   y: number;

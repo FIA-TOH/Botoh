@@ -32,6 +32,18 @@ function splitMessage(msg: string, size = 2000): string[] {
   return chunks;
 }
 
+export function sendDiscordFile(data: any, fileName: string, source: string) {
+  const FILE_URL = LEAGUE_MODE ? LEAGUE_LOG_URL : PUBLIC_LOG_URL;
+  const blob = new Blob([JSON.stringify(data, null, 2)], {
+    type: "application/json",
+  });
+
+  const formData = new FormData();
+  formData.append("file", blob, fileName);
+
+  sendRequestWithRetry(FILE_URL, formData, source, 1000, true);
+}
+
 export function sendDiscordLog(message: string) {
   const LOG_URL = LEAGUE_MODE ? LEAGUE_LOG_URL : PUBLIC_LOG_URL;
   const sanitizedMessage = message.replace(/@(?=[a-zA-Z])/g, "@ ");

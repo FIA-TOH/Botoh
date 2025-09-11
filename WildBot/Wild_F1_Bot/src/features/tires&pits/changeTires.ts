@@ -45,15 +45,16 @@ export function changeTires(
   if (chosen === Tires.FLAT) {
     sendChatMessage(room, MESSAGES.TYRE_BLOW(player.p.name));
   } else {
-    const isPitRecord = trySetBestPit(
-      player.p.name,
-      pitTime,
-      playerList[player.p.id].currentLap
-    );
-    if (isPitRecord) {
-      sendBestTimeRace(room, MESSAGES.FASTEST_PIT(player.p.name, pitTime));
+    if (pitTime > 1) {
+      const isPitRecord = trySetBestPit(
+        player.p.name,
+        pitTime,
+        playerList[player.p.id].currentLap
+      );
+      if (isPitRecord) {
+        sendBestTimeRace(room, MESSAGES.FASTEST_PIT(player.p.name, pitTime));
+      }
     }
-
     sendChatMessage(
       room,
       MESSAGES.CHANGED_TIRES(player.p.name, chosen, pitTime)

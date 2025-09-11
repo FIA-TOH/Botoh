@@ -16,10 +16,28 @@ export function performPitStop(
   const playerState = playerList[byPlayer.id];
   playerState.tires = tiresKey;
   playerState.kers = Math.min(playerState.kers + 20, 100);
-  playerState.pits.pit.push({
-    tyre: tiresKey,
-    lap: playerState.currentLap,
-  });
+
+  const pitTime = playerState.pitFailures?.totalTime ?? 0;
+  const currentLap = playerState.currentLap;
+
+  const existingPitIndex = playerState.pits.pit.findIndex(
+    (p) => p.lap === currentLap
+  );
+
+  if (existingPitIndex !== -1) {
+    playerState.pits.pit[existingPitIndex] = {
+      tyre: tiresKey,
+      lap: currentLap,
+      time: pitTime,
+    };
+  } else {
+    playerState.pits.pit.push({
+      tyre: tiresKey,
+      lap: currentLap,
+      time: pitTime,
+    });
+    playerState.pits.pitsNumber++;
+  }
 
   delete playerState.pitTargetTires;
   delete playerState.pitInitialPos;

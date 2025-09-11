@@ -68,9 +68,10 @@ export function printAllPositions(
     } - ${bestPit.pitTime.toFixed(3)}s (Stop ${bestPit.pitNumber})\n`;
   }
 
+  log("positionList: ", { sendToDiscord: sendToDiscord ?? true });
+  console.log(positionList);
+
   if (messageBuffer.length > 0) {
     sendNonLocalizedSmallChatMessage(room, messageBuffer, toPlayerID);
   }
-
-  log("positionList: ", { sendToDiscord: sendToDiscord ?? true });
 }

@@ -5,14 +5,13 @@
 As vezes o pneu nao muda visualmente emoji
 Quando troca de mapa manuamente, resetar o circuito votado
 Tratar quando nao tiver ninguem na sala
-Fast lap max time nao mostrar nos logs
 Qualy as vezes sem ghost
 
 # To do dos Mapas
 
 # To-do rapidos
 
-Melhorar informacoes que dao sobre a corrida dzo player, tipo pneu inicial e quantidade de pit melhorada (se torcar varias vezes na mesmav ez nao vonta como varias trocadas)
+Mapas
 
 # To-Do longos
 
