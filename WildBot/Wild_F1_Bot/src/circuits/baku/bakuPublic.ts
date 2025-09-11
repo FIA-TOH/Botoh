@@ -90,6 +90,20 @@ const BAKUPUBLIC_INFO: CircuitInfo = {
   Limit: 5,
   Votes: 0,
   pitSpeed: 0.97,
+  CutDetectSegments: [
+    {
+      v0: [-4744, 1115],
+      v1: [-4752, 1224],
+      index: 220,
+      penalty: 5,
+    },
+    {
+      v0: [-5558, 84],
+      v1: [-5640, 129],
+      index: 221,
+      penalty: 5,
+    },
+  ],
 };
 
 export const BAKUPUBLIC: Circuit = {

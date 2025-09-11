@@ -46,21 +46,6 @@ import { INDIANAPOLISLEAGUE } from "../../circuits/indianapolis/indianapolisLeag
 
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 
-import { ISTANBULLEAGUE } from "../../circuits/istanbulLeague/istanbulLeague";
-import { FUJILEAGUE } from "../../circuits/fuji/fujiLeague";
-
-import { BAKULEAGUE } from "../../circuits/baku/bakuLeague";
-import { MONACOLEAGUE } from "../../circuits/monaco/monacoLeague";
-import { VALENCIALEAGUE } from "../../circuits/valencia/valenciaLeague";
-import { SILVERSTONELEAGUE } from "../../circuits/silverstone/silverstoneLeague";
-import { SPALEAGUE } from "../../circuits/spa/spaLeague";
-import { NURBURGRINGLEAGUE } from "../../circuits/nurburgring/nurburgringLeague";
-import { MONZALEAGUE } from "../../circuits/monza/monzaLeague";
-import { CANADALEAGUE } from "../../circuits/canada/canadaLeague";
-import { AUSTINLEAGUE } from "../../circuits/austin/austinLeague";
-import { SHANGHAILEAGUE } from "../../circuits/shanghai/shanghaiLeague";
-import { ARGENTINALEAGUE } from "../../circuits/argentina/argentinaLeague";
-
 import { SUZUKAPUBLIC } from "../../circuits/suzuka/suzukaPublic";
 import { MELBOURNEPUBLIC } from "../../circuits/melbourne/melbournePublic";
 import { BAKUPUBLIC } from "../../circuits/baku/bakuPublic";

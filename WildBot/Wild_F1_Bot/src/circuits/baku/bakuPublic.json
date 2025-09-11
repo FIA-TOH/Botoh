@@ -1480,45 +1480,6 @@
       "color": "00AF66"
     },
     {
-      "x": -5640,
-      "y": 129,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"],
-      "color": "888888"
-    },
-    {
-      "x": -5558,
-      "y": 84,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"],
-      "color": "888888"
-    },
-    {
-      "x": -4752,
-      "y": 1224,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"],
-      "color": "888888",
-      "curve": 0
-    },
-    {
-      "x": 942,
-      "y": 195,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "x": 1276,
-      "y": 197,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
       "x": -5479,
       "y": -219,
       "bCoef": 0,
@@ -1535,13 +1496,6 @@
       "color": "ffffff"
     },
     { "x": -2845, "y": -1121 },
-    {
-      "x": -4744,
-      "y": 1115,
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
 
     {
       "x": 1034,
@@ -3567,15 +3521,6 @@
       "bCoef": 0
     },
     {
-      "v0": 196,
-      "v1": 197,
-      "curve": -27.621986344243865,
-      "color": "777777",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
       "v0": 30,
       "v1": 32,
       "color": "ffffff",
@@ -3584,39 +3529,51 @@
       "cGroup": ["redKO", "blueKO"]
     },
     {
-      "v0": 198,
-      "v1": 199,
+      "v0": 193,
+      "v1": 194,
       "color": "ffffff",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
       "cGroup": ["redKO", "blueKO"]
     },
-    { "v0": 127, "v1": 200, "curve": -72.46205075517716, "color": "777777" },
-    { "v0": 200, "v1": 62, "curve": 99.39736103459865, "color": "777777" },
+    { "v0": 127, "v1": 195, "curve": -72.46205075517716, "color": "777777" },
+    { "v0": 195, "v1": 62, "curve": 99.39736103459865, "color": "777777" },
+
+    {
+      "v0": 197,
+      "v1": 196,
+      "curve": 326.9712186156326,
+      "color": "E4002B",
+      "bCoef": 0,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
+    {
+      "v0": 199,
+      "v1": 198,
+      "curve": 326.9712186156326,
+      "color": "ffffff",
+      "bCoef": 0,
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
+    },
     {
       "v0": 201,
-      "v1": 195,
-      "curve": 0,
-      "color": "777777",
+      "v1": 200,
+      "curve": 326.9712186156326,
+      "color": "ffffff",
       "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
+      "cMask": ["red", "blue"],
+      "cGroup": ["redKO", "blueKO"],
+      "trait": "kickOffBarrier"
     },
-    {
-      "v0": 194,
-      "v1": 193,
-      "curve": 0,
-      "color": "777777",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "ball", "c0"],
-      "cGroup": ["wall"]
-    },
-
     {
       "v0": 203,
       "v1": 202,
       "curve": 326.9712186156326,
-      "color": "E4002B",
+      "color": "ffffff",
       "bCoef": 0,
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
@@ -3781,36 +3738,6 @@
       "cMask": ["red", "blue"],
       "cGroup": ["redKO", "blueKO"],
       "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 237,
-      "v1": 236,
-      "curve": 326.9712186156326,
-      "color": "ffffff",
-      "bCoef": 0,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 239,
-      "v1": 238,
-      "curve": 326.9712186156326,
-      "color": "ffffff",
-      "bCoef": 0,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
-    },
-    {
-      "v0": 241,
-      "v1": 240,
-      "curve": 326.9712186156326,
-      "color": "ffffff",
-      "bCoef": 0,
-      "cMask": ["red", "blue"],
-      "cGroup": ["redKO", "blueKO"],
-      "trait": "kickOffBarrier"
     }
   ],
 
@@ -3851,38 +3778,8 @@
     },
     {
       "radius": 5,
-      "invMass": 2,
-      "pos": [936, 290],
-      "color": "0092BC",
-      "bCoef": 0.5,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"],
-      "damping": 0.5
-    },
-    {
-      "radius": 5,
-      "invMass": 5,
-      "pos": [936, 311],
-      "color": "E4002B",
-      "bCoef": 0.5,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"],
-      "damping": 0.5
-    },
-    {
-      "radius": 5,
-      "invMass": 5,
-      "pos": [935, 334],
-      "color": "00AF66",
-      "bCoef": 0.5,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"],
-      "damping": 0.5
-    },
-    {
-      "radius": 5,
       "invMass": 0,
-      "pos": [2778, -176],
+      "pos": [2779, -206],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -3891,7 +3788,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [2778, -223],
+      "pos": [2780, -266],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -3900,7 +3797,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [2779, -271],
+      "pos": [2779, -327],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -3909,7 +3806,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [2779, -309],
+      "pos": [2780, -386],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -3918,7 +3815,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [2780, -383],
+      "pos": [2779, -450],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -3927,7 +3824,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [2778, -440],
+      "pos": [2778, -516],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -3936,7 +3833,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [2780, -495],
+      "pos": [2778, -597],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -3945,25 +3842,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [2779, -560],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [2778, -637],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [2778, -704],
+      "pos": [2776, -689],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4008,7 +3887,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [2779, -344],
+      "pos": [2263, -1559],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4017,7 +3896,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [2338, -1562],
+      "pos": [2125, -1559],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4026,7 +3905,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [2301, -1560],
+      "pos": [1989, -1561],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4035,7 +3914,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [2255, -1559],
+      "pos": [1826, -1559],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4044,61 +3923,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [2199, -1561],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [2140, -1558],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [2074, -1560],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [2006, -1561],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [1926, -1560],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [1828, -1561],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [1653, -1561],
+      "pos": [1647, -1559],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4116,7 +3941,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [1180, -1552],
+      "pos": [1179, -1550],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4125,16 +3950,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [891, -1547],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [664, -1545],
+      "pos": [886, -1545],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4152,7 +3968,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [155, -1234],
+      "pos": [156, -1204],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4161,7 +3977,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [158, -1188],
+      "pos": [159, -1122],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4170,7 +3986,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [157, -1144],
+      "pos": [163, -1045],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4179,7 +3995,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [159, -1106],
+      "pos": [166, -958],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4188,34 +4004,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [161, -1056],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [165, -996],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [165, -929],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [166, -858],
+      "pos": [170, -858],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4233,7 +4022,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-23, -489],
+      "pos": [-85, -490],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4242,7 +4031,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-86, -489],
+      "pos": [-211, -487],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4251,7 +4040,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-163, -489],
+      "pos": [-326, -485],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4260,7 +4049,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-245, -486],
+      "pos": [-436, -484],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4269,7 +4058,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-305, -486],
+      "pos": [-540, -480],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4278,61 +4067,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-377, -485],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-460, -482],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-522, -482],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-599, -480],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-677, -478],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-751, -475],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-821, -475],
+      "pos": [-647, -479],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4350,7 +4085,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-1477, -376],
+      "pos": [-1469, -310],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4359,25 +4094,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-1473, -340],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-1469, -299],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-1466, -265],
+      "pos": [-1465, -256],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4393,99 +4110,45 @@
       "cGroup": ["wall"]
     },
     {
-      "radius": 5,
+      "radius": 10,
       "invMass": 0,
-      "pos": [-1462, -236],
+      "pos": [-2097, 120],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
       "cGroup": ["wall"]
     },
     {
-      "radius": 5,
+      "radius": 10,
       "invMass": 0,
-      "pos": [-2157, 125],
+      "pos": [-1965, 104],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
       "cGroup": ["wall"]
     },
     {
-      "radius": 5,
+      "radius": 10,
       "invMass": 0,
-      "pos": [-2098, 117],
+      "pos": [-1836, 88],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
       "cGroup": ["wall"]
     },
     {
-      "radius": 5,
+      "radius": 10,
       "invMass": 0,
-      "pos": [-2035, 109],
+      "pos": [-1705, 71],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
       "cGroup": ["wall"]
     },
     {
-      "radius": 5,
+      "radius": 10,
       "invMass": 0,
-      "pos": [-1959, 100],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-1888, 92],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-1796, 81],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-1714, 70],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-1625, 59],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-1539, 48],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-1459, 39],
+      "pos": [-1566, 54],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4503,7 +4166,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-2895, -124],
+      "pos": [-2891, -164],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4512,7 +4175,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-2891, -183],
+      "pos": [-2888, -241],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4521,7 +4184,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-2887, -226],
+      "pos": [-2882, -318],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4530,7 +4193,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-2884, -285],
+      "pos": [-2875, -408],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4539,7 +4202,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-2879, -363],
+      "pos": [-2870, -518],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4548,7 +4211,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-2873, -454],
+      "pos": [-3311, -1372],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4557,7 +4220,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-2868, -536],
+      "pos": [-3298, -1409],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4566,7 +4229,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-2863, -618],
+      "pos": [-3285, -1451],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4575,88 +4238,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-2855, -716],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-2849, -801],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-3041, 198],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-3311, -1241],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-3330, -1299],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-3319, -1338],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-3307, -1380],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-3292, -1436],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-3609, -1652],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-3745, -1652],
+      "pos": [-3683, -1651],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4683,7 +4265,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-4442, -1602],
+      "pos": [-4481, -1595],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4692,7 +4274,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-4616, -1575],
+      "pos": [-3490, -1664],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4701,34 +4283,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-3507, -1663],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-3457, -1670],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-3412, -1673],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-3356, -1676],
+      "pos": [-3407, -1673],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4746,7 +4301,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-5041, -1493],
+      "pos": [-5040, -1489],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4755,7 +4310,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-4881, -1531],
+      "pos": [-4798, -1541],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4764,7 +4319,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-5085, -1435],
+      "pos": [-5135, -1363],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4773,43 +4328,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-5003, -1345],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-5138, -1363],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-5064, -1255],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-5215, -1252],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-5147, -1134],
+      "pos": [-5214, -1251],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4863,15 +4382,6 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-5386, -684],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
       "pos": [-5535, -581],
       "color": "E4002B",
       "bCoef": 0,
@@ -4881,25 +4391,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-5427, -476],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-5577, -357],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-5480, -219],
+      "pos": [-5576, -353],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4917,7 +4409,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-5801, 88],
+      "pos": [-5804, 118],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4926,7 +4418,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-5802, 168],
+      "pos": [-5721, 319],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4935,7 +4427,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-5760, 271],
+      "pos": [-5658, 401],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4944,7 +4436,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-5736, 300],
+      "pos": [-5590, 485],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4953,7 +4445,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-5783, 239],
+      "pos": [-5515, 581],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4962,7 +4454,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-5710, 334],
+      "pos": [-5431, 691],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4971,7 +4463,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-5681, 373],
+      "pos": [-5335, 811],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -4980,52 +4472,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-5633, 430],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-5564, 519],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-5481, 626],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-5410, 718],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-5295, 864],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-5170, 1025],
+      "pos": [-5233, 945],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -5061,43 +4508,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-4354, 1573],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-4235, 1245],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-4518, 1099],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
       "pos": [-4414, 1009],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-4181, 1048],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -5124,15 +4535,6 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-4046, 930],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
       "pos": [-4039, 698],
       "color": "E4002B",
       "bCoef": 0,
@@ -5151,25 +4553,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-3753, 816],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
       "pos": [-3677, 647],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-3565, 792],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -5214,15 +4598,6 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-3128, 578],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
       "pos": [-3010, 732],
       "color": "E4002B",
       "bCoef": 0,
@@ -5241,43 +4616,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-2744, 610],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-2837, 417],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-2650, 435],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-2706, 241],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-2615, 188],
+      "pos": [-2644, 202],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -5295,7 +4634,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-2434, 295],
+      "pos": [-1936, 235],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -5304,34 +4643,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-2156, 260],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-1834, 225],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-1550, 191],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-3285, -1676],
+      "pos": [-3319, -1676],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -5349,7 +4661,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-920, -605],
+      "pos": [-924, -603],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -5358,7 +4670,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-788, -616],
+      "pos": [-789, -613],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -5367,25 +4679,7 @@
     {
       "radius": 5,
       "invMass": 0,
-      "pos": [-628, -622],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-426, -630],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-200, -640],
+      "pos": [-633, -621],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -5395,15 +4689,6 @@
       "radius": 5,
       "invMass": 0,
       "pos": [-1058, -581],
-      "color": "E4002B",
-      "bCoef": 0,
-      "cMask": ["red", "blue", "c0"],
-      "cGroup": ["wall"]
-    },
-    {
-      "radius": 5,
-      "invMass": 0,
-      "pos": [-1265, -551],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],
@@ -5422,6 +4707,33 @@
       "radius": 5,
       "invMass": 0,
       "pos": [2368, -1560],
+      "color": "E4002B",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["wall"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-2290, 145],
+      "color": "E4002B",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["wall"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-2485, 168],
+      "color": "E4002B",
+      "bCoef": 0,
+      "cMask": ["red", "blue", "c0"],
+      "cGroup": ["wall"]
+    },
+    {
+      "radius": 5,
+      "invMass": 0,
+      "pos": [-5134, 1068],
       "color": "E4002B",
       "bCoef": 0,
       "cMask": ["red", "blue", "c0"],

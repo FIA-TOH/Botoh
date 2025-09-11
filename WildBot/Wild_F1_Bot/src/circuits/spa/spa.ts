@@ -208,6 +208,12 @@ const SPA_INFO: CircuitInfo = {
       index: 18,
       penalty: 5,
     },
+    {
+      v0: [2334, 926],
+      v1: [2113, 1010],
+      index: 183,
+      penalty: 5,
+    },
   ],
 };
 

@@ -11,6 +11,8 @@ Qualy as vezes sem ghost
 
 # To-do rapidos
 
+Tentar fazer banking como o rodri falou
+Automaticamente se o cara saiu e voltar depois de X tempo, ele consegue voltar para a corrida saindo dos boxes em ultimo
 Mapas
 
 # To-Do longos
