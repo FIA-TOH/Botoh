@@ -35,6 +35,7 @@ const trackNameMapping: { [key: string]: string } = {
   hungaroingNano: "hungaroring By Nanoseb",
   indianapolis: "Indianapolis Motor Speedway - By Ximb",
   miami: "Miami by Rodri",
+  las_vegas: "Las Vegas Strip Circuit - By Ximb",
 };
 
 export const bestTimes: { [key: string]: [number, string, string] } = {
@@ -53,11 +54,11 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   monza: [45.933, "Alberto Ulasscari", trackNameMapping["monza"]],
   canada: [37.716, "Alberto Ulasscari", trackNameMapping["canada"]],
   austin: [49.783, "Franco ColaSplinter", trackNameMapping["austin"]],
-  shanghai: [999.999, "Jean Dany Vergne", trackNameMapping["shanghai"]],
+  shanghai: [44.101, "Franco ColaSplinter", trackNameMapping["shanghai"]],
   suzuka: [39.35, "Franco ColaSplinter", trackNameMapping["suzuka"]],
-  interlagos: [999.999, "Lando Canorris", trackNameMapping["interlagos"]],
+  interlagos: [36.3, "Franco ColaSplinter", trackNameMapping["interlagos"]],
   baku: [46.749, "Alberto Ulasscari", trackNameMapping["baku"]],
-  argentina: [999.999, "undefined", trackNameMapping["argentina"]],
+  argentina: [43.025, "Franco ColaSplinter", trackNameMapping["argentina"]],
   marinaBay: [48.717, "Ximbastian Vettel", trackNameMapping["marinaBay"]],
   jeddah: [43.433, "HiroShiryu Fushida", trackNameMapping["jeddah"]],
   yasMarina: [39.733, "HiroShiryu Fushida", trackNameMapping["yasMarina"]],
@@ -71,11 +72,12 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   mexico: [38.383, "Samuel Bortoleto", trackNameMapping["mexico"]],
   austria: [30.916, "Jean Dany Vegne", trackNameMapping["austria"]],
   laguna_seca: [34.816, "Jean Dany Vergne", trackNameMapping["laguna_seca"]],
-  balaton: [999.999, "undefined", trackNameMapping["balaton"]],
+  balaton: [44.639, "Ximbastian Vettel", trackNameMapping["balaton"]],
   nurburgringNano: [999.999, "undefined", trackNameMapping["nurburgringNano"]],
   hungaroingNano: [999.999, "undefined", trackNameMapping["hungaroingNano"]],
   indianapolis: [30.5, "Gabriel Schumacchio", trackNameMapping["indianapolis"]],
-  miami: [999.999, "undefined", trackNameMapping["miami"]],
+  miami: [43.05, "Ximbastian Vettel", trackNameMapping["miami"]],
+  las_vegas: [43.797, "Ximbastian Vettel", "Las Vegas Strip Circuit - By Ximb"],
 };
 export const getAbbreviatedTrackName = (
   fullTrackName: string
