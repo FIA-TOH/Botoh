@@ -12,6 +12,33 @@ const MONACO_INFO: CircuitInfo = {
         },
         passingDirection: Direction.LEFT
     },
+    sectorOne:{
+        bounds: {
+                minX: 70,
+                maxX: 100,
+                minY: -110,
+                maxY: 157
+            },
+            passingDirection: Direction.LEFT
+    },
+    sectorTwo:{
+        bounds: {
+            minX: -2230,
+            maxX: -2120,
+            minY: -3100,
+            maxY: -3070
+        },
+        passingDirection: Direction.UP
+    },
+    sectorThree:{
+        bounds: {
+            minX: 170,
+            maxX: 201,
+            minY: -380,
+            maxY: -277
+        },
+        passingDirection: Direction.RIGHT
+    },
     name: "Circuit de Monaco - By Ximb",
     boxLine: {
         minX: 103,
@@ -54,6 +81,7 @@ const MONACO_INFO: CircuitInfo = {
     Angle: 60,
     Limit: 5,
     Votes: 0,
+    pitSpeed: 0.955
 }
 
 export const MONACO: Circuit = {

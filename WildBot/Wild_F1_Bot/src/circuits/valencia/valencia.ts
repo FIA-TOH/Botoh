@@ -13,24 +13,51 @@ const VALENCIA_INFO: CircuitInfo = {
         },
         passingDirection: Direction.UP
     },
+    sectorOne:{
+        bounds: {
+                minX: -215,
+                maxX: 210,
+                minY: 68,
+                maxY: 100
+            },
+            passingDirection: Direction.UP
+    },
+    sectorTwo:{
+        bounds: {
+            minX: 3580,
+            maxX: 3610,
+            minY: -359,
+            maxY: -208
+        },
+        passingDirection: Direction.RIGHT
+    },
+    sectorThree:{
+        bounds: {
+            minX: -543,
+            maxX: -513,
+            minY: 1100,
+            maxY: 1280
+        },
+        passingDirection: Direction.LEFT
+    },
     name: "Valencia Street Circuit - By Ximb",
     boxLine: {
-        minX: 85,
-        maxX: 200,
-        minY: 130,
-        maxY: 714
+        minX: 87,
+        maxX: 162,
+        minY: 104,
+        maxY: 688
     },
     pitlaneStart: {
-        minX: 18,
-        maxX: 200,
-        minY: 730,
-        maxY: 760
+        minX: -6,
+        maxX: 163,
+        minY: 720,
+        maxY: 750
     },
     pitlaneEnd: {
-        minX: 10,
-        maxX: 125,
-        minY: -436,
-        maxY: -406
+        minX: 6,
+        maxX: 146,
+        minY: -331,
+        maxY: -300
     },
     drsStart: [
         {
@@ -72,6 +99,7 @@ const VALENCIA_INFO: CircuitInfo = {
     Angle: 90,
     Limit: 5,
     Votes: 0,
+    pitSpeed: 0.92
 }
 
 export const VALENCIA: Circuit = {

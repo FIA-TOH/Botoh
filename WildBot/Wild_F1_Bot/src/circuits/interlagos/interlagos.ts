@@ -1,63 +1,97 @@
 import { bestTimes } from "../bestTimes";
-import {Circuit, CircuitInfo, Direction} from "../Circuit";
+import { Circuit, CircuitInfo, Direction } from "../Circuit";
 import interlagos_json from "./interlagos.json";
 
 const INTERLAGOS_INFO: CircuitInfo = {
-    finishLine: {
-        bounds: {
-            minX: -100,
-            maxX: -75,
-            minY: -100,
-            maxY: 224
-        },
-        passingDirection: Direction.RIGHT
+  finishLine: {
+    bounds: {
+      minX: 773,
+      maxX: 805,
+      minY: 1017,
+      maxY: 1336,
     },
-    name: "Autodromo Interlagos - By Ximb",
-    boxLine: {
-        minX: -1100,
-        maxX: -100,
-        minY: -100,
-        maxY: -24
+    passingDirection: Direction.RIGHT,
+  },
+  sectorOne: {
+    bounds: {
+      minX: 773,
+      maxX: 805,
+      minY: 1017,
+      maxY: 1336,
     },
-    pitlaneStart: {
-        minX: -1601,
-        maxX: -1571,
-        minY: -71,
-        maxY: 36
+    passingDirection: Direction.RIGHT,
+  },
+  sectorTwo: {
+    bounds: {
+      minX: 109,
+      maxX: 141,
+      minY: -1332,
+      maxY: -833,
     },
-    pitlaneEnd: {
-        minX: 438,
-        maxX: 468,
-        minY: -61,
-        maxY: 33
+    passingDirection: Direction.LEFT,
+  },
+  sectorThree: {
+    bounds: {
+      minX: -1680,
+      maxX: -1167,
+      minY: -379,
+      maxY: -347,
     },
-    drsStart: [{
-        minX: 0,
-        maxX: 0,
-        minY: 0,
-        maxY: 0,
-    }],
-    drsEnd: [{
-        minX: 0,
-        maxX: 0,
-        minY: 0,
-        maxY: 0,
-    }],
-    checkpoints: [],
-    lastPlace: {
-        x: interlagos_json.redSpawnPoints[interlagos_json.redSpawnPoints.length - 1][0],
-        y: interlagos_json.redSpawnPoints[interlagos_json.redSpawnPoints.length - 1][1],
+    passingDirection: Direction.UP,
+  },
+  name: "Autodromo Interlagos - By Ximb",
+  boxLine: {
+    minX: -227,
+    maxX: 773,
+    minY: 1017,
+    maxY: 1093,
+  },
+  pitlaneStart: {
+    minX: -724,
+    maxX: -692,
+    minY: 1051,
+    maxY: 1157,
+  },
+  pitlaneEnd: {
+    minX: 1248,
+    maxX: 1421,
+    minY: 923,
+    maxY: 955,
+  },
+  drsStart: [
+    {
+      minX: 0,
+      maxX: 0,
+      minY: 0,
+      maxY: 0,
     },
-    BestTime: bestTimes.interlagos,
-    MainColor: [0x10a100, 0xffff00, 0x10a100],
-    AvatarColor: 0x00008C,
-    Angle: 90,
-    Limit: 5,
-    Votes: 0,
-}
+  ],
+  drsEnd: [
+    {
+      minX: 0,
+      maxX: 0,
+      minY: 0,
+      maxY: 0,
+    },
+  ],
+  checkpoints: [],
+  lastPlace: {
+    x: interlagos_json.redSpawnPoints[
+      interlagos_json.redSpawnPoints.length - 1
+    ][0],
+    y: interlagos_json.redSpawnPoints[
+      interlagos_json.redSpawnPoints.length - 1
+    ][1],
+  },
+  BestTime: bestTimes.interlagos,
+  MainColor: [0x10a100, 0xffff00, 0x10a100],
+  AvatarColor: 0x00008c,
+  Angle: 90,
+  Limit: 5,
+  Votes: 0,
+};
 
 export const INTERLAGOS: Circuit = {
-    map: JSON.stringify(interlagos_json),
-    info: INTERLAGOS_INFO
-
-}
+  map: JSON.stringify(interlagos_json),
+  info: INTERLAGOS_INFO,
+};

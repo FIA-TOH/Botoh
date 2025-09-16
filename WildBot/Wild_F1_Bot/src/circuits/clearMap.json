@@ -1,0 +1,53 @@
+{
+  "name": "Clear Map",
+
+  "width": 3300,
+
+  "height": 3300,
+
+  "spawnDistance": 710,
+
+  "bg": {
+    "type": "hockey",
+    "height": 0,
+    "width": 0,
+    "cornerRadius": 0,
+    "kickOffRadius": 0
+  },
+
+  "vertexes": [],
+
+  "segments": [],
+
+  "goals": [],
+
+  "discs": [],
+
+  "planes": [],
+
+  "playerPhysics": {
+    "bCoef": 0.5,
+    "invMass": 0.5,
+    "damping": 0.985,
+    "acceleration": 0.144,
+    "kickingAcceleration": 0.148,
+    "kickingDamping": 0.986,
+    "kickStrength": 0,
+    "radius": 14.25,
+    "cGroup": ["red", "blue"],
+    "gravity": [0, 0],
+    "kickback": 0
+  },
+
+  "traits": {},
+
+  "cameraFollow": "player",
+
+  "canBeStored": false,
+
+  "joints": [],
+
+  "redSpawnPoints": [],
+
+  "blueSpawnPoints": []
+}

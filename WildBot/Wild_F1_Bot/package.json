@@ -4,14 +4,15 @@
   "description": "## Haxball bot for simulating f1 races.\n",
   "scripts": {
     "build:league": "webpack --env LEAGUE_MODE=true",
-    "build:non-league": "webpack --env LEAGUE_MODE=false",
-    "build:all": "npm run build:league && npm run build:non-league"
+    "build:pub": "webpack --env LEAGUE_MODE=false",
+    "build:all": "npm run build:league && npm run build:pub"
   },
   "author": "RicardoPinto26",
   "license": "",
   "dependencies": {
     "@types/haxball-headless-browser": "^0.2.5",
     "@types/node": "^22.1.0",
+    "ajv-keywords": "^5.1.0",
     "browserify": "^17.0.0",
     "envify": "^4.1.0",
     "js-sha256": "^0.11.0"
