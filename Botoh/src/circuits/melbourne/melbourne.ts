@@ -1,6 +1,11 @@
 import { bestTimes } from "../bestTimes";
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
-import melbourne_json from "./melbourne.json";
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
+const melbourne_raw = readFileSync(join(__dirname, "melbourne.hbs"), "utf-8");
+const melbourne_json = JSON.parse(melbourne_raw);
 
 const MELBOURNE_INFO: CircuitInfo = {
   finishLine: {
@@ -130,6 +135,6 @@ const MELBOURNE_INFO: CircuitInfo = {
 };
 
 export const MELBOURNE: Circuit = {
-  map: JSON.stringify(melbourne_json),
+  map: melbourne_raw,
   info: MELBOURNE_INFO,
 };

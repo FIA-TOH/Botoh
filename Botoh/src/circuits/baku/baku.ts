@@ -1,6 +1,11 @@
 import { bestTimes } from "../bestTimes";
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
-import baku_json from "./baku.json";
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
+const baku_raw = readFileSync(join(__dirname, "baku.hbs"), "utf-8");
+const baku_json = JSON.parse(baku_raw);
 
 const BAKU_INFO: CircuitInfo = {
   finishLine: {
@@ -103,6 +108,6 @@ const BAKU_INFO: CircuitInfo = {
 };
 
 export const BAKU: Circuit = {
-  map: JSON.stringify(baku_json),
+  map: baku_raw,
   info: BAKU_INFO,
 };

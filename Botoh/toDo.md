@@ -15,6 +15,7 @@ TODOS mapas para hbs
 
 COmando leaguye e public pra index.ts
 Ver se é possivel transformar em um dist copiavel e colavel para jeadless host
+Ver se é possivel pegar novo code toda vez q dar comando
 
 Tempo mais exato
 Tentar fazer banking como o rodri falou

@@ -1,6 +1,14 @@
 import { bestTimes } from "../bestTimes";
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
-import nurburgringPublic_json from "./nurburgringPublic.json";
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
+const nurburgringPublic_raw = readFileSync(
+  join(__dirname, "nurburgringPublic.hbs"),
+  "utf-8"
+);
+const nurburgringPublic_json = JSON.parse(nurburgringPublic_raw);
 
 const NURBURGRINGPUBLIC_INFO: CircuitInfo = {
   finishLine: {
@@ -215,6 +223,6 @@ const NURBURGRINGPUBLIC_INFO: CircuitInfo = {
 };
 
 export const NURBURGRINGPUBLIC: Circuit = {
-  map: JSON.stringify(nurburgringPublic_json),
+  map: nurburgringPublic_raw,
   info: NURBURGRINGPUBLIC_INFO,
 };

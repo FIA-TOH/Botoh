@@ -1,6 +1,11 @@
 import { bestTimes } from "../bestTimes";
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
-import spa_json from "./spa.json";
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
+const spa_raw = readFileSync(join(__dirname, "spa.hbs"), "utf-8");
+const spa_json = JSON.parse(spa_raw);
 
 const SPA_INFO: CircuitInfo = {
   finishLine: {
@@ -218,6 +223,6 @@ const SPA_INFO: CircuitInfo = {
 };
 
 export const SPA: Circuit = {
-  map: JSON.stringify(spa_json),
+  map: spa_raw,
   info: SPA_INFO,
 };

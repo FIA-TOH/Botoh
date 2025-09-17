@@ -1,6 +1,11 @@
 import { bestTimes } from "../bestTimes";
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
-import imola_json from "./imola.json";
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
+const imola_raw = readFileSync(join(__dirname, "imola.hbs"), "utf-8");
+const imola_json = JSON.parse(imola_raw);
 
 const IMOLA_INFO: CircuitInfo = {
   finishLine: {
@@ -192,6 +197,6 @@ const IMOLA_INFO: CircuitInfo = {
 };
 
 export const IMOLA: Circuit = {
-  map: JSON.stringify(imola_json),
+  map: imola_raw,
   info: IMOLA_INFO,
 };

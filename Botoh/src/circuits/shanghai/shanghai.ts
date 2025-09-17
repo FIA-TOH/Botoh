@@ -1,6 +1,11 @@
 import { bestTimes } from "../bestTimes";
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
-import shanghai_json from "./shanghai.json";
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
+const shanghai_raw = readFileSync(join(__dirname, "shanghai.hbs"), "utf-8");
+const shanghai_json = JSON.parse(shanghai_raw);
 
 const SHANGHAI_INFO: CircuitInfo = {
   finishLine: {
@@ -277,6 +282,6 @@ const SHANGHAI_INFO: CircuitInfo = {
 };
 
 export const SHANGHAI: Circuit = {
-  map: JSON.stringify(shanghai_json),
+  map: shanghai_raw,
   info: SHANGHAI_INFO,
 };
