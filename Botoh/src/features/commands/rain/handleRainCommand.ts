@@ -1,6 +1,6 @@
 import { sendErrorMessage, sendChatMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
-import { setRainChances } from "../../rain/rain";
+// import { setRainChances } from "../../rain/rain";
 
 export function handleRainCommand(
   byPlayer: PlayerObject,
@@ -24,7 +24,7 @@ export function handleRainCommand(
       return;
     }
 
-    setRainChances(newRain);
+    // setRainChances(newRain);
     sendChatMessage(room, MESSAGES.RAIN_CHANCES(newRain));
   }
 }

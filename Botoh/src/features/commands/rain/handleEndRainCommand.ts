@@ -1,6 +1,6 @@
 import { sendErrorMessage, sendChatMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
-import { resetAllRainEvents } from "../../rain/rain";
+// import { resetAllRainEvents } from "../../rain/rain";
 
 export function handleEndRainCommand(
   byPlayer: PlayerObject,
@@ -17,6 +17,6 @@ export function handleEndRainCommand(
     return false;
   } else {
     sendChatMessage(room, MESSAGES.RAIN_STOPPED());
-    resetAllRainEvents();
+    // resetAllRainEvents();
   }
 }

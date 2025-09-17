@@ -1,7 +1,7 @@
 import { handleGameStateChange } from "../changeGameState/gameState";
 import { laps } from "../zones/laps";
 import { resetPlayer } from "../changePlayerState/players";
-import { resetAllRainEvents } from "../rain/rain";
+// import { resetAllRainEvents } from "../rain/rain";
 import { positionList } from "../changeGameState/race/positionList";
 import { finishList, lapPositions } from "../zones/laps/handleLapChange";
 import { log } from "../discord/logger";
@@ -27,7 +27,7 @@ export function GameStart(room: RoomObject) {
     resetBestLap();
     resetBestPit();
 
-    resetAllRainEvents();
+    // resetAllRainEvents();
     setCameraAuto();
     room.getPlayerList().forEach((p) => {
       resetPlayer(p, room, p.id, true);

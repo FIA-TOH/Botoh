@@ -1,32 +1,43 @@
-const path = require('path');
-const webpack = require('webpack');
+const path = require("path");
+const webpack = require("webpack");
+const nodeExternals = require("webpack-node-externals");
 
+const CopyPlugin = require("copy-webpack-plugin");
 module.exports = (env) => {
-    const isLeagueMode = env.LEAGUE_MODE === 'true';
+  const isLeagueMode = env.LEAGUE_MODE === "true";
 
-    return {
-        mode: 'production',
-        entry: './src/room.ts', // Change to .ts if using TypeScript
-        output: {
-            path: path.resolve(__dirname, 'dist'),
-            filename: isLeagueMode ? 'league.js' : 'pub.js',
+  return {
+    mode: "production",
+    target: "node",
+    entry: "./src/room.ts",
+    output: {
+      path: path.resolve(__dirname, "dist"),
+      filename: isLeagueMode ? "league.js" : "pub.js",
+    },
+    resolve: {
+      extensions: [".ts", ".js", ".json"],
+    },
+    module: {
+      rules: [
+        {
+          test: /\.ts$/,
+          exclude: /node_modules/,
+          use: "ts-loader",
         },
-        resolve: {
-            extensions: ['.ts', '.js', '.json'], // Resolve both .ts and .js extensions
+        {
+          test: /\.hbs$/i,
+          use: "raw-loader",
         },
-        plugins: [
-            new webpack.DefinePlugin({
-                'process.env.LEAGUE_MODE': JSON.stringify(env.LEAGUE_MODE),
-            }),
-        ],
-        module: {
-            rules: [
-                {
-                    test: /\.ts$/, // Use ts-loader for .ts files
-                    exclude: /node_modules/,
-                    use: 'ts-loader',
-                },
-            ],
-        },
-    };
+      ],
+    },
+    plugins: [
+      new webpack.DefinePlugin({
+        "process.env.LEAGUE_MODE": JSON.stringify(env.LEAGUE_MODE),
+      }),
+      new CopyPlugin({
+        patterns: [{ from: "src/circuits/**/*.hbs", to: "[name][ext]" }],
+      }),
+    ],
+    externals: [nodeExternals()],
+  };
 };

@@ -1,13 +1,15 @@
 import { vsc } from "../handleSpeed";
 
 import { playerList } from "../../changePlayerState/playerList";
-import { isRaining } from "../../rain/rain";
+// import { isRaining } from "../../rain/rain";
 import { Tires } from "../../tires&pits/tires";
 import { constants } from "../constants";
 import { calculateGripForDryConditions } from "./dryCondition";
 import { calculateGripForWetConditions } from "./wetCondition";
 import { slipstreamEnabled, gasEnabled } from "../handleSlipstream";
 import { tyresActivated } from "../../commands/tyres/handleEnableTyresCommand";
+
+const isRaining = false;
 
 export function calculateGripMultiplierForConditions(
   player: PlayerObject,

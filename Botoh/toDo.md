@@ -9,7 +9,12 @@ Qualy as vezes sem ghost
 
 # To do dos Mapas
 
+TODOS mapas para hbs
+
 # To-do rapidos
+
+COmando leaguye e public pra index.ts
+Ver se é possivel transformar em um dist copiavel e colavel para jeadless host
 
 Tempo mais exato
 Tentar fazer banking como o rodri falou
@@ -26,3 +31,15 @@ Auto yellow flag system
 New tyres
 P&D
 API para fazer gráfico de posicão
+
+# Comandos
+
+npx ts-node index.ts
+
+npm run build:league
+npm run start:league
+
+npm run build:pub
+npm run start:pub
+
+node generateCutSegments.js

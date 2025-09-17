@@ -1,6 +1,6 @@
 import { sendErrorMessage, sendChatMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
-import { setRainItensity } from "../../rain/rain";
+// import { setRainItensity } from "../../rain/rain";
 
 export function handleRainItensity(
   byPlayer: PlayerObject,
@@ -20,6 +20,6 @@ export function handleRainItensity(
     sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id);
   } else {
     sendChatMessage(room, MESSAGES.NEW_RAIN_INTENSITY(intensity));
-    setRainItensity(intensity);
+    // setRainItensity(intensity);
   }
 }

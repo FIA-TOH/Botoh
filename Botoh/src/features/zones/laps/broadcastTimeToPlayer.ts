@@ -4,7 +4,7 @@ import { MESSAGES } from "../../chat/messages";
 import { getPlayerAndDiscs } from "../../playerFeatures/getPlayerAndDiscs";
 import { getPlayerByName } from "../../playerFeatures/getPlayerBy";
 
-export function broadcastLapTimeToPlayers(
+export async function broadcastLapTimeToPlayers(
   room: RoomObject,
   lapTime: number,
   playerName: string,
@@ -24,7 +24,7 @@ export function broadcastLapTimeToPlayers(
       pla.p.id
     );
   });
-  const p = getPlayerByName(playerName);
+  const p = await getPlayerByName(playerName);
   if (p && showToPlayer)
     sendSuccessMessage(room, MESSAGES.LAP_TIME(lapTime), p.p.id);
 }

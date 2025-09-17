@@ -4,7 +4,7 @@ import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { MESSAGES } from "../chat/messages";
 import { resetPlayers } from "../changePlayerState/players";
 
-import { rainEnabled, resetAllRainEvents, setRainChances } from "../rain/rain";
+// import { rainEnabled, resetAllRainEvents, setRainChances } from "../rain/rain";
 import {
   changeGameStoppedNaturally,
   gameStopedNaturally,
@@ -77,7 +77,7 @@ export function GameStop(room: RoomObject) {
       sendDiscordFile(qualiResults, fileName, "QUALI_RESULTS");
     }
 
-    resetAllRainEvents();
+    // resetAllRainEvents();
     if (gameMode !== GameMode.WAITING) {
       if (gameStopedNaturally && !LEAGUE_MODE) {
         PublicGameFlow(room);
@@ -109,9 +109,9 @@ export function GameStop(room: RoomObject) {
         }
       }
       clearPlayers();
-      if (rainEnabled) {
-        setRainChances(0);
-      }
+      // if (rainEnabled) {
+      //   setRainChances(0);
+      // }
     }
 
     handleFlagCommand(undefined, ["reset"], room);
