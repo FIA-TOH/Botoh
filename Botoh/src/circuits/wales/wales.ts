@@ -1,5 +1,17 @@
-import wales_json from "./wales.json";
+import { bestTimes } from "../bestTimes";
+
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
+
 import {Circuit, CircuitInfo, Direction} from "../Circuit";
+
+const wales_raw = readFileSync(join(__dirname, "wales.hbs"), "utf-8");
+const wales_json = JSON.parse(wales_raw);
+
+
 
 const WALES_INFO: CircuitInfo = {
     finishLine: {
@@ -66,6 +78,6 @@ const WALES_INFO: CircuitInfo = {
 }
 
 export const WALES: Circuit = {
-    map: JSON.stringify(wales_json),
+    map: wales_raw,
     info: WALES_INFO
 }

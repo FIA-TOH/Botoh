@@ -1,6 +1,16 @@
-import austinPublic_json from "./austinPublic.json";
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
+
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
 import { bestTimes } from "../bestTimes";
+
+const austinPublic_raw = readFileSync(join(__dirname, "austinPublic.hbs"), "utf-8");
+const austinPublic_json = JSON.parse(austinPublic_raw);
+
+
 
 const AUSTINPUBLIC_INFO: CircuitInfo = {
   finishLine: {
@@ -251,6 +261,6 @@ const AUSTINPUBLIC_INFO: CircuitInfo = {
 };
 
 export const AUSTINPUBLIC: Circuit = {
-  map: JSON.stringify(austinPublic_json),
+  map: austinPublic_raw,
   info: AUSTINPUBLIC_INFO,
 };

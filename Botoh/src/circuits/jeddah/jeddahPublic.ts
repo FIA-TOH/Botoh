@@ -1,6 +1,16 @@
-import jeddahPublic_json from "./jeddahPublic.json";
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
+
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
 import { bestTimes } from "../bestTimes";
+
+const jeddahPublic_raw = readFileSync(join(__dirname, "jeddahPublic.hbs"), "utf-8");
+const jeddahPublic_json = JSON.parse(jeddahPublic_raw);
+
+
 
 const JEDDAHPUBLIC_INFO: CircuitInfo = {
   finishLine: {
@@ -59,6 +69,6 @@ const JEDDAHPUBLIC_INFO: CircuitInfo = {
   BestTime: bestTimes.jeddah,
 };
 export const JEDDAHPUBLIC: Circuit = {
-  map: JSON.stringify(jeddahPublic_json),
+  map: jeddahPublic_raw,
   info: JEDDAHPUBLIC_INFO,
 };

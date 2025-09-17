@@ -1,6 +1,16 @@
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
 import { bestTimes } from "../bestTimes";
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
-import sochiPublic_json from "./sochiPublic.json";
+
+const sochiPublic_raw = readFileSync(join(__dirname, "sochiPublic.hbs"), "utf-8");
+const sochiPublic_json = JSON.parse(sochiPublic_raw);
+
+
+
 
 const SOCHIPUBLIC_INFO: CircuitInfo = {
   finishLine: {
@@ -154,6 +164,6 @@ const SOCHIPUBLIC_INFO: CircuitInfo = {
 };
 
 export const SOCHIPUBLIC: Circuit = {
-  map: JSON.stringify(sochiPublic_json),
+  map: sochiPublic_raw,
   info: SOCHIPUBLIC_INFO,
 };

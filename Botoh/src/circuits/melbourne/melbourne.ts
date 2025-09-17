@@ -7,6 +7,10 @@ import { join } from "path";
 const melbourne_raw = readFileSync(join(__dirname, "melbourne.hbs"), "utf-8");
 const melbourne_json = JSON.parse(melbourne_raw);
 
+
+
+
+
 const MELBOURNE_INFO: CircuitInfo = {
   finishLine: {
     bounds: {

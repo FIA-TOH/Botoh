@@ -1,6 +1,16 @@
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
 import { bestTimes } from "../bestTimes";
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
-import waitRoom_json from "./waitRoom.json";
+
+const waitRoom_raw = readFileSync(join(__dirname, "waitRoom.hbs"), "utf-8");
+const waitRoom_json = JSON.parse(waitRoom_raw);
+
+
+
 
 const WAITROOM_INFO: CircuitInfo = {
   finishLine: {
@@ -62,6 +72,6 @@ const WAITROOM_INFO: CircuitInfo = {
 };
 
 export const WAITROOM: Circuit = {
-  map: JSON.stringify(waitRoom_json),
+  map: waitRoom_raw,
   info: WAITROOM_INFO,
 };

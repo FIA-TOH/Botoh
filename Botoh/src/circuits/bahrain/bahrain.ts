@@ -1,6 +1,16 @@
-import bahrain_json from "./bahrain.json";
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
+
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
 import { bestTimes } from "../bestTimes";
+
+const bahrain_raw = readFileSync(join(__dirname, "bahrain.hbs"), "utf-8");
+const bahrain_json = JSON.parse(bahrain_raw);
+
+
 
 const BAHRAIN_INFO: CircuitInfo = {
   finishLine: {
@@ -210,6 +220,6 @@ const BAHRAIN_INFO: CircuitInfo = {
   ],
 };
 export const BAHRAIN: Circuit = {
-  map: JSON.stringify(bahrain_json),
+  map: bahrain_raw,
   info: BAHRAIN_INFO,
 };

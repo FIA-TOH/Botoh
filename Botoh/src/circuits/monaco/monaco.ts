@@ -1,6 +1,16 @@
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
 import { bestTimes } from "../bestTimes";
 import {Circuit, CircuitInfo, Direction} from "../Circuit";
-import monaco_json from "./monaco.json";
+
+const monaco_raw = readFileSync(join(__dirname, "monaco.hbs"), "utf-8");
+const monaco_json = JSON.parse(monaco_raw);
+
+
+
 
 const MONACO_INFO: CircuitInfo = {
     finishLine: {
@@ -85,6 +95,6 @@ const MONACO_INFO: CircuitInfo = {
 }
 
 export const MONACO: Circuit = {
-    map: JSON.stringify(monaco_json),
+    map: monaco_raw,
     info: MONACO_INFO
 }

@@ -1,6 +1,16 @@
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
 import { bestTimes } from "../bestTimes";
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
-import las_vegasPublic_json from "./las_vegasPublic.json";
+
+const las_vegasPublic_raw = readFileSync(join(__dirname, "las_vegasPublic.hbs"), "utf-8");
+const las_vegasPublic_json = JSON.parse(las_vegasPublic_raw);
+
+
+
 
 const LAS_VEGASPUBLIC_INFO: CircuitInfo = {
   finishLine: {
@@ -155,6 +165,6 @@ const LAS_VEGASPUBLIC_INFO: CircuitInfo = {
 };
 
 export const LAS_VEGASPUBLIC: Circuit = {
-  map: JSON.stringify(las_vegasPublic_json),
+  map: las_vegasPublic_raw,
   info: LAS_VEGASPUBLIC_INFO,
 };

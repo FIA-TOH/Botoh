@@ -7,7 +7,8 @@
     "build:pub": "webpack --env LEAGUE_MODE=false",
     "build:all": "npm run build:league && npm run build:pub",
     "start:league": "node dist/league.js",
-    "start:pub": "node dist/pub.js"
+    "start:pub": "node dist/pub.js",
+    "convert:circuits": "ts-node scripts/convertCircuits.ts"
   },
   "author": "Ximb",
   "license": "",

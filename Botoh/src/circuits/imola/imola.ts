@@ -7,6 +7,10 @@ import { join } from "path";
 const imola_raw = readFileSync(join(__dirname, "imola.hbs"), "utf-8");
 const imola_json = JSON.parse(imola_raw);
 
+
+
+
+
 const IMOLA_INFO: CircuitInfo = {
   finishLine: {
     bounds: {

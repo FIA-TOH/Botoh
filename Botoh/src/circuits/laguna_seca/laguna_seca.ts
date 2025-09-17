@@ -1,6 +1,16 @@
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
 import { bestTimes } from "../bestTimes";
 import {Circuit, CircuitInfo, Direction} from "../Circuit";
-import laguna_seca_json from "./laguna_seca.json";
+
+const laguna_seca_raw = readFileSync(join(__dirname, "laguna_seca.hbs"), "utf-8");
+const laguna_seca_json = JSON.parse(laguna_seca_raw);
+
+
+
 
 const LAGUNA_SECA_INFO: CircuitInfo = {
     finishLine: {
@@ -85,6 +95,6 @@ const LAGUNA_SECA_INFO: CircuitInfo = {
 }
 
 export const LAGUNA_SECA: Circuit = {
-    map: JSON.stringify(laguna_seca_json),
+    map: laguna_seca_raw,
     info: LAGUNA_SECA_INFO
 }

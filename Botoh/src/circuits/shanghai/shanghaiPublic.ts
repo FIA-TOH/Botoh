@@ -10,6 +10,10 @@ const shanghaiPublic_raw = readFileSync(
 );
 const shanghaiPublic_json = JSON.parse(shanghaiPublic_raw);
 
+
+
+
+
 const SHANGHAIPUBLIC_INFO: CircuitInfo = {
   finishLine: {
     bounds: {

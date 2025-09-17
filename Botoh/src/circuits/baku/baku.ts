@@ -7,6 +7,10 @@ import { join } from "path";
 const baku_raw = readFileSync(join(__dirname, "baku.hbs"), "utf-8");
 const baku_json = JSON.parse(baku_raw);
 
+
+
+
+
 const BAKU_INFO: CircuitInfo = {
   finishLine: {
     bounds: {

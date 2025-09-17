@@ -7,6 +7,10 @@ import { join } from "path";
 const shanghai_raw = readFileSync(join(__dirname, "shanghai.hbs"), "utf-8");
 const shanghai_json = JSON.parse(shanghai_raw);
 
+
+
+
+
 const SHANGHAI_INFO: CircuitInfo = {
   finishLine: {
     bounds: {

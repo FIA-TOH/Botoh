@@ -9,6 +9,10 @@ const imolaPublic_raw = readFileSync(
 );
 const imolaPublic_json = JSON.parse(imolaPublic_raw);
 
+
+
+
+
 const IMOLAPUBLIC_INFO: CircuitInfo = {
   finishLine: {
     bounds: {

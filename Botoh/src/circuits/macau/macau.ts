@@ -1,5 +1,17 @@
-import macau_json from "./macau.json";
+import { bestTimes } from "../bestTimes";
+
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
+
 import {Circuit, CircuitInfo, Direction} from "../Circuit";
+
+const macau_raw = readFileSync(join(__dirname, "macau.hbs"), "utf-8");
+const macau_json = JSON.parse(macau_raw);
+
+
 
 const MACAU_INFO: CircuitInfo = {
     finishLine: {
@@ -50,7 +62,7 @@ const MACAU_INFO: CircuitInfo = {
 }
 
 export const MACAU: Circuit = {
-    map: JSON.stringify(macau_json),
+    map: macau_raw,
     info: MACAU_INFO
 
 }

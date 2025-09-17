@@ -1,6 +1,16 @@
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
 import { bestTimes } from "../bestTimes";
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
-import interlagosLeague_json from "./interlagosLeague.json";
+
+const interlagosLeague_raw = readFileSync(join(__dirname, "interlagosLeague.hbs"), "utf-8");
+const interlagosLeague_json = JSON.parse(interlagosLeague_raw);
+
+
+
 
 const INTERLAGOSLEAGUE_INFO: CircuitInfo = {
   finishLine: {
@@ -92,6 +102,6 @@ const INTERLAGOSLEAGUE_INFO: CircuitInfo = {
 };
 
 export const INTERLAGOSLEAGUE: Circuit = {
-  map: JSON.stringify(interlagosLeague_json),
+  map: interlagosLeague_raw,
   info: INTERLAGOSLEAGUE_INFO,
 };

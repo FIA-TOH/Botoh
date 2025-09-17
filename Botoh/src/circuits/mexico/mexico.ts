@@ -1,6 +1,16 @@
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
 import { bestTimes } from "../bestTimes";
 import {Circuit, CircuitInfo, Direction} from "../Circuit";
-import mexico_json from "./mexico.json";
+
+const mexico_raw = readFileSync(join(__dirname, "mexico.hbs"), "utf-8");
+const mexico_json = JSON.parse(mexico_raw);
+
+
+
 
 const MEXICO_INFO: CircuitInfo = {
     finishLine: {
@@ -85,6 +95,6 @@ const MEXICO_INFO: CircuitInfo = {
 }
 
 export const MEXICO: Circuit = {
-    map: JSON.stringify(mexico_json),
+    map: mexico_raw,
     info: MEXICO_INFO
 }

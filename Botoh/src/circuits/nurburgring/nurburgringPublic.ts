@@ -10,6 +10,10 @@ const nurburgringPublic_raw = readFileSync(
 );
 const nurburgringPublic_json = JSON.parse(nurburgringPublic_raw);
 
+
+
+
+
 const NURBURGRINGPUBLIC_INFO: CircuitInfo = {
   finishLine: {
     bounds: {

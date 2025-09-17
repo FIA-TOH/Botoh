@@ -1,6 +1,16 @@
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
 import { bestTimes } from "../bestTimes";
 import {Circuit, CircuitInfo, Direction} from "../Circuit";
-import paul_ricard_json from "./paul_ricard.json";
+
+const paul_ricard_raw = readFileSync(join(__dirname, "paul_ricard.hbs"), "utf-8");
+const paul_ricard_json = JSON.parse(paul_ricard_raw);
+
+
+
 
 const PAUL_RICARD_INFO: CircuitInfo = {
     finishLine: {
@@ -57,6 +67,6 @@ const PAUL_RICARD_INFO: CircuitInfo = {
   };
 
 export const PAUL_RICARD: Circuit = {
-    map: JSON.stringify(paul_ricard_json),
+    map: paul_ricard_raw,
     info: PAUL_RICARD_INFO
 }

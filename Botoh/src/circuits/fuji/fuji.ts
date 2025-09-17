@@ -1,8 +1,11 @@
-import { LEAGUE_MODE } from "../../features/hostLeague/leagueMode";
+import { readFileSync } from "fs";
+import { join } from "path";
+
 import { bestTimes } from "../bestTimes";
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
-import fuji_json from "./fuji.json";
-import fuji_json_league from "./fujiLeague.json";
+
+const fuji_raw = readFileSync(join(__dirname, "fuji.hbs"), "utf-8");
+const fuji_json = JSON.parse(fuji_raw);
 
 const FUJI_INFO: CircuitInfo = {
   finishLine: {
@@ -63,6 +66,6 @@ const FUJI_INFO: CircuitInfo = {
 };
 
 export const FUJI: Circuit = {
-  map: JSON.stringify(fuji_json),
+  map: fuji_raw,
   info: FUJI_INFO,
 };

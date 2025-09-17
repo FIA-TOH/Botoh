@@ -6,6 +6,10 @@ import { join } from "path";
 const suzuka_raw = readFileSync(join(__dirname, "suzuka.hbs"), "utf-8");
 const suzuka_json = JSON.parse(suzuka_raw);
 
+
+
+
+
 const SUZUKA_INFO: CircuitInfo = {
   finishLine: {
     bounds: {

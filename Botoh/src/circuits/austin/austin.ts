@@ -1,6 +1,16 @@
-import austin_json from "./austin.json";
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
+
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
 import { bestTimes } from "../bestTimes";
+
+const austin_raw = readFileSync(join(__dirname, "austin.hbs"), "utf-8");
+const austin_json = JSON.parse(austin_raw);
+
+
 
 const AUSTIN_INFO: CircuitInfo = {
   finishLine: {
@@ -247,6 +257,6 @@ const AUSTIN_INFO: CircuitInfo = {
 };
 
 export const AUSTIN: Circuit = {
-  map: JSON.stringify(austin_json),
+  map: austin_raw,
   info: AUSTIN_INFO,
 };

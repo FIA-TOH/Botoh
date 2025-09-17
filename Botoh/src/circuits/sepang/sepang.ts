@@ -1,6 +1,16 @@
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
 import { bestTimes } from "../bestTimes";
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
-import sepang_json from "./sepang.json";
+
+const sepang_raw = readFileSync(join(__dirname, "sepang.hbs"), "utf-8");
+const sepang_json = JSON.parse(sepang_raw);
+
+
+
 
 const SEPANG_INFO: CircuitInfo = {
   finishLine: {
@@ -192,6 +202,6 @@ const SEPANG_INFO: CircuitInfo = {
 };
 
 export const SEPANG: Circuit = {
-  map: JSON.stringify(sepang_json),
+  map: sepang_raw,
   info: SEPANG_INFO,
 };

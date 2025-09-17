@@ -1,7 +1,17 @@
 
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
+
 import { bestTimes } from "../bestTimes";
 import {Circuit, CircuitInfo, Direction} from "../Circuit";
-import fuji_json_league from "./fujiLeague.json"
+
+const fujiLeague_raw = readFileSync(join(__dirname, "fujiLeague.hbs"), "utf-8");
+const fujiLeague_json = JSON.parse(fujiLeague_raw);
+
+
+
 
 const FUJI_INFO: CircuitInfo = {
     finishLine: {
@@ -58,7 +68,7 @@ const FUJI_INFO: CircuitInfo = {
 }
 
 export const FUJILEAGUE: Circuit = {
-    map: JSON.stringify(fuji_json_league),
+    map: fujiLeague_raw,
     info: FUJI_INFO
 
 }

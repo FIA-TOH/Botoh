@@ -7,6 +7,10 @@ import { join } from "path";
 const spa_raw = readFileSync(join(__dirname, "spa.hbs"), "utf-8");
 const spa_json = JSON.parse(spa_raw);
 
+
+
+
+
 const SPA_INFO: CircuitInfo = {
   finishLine: {
     bounds: {

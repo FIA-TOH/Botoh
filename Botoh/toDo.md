@@ -44,3 +44,5 @@ npm run build:pub
 npm run start:pub
 
 node generateCutSegments.js
+
+npm run convert:circuits

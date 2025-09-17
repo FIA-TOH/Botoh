@@ -1,6 +1,16 @@
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
 import { bestTimes } from "../bestTimes";
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
-import canadaPublic_json from "./canadaPublic.json";
+
+const canadaPublic_raw = readFileSync(join(__dirname, "canadaPublic.hbs"), "utf-8");
+const canadaPublic_json = JSON.parse(canadaPublic_raw);
+
+
+
 
 const CANADAPUBLIC_INFO: CircuitInfo = {
   finishLine: {
@@ -185,6 +195,6 @@ const CANADAPUBLIC_INFO: CircuitInfo = {
 };
 
 export const CANADAPUBLIC: Circuit = {
-  map: JSON.stringify(canadaPublic_json),
+  map: canadaPublic_raw,
   info: CANADAPUBLIC_INFO,
 };

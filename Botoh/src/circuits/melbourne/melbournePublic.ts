@@ -10,6 +10,10 @@ const melbournePublic_raw = readFileSync(
 );
 const melbournePublic_json = JSON.parse(melbournePublic_raw);
 
+
+
+
+
 const MELBOURNEPUBLIC_INFO: CircuitInfo = {
   finishLine: {
     bounds: {
