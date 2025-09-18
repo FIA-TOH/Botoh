@@ -56,10 +56,9 @@ export function sendDiscordLog(message: string) {
 }
 export function sendDiscordChat(message: string) {
   const MESSAGES_URL = LEAGUE_MODE ? LEAGUE_CHAT_URL : PUBLIC_CHAT_URL;
-  const request = new XMLHttpRequest();
+
   const sanitizedMessage = message.replace(/@(?=[a-zA-Z])/g, "@ ");
-  request.open("POST", MESSAGES_URL);
-  request.setRequestHeader("Content-type", "application/json");
+
   const parts = splitMessage(sanitizedMessage);
   parts.forEach((part) => {
     sendRequestWithRetry(MESSAGES_URL, { content: part }, "CHAT");
@@ -157,9 +156,13 @@ async function sendRequestWithRetry(
   isFormData = false
 ): Promise<void> {
   try {
+    const headers = isFormData
+      ? body.getHeaders()
+      : { "Content-Type": "application/json" };
+
     const res = await fetch(url, {
       method: "POST",
-      headers: isFormData ? undefined : { "Content-Type": "application/json" },
+      headers,
       body: isFormData ? body : JSON.stringify(body),
     });
 

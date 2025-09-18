@@ -23,6 +23,8 @@ export function GameStart(room: RoomObject) {
 
     if (gameMode !== GameMode.TRAINING) {
       room.startRecording();
+      const replay = room.stopRecording();
+      console.log(replay?.length, replay);
     }
     resetBestLap();
     resetBestPit();
