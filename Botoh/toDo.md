@@ -11,6 +11,8 @@ Qualy as vezes sem ghost
 
 TODOS mapas para hbs
 
+Nurburgring dando pra passar antes de comecar
+
 # To-do rapidos
 
 COmando leaguye e public pra index.ts
