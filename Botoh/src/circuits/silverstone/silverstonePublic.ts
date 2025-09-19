@@ -1,6 +1,16 @@
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
 import { bestTimes } from "../bestTimes";
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
-import silverstonePublic_json from "./silverstonePublic.json";
+
+const silverstonePublic_raw = readFileSync(join(__dirname, "silverstonePublic.hbs"), "utf-8");
+const silverstonePublic_json = JSON.parse(silverstonePublic_raw);
+
+
+
 
 const SILVERSTONEPUBLIC_INFO: CircuitInfo = {
   finishLine: {
@@ -93,6 +103,6 @@ const SILVERSTONEPUBLIC_INFO: CircuitInfo = {
 };
 
 export const SILVERSTONEPUBLIC: Circuit = {
-  map: JSON.stringify(silverstonePublic_json),
+  map: silverstonePublic_raw,
   info: SILVERSTONEPUBLIC_INFO,
 };

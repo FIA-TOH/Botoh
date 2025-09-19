@@ -1,5 +1,17 @@
+import { bestTimes } from "../bestTimes";
+
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
 import {Circuit, CircuitInfo, Direction} from "../Circuit";
-import algarve_json from "./algarve.json";
+
+const algarve_raw = readFileSync(join(__dirname, "algarve.hbs"), "utf-8");
+const algarve_json = JSON.parse(algarve_raw);
+
+
+
 
 
 const ALGARVE_INFO: CircuitInfo = {
@@ -67,6 +79,6 @@ const ALGARVE_INFO: CircuitInfo = {
 }
 
 export const ALGARVE: Circuit = {
-    map: JSON.stringify(algarve_json),
+    map: algarve_raw,
     info: ALGARVE_INFO
 }

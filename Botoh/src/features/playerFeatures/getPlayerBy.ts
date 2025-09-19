@@ -1,8 +1,9 @@
-import { room } from "../../room";
+import { roomPromise } from "../../room";
 import { getRunningPlayers } from "../utils";
 import { getPlayerAndDiscs } from "./getPlayerAndDiscs";
 
-export function getPlayerByName(name: string) {
+export async function getPlayerByName(name: string) {
+  const room = await roomPromise;
   const playersAndDiscs = getPlayerAndDiscs(room);
   const players = getRunningPlayers(playersAndDiscs);
 
@@ -13,7 +14,8 @@ export function getPlayerByName(name: string) {
   return player;
 }
 
-export function getPlayerById(id: string) {
+export async function getPlayerById(id: string) {
+  const room = await roomPromise;
   const playersAndDiscs = getPlayerAndDiscs(room);
   const players = getRunningPlayers(playersAndDiscs);
 

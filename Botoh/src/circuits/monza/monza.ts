@@ -1,6 +1,16 @@
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
 import { bestTimes } from "../bestTimes";
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
-import monza_json from "./monza.json";
+
+const monza_raw = readFileSync(join(__dirname, "monza.hbs"), "utf-8");
+const monza_json = JSON.parse(monza_raw);
+
+
+
 
 const MONZA_INFO: CircuitInfo = {
   finishLine: {
@@ -169,6 +179,6 @@ const MONZA_INFO: CircuitInfo = {
 };
 
 export const MONZA: Circuit = {
-  map: JSON.stringify(monza_json),
+  map: monza_raw,
   info: MONZA_INFO,
 };

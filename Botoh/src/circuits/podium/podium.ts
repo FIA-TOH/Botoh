@@ -1,6 +1,15 @@
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
 import { bestTimes } from "../bestTimes";
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
-import podium_json from "./podium.json";
+
+const podium_raw = readFileSync(join(__dirname, "podium.hbs"), "utf-8");
+const podium_json = JSON.parse(podium_raw);
+
+
 
 const PODIUM_INFO: CircuitInfo = {
   finishLine: {
@@ -58,6 +67,6 @@ const PODIUM_INFO: CircuitInfo = {
 };
 
 export const PODIUM: Circuit = {
-  map: JSON.stringify(podium_json),
+  map: podium_raw,
   info: PODIUM_INFO,
 };

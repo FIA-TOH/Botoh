@@ -1,5 +1,17 @@
-import jeddah_json from "./jeddah.json";
+import { bestTimes } from "../bestTimes";
+
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
+
 import {Circuit, CircuitInfo, Direction} from "../Circuit";
+
+const jeddah_raw = readFileSync(join(__dirname, "jeddah.hbs"), "utf-8");
+const jeddah_json = JSON.parse(jeddah_raw);
+
+
 
 const JEDDAH_INFO: CircuitInfo = {
     finishLine: {
@@ -49,6 +61,6 @@ const JEDDAH_INFO: CircuitInfo = {
     }
 }
 export const JEDDAH: Circuit = {
-    map: JSON.stringify(jeddah_json),
+    map: jeddah_raw,
     info: JEDDAH_INFO
 }

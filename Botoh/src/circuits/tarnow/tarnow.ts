@@ -1,5 +1,17 @@
+import { bestTimes } from "../bestTimes";
+
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
 import {Circuit, CircuitInfo, Direction} from "../Circuit";
-import tarnow_json from "./tarnow.json";
+
+const tarnow_raw = readFileSync(join(__dirname, "tarnow.hbs"), "utf-8");
+const tarnow_json = JSON.parse(tarnow_raw);
+
+
+
 
 
 const TARNOW_INFO: CircuitInfo = {
@@ -55,6 +67,6 @@ const TARNOW_INFO: CircuitInfo = {
 }
 
 export const TARNOW: Circuit = {
-    map: JSON.stringify(tarnow_json),
+    map: tarnow_raw,
     info: TARNOW_INFO
 }

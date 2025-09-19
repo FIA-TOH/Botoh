@@ -18,7 +18,7 @@ import { tyresActivated } from "../../commands/tyres/handleEnableTyresCommand";
 import { sendDiscordTrackRecord } from "../../discord/discord";
 import { log } from "../../discord/logger";
 import { getPlayerAndDiscs } from "../../playerFeatures/getPlayerAndDiscs";
-import { rainEnabled, rainIntensity } from "../../rain/rain";
+// import { rainEnabled, rainIntensity } from "../../rain/rain";
 import { ACTUAL_CIRCUIT } from "../../roomFeatures/stadiumChange";
 import { Tires } from "../../tires&pits/tires";
 import { serialize, someArray } from "../../utils";
@@ -91,13 +91,13 @@ export function processCompletedLap(
       0xff8f00
     );
   }
-  if (rainEnabled) {
-    sendChatMessage(
-      room,
-      MESSAGES.RAIN_INTENSITY_LAP(Math.round(rainIntensity)),
-      p.id
-    );
-  }
+  // if (rainEnabled) {
+  //   sendChatMessage(
+  //     room,
+  //     MESSAGES.RAIN_INTENSITY_LAP(Math.round(rainIntensity)),
+  //     p.id
+  //   );
+  // }
   if (
     tyresActivated &&
     gameMode !== GameMode.QUALY &&

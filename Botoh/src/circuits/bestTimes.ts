@@ -36,6 +36,7 @@ const trackNameMapping: { [key: string]: string } = {
   indianapolis: "Indianapolis Motor Speedway - By Ximb",
   miami: "Miami by Rodri",
   las_vegas: "Las Vegas Strip Circuit - By Ximb",
+  zandvoort: "Zandvoort by Rodri",
 };
 
 export const bestTimes: { [key: string]: [number, string, string] } = {
@@ -78,6 +79,7 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   indianapolis: [30.5, "Gabriel Schumacchio", trackNameMapping["indianapolis"]],
   miami: [43.05, "Ximbastian Vettel", trackNameMapping["miami"]],
   las_vegas: [43.797, "Ximbastian Vettel", "Las Vegas Strip Circuit - By Ximb"],
+  zandvoort: [999.999, "Rodri", "Zandvoort by Rodri"],
 };
 export const getAbbreviatedTrackName = (
   fullTrackName: string

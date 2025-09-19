@@ -1,5 +1,17 @@
+import { bestTimes } from "../bestTimes";
+
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
 import {Circuit, CircuitInfo, Direction} from "../Circuit";
-import hungaryNano_json from "./hungaryNano.json";
+
+const hungaryNano_raw = readFileSync(join(__dirname, "hungaryNano.hbs"), "utf-8");
+const hungaryNano_json = JSON.parse(hungaryNano_raw);
+
+
+
 
 const HUNGARYNANO_INFO: CircuitInfo = {
     finishLine: {
@@ -66,6 +78,6 @@ const HUNGARYNANO_INFO: CircuitInfo = {
 }
 
 export const HUNGARYNANO: Circuit = {
-    map: JSON.stringify(hungaryNano_json),
+    map: hungaryNano_raw,
     info: HUNGARYNANO_INFO
 }

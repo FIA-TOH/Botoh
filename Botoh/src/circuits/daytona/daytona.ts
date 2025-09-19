@@ -1,5 +1,17 @@
+import { bestTimes } from "../bestTimes";
+
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
 import {Circuit, CircuitInfo, Direction} from "../Circuit";
-import daytona_json from "./daytona.json";
+
+const daytona_raw = readFileSync(join(__dirname, "daytona.hbs"), "utf-8");
+const daytona_json = JSON.parse(daytona_raw);
+
+
+
 
 const DAYTONA_INFO: CircuitInfo = {
     finishLine: {
@@ -50,6 +62,6 @@ const DAYTONA_INFO: CircuitInfo = {
 }
 
 export const DAYTONA: Circuit = {
-    map: JSON.stringify(daytona_json),
+    map: daytona_raw,
     info: DAYTONA_INFO
 }

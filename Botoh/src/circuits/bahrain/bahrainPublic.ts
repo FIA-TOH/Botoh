@@ -1,6 +1,16 @@
-import bahrainPublic_json from "./bahrainPublic.json";
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
+
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
 import { bestTimes } from "../bestTimes";
+
+const bahrainPublic_raw = readFileSync(join(__dirname, "bahrainPublic.hbs"), "utf-8");
+const bahrainPublic_json = JSON.parse(bahrainPublic_raw);
+
+
 
 const BAHRAINPUBLIC_INFO: CircuitInfo = {
   finishLine: {
@@ -214,6 +224,6 @@ const BAHRAINPUBLIC_INFO: CircuitInfo = {
   ],
 };
 export const BAHRAINPUBLIC: Circuit = {
-  map: JSON.stringify(bahrainPublic_json),
+  map: bahrainPublic_raw,
   info: BAHRAINPUBLIC_INFO,
 };

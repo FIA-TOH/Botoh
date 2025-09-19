@@ -1,6 +1,16 @@
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
 import { bestTimes } from "../bestTimes";
 import {Circuit, CircuitInfo, Direction} from "../Circuit";
-import valenciaLeague_json from "./valenciaLeague.json";
+
+const valenciaLeague_raw = readFileSync(join(__dirname, "valenciaLeague.hbs"), "utf-8");
+const valenciaLeague_json = JSON.parse(valenciaLeague_raw);
+
+
+
 
 
 const VALENCIALEAGUE_INFO: CircuitInfo = {
@@ -103,6 +113,6 @@ const VALENCIALEAGUE_INFO: CircuitInfo = {
 }
 
 export const VALENCIALEAGUE: Circuit = {
-    map: JSON.stringify(valenciaLeague_json),
+    map: valenciaLeague_raw,
     info: VALENCIALEAGUE_INFO
 }

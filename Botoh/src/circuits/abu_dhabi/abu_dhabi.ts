@@ -1,6 +1,16 @@
-import abu_dhabi_json from "./abu_dhabi.json";
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
+
 import {Circuit, CircuitInfo, Direction} from "../Circuit";
 import { bestTimes } from "../bestTimes";
+
+const abu_dhabi_raw = readFileSync(join(__dirname, "abu_dhabi.hbs"), "utf-8");
+const abu_dhabi_json = JSON.parse(abu_dhabi_raw);
+
+
 
 const ABU_DHABI_INFO: CircuitInfo = {
     finishLine: {
@@ -57,6 +67,6 @@ const ABU_DHABI_INFO: CircuitInfo = {
 }
 
 export const ABU_DHABI: Circuit = {
-    map: JSON.stringify(abu_dhabi_json),
+    map: abu_dhabi_raw,
     info: ABU_DHABI_INFO
 }

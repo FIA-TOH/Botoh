@@ -1,6 +1,16 @@
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
 import { bestTimes } from "../bestTimes";
 import {Circuit, CircuitInfo, Direction} from "../Circuit";
-import hocken_json from "./hocken.json";
+
+const hocken_raw = readFileSync(join(__dirname, "hocken.hbs"), "utf-8");
+const hocken_json = JSON.parse(hocken_raw);
+
+
+
 
 
 const HOCKEN_INFO: CircuitInfo = {
@@ -75,6 +85,6 @@ const HOCKEN_INFO: CircuitInfo = {
 }
 
 export const HOCKEN: Circuit = {
-    map: JSON.stringify(hocken_json),
+    map: hocken_raw,
     info: HOCKEN_INFO
 }

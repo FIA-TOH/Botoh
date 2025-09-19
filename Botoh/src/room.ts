@@ -1,3 +1,4 @@
+import HaxballJS from "haxball.js";
 import { handleChangeMap } from "./features/zones/maps";
 import {
   leagueName,
@@ -21,52 +22,59 @@ import { log } from "./features/discord/logger";
 
 const roomName = LEAGUE_MODE ? leagueName : publicName;
 
-export const room = HBInit({
-  roomName: roomName,
-  noPlayer: true,
-  public: !LEAGUE_MODE,
-  maxPlayers: maxPlayers,
-  password: roomPassword ?? undefined,
-  token: "thr1.AAAAAGdDS0jEIWnS04qeVA.1F4ha2154X8",
-  geo: {
-    code: "BR",
-    lat: -23.5505,
-    lon: -46.6333,
-  },
+export const roomPromise: Promise<any> = HaxballJS().then((HBInit: any) => {
+  const room = HBInit({
+    roomName: roomName,
+    noPlayer: true,
+    public: !LEAGUE_MODE,
+    maxPlayers: maxPlayers,
+    password: roomPassword ?? undefined,
+    token:
+      process.env.HAXBALL_TOKEN ?? "thr1.AAAAAGjNwhen-ypiNqHMXg.IRvuYZ1QqBM",
+    geo: {
+      code: "BR",
+      lat: -23.5505,
+      lon: -46.6333,
+    },
+  });
+
+  room.setScoreLimit(0);
+  room.setTimeLimit(0);
+  room.setTeamsLock(true);
+  handleChangeMap(0, room);
+
+  sendDiscordLink(room, 3);
+
+  GameStart(room);
+  GameStop(room);
+  GameTick(room);
+  PlayerChat(room);
+  PlayerJoin(room);
+  PlayerLeave(room);
+  StadiumChange(room);
+  TeamChange(room);
+  PlaerActivity(room);
+
+  room.onRoomLink = function (link: any) {
+    console.log("Link da sala:", link);
+  };
+
+  room.onGamePause = function (byPlayer: any) {
+    byPlayer == null
+      ? log(`Game paused`)
+      : log(`Game paused by ${byPlayer.name}`);
+    handleGameStateChange("paused", room);
+  };
+  room.onGameUnpause = function (byPlayer: any) {
+    byPlayer == null
+      ? log(`Game unpaused`)
+      : log(`Game unpaused by ${byPlayer.name}`);
+    handleGameStateChange("running", room);
+  };
+
+  return room;
 });
 
-room.setScoreLimit(0);
-room.setTimeLimit(0);
-room.setTeamsLock(true);
-handleChangeMap(0, room);
-
-sendDiscordLink(room, 3);
-
-GameStart(room);
-GameStop(room);
-GameTick(room);
-PlayerChat(room);
-PlayerJoin(room);
-PlayerLeave(room);
-StadiumChange(room);
-TeamChange(room);
-PlaerActivity(room);
-
-room.onGamePause = function (byPlayer) {
-  byPlayer == null
-    ? log(`Game paused`)
-    : log(`Game paused by ${byPlayer.name}`);
-  handleGameStateChange("paused", room);
-};
-room.onGameUnpause = function (byPlayer) {
-  byPlayer == null
-    ? log(`Game unpaused`)
-    : log(`Game unpaused by ${byPlayer.name}`);
-  handleGameStateChange("running", room);
-};
-
-const regexPattern = /^\[[A-Z]{2}] \S.*$/;
-// if (LEAGUE_MODE && !regexPattern.test(player.name)) {
-//     kickPlayer(player.id, `Your name must be in the format "[XX] Name"`, room)
-//     return
-// }
+export async function getRoom() {
+  return await roomPromise;
+}

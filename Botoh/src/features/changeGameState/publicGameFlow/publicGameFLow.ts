@@ -16,7 +16,7 @@ import {
   reorderPlayersByRacePosition,
   reorderPlayersInRoomRace,
 } from "../../movePlayers/reorderPlayersInRoom";
-import { rainEnabled } from "../../rain/rain";
+// import { rainEnabled } from "../../rain/rain";
 import { delay } from "../../utils";
 import { CIRCUITS, handleChangeMap } from "../../zones/maps";
 import { changeGameMode, GameMode, gameMode } from "../changeGameModes";
@@ -61,10 +61,10 @@ export default async function PublicGameFlow(room: RoomObject) {
       handleExplainTyresCommand(undefined, undefined, room);
       await delay(5);
     }
-    if (rainEnabled) {
-      handleExplainRainCommand(undefined, undefined, room);
-      await delay(5);
-    }
+    // if (rainEnabled) {
+    //   handleExplainRainCommand(undefined, undefined, room);
+    //   await delay(5);
+    // }
     handleExplainErsCommand(undefined, undefined, room);
     await delay(5);
 
@@ -117,10 +117,10 @@ export default async function PublicGameFlow(room: RoomObject) {
       handleExplainTyresCommand(undefined, undefined, room);
       await delay(5);
     }
-    if (rainEnabled) {
-      handleExplainRainCommand(undefined, undefined, room);
-      await delay(5);
-    }
+    // if (rainEnabled) {
+    //   handleExplainRainCommand(undefined, undefined, room);
+    //   await delay(5);
+    // }
     handleExplainErsCommand(undefined, undefined, room);
     await delay(5);
 

@@ -1,6 +1,16 @@
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
 import { bestTimes } from "../bestTimes";
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
-import marina_bayPublic_json from "./marina_bayPublic.json";
+
+const marina_bayPublic_raw = readFileSync(join(__dirname, "marina_bayPublic.hbs"), "utf-8");
+const marina_bayPublic_json = JSON.parse(marina_bayPublic_raw);
+
+
+
 
 const MARINA_BAYPUBLIC_INFO: CircuitInfo = {
   finishLine: {
@@ -77,6 +87,6 @@ const MARINA_BAYPUBLIC_INFO: CircuitInfo = {
 };
 
 export const MARINA_BAYPUBLIC: Circuit = {
-  map: JSON.stringify(marina_bayPublic_json),
+  map: marina_bayPublic_raw,
   info: MARINA_BAYPUBLIC_INFO,
 };

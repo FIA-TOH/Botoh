@@ -1,4 +1,4 @@
-import { rainIntensity } from "../../rain/rain";
+// import { rainIntensity } from "../../rain/rain";
 import { Tires } from "../../tires&pits/tires";
 import { calculateGripMultiplier } from "./grip";
 
@@ -8,7 +8,7 @@ export function calculateGripForWetConditions(
   norm: Number
 ) {
   if (!norm) return;
-
+  const rainIntensity = 0; // Valor padrão quando a chuva não está ativada
   const normalizedRain = rainIntensity / 100;
 
   switch (tyres) {

@@ -1,6 +1,16 @@
-import abu_dhabiPublic_json from "./abu_dhabiPublic.json";
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
+
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
 import { bestTimes } from "../bestTimes";
+
+const abu_dhabiPublic_raw = readFileSync(join(__dirname, "abu_dhabiPublic.hbs"), "utf-8");
+const abu_dhabiPublic_json = JSON.parse(abu_dhabiPublic_raw);
+
+
 
 const ABU_DHABIPUBLIC_INFO: CircuitInfo = {
   finishLine: {
@@ -65,6 +75,6 @@ const ABU_DHABIPUBLIC_INFO: CircuitInfo = {
 };
 
 export const ABU_DHABIPUBLIC: Circuit = {
-  map: JSON.stringify(abu_dhabiPublic_json),
+  map: abu_dhabiPublic_raw,
   info: ABU_DHABIPUBLIC_INFO,
 };

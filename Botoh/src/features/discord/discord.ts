@@ -3,6 +3,8 @@ import { getPlayerTeam } from "../commands/teams/getTeam";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { getTimestamp } from "../utils";
+import FormData from "form-data";
+import { Blob } from "buffer";
 
 const PUBLIC_CHAT_URL =
   "https://discord.com/api/webhooks/1409976523330682950/9SS0ZO32tm8KzreIq0PcQi3C3_isAF27CjGlHeYFDDxev3bTHJ5xUlkRDIx-N6gNhTvV";
@@ -34,12 +36,10 @@ function splitMessage(msg: string, size = 2000): string[] {
 
 export function sendDiscordFile(data: any, fileName: string, source: string) {
   const FILE_URL = LEAGUE_MODE ? LEAGUE_LOG_URL : PUBLIC_LOG_URL;
-  const blob = new Blob([JSON.stringify(data, null, 2)], {
-    type: "application/json",
-  });
+  const buffer = Buffer.from(JSON.stringify(data, null, 2), "utf-8");
 
   const formData = new FormData();
-  formData.append("file", blob, fileName);
+  formData.append("file", buffer, fileName);
 
   sendRequestWithRetry(FILE_URL, formData, source, 1000, true);
 }
@@ -56,10 +56,9 @@ export function sendDiscordLog(message: string) {
 }
 export function sendDiscordChat(message: string) {
   const MESSAGES_URL = LEAGUE_MODE ? LEAGUE_CHAT_URL : PUBLIC_CHAT_URL;
-  const request = new XMLHttpRequest();
+
   const sanitizedMessage = message.replace(/@(?=[a-zA-Z])/g, "@ ");
-  request.open("POST", MESSAGES_URL);
-  request.setRequestHeader("Content-type", "application/json");
+
   const parts = splitMessage(sanitizedMessage);
   parts.forEach((part) => {
     sendRequestWithRetry(MESSAGES_URL, { content: part }, "CHAT");
@@ -138,68 +137,54 @@ function generateFileName() {
   const minutes = now.getMinutes().toString().padStart(2, "0");
   return `HBReplay-${day}-${month}-${year}-${hours}h${minutes}m - [${ACTUAL_CIRCUIT.info.name}].hbr2`;
 }
-
 export function sendDiscordReplay(replay: Uint8Array) {
   const REPLAYS_URL = LEAGUE_MODE ? LEAGUE_REPLAY_URL : PUBLIC_REPLAY_URL;
 
-  const arrayBuffer: ArrayBuffer = replay.buffer.slice(
-    replay.byteOffset,
-    replay.byteOffset + replay.byteLength
-  ) as ArrayBuffer;
-
-  const blob = new Blob([arrayBuffer], { type: "application/octet-stream" });
+  const buffer = Buffer.from(replay);
 
   const formData = new FormData();
-  formData.append("file", blob, generateFileName());
+  formData.append("file", buffer, generateFileName());
 
   sendRequestWithRetry(REPLAYS_URL, formData, "REPLAY", 1000, true);
 }
-function sendRequestWithRetry(
+
+async function sendRequestWithRetry(
   url: string,
   body: any,
   source: string,
   delay = 1000,
   isFormData = false
-) {
-  const request = new XMLHttpRequest();
+): Promise<void> {
+  try {
+    const headers = isFormData
+      ? body.getHeaders()
+      : { "Content-Type": "application/json" };
 
-  request.open("POST", url);
-  if (!isFormData) {
-    request.setRequestHeader("Content-type", "application/json");
-  }
+    const res = await fetch(url, {
+      method: "POST",
+      headers,
+      body: isFormData ? body : JSON.stringify(body),
+    });
 
-  request.onload = () => {
-    if (request.status >= 200 && request.status < 300) {
-      // sucesso silencioso (não loga nada)
-      return;
-    } else if (request.status === 429) {
+    if (res.ok) {
+      return; // sucesso silencioso
+    } else if (res.status === 429) {
       const preview = !isFormData
         ? JSON.stringify(body).slice(0, 100)
         : "[file upload]";
       console.warn(
-        `[Discord RATE LIMIT] (${source}) Retentando em ${delay}ms\nConteúdo: ${preview}\nStack:`,
-        new Error().stack
+        `⚠️⚠️⚠️ [Discord RATE LIMIT] (${source}) Retentando em ${delay}ms\nConteúdo: ${preview}`
       );
-      setTimeout(
-        () => sendRequestWithRetry(url, body, source, delay * 2, isFormData),
-        delay
-      );
+      setTimeout(() => {
+        sendRequestWithRetry(url, body, source, delay * 2, isFormData);
+      }, delay);
     } else {
       console.error(
-        `[Discord ERROR ${request.status}] (${source}):`,
-        request.responseText,
-        new Error().stack
+        `❌❌❌ [Discord ERROR ${res.status}] (${source}):`,
+        await res.text()
       );
     }
-  };
-
-  request.onerror = () => {
-    console.error(`[Discord NETWORK ERROR] (${source})`, new Error().stack);
-  };
-
-  if (isFormData) {
-    request.send(body);
-  } else {
-    request.send(JSON.stringify(body));
+  } catch (err) {
+    console.error(`❌❌❌ [Discord NETWORK ERROR] (${source}):`, err);
   }
 }

@@ -1,6 +1,14 @@
 import { bestTimes } from "../bestTimes";
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
-import suzuka_json from "./suzuka.json";
+import { readFileSync } from "fs";
+import { join } from "path";
+
+const suzuka_raw = readFileSync(join(__dirname, "suzuka.hbs"), "utf-8");
+const suzuka_json = JSON.parse(suzuka_raw);
+
+
+
+
 
 const SUZUKA_INFO: CircuitInfo = {
   finishLine: {
@@ -205,6 +213,6 @@ const SUZUKA_INFO: CircuitInfo = {
 };
 
 export const SUZUKA: Circuit = {
-  map: JSON.stringify(suzuka_json),
+  map: suzuka_raw,
   info: SUZUKA_INFO,
 };

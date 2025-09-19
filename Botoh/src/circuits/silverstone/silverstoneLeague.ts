@@ -1,6 +1,16 @@
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
 import { bestTimes } from "../bestTimes";
 import {Circuit, CircuitInfo, Direction} from "../Circuit";
-import silverstoneLeague_json from "./silverstoneLeague.json";
+
+const silverstoneLeague_raw = readFileSync(join(__dirname, "silverstoneLeague.hbs"), "utf-8");
+const silverstoneLeague_json = JSON.parse(silverstoneLeague_raw);
+
+
+
 
 const SILVERSTONELEAGUE_INFO: CircuitInfo = {
     finishLine: {
@@ -85,6 +95,6 @@ const SILVERSTONELEAGUE_INFO: CircuitInfo = {
 }
 
 export const SILVERSTONELEAGUE: Circuit = {
-    map: JSON.stringify(silverstoneLeague_json),
+    map: silverstoneLeague_raw,
     info: SILVERSTONELEAGUE_INFO
 }

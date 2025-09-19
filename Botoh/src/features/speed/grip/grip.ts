@@ -1,5 +1,8 @@
 import { playerList } from "../../changePlayerState/playerList";
-import { isRaining, rainEnabled } from "../../rain/rain";
+// import { isRaining, rainEnabled } from "../../rain/rain";
+
+const isRaining = false;
+const rainEnabled = false;
 
 export function updateGripCounter(
   playersAndDiscs: { p: PlayerObject; disc: DiscPropertiesObject }[]

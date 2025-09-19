@@ -1,6 +1,16 @@
+
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
 import { bestTimes } from "../bestTimes";
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
-import balaton_json from "./balaton.json";
+
+const balaton_raw = readFileSync(join(__dirname, "balaton.hbs"), "utf-8");
+const balaton_json = JSON.parse(balaton_raw);
+
+
+
 
 const BALATON_INFO: CircuitInfo = {
   finishLine: {
@@ -89,6 +99,6 @@ const BALATON_INFO: CircuitInfo = {
 };
 
 export const BALATON: Circuit = {
-  map: JSON.stringify(balaton_json),
+  map: balaton_raw,
   info: BALATON_INFO,
 };
