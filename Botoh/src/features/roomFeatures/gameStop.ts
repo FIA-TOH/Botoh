@@ -48,14 +48,13 @@ export function GameStop(room: RoomObject) {
 
     handleGameStateChange(null, room);
     if (gameMode !== GameMode.TRAINING) {
-      const replay = room.stopRecording();
-      console.log(replay?.length, replay);
-
-      if (replay && gameStarted) {
-        sendDiscordReplay(replay);
-      } else {
-        log("Replay discarted");
-      }
+      // const replay = room.stopRecording();
+      // console.log(replay?.length, replay);
+      // if (replay && gameStarted) {
+      //   sendDiscordReplay(replay);
+      // } else {
+      //   log("Replay discarted");
+      // }
     }
     setGameStarted(false);
 

@@ -3,6 +3,7 @@ import { playerList } from "../changePlayerState/playerList";
 import { handleAvatar, Situacions } from "./handleAvatar";
 import { Tires, TIRE_STARTING_SPEED } from "../tires&pits/tires";
 import { gameMode, GameMode } from "../changeGameState/changeGameModes";
+import { start } from "repl";
 
 export function createPlayerInfo(ip?: string) {
   return {
@@ -20,6 +21,8 @@ export function createPlayerInfo(ip?: string) {
     lapTime: 0,
     lastLapTimeUpdate: 0,
     bestTime: Number.MAX_VALUE,
+    startLapTime: 0,
+    lastLapTime: 0,
 
     // Setores
     currentSector: 3,
@@ -81,6 +84,10 @@ export function createPlayerInfo(ip?: string) {
     lastDir: undefined,
     slipTicks: undefined,
     slipDir: undefined,
+
+    previousPos: null,
+    previousX: undefined,
+    previousY: undefined,
   };
 }
 
@@ -113,6 +120,8 @@ export function resetPlayer(
   playerList[id].lapChanged = false;
   playerList[id].lapTime = 0;
   playerList[id].lastLapTimeUpdate = 0;
+  playerList[id].lastLapTime = 0;
+  playerList[id].startLapTime = 0;
 
   playerList[id].currentSector = 3;
   playerList[id].sectorChanged = false;
@@ -164,4 +173,8 @@ export function resetPlayer(
   playerList[id].lastDir = undefined;
   playerList[id].slipTicks = undefined;
   playerList[id].slipDir = undefined;
+
+  playerList[id].previousPos = null;
+  playerList[id].previousX = undefined;
+  playerList[id].previousY = undefined;
 }

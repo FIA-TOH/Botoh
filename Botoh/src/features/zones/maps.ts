@@ -76,6 +76,7 @@ import { WAITROOMQUALY } from "../../circuits/waitRoom/waitRoomQualy";
 import { gameMode, GameMode } from "../changeGameState/changeGameModes";
 import { LAS_VEGAS } from "../../circuits/las_vegas/las_vegas";
 import { LAS_VEGASPUBLIC } from "../../circuits/las_vegas/las_vegasPublic";
+import { ZANDVOORT } from "../../circuits/zandvoort/zandvoort";
 
 // import {DAYTONA} from "../circuits/daytona/daytona";
 // import {BARCELONA} from "../circuits/barcelona/barcelona";
@@ -122,6 +123,7 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
       HUNGARYNANO,
       LAS_VEGAS,
       INTERLAGOSLEAGUE,
+      ZANDVOORT,
       INDIANAPOLIS,
       PODIUM,
       WAITROOM,
@@ -159,6 +161,7 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
       MEXICO,
       MIAMI,
       LAS_VEGASPUBLIC,
+      ZANDVOORT,
       WAITROOM,
       WAITROOMQUALY,
     ];

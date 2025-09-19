@@ -173,18 +173,18 @@ async function sendRequestWithRetry(
         ? JSON.stringify(body).slice(0, 100)
         : "[file upload]";
       console.warn(
-        `[Discord RATE LIMIT] (${source}) Retentando em ${delay}ms\nConteúdo: ${preview}`
+        `⚠️⚠️⚠️ [Discord RATE LIMIT] (${source}) Retentando em ${delay}ms\nConteúdo: ${preview}`
       );
       setTimeout(() => {
         sendRequestWithRetry(url, body, source, delay * 2, isFormData);
       }, delay);
     } else {
       console.error(
-        `[Discord ERROR ${res.status}] (${source}):`,
+        `❌❌❌ [Discord ERROR ${res.status}] (${source}):`,
         await res.text()
       );
     }
   } catch (err) {
-    console.error(`[Discord NETWORK ERROR] (${source}):`, err);
+    console.error(`❌❌❌ [Discord NETWORK ERROR] (${source}):`, err);
   }
 }

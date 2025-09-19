@@ -15,9 +15,13 @@ TODOS mapas para hbs
 
 COmando leaguye e public pra index.ts
 Ver se é possivel transformar em um dist copiavel e colavel para jeadless host
-Ver se é possivel pegar novo token toda vez q dar comando
 Ver a questao do replay nao funfando
 
+Recorde mais podios sem vitoria
+Recorde pior melhor posicao apos 5 ou 3 grande premios
+
+Add daytonna Rodri
+Add mapa atualizado rodri esta no discord
 Tempo mais exato
 Tentar fazer banking como o rodri falou
 Automaticamente se o cara saiu e voltar depois de X tempo, ele consegue voltar para a corrida saindo dos boxes em ultimo

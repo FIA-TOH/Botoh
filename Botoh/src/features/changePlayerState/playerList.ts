@@ -33,6 +33,8 @@ export interface PlayerInfo {
   lapTime: number;
   lastLapTimeUpdate: number;
   bestTime: number;
+  startLapTime: number;
+  lastLapTime: number;
 
   // Setores
   currentSector: number;
@@ -85,6 +87,10 @@ export interface PlayerInfo {
   lastDir?: Direction;
   slipTicks?: number;
   slipDir?: Direction;
+
+  previousPos: { x: number; y: number } | null;
+  previousX?: number;
+  previousY?: number;
 }
 
 type PlayerList = {

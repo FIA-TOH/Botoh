@@ -14,5 +14,6 @@ export function resetLapData(
   playerData.sectorTimeCounter = 0;
   playerData.sectorTime = [];
   playerData.currentSector = 1;
+  playerData.lapChanged = false; // ← ESTA LINHA É CRUCIAL
   playerList[playerId].totalTime = room.getScores().time;
 }
