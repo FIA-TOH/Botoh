@@ -6,12 +6,11 @@ As vezes o pneu nao muda visualmente emoji
 Quando troca de mapa manuamente, resetar o circuito votado
 Tratar quando nao tiver ninguem na sala
 Qualy as vezes sem ghost
+Nurburgring dando pra passar antes de comecar com rr
 
 # To do dos Mapas
 
 TODOS mapas para hbs
-
-Nurburgring dando pra passar antes de comecar
 
 # To-do rapidos
 
@@ -53,3 +52,7 @@ npm run start:pub
 node generateCutSegments.js
 
 npm run convert:circuits
+
+$env:HAXBALL_TOKEN="thr1.AAAAAGjN1A_qttro6chAWg.asOkunzwZB0"
+$env:LANGUAGE="en"
+npm run start:league

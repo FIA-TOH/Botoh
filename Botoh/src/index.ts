@@ -1,10 +1,8 @@
+import { LEAGUE_MODE } from "./features/hostLeague/leagueMode";
 import { roomPromise } from "./room";
 
 async function main() {
-  const isLeagueMode = process.argv.includes("--league");
-  console.log(`Modo: ${isLeagueMode ? "League" : "Public"}`);
-
-  process.env.LEAGUE_MODE = isLeagueMode ? "true" : "false";
+  console.log(`Modo: ${LEAGUE_MODE ? "League" : "Public"}`);
 
   const room = await roomPromise;
   console.log(`✅ Sala criada`);

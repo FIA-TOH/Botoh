@@ -17,4 +17,5 @@ export function handleHelpCommand(
   sendChatMessage(room, MESSAGES.HELP_PART_THREE(), byPlayer.id);
   sendChatMessage(room, MESSAGES.HELP_PART_FOUR(), byPlayer.id);
   sendChatMessage(room, MESSAGES.HELP_PART_FIVE(), byPlayer.id);
+  sendChatMessage(room, MESSAGES.HELP_PART_SIX(), byPlayer.id);
 }

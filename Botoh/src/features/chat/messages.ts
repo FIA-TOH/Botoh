@@ -485,6 +485,13 @@ export const MESSAGES = {
     tr: tr_messages.HELP_PART_FIVE,
     pt: pt_messages.HELP_PART_FIVE,
   }),
+  HELP_PART_SIX: (): LocalizedMessageFunction => ({
+    en: en_messages.HELP_PART_SIX,
+    es: es_messages.HELP_PART_SIX,
+    fr: fr_messages.HELP_PART_SIX,
+    tr: tr_messages.HELP_PART_SIX,
+    pt: pt_messages.HELP_PART_SIX,
+  }),
 
   CLEARED_BANS: (): LocalizedMessageFunction => ({
     en: en_messages.CLEARED_BANS,
