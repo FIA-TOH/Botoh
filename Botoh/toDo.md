@@ -10,19 +10,12 @@ Nurburgring dando pra passar antes de comecar com rr
 
 # To do dos Mapas
 
-TODOS mapas para hbs
-
 # To-do rapidos
 
-COmando leaguye e public pra index.ts
-Ver se é possivel transformar em um dist copiavel e colavel para jeadless host
 Ver a questao do replay nao funfando
 
-Recorde mais podios sem vitoria
-Recorde pior melhor posicao apos 5 ou 3 grande premios
-
 Add daytonna Rodri
-Add mapa atualizado rodri esta no discord
+Add mapas atualizado rodri esta no discord
 Tempo mais exato
 Tentar fazer banking como o rodri falou
 Automaticamente se o cara saiu e voltar depois de X tempo, ele consegue voltar para a corrida saindo dos boxes em ultimo
@@ -42,6 +35,7 @@ API para fazer gráfico de posicão
 # Comandos
 
 npx ts-node index.ts
+npx ts-node index.ts --league
 
 npm run build:league
 npm run start:league
@@ -53,6 +47,7 @@ node generateCutSegments.js
 
 npm run convert:circuits
 
-$env:HAXBALL_TOKEN="thr1.AAAAAGjN1A_qttro6chAWg.asOkunzwZB0"
+$env:HAXBALL_GEO="ES,40.4168,-3.7038"
+$env:HAXBALL_TOKEN="thr1.AAAAAGjOzitQJz04f8bKFg.UvDUmsRVWxg"
 $env:LANGUAGE="en"
 npm run start:league

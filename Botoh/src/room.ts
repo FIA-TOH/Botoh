@@ -22,6 +22,24 @@ import { log } from "./features/discord/logger";
 
 const roomName = LEAGUE_MODE ? leagueName : publicName;
 
+function getGeo() {
+  const geoEnv = process.env.HAXBALL_GEO;
+  if (!geoEnv) {
+    return {
+      code: "BR",
+      lat: -23.5505,
+      lon: -46.6333,
+    };
+  }
+
+  const [code, lat, lon] = geoEnv.split(",");
+  return {
+    code: code || "BR",
+    lat: parseFloat(lat) || -23.5505,
+    lon: parseFloat(lon) || -46.6333,
+  };
+}
+
 export const roomPromise: Promise<any> = HaxballJS().then((HBInit: any) => {
   const room = HBInit({
     roomName: roomName,
@@ -31,11 +49,7 @@ export const roomPromise: Promise<any> = HaxballJS().then((HBInit: any) => {
     password: roomPassword ?? undefined,
     token:
       process.env.HAXBALL_TOKEN ?? "thr1.AAAAAGjNwhen-ypiNqHMXg.IRvuYZ1QqBM",
-    geo: {
-      code: "BR",
-      lat: -23.5505,
-      lon: -46.6333,
-    },
+    geo: getGeo(),
   });
 
   room.setScoreLimit(0);
