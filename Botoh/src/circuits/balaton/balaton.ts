@@ -30,17 +30,17 @@ const BALATON_INFO: CircuitInfo = {
     bounds: {
       minX: 1029,
       maxX: 1061,
-      minY: 176,
-      maxY: 388,
+      minY: 133,
+      maxY: 398,
     },
     passingDirection: Direction.RIGHT,
   },
   sectorThree: {
     bounds: {
-      minX: -209,
-      maxX: 355,
-      minY: 4256,
-      maxY: 4288,
+      minX: 583,
+      maxX: 1084,
+      minY: 3612,
+      maxY: 3644,
     },
     passingDirection: Direction.RIGHT,
   },

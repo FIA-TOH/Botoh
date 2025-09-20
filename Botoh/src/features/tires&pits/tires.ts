@@ -67,13 +67,20 @@ export const TYRE_DURABILITY = (limit: number | null): TireDurability => {
     };
   } else {
     return {
-      [Tires.SOFT]: 900 * 0.8571, // ≈ 771.4
-      [Tires.MEDIUM]: 1200 * 0.8571, // ≈ 1028.6
-      [Tires.HARD]: 1600 * 0.8571, // ≈ 1371.4
-      [Tires.WET]: 1200 * 0.8571, // ≈ 1028.6
-      [Tires.INTER]: 1200 * 0.8571, // ≈ 1028.6
+      [Tires.SOFT]: 150, // 2.5
+      [Tires.MEDIUM]: 185.94, // 3.1 (15% a menos)
+      [Tires.HARD]: 255, // 4.25 (15% a menos)
+      [Tires.WET]: 200, // 3.33
+      [Tires.INTER]: 200, // 3.33
       [Tires.FLAT]: Infinity,
       [Tires.TRAIN]: Infinity,
+      // [Tires.SOFT]: 900 * 0.8571, // ≈ 771.4
+      // [Tires.MEDIUM]: 1200 * 0.8571, // ≈ 1028.6
+      // [Tires.HARD]: 1600 * 0.8571, // ≈ 1371.4
+      // [Tires.WET]: 1200 * 0.8571, // ≈ 1028.6
+      // [Tires.INTER]: 1200 * 0.8571, // ≈ 1028.6
+      // [Tires.FLAT]: Infinity,
+      // [Tires.TRAIN]: Infinity,
     };
   }
 };

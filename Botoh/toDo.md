@@ -2,13 +2,13 @@
 
 # Testes/Ficar de olho
 
-Zandvoort dando pra sair ghost
-
-Problema postado no discord pit stop
 Nurburgring dando pra passar antes de comecar com rr
 Miami dando pra passar antes de comecar com rr
 
 # To do dos Mapas
+
+Voltar (Mudar punicao para 2s), esta no meu discord pv
+Voltar (Mudar pneus para igual pub)
 
 # To-do rapidos
 

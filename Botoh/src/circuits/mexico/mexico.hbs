@@ -569,7 +569,7 @@ true, "color" : "777777", "bCoef" : 0, "cMask" : ["red","blue","c0" ], "cGroup"
 0.25, "cGroup" : ["redKO","blueKO" ] }, { "v0" : 40, "v1" : 204, "vis" : true,
 "color" : "ffffff", "bCoef" : 0.25, "cGroup" : ["redKO","blueKO" ] }, { "v0" :
 40, "v1" : 205, "vis" : true, "color" : "C8102E", "bCoef" : 0.25, "cGroup" :
-["redKO","blueKO" ] } ], "goals" : [ ], "discs" : [ { "pos" : [-6000,0 ],
+["redKO","blueKO" ] } ], "goals" : [ ], "discs" : [ { "pos" : [-3250,0 ],
 "bCoef" : 10, "cMask" : ["ball" ], "damping" : 1, "speed" : [4.471,0 ] }, {
 "radius" : 5, "invMass" : 0, "pos" : [-349,-31 ], "color" : "C8102E", "bCoef" :
 0, "cMask" : ["red","blue","c0" ], "cGroup" : ["wall" ], "damping" : 0 }, {
@@ -728,19 +728,22 @@ true, "color" : "777777", "bCoef" : 0, "cMask" : ["red","blue","c0" ], "cGroup"
 "radius" : 5, "invMass" : 0, "pos" : [2477,514 ], "color" : "C8102E", "bCoef" :
 0, "cMask" : ["red","blue","c0" ], "cGroup" : ["wall" ], "damping" : 0 }, {
 "radius" : 5, "invMass" : 0, "pos" : [2497,467 ], "color" : "C8102E", "bCoef" :
-0, "cMask" : ["red","blue","c0" ], "cGroup" : ["wall" ], "damping" : 0 } ],
-"planes" : [ { "normal" : [0,1 ], "dist" : -188, "bCoef" : 0.25, "cMask" :
-["red","blue" ], "cGroup" : ["redKO","blueKO" ] }, { "normal" : [0,-1 ], "dist"
-: 21, "bCoef" : 0, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ] },
-{ "normal" : [1,0 ], "dist" : -2449, "bCoef" : 0.25, "cMask" : ["red","blue" ],
-"cGroup" : ["redKO","blueKO" ] }, { "normal" : [0,1 ], "dist" : -403, "bCoef" :
-0.25, "cMask" : ["red","blue" ] }, { "normal" : [-1,0 ], "dist" : 1695, "bCoef"
-: 0.25, "cMask" : ["red","blue","c0" ], "cGroup" : ["redKO","blueKO" ] } ],
-"traits" : { "ballArea" : { "vis" : false, "bCoef" : 1, "cMask" : ["ball" ] },
-"goalPost" : { "radius" : 8, "invMass" : 0, "bCoef" : 0.5 }, "goalNet" : { "vis"
-: true, "bCoef" : 0.1, "cMask" : ["ball" ] }, "kickOffBarrier" : { "vis" :
-false, "bCoef" : 0.1, "cGroup" : ["redKO","blueKO" ], "cMask" : ["red","blue" ]
-}, "boostNet" : { "vis" : true, "bCoef" : -3, "cMask" : ["ball" ], "color" :
+0, "cMask" : ["red","blue","c0" ], "cGroup" : ["wall" ], "damping" : 0 }, {
+"pos" : [-1700,-300 ], "bCoef" : 100, "cMask" : ["ball" ], "damping" : 1,
+"speed" : [0,0 ] }, { "pos" : [-4950,-300 ], "bCoef" : 100, "cMask" : ["ball" ],
+"damping" : 1, "speed" : [4.471,0 ] } ], "planes" : [ { "normal" : [0,1 ],
+"dist" : -188, "bCoef" : 0.25, "cMask" : ["red","blue" ], "cGroup" :
+["redKO","blueKO" ] }, { "normal" : [0,-1 ], "dist" : 21, "bCoef" : 0, "cMask" :
+["red","blue" ], "cGroup" : ["redKO","blueKO" ] }, { "normal" : [1,0 ], "dist" :
+-2449, "bCoef" : 0.25, "cMask" : ["red","blue" ], "cGroup" : ["redKO","blueKO" ]
+}, { "normal" : [0,1 ], "dist" : -403, "bCoef" : 0.25, "cMask" : ["red","blue" ]
+}, { "normal" : [-1,0 ], "dist" : 1695, "bCoef" : 0.25, "cMask" :
+["red","blue","c0" ], "cGroup" : ["redKO","blueKO" ] } ], "traits" : {
+"ballArea" : { "vis" : false, "bCoef" : 1, "cMask" : ["ball" ] }, "goalPost" : {
+"radius" : 8, "invMass" : 0, "bCoef" : 0.5 }, "goalNet" : { "vis" : true,
+"bCoef" : 0.1, "cMask" : ["ball" ] }, "kickOffBarrier" : { "vis" : false,
+"bCoef" : 0.1, "cGroup" : ["redKO","blueKO" ], "cMask" : ["red","blue" ] },
+"boostNet" : { "vis" : true, "bCoef" : -3, "cMask" : ["ball" ], "color" :
 [40,240,150 ] } }, "playerPhysics" : { "bCoef" : 0.5, "invMass" : 0.5, "damping"
 : 0.985, "acceleration" : 0.144, "kickingAcceleration" : 0.148, "kickingDamping"
 : 0.986, "kickStrength" : 0, "radius" : 14.25, "cGroup" : [ "red", "blue" ],
