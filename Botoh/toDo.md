@@ -2,15 +2,20 @@
 
 # Testes/Ficar de olho
 
-As vezes o pneu nao muda visualmente emoji
-Quando troca de mapa manuamente, resetar o circuito votado
-Tratar quando nao tiver ninguem na sala
-Qualy as vezes sem ghost
+Zandvoort dando pra sair ghost
+
+Problema postado no discord pit stop
 Nurburgring dando pra passar antes de comecar com rr
+Miami dando pra passar antes de comecar com rr
 
 # To do dos Mapas
 
 # To-do rapidos
+
+Qualy sem ghost em Miami
+Na qualy dar Ghost pra geral antes msm de comecar
+
+Quando troca de mapa manuamente, resetar o circuito votado
 
 Ver a questao do replay nao funfando
 
@@ -47,7 +52,7 @@ node generateCutSegments.js
 
 npm run convert:circuits
 
-$env:HAXBALL_GEO="ES,40.4168,-3.7038"
+$env:HAXBALL_GEO="DE,50.1109,8.6821"
 $env:HAXBALL_TOKEN="thr1.AAAAAGjOzitQJz04f8bKFg.UvDUmsRVWxg"
 $env:LANGUAGE="en"
 npm run start:league

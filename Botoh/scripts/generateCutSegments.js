@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 const MAP_FILE =
-  "C:\\Users\\senho\\Documents\\Ftoh\\FTOH-Bot\\Botoh\\src\\circuits\\zandvoort\\zandvoort.json";
+  "C:\\Users\\senho\\Documents\\Ftoh\\FTOH-Bot\\Botoh\\src\\circuits\\mexico\\mexico.json";
 const SEGMENT_COLOR = "696969";
 
 const mapJson = JSON.parse(fs.readFileSync(MAP_FILE, "utf-8"));

@@ -93,7 +93,7 @@
   "TYRE_STEP_ERROR": "🛞{{fltstatus}}🛞{{frtstatus}}🛞{{bltstatus}}🛞{{brtstatus}} |❌ hubo un problema, lo estamos solucionando!",
   "TYRE_STEP_SUCCESS": "🛞{{fltstatus}}🛞{{frtstatus}}🛞{{bltstatus}}🛞{{brtstatus}} |✅🚨✅NEUMÁTICOS CAMBIADOS, ¡VAMOS, VAMOS, VAMOS!!!✅🚨✅",
   "CANCELED_CHANGE_TYRES": "❌🚨❌Pit-stop cancelado, se detectó movimiento.❌🚨❌",
-  "CHANGED_TIRES": "{{name}} cambió los neumáticos a {{tires}} con una parada en boxes de {{segundos}}s",
+  "CHANGED_TIRES": "{{name}} cambió los neumáticos a {{tires}} con una parada en boxes de {{seconds}}s",
   "FASTEST_PIT": "👨‍🔧 ¡Parada en boxes más rápida de la carrera! {{name}} - {{seconds}}s",
   "EXPLAIN_RAIN": "Cuando la lluvia comience, cambia los neumáticos con !neumáticos (i|w), lluvia ligera = intermedios, fuerte = mojado",
   "EXPLAIN_SERVER": "¡Bienvenido a FTOH! Este es un servidor de carreras de Fórmula 1 en Haxball. Primero, está la clasificación (qualy), donde debes hacer el mejor tiempo posible. Luego viene la carrera, compuesta por 7 vueltas. ¡Presta atención a los neumáticos — marcan toda la diferencia!",

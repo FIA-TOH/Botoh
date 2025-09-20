@@ -93,7 +93,7 @@
   "TYRE_STEP_ERROR": "🛞{{fltstatus}}🛞{{frtstatus}}🛞{{bltstatus}}🛞{{brtstatus}} |❌ there was a problem, we are fixing it!",
   "TYRE_STEP_SUCCESS": "🛞{{fltstatus}}🛞{{frtstatus}}🛞{{bltstatus}}🛞{{brtstatus}} |✅🚨✅TYRES CHANGED, GO, GO, GO!!!✅🚨✅",
   "CANCELED_CHANGE_TYRES": "❌🚨❌Pit stop canceled, movement detected.❌🚨❌",
-  "CHANGED_TIRES": "{{name}} changed tyres to {{tires}} with a {{segundos}}s pitstop",
+  "CHANGED_TIRES": "{{name}} changed tyres to {{tires}} with a {{seconds}}s pitstop",
   "FASTEST_PIT": "👨‍🔧 Fastest pit stop of the race! {{name}} - {{seconds}}s",
   "EXPLAIN_RAIN": "When the rain starts, change the tires with !tires (i|w), light rain = intermediate, heavy rain = wet",
   "EXPLAIN_SERVER": "Welcome to FTOH! This is a Formula 1 racing server in Haxball. First is qualifying, where you must set the best possible time. Then comes the race, consisting of 7 laps. Pay attention to your tyres — they make all the difference!",
