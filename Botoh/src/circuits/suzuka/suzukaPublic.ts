@@ -3,7 +3,10 @@ import { Circuit, CircuitInfo, Direction } from "../Circuit";
 import { readFileSync } from "fs";
 import { join } from "path";
 
-const suzukaPublic_raw = readFileSync(join(__dirname, "suzuka.hbs"), "utf-8");
+const suzukaPublic_raw = readFileSync(
+  join(__dirname, "suzukaPublic.hbs"),
+  "utf-8"
+);
 const suzukaPublic_json = JSON.parse(suzukaPublic_raw);
 
 const SUZUKAPUBLIC_INFO: CircuitInfo = {

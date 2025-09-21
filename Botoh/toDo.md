@@ -5,17 +5,19 @@
 Nurburgring dando pra passar antes de comecar com rr
 Miami dando pra passar antes de comecar com rr
 
-# To do dos Mapas
+Na qualy dar Ghost pra geral antes msm de comecar
 
-Voltar (Mudar punicao para 2s), esta no meu discord pv
-Voltar (Mudar pneus para igual pub)
+# To do dos Mapas
 
 # To-do rapidos
 
-Qualy sem ghost em Miami
-Na qualy dar Ghost pra geral antes msm de comecar
+Deixar host 24/7 problema SSH
+Muitos ⚠️⚠️⚠️[Discord RATE LIMIT] (LOG) Retentando em 1000ms
+❌❌❌[Discord NETWORK ERROR] (RACE_RESULTS): TypeError: object is not iterable at Object.fetch (node:internal/streams/pipeline:231:11) at async T (/home/formula1/F1OR-Bot-Batch/dist/pub.js:1:191968) ❌❌❌[Discord NETWORK ERROR] (QUALI_RESULTS): TypeError: object is not iterable at Object.fetch (node:internal/streams/pipeline:231:11) at async T (/home/formula1/F1OR-Bot-Batch/dist/pub.js:1:191968)
 
 Quando troca de mapa manuamente, resetar o circuito votado
+
+Slipstream em corrida adaptar
 
 Ver a questao do replay nao funfando
 
@@ -24,6 +26,7 @@ Add mapas atualizado rodri esta no discord
 Tempo mais exato
 Tentar fazer banking como o rodri falou
 Automaticamente se o cara saiu e voltar depois de X tempo, ele consegue voltar para a corrida saindo dos boxes em ultimo
+Pneu estourar
 Mapas
 
 # To-Do longos

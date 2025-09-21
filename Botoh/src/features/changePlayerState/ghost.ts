@@ -20,8 +20,6 @@ export function setGhostMode(
     ? room.CollisionFlags.c0 | room.CollisionFlags.redKO
     : room.CollisionFlags.red | room.CollisionFlags.redKO;
 
-  if (room.getScores() != null) {
-    const playersAndDiscs = getPlayerAndDiscs(room);
-    updatePlayerCollision(room, playersAndDiscs, collisionGroup);
-  }
+  const playersAndDiscs = getPlayerAndDiscs(room);
+  updatePlayerCollision(room, playersAndDiscs, collisionGroup);
 }

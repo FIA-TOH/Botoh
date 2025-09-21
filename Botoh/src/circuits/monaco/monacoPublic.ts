@@ -1,16 +1,14 @@
-
-
 import { readFileSync } from "fs";
 import { join } from "path";
 
 import { bestTimes } from "../bestTimes";
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
 
-const monacoPublic_raw = readFileSync(join(__dirname, "monacoPublic.hbs"), "utf-8");
+const monacoPublic_raw = readFileSync(
+  join(__dirname, "monacoPublic.hbs"),
+  "utf-8"
+);
 const monacoPublic_json = JSON.parse(monacoPublic_raw);
-
-
-
 
 const MONACOPUBLIC_INFO: CircuitInfo = {
   finishLine: {
@@ -100,6 +98,26 @@ const MONACOPUBLIC_INFO: CircuitInfo = {
   Limit: 5,
   Votes: 0,
   pitSpeed: 0.955,
+  CutDetectSegments: [
+    {
+      v0: [454, -219],
+      v1: [496, -280],
+      index: 165,
+      penalty: 5,
+    },
+    {
+      v0: [-675, -1131],
+      v1: [-847, -1055],
+      index: 187,
+      penalty: 5,
+    },
+    {
+      v0: [-847, -1055],
+      v1: [-681, -1065],
+      index: 188,
+      penalty: 5,
+    },
+  ],
 };
 
 export const MONACOPUBLIC: Circuit = {

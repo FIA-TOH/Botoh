@@ -1,16 +1,14 @@
-
-
 import { readFileSync } from "fs";
 import { join } from "path";
 
 import { bestTimes } from "../bestTimes";
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
 
-const valenciaPublic_raw = readFileSync(join(__dirname, "valenciaPublic.hbs"), "utf-8");
+const valenciaPublic_raw = readFileSync(
+  join(__dirname, "valenciaPublic.hbs"),
+  "utf-8"
+);
 const valenciaPublic_json = JSON.parse(valenciaPublic_raw);
-
-
-
 
 const VALENCIAPUBLIC_INFO: CircuitInfo = {
   finishLine: {
@@ -112,6 +110,62 @@ const VALENCIAPUBLIC_INFO: CircuitInfo = {
   Limit: 5,
   Votes: 0,
   pitSpeed: 0.92,
+  CutDetectSegments: [
+    {
+      v0: [3970, 175],
+      v1: [4156, 351],
+      index: 186,
+      penalty: 5,
+    },
+    {
+      v0: [-3496, -121],
+      v1: [-3455, -118],
+      index: 211,
+      penalty: 5,
+    },
+    {
+      v0: [-2183, -706],
+      v1: [-2187, -858],
+      index: 212,
+      penalty: 5,
+    },
+    {
+      v0: [-1644, -405],
+      v1: [-1623, -509],
+      index: 213,
+      penalty: 5,
+    },
+    {
+      v0: [-625, 539],
+      v1: [-555, 492],
+      index: 214,
+      penalty: 5,
+    },
+    {
+      v0: [380, 1283],
+      v1: [385, 1223],
+      index: 215,
+      penalty: 5,
+    },
+    {
+      v0: [248, 1117],
+      v1: [53, 1186],
+      index: 217,
+      penalty: 5,
+    },
+    {
+      v0: [67, 1068],
+      v1: [53, 1186],
+      index: 224,
+      penalty: 5,
+    },
+    {
+      v0: [2370, -805],
+      v1: [2407, -596],
+      index: 225,
+      penalty: 5,
+    },
+  ],
 };
 
 export const VALENCIAPUBLIC: Circuit = {
