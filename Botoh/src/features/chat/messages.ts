@@ -345,20 +345,20 @@ export const MESSAGES = {
     pt: pt_messages.VSC_NOT_ACTIVE,
   }),
 
-  DISCORD_INVITE: (): LocalizedMessageFunction => ({
-    en: en_messages.DISCORD_INVITE,
-    es: es_messages.DISCORD_INVITE,
-    fr: fr_messages.DISCORD_INVITE,
-    tr: tr_messages.DISCORD_INVITE,
-    pt: pt_messages.DISCORD_INVITE,
+  DISCORD_INVITE: (link: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.DISCORD_INVITE, { link: link }),
+    es: replaceTemplateString(es_messages.DISCORD_INVITE, { link: link }),
+    fr: replaceTemplateString(fr_messages.DISCORD_INVITE, { link: link }),
+    tr: replaceTemplateString(tr_messages.DISCORD_INVITE, { link: link }),
+    pt: replaceTemplateString(pt_messages.DISCORD_INVITE, { link: link }),
   }),
 
-  LEAGUE_INVITE: (): LocalizedMessageFunction => ({
-    en: en_messages.LEAGUE_INVITE,
-    es: es_messages.LEAGUE_INVITE,
-    fr: fr_messages.LEAGUE_INVITE,
-    tr: tr_messages.LEAGUE_INVITE,
-    pt: pt_messages.LEAGUE_INVITE,
+  LEAGUE_INVITE: (link: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.LEAGUE_INVITE, { link: link }),
+    es: replaceTemplateString(es_messages.LEAGUE_INVITE, { link: link }),
+    fr: replaceTemplateString(fr_messages.LEAGUE_INVITE, { link: link }),
+    tr: replaceTemplateString(tr_messages.LEAGUE_INVITE, { link: link }),
+    pt: replaceTemplateString(pt_messages.LEAGUE_INVITE, { link: link }),
   }),
 
   NO_MANUAL_MAPS: (): LocalizedMessageFunction => ({

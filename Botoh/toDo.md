@@ -78,6 +78,7 @@ node generateCutSegments.js
 
 npm run convert:circuits
 
+$env:LEAGUE_ENV="haxbula"
 $env:HAXBALL_GEO="DE,50.1109,8.6821"
 $env:HAXBALL_TOKEN="thr1.AAAAAGjOzitQJz04f8bKFg.UvDUmsRVWxg"
 $env:LANGUAGE="en"

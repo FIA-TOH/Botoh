@@ -36,6 +36,7 @@ import {
 } from "../discord/logResults";
 import { gameStarted, setGameStarted } from "./gameTick";
 import { positionList } from "../changeGameState/race/positionList";
+import { sendDiscordMessage } from "../discord/sendDiscordLink";
 
 export function GameStop(room: RoomObject) {
   room.onGameStop = function (byPlayer) {
@@ -105,7 +106,7 @@ export function GameStop(room: RoomObject) {
           printAllPositions(room);
           movePlayersToCorrectSide();
           resetPlayers(room);
-          sendChatMessage(room, MESSAGES.DISCORD_INVITE());
+          sendDiscordMessage(room);
         }
       }
       clearPlayers();

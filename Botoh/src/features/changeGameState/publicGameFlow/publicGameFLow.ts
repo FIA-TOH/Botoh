@@ -11,6 +11,7 @@ import {
   sendQualiResultsToDiscord,
   sendRaceResultsToDiscord,
 } from "../../discord/logResults";
+import { sendDiscordMessage } from "../../discord/sendDiscordLink";
 import { movePlayersToCorrectSide } from "../../movePlayers/movePlayerToCorrectSide";
 import {
   reorderPlayersByRacePosition,
@@ -53,7 +54,8 @@ export default async function PublicGameFlow(room: RoomObject) {
     voteSession(room);
     await delay(10);
 
-    sendChatMessage(room, MESSAGES.DISCORD_INVITE());
+    sendDiscordMessage(room);
+
     await delay(10);
 
     handleMuteCommand(undefined, undefined, room);
@@ -109,7 +111,7 @@ export default async function PublicGameFlow(room: RoomObject) {
     room.startGame();
     await delay(5);
 
-    sendChatMessage(room, MESSAGES.DISCORD_INVITE());
+    sendDiscordMessage(room);
     await delay(10);
 
     handleMuteCommand(undefined, undefined, room);

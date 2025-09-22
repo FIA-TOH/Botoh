@@ -5,6 +5,8 @@ import {
   maxPlayers,
   publicName,
   roomPassword,
+  haxbulaLeagueName,
+  haxbulaPublicName,
 } from "../roomconfig.json";
 import { LEAGUE_MODE } from "./features/hostLeague/leagueMode";
 import { handleGameStateChange } from "./features/changeGameState/gameState";
@@ -20,7 +22,14 @@ import { GameStop } from "./features/roomFeatures/gameStop";
 import { PlaerActivity } from "./features/roomFeatures/playerActivitie";
 import { log } from "./features/discord/logger";
 
-const roomName = LEAGUE_MODE ? leagueName : publicName;
+const envName = process.env.LEAGUE_ENV || "ftoh";
+const roomName = LEAGUE_MODE
+  ? envName === "haxbula"
+    ? haxbulaLeagueName
+    : leagueName
+  : envName === "haxbula"
+  ? haxbulaPublicName
+  : publicName;
 
 function getGeo() {
   const geoEnv = process.env.HAXBALL_GEO;

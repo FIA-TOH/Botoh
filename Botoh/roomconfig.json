@@ -5,6 +5,8 @@
   "bans": ["90.94.201.31"],
   "publicName": "🏎️ Formula 1 - FTOH 🏎️",
   "leagueName": "🏎️ Formula 1 - FTOH 🏎️",
+  "haxbulaPublicName": "🏎️ Formula 1 - HAXBULA 🏎️",
+  "haxbulaLeagueName": "🏎️ Formula 1 - HAXBULA 🏎️",
   "maxPlayers": 22,
   "roomPassword": null,
   "afkKickTime": 27,

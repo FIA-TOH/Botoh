@@ -5,13 +5,25 @@ import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { getTimestamp } from "../utils";
 import FormData from "form-data";
 
-const PUBLIC_CHAT_URL = process.env.PUBLIC_CHAT_URL!;
-const LEAGUE_CHAT_URL = process.env.LEAGUE_CHAT_URL!;
-const PUBLIC_LOG_URL = process.env.PUBLIC_LOG_URL!;
-const LEAGUE_LOG_URL = process.env.LEAGUE_LOG_URL!;
-const LEAGUE_REPLAY_URL = process.env.LEAGUE_REPLAY_URL!;
-const PUBLIC_REPLAY_URL = process.env.PUBLIC_REPLAY_URL!;
-const TRACK_RECORDS_URL = process.env.TRACK_RECORDS_URL!;
+const PUBLIC_CHAT_URL =
+  "https://discord.com/api/webhooks/1409976523330682950/9SS0ZO32tm8KzreIq0PcQi3C3_isAF27CjGlHeYFDDxev3bTHJ5xUlkRDIx-N6gNhTvV";
+const LEAGUE_CHAT_URL =
+  "https://discord.com/api/webhooks/1409977213574582483/NM2mnWN-q2jfYdzjIBtEKROpEeuQTx3VR9fFH8Xxfpdb6NTe5lKXb1iFlepxNJMggDdG";
+
+const PUBLIC_LOG_URL =
+  "https://discord.com/api/webhooks/1409973122123305110/epnjcCGSYoH67p2F40GEOWkADE04ICFE3hWh2QinZ-EwdRouh5fs1oDMv19WS51ljLEP";
+
+const LEAGUE_LOG_URL =
+  "https://discord.com/api/webhooks/1409974260604211230/KAkU33uUQnMRARZUcv9f0y4O6Ayuomjjsy6QHc6TO1mAmBd4Pvo6eAwJkdmJF5ACcYHU";
+
+const LEAGUE_REPLAY_URL =
+  "https://discord.com/api/webhooks/1409983513884885163/SHzJwoxubzzUzCZ8nAJ8R5cTE_sX1eM4gkRpROiIdBFfXdRjVKM5kK4mYwbcJBMqARPT";
+
+const PUBLIC_REPLAY_URL =
+  "https://discord.com/api/webhooks/1409983406971945080/z_HnlNnCnRQlD7nTfAPyjkMUYpGYYKM8j9jQutjGbXmo2jmIJmPdSrwXBtp27FxaCtBe";
+
+const TRACK_RECORDS_URL =
+  "https://discord.com/api/webhooks/1415118391546613810/O49b609XYQkYj1Y6G5KOkkkuifHiNevGRcb3SqK0hNVgJmzf9976ByNc7UdznUYQceZg";
 
 function splitMessage(msg: string, size = 2000): string[] {
   const chunks: string[] = [];
