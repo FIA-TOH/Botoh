@@ -1,3 +1,4 @@
+import { GameMode, gameMode } from "../changeGameState/changeGameModes";
 import { getPlayersOrderedByQualiTime } from "../changeGameState/qualy/playerTime";
 import { positionList } from "../changeGameState/race/positionList";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
@@ -26,9 +27,18 @@ export function sendQualiResultsToDiscord() {
 
   const pole = orderedList[0];
 
+  let gameModeResult;
+  if (gameMode === GameMode.QUALY) {
+    gameModeResult = "QUALIFYING";
+  } else if (gameMode === GameMode.TRAINING) {
+    gameModeResult = "TRAINING";
+  } else {
+    gameModeResult = "OTHER";
+  }
+
   const header =
     "```" +
-    `\n🏁 QUALIFYING RESULTS - ${ACTUAL_CIRCUIT.info.name} 🏁` +
+    `\n🏁 ${gameModeResult} RESULTS - ${ACTUAL_CIRCUIT.info.name} 🏁` +
     `\nTime: ${getTimestamp()}` +
     "\nPos | Driver (Team)     | Gap       | Best Lap " +
     "\n---------------------------------------------------------------------";
@@ -57,11 +67,19 @@ export function sendQualiResultsToDiscord() {
 }
 export function sendRaceResultsToDiscord() {
   if (positionList.length === 0) return;
+  let gameModeResult;
+  if (gameMode === GameMode.RACE) {
+    gameModeResult = "RACE";
+  } else if (gameMode === GameMode.INDY) {
+    gameModeResult = "INDY";
+  } else {
+    gameModeResult = "OTHER";
+  }
 
   const winner = positionList[0];
   const header =
     "```" +
-    `\n🏁 FINAL RACE RESULTS - ${ACTUAL_CIRCUIT.info.name} 🏁` +
+    `\n🏁 FINAL ${gameModeResult} RESULTS - ${ACTUAL_CIRCUIT.info.name} 🏁` +
     `\nTime: ${getTimestamp()}` +
     `\nLaps: ${laps}` +
     "\nPos | Driver (Team)     | Gap       | Total Time  | Fast Lap  | Laps | Pits" +

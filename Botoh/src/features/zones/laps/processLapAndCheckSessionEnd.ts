@@ -1,7 +1,7 @@
 import { gameMode, GameMode } from "../../changeGameState/changeGameModes";
 import { qualiTime } from "../../changeGameState/qualy/qualiMode";
 import { showPlayerQualiPosition } from "../../changeGameState/qualy/showPositionQualy";
-import { positionList } from "../../changeGameState/race/positionList";
+import { printAllPositions } from "../../changeGameState/race/printAllPositions";
 import { playerList } from "../../changePlayerState/playerList";
 import { sendChatMessage, sendSuccessMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
@@ -51,7 +51,7 @@ export function processLapAndCheckSessionEnd(
             p.id
           );
         } else {
-          console.log(positionList);
+          printAllPositions(room, 1000);
           notifySpectatorsCurrentLap(room, currentLap, playerAndDiscs);
         }
       } else {

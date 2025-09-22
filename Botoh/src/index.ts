@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config({ path: "../.env" });
+
 import { LEAGUE_MODE } from "./features/hostLeague/leagueMode";
 import { roomPromise } from "./room";
 

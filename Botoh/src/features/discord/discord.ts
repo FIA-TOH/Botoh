@@ -4,27 +4,14 @@ import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { getTimestamp } from "../utils";
 import FormData from "form-data";
-import { Blob } from "buffer";
 
-const PUBLIC_CHAT_URL =
-  "https://discord.com/api/webhooks/1409976523330682950/9SS0ZO32tm8KzreIq0PcQi3C3_isAF27CjGlHeYFDDxev3bTHJ5xUlkRDIx-N6gNhTvV";
-const LEAGUE_CHAT_URL =
-  "https://discord.com/api/webhooks/1409977213574582483/NM2mnWN-q2jfYdzjIBtEKROpEeuQTx3VR9fFH8Xxfpdb6NTe5lKXb1iFlepxNJMggDdG";
-
-const PUBLIC_LOG_URL =
-  "https://discord.com/api/webhooks/1409973122123305110/epnjcCGSYoH67p2F40GEOWkADE04ICFE3hWh2QinZ-EwdRouh5fs1oDMv19WS51ljLEP";
-
-const LEAGUE_LOG_URL =
-  "https://discord.com/api/webhooks/1409974260604211230/KAkU33uUQnMRARZUcv9f0y4O6Ayuomjjsy6QHc6TO1mAmBd4Pvo6eAwJkdmJF5ACcYHU";
-
-const LEAGUE_REPLAY_URL =
-  "https://discord.com/api/webhooks/1409983513884885163/SHzJwoxubzzUzCZ8nAJ8R5cTE_sX1eM4gkRpROiIdBFfXdRjVKM5kK4mYwbcJBMqARPT";
-
-const PUBLIC_REPLAY_URL =
-  "https://discord.com/api/webhooks/1409983406971945080/z_HnlNnCnRQlD7nTfAPyjkMUYpGYYKM8j9jQutjGbXmo2jmIJmPdSrwXBtp27FxaCtBe";
-
-const TRACK_RECORDS_URL =
-  "https://discord.com/api/webhooks/1415118391546613810/O49b609XYQkYj1Y6G5KOkkkuifHiNevGRcb3SqK0hNVgJmzf9976ByNc7UdznUYQceZg";
+const PUBLIC_CHAT_URL = process.env.PUBLIC_CHAT_URL!;
+const LEAGUE_CHAT_URL = process.env.LEAGUE_CHAT_URL!;
+const PUBLIC_LOG_URL = process.env.PUBLIC_LOG_URL!;
+const LEAGUE_LOG_URL = process.env.LEAGUE_LOG_URL!;
+const LEAGUE_REPLAY_URL = process.env.LEAGUE_REPLAY_URL!;
+const PUBLIC_REPLAY_URL = process.env.PUBLIC_REPLAY_URL!;
+const TRACK_RECORDS_URL = process.env.TRACK_RECORDS_URL!;
 
 function splitMessage(msg: string, size = 2000): string[] {
   const chunks: string[] = [];
@@ -34,157 +21,176 @@ function splitMessage(msg: string, size = 2000): string[] {
   return chunks;
 }
 
-export function sendDiscordFile(data: any, fileName: string, source: string) {
-  const FILE_URL = LEAGUE_MODE ? LEAGUE_LOG_URL : PUBLIC_LOG_URL;
-  const buffer = Buffer.from(JSON.stringify(data, null, 2), "utf-8");
-
-  const formData = new FormData();
-  formData.append("file", buffer, fileName);
-
-  sendRequestWithRetry(FILE_URL, formData, source, 1000, true);
-}
-
-export function sendDiscordLog(message: string) {
-  const LOG_URL = LEAGUE_MODE ? LEAGUE_LOG_URL : PUBLIC_LOG_URL;
-  const sanitizedMessage = message.replace(/@(?=[a-zA-Z])/g, "@ ");
-  const timestampedMessage = `${sanitizedMessage} - ${getTimestamp()}`;
-  const parts = splitMessage(timestampedMessage);
-
-  parts.forEach((part) => {
-    sendRequestWithRetry(LOG_URL, { content: part }, "LOG");
-  });
-}
-export function sendDiscordChat(message: string) {
-  const MESSAGES_URL = LEAGUE_MODE ? LEAGUE_CHAT_URL : PUBLIC_CHAT_URL;
-
-  const sanitizedMessage = message.replace(/@(?=[a-zA-Z])/g, "@ ");
-
-  const parts = splitMessage(sanitizedMessage);
-  parts.forEach((part) => {
-    sendRequestWithRetry(MESSAGES_URL, { content: part }, "CHAT");
-  });
-}
-export function sendDiscordPlayerChat(userInfo: PlayerObject, message: string) {
-  const MESSAGES_URL = LEAGUE_MODE ? LEAGUE_CHAT_URL : PUBLIC_CHAT_URL;
-  const sanitizedMessage = message.replace(/@(?=[a-zA-Z])/g, "@ ");
-
-  const team = getPlayerTeam(playerList[userInfo.id]);
-
-  const embedColor = team ? team.color : 0xb3b3b3;
-
-  const parts = splitMessage(sanitizedMessage);
-
-  parts.forEach((part) => {
-    const embed = {
-      username: userInfo.name,
-      embeds: [
-        {
-          color: embedColor,
-          description: part,
-          footer: {
-            text: getTimestamp(),
-          },
-        },
-      ],
-    };
-
-    sendRequestWithRetry(MESSAGES_URL, embed, "PLAYER_CHAT_EMBED");
-  });
-}
-
-export function sendDiscordResult(message: string) {
-  const LOG_URL = LEAGUE_MODE ? LEAGUE_REPLAY_URL : PUBLIC_REPLAY_URL;
-  const sanitizedMessage = message.replace(/@(?=[a-zA-Z])/g, "@ ");
-  const timestampedMessage = `${sanitizedMessage} - ${getTimestamp()}`;
-  const parts = splitMessage(timestampedMessage);
-
-  parts.forEach((part) => {
-    sendRequestWithRetry(LOG_URL, { content: part }, "RESULT");
-  });
-}
-export function sendDiscordTrackRecord(playerName: string, lapTime: number) {
-  const embed = {
-    username: "Records de Pista",
-    embeds: [
-      {
-        color: 0xff75d1,
-        title: "New track record! 🏆",
-        fields: [
-          { name: "🏎️ Driver:", value: playerName, inline: false },
-          {
-            name: "🌍 Circuit:",
-            value: ACTUAL_CIRCUIT.info.name + " - By Ximb",
-            inline: false,
-          },
-          { name: "⏱️ Time:", value: lapTime.toFixed(3) + "s", inline: false },
-        ],
-        footer: {
-          text: getTimestamp(),
-        },
-      },
-    ],
-  };
-
-  sendRequestWithRetry(TRACK_RECORDS_URL, embed, "TRACK_RECORD_EMBED");
-}
-
-function generateFileName() {
-  const now = new Date();
-  const day = now.getDate().toString().padStart(2, "0");
-  const month = (now.getMonth() + 1).toString().padStart(2, "0");
-  const year = now.getFullYear();
-  const hours = now.getHours().toString().padStart(2, "0");
-  const minutes = now.getMinutes().toString().padStart(2, "0");
-  return `HBReplay-${day}-${month}-${year}-${hours}h${minutes}m - [${ACTUAL_CIRCUIT.info.name}].hbr2`;
-}
-export function sendDiscordReplay(replay: Uint8Array) {
-  const REPLAYS_URL = LEAGUE_MODE ? LEAGUE_REPLAY_URL : PUBLIC_REPLAY_URL;
-
-  const buffer = Buffer.from(replay);
-
-  const formData = new FormData();
-  formData.append("file", buffer, generateFileName());
-
-  sendRequestWithRetry(REPLAYS_URL, formData, "REPLAY", 1000, true);
-}
-
-async function sendRequestWithRetry(
+async function safeSend(
   url: string,
   body: any,
   source: string,
-  delay = 1000,
   isFormData = false
-): Promise<void> {
+) {
   try {
+    if (!body)
+      return console.warn(`⚠️ [Discord SKIPPED] (${source}): body empty`);
     const headers = isFormData
       ? body.getHeaders()
       : { "Content-Type": "application/json" };
-
     const res = await fetch(url, {
       method: "POST",
       headers,
       body: isFormData ? body : JSON.stringify(body),
     });
 
-    if (res.ok) {
-      return; // sucesso silencioso
-    } else if (res.status === 429) {
-      const preview = !isFormData
-        ? JSON.stringify(body).slice(0, 100)
-        : "[file upload]";
-      console.warn(
-        `⚠️⚠️⚠️ [Discord RATE LIMIT] (${source}) Retentando em ${delay}ms\nConteúdo: ${preview}`
-      );
-      setTimeout(() => {
-        sendRequestWithRetry(url, body, source, delay * 2, isFormData);
-      }, delay);
-    } else {
-      console.error(
-        `❌❌❌ [Discord ERROR ${res.status}] (${source}):`,
-        await res.text()
-      );
+    if (!res.ok) {
+      if (res.status === 429) {
+        const delay = 1000;
+        setTimeout(() => safeSend(url, body, source, isFormData), delay);
+      } else {
+        console.error(
+          `❌ [Discord ERROR ${res.status}] (${source}):`,
+          await res.text()
+        );
+      }
     }
   } catch (err) {
-    console.error(`❌❌❌ [Discord NETWORK ERROR] (${source}):`, err);
+    console.error(`❌ [Discord NETWORK ERROR] (${source}):`, err);
+  }
+}
+
+export function sendDiscordFile(data: any, fileName: string, source: string) {
+  try {
+    const FILE_URL = LEAGUE_MODE ? LEAGUE_LOG_URL : PUBLIC_LOG_URL;
+    const buffer = Buffer.from(JSON.stringify(data, null, 2), "utf-8");
+    const formData = new FormData();
+    formData.append("file", buffer, fileName);
+    safeSend(FILE_URL, formData, source, true);
+  } catch (err) {
+    console.error("❌ [sendDiscordFile ERROR]:", err);
+  }
+}
+
+export function sendDiscordLog(message: string) {
+  try {
+    if (!message) return;
+    const LOG_URL = LEAGUE_MODE ? LEAGUE_LOG_URL : PUBLIC_LOG_URL;
+    const sanitized = message.replace(/@(?=[a-zA-Z])/g, "@ ");
+    const timestamped = `${sanitized} - ${getTimestamp()}`;
+    splitMessage(timestamped).forEach((part) =>
+      safeSend(LOG_URL, { content: part }, "LOG")
+    );
+  } catch (err) {
+    console.error("❌ [sendDiscordLog ERROR]:", err);
+  }
+}
+
+export function sendDiscordChat(message: string) {
+  try {
+    const MESSAGES_URL = LEAGUE_MODE ? LEAGUE_CHAT_URL : PUBLIC_CHAT_URL;
+    const sanitized = message.replace(/@(?=[a-zA-Z])/g, "@ ");
+    splitMessage(sanitized).forEach((part) =>
+      safeSend(MESSAGES_URL, { content: part }, "CHAT")
+    );
+  } catch (err) {
+    console.error("❌ [sendDiscordChat ERROR]:", err);
+  }
+}
+
+export function sendDiscordPlayerChat(userInfo: PlayerObject, message: string) {
+  try {
+    const MESSAGES_URL = LEAGUE_MODE ? LEAGUE_CHAT_URL : PUBLIC_CHAT_URL;
+    const sanitized = message.replace(/@(?=[a-zA-Z])/g, "@ ");
+    const team = getPlayerTeam(playerList[userInfo.id]);
+    const embedColor = team?.color ?? 0xb3b3b3;
+
+    splitMessage(sanitized).forEach((part) => {
+      const embed = {
+        username: userInfo.name,
+        embeds: [
+          {
+            color: embedColor,
+            description: part,
+            footer: { text: getTimestamp() },
+          },
+        ],
+      };
+      safeSend(MESSAGES_URL, embed, "PLAYER_CHAT_EMBED");
+    });
+  } catch (err) {
+    console.error("❌ [sendDiscordPlayerChat ERROR]:", err);
+  }
+}
+
+export function sendDiscordResult(message: string) {
+  try {
+    if (!message) return;
+    const LOG_URL = LEAGUE_MODE ? LEAGUE_REPLAY_URL : PUBLIC_REPLAY_URL;
+    const sanitized = message.replace(/@(?=[a-zA-Z])/g, "@ ");
+    const timestamped = `${sanitized} - ${getTimestamp()}`;
+    splitMessage(timestamped).forEach((part) =>
+      safeSend(LOG_URL, { content: part }, "RESULT")
+    );
+  } catch (err) {
+    console.error("❌ [sendDiscordResult ERROR]:", err);
+  }
+}
+
+export function sendDiscordTrackRecord(playerName: string, lapTime: number) {
+  try {
+    // Validar lapTime
+    if (!isFinite(lapTime) || lapTime <= 0) {
+      console.warn(`⚠️ Track record inválido para ${playerName}: ${lapTime}`);
+      return;
+    }
+    const embed = {
+      username: "Records de Pista",
+      embeds: [
+        {
+          color: 0xff75d1,
+          title: "New track record! 🏆",
+          fields: [
+            { name: "🏎️ Driver:", value: playerName, inline: false },
+            {
+              name: "🌍 Circuit:",
+              value: ACTUAL_CIRCUIT.info.name + " - By Ximb",
+              inline: false,
+            },
+            {
+              name: "⏱️ Time:",
+              value: lapTime.toFixed(3) + "s",
+              inline: false,
+            },
+          ],
+          footer: { text: getTimestamp() },
+        },
+      ],
+    };
+    safeSend(TRACK_RECORDS_URL, embed, "TRACK_RECORD_EMBED");
+  } catch (err) {
+    console.error("❌ [sendDiscordTrackRecord ERROR]:", err);
+  }
+}
+
+function generateFileName() {
+  try {
+    const now = new Date();
+    const pad = (n: number) => n.toString().padStart(2, "0");
+    return `HBReplay-${pad(now.getDate())}-${pad(
+      now.getMonth() + 1
+    )}-${now.getFullYear()}-${pad(now.getHours())}h${pad(now.getMinutes())}m-[${
+      ACTUAL_CIRCUIT.info.name
+    }].hbr2`;
+  } catch (err) {
+    console.error("❌ [generateFileName ERROR]:", err);
+    return `HBReplay-unknown.hbr2`;
+  }
+}
+
+export function sendDiscordReplay(replay: Uint8Array) {
+  try {
+    const REPLAYS_URL = LEAGUE_MODE ? LEAGUE_REPLAY_URL : PUBLIC_REPLAY_URL;
+    const buffer = Buffer.from(replay);
+    const formData = new FormData();
+    formData.append("file", buffer, generateFileName());
+    safeSend(REPLAYS_URL, formData, "REPLAY", true);
+  } catch (err) {
+    console.error("❌ [sendDiscordReplay ERROR]:", err);
   }
 }
