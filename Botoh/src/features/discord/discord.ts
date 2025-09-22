@@ -161,7 +161,7 @@ export function sendDiscordTrackRecord(playerName: string, lapTime: number) {
             { name: "🏎️ Driver:", value: playerName, inline: false },
             {
               name: "🌍 Circuit:",
-              value: ACTUAL_CIRCUIT.info.name + " - By Ximb",
+              value: ACTUAL_CIRCUIT.info.name,
               inline: false,
             },
             {

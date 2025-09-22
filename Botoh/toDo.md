@@ -2,23 +2,11 @@
 
 # Testes/Ficar de olho
 
-AS vezes sem ghost
 Ver se gameMode Result fica melhor training titulo no discord
 
 # To do dos Mapas
 
 # To-do rapidos
-
-Yas marina bugado
-
-Ver se tem que deixar os webhooks em um env
-Deixar circuitos em Env
-
-Bahrain bugado ghost
-las vegas bolinha ghost bug
-Punicao montreal t1 maior
-
-NewTrack record by ximb
 
 Pub 1 parada obrigatoria
 

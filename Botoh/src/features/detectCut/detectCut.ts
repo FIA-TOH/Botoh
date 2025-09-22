@@ -6,7 +6,7 @@ import { getTimestamp } from "../utils";
 import { applyCutPenalty } from "./applyCutPenalty";
 
 const SEGMENT_CUT_COLOUR = "696969";
-const DEFAULT_PENALTY = 2;
+const DEFAULT_PENALTY = 5;
 
 let cutSegments: CutSegment[] = [];
 const playerLastSegment: Map<number, Set<number>> = new Map();
@@ -20,7 +20,7 @@ export function loadCutSegmentsFromCircuit(circuit: Circuit) {
     cutSegments = circuit.info.CutDetectSegments.map(
       (seg: any, index: number) => ({
         index,
-        penalty: DEFAULT_PENALTY,
+        penalty: seg.penalty ?? DEFAULT_PENALTY,
         v0: [seg.v0[0], seg.v0[1]],
         v1: [seg.v1[0], seg.v1[1]],
       })
@@ -101,15 +101,15 @@ export function detectCut(
     );
 
     if (dist < pad.disc.radius && !lastSet.has(seg.index)) {
-      let realPeanlty = DEFAULT_PENALTY;
+      let realPeanlty = seg.penalty;
       if (room.getScores().time < 30) {
-        realPeanlty = DEFAULT_PENALTY;
+        realPeanlty = seg.penalty / 2;
       }
       log(`${pad.p.name} cutted the track at ${getTimestamp()}`);
-      sendAlertMessage(room, MESSAGES.CUTTED_TRACK(realPeanlty || 2), pad.p.id);
+      sendAlertMessage(room, MESSAGES.CUTTED_TRACK(realPeanlty || 5), pad.p.id);
 
       lastSet.add(seg.index);
-      applyCutPenalty(pad, realPeanlty || 2, room);
+      applyCutPenalty(pad, realPeanlty || 5, room);
     }
 
     if (dist >= pad.disc.radius && lastSet.has(seg.index)) {

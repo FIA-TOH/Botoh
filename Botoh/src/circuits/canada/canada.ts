@@ -1,5 +1,3 @@
-
-
 import { readFileSync } from "fs";
 import { join } from "path";
 
@@ -8,9 +6,6 @@ import { Circuit, CircuitInfo, Direction } from "../Circuit";
 
 const canada_raw = readFileSync(join(__dirname, "canada.hbs"), "utf-8");
 const canada_json = JSON.parse(canada_raw);
-
-
-
 
 const CANADA_INFO: CircuitInfo = {
   finishLine: {
@@ -149,19 +144,19 @@ const CANADA_INFO: CircuitInfo = {
       v0: [-3968, 454],
       v1: [-3803, -239],
       index: 203,
-      penalty: 5,
+      penalty: 10,
     },
     {
       v0: [-3968, 454],
       v1: [-4116, 288],
       index: 204,
-      penalty: 5,
+      penalty: 7,
     },
     {
       v0: [-4116, 288],
       v1: [-4073, 66],
       index: 205,
-      penalty: 5,
+      penalty: 7,
     },
     {
       v0: [-249, -1245],
