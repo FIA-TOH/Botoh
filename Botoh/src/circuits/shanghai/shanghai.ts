@@ -7,10 +7,6 @@ import { join } from "path";
 const shanghai_raw = readFileSync(join(__dirname, "shanghai.hbs"), "utf-8");
 const shanghai_json = JSON.parse(shanghai_raw);
 
-
-
-
-
 const SHANGHAI_INFO: CircuitInfo = {
   finishLine: {
     bounds: {
@@ -178,25 +174,25 @@ const SHANGHAI_INFO: CircuitInfo = {
       v0: [-1521, 33],
       v1: [-1795, -104],
       index: 195,
-      penalty: 5,
+      penalty: 10,
     },
     {
       v0: [-1795, -104],
       v1: [-1893, -346],
       index: 196,
-      penalty: 5,
+      penalty: 10,
     },
     {
       v0: [-1893, -346],
       v1: [-1793, -574],
       index: 197,
-      penalty: 5,
+      penalty: 7,
     },
     {
       v0: [-1793, -574],
       v1: [-1624, -634],
       index: 198,
-      penalty: 5,
+      penalty: 7,
     },
     {
       v0: [-1624, -634],

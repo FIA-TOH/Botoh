@@ -10,10 +10,6 @@ const shanghaiPublic_raw = readFileSync(
 );
 const shanghaiPublic_json = JSON.parse(shanghaiPublic_raw);
 
-
-
-
-
 const SHANGHAIPUBLIC_INFO: CircuitInfo = {
   finishLine: {
     bounds: {
@@ -185,25 +181,25 @@ const SHANGHAIPUBLIC_INFO: CircuitInfo = {
       v0: [-1521, 33],
       v1: [-1795, -104],
       index: 195,
-      penalty: 5,
+      penalty: 10,
     },
     {
       v0: [-1795, -104],
       v1: [-1893, -346],
       index: 196,
-      penalty: 5,
+      penalty: 10,
     },
     {
       v0: [-1893, -346],
       v1: [-1793, -574],
       index: 197,
-      penalty: 5,
+      penalty: 7,
     },
     {
       v0: [-1793, -574],
       v1: [-1624, -634],
       index: 198,
-      penalty: 5,
+      penalty: 7,
     },
     {
       v0: [-1624, -634],
