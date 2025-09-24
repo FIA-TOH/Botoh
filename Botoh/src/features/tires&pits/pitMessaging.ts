@@ -1,3 +1,4 @@
+import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
 import { sendSmallChatMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { PitResult } from "./pitStopFunctions";
@@ -21,26 +22,26 @@ export function emitPitMessage(
   room: RoomObject,
   kind: PitStepKind,
   statuses: [TyreStatus, TyreStatus, TyreStatus, TyreStatus],
-  playerId: number
+  player: PlayerObject
 ) {
   const [flt, frt, blt, brt] = statuses;
   if (kind === "error") {
     sendSmallChatMessage(
       room,
       MESSAGES.TYRE_STEP_ERROR(flt, frt, blt, brt),
-      playerId
+      player.id
     );
   } else if (kind === "success") {
     sendSmallChatMessage(
       room,
       MESSAGES.TYRE_STEP_SUCCESS(flt, frt, blt, brt),
-      playerId
+      player.id
     );
   } else {
     sendSmallChatMessage(
       room,
       MESSAGES.TYRE_STEP_CHANGING(flt, frt, blt, brt),
-      playerId
+      player.id
     );
   }
 }

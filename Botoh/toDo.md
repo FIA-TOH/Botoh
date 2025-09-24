@@ -8,26 +8,15 @@ Ver se gameMode Result fica melhor training titulo no discord
 
 # To-do rapidos
 
-Pub 1 parada obrigatoria
+Conferir bug 2 parada obrigatoria a segunda so pede na ultima volta
+
+Shanghai t1 big nerf
 
 Aumentar velocidade box ou adaptar progressivo
 
 Quando troca de mapa manuamente, resetar o circuito votado
 
 Slipstream em corrida adaptar
-
-| New circuit loaded: Wait Room - By Ximb
-0|botoh | Game started
-0|botoh | ❌❌❌ [Discord NETWORK ERROR] (RACE_RESULTS): TypeError: object is not iterable
-0|botoh | at Object.fetch (node:internal/deps/undici/undici:16289:11)
-0|botoh | at async T (/home/formulatoh/FTOH-Bot/Botoh/dist/pub.js:1:198141)
-0|botoh | ❌❌❌ [Discord NETWORK ERROR] (QUALI_RESULTS): TypeError: object is not iterable
-0|botoh | at Object.fetch (node:internal/deps/undici/undici:16289:11)
-0|botoh | at async T (/home/formulatoh/FTOH-Bot/Botoh/dist/pub.js:1:198141)
-0|botoh | ⚠️⚠️⚠️ [Discord RATE LIMIT] (LOG) Retentando em 1000ms
-0|botoh | Conteúdo: {"content":"04 - Philipe | 02 | 41.173\n⚡ Fastest Lap: canø - 34.288s (Lap 3)\n🔧 Fas
-0|botoh | ⚠️⚠️⚠️ [Discord RATE LIMIT] (LOG) Retentando em 1000ms
-0|botoh | Conteúdo: {"content":" P - Name | Pits | Best Lap\n01 - canø | 00 | 34.288
 
 Recorde pistas ataulizar
 

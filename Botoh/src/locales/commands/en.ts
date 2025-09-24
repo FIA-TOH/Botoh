@@ -280,6 +280,11 @@ export default function en_commands(
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject
+  ) => void,
+  handleSetMinimumPit: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
   ) => void
 ): Commands {
   return {
@@ -341,5 +346,6 @@ export default function en_commands(
     "!camera_id": handleCameraPlayerFollow,
     "!camera_position": handleCameraPositionFollow,
     "!game_flow": handleChangeGameFLow,
+    "!min_pit": handleSetMinimumPit,
   };
 }

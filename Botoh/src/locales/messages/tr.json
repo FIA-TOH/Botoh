@@ -133,5 +133,7 @@
   "POSITION_QUALY": "{{position}}. sıradasınız!",
   "ERROR_POSITION_QUALY": "Henüz bir tur tamamlamadınız.",
   "EARLY_LAP_ERROR": "Zamanlayıcı başlamadan bitiş çizgisini geçtin, başlangıca dönmek için !rr kullan, aksi takdirde tur geçerli sayılmayacak.",
-  "CUTTED_TRACK": "⚠️ Yolu kestiniz! Hızınız {{seconds}} saniye boyunca düşürülecek."
+  "CUTTED_TRACK": "⚠️ Yolu kestiniz! Hızınız {{seconds}} saniye boyunca düşürülecek.",
+  "NEED_PIT_THIS_LAP": "⚠️ BOX, BOX, BOX! Bu turda pit stop yapmazsan DİSKALİFİYE edileceksin! ⚠️",
+  "DSQ_MINIMUM_PITS": "❌ Diskalifiye! Minimum pit stop sayısını karşılamadın."
 }

@@ -130,8 +130,10 @@
   "CHAT_FREE": "¡LIBERTAD! ¡El chat ahora está libre!",
   "STARTING_LAP": "¡Carrera iniciada, buena suerte piloto!",
   "STARTING_QUALY_LAP": "Iniciando vuelta de clasificación, ¡vuela!",
-  "POSITION_QUALY": "¡Estás en la posición {{position}}!",
+  "POSITION_QUALY": "¡Estás en P{{position}}!",
   "ERROR_POSITION_QUALY": "Aún no has registrado una vuelta.",
   "EARLY_LAP_ERROR": "Cruzaste la línea de meta antes de que comenzara el cronómetro, usa !rr para volver al inicio, de lo contrario la vuelta no será válida.",
-  "CUTTED_TRACK": "⚠️ ¡Has cortado el camino! Tu velocidad se reducirá durante {{seconds}} segundos."
+  "CUTTED_TRACK": "⚠️ ¡Has cortado el camino! Tu velocidad se reducirá durante {{seconds}} segundos.",
+  "NEED_PIT_THIS_LAP": "⚠️ ¡BOX, BOX, BOX! ¡Debes entrar en boxes en esta vuelta o serás DESCALIFICADO! ⚠️",
+  "DSQ_MINIMUM_PITS": "❌ ¡Descalificado! No cumpliste con el número mínimo de paradas en boxes."
 }

@@ -4,6 +4,7 @@ import { Tires } from "./tires";
 import { emitPitMessage } from "./pitMessaging";
 import { sendAlertMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
+import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
 
 export function performPitStop(
   room: RoomObject,
@@ -43,6 +44,7 @@ export function performPitStop(
   delete playerState.pitInitialPos;
   delete playerState.pitSteps;
   playerState.inPitStop = false;
+  handleAvatar(Situacions.Correct, byPlayer, room);
 }
 export function detectPitPerTick(
   pad: { p: PlayerObject; disc: DiscPropertiesObject },
@@ -73,7 +75,7 @@ export function detectPitPerTick(
   while (state.pitSteps && state.pitSteps.length > 0) {
     const next = state.pitSteps[0];
     if (state.pitCountdown <= next.threshold + EPS) {
-      emitPitMessage(room, next.kind, next.statuses, pad.p.id);
+      emitPitMessage(room, next.kind, next.statuses, pad.p);
       state.pitSteps.shift();
 
       if (next.kind === "success" && state.pitTargetTires) {

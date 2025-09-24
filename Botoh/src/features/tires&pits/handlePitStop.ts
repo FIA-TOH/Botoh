@@ -38,5 +38,5 @@ export function handlePitStop(
 
   state.pitSteps = buildPitSteps(state.pitFailures);
 
-  emitPitMessage(room, "changing", ["🟨", "⬜", "⬜", "⬜"], byPlayer.id);
+  emitPitMessage(room, "changing", ["🟨", "⬜", "⬜", "⬜"], byPlayer);
 }

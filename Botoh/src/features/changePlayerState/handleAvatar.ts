@@ -10,14 +10,20 @@ export enum Situacions {
   Rain = "Rain",
   Flag = "Flag",
   Null = "Null",
+  Correct = "Correct",
+  Wrong = "Wrong",
+  NeedPit = "NeedPit",
 }
 
 const currentSituacion: Record<number, Situacions> = {};
 
 const SITUATION_PRIORITY: Record<Situacions, number> = {
-  [Situacions.Rain]: 5,
-  [Situacions.Flag]: 4,
-  [Situacions.Ers]: 3,
+  [Situacions.Rain]: 8,
+  [Situacions.Flag]: 7,
+  [Situacions.Wrong]: 6,
+  [Situacions.Correct]: 5,
+  [Situacions.NeedPit]: 5,
+  [Situacions.Ers]: 4,
   [Situacions.Speed]: 3,
   [Situacions.ChangeTyre]: 2,
   [Situacions.Null]: 1,
@@ -93,6 +99,34 @@ const situationHandlers: Record<
       restoreTyreOrCar(player.id, room);
       currentSituacion[player.id] = Situacions.Null;
     }, durations[0]);
+  },
+  [Situacions.Wrong]: (player, room) => {
+    const wrongDurationSeconnds = 5;
+    room.setPlayerAvatar(player.id, "❌");
+
+    playerTimers[player.id].timeout = setTimeout(() => {
+      restoreTyreOrCar(player.id, room);
+      currentSituacion[player.id] = Situacions.Null;
+    }, wrongDurationSeconnds * 1000);
+  },
+  [Situacions.NeedPit]: (player, room) => {
+    const needPitDurationSeconds = 5;
+    room.setPlayerAvatar(player.id, "🛞⚠️");
+
+    playerTimers[player.id].timeout = setTimeout(() => {
+      restoreTyreOrCar(player.id, room);
+      currentSituacion[player.id] = Situacions.Null;
+    }, needPitDurationSeconds * 1000);
+  },
+  [Situacions.Correct]: (player, room) => {
+    const correctDurationSeconnds = 2;
+
+    room.setPlayerAvatar(player.id, "✅");
+
+    playerTimers[player.id].timeout = setTimeout(() => {
+      restoreTyreOrCar(player.id, room);
+      currentSituacion[player.id] = Situacions.Null;
+    }, correctDurationSeconnds * 1000);
   },
 
   [Situacions.Speed]: (player, room, arg) => {

@@ -70,16 +70,15 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   ],
   fuji: [37.183, "Ximbastian Vettel", trackNameMapping["fuji"]],
   hungaroing: [37.617, "Jean Dany-Vegne", trackNameMapping["hungaroing"]],
-  mexico: [38.383, "Samuel Bortoleto", trackNameMapping["mexico"]],
+  mexico: [37.603, "Ximbastian Vettel", trackNameMapping["mexico"]],
   austria: [30.916, "Jean Dany Vegne", trackNameMapping["austria"]],
-  laguna_seca: [999.999, "Jean Dany Vergne", trackNameMapping["laguna_seca"]],
-  balaton: [999.999, "Ximbastian Vettel", trackNameMapping["balaton"]],
-  nurburgringNano: [999.999, "undefined", trackNameMapping["nurburgringNano"]],
+  laguna_seca: [34.331, "Cano", trackNameMapping["laguna_seca"]],
+  balaton: [39.081, "Rodri", trackNameMapping["nurburgringNano"]],
   hungaroingNano: [999.999, "undefined", trackNameMapping["hungaroingNano"]],
   indianapolis: [30.5, "Gabriel Schumacchio", trackNameMapping["indianapolis"]],
   miami: [43.05, "Ximbastian Vettel", trackNameMapping["miami"]],
-  las_vegas: [43.797, "Ximbastian Vettel", "Las Vegas Strip Circuit - By Ximb"],
-  zandvoort: [999.999, "Rodri", "Zandvoort by Rodri"],
+  las_vegas: [43.569, "Ximbastian Vettel", "Las Vegas Strip Circuit - By Ximb"],
+  zandvoort: [37.358, "Ximbastian Vettel", "Zandvoort by Rodri"],
 };
 export const getAbbreviatedTrackName = (
   fullTrackName: string

@@ -61,6 +61,7 @@ import { handleCameraPlayerFollow } from "./camera/handleCameraPlayerFollow";
 import { handleCameraPositionFollow } from "./camera/handleCameraPositionFollow";
 import { handleCameraProperties } from "./camera/handleCameraProperties";
 import { handleChangeGameFLow } from "./gameState/gameFlow";
+import { handleSetMinimumPit } from "./tyres/handleSetMinimumPit";
 
 export type CommandFunction = (
   handleAdminCommand: (
@@ -342,6 +343,11 @@ export type CommandFunction = (
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject
+  ) => void,
+  handleSetMinimumPit: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
   ) => void
 ) => Commands;
 
@@ -407,7 +413,8 @@ function importCommandsByLanguage(commandFunctions: {
         handleCameraProperties,
         handleCameraPlayerFollow,
         handleCameraPositionFollow,
-        handleChangeGameFLow
+        handleChangeGameFLow,
+        handleSetMinimumPit
       ),
     }),
     {}
@@ -474,7 +481,8 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
         handleCameraProperties,
         handleCameraPlayerFollow,
         handleCameraPositionFollow,
-        handleChangeGameFLow
+        handleChangeGameFLow,
+        handleSetMinimumPit
       ),
     }),
     {}

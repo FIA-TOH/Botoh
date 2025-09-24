@@ -1563,4 +1563,18 @@ export const MESSAGES = {
       seconds: seconds.toString(),
     }),
   }),
+  NEED_PIT_THIS_LAP: (): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.NEED_PIT_THIS_LAP, {}),
+    es: replaceTemplateString(es_messages.NEED_PIT_THIS_LAP, {}),
+    fr: replaceTemplateString(fr_messages.NEED_PIT_THIS_LAP, {}),
+    tr: replaceTemplateString(tr_messages.NEED_PIT_THIS_LAP, {}),
+    pt: replaceTemplateString(pt_messages.NEED_PIT_THIS_LAP, {}),
+  }),
+  DSQ_MINIMUM_PITS: (): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.DSQ_MINIMUM_PITS, {}),
+    es: replaceTemplateString(es_messages.DSQ_MINIMUM_PITS, {}),
+    fr: replaceTemplateString(fr_messages.DSQ_MINIMUM_PITS, {}),
+    tr: replaceTemplateString(tr_messages.DSQ_MINIMUM_PITS, {}),
+    pt: replaceTemplateString(pt_messages.DSQ_MINIMUM_PITS, {}),
+  }),
 };

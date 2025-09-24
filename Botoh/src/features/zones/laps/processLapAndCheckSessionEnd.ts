@@ -5,6 +5,7 @@ import { printAllPositions } from "../../changeGameState/race/printAllPositions"
 import { playerList } from "../../changePlayerState/playerList";
 import { sendChatMessage, sendSuccessMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
+import { processIfMinimumPitStopsMet } from "../../tires&pits/minimumPit";
 import { serialize } from "../../utils";
 import { laps } from "../laps";
 import { lapPositions } from "./handleLapChange";
@@ -34,6 +35,14 @@ export function processLapAndCheckSessionEnd(
       if (currentLap <= laps) {
         sendChatMessage(room, MESSAGES.CURRENT_LAP(currentLap, laps), p.id);
 
+        processIfMinimumPitStopsMet(
+          p,
+          currentLap,
+          laps,
+          playerList[p.id].pits.pitsNumber,
+          room
+        );
+
         if (position > 1) {
           const prevPlayer = lapPositions[lapIndex][position - 2];
           const distance =
@@ -56,6 +65,12 @@ export function processLapAndCheckSessionEnd(
         }
       } else {
         handleRaceFinish(p, room, lapTime, position === 1);
+      }
+      //Penultime lap
+      if (lapIndex === laps - 2) {
+        if (playerList[p.id].pits.pitsNumber === 1) {
+          console.log("Faça pit!");
+        }
       }
     }
   } else {

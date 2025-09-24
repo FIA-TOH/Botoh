@@ -135,5 +135,7 @@
   "ERROR_POSITION_QUALY": "Você ainda não registrou uma volta.",
   "EARLY_LAP_ERROR": "Atravessaste a linha de chegada antes do timer iniciar, use !rr para voltar ao inicio, ou seja volta não será validada.",
   "NON_ADMIN_COMMANDS": "Comandos disponíveis: !lang, !dicas, !ajuda, !comandos, !tyres, !wait_time, !maps, !times (somente em qualy), !positions (somente em corridas).",
-  "CUTTED_TRACK": "⚠️ Você cortou o caminho! Sua velocidade será reduzida por {{seconds}} segundos."
+  "CUTTED_TRACK": "⚠️ Você cortou o caminho! Sua velocidade será reduzida por {{seconds}} segundos.",
+  "NEED_PIT_THIS_LAP": "⚠️ BOX, BOX, BOX! Você precisa fazer o pit nesta volta ou será DESQUALIFICADO! ⚠️",
+  "DSQ_MINIMUM_PITS": "❌ Desclassificado! Você não cumpriu o número mínimo de pitstops."
 }

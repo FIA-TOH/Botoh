@@ -133,5 +133,7 @@
   "POSITION_QUALY": "Vous êtes à la {{position}}ᵉ place !",
   "ERROR_POSITION_QUALY": "Vous n'avez pas encore terminé un tour.",
   "EARLY_LAP_ERROR": "Tu as franchi la ligne d'arrivée avant que le chronomètre ne commence, utilise !rr pour revenir au départ, sinon le tour ne sera pas validé.",
-  "CUTTED_TRACK": "⚠️ Vous avez coupé le chemin ! Votre vitesse sera réduite pendant {{seconds}} secondes."
+  "CUTTED_TRACK": "⚠️ Vous avez coupé le chemin ! Votre vitesse sera réduite pendant {{seconds}} secondes.",
+  "NEED_PIT_THIS_LAP": "⚠️ BOX, BOX, BOX ! Vous devez rentrer aux stands ce tour-ci ou vous serez DISQUALIFIÉ ! ⚠️",
+  "DSQ_MINIMUM_PITS": "❌ Disqualifié ! Vous n’avez pas respecté le nombre minimum d’arrêts aux stands."
 }
