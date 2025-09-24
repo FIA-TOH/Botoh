@@ -8,8 +8,6 @@ Ver se gameMode Result fica melhor training titulo no discord
 
 # To-do rapidos
 
-Conferir bug 2 parada obrigatoria a segunda so pede na ultima volta
-
 Shanghai t1 big nerf
 
 Aumentar velocidade box ou adaptar progressivo
