@@ -60,6 +60,9 @@ export interface PlayerInfo {
   pitInitialPos?: { x: number; y: number };
   pitFailures?: PitResult;
   pitSteps?: PitStep[] | undefined;
+  pitEntryTime?: number;
+  pitEntryStartLimiter?: number;
+  prevLimiter?: number;
 
   // Recursos de corrida
   speedEnabled: boolean;

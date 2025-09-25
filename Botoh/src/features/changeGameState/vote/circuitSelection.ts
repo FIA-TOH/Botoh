@@ -1,5 +1,6 @@
 import { Circuit } from "../../../circuits/Circuit";
 import { log } from "../../discord/logger";
+import { CIRCUITS } from "../../zones/maps";
 import { selectedCircuits } from "./vote";
 
 let lockedWinner: Circuit | null = null;
@@ -46,4 +47,8 @@ export function getWinnerCircuit(): Circuit {
 
 export function getLockedWinnerVotes(): number {
   return lockedWinnerVotes;
+}
+
+export function postNewLockedWinner(circuitIndex: number) {
+  lockedWinner = CIRCUITS[circuitIndex];
 }

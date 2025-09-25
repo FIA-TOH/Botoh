@@ -1,4 +1,7 @@
-import { clearLockedWinner } from "../../changeGameState/vote/circuitSelection";
+import {
+  clearLockedWinner,
+  postNewLockedWinner,
+} from "../../changeGameState/vote/circuitSelection";
 import { isOnVoteSession } from "../../changeGameState/vote/vote";
 import { sendErrorMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
@@ -27,5 +30,6 @@ export function handleCircuitCommand(
   } else {
     handleChangeMap(index, room);
     clearLockedWinner();
+    postNewLockedWinner(index);
   }
 }

@@ -1,5 +1,6 @@
 import { controlPlayerSpeed } from "./handleSpeed";
 import { getRunningPlayers } from "../utils";
+import { playerList } from "../changePlayerState/playerList";
 let nextPlayerIndex = 0;
 let accumulated = 0;
 
@@ -30,8 +31,14 @@ export function distributeSpeed(
       const playerAndDisc = playersAndDiscs.find(
         (pd) => pd.p.id === player.p.id
       );
+
       if (playerAndDisc) {
-        playersToProcess.push(playerAndDisc);
+        const playerInfo = playerList[player.p.id];
+        if (playerInfo?.inPitlane) {
+          playersToProcess.push(playerAndDisc, playerAndDisc, playerAndDisc);
+        } else {
+          playersToProcess.push(playerAndDisc);
+        }
       }
     }
     nextPlayerIndex = (nextPlayerIndex + 1) % totalPlayers;

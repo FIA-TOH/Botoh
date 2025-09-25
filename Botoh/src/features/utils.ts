@@ -85,14 +85,54 @@ export function delay(segundos: number) {
   return new Promise((resolve) => setTimeout(resolve, segundos * 1000));
 }
 
+function pad(n: number) {
+  return n.toString().padStart(2, "0");
+}
+
+function formatInTimeZone(date: Date, timeZone = "America/Sao_Paulo") {
+  try {
+    const parts = new Intl.DateTimeFormat("en-GB", {
+      timeZone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    }).formatToParts(date);
+
+    const map: Record<string, string> = {};
+    for (const p of parts) {
+      if (p.type !== "literal") map[p.type] = p.value;
+    }
+
+    return {
+      year: map.year,
+      month: map.month,
+      day: map.day,
+      hour: map.hour,
+      minute: map.minute,
+      second: map.second,
+    };
+  } catch (err) {
+    const desiredOffsetMinutes = -3 * 60;
+    const utcMs = date.getTime() + date.getTimezoneOffset() * 60000;
+    const targetMs = utcMs + desiredOffsetMinutes * 60000;
+    const d = new Date(targetMs);
+    return {
+      year: String(d.getFullYear()),
+      month: pad(d.getMonth() + 1),
+      day: pad(d.getDate()),
+      hour: pad(d.getHours()),
+      minute: pad(d.getMinutes()),
+      second: pad(d.getSeconds()),
+    };
+  }
+}
+
 export function getTimestamp(): string {
   const now = new Date();
-  const pad = (n: number) => n.toString().padStart(2, "0");
-  const hours = pad(now.getHours());
-  const minutes = pad(now.getMinutes());
-  const seconds = pad(now.getSeconds());
-  const day = pad(now.getDate());
-  const month = pad(now.getMonth() + 1);
-  const year = now.getFullYear();
-  return `[${year}-${month}-${day} ${hours}:${minutes}:${seconds}]`;
+  const t = formatInTimeZone(now, "America/Sao_Paulo");
+  return `[${t.year}-${t.month}-${t.day} ${t.hour}:${t.minute}:${t.second}]`;
 }
