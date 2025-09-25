@@ -3,6 +3,7 @@ import { playerList } from "../changePlayerState/playerList";
 import { sendAlertMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { playerBuffList } from "../commands/adjustThings/handleNerfListCommand";
+import { presentationLap } from "../commands/gameState/handlePresentationLapCommand";
 import { tyresActivated } from "../commands/tyres/handleEnableTyresCommand";
 import { vsc } from "../speed/handleSpeed";
 import { laps } from "../zones/laps";
@@ -11,7 +12,9 @@ import { TYRE_DURABILITY, Tires } from "./tires";
 
 export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
   const p = playerList[player.id];
-
+  if (presentationLap || vsc || p.inPitlane) {
+    return;
+  }
   if (
     !tyresActivated ||
     gameMode == GameMode.QUALY ||

@@ -1,3 +1,4 @@
+import { gameMode, GameMode } from "../changeGameState/changeGameModes";
 import { vectorSpeed } from "../utils";
 import { constants } from "./constants";
 
@@ -91,7 +92,9 @@ function calculateSlipstream(
   });
 
   const finalSlipstream = Math.min(
-    constants.MAX_SLIPSTREAM,
+    gameMode === GameMode.INDY
+      ? constants.MAX_SLIPSTREAM
+      : constants.MAX_SLIPSTREAM * 2,
     minSlipstream / 100
   );
   // console.log(`\n Final slipstream to the player ${player.p.id}: ${finalSlipstream.toFixed(5)}\n`);

@@ -46,34 +46,34 @@ function handleQualyMode(room: RoomObject) {
   enableSlipstream(false);
   setGhostMode(room, true);
   handleRREnabledCommand(undefined, ["true"], room);
-  sendSuccessMessage(room, MESSAGES.TIME_TO_QUALY());
   handleEnableTyresCommand(undefined, ["true"], room);
+  sendSuccessMessage(room, MESSAGES.TIME_TO_QUALY());
 }
 
 function handleTrainingMode(room: RoomObject) {
   enableGas(false);
-  setGhostMode(room, true);
   enableSlipstream(false);
-  changeLaps("999", undefined, room);
+  setGhostMode(room, true);
   handleRREnabledCommand(undefined, ["true"], room);
+  changeLaps("999", undefined, room);
   handleEnableTyresCommand(undefined, ["true"], room);
 }
 
 function handleIndyMode(room: RoomObject) {
   enableGas(true);
+  enableSlipstream(false);
   setGhostMode(room, false);
-  enableSlipstream(true);
   handleRREnabledCommand(undefined, ["false"], room);
   handleEnableTyresCommand(undefined, ["true"], room);
 }
 
 function handleRaceMode(room: RoomObject) {
   enableGas(false);
-  enableSlipstream(false);
+  enableSlipstream(true);
   setGhostMode(room, false);
   handleRREnabledCommand(undefined, ["false"], room);
-  sendSuccessMessage(room, MESSAGES.TIME_TO_RACE(laps));
   handleEnableTyresCommand(undefined, ["true"], room);
+  sendSuccessMessage(room, MESSAGES.TIME_TO_RACE(laps));
 }
 
 function handleWaintingRoom(room: RoomObject) {

@@ -49,7 +49,7 @@ export function GameTick(room: RoomObject) {
 
     players.forEach((pad) => {
       const p = pad.p;
-      if (!presentationLap) handleTireWear(p, room);
+      handleTireWear(p, room);
 
       handleChangePlayerSizeSuzuka(pad, room);
       handleChangeCollisionPlayerSuzuka(pad, room);

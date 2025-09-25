@@ -8,15 +8,7 @@ Ver se gameMode Result fica melhor training titulo no discord
 
 # To-do rapidos
 
-Shanghai t1 big nerf
-
-Aumentar velocidade box ou adaptar progressivo
-
-Quando troca de mapa manuamente, resetar o circuito votado
-
-Slipstream em corrida adaptar
-
-Recorde pistas ataulizar
+nao gastar pneu pit e safety
 
 Tempo mais exato
 Add daytonna Rodri

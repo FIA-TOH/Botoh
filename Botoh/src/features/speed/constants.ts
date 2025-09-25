@@ -25,7 +25,7 @@ export const constants = {
   RESIDUAL_SLIPSTREAM_TIME: 2, // How much time does it take to the slipstream to end
   SLIPSTREAM_RESIDUAL_VALUE: 0.0002 * 0.2, // How much powerfull is the slipstream when you are closer
   SLIPSTREAM_ACTIVATION_DISTANCE: 500, // The distance you have to be to the slipstream start to act
-  SLIPSTREAM_LATERAL_TOLERANCE: 38, // The width of the slipstream effect
+  SLIPSTREAM_LATERAL_TOLERANCE: 38, // The width of the slipstream effects
 
   // ===============================
   // Chuva e Aderência
