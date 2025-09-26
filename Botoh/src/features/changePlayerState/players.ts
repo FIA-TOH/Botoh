@@ -85,7 +85,7 @@ export function createPlayerInfo(ip?: string) {
     slipTicks: undefined,
     slipDir: undefined,
 
-    previousPos: null,
+    previousPos: { x: null, y: null },
     previousX: undefined,
     previousY: undefined,
   };
@@ -174,7 +174,7 @@ export function resetPlayer(
   playerList[id].slipTicks = undefined;
   playerList[id].slipDir = undefined;
 
-  playerList[id].previousPos = null;
+  playerList[id].previousPos = { x: null, y: null };
   playerList[id].previousX = undefined;
   playerList[id].previousY = undefined;
 }

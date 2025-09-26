@@ -19,6 +19,7 @@ import { setBallPosition } from "../camera/setBallPosition";
 import { detectPitPerTick } from "../tires&pits/performPitStop";
 import { detectCut } from "../detectCut/detectCut";
 import { GameMode, gameMode } from "../changeGameState/changeGameModes";
+import { updatePreviousPos } from "../zones/updateAccuranteTime.";
 
 const detectCutThrottledByPlayer: Map<
   number,
@@ -62,6 +63,8 @@ export function GameTick(room: RoomObject) {
         );
       }
       detectCutThrottledByPlayer.get(pad.p.id)!(pad, room);
+
+      // updatePreviousPos(pad, p);
     });
 
     afkKick(room);

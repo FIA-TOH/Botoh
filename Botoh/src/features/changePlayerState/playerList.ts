@@ -91,7 +91,7 @@ export interface PlayerInfo {
   slipTicks?: number;
   slipDir?: Direction;
 
-  previousPos: { x: number; y: number } | null;
+  previousPos: { x: number | null; y: number | null };
   previousX?: number;
   previousY?: number;
 }

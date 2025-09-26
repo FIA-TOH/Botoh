@@ -92,9 +92,9 @@ function calculateSlipstream(
   });
 
   const finalSlipstream = Math.min(
-    gameMode === GameMode.INDY
+    gameMode !== GameMode.INDY
       ? constants.MAX_SLIPSTREAM
-      : constants.MAX_SLIPSTREAM * 2,
+      : constants.MAX_SLIPSTREAM / 2,
     minSlipstream / 100
   );
   // console.log(`\n Final slipstream to the player ${player.p.id}: ${finalSlipstream.toFixed(5)}\n`);

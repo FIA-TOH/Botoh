@@ -8,14 +8,11 @@ Ver se gameMode Result fica melhor training titulo no discord
 
 # To-do rapidos
 
-nao gastar pneu pit e safety
-
 Tempo mais exato
 Add daytonna Rodri
 Tentar fazer banking como o rodri falou
 Automaticamente se o cara saiu e voltar depois de X tempo, ele consegue voltar para a corrida saindo dos boxes em ultimo
 Pneu estourar
-Mapas
 
 Ver a questao do replay nao funfando
 
