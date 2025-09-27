@@ -10,10 +10,6 @@ const nurburgring_raw = readFileSync(
 );
 const nurburgring_json = JSON.parse(nurburgring_raw);
 
-
-
-
-
 const NURBURGRING_INFO: CircuitInfo = {
   finishLine: {
     bounds: {
@@ -53,9 +49,9 @@ const NURBURGRING_INFO: CircuitInfo = {
     passingDirection: Direction.LEFT,
   },
   boxLine: {
-    minX: -1454,
-    maxX: -654,
-    minY: 71,
+    minX: -1213,
+    maxX: -413,
+    minY: 70,
     maxY: 150,
   },
   pitlaneStart: {
