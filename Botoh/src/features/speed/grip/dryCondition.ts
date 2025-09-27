@@ -9,7 +9,7 @@ export function calculateGripForDryConditions(
   norm: Number
 ) {
   if (!norm) return;
-  if (laps >= 23) {
+  if (laps >= 15) {
     switch (tyres) {
       case "SOFT":
         return calculateGripMultiplier(wear, norm, 1.0, 0.993);
