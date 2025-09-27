@@ -1,12 +1,24 @@
 import { Circuit, CutSegment } from "../../circuits/Circuit";
+import { GameMode, gameMode } from "../changeGameState/changeGameModes";
 import { sendAlertMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { log } from "../discord/logger";
+import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { getTimestamp } from "../utils";
 import { applyCutPenalty } from "./applyCutPenalty";
 
 const SEGMENT_CUT_COLOUR = "696969";
-const DEFAULT_PENALTY = 5;
+const DEFAULT_PENALTY_PUBLIC = 5;
+const DEFAULT_PENALTY_LEAGUE = 2;
+
+function decidePenalty(seg: any) {
+  const PENALTY =
+    LEAGUE_MODE && gameMode === GameMode.RACE
+      ? DEFAULT_PENALTY_LEAGUE
+      : seg.penalty ?? DEFAULT_PENALTY_PUBLIC;
+
+  return PENALTY;
+}
 
 let cutSegments: CutSegment[] = [];
 const playerLastSegment: Map<number, Set<number>> = new Map();
@@ -20,7 +32,7 @@ export function loadCutSegmentsFromCircuit(circuit: Circuit) {
     cutSegments = circuit.info.CutDetectSegments.map(
       (seg: any, index: number) => ({
         index,
-        penalty: seg.penalty ?? DEFAULT_PENALTY,
+        penalty: decidePenalty(seg),
         v0: [seg.v0[0], seg.v0[1]],
         v1: [seg.v1[0], seg.v1[1]],
       })
@@ -36,7 +48,7 @@ export function loadCutSegmentsFromCircuit(circuit: Circuit) {
         if (!v0 || !v1) return null;
         return {
           index,
-          penalty: DEFAULT_PENALTY,
+          penalty: decidePenalty(seg),
           v0: [v0.x, v0.y] as [number, number],
           v1: [v1.x, v1.y] as [number, number],
         };
@@ -101,9 +113,9 @@ export function detectCut(
     );
 
     if (dist < pad.disc.radius && !lastSet.has(seg.index)) {
-      let realPeanlty = seg.penalty;
-      if (room.getScores().time < 30) {
-        realPeanlty = seg.penalty / 2;
+      let realPeanlty = decidePenalty(seg);
+      if (room.getScores().time < 30 && gameMode === GameMode.RACE) {
+        realPeanlty = decidePenalty(seg) / 2;
       }
       log(`${pad.p.name} cutted the track at ${getTimestamp()}`);
       sendAlertMessage(room, MESSAGES.CUTTED_TRACK(realPeanlty || 5), pad.p.id);
