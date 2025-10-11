@@ -13,6 +13,7 @@ export function createPlayerInfo(ip?: string) {
     afk: false,
     afkAlert: false,
     leagueTeam: null,
+    didHardQualy: false,
 
     // Propriedades de corrida e volta
     totalTime: 0,
@@ -88,6 +89,9 @@ export function createPlayerInfo(ip?: string) {
     previousPos: { x: null, y: null },
     previousX: undefined,
     previousY: undefined,
+
+    //contadores
+    timeWhenEntered: 0,
   };
 }
 
@@ -114,6 +118,7 @@ export function resetPlayer(
   }
   playerList[id].isInTheRoom = true;
   playerList[id].afkAlert = false;
+  playerList[id].didHardQualy = false;
 
   playerList[id].totalTime = 0;
   playerList[id].currentLap = 0;
@@ -177,4 +182,7 @@ export function resetPlayer(
   playerList[id].previousPos = { x: null, y: null };
   playerList[id].previousX = undefined;
   playerList[id].previousY = undefined;
+
+  //contadores
+  playerList[id].timeWhenEntered = 0;
 }

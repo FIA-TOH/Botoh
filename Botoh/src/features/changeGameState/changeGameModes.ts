@@ -104,6 +104,8 @@ function handleWaintingRoom(room: RoomObject) {
 }
 
 function handleHardQualyMode(room: RoomObject) {
+  room.sendAnnouncement("⚠️ Hard Qualy Mode Activated ⚠️");
+
   enableGas(false);
   enableSlipstream(false);
   setGhostMode(room, false);

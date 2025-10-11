@@ -20,6 +20,7 @@ import { detectPitPerTick } from "../tires&pits/performPitStop";
 import { detectCut } from "../detectCut/detectCut";
 import { GameMode, gameMode } from "../changeGameState/changeGameModes";
 import { updatePreviousPos } from "../zones/updateAccuranteTime.";
+import { kickIfQualyTimeEnded } from "../commands/gameMode/qualy/hardQualyFunctions";
 
 const detectCutThrottledByPlayer: Map<
   number,
@@ -63,6 +64,10 @@ export function GameTick(room: RoomObject) {
         );
       }
       detectCutThrottledByPlayer.get(pad.p.id)!(pad, room);
+
+      if (gameMode === GameMode.HARD_QUALY) {
+        kickIfQualyTimeEnded(room, p);
+      }
 
       // updatePreviousPos(pad, p);
     });

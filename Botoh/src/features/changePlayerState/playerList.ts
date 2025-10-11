@@ -25,6 +25,7 @@ export interface PlayerInfo {
   afk: boolean;
   afkAlert: boolean;
   leagueTeam: string | null;
+  didHardQualy: boolean;
 
   // Propriedades de corrida e volta
   totalTime: number;
@@ -94,6 +95,9 @@ export interface PlayerInfo {
   previousPos: { x: number | null; y: number | null };
   previousX?: number;
   previousY?: number;
+
+  //contadores
+  timeWhenEntered: number;
 }
 
 type PlayerList = {

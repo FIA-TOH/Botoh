@@ -11,6 +11,7 @@ import { updatePlayerActivity } from "../afk/afk";
 import { followPlayerId } from "../camera/cameraFollow";
 import { checkRunningPlayers } from "../changeGameState/publicGameFlow/startStopGameFlow";
 import { changeGameStoppedNaturally } from "../changeGameState/gameStopeedNaturally";
+import { sendQualiResultsToDiscord } from "../discord/logResults";
 
 export function PlayerLeave(room: RoomObject) {
   room.onPlayerLeave = function (player) {
@@ -36,14 +37,21 @@ export function PlayerLeave(room: RoomObject) {
         }
       }
     }
-
+    if (gameMode === GameMode.HARD_QUALY) {
+      if (room.getPlayerList().length <= 1) {
+        room.setPassword(null);
+      }
+      playerObj.didHardQualy = true;
+      sendQualiResultsToDiscord();
+    }
     if (player.id === followPlayerId && playerObj?.cameraFollowing) {
     } else {
       const playersAndDiscs = getPlayerAndDiscs(room);
       if (
         room.getScores() != null &&
         getRunningPlayers(playersAndDiscs).length === 0 &&
-        gameMode !== GameMode.TRAINING
+        gameMode !== GameMode.TRAINING &&
+        gameMode !== GameMode.HARD_QUALY
       ) {
         changeGameStoppedNaturally(false);
         room.stopGame();

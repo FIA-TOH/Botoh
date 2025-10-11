@@ -29,7 +29,7 @@ export function TeamChange(room: RoomObject) {
       handleAvatar(Situacions.ChangeTyre, changedPlayer, room);
       if (
         room.getScores().time > 0 &&
-        generalGameMode !== GeneralGameMode.GENERAL_QUALY &&
+        gameMode !== GameMode.HARD_QUALY &&
         gameMode !== GameMode.WAITING
       ) {
         const boxLine = ACTUAL_CIRCUIT.info.boxLine;

@@ -10,8 +10,9 @@ import { printAllPositions } from "../../changeGameState/race/printAllPositions"
 import { playerList } from "../../changePlayerState/playerList";
 import { sendChatMessage, sendSuccessMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
+import { maxLapsQualy } from "../../commands/gameMode/qualy/hardQualyFunctions";
 import { processIfMinimumPitStopsMet } from "../../tires&pits/minimumPit";
-import { serialize } from "../../utils";
+import { serialize, kickPlayer } from "../../utils";
 import { laps } from "../laps";
 import { lapPositions } from "./handleLapChange";
 import { handleRaceFinish } from "./handleRaceFinish";
@@ -26,6 +27,11 @@ export function processLapAndCheckSessionEnd(
   const p = pad.p;
   const playerData = playerList[p.id];
   const currentLap = playerData.currentLap;
+
+  if (gameMode === GameMode.HARD_QUALY && currentLap >= maxLapsQualy) {
+    kickPlayer(p.id, "Qualy ended", room);
+    return;
+  }
 
   if (generalGameMode !== GeneralGameMode.GENERAL_QUALY) {
     const lapIndex = currentLap - 2;
@@ -71,7 +77,7 @@ export function processLapAndCheckSessionEnd(
       } else {
         handleRaceFinish(p, room, lapTime, position === 1);
       }
-      //Penultime lap
+
       if (lapIndex === laps - 2) {
         if (playerList[p.id].pits.pitsNumber === 1) {
           console.log("Faça pit!");

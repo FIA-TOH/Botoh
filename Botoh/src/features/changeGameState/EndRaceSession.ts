@@ -17,7 +17,10 @@ export function endRaceSession(
   const scores = room.getScores();
 
   const shouldStopForNoPlayers =
-    scores !== null && players.length === 0 && gameMode !== GameMode.TRAINING;
+    scores !== null &&
+    players.length === 0 &&
+    gameMode !== GameMode.TRAINING &&
+    gameMode !== GameMode.HARD_QUALY;
 
   const shouldStopForTimeLimit =
     !LEAGUE_MODE &&

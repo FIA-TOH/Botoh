@@ -42,7 +42,6 @@ export function sendQualiResultsToDiscord() {
   }
 
   const header =
-    "```" +
     `\n🏁 ${gameModeResult} RESULTS - ${ACTUAL_CIRCUIT.info.name} 🏁` +
     `\nTime: ${getTimestamp()}` +
     "\nPos | Driver (Team)     | Gap       | Best Lap " +
@@ -67,8 +66,7 @@ export function sendQualiResultsToDiscord() {
     )}`;
   });
 
-  const footer = "\n```";
-  sendDiscordResult(header + body + footer);
+  sendDiscordResult(header + body);
 }
 export function sendRaceResultsToDiscord() {
   if (positionList.length === 0) return;
