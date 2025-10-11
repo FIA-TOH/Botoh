@@ -1,4 +1,9 @@
-import { gameMode, GameMode } from "../changeGameState/changeGameModes";
+import {
+  gameMode,
+  GameMode,
+  generalGameMode,
+  GeneralGameMode,
+} from "../changeGameState/changeGameModes";
 import { getPlayersOrderedByQualiTime } from "../changeGameState/qualy/playerTime";
 import { positionList } from "../changeGameState/race/positionList";
 import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
@@ -33,9 +38,12 @@ export function updateFollowPlayerId(room: RoomObject) {
   if (mode === "auto") {
     let candidateIds: number[] = [];
 
-    if (gameMode === GameMode.RACE || gameMode === GameMode.INDY) {
+    if (generalGameMode === GeneralGameMode.GENERAL_RACE) {
       candidateIds = positionList.map((p) => p.id);
-    } else if (gameMode === GameMode.QUALY || gameMode === GameMode.TRAINING) {
+    } else if (
+      generalGameMode === GeneralGameMode.GENERAL_QUALY ||
+      gameMode === GameMode.TRAINING
+    ) {
       candidateIds = getPlayersOrderedByQualiTime().map((p) => p.id);
     }
 
@@ -67,11 +75,11 @@ export function updateFollowPlayerId(room: RoomObject) {
     const index = followPositionIndex - 1;
     let candidateId: number | null = null;
 
-    if (gameMode === GameMode.RACE || gameMode === GameMode.INDY) {
+    if (generalGameMode === GeneralGameMode.GENERAL_RACE) {
       if (index >= 0 && positionList[index]) {
         candidateId = positionList[index].id;
       }
-    } else if (gameMode === GameMode.QUALY) {
+    } else if (generalGameMode === GeneralGameMode.GENERAL_QUALY) {
       const orderedList = getPlayersOrderedByQualiTime();
       if (index >= 0 && orderedList[index]) {
         candidateId = orderedList[index].id;

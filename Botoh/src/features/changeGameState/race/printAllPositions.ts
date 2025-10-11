@@ -7,7 +7,12 @@ import { MESSAGES } from "../../chat/messages";
 import { log } from "../../discord/logger";
 import { getBestPit } from "../../tires&pits/trackBestPit";
 import { getBestLap } from "../../zones/laps/trackBestLap";
-import { gameMode, GameMode } from "../changeGameModes";
+import {
+  gameMode,
+  GameMode,
+  generalGameMode,
+  GeneralGameMode,
+} from "../changeGameModes";
 import { positionList } from "./positionList";
 
 const HAXBALL_MSG_LIMIT = 124;
@@ -17,7 +22,10 @@ export function printAllPositions(
   toPlayerID?: number,
   sendToDiscord?: boolean
 ) {
-  if (gameMode == GameMode.QUALY || gameMode == GameMode.TRAINING) {
+  if (
+    generalGameMode === GeneralGameMode.GENERAL_QUALY ||
+    gameMode == GameMode.TRAINING
+  ) {
     sendErrorMessage(room, MESSAGES.POSITIONS_IN_QUALI(), toPlayerID);
     return false;
   }

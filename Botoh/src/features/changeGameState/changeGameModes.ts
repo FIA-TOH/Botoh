@@ -18,9 +18,17 @@ export enum GameMode {
   TRAINING = "training",
   INDY = "indy",
   WAITING = "waiting",
+  HARD_QUALY = "hard_qualy",
+}
+
+export enum GeneralGameMode {
+  GENERAL_RACE = "general_race",
+  GENERAL_QUALY = "general_qualy",
+  NONE = "none",
 }
 
 export let gameMode: GameMode = GameMode.RACE;
+export let generalGameMode: GeneralGameMode = GeneralGameMode.GENERAL_RACE;
 
 export function changeGameMode(newMode: GameMode, room: RoomObject) {
   gameMode = newMode;
@@ -38,7 +46,13 @@ export function changeGameMode(newMode: GameMode, room: RoomObject) {
       return handleWaintingRoom(room);
     case GameMode.RACE:
       return handleRaceMode(room);
+    case GameMode.HARD_QUALY:
+      return handleHardQualyMode(room);
   }
+}
+
+export function changeGeneralGameMode(newGeneralMode: GeneralGameMode) {
+  generalGameMode = newGeneralMode;
 }
 
 function handleQualyMode(room: RoomObject) {
@@ -48,6 +62,7 @@ function handleQualyMode(room: RoomObject) {
   handleRREnabledCommand(undefined, ["true"], room);
   handleEnableTyresCommand(undefined, ["true"], room);
   sendSuccessMessage(room, MESSAGES.TIME_TO_QUALY());
+  changeGeneralGameMode(GeneralGameMode.GENERAL_QUALY);
 }
 
 function handleTrainingMode(room: RoomObject) {
@@ -57,6 +72,7 @@ function handleTrainingMode(room: RoomObject) {
   handleRREnabledCommand(undefined, ["true"], room);
   changeLaps("999", undefined, room);
   handleEnableTyresCommand(undefined, ["true"], room);
+  changeGeneralGameMode(GeneralGameMode.NONE);
 }
 
 function handleIndyMode(room: RoomObject) {
@@ -65,6 +81,7 @@ function handleIndyMode(room: RoomObject) {
   setGhostMode(room, false);
   handleRREnabledCommand(undefined, ["false"], room);
   handleEnableTyresCommand(undefined, ["true"], room);
+  changeGeneralGameMode(GeneralGameMode.GENERAL_RACE);
 }
 
 function handleRaceMode(room: RoomObject) {
@@ -74,6 +91,7 @@ function handleRaceMode(room: RoomObject) {
   handleRREnabledCommand(undefined, ["false"], room);
   handleEnableTyresCommand(undefined, ["true"], room);
   sendSuccessMessage(room, MESSAGES.TIME_TO_RACE(laps));
+  changeGeneralGameMode(GeneralGameMode.GENERAL_RACE);
 }
 
 function handleWaintingRoom(room: RoomObject) {
@@ -82,4 +100,15 @@ function handleWaintingRoom(room: RoomObject) {
   setGhostMode(room, false);
   handleRREnabledCommand(undefined, ["false"], room);
   handleEnableTyresCommand(undefined, ["false"], room);
+  changeGeneralGameMode(GeneralGameMode.NONE);
+}
+
+function handleHardQualyMode(room: RoomObject) {
+  enableGas(false);
+  enableSlipstream(false);
+  setGhostMode(room, false);
+  handleRREnabledCommand(undefined, ["false"], room);
+  handleEnableTyresCommand(undefined, ["false"], room);
+  sendSuccessMessage(room, MESSAGES.TIME_TO_QUALY());
+  changeGeneralGameMode(GeneralGameMode.GENERAL_QUALY);
 }

@@ -8,7 +8,12 @@ import { MESSAGES } from "../chat/messages";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { isBanned } from "../ipRelated/isBanned";
 import { decodeIPFromConn, banPlayer, kickPlayer } from "../utils";
-import { gameMode, GameMode } from "../changeGameState/changeGameModes";
+import {
+  gameMode,
+  GameMode,
+  generalGameMode,
+  GeneralGameMode,
+} from "../changeGameState/changeGameModes";
 import { log } from "../discord/logger";
 import { checkRunningPlayers } from "../changeGameState/publicGameFlow/startStopGameFlow";
 
@@ -17,7 +22,7 @@ function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
     if (room.getScores()) {
       if (
         gameState === "running" &&
-        gameMode !== GameMode.QUALY &&
+        generalGameMode !== GeneralGameMode.GENERAL_QUALY &&
         gameMode !== GameMode.TRAINING &&
         gameMode !== GameMode.WAITING
       ) {

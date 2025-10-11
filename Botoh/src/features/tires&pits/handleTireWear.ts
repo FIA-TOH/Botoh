@@ -1,4 +1,9 @@
-import { gameMode, GameMode } from "../changeGameState/changeGameModes";
+import {
+  gameMode,
+  GameMode,
+  generalGameMode,
+  GeneralGameMode,
+} from "../changeGameState/changeGameModes";
 import { playerList } from "../changePlayerState/playerList";
 import { sendAlertMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
@@ -17,7 +22,7 @@ export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
   }
   if (
     !tyresActivated ||
-    gameMode == GameMode.QUALY ||
+    generalGameMode === GeneralGameMode.GENERAL_QUALY ||
     gameMode === GameMode.WAITING
   ) {
     p.wear = 20;

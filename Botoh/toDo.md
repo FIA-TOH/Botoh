@@ -2,13 +2,15 @@
 
 # Testes/Ficar de olho
 
-Ver se gameMode Result fica melhor training titulo no discord
-Tempo mais exato
+Ver se training results aparecem
+Ver se resultados muito grandes se separam
+Punicoes de 2s em liga
 
 # To do dos Mapas
 
 # To-do rapidos
 
+Qualy liga
 Automaticamente se o cara saiu e voltar depois de X tempo, ele consegue voltar para a corrida saindo dos boxes em ultimo
 Tentar fazer banking como o rodri falou
 Add daytonna Rodri

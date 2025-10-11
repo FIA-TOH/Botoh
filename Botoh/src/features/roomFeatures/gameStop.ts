@@ -14,6 +14,8 @@ import {
   gameMode,
   GameMode,
   changeGameMode,
+  generalGameMode,
+  GeneralGameMode,
 } from "../changeGameState/changeGameModes";
 import {
   clearPlayers,
@@ -85,7 +87,7 @@ export function GameStop(room: RoomObject) {
         changeGameStoppedNaturally(false);
       } else {
         handleGameStateChange(null, room);
-        if (gameMode == GameMode.QUALY) {
+        if (generalGameMode === GeneralGameMode.GENERAL_QUALY) {
           sendQualiResultsToDiscord();
           printAllTimes(room);
           reorderPlayersInRoomRace(room);

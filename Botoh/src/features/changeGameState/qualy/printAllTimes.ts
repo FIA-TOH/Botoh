@@ -6,13 +6,18 @@ import {
   sendNonLocalizedSmallChatMessage,
 } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
-import { GameMode, gameMode } from "../changeGameModes";
+import {
+  GameMode,
+  gameMode,
+  GeneralGameMode,
+  generalGameMode,
+} from "../changeGameModes";
 import { getPlayersOrderedByQualiTime } from "./playerTime";
 
 const HAXBALL_MSG_LIMIT = 124;
 
 export function printAllTimes(room: RoomObject, toPlayerID?: number) {
-  if (![GameMode.QUALY, GameMode.TRAINING].includes(gameMode)) {
+  if (generalGameMode === GeneralGameMode.GENERAL_RACE) {
     sendErrorMessage(room, MESSAGES.TIMES_IN_RACE(), toPlayerID);
     return;
   }

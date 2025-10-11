@@ -1,4 +1,9 @@
-import { gameMode, GameMode } from "../../changeGameState/changeGameModes";
+import {
+  gameMode,
+  GameMode,
+  generalGameMode,
+  GeneralGameMode,
+} from "../../changeGameState/changeGameModes";
 import { Teams } from "../../changeGameState/teams";
 import { playerList } from "../../changePlayerState/playerList";
 import { resetPlayer } from "../../changePlayerState/players";
@@ -23,7 +28,7 @@ export function handleAfkCommand(
     sendAlertMessage(room, MESSAGES.NOW_AFK(), byPlayer.id);
     resetPlayer(byPlayer, room, byPlayer.id);
   } else if (
-    gameMode == GameMode.QUALY ||
+    generalGameMode === GeneralGameMode.GENERAL_QUALY ||
     gameMode == GameMode.TRAINING ||
     gameMode === GameMode.WAITING
   ) {

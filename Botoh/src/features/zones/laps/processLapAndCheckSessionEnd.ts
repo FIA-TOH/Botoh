@@ -1,4 +1,9 @@
-import { gameMode, GameMode } from "../../changeGameState/changeGameModes";
+import {
+  gameMode,
+  GameMode,
+  generalGameMode,
+  GeneralGameMode,
+} from "../../changeGameState/changeGameModes";
 import { qualiTime } from "../../changeGameState/qualy/qualiMode";
 import { showPlayerQualiPosition } from "../../changeGameState/qualy/showPositionQualy";
 import { printAllPositions } from "../../changeGameState/race/printAllPositions";
@@ -22,7 +27,7 @@ export function processLapAndCheckSessionEnd(
   const playerData = playerList[p.id];
   const currentLap = playerData.currentLap;
 
-  if (gameMode !== GameMode.QUALY) {
+  if (generalGameMode !== GeneralGameMode.GENERAL_QUALY) {
     const lapIndex = currentLap - 2;
     const position = lapPositions[lapIndex].push({
       id: p.id,

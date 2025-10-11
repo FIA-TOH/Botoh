@@ -6,11 +6,16 @@ import {
   sendSmallChatMessage,
 } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
-import { gameMode, GameMode } from "../changeGameModes";
+import {
+  gameMode,
+  GameMode,
+  generalGameMode,
+  GeneralGameMode,
+} from "../changeGameModes";
 import { getPlayersOrderedByQualiTime } from "./playerTime";
 
 export function showPlayerQualiPosition(room: RoomObject, playerId: number) {
-  if (gameMode !== GameMode.QUALY) return;
+  if (generalGameMode !== GeneralGameMode.GENERAL_QUALY) return;
 
   const orderedList = getPlayersOrderedByQualiTime();
   const playerIndex = orderedList.findIndex((p) => p.id === playerId);

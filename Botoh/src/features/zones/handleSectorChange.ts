@@ -1,4 +1,9 @@
-import { gameMode, GameMode } from "../changeGameState/changeGameModes";
+import {
+  gameMode,
+  GameMode,
+  generalGameMode,
+  GeneralGameMode,
+} from "../changeGameState/changeGameModes";
 import {
   updatePositionList,
   positionList,
@@ -135,7 +140,11 @@ export function checkPlayerSector(
 export function checkBlueFlag(p: PlayerObject, room: RoomObject) {
   const playerInfo = positionList.find((entry) => entry.name === p.name);
   if (!playerInfo) return;
-  if (gameMode == GameMode.QUALY || gameMode == GameMode.TRAINING) return;
+  if (
+    generalGameMode === GeneralGameMode.GENERAL_QUALY ||
+    gameMode == GameMode.TRAINING
+  )
+    return;
 
   positionList.forEach((opponent) => {
     const opponentInfo = room

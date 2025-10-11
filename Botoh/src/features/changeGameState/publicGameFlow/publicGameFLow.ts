@@ -20,7 +20,13 @@ import {
 // import { rainEnabled } from "../../rain/rain";
 import { delay } from "../../utils";
 import { CIRCUITS, handleChangeMap } from "../../zones/maps";
-import { changeGameMode, GameMode, gameMode } from "../changeGameModes";
+import {
+  changeGameMode,
+  GameMode,
+  gameMode,
+  generalGameMode,
+  GeneralGameMode,
+} from "../changeGameModes";
 import { changeGameStoppedNaturally } from "../gameStopeedNaturally";
 import { printAllTimes } from "../qualy/printAllTimes";
 import { printAllPositions } from "../race/printAllPositions";
@@ -40,7 +46,7 @@ export default async function PublicGameFlow(room: RoomObject) {
     (c) => c.info?.name === "Wait Qualy Room - By Ximb"
   );
 
-  if (gameMode === GameMode.RACE) {
+  if (generalGameMode === GeneralGameMode.GENERAL_RACE) {
     sendRaceResultsToDiscord();
     printAllPositions(room);
     resetPlayers(room);
@@ -99,7 +105,7 @@ export default async function PublicGameFlow(room: RoomObject) {
     return;
   }
 
-  if (gameMode === GameMode.QUALY) {
+  if (generalGameMode === GeneralGameMode.GENERAL_QUALY) {
     sendQualiResultsToDiscord();
     printAllTimes(room);
     reorderPlayersInRoomRace(room);

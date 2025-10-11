@@ -1,4 +1,9 @@
-import { gameMode, GameMode } from "../../changeGameState/changeGameModes";
+import {
+  gameMode,
+  GameMode,
+  GeneralGameMode,
+  generalGameMode,
+} from "../../changeGameState/changeGameModes";
 import { sendErrorMessage, sendChatMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { setLaps } from "../../zones/laps";
@@ -13,7 +18,10 @@ export function changeLaps(
     const newLaps = Number(newLapsArg);
 
     if (byPlayer) {
-      if (gameMode == GameMode.QUALY || gameMode == GameMode.TRAINING) {
+      if (
+        generalGameMode === GeneralGameMode.GENERAL_QUALY ||
+        gameMode == GameMode.TRAINING
+      ) {
         sendErrorMessage(room, MESSAGES.LAPS_IN_QUALI(), byPlayer.id);
         return false;
       }

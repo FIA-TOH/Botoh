@@ -1,4 +1,9 @@
-import { gameMode, GameMode } from "../../../changeGameState/changeGameModes";
+import {
+  gameMode,
+  GameMode,
+  generalGameMode,
+  GeneralGameMode,
+} from "../../../changeGameState/changeGameModes";
 import { qualiTime } from "../../../changeGameState/qualy/qualiMode";
 import { sendChatMessage } from "../../../chat/chat";
 import { MESSAGES } from "../../../chat/messages";
@@ -15,7 +20,7 @@ export function handleWaitTimeCommand(
     return false;
   }
 
-  if (gameMode == GameMode.QUALY) {
+  if (generalGameMode === GeneralGameMode.GENERAL_QUALY) {
     const willEnd = qualiTime !== Number.MAX_VALUE;
 
     if (!willEnd) sendChatMessage(room, MESSAGES.QUALI_WONT_END(), byPlayer.id);

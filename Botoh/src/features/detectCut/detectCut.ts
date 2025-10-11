@@ -1,5 +1,10 @@
 import { Circuit, CutSegment } from "../../circuits/Circuit";
-import { GameMode, gameMode } from "../changeGameState/changeGameModes";
+import {
+  GameMode,
+  gameMode,
+  generalGameMode,
+  GeneralGameMode,
+} from "../changeGameState/changeGameModes";
 import { sendAlertMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { log } from "../discord/logger";
@@ -13,7 +18,7 @@ const DEFAULT_PENALTY_LEAGUE = 2;
 
 function decidePenalty(seg: any) {
   const PENALTY =
-    LEAGUE_MODE && gameMode === GameMode.RACE
+    LEAGUE_MODE && generalGameMode === GeneralGameMode.GENERAL_RACE
       ? DEFAULT_PENALTY_LEAGUE
       : seg.penalty ?? DEFAULT_PENALTY_PUBLIC;
 
@@ -114,7 +119,10 @@ export function detectCut(
 
     if (dist < pad.disc.radius && !lastSet.has(seg.index)) {
       let realPeanlty = decidePenalty(seg);
-      if (room.getScores().time < 30 && gameMode === GameMode.RACE) {
+      if (
+        room.getScores().time < 30 &&
+        generalGameMode === GeneralGameMode.GENERAL_RACE
+      ) {
         realPeanlty = decidePenalty(seg) / 2;
       }
       log(`${pad.p.name} cutted the track at ${getTimestamp()}`);

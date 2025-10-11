@@ -1,4 +1,9 @@
-import { gameMode, GameMode } from "../../changeGameState/changeGameModes";
+import {
+  gameMode,
+  GameMode,
+  generalGameMode,
+  GeneralGameMode,
+} from "../../changeGameState/changeGameModes";
 import { ghostMode } from "../../changePlayerState/ghost";
 import { playerList } from "../../changePlayerState/playerList";
 import { resetPlayer } from "../../changePlayerState/players";
@@ -19,7 +24,10 @@ export function handleRRAllCommand(room: RoomObject) {
 
     resetPlayer(player.p, room, player.p.id);
 
-    if (gameMode === GameMode.QUALY || gameMode === GameMode.TRAINING) {
+    if (
+      generalGameMode === GeneralGameMode.GENERAL_QUALY ||
+      gameMode === GameMode.TRAINING
+    ) {
       playerList[player.p.id].kers = 100;
       playerList[player.p.id].wear = 20;
     }
@@ -54,7 +62,10 @@ export function handleRRCommand(
     return;
   }
   resetPlayer(byPlayer, room, byPlayer.id);
-  if (gameMode == GameMode.QUALY || gameMode == GameMode.TRAINING) {
+  if (
+    generalGameMode === GeneralGameMode.GENERAL_QUALY ||
+    gameMode == GameMode.TRAINING
+  ) {
     playerList[byPlayer.id].kers = 100;
     playerList[byPlayer.id].wear = 20;
   }

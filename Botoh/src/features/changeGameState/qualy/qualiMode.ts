@@ -1,7 +1,12 @@
 import { sendErrorMessage, sendSuccessMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { LEAGUE_MODE } from "../../hostLeague/leagueMode";
-import { GameMode, gameMode } from "../changeGameModes";
+import {
+  GameMode,
+  gameMode,
+  generalGameMode,
+  GeneralGameMode,
+} from "../changeGameModes";
 
 export let qualiTime = 2;
 export let raceTime = LEAGUE_MODE ? 0 : 7;
@@ -11,7 +16,7 @@ export function setQualiTime(
   time: number,
   room: RoomObject
 ) {
-  if (gameMode !== GameMode.QUALY) {
+  if (generalGameMode !== GeneralGameMode.GENERAL_QUALY) {
     sendErrorMessage(room, MESSAGES.NOT_IN_QUALI(), player.id);
     return false;
   }

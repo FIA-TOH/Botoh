@@ -32,6 +32,14 @@ function splitMessage(msg: string, size = 2000): string[] {
   }
   return chunks;
 }
+function splitCodeMessage(msg: string, size = 1900): string[] {
+  const chunks: string[] = [];
+  for (let i = 0; i < msg.length; i += size) {
+    const part = msg.slice(i, i + size);
+    chunks.push("```" + part + "```");
+  }
+  return chunks;
+}
 
 async function safeSend(
   url: string,
@@ -135,8 +143,9 @@ export function sendDiscordResult(message: string) {
     if (!message) return;
     const LOG_URL = LEAGUE_MODE ? LEAGUE_REPLAY_URL : PUBLIC_REPLAY_URL;
     const sanitized = message.replace(/@(?=[a-zA-Z])/g, "@ ");
-    const timestamped = `${sanitized} - ${getTimestamp()}`;
-    splitMessage(timestamped).forEach((part) =>
+    const timestamped = `${sanitized}\n\n📅 ${getTimestamp()}`;
+
+    splitCodeMessage(timestamped).forEach((part) =>
       safeSend(LOG_URL, { content: part }, "RESULT")
     );
   } catch (err) {

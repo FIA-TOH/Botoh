@@ -1,4 +1,9 @@
-import { GameMode, gameMode } from "../changeGameState/changeGameModes";
+import {
+  GameMode,
+  gameMode,
+  generalGameMode,
+  GeneralGameMode,
+} from "../changeGameState/changeGameModes";
 import { getPlayersOrderedByQualiTime } from "../changeGameState/qualy/playerTime";
 import { positionList } from "../changeGameState/race/positionList";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
@@ -28,7 +33,7 @@ export function sendQualiResultsToDiscord() {
   const pole = orderedList[0];
 
   let gameModeResult;
-  if (gameMode === GameMode.QUALY) {
+  if (generalGameMode === GeneralGameMode.GENERAL_QUALY) {
     gameModeResult = "QUALIFYING";
   } else if (gameMode === GameMode.TRAINING) {
     gameModeResult = "TRAINING";

@@ -1,5 +1,10 @@
 import { afkKickTime, afkAlertTime } from "../../../roomconfig.json";
-import { GameMode, gameMode } from "../changeGameState/changeGameModes";
+import {
+  GameMode,
+  gameMode,
+  GeneralGameMode,
+  generalGameMode,
+} from "../changeGameState/changeGameModes";
 import { gameState } from "../changeGameState/gameState";
 import { Teams } from "../changeGameState/teams";
 import { playerList } from "../changePlayerState/playerList";
@@ -31,7 +36,7 @@ export function afkKick(room: RoomObject) {
         gameState === "running" &&
         gameMode !== GameMode.WAITING &&
         gameMode !== GameMode.TRAINING &&
-        gameMode !== GameMode.QUALY &&
+        generalGameMode !== GeneralGameMode.GENERAL_QUALY &&
         player.team === Teams.RUNNERS
       ) {
         if (afkDuration > afkKickTimeMilisseconds) {

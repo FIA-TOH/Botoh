@@ -3,7 +3,12 @@ import { playerList } from "../changePlayerState/playerList";
 import { resetPlayer } from "../changePlayerState/players";
 import { Teams } from "../changeGameState/teams";
 import { ACTUAL_CIRCUIT } from "./stadiumChange";
-import { gameMode, GameMode } from "../changeGameState/changeGameModes";
+import {
+  gameMode,
+  GameMode,
+  generalGameMode,
+  GeneralGameMode,
+} from "../changeGameState/changeGameModes";
 import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
 import { updatePlayerActivity } from "../afk/afk";
 import { followPlayerId } from "../camera/cameraFollow";
@@ -24,7 +29,7 @@ export function TeamChange(room: RoomObject) {
       handleAvatar(Situacions.ChangeTyre, changedPlayer, room);
       if (
         room.getScores().time > 0 &&
-        gameMode !== GameMode.QUALY &&
+        generalGameMode !== GeneralGameMode.GENERAL_QUALY &&
         gameMode !== GameMode.WAITING
       ) {
         const boxLine = ACTUAL_CIRCUIT.info.boxLine;

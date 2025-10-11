@@ -1,4 +1,9 @@
-import { gameMode, GameMode } from "../../changeGameState/changeGameModes";
+import {
+  gameMode,
+  GameMode,
+  generalGameMode,
+  GeneralGameMode,
+} from "../../changeGameState/changeGameModes";
 import { updatePositionList } from "../../changeGameState/race/positionList";
 import { Teams } from "../../changeGameState/teams";
 import { playerList } from "../../changePlayerState/playerList";
@@ -46,9 +51,9 @@ export function checkPlayerLaps(
     if (playerData.lapChanged) return;
 
     if (playerData.currentLap === 0) {
-      if (gameMode === GameMode.RACE || gameMode === GameMode.INDY) {
+      if (generalGameMode === GeneralGameMode.GENERAL_RACE) {
         sendSmallChatMessage(room, MESSAGES.STARTING_LAP(), p.id);
-      } else if (gameMode === GameMode.QUALY) {
+      } else if (generalGameMode === GeneralGameMode.GENERAL_QUALY) {
         sendSmallChatMessage(room, MESSAGES.STARTING_QUALY_LAP(), p.id);
       }
     }
@@ -73,7 +78,10 @@ export function checkPlayerLaps(
 
     resetLapData(playerData, p.id, room);
 
-    if (gameMode !== GameMode.QUALY && gameMode !== GameMode.TRAINING) {
+    if (
+      generalGameMode !== GeneralGameMode.GENERAL_QUALY &&
+      gameMode !== GameMode.TRAINING
+    ) {
       updatePositionList(players, room);
       checkBlueFlag(p, room);
     }

@@ -4,7 +4,12 @@ import { ifInBoxZone } from "../../tires&pits/pits";
 import { playerList } from "../../changePlayerState/playerList";
 import { getRunningPlayers } from "../../utils";
 import { gasEnabled } from "../handleSlipstream";
-import { gameMode, GameMode } from "../../changeGameState/changeGameModes";
+import {
+  gameMode,
+  GameMode,
+  generalGameMode,
+  GeneralGameMode,
+} from "../../changeGameState/changeGameModes";
 import { presentationLap } from "../../commands/gameState/handlePresentationLapCommand";
 import { playerBuffList } from "../../commands/adjustThings/handleNerfListCommand";
 
@@ -106,7 +111,7 @@ function handleFuel(
       }
     } else if (
       time > 0 &&
-      gameMode !== GameMode.QUALY &&
+      generalGameMode !== GeneralGameMode.GENERAL_QUALY &&
       !presentationLap &&
       !vsc &&
       playerInfo.tires

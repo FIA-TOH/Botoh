@@ -3,7 +3,12 @@ import {
   bestTimes,
   updateBestTime,
 } from "../../../circuits/bestTimes";
-import { GameMode, gameMode } from "../../changeGameState/changeGameModes";
+import {
+  GameMode,
+  gameMode,
+  generalGameMode,
+  GeneralGameMode,
+} from "../../changeGameState/changeGameModes";
 import { updatePlayerTime } from "../../changeGameState/qualy/playerTime";
 import { playerList } from "../../changePlayerState/playerList";
 import {
@@ -100,7 +105,7 @@ export function processCompletedLap(
   // }
   if (
     tyresActivated &&
-    gameMode !== GameMode.QUALY &&
+    generalGameMode !== GeneralGameMode.GENERAL_QUALY &&
     playerData.tires !== Tires.FLAT
   )
     sendChatMessage(
