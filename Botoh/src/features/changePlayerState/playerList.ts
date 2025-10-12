@@ -34,8 +34,6 @@ export interface PlayerInfo {
   lapTime: number;
   lastLapTimeUpdate: number;
   bestTime: number;
-  startLapTime: number;
-  lastLapTime: number;
 
   // Setores
   currentSector: number;
@@ -61,9 +59,6 @@ export interface PlayerInfo {
   pitInitialPos?: { x: number; y: number };
   pitFailures?: PitResult;
   pitSteps?: PitStep[] | undefined;
-  pitEntryTime?: number;
-  pitEntryStartLimiter?: number;
-  prevLimiter?: number;
 
   // Recursos de corrida
   speedEnabled: boolean;
@@ -93,8 +88,6 @@ export interface PlayerInfo {
   slipDir?: Direction;
 
   previousPos: { x: number | null; y: number | null };
-  previousX?: number;
-  previousY?: number;
 
   //contadores
   timeWhenEntered: number;

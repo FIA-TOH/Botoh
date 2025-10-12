@@ -12,6 +12,7 @@ import { followPlayerId } from "../camera/cameraFollow";
 import { checkRunningPlayers } from "../changeGameState/publicGameFlow/startStopGameFlow";
 import { changeGameStoppedNaturally } from "../changeGameState/gameStopeedNaturally";
 import { sendQualiResultsToDiscord } from "../discord/logResults";
+import { addPlayerLeftInfo } from "../comeBackRace.ts/comeBackToRaceFunctions";
 
 export function PlayerLeave(room: RoomObject) {
   room.onPlayerLeave = function (player) {
@@ -19,6 +20,37 @@ export function PlayerLeave(room: RoomObject) {
     updatePlayerActivity(player);
 
     const playerObj = playerList[player.id];
+
+    if (playerObj) {
+      const playerLeft = {
+        id: player.id,
+        name: player.name,
+        ip: playerObj.ip,
+        leagueTeam: playerObj.leagueTeam,
+        didHardQualy: playerObj.didHardQualy,
+        totalTime: playerObj.totalTime,
+        bestTime: playerObj.bestTime,
+        tires: playerObj.tires,
+        wear: playerObj.wear,
+        lapsOnCurrentTire: playerObj.lapsOnCurrentTire,
+        showTires: playerObj.showTires,
+        maxSpeed: playerObj.maxSpeed,
+        pits: playerObj.pits,
+        pitTargetTires: playerObj.pitTargetTires,
+        pitFailures: playerObj.pitFailures,
+        pitInitialPos: playerObj.pitInitialPos,
+        speedEnabled: playerObj.speedEnabled,
+        kers: playerObj.kers,
+        gas: playerObj.gas,
+        prevGas: playerObj.prevGas,
+        language: playerObj.language,
+        everyoneLaps: playerObj.everyoneLaps,
+        voted: playerObj.voted,
+        leftAt: new Date().toISOString(),
+      };
+
+      addPlayerLeftInfo(playerLeft);
+    }
 
     if (LEAGUE_MODE) {
       const hash = playerObj !== undefined ? sha256(playerObj.ip) : "";

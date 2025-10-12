@@ -10,8 +10,10 @@ Punicoes de 2s em liga
 
 # To-do rapidos
 
-Qualy liga
-Automaticamente se o cara saiu e voltar depois de X tempo, ele consegue voltar para a corrida saindo dos boxes em ultimo
+Se o cara sair X minutos depois usar !join para voltar
+Avisar quando pode sair dos boxes, kickar se sair antes
+Confirmar se ta dando certo
+
 Tentar fazer banking como o rodri falou
 Add daytonna Rodri
 Pneu estourar
