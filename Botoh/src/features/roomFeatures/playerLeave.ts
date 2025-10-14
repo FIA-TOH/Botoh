@@ -5,7 +5,12 @@ import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { playerList } from "../changePlayerState/playerList";
 import { getRunningPlayers } from "../utils";
 import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
-import { gameMode, GameMode } from "../changeGameState/changeGameModes";
+import {
+  gameMode,
+  GameMode,
+  generalGameMode,
+  GeneralGameMode,
+} from "../changeGameState/changeGameModes";
 import { log } from "../discord/logger";
 import { updatePlayerActivity } from "../afk/afk";
 import { followPlayerId } from "../camera/cameraFollow";
@@ -21,40 +26,44 @@ export function PlayerLeave(room: RoomObject) {
 
     const playerObj = playerList[player.id];
 
-    if (playerObj) {
-      const playerLeft = {
-        id: player.id,
-        name: player.name,
-        ip: playerObj.ip,
-        leagueTeam: playerObj.leagueTeam,
-        didHardQualy: playerObj.didHardQualy,
-        totalTime: playerObj.totalTime,
-        bestTime: playerObj.bestTime,
-        tires: playerObj.tires,
-        wear: playerObj.wear,
-        lapsOnCurrentTire: playerObj.lapsOnCurrentTire,
-        showTires: playerObj.showTires,
-        maxSpeed: playerObj.maxSpeed,
-        pits: playerObj.pits,
-        pitTargetTires: playerObj.pitTargetTires,
-        pitFailures: playerObj.pitFailures,
-        pitInitialPos: playerObj.pitInitialPos,
-        speedEnabled: playerObj.speedEnabled,
-        kers: playerObj.kers,
-        gas: playerObj.gas,
-        prevGas: playerObj.prevGas,
-        language: playerObj.language,
-        everyoneLaps: playerObj.everyoneLaps,
-        voted: playerObj.voted,
-        leftAt: new Date().toISOString(),
-      };
-
-      addPlayerLeftInfo(playerLeft);
-    }
-
     if (LEAGUE_MODE) {
       const hash = playerObj !== undefined ? sha256(playerObj.ip) : "";
       log(`${player.name} has left. (${hash})`);
+
+      if (
+        generalGameMode === GeneralGameMode.GENERAL_RACE &&
+        room.getScores()?.time > 0 &&
+        playerObj
+      ) {
+        const playerLeft = {
+          id: player.id,
+          name: player.name,
+          ip: playerObj.ip,
+          leagueTeam: playerObj.leagueTeam,
+          didHardQualy: playerObj.didHardQualy,
+          totalTime: playerObj.totalTime,
+          bestTime: playerObj.bestTime,
+          tires: playerObj.tires,
+          wear: playerObj.wear,
+          lapsOnCurrentTire: playerObj.lapsOnCurrentTire,
+          showTires: playerObj.showTires,
+          maxSpeed: playerObj.maxSpeed,
+          pits: playerObj.pits,
+          pitTargetTires: playerObj.pitTargetTires,
+          pitFailures: playerObj.pitFailures,
+          pitInitialPos: playerObj.pitInitialPos,
+          speedEnabled: playerObj.speedEnabled,
+          kers: playerObj.kers,
+          gas: playerObj.gas,
+          prevGas: playerObj.prevGas,
+          language: playerObj.language,
+          everyoneLaps: playerObj.everyoneLaps,
+          voted: playerObj.voted,
+          leftAt: new Date().toISOString(),
+        };
+
+        addPlayerLeftInfo(playerLeft);
+      }
     } else {
       const ip = playerObj !== undefined ? playerObj.ip : "";
       log(`${player.name} has left. (${ip})`);

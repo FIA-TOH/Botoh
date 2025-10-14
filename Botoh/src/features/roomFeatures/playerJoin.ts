@@ -3,7 +3,11 @@ import { gameState } from "../changeGameState/gameState";
 import { Teams } from "../changeGameState/teams";
 import { idToAuth, playerList } from "../changePlayerState/playerList";
 import { createPlayerInfo } from "../changePlayerState/players";
-import { MAX_PLAYER_NAME, sendSuccessMessage } from "../chat/chat";
+import {
+  MAX_PLAYER_NAME,
+  sendChatMessage,
+  sendSuccessMessage,
+} from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { isBanned } from "../ipRelated/isBanned";
@@ -16,11 +20,19 @@ import {
 } from "../changeGameState/changeGameModes";
 import { log } from "../discord/logger";
 import { checkRunningPlayers } from "../changeGameState/publicGameFlow/startStopGameFlow";
+import {
+  playersLeftInfo,
+  REJOIN_TIME_LIMIT,
+} from "../comeBackRace.ts/comeBackToRaceFunctions";
+import { positionList } from "../changeGameState/race/positionList";
 
 const HARD_QUALY_PASSWORD = "hardqualy";
 
 function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
   const players = room.getPlayerList();
+  const now = new Date();
+
+  const wasRunning = positionList.some((p) => p.name === player.name);
 
   if (players.length > 1) {
     if (room.getScores()) {
@@ -31,6 +43,25 @@ function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
         gameMode !== GameMode.WAITING
       ) {
         room.setPlayerTeam(player.id, Teams.SPECTATORS);
+      } else if (wasRunning) {
+        const leftInfoIndex = playersLeftInfo.findIndex(
+          (info) => info.name === player.name
+        );
+
+        if (leftInfoIndex !== -1) {
+          const leftInfo = playersLeftInfo[leftInfoIndex];
+          const leftAt = new Date(leftInfo.leftAt);
+          const diffInSeconds = (now.getTime() - leftAt.getTime()) / 1000;
+
+          if (diffInSeconds <= REJOIN_TIME_LIMIT) {
+            room.sendAnnouncement(
+              `⚠️ Você saiu durante a corrida. Digite !rejoin para voltar a correr.`,
+              player.id
+            );
+          }
+          room.setPlayerTeam(player.id, Teams.SPECTATORS);
+          return;
+        }
       } else {
         room.setPlayerTeam(player.id, Teams.RUNNERS);
       }

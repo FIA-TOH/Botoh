@@ -10,8 +10,9 @@ Punicoes de 2s em liga
 
 # To-do rapidos
 
-Se o cara sair X minutos depois usar !join para voltar
-Avisar quando pode sair dos boxes, kickar se sair antes
+Avaliar a questão das laps se esta correto
+Avisar quando pode sair dos boxes, levando em consideracao quem é o ultimo sem ser ele mesmo, kickar se sair antes
+Mudar mensagens para todas linguas
 Confirmar se ta dando certo
 
 Tentar fazer banking como o rodri falou

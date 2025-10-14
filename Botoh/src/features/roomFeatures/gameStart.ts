@@ -13,6 +13,7 @@ import { GameMode, gameMode } from "../changeGameState/changeGameModes";
 import { handleRRAllCommand } from "../commands/playerState/handleRRCommand";
 import { resetBestPit } from "../tires&pits/trackBestPit";
 import { resetBestLap } from "../zones/laps/trackBestLap";
+import { clearPlayersLeftInfo } from "../comeBackRace.ts/comeBackToRaceFunctions";
 
 export function GameStart(room: RoomObject) {
   room.onGameStart = function (byPlayer) {
@@ -26,6 +27,7 @@ export function GameStart(room: RoomObject) {
     }
     resetBestLap();
     resetBestPit();
+    clearPlayersLeftInfo();
 
     // resetAllRainEvents();
     setCameraAuto();

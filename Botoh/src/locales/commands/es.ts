@@ -285,6 +285,11 @@ export default function es_commands(
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject
+  ) => void,
+  handleRejoinCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
   ) => void
 ): Commands {
   return {
@@ -350,5 +355,6 @@ export default function es_commands(
     "!camera_position": handleCameraPositionFollow,
     "!game_flow": handleChangeGameFLow,
     "!min_pit": handleSetMinimumPit,
+    "!rejoin": handleRejoinCommand,
   };
 }

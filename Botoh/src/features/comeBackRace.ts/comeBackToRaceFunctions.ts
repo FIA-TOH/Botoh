@@ -1,5 +1,7 @@
 import { Tires } from "../tires&pits/tires";
 
+export const REJOIN_TIME_LIMIT = 60; //seconds
+
 export let playersLeftInfo: PlayerLeftInfo[] = [];
 
 export interface PlayerLeftInfo {
