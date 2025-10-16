@@ -16,7 +16,6 @@ import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { vsc } from "../speed/handleSpeed";
 
 const activities: { [key: number]: number } = {};
-
 export function afkKick(room: RoomObject) {
   const players = room.getPlayerList();
   const afkKickTimeMilisseconds = afkKickTime * 1000;
@@ -25,9 +24,13 @@ export function afkKick(room: RoomObject) {
   for (let id in activities) {
     for (let i = 0; i < players.length; i++) {
       const player = players[i];
-
       const playerId = player.id;
       const playerPropierties = playerList[playerId];
+
+      if (playerPropierties && playerPropierties.canLeavePitLane === false) {
+        continue;
+      }
+
       const afkDuration = Date.now() - activities[playerId];
 
       if (

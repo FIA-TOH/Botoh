@@ -10,6 +10,7 @@ export enum Situacions {
   Rain = "Rain",
   Flag = "Flag",
   Null = "Null",
+  CanLeavePit = "CanLeavePit",
   Correct = "Correct",
   Wrong = "Wrong",
   NeedPit = "NeedPit",
@@ -20,6 +21,7 @@ const currentSituacion: Record<number, Situacions> = {};
 const SITUATION_PRIORITY: Record<Situacions, number> = {
   [Situacions.Rain]: 8,
   [Situacions.Flag]: 7,
+  [Situacions.CanLeavePit]: 7,
   [Situacions.Wrong]: 6,
   [Situacions.Correct]: 5,
   [Situacions.NeedPit]: 5,
@@ -99,6 +101,15 @@ const situationHandlers: Record<
       restoreTyreOrCar(player.id, room);
       currentSituacion[player.id] = Situacions.Null;
     }, durations[0]);
+  },
+  [Situacions.CanLeavePit]: (player, room) => {
+    const wrongDurationSeconnds = 3;
+    room.setPlayerAvatar(player.id, "🔓");
+
+    playerTimers[player.id].timeout = setTimeout(() => {
+      restoreTyreOrCar(player.id, room);
+      currentSituacion[player.id] = Situacions.Null;
+    }, wrongDurationSeconnds * 1000);
   },
   [Situacions.Wrong]: (player, room) => {
     const wrongDurationSeconnds = 5;

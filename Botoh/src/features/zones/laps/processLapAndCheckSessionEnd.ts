@@ -10,9 +10,10 @@ import { printAllPositions } from "../../changeGameState/race/printAllPositions"
 import { playerList } from "../../changePlayerState/playerList";
 import { sendChatMessage, sendSuccessMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
+import { allowPlayersRejoinRace } from "../../comeBackRace.ts/comeBackToRaceFunctions";
 import { maxLapsQualy } from "../../commands/gameMode/qualy/hardQualyFunctions";
 import { processIfMinimumPitStopsMet } from "../../tires&pits/minimumPit";
-import { serialize, kickPlayer } from "../../utils";
+import { serialize, kickPlayer, getRunningPlayers } from "../../utils";
 import { laps } from "../laps";
 import { lapPositions } from "./handleLapChange";
 import { handleRaceFinish } from "./handleRaceFinish";
@@ -73,6 +74,9 @@ export function processLapAndCheckSessionEnd(
         } else {
           printAllPositions(room, 1000);
           notifySpectatorsCurrentLap(room, currentLap, playerAndDiscs);
+          if (generalGameMode === GeneralGameMode.GENERAL_RACE) {
+            allowPlayersRejoinRace(room);
+          }
         }
       } else {
         handleRaceFinish(p, room, lapTime, position === 1);

@@ -1,4 +1,8 @@
+import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
+import { playerList } from "../changePlayerState/playerList";
+import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
 import { Tires } from "../tires&pits/tires";
+import { getRunningPlayers } from "../utils";
 
 export const REJOIN_TIME_LIMIT = 60; //seconds
 
@@ -37,4 +41,17 @@ export function addPlayerLeftInfo(player: PlayerLeftInfo) {
 
 export function clearPlayersLeftInfo() {
   playersLeftInfo = [];
+}
+
+export function allowPlayersRejoinRace(room: RoomObject) {
+  const playersAndDiscs = getPlayerAndDiscs(room);
+  const players = getRunningPlayers(playersAndDiscs);
+  players.forEach((p) => {
+    const pdata = playerList[p.p.id];
+    if (pdata && pdata.canLeavePitLane === false) {
+      room.sendAnnouncement("✅ Agora você pode sair do box!", p.p.id);
+      handleAvatar(Situacions.CanLeavePit, p.p, room);
+      pdata.canLeavePitLane = true;
+    }
+  });
 }

@@ -6,6 +6,7 @@ import { playerList } from "../changePlayerState/playerList";
 import { inHitbox, getRunningPlayers } from "../utils";
 import { handleExplainTyresCommand } from "../commands/tyres/handleExplainTyresCommand";
 import { generatePitResult } from "./pitStopFunctions";
+import { Teams } from "../changeGameState/teams";
 
 function ifInPitlaneStart(
   player: { p: PlayerObject; disc: DiscPropertiesObject },
@@ -60,6 +61,12 @@ export function handlePitlane(
 
     //Code system for box
     if (ifInPitlaneEnd(player, room) && playerList[p.id].inPitlane) {
+      if (playerList[p.id].canLeavePitLane === false) {
+        playerList[p.id].canLeavePitLane = true;
+        room.sendAnnouncement("⛔ Você não pode sair do box ainda!", p.id);
+        room.setPlayerTeam(p.id, Teams.SPECTATORS); //Spectators
+        return;
+      }
       playerList[p.id].inPitlane = false;
 
       // if (LEAGUE_MODE && playerList[player.p.id].boxAlert !== false) {

@@ -10,8 +10,8 @@ Punicoes de 2s em liga
 
 # To-do rapidos
 
-Avaliar a questão das laps se esta correto
-Avisar quando pode sair dos boxes, levando em consideracao quem é o ultimo sem ser ele mesmo, kickar se sair antes
+Mudar volta para ser igual a volta do primeiro
+Ao invez de sair do meio, sair do ultimo box (fazer funcao reutilizavel, para punicoes futuras)
 Mudar mensagens para todas linguas
 Confirmar se ta dando certo
 

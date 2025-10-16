@@ -54,7 +54,7 @@ export function handleRejoinCommand(
   }, 500);
 
   room.sendAnnouncement(
-    `🏁 Você voltou para a corrida! Aguarde o último colocado passar pela linha de chegada para sair do box — caso contrário, será desclassificado.`,
+    `🏁 Você voltou para a corrida! Aguarde o primeiro colocado passar pela linha de chegada para sair do box — caso contrário, será desclassificado.`,
     byPlayer.id
   );
   room.sendAnnouncement(

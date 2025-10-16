@@ -11,12 +11,13 @@ export function resetPlayerComeBack(
   id: number
 ) {
   const lastPlacePlayerInfo = getPlayerByRacePosition("last", room);
-  console.log(lastPlacePlayerInfo);
 
   if (playerList[id] === undefined || lastPlacePlayerInfo === undefined) {
     //return error
     return;
   }
+
+  playerList[id].canLeavePitLane = false;
 
   playerList[id].isInTheRoom = true;
   playerList[id].afk = false;
@@ -26,7 +27,6 @@ export function resetPlayerComeBack(
   playerList[id].inPitStop = false;
   playerList[id].boxAlert = false;
   playerList[id].pitCountdown = 5;
-  //to-do gerar pitSteps
   playerList[id].pitSteps = undefined;
   playerList[id].drs = false;
   playerList[id].slipstreamEndTime = undefined;

@@ -56,6 +56,7 @@ export function createPlayerInfo(ip?: string) {
     pitInitialPos: { x: 0, y: 0 },
     pitFailures: undefined,
     pitSteps: undefined,
+    canLeavePitLane: true,
 
     // Recursos de corrida
     speedEnabled: false,
@@ -137,6 +138,7 @@ export function resetPlayer(
   playerList[id].boxAlert = false;
   playerList[id].pitFailures = undefined;
   playerList[id].pitSteps = undefined;
+  playerList[id].canLeavePitLane = true;
 
   playerList[id].pits = {
     pitsNumber: 0,
