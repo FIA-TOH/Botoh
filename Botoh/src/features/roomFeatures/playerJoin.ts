@@ -5,6 +5,7 @@ import { idToAuth, playerList } from "../changePlayerState/playerList";
 import { createPlayerInfo } from "../changePlayerState/players";
 import {
   MAX_PLAYER_NAME,
+  sendAlertMessage,
   sendChatMessage,
   sendSuccessMessage,
 } from "../chat/chat";
@@ -54,10 +55,7 @@ function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
           const diffInSeconds = (now.getTime() - leftAt.getTime()) / 1000;
 
           if (diffInSeconds <= REJOIN_TIME_LIMIT) {
-            room.sendAnnouncement(
-              `⚠️ Você saiu durante a corrida. Digite !rejoin para voltar a correr.`,
-              player.id
-            );
+            sendAlertMessage(room, MESSAGES.TYPE_REJOIN(), player.id);
           }
           room.setPlayerTeam(player.id, Teams.SPECTATORS);
           return;

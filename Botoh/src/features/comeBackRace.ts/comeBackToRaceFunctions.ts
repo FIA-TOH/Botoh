@@ -1,5 +1,7 @@
 import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
 import { playerList } from "../changePlayerState/playerList";
+import { sendMessage, sendSuccessMessage } from "../chat/chat";
+import { MESSAGES } from "../chat/messages";
 import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
 import { Tires } from "../tires&pits/tires";
 import { getRunningPlayers } from "../utils";
@@ -51,7 +53,7 @@ export function allowPlayersRejoinRace(room: RoomObject) {
   players.forEach((p) => {
     const pdata = playerList[p.p.id];
     if (pdata && pdata.canLeavePitLane === false) {
-      room.sendAnnouncement("✅ Agora você pode sair do box!", p.p.id);
+      sendSuccessMessage(room, MESSAGES.YOU_CAN_LEAVE_THE_BOX(), p.p.id);
       handleAvatar(Situacions.CanLeavePit, p.p, room);
       pdata.canLeavePitLane = true;
     }

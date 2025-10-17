@@ -5,7 +5,11 @@ import {
 import { Teams } from "../../changeGameState/teams";
 import { handleAvatar, Situacions } from "../../changePlayerState/handleAvatar";
 import { playerList } from "../../changePlayerState/playerList";
-import { sendErrorMessage, sendChatMessage } from "../../chat/chat";
+import {
+  sendErrorMessage,
+  sendChatMessage,
+  sendAlertMessage,
+} from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import {
   playersLeftInfo,
@@ -34,10 +38,7 @@ export function handleRejoinCommand(
   const index = playersLeftInfo.findIndex((p) => p.name === playerName);
 
   if (index === -1) {
-    room.sendAnnouncement(
-      `❌ Você não estava correndo antes de sair.`,
-      byPlayer.id
-    );
+    sendErrorMessage(room, MESSAGES.YOU_WERENT_RACING_BEFORE(), byPlayer.id);
     return;
   }
 
@@ -46,7 +47,7 @@ export function handleRejoinCommand(
   const diffInSeconds = (now.getTime() - leftAt.getTime()) / 1000;
 
   if (diffInSeconds > REJOIN_TIME_LIMIT) {
-    room.sendAnnouncement(`❌ O tempo para rejoin expirou.`, byPlayer.id);
+    sendErrorMessage(room, MESSAGES.THE_JOIN_TIME_IS_OVER(), byPlayer.id);
     return;
   }
 
@@ -60,14 +61,8 @@ export function handleRejoinCommand(
     handleAvatar(Situacions.ChangeTyre, byPlayer, room);
   }, 500);
 
-  room.sendAnnouncement(
-    `🏁 Você voltou para a corrida! Aguarde o primeiro colocado passar pela linha de chegada para sair do box — caso contrário, será desclassificado.`,
-    byPlayer.id
-  );
-  room.sendAnnouncement(
-    `📢 O aviso será mostrado no chat e no seu avatar quando for permitido sair.`,
-    byPlayer.id
-  );
+  sendAlertMessage(room, MESSAGES.CAME_BACK_RACE_ONE(), byPlayer.id);
+  sendAlertMessage(room, MESSAGES.CAME_BACK_RACE_TWO(), byPlayer.id);
 
   playersLeftInfo.splice(index, 1);
 }

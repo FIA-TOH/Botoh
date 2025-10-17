@@ -1,4 +1,4 @@
-import { sendAlertMessage } from "../chat/chat";
+import { sendAlertMessage, sendErrorMessage } from "../chat/chat";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { CIRCUITS, currentMapIndex } from "../zones/maps";
 import { MESSAGES } from "../chat/messages";
@@ -63,7 +63,8 @@ export function handlePitlane(
     if (ifInPitlaneEnd(player, room) && playerList[p.id].inPitlane) {
       if (playerList[p.id].canLeavePitLane === false) {
         playerList[p.id].canLeavePitLane = true;
-        room.sendAnnouncement("⛔ Você não pode sair do box ainda!", p.id);
+        sendErrorMessage(room, MESSAGES.CANNOT_LEAVE_BOX(), p.id);
+
         room.setPlayerTeam(p.id, Teams.SPECTATORS); //Spectators
         return;
       }

@@ -137,5 +137,12 @@
   "NON_ADMIN_COMMANDS": "Comandos disponíveis: !lang, !dicas, !ajuda, !comandos, !tyres, !wait_time, !maps, !times (somente em qualy), !positions (somente em corridas).",
   "CUTTED_TRACK": "⚠️ Você cortou o caminho! Sua velocidade será reduzida por {{seconds}} segundos.",
   "NEED_PIT_THIS_LAP": "⚠️ BOX, BOX, BOX! Você precisa fazer o pit nesta volta ou será DESQUALIFICADO! ⚠️",
-  "DSQ_MINIMUM_PITS": "❌ Desclassificado! Você não cumpriu o número mínimo de pitstops."
+  "DSQ_MINIMUM_PITS": "❌ Desclassificado! Você não cumpriu o número mínimo de pitstops.",
+  "YOU_CAN_LEAVE_THE_BOX": "✅ Agora você pode sair do box!",
+  "YOU_WERENT_RACING_BEFORE": "❌ Você não estava correndo antes de sair.",
+  "THE_JOIN_TIME_IS_OVER": "❌ O tempo para rejoin expirou.",
+  "CAME_BACK_RACE_ONE": "🏁 Você voltou para a corrida! Aguarde o primeiro colocado passar pela linha de chegada para sair do box — caso contrário, será desclassificado.",
+  "CAME_BACK_RACE_TWO": "📢 O aviso será mostrado no chat e no seu avatar quando for permitido sair.",
+  "TYPE_REJOIN": "⚠️ Você saiu durante a corrida. Digite !rejoin para voltar a correr.",
+  "CANNOT_LEAVE_BOX": "⛔ Você não pode sair do box ainda!"
 }

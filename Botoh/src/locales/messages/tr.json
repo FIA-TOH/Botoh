@@ -135,5 +135,12 @@
   "EARLY_LAP_ERROR": "Zamanlayıcı başlamadan bitiş çizgisini geçtin, başlangıca dönmek için !rr kullan, aksi takdirde tur geçerli sayılmayacak.",
   "CUTTED_TRACK": "⚠️ Yolu kestiniz! Hızınız {{seconds}} saniye boyunca düşürülecek.",
   "NEED_PIT_THIS_LAP": "⚠️ BOX, BOX, BOX! Bu turda pit stop yapmazsan DİSKALİFİYE edileceksin! ⚠️",
-  "DSQ_MINIMUM_PITS": "❌ Diskalifiye! Minimum pit stop sayısını karşılamadın."
+  "DSQ_MINIMUM_PITS": "❌ Diskalifiye! Minimum pit stop sayısını karşılamadın.",
+  "YOU_CAN_LEAVE_THE_BOX": "✅ Artık pit alanından çıkabilirsiniz!",
+  "YOU_WERENT_RACING_BEFORE": "❌ Ayrılmadan önce yarışmıyordunuz.",
+  "THE_JOIN_TIME_IS_OVER": "❌ Yeniden katılma süresi doldu.",
+  "CAME_BACK_RACE_ONE": "🏁 Yarışa geri döndünüz! Pit alanından çıkmak için ilk sıradaki sürücünün bitiş çizgisini geçmesini bekleyin — aksi takdirde diskalifiye edileceksiniz.",
+  "CAME_BACK_RACE_TWO": "📢 Pit alanından çıkmanıza izin verildiğinde sohbet ve avatarınızda bir bildirim gösterilecektir.",
+  "TYPE_REJOIN": "⚠️ Yarış sırasında ayrıldınız. Yarışa geri dönmek için !rejoin yazın.",
+  "CANNOT_LEAVE_BOX": "⛔ Henüz pit alanından çıkamazsınız!"
 }

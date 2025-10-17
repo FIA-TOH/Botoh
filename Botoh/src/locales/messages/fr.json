@@ -135,5 +135,12 @@
   "EARLY_LAP_ERROR": "Tu as franchi la ligne d'arrivée avant que le chronomètre ne commence, utilise !rr pour revenir au départ, sinon le tour ne sera pas validé.",
   "CUTTED_TRACK": "⚠️ Vous avez coupé le chemin ! Votre vitesse sera réduite pendant {{seconds}} secondes.",
   "NEED_PIT_THIS_LAP": "⚠️ BOX, BOX, BOX ! Vous devez rentrer aux stands ce tour-ci ou vous serez DISQUALIFIÉ ! ⚠️",
-  "DSQ_MINIMUM_PITS": "❌ Disqualifié ! Vous n’avez pas respecté le nombre minimum d’arrêts aux stands."
+  "DSQ_MINIMUM_PITS": "❌ Disqualifié ! Vous n’avez pas respecté le nombre minimum d’arrêts aux stands.",
+  "YOU_CAN_LEAVE_THE_BOX": "✅ Vous pouvez maintenant quitter le box !",
+  "YOU_WERENT_RACING_BEFORE": "❌ Vous ne couriez pas avant de partir.",
+  "THE_JOIN_TIME_IS_OVER": "❌ Le temps de réintégration est écoulé.",
+  "CAME_BACK_RACE_ONE": "🏁 Vous êtes de retour dans la course ! Attendez que le premier franchisse la ligne d'arrivée pour sortir des stands — sinon, vous serez disqualifié.",
+  "CAME_BACK_RACE_TWO": "📢 Une notification s'affichera dans le chat et sur votre avatar lorsque vous serez autorisé à partir.",
+  "TYPE_REJOIN": "⚠️ Vous êtes parti pendant la course. Tapez !rejoin pour revenir en course.",
+  "CANNOT_LEAVE_BOX": "⛔ Vous ne pouvez pas encore quitter le box !"
 }

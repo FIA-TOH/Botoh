@@ -135,5 +135,12 @@
   "EARLY_LAP_ERROR": "You crossed the finish line before the timer started, use !rr to return to the start, otherwise the lap will not be validated.",
   "CUTTED_TRACK": "⚠️ You cut the track! Your speed will be reduced for {{seconds}} seconds.",
   "NEED_PIT_THIS_LAP": "⚠️ BOX, BOX, BOX! You must pit this lap or you will be DISQUALIFIED! ⚠️",
-  "DSQ_MINIMUM_PITS": "❌ Disqualified! You did not meet the minimum number of pitstops."
+  "DSQ_MINIMUM_PITS": "❌ Disqualified! You did not meet the minimum number of pitstops.",
+  "YOU_CAN_LEAVE_THE_BOX": "✅ You can now leave the box!",
+  "YOU_WERENT_RACING_BEFORE": "❌ You weren't racing before leaving.",
+  "THE_JOIN_TIME_IS_OVER": "❌ The rejoin time has expired.",
+  "CAME_BACK_RACE_ONE": "🏁 You're back in the race! Wait for the leader to cross the finish line before leaving the pit—otherwise, you will be disqualified.",
+  "CAME_BACK_RACE_TWO": "📢 A notification will be shown in the chat and on your avatar when you are allowed to leave.",
+  "TYPE_REJOIN": "⚠️ You left during the race. Type !rejoin to return to racing.",
+  "CANNOT_LEAVE_BOX": "⛔ You cannot leave the box yet!"
 }
