@@ -34,6 +34,7 @@ export interface PlayerInfo {
   lapTime: number;
   lastLapTimeUpdate: number;
   bestTime: number;
+  lapsBehindLeaderWhenLeft: number | null;
 
   // Setores
   currentSector: number;

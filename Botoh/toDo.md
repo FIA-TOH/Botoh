@@ -10,10 +10,9 @@ Punicoes de 2s em liga
 
 # To-do rapidos
 
-Mudar volta para ser igual a volta do primeiro
-Ao invez de sair do meio, sair do ultimo box (fazer funcao reutilizavel, para punicoes futuras)
+Atualmente esta na mesma quantia, o certo seria -1
+AFK nao pegar pra quem ta no pit
 Mudar mensagens para todas linguas
-Confirmar se ta dando certo
 
 Tentar fazer banking como o rodri falou
 Add daytonna Rodri

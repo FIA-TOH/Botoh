@@ -290,6 +290,11 @@ export default function tr_commands(
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject
+  ) => void,
+  handleMoveToBoxCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
   ) => void
 ): Commands {
   return {
@@ -353,5 +358,6 @@ export default function tr_commands(
     "!game_flow": handleChangeGameFLow,
     "!min_pit": handleSetMinimumPit,
     "!rejoin": handleRejoinCommand,
+    "!move_to_box": handleMoveToBoxCommand,
   };
 }

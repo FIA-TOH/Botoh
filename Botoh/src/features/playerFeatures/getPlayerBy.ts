@@ -15,12 +15,11 @@ export async function getPlayerByName(name: string) {
   return player;
 }
 
-export async function getPlayerById(id: string) {
-  const room = await roomPromise;
+export function getPlayerById(id: string | number, room: RoomObject) {
   const playersAndDiscs = getPlayerAndDiscs(room);
   const players = getRunningPlayers(playersAndDiscs);
 
-  const player = players.find((pad) => pad.p.id);
+  const player = players.find((pad) => pad.p.id === id);
 
   return player;
 }

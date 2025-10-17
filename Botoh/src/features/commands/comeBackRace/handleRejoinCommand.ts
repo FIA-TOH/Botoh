@@ -1,3 +1,7 @@
+import {
+  GeneralGameMode,
+  generalGameMode,
+} from "../../changeGameState/changeGameModes";
 import { Teams } from "../../changeGameState/teams";
 import { handleAvatar, Situacions } from "../../changePlayerState/handleAvatar";
 import { playerList } from "../../changePlayerState/playerList";
@@ -16,7 +20,10 @@ export function handleRejoinCommand(
   args: string[],
   room: RoomObject
 ) {
-  if (room.getScores() === null) {
+  if (
+    room.getScores() === null ||
+    generalGameMode !== GeneralGameMode.GENERAL_RACE
+  ) {
     sendErrorMessage(room, MESSAGES.NOT_STARTED(), byPlayer.id);
     return false;
   }
@@ -48,7 +55,7 @@ export function handleRejoinCommand(
   setTimeout(() => {
     Object.assign(playerList[byPlayer.id], info);
 
-    resetPlayerComeBack(byPlayer, room, byPlayer.id);
+    resetPlayerComeBack(byPlayer, room, byPlayer.id, info);
 
     handleAvatar(Situacions.ChangeTyre, byPlayer, room);
   }, 500);

@@ -12,6 +12,7 @@ import {
 import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
 import { updatePlayerActivity } from "../afk/afk";
 import { followPlayerId } from "../camera/cameraFollow";
+import { moveToBox } from "../comeBackRace.ts/moveToBox";
 
 export function TeamChange(room: RoomObject) {
   room.onPlayerTeamChange = function (changedPlayer: PlayerObject) {
@@ -32,14 +33,7 @@ export function TeamChange(room: RoomObject) {
         gameMode !== GameMode.HARD_QUALY &&
         gameMode !== GameMode.WAITING
       ) {
-        const boxLine = ACTUAL_CIRCUIT.info.boxLine;
-        const middleX = (boxLine.minX + boxLine.maxX) / 2;
-        const middleY = (boxLine.minY + boxLine.maxY) / 2;
-        playerList[changedPlayer.id].inPitlane = true;
-        room.setPlayerDiscProperties(changedPlayer.id, {
-          x: middleX,
-          y: middleY,
-        });
+        moveToBox(changedPlayer, room, "end");
       }
     }
 

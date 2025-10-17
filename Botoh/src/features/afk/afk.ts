@@ -27,7 +27,7 @@ export function afkKick(room: RoomObject) {
       const playerId = player.id;
       const playerPropierties = playerList[playerId];
 
-      if (playerPropierties && playerPropierties.canLeavePitLane === false) {
+      if (playerPropierties && playerPropierties.canLeavePitLane === true) {
         continue;
       }
 

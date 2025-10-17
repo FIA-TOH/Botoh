@@ -33,6 +33,8 @@ export interface PlayerLeftInfo {
   everyoneLaps: any;
   voted: boolean;
   leftAt: string;
+  lapsCompletedWhenLeft?: number;
+  lapsBehindLeaderWhenLeft?: number | null;
 }
 
 export function addPlayerLeftInfo(player: PlayerLeftInfo) {

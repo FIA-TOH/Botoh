@@ -18,6 +18,7 @@ import { checkRunningPlayers } from "../changeGameState/publicGameFlow/startStop
 import { changeGameStoppedNaturally } from "../changeGameState/gameStopeedNaturally";
 import { sendQualiResultsToDiscord } from "../discord/logResults";
 import { addPlayerLeftInfo } from "../comeBackRace.ts/comeBackToRaceFunctions";
+import { getPlayerByRacePosition } from "../playerFeatures/getPlayerBy";
 
 export function PlayerLeave(room: RoomObject) {
   room.onPlayerLeave = function (player) {
@@ -25,6 +26,12 @@ export function PlayerLeave(room: RoomObject) {
     updatePlayerActivity(player);
 
     const playerObj = playerList[player.id];
+    const firstPlacePlayer = getPlayerByRacePosition("first", room);
+    const firstPlacePlayerLap = firstPlacePlayer
+      ? playerList[firstPlacePlayer.id].currentLap
+      : 0;
+
+    const lapsCompleted = Math.max(0, playerList[player.id].currentLap - 1);
 
     if (LEAGUE_MODE) {
       const hash = playerObj !== undefined ? sha256(playerObj.ip) : "";
@@ -59,8 +66,22 @@ export function PlayerLeave(room: RoomObject) {
           language: playerObj.language,
           everyoneLaps: playerObj.everyoneLaps,
           voted: playerObj.voted,
+          lapsBehindLeaderWhenLeft: Math.max(
+            0,
+            firstPlacePlayerLap - playerObj.currentLap
+          ),
+          lapsCompletedWhenLeft: lapsCompleted,
+
           leftAt: new Date().toISOString(),
         };
+        console.log(
+          "LEFT SAVE",
+          player.name,
+          "lapsCompletedWhenLeft",
+          lapsCompleted,
+          "lapsBehind",
+          playerObj.currentLap - firstPlacePlayerLap
+        );
 
         addPlayerLeftInfo(playerLeft);
       }
