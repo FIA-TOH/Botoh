@@ -27,10 +27,9 @@ export function afkKick(room: RoomObject) {
       const playerId = player.id;
       const playerPropierties = playerList[playerId];
 
-      if (playerPropierties && playerPropierties.canLeavePitLane === true) {
-        continue;
+      if (playerPropierties.inPitlane) {
+        return false;
       }
-
       const afkDuration = Date.now() - activities[playerId];
 
       if (
