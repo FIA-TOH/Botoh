@@ -15,7 +15,7 @@ export function resetPlayerComeBack(
   const firstPlayer = getPlayerByRacePosition("first", room);
   const firstPlayerCurrentLap = firstPlayer
     ? playerList[firstPlayer.id].currentLap
-    : 0;
+    : 1;
   const lapsBehindWhenLeft = info.lapsBehindLeaderWhenLeft ?? 0;
 
   if (playerList[id] === undefined) {
@@ -60,7 +60,7 @@ export function resetPlayerComeBack(
   playerList[id].previousPos = { x: null, y: null };
   playerList[id].timeWhenEntered = 0;
 
-  playerList[id].currentLap = finalLapsCompleted + 1;
+  playerList[id].currentLap = finalLapsCompleted;
   playerList[id].lapChanged = false;
   playerList[id].lastLapTimeUpdate = 0;
   playerList[id].currentSector = 3;
