@@ -89,4 +89,14 @@ export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
       break;
     }
   }
+
+  const blowoutChance = getBlowoutChance(remainingPercentage);
+  if (Math.random() < blowoutChance) {
+    changeTires(
+      { p: player, disc: room.getPlayerDiscProperties(player.id) },
+      Tires.FLAT,
+      room
+    );
+    sendAlertMessage(room, MESSAGES.WEAR_ON_CURRENT_TIRE(0), player.id);
+  }
 }
