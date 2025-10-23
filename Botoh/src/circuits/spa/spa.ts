@@ -7,10 +7,6 @@ import { join } from "path";
 const spa_raw = readFileSync(join(__dirname, "spa.hbs"), "utf-8");
 const spa_json = JSON.parse(spa_raw);
 
-
-
-
-
 const SPA_INFO: CircuitInfo = {
   finishLine: {
     bounds: {
@@ -95,6 +91,7 @@ const SPA_INFO: CircuitInfo = {
   Limit: 5,
   Votes: 0,
   pitSpeed: 0.96,
+  TireDegradationPercentage: -5,
   CutDetectSegments: [
     {
       v0: [-1006, -1778],

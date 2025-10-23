@@ -1,16 +1,14 @@
-
-
 import { readFileSync } from "fs";
 import { join } from "path";
 
 import { bestTimes } from "../bestTimes";
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
 
-const hockenPublic_raw = readFileSync(join(__dirname, "hockenPublic.hbs"), "utf-8");
+const hockenPublic_raw = readFileSync(
+  join(__dirname, "hockenPublic.hbs"),
+  "utf-8"
+);
 const hockenPublic_json = JSON.parse(hockenPublic_raw);
-
-
-
 
 const HOCKENPUBLIC_INFO: CircuitInfo = {
   finishLine: {
@@ -84,6 +82,7 @@ const HOCKENPUBLIC_INFO: CircuitInfo = {
   Angle: 90,
   Limit: 5,
   Votes: 0,
+  TireDegradationPercentage: 0,
 };
 
 export const HOCKENPUBLIC: Circuit = {

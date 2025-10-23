@@ -14,9 +14,11 @@ export function distributeSpeed(
 
   const ticksPerSecond = 60;
   const minTicksPerPlayer = 3;
+  const reductionFactor = 0.75; //-25%
 
   const requiredProcessPerSecond = totalPlayers * minTicksPerPlayer;
-  const avgProcessPerTick = requiredProcessPerSecond / ticksPerSecond;
+  const avgProcessPerTick =
+    (requiredProcessPerSecond / ticksPerSecond) * reductionFactor;
 
   accumulated += avgProcessPerTick;
 

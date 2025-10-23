@@ -1,5 +1,3 @@
-
-
 import { readFileSync } from "fs";
 import { join } from "path";
 
@@ -8,9 +6,6 @@ import { Circuit, CircuitInfo, Direction } from "../Circuit";
 
 const monza_raw = readFileSync(join(__dirname, "monza.hbs"), "utf-8");
 const monza_json = JSON.parse(monza_raw);
-
-
-
 
 const MONZA_INFO: CircuitInfo = {
   finishLine: {
@@ -96,6 +91,7 @@ const MONZA_INFO: CircuitInfo = {
   Limit: 5,
   Votes: 0,
   pitSpeed: 0.96,
+  TireDegradationPercentage: -30,
   CutDetectSegments: [
     {
       v0: [-936, 390],

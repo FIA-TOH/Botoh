@@ -4,19 +4,15 @@
 
 Ver se training results aparecem
 Ver se resultados muito grandes se separam
-Punicoes de 2s em liga
 
 # To do dos Mapas
 
-# To-do rapidos
+Atualizar alguns mapas
 
-Atualmente esta na mesma quantia, o certo seria -1
-AFK nao pegar pra quem ta no pit
-Mudar mensagens para todas linguas
+# To-do rapidos
 
 Tentar fazer banking como o rodri falou
 Add daytonna Rodri
-Pneu estourar
 
 Ver a questao do replay nao funfando
 

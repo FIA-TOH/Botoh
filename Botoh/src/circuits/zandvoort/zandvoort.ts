@@ -94,6 +94,7 @@ const ZANDVOORT_INFO: CircuitInfo = {
   Limit: 5,
   Votes: 0,
   pitSpeed: 0.94,
+  TireDegradationPercentage: 15,
   CutDetectSegments: [
     {
       v0: [1131.3857921101544, -70.47119561408442],

@@ -44,6 +44,7 @@ export interface CircuitInfo {
   sectorTwo?: DirectedHitboxBounds;
   sectorThree?: DirectedHitboxBounds;
   pitSpeed?: number;
+  TireDegradationPercentage?: number;
   CutDetectSegments?: CutSegment[];
 }
 

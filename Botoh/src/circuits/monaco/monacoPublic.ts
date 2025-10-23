@@ -98,6 +98,7 @@ const MONACOPUBLIC_INFO: CircuitInfo = {
   Limit: 5,
   Votes: 0,
   pitSpeed: 0.955,
+  TireDegradationPercentage: -40,
   CutDetectSegments: [
     {
       v0: [454, -219],
