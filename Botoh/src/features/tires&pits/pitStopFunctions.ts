@@ -13,20 +13,34 @@ export type PitResult = {
   perTyreTimes: number[];
 };
 const PIT_TABLE: PitTimeEntry[] = [
-  { time: 1.6, prob: 0.5 }, // ultra-rápido
-  { time: 1.8, prob: 2 },
-  { time: 2.0, prob: 5 },
-  { time: 2.2, prob: 10 },
-  { time: 2.4, prob: 15 },
-  { time: 2.6, prob: 20 }, // pico de probabilidade
-  { time: 2.8, prob: 15 },
-  { time: 3.0, prob: 10 },
-  { time: 3.5, prob: 5 }, // um pouco lento
-  { time: 4.0, prob: 3 },
-  { time: 5.0, prob: 2 }, // lento raro
-  { time: 6.0, prob: 1 }, // muito raro
-  { time: 8.0, prob: 0.5 }, // erros extremos
-  { time: 10.0, prob: 0.2 }, // pit catastrófico
+  // { time: 1.6, prob: 0.5 }, // ultra-rápido
+  // { time: 1.8, prob: 2 },
+  // { time: 2.0, prob: 5 },
+  // { time: 2.2, prob: 10 },
+  // { time: 2.4, prob: 15 },
+  // { time: 2.6, prob: 20 }, // pico de probabilidade
+  // { time: 2.8, prob: 15 },
+  // { time: 3.0, prob: 10 },
+  // { time: 3.5, prob: 5 }, // um pouco lento
+  // { time: 4.0, prob: 3 },
+  // { time: 5.0, prob: 2 }, // lento raro
+  // { time: 6.0, prob: 1 }, // muito raro
+  // { time: 8.0, prob: 0.5 }, // erros extremos
+  // { time: 10.0, prob: 0.2 }, // pit catastrófico
+  { time: 5.0, prob: 0.5 }, // ultra-rápido
+  { time: 5.2, prob: 2 },
+  { time: 5.4, prob: 5 },
+  { time: 5.6, prob: 10 },
+  { time: 5.8, prob: 15 },
+  { time: 6.0, prob: 20 }, // pico de probabilidade
+  { time: 6.2, prob: 15 },
+  { time: 6.5, prob: 10 },
+  { time: 7.0, prob: 5 }, // um pouco lento
+  { time: 8.0, prob: 3 },
+  { time: 9.0, prob: 2 }, // lento raro
+  { time: 10.0, prob: 1 }, // muito raro
+  { time: 12.0, prob: 0.5 }, // erros extremos
+  { time: 15.0, prob: 0.2 }, // pit catastrófico
 ];
 
 export function generatePitCountdown(): number {

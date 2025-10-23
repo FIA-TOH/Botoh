@@ -16,7 +16,7 @@ export const TIRE_STARTING_SPEED = {
   [Tires.HARD]: 4.9,
   [Tires.INTER]: 4.4,
   [Tires.WET]: 3.9,
-  [Tires.FLAT]: 3.0,
+  [Tires.FLAT]: 2.9,
   [Tires.TRAIN]: 5.4,
 };
 

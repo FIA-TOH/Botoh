@@ -10,14 +10,21 @@ import { MESSAGES } from "../chat/messages";
 import { playerBuffList } from "../commands/adjustThings/handleNerfListCommand";
 import { presentationLap } from "../commands/gameState/handlePresentationLapCommand";
 import { tyresActivated } from "../commands/tyres/handleEnableTyresCommand";
+import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { vsc } from "../speed/handleSpeed";
 import { laps } from "../zones/laps";
 import { changeTires } from "./changeTires";
+import { getBlowoutChance } from "./tireBlowFunctions";
+import { applyTrackTireDegradation } from "./tireDegradationFunction";
 import { TYRE_DURABILITY, Tires } from "./tires";
 
 export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
   const p = playerList[player.id];
+  const currentTime = room.getScores().time;
+  if (!p.lastCheckTime) p.lastCheckTime = currentTime;
+
   if (presentationLap || vsc || p.inPitlane) {
+    p.lastCheckTime = currentTime;
     return;
   }
   if (
@@ -29,10 +36,14 @@ export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
     return;
   }
 
-  const totalDurability = TYRE_DURABILITY(laps)[p.tires as Tires];
-  const currentTime = room.getScores().time;
-
-  if (!p.lastCheckTime) p.lastCheckTime = currentTime;
+  //Tyre durability calculation
+  let totalDurability = TYRE_DURABILITY(laps);
+  const trackDegradation = ACTUAL_CIRCUIT?.info?.TireDegradationPercentage ?? 0;
+  totalDurability = applyTrackTireDegradation(
+    totalDurability,
+    trackDegradation
+  );
+  const currentTireDurability = totalDurability[p.tires as Tires];
 
   const timeElapsed = currentTime - p.lastCheckTime;
   p.lastCheckTime = currentTime;
@@ -41,7 +52,8 @@ export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
     (buffPlayer) => buffPlayer.name === player.name
   );
   const wearReductionFactor = vsc ? 0.25 : 1;
-  const wearIncrementPerSecond = (100 / totalDurability) * wearReductionFactor;
+  const wearIncrementPerSecond =
+    (100 / currentTireDurability) * wearReductionFactor;
 
   if (isBuffed && 100 - p.wear <= 50) {
     return;

@@ -1,4 +1,4 @@
-function getBlowoutChance(remaining: number): number {
+export function getBlowoutChance(remaining: number): number {
   if (remaining <= 0) return 1;
   if (remaining <= 5) return 0.000621; // 100% per minute
   if (remaining <= 10) return 0.000285; // 80%
