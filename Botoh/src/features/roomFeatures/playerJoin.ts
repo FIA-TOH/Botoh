@@ -12,7 +12,12 @@ import {
 import { MESSAGES } from "../chat/messages";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { isBanned } from "../ipRelated/isBanned";
-import { decodeIPFromConn, banPlayer, kickPlayer } from "../utils";
+import {
+  decodeIPFromConn,
+  banPlayer,
+  kickPlayer,
+  getRunningPlayers,
+} from "../utils";
 import {
   gameMode,
   GameMode,
@@ -26,6 +31,9 @@ import {
   REJOIN_TIME_LIMIT,
 } from "../comeBackRace.ts/comeBackToRaceFunctions";
 import { positionList } from "../changeGameState/race/positionList";
+import { sendDiscordGeneralChatQualy } from "../discord/discord";
+import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
+import { PLAYER_LIMIT } from "../commands/adminThings/handleLimitPlayerQuantity";
 
 const HARD_QUALY_PASSWORD = "hardqualy";
 
@@ -34,6 +42,16 @@ function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
   const now = new Date();
 
   const wasRunning = positionList.some((p) => p.name === player.name);
+
+  if (gameMode === GameMode.HARD_QUALY) {
+    sendDiscordGeneralChatQualy(`${player.name} has joined the qualy room!`);
+    if (
+      playerList[player.id].didHardQualy === true &&
+      player.name !== "Admin"
+    ) {
+      kickPlayer(player.id, `You already did qualy`, room);
+    }
+  }
 
   if (players.length > 1) {
     if (room.getScores()) {
@@ -68,14 +86,26 @@ function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
     room.setPlayerTeam(player.id, Teams.RUNNERS);
     room.startGame();
   }
-  playerList[player.id].timeWhenEntered = room.getScores()
-    ? room.getScores().time
-    : 0;
+  if (room.getScores() && typeof room.getScores().time === "number") {
+    const currentTime = room.getScores().time;
+    playerList[player.id].timeWhenEntered =
+      currentTime > 0 ? currentTime : Date.now() / 1000;
+  } else {
+    playerList[player.id].timeWhenEntered = Date.now() / 1000;
+  }
+
+  setTimeout(() => {
+    if (room.getScores() && typeof room.getScores().time === "number") {
+      const currentTime = room.getScores().time;
+      playerList[player.id].timeWhenEntered = currentTime;
+    }
+  }, 500);
 }
 
 export function PlayerJoin(room: RoomObject) {
-  const players = room.getPlayerList();
   room.onPlayerJoin = function (player) {
+    const players = room.getPlayerList();
+
     const ip = decodeIPFromConn(player.conn);
     log(`The IP ${ip} joined!`);
 
@@ -116,9 +146,22 @@ export function PlayerJoin(room: RoomObject) {
     }
 
     if (gameMode === GameMode.HARD_QUALY) {
-      if (players.length >= 1) {
+      if (players.length >= 0) {
         room.setPassword(HARD_QUALY_PASSWORD);
       } else {
+        room.setPassword(null);
+      }
+    } else {
+      if (players.length > PLAYER_LIMIT) {
+        room.setPassword("roomfull");
+        kickPlayer(
+          player.id,
+          `❌ Room full! The limit is ${PLAYER_LIMIT} players.`,
+          room
+        );
+        room.setPassword(null);
+        return;
+      } else if (players.length < PLAYER_LIMIT) {
         room.setPassword(null);
       }
     }

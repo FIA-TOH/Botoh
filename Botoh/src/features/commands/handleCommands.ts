@@ -64,6 +64,8 @@ import { handleChangeGameFLow } from "./gameState/gameFlow";
 import { handleSetMinimumPit } from "./tyres/handleSetMinimumPit";
 import { handleRejoinCommand } from "./comeBackRace/handleRejoinCommand";
 import { handleMoveToBoxCommand } from "../comeBackRace.ts/moveToBox";
+import { handlePlayerQuantity } from "./adminThings/handlePlayerQuantity";
+import { handleLimitPlayerQuantity } from "./adminThings/handleLimitPlayerQuantity";
 
 export type CommandFunction = (
   handleAdminCommand: (
@@ -360,6 +362,16 @@ export type CommandFunction = (
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject
+  ) => void,
+  handlePlayerQuantity: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
+  ) => void,
+  handleLimitPlayerQuantity: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
   ) => void
 ) => Commands;
 
@@ -428,7 +440,9 @@ function importCommandsByLanguage(commandFunctions: {
         handleChangeGameFLow,
         handleSetMinimumPit,
         handleRejoinCommand,
-        handleMoveToBoxCommand
+        handleMoveToBoxCommand,
+        handlePlayerQuantity,
+        handleLimitPlayerQuantity
       ),
     }),
     {}
@@ -498,7 +512,9 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
         handleChangeGameFLow,
         handleSetMinimumPit,
         handleRejoinCommand,
-        handleMoveToBoxCommand
+        handleMoveToBoxCommand,
+        handlePlayerQuantity,
+        handleLimitPlayerQuantity
       ),
     }),
     {}

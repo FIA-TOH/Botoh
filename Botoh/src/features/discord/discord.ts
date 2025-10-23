@@ -19,11 +19,20 @@ const LEAGUE_LOG_URL =
 const LEAGUE_REPLAY_URL =
   "https://discord.com/api/webhooks/1409983513884885163/SHzJwoxubzzUzCZ8nAJ8R5cTE_sX1eM4gkRpROiIdBFfXdRjVKM5kK4mYwbcJBMqARPT";
 
+const LEAGUE_REPLAY_URL_HAXBULA =
+  "https://discord.com/api/webhooks/1430929602133360660/58LI0LCU_lqQ1EbCUqsc-2BoN_RiTM0Ar2kM8mY2skMVkRe6UXTkBq6UOQZNPul-xJv5";
+
 const PUBLIC_REPLAY_URL =
   "https://discord.com/api/webhooks/1409983406971945080/z_HnlNnCnRQlD7nTfAPyjkMUYpGYYKM8j9jQutjGbXmo2jmIJmPdSrwXBtp27FxaCtBe";
 
 const TRACK_RECORDS_URL =
   "https://discord.com/api/webhooks/1415118391546613810/O49b609XYQkYj1Y6G5KOkkkuifHiNevGRcb3SqK0hNVgJmzf9976ByNc7UdznUYQceZg";
+
+const GENERAL_CHAT_HAXBULA_URL =
+  "https://discord.com/api/webhooks/1430915666252271758/lNQAKWBM8GbEm-DKJcXTSydxgytRjuuCeI5ZbkpzC2xJlzZl8XY3HbOd9EoZjUc0ub3T";
+
+const GENERAL_CHAT_FTOH_URL =
+  "https://discord.com/api/webhooks/1430928301542608907/Nl8tc5blU1aFQXUlfN6tPVX5Q0FX00aaNAyoOedLTEfLsz5t97Wi5Nm74RYuaqPDwPVY";
 
 function splitMessage(msg: string, size = 2000): string[] {
   const chunks: string[] = [];
@@ -141,7 +150,14 @@ export function sendDiscordPlayerChat(userInfo: PlayerObject, message: string) {
 export function sendDiscordResult(message: string) {
   try {
     if (!message) return;
-    const LOG_URL = LEAGUE_MODE ? LEAGUE_REPLAY_URL : PUBLIC_REPLAY_URL;
+    const envName = process.env.LEAGUE_ENV || "ftoh";
+    let LOG_URL = "";
+    if (envName === "haxbula") {
+      LOG_URL = LEAGUE_MODE ? LEAGUE_REPLAY_URL_HAXBULA : PUBLIC_REPLAY_URL;
+    } else {
+      LOG_URL = LEAGUE_MODE ? LEAGUE_REPLAY_URL : PUBLIC_REPLAY_URL;
+    }
+
     const sanitized = message.replace(/@(?=[a-zA-Z])/g, "@ ");
     const timestamped = `${sanitized}\n\n📅 ${getTimestamp()}`;
 
@@ -213,5 +229,18 @@ export function sendDiscordReplay(replay: Uint8Array) {
     safeSend(REPLAYS_URL, formData, "REPLAY", true);
   } catch (err) {
     console.error("❌ [sendDiscordReplay ERROR]:", err);
+  }
+}
+
+export function sendDiscordGeneralChatQualy(message: string) {
+  try {
+    const envName = process.env.LEAGUE_ENV || "ftoh";
+
+    const MESSAGES_URL =
+      envName === "haxbula" ? GENERAL_CHAT_HAXBULA_URL : GENERAL_CHAT_FTOH_URL;
+    const codeMessage = "```" + message + "```";
+    safeSend(MESSAGES_URL, { content: codeMessage }, "GENERAL_CHAT_QUALY");
+  } catch (err) {
+    console.error("❌ [sendDiscordGeneralChatQualy ERROR]:", err);
   }
 }

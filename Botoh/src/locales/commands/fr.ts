@@ -295,6 +295,16 @@ export default function fr_commands(
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject
+  ) => void,
+  handlePlayerQuantity: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
+  ) => void,
+  handleLimitPlayerQuantity: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
   ) => void
 ): Commands {
   return {
@@ -360,5 +370,7 @@ export default function fr_commands(
     "!min_pit": handleSetMinimumPit,
     "!rejoin": handleRejoinCommand,
     "!move_to_box": handleMoveToBoxCommand,
+    "!player_quantity": handlePlayerQuantity,
+    "!set_max_players": handleLimitPlayerQuantity,
   };
 }

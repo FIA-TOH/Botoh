@@ -10,6 +10,7 @@ import {
   GeneralGameMode,
 } from "../../changeGameState/changeGameModes";
 import { updatePlayerTime } from "../../changeGameState/qualy/playerTime";
+import { getNumberPositionQualy } from "../../changeGameState/qualy/showPositionQualy";
 import { playerList } from "../../changePlayerState/playerList";
 import {
   sendBestTimeRace,
@@ -20,7 +21,10 @@ import {
 } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { tyresActivated } from "../../commands/tyres/handleEnableTyresCommand";
-import { sendDiscordTrackRecord } from "../../discord/discord";
+import {
+  sendDiscordGeneralChatQualy,
+  sendDiscordTrackRecord,
+} from "../../discord/discord";
 import { log } from "../../discord/logger";
 import { getPlayerAndDiscs } from "../../playerFeatures/getPlayerAndDiscs";
 // import { rainEnabled, rainIntensity } from "../../rain/rain";
@@ -87,6 +91,45 @@ export function processCompletedLap(
         p.id
       );
       broadcastLapTimeToPlayers(room, lapTime, p.name, false);
+    }
+  }
+  if (gameMode === GameMode.HARD_QUALY) {
+    if (playerData.currentLap === 2) {
+      sendDiscordGeneralChatQualy(
+        `${
+          playerData.currentLap - 1
+        }st attemp: ${lapTime.toString()}s - P${getNumberPositionQualy(
+          room,
+          p.id
+        )}`
+      );
+    } else if (playerData.currentLap === 3) {
+      sendDiscordGeneralChatQualy(
+        `${
+          playerData.currentLap - 1
+        }nd attemp: ${lapTime.toString()}s - P${getNumberPositionQualy(
+          room,
+          p.id
+        )}`
+      );
+    } else if (playerData.currentLap === 4) {
+      sendDiscordGeneralChatQualy(
+        `${
+          playerData.currentLap - 1
+        }rd attemp: ${lapTime.toString()}s - P${getNumberPositionQualy(
+          room,
+          p.id
+        )}`
+      );
+    } else {
+      sendDiscordGeneralChatQualy(
+        `${
+          playerData.currentLap - 1
+        }th attemp: ${lapTime.toString()}s - P${getNumberPositionQualy(
+          room,
+          p.id
+        )}`
+      );
     }
   }
   if (hasSector) {

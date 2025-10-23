@@ -1,4 +1,5 @@
 import { updatePositionList } from "../../changeGameState/race/positionList";
+import { Teams } from "../../changeGameState/teams";
 import { playerList } from "../../changePlayerState/playerList";
 import { sendSuccessMessage, sendAlertMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
@@ -32,13 +33,13 @@ export function handleRaceFinish(
   sendSuccessMessage(room, MESSAGES.FINISH_RACE(), p.id);
   playerList[p.id].totalTime = room.getScores().time;
   updatePositionList(getRunningPlayers(playersAndDiscs), room);
-  room.setPlayerTeam(p.id, 0);
+  room.setPlayerTeam(p.id, Teams.SPECTATORS);
 
   if (isWinner && !LEAGUE_MODE) {
     sendAlertMessage(room, MESSAGES.SECONDS_TO_FINISH(SECONDS_AFTER_FIRST_END));
     timerController.positionTimer = setTimeout(() => {
       getRunningPlayers(playersAndDiscs).forEach((fp) =>
-        room.setPlayerTeam(fp.p.id, 0)
+        room.setPlayerTeam(fp.p.id, Teams.SPECTATORS)
       );
       timerController.positionTimer = null;
     }, SECONDS_AFTER_FIRST_END * 1000);

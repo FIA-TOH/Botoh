@@ -7,6 +7,7 @@ import {
 import { qualiTime } from "../../changeGameState/qualy/qualiMode";
 import { showPlayerQualiPosition } from "../../changeGameState/qualy/showPositionQualy";
 import { printAllPositions } from "../../changeGameState/race/printAllPositions";
+import { Teams } from "../../changeGameState/teams";
 import { playerList } from "../../changePlayerState/playerList";
 import { sendChatMessage, sendSuccessMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
@@ -29,8 +30,17 @@ export function processLapAndCheckSessionEnd(
   const playerData = playerList[p.id];
   const currentLap = playerData.currentLap;
 
-  if (gameMode === GameMode.HARD_QUALY && currentLap >= maxLapsQualy) {
-    kickPlayer(p.id, "Qualy ended", room);
+  if (gameMode === GameMode.HARD_QUALY && currentLap - 1 >= maxLapsQualy) {
+    const playerId = p.id;
+
+    setTimeout(() => {
+      const stillInRoom = room.getPlayerList().some((pl) => pl.id === playerId);
+
+      if (stillInRoom) {
+        kickPlayer(playerId, "Qualy ended", room);
+      }
+    }, 3000);
+
     return;
   }
 
@@ -84,6 +94,7 @@ export function processLapAndCheckSessionEnd(
 
       if (lapIndex === laps - 2) {
         if (playerList[p.id].pits.pitsNumber === 1) {
+          //to-do: ver oq é isso
           console.log("Faça pit!");
         }
       }
@@ -91,9 +102,13 @@ export function processLapAndCheckSessionEnd(
   } else {
     showPlayerQualiPosition(room, p.id);
 
-    if (room.getScores().time >= qualiTime * 60) {
-      sendSuccessMessage(room, MESSAGES.FINISH_QUALI(), p.id);
-      room.setPlayerTeam(p.id, 0);
+    if (gameMode === GameMode.HARD_QUALY) {
+      return;
+    } else {
+      if (room.getScores().time >= qualiTime * 60) {
+        sendSuccessMessage(room, MESSAGES.FINISH_QUALI(), p.id);
+        room.setPlayerTeam(p.id, Teams.SPECTATORS);
+      }
     }
   }
 }

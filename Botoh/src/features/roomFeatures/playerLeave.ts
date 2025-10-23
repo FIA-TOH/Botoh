@@ -19,6 +19,7 @@ import { changeGameStoppedNaturally } from "../changeGameState/gameStopeedNatura
 import { sendQualiResultsToDiscord } from "../discord/logResults";
 import { addPlayerLeftInfo } from "../comeBackRace.ts/comeBackToRaceFunctions";
 import { getPlayerByRacePosition } from "../playerFeatures/getPlayerBy";
+import { sendDiscordGeneralChatQualy } from "../discord/discord";
 
 export function PlayerLeave(room: RoomObject) {
   room.onPlayerLeave = function (player) {
@@ -36,6 +37,9 @@ export function PlayerLeave(room: RoomObject) {
     if (LEAGUE_MODE) {
       const hash = playerObj !== undefined ? sha256(playerObj.ip) : "";
       log(`${player.name} has left. (${hash})`);
+      if (gameMode === GameMode.HARD_QUALY) {
+        sendDiscordGeneralChatQualy(`${player.name} has left the qualy room!`);
+      }
 
       if (
         generalGameMode === GeneralGameMode.GENERAL_RACE &&
@@ -104,6 +108,7 @@ export function PlayerLeave(room: RoomObject) {
         room.setPassword(null);
       }
       playerObj.didHardQualy = true;
+
       sendQualiResultsToDiscord();
     }
     if (player.id === followPlayerId && playerObj?.cameraFollowing) {
