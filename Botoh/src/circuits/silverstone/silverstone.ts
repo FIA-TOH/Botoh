@@ -104,7 +104,7 @@ const SILVERSTONE_INFO: CircuitInfo = {
       v0: [1112, -230],
       v1: [1040, -18],
       index: 93,
-      penalty: 5,
+      penalty: 10,
     },
     {
       v0: [-3049, 76],
@@ -128,7 +128,7 @@ const SILVERSTONE_INFO: CircuitInfo = {
       v0: [564, 179],
       v1: [1040, -18],
       index: 162,
-      penalty: 5,
+      penalty: 10,
     },
     {
       v0: [1037, 735],
