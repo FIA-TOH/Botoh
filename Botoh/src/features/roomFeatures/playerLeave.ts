@@ -37,7 +37,7 @@ export function PlayerLeave(room: RoomObject) {
     if (LEAGUE_MODE) {
       const hash = playerObj !== undefined ? sha256(playerObj.ip) : "";
       log(`${player.name} has left. (${hash})`);
-      if (gameMode === GameMode.HARD_QUALY) {
+      if (gameMode === GameMode.HARD_QUALY && player.name !== "Admin") {
         sendDiscordGeneralChatQualy(`${player.name} has left the qualy room!`);
       }
 

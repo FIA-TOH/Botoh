@@ -44,7 +44,10 @@ function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
   const wasRunning = positionList.some((p) => p.name === player.name);
 
   if (gameMode === GameMode.HARD_QUALY) {
-    sendDiscordGeneralChatQualy(`${player.name} has joined the qualy room!`);
+    if (player.name !== "Admin") {
+      sendDiscordGeneralChatQualy(`${player.name} has joined the qualy room!`);
+    }
+
     if (
       playerList[player.id].didHardQualy === true &&
       player.name !== "Admin"
