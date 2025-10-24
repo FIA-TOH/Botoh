@@ -15,6 +15,7 @@
   "HEATED_TYRES": "Vos pneus sont chauds !",
   "BOX_BOX_BOX": "BOX BOX BOX! C'est votre dernière chance de faire un arrêt avant que vos pneus lâchent !",
   "BLOWN_OUT_TIRES": "Vos pneus ont lâché! Vous devez VITE vous arrêtez aux standes !",
+  "BLOWN_OUT_UNLUCKY_TIRES": "Tes pneus ont éclaté ! Quelle malchance... rends-toi aux stands et change-les immédiatement !",
   "DISCORD_INVITE": "🏎️ Rejoins mon serveur discord : | https://discord.gg/MAXhQNKRjS 🏎️",
   "LEAGUE_INVITE": "🏎️ Rejoins le league: | https://discord.gg/MAXhQNKRjS 🏎️",
   "NO_MANUAL_MAPS": "Merci de ne pas changer de circuit manuellement! Utilisez !circuit <index> pour changer",

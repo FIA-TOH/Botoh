@@ -15,6 +15,7 @@
   "HEATED_TYRES": "Your tyres are heated up!",
   "BOX_BOX_BOX": "BOX BOX BOX! This is your last chance to box before your tires blow out!",
   "BLOWN_OUT_TIRES": "Your tires are blown out! You need to pit ASAP!",
+  "BLOWN_OUT_UNLUCKY_TIRES": "Your tires have blown out! What bad luck... head to the pits and change them immediately!",
   "DISCORD_INVITE": "🏎️ Join our discord: | {{link}} 🏎️",
   "LEAGUE_INVITE": "🏎️ Join the league: | {{link}} 🏎️",
   "NO_MANUAL_MAPS": "Please don't change the map manually! use !circuit <index> to change the map",

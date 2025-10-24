@@ -66,14 +66,25 @@ export const TYRE_DURABILITY = (limit: number | null): TireDurability => {
       [Tires.TRAIN]: Infinity,
     };
   } else {
+    // HAXBULA 25 MIN TIRES
     return {
-      [Tires.SOFT]: 900 * 0.8571, // ≈ 771.4
-      [Tires.MEDIUM]: 1200 * 0.8571, // ≈ 1028.6
-      [Tires.HARD]: 1600 * 0.8571, // ≈ 1371.4
-      [Tires.WET]: 1200 * 0.8571, // ≈ 1028.6
-      [Tires.INTER]: 1200 * 0.8571, // ≈ 1028.6
+      [Tires.SOFT]: 900 * 0.7, // ≈ 630
+      [Tires.MEDIUM]: 1200 * 0.7, // ≈ 840
+      [Tires.HARD]: 1600 * 0.7, // ≈ 1120
+      [Tires.WET]: 1200 * 0.7, // ≈ 840
+      [Tires.INTER]: 1200 * 0.7, // ≈ 840
       [Tires.FLAT]: Infinity,
       [Tires.TRAIN]: Infinity,
     };
+    //FTOH 30 MIN TIRES
+    // return {
+    //   [Tires.SOFT]: 900 * 0.8571, // ≈ 771.4
+    //   [Tires.MEDIUM]: 1200 * 0.8571, // ≈ 1028.6
+    //   [Tires.HARD]: 1600 * 0.8571, // ≈ 1371.4
+    //   [Tires.WET]: 1200 * 0.8571, // ≈ 1028.6
+    //   [Tires.INTER]: 1200 * 0.8571, // ≈ 1028.6
+    //   [Tires.FLAT]: Infinity,
+    //   [Tires.TRAIN]: Infinity,
+    // };
   }
 };

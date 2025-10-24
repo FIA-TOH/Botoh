@@ -5,7 +5,7 @@ import {
   GeneralGameMode,
 } from "../changeGameState/changeGameModes";
 import { playerList } from "../changePlayerState/playerList";
-import { sendAlertMessage } from "../chat/chat";
+import { sendAlertMessage, sendChatMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { playerBuffList } from "../commands/adjustThings/handleNerfListCommand";
 import { presentationLap } from "../commands/gameState/handlePresentationLapCommand";
@@ -109,6 +109,7 @@ export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
       Tires.FLAT,
       room
     );
-    sendAlertMessage(room, MESSAGES.WEAR_ON_CURRENT_TIRE(0), player.id);
+    sendAlertMessage(room, MESSAGES.BLOWN_OUT_UNLUCKY_TIRES(), player.id);
+    sendChatMessage(room, MESSAGES.TYRE_BLOW(player.name));
   }
 }

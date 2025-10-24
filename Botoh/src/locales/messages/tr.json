@@ -15,6 +15,7 @@
   "HEATED_TYRES": "Lastikleriniz ısındı!",
   "BOX_BOX_BOX": "BOX BOX BOX! Bu, lastikleriniz patlamadan önce son şansınız!",
   "BLOWN_OUT_TIRES": "Lastikleriniz patladı! Hemen pite girin!",
+  "BLOWN_OUT_UNLUCKY_TIRES": "Lastiklerin patladı! Ne şanssızlık... hemen pit alanına git ve onları değiştir!",
   "DISCORD_INVITE": "🏎️ Discord'a katılın: | https://discord.gg/MAXhQNKRjS 🏎️",
   "LEAGUE_INVITE": "🏎️ Lig'e katılın: | https://discord.gg/MAXhQNKRjS 🏎️",
   "NO_MANUAL_MAPS": "Lütfen haritayı manuel olarak değiştirmeyin! Haritayı değiştirmek için !circuit <index> kullanın",

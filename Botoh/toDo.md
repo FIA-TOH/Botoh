@@ -44,6 +44,8 @@ npm run convert:circuits
 
 $env:LEAGUE_ENV="haxbula"
 $env:HAXBALL_GEO="DE,50.1109,8.6821"
-$env:HAXBALL_TOKEN="thr1.AAAAAGjOzitQJz04f8bKFg.UvDUmsRVWxg"
+$env:HAXBALL_TOKEN="thr1.AAAAAGj6ZsRuZvv497oppQ.WgTmqRaXcpA"
 $env:LANGUAGE="en"
 npm run start:league
+
+LEAGUE_ENV=haxbula HAXBALL_GEO="ES,41.3784,2.1925" HAXBALL_TOKEN="thr1.AAAAAGj6ZsRuZvv497oppQ.WgTmqRaXcpA" LANGUAGE="en" pm2 start npm --name botoh -- run start:league

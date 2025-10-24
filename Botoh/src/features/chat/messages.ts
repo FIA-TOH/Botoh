@@ -176,6 +176,13 @@ export const MESSAGES = {
     tr: tr_messages.BLOWN_OUT_TIRES,
     pt: pt_messages.BLOWN_OUT_TIRES,
   }),
+  BLOWN_OUT_UNLUCKY_TIRES: (): LocalizedMessageFunction => ({
+    en: en_messages.BLOWN_OUT_UNLUCKY_TIRES,
+    es: es_messages.BLOWN_OUT_UNLUCKY_TIRES,
+    fr: fr_messages.BLOWN_OUT_UNLUCKY_TIRES,
+    tr: tr_messages.BLOWN_OUT_UNLUCKY_TIRES,
+    pt: pt_messages.BLOWN_OUT_UNLUCKY_TIRES,
+  }),
   NOW_SHOWING_TIRES: (): LocalizedMessageFunction => ({
     en: en_messages.NOW_SHOWING_TIRES,
     es: es_messages.NOW_SHOWING_TIRES,
