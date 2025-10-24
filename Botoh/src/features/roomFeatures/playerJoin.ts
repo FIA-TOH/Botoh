@@ -57,14 +57,10 @@ function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
     if (room.getScores()) {
       if (
         gameState === "running" &&
-        generalGameMode !== GeneralGameMode.GENERAL_QUALY &&
-        gameMode !== GameMode.TRAINING &&
-        gameMode !== GameMode.WAITING
+        generalGameMode === GeneralGameMode.GENERAL_RACE
       ) {
-        console.log("aca", gameMode);
-
         room.setPlayerTeam(player.id, Teams.SPECTATORS);
-      } else if (wasRunning) {
+      } else if (wasRunning && GeneralGameMode.GENERAL_RACE) {
         const leftInfoIndex = playersLeftInfo.findIndex(
           (info) => info.name === player.name
         );
@@ -77,11 +73,10 @@ function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
           if (diffInSeconds <= REJOIN_TIME_LIMIT) {
             sendAlertMessage(room, MESSAGES.TYPE_REJOIN(), player.id);
           }
-          console.log("aqui", wasRunning);
-
           room.setPlayerTeam(player.id, Teams.SPECTATORS);
           return;
         }
+        room.setPlayerTeam(player.id, Teams.SPECTATORS);
       } else {
         room.setPlayerTeam(player.id, Teams.RUNNERS);
       }
