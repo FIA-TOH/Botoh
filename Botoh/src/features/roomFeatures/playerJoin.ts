@@ -61,6 +61,8 @@ function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
         gameMode !== GameMode.TRAINING &&
         gameMode !== GameMode.WAITING
       ) {
+        console.log("aca", gameMode);
+
         room.setPlayerTeam(player.id, Teams.SPECTATORS);
       } else if (wasRunning) {
         const leftInfoIndex = playersLeftInfo.findIndex(
@@ -75,6 +77,8 @@ function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
           if (diffInSeconds <= REJOIN_TIME_LIMIT) {
             sendAlertMessage(room, MESSAGES.TYPE_REJOIN(), player.id);
           }
+          console.log("aqui", wasRunning);
+
           room.setPlayerTeam(player.id, Teams.SPECTATORS);
           return;
         }
