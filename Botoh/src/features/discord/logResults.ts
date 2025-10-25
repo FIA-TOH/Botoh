@@ -12,7 +12,7 @@ import { getBestPit } from "../tires&pits/trackBestPit";
 import { getTimestamp } from "../utils";
 import { laps } from "../zones/laps";
 import { getBestLap } from "../zones/laps/trackBestLap";
-import { sendDiscordLog, sendDiscordResult } from "./discord";
+import { sendDiscordResult } from "./discord";
 
 function formatTimeSec(seconds: number): string {
   if (seconds <= 0 || seconds === Number.MAX_VALUE || !isFinite(seconds)) {

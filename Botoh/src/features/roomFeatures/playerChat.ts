@@ -28,7 +28,7 @@ export function PlayerChat(room: RoomObject) {
     const args = message.toLowerCase().split(" ").slice(1);
 
     if (command[0] !== "!") {
-      sendDiscordPlayerChat(player, message);
+      // sendDiscordPlayerChat(player, message);
       if (mute_mode && !player.admin) {
         sendErrorMessage(room, MESSAGES.IN_MUTE_MODE(), player.id);
         return false;

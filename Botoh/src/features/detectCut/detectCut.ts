@@ -7,8 +7,10 @@ import {
 } from "../changeGameState/changeGameModes";
 import { sendAlertMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
+import { sendDiscordCutTrack } from "../discord/discord";
 import { log } from "../discord/logger";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
+import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { getTimestamp } from "../utils";
 import { applyCutPenalty } from "./applyCutPenalty";
 
@@ -125,6 +127,11 @@ export function detectCut(
       ) {
         realPeanlty = decidePenalty(seg) / 2;
       }
+      // sendDiscordCutTrack(
+      //   `${pad.p.name} cutted the track at ${getTimestamp()} -$ ${
+      //     ACTUAL_CIRCUIT.info.name
+      //   }`
+      // );
       log(`${pad.p.name} cutted the track at ${getTimestamp()}`);
       sendAlertMessage(room, MESSAGES.CUTTED_TRACK(realPeanlty || 5), pad.p.id);
 

@@ -68,18 +68,17 @@ export function GameStop(room: RoomObject) {
       log("Temporizer canceled by onGameStop");
     }
 
-    if (positionList.length > 0) {
-      const fileName = `RaceResults-${getTimestamp()}.json`;
+    // if (positionList.length > 0) {
+    //   const fileName = `RaceResults-${getTimestamp()}.json`;
 
-      sendDiscordFile(positionList, fileName, "RACE_RESULTS");
-    }
+    //   sendDiscordFile(positionList, fileName, "RACE_RESULTS");
+    // }
+    // const qualiResults = getPlayersOrderedByQualiTime();
+    // if (qualiResults.length > 0) {
+    //   const fileName = `QualiResults-${getTimestamp()}.json`;
 
-    const qualiResults = getPlayersOrderedByQualiTime();
-    if (qualiResults.length > 0) {
-      const fileName = `QualiResults-${getTimestamp()}.json`;
-
-      sendDiscordFile(qualiResults, fileName, "QUALI_RESULTS");
-    }
+    //   sendDiscordFile(qualiResults, fileName, "QUALI_RESULTS");
+    // }
 
     // resetAllRainEvents();
     if (gameMode !== GameMode.WAITING) {

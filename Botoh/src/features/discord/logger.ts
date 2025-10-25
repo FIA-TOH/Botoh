@@ -33,7 +33,7 @@ export function log(...args: any[]) {
 
   console.log(...messages);
 
-  if (options.sendToDiscord) {
-    sendDiscordLog(messages.map((m) => String(m)).join(" "));
-  }
+  // if (options.sendToDiscord) {
+  //   sendDiscordLog(messages.map((m) => String(m)).join(" "));
+  // }
 }

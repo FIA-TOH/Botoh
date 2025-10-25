@@ -34,6 +34,9 @@ const GENERAL_CHAT_HAXBULA_URL =
 const GENERAL_CHAT_FTOH_URL =
   "https://discord.com/api/webhooks/1430928301542608907/Nl8tc5blU1aFQXUlfN6tPVX5Q0FX00aaNAyoOedLTEfLsz5t97Wi5Nm74RYuaqPDwPVY";
 
+const CUT_TRACK_URL =
+  "https://discord.com/api/webhooks/1431458818042233004/M53GPd84SCq-g68AyI65kdvuCEiLCpYhZOb0W6a8VlojNQOlWU9XChz6CI5zApoZg9-j";
+
 function splitMessage(msg: string, size = 2000): string[] {
   const chunks: string[] = [];
   for (let i = 0; i < msg.length; i += size) {
@@ -242,5 +245,14 @@ export function sendDiscordGeneralChatQualy(message: string) {
     safeSend(MESSAGES_URL, { content: codeMessage }, "GENERAL_CHAT_QUALY");
   } catch (err) {
     console.error("❌ [sendDiscordGeneralChatQualy ERROR]:", err);
+  }
+}
+
+export function sendDiscordCutTrack(message: string) {
+  try {
+    const codeMessage = "```" + message + "```";
+    safeSend(CUT_TRACK_URL, { content: codeMessage }, "CUT_TRACK_DETECTOR");
+  } catch (err) {
+    console.error("❌ [sendDiscordCutTrack ERROR]:", err);
   }
 }
