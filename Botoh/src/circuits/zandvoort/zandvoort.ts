@@ -10,18 +10,18 @@ const ZANDVOORT_INFO: CircuitInfo = {
   finishLine: {
     bounds: {
       minX: -54,
-      maxX: 165,
+      maxX: 377,
       minY: -7,
-      maxY: 39,
+      maxY: 216,
     },
     passingDirection: Direction.UP,
   },
   sectorOne: {
     bounds: {
       minX: -54,
-      maxX: 165,
+      maxX: 377,
       minY: -7,
-      maxY: 39,
+      maxY: 216,
     },
     passingDirection: Direction.UP,
   },
@@ -93,7 +93,7 @@ const ZANDVOORT_INFO: CircuitInfo = {
   Angle: 90,
   Limit: 5,
   Votes: 0,
-  pitSpeed: 0.94,
+  pitSpeed: 0.97,
   TireDegradationPercentage: 15,
   CutDetectSegments: [
     {

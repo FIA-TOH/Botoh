@@ -90,7 +90,7 @@ const BALATON_INFO: CircuitInfo = {
   Angle: 60,
   Limit: 5,
   Votes: 0,
-  pitSpeed: 0.955,
+  pitSpeed: 0.97,
   CutDetectSegments: [
     {
       v0: [1219.3473985896246, -542.9698850643176],

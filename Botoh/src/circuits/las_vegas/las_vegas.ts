@@ -1,5 +1,3 @@
-
-
 import { readFileSync } from "fs";
 import { join } from "path";
 
@@ -8,9 +6,6 @@ import { Circuit, CircuitInfo, Direction } from "../Circuit";
 
 const las_vegas_raw = readFileSync(join(__dirname, "las_vegas.hbs"), "utf-8");
 const las_vegas_json = JSON.parse(las_vegas_raw);
-
-
-
 
 const LAS_VEGAS_INFO: CircuitInfo = {
   finishLine: {
@@ -99,7 +94,7 @@ const LAS_VEGAS_INFO: CircuitInfo = {
   Angle: 60,
   Limit: 5,
   Votes: 0,
-  pitSpeed: 0.955,
+  pitSpeed: 0.97,
   CutDetectSegments: [
     {
       v0: [2905, 961],

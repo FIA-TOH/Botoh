@@ -97,7 +97,7 @@ const SILVERSTONEPUBLIC_INFO: CircuitInfo = {
   Angle: 60,
   Limit: 5,
   Votes: 0,
-  pitSpeed: 0.95,
+  pitSpeed: 0.97,
   TireDegradationPercentage: 15,
   CutDetectSegments: [
     {

@@ -90,7 +90,7 @@ const SHANGHAI_INFO: CircuitInfo = {
   Angle: 90,
   Limit: 5,
   Votes: 0,
-  pitSpeed: 0.95,
+  pitSpeed: 0.97,
   CutDetectSegments: [
     {
       v0: [-1510, -1704],

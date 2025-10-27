@@ -97,7 +97,7 @@ const MONZAPUBLIC_INFO: CircuitInfo = {
   Angle: 0,
   Limit: 5,
   Votes: 0,
-  pitSpeed: 0.96,
+  pitSpeed: 0.97,
   TireDegradationPercentage: -30,
   CutDetectSegments: [
     {

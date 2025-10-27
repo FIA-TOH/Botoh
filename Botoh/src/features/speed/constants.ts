@@ -13,7 +13,7 @@ export const constants = {
   // ===============================
   // Pitlane e Safety Car
   // ===============================
-  DEFAULT_PIT_SPEED: 0.95,
+  DEFAULT_PIT_SPEED: 0.97,
   SAFETY_CAR_SPEED: 0.985,
   SAFETY_CAR_INDY_SPEED: 0.993,
 

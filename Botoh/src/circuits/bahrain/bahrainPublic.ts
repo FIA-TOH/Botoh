@@ -1,16 +1,14 @@
-
-
 import { readFileSync } from "fs";
 import { join } from "path";
-
 
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
 import { bestTimes } from "../bestTimes";
 
-const bahrainPublic_raw = readFileSync(join(__dirname, "bahrainPublic.hbs"), "utf-8");
+const bahrainPublic_raw = readFileSync(
+  join(__dirname, "bahrainPublic.hbs"),
+  "utf-8"
+);
 const bahrainPublic_json = JSON.parse(bahrainPublic_raw);
-
-
 
 const BAHRAINPUBLIC_INFO: CircuitInfo = {
   finishLine: {
@@ -99,7 +97,7 @@ const BAHRAINPUBLIC_INFO: CircuitInfo = {
   Angle: 0,
   Limit: 5,
   Votes: 0,
-  pitSpeed: 0.92,
+  pitSpeed: 0.97,
   CutDetectSegments: [
     {
       v0: [388, -128],

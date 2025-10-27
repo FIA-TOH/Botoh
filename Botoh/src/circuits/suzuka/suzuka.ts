@@ -6,10 +6,6 @@ import { join } from "path";
 const suzuka_raw = readFileSync(join(__dirname, "suzuka.hbs"), "utf-8");
 const suzuka_json = JSON.parse(suzuka_raw);
 
-
-
-
-
 const SUZUKA_INFO: CircuitInfo = {
   finishLine: {
     bounds: {
@@ -93,7 +89,7 @@ const SUZUKA_INFO: CircuitInfo = {
   Angle: 90,
   Limit: 5,
   Votes: 0,
-  pitSpeed: 0.94,
+  pitSpeed: 0.97,
   CutDetectSegments: [
     {
       v0: [2938, -562],

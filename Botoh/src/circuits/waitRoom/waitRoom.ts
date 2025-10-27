@@ -1,5 +1,3 @@
-
-
 import { readFileSync } from "fs";
 import { join } from "path";
 
@@ -8,9 +6,6 @@ import { Circuit, CircuitInfo, Direction } from "../Circuit";
 
 const waitRoom_raw = readFileSync(join(__dirname, "waitRoom.hbs"), "utf-8");
 const waitRoom_json = JSON.parse(waitRoom_raw);
-
-
-
 
 const WAITROOM_INFO: CircuitInfo = {
   finishLine: {
@@ -68,7 +63,7 @@ const WAITROOM_INFO: CircuitInfo = {
   Angle: 90,
   Limit: 5,
   Votes: 0,
-  pitSpeed: 0.95,
+  pitSpeed: 0.97,
 };
 
 export const WAITROOM: Circuit = {

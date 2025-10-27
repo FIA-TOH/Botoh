@@ -97,7 +97,7 @@ const LAGUNA_SECA_INFO: CircuitInfo = {
   Angle: 60,
   Limit: 5,
   Votes: 0,
-  pitSpeed: 0.955,
+  pitSpeed: 0.97,
   CutDetectSegments: [
     {
       v0: [695.9964182729977, 1355.9839868659146],

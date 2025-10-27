@@ -1,5 +1,3 @@
-
-
 import { readFileSync } from "fs";
 import { join } from "path";
 
@@ -8,9 +6,6 @@ import { Circuit, CircuitInfo, Direction } from "../Circuit";
 
 const miami_raw = readFileSync(join(__dirname, "miami.hbs"), "utf-8");
 const miami_json = JSON.parse(miami_raw);
-
-
-
 
 const MIAMI_INFO: CircuitInfo = {
   finishLine: {
@@ -95,7 +90,7 @@ const MIAMI_INFO: CircuitInfo = {
   Angle: 60,
   Limit: 5,
   Votes: 0,
-  pitSpeed: 0.95,
+  pitSpeed: 0.97,
 };
 
 export const MIAMI: Circuit = {

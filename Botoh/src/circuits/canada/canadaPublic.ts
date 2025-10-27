@@ -1,16 +1,14 @@
-
-
 import { readFileSync } from "fs";
 import { join } from "path";
 
 import { bestTimes } from "../bestTimes";
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
 
-const canadaPublic_raw = readFileSync(join(__dirname, "canadaPublic.hbs"), "utf-8");
+const canadaPublic_raw = readFileSync(
+  join(__dirname, "canadaPublic.hbs"),
+  "utf-8"
+);
 const canadaPublic_json = JSON.parse(canadaPublic_raw);
-
-
-
 
 const CANADAPUBLIC_INFO: CircuitInfo = {
   finishLine: {
@@ -99,7 +97,7 @@ const CANADAPUBLIC_INFO: CircuitInfo = {
   Angle: 90,
   Limit: 5,
   Votes: 0,
-  pitSpeed: 0.96,
+  pitSpeed: 0.97,
   CutDetectSegments: [
     {
       v0: [-612, 543],

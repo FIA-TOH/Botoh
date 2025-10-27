@@ -90,7 +90,7 @@ const MEXICO_INFO: CircuitInfo = {
   Angle: 60,
   Limit: 5,
   Votes: 0,
-  pitSpeed: 0.955,
+  pitSpeed: 0.97,
   CutDetectSegments: [
     {
       v0: [-2955, 283],

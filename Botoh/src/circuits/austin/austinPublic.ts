@@ -1,16 +1,14 @@
-
-
 import { readFileSync } from "fs";
 import { join } from "path";
-
 
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
 import { bestTimes } from "../bestTimes";
 
-const austinPublic_raw = readFileSync(join(__dirname, "austinPublic.hbs"), "utf-8");
+const austinPublic_raw = readFileSync(
+  join(__dirname, "austinPublic.hbs"),
+  "utf-8"
+);
 const austinPublic_json = JSON.parse(austinPublic_raw);
-
-
 
 const AUSTINPUBLIC_INFO: CircuitInfo = {
   finishLine: {
@@ -111,7 +109,7 @@ const AUSTINPUBLIC_INFO: CircuitInfo = {
   Angle: 90,
   Limit: 4,
   Votes: 0,
-  pitSpeed: 0.94,
+  pitSpeed: 0.97,
   CutDetectSegments: [
     {
       v0: [-2522, 645],
