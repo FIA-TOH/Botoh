@@ -14,7 +14,7 @@ import { MESSAGES } from "../../chat/messages";
 import { allowPlayersRejoinRace } from "../../comeBackRace.ts/comeBackToRaceFunctions";
 import { maxLapsQualy } from "../../commands/gameMode/qualy/hardQualyFunctions";
 import { processIfMinimumPitStopsMet } from "../../tires&pits/minimumPit";
-import { serialize, kickPlayer, getRunningPlayers } from "../../utils";
+import { serialize, kickPlayer } from "../../utils";
 import { laps } from "../laps";
 import { lapPositions } from "./handleLapChange";
 import { handleRaceFinish } from "./handleRaceFinish";
@@ -90,13 +90,6 @@ export function processLapAndCheckSessionEnd(
         }
       } else {
         handleRaceFinish(p, room, lapTime, position === 1);
-      }
-
-      if (lapIndex === laps - 2) {
-        if (playerList[p.id].pits.pitsNumber === 1) {
-          //to-do: ver oq é isso
-          console.log("Faça pit!");
-        }
       }
     }
   } else {

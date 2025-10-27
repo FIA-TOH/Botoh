@@ -1,9 +1,5 @@
-import { gameMode, GameMode } from "../changeGameState/changeGameModes";
-import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
 import { playerList } from "../changePlayerState/playerList";
-import { createPlayerInfo } from "../changePlayerState/players";
 import { getPlayerByRacePosition } from "../playerFeatures/getPlayerBy";
-import { Tires, TIRE_STARTING_SPEED } from "../tires&pits/tires";
 import { PlayerLeftInfo } from "./comeBackToRaceFunctions";
 
 export function resetPlayerComeBack(
@@ -19,7 +15,7 @@ export function resetPlayerComeBack(
   const lapsBehindWhenLeft = info.lapsBehindLeaderWhenLeft ?? 0;
 
   if (playerList[id] === undefined) {
-    //to-do return error
+    console.error("player not found on the list, resetPlayerComeBack");
     return;
   }
   const lapsCompletedWhenLeft =
@@ -33,7 +29,7 @@ export function resetPlayerComeBack(
   let finalLapsCompleted = lapsCompletedWhenLeft;
   const diff = targetLapsCompleted - lapsCompletedWhenLeft;
   if (diff > 1 || diff < -1) {
-    // sincroniza com o líder se estiver muito diferente
+    //Sincronize if the leader is far ahead
     finalLapsCompleted = targetLapsCompleted;
   }
 
@@ -66,19 +62,4 @@ export function resetPlayerComeBack(
   playerList[id].currentSector = 3;
   playerList[id].sectorChanged = false;
   (playerList[id].sectorTime = []), playerList[id].sectorTimeCounter;
-
-  console.log(
-    "RESET REJOIN",
-    player.name,
-    "leaderLap",
-    firstPlayerCurrentLap,
-    "savedCompleted",
-    lapsCompletedWhenLeft,
-    "targetCompleted",
-    targetLapsCompleted,
-    "finalCompleted",
-    finalLapsCompleted,
-    "-> currentLap",
-    playerList[id].currentLap
-  );
 }

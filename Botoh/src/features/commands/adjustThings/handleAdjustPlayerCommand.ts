@@ -30,12 +30,35 @@ export function handleAjustPlayerCommand(
   const playerChoosen = args[1];
   const value = args[2];
   let playerNumero: number | undefined;
+
+  if (adjust !== "wear" && adjust !== "laps") {
+    room.sendAnnouncement(
+      "Correct model !adjust [wear|laps] [id] [value]",
+      byPlayer.id,
+      0xff0000
+    );
+    return;
+  }
   if (!isNaN(Number(playerChoosen))) {
     playerNumero = Number(playerChoosen);
+  } else {
+    room.sendAnnouncement(
+      "Correct model !adjust [wear|laps] [id] [value]",
+      byPlayer.id,
+      0xff0000
+    );
+    return;
   }
   let valueNumber: number | undefined;
   if (!isNaN(Number(value))) {
     valueNumber = Number(value);
+  } else {
+    room.sendAnnouncement(
+      "Correct model !adjust [wear|laps] [id] [value]",
+      byPlayer.id,
+      0xff0000
+    );
+    return;
   }
   const playersAndDiscs = getPlayerAndDiscs(room);
 
@@ -43,19 +66,6 @@ export function handleAjustPlayerCommand(
   let playerEscolhido: { p: PlayerObject; disc: DiscPropertiesObject }[] = [];
   const playerInfo = playerList[playerEscolhido[0].p.id];
 
-  if (adjust === "wear") {
-    playerInfo.wear = valueNumber as number;
-  } else if (adjust === "laps") {
-    playerInfo.currentLap = valueNumber as number;
-    playerInfo.currentSector = 3 as number;
-  } else {
-    room.sendAnnouncement(
-      "Now you can only change wear or laps.",
-      byPlayer.id,
-      0xff0000
-    );
-    return;
-  }
   if (!playerChoosen) {
     room.sendAnnouncement("Choose a player.", byPlayer.id, 0xff0000);
     return;
@@ -75,6 +85,20 @@ export function handleAjustPlayerCommand(
 
   if (playerEscolhido?.length === 0) {
     room.sendAnnouncement("Choose a valid player.", byPlayer.id, 0xff0000);
+    return;
+  }
+
+  if (adjust === "wear") {
+    playerInfo.wear = valueNumber as number;
+  } else if (adjust === "laps") {
+    playerInfo.currentLap = valueNumber as number;
+    playerInfo.currentSector = 3 as number;
+  } else {
+    room.sendAnnouncement(
+      "Now you can only change wear or laps.",
+      byPlayer.id,
+      0xff0000
+    );
     return;
   }
 }
