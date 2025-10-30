@@ -2,9 +2,6 @@
 
 # Testes/Ficar de olho
 
-Ver se training results aparecem
-Ver se resultados muito grandes se separam
-
 # To do dos Mapas
 
 Atualizar alguns mapas
@@ -49,3 +46,5 @@ $env:LANGUAGE="en"
 npm run start:league
 
 LEAGUE_ENV=haxbula HAXBALL_GEO="ES,41.3784,2.1925" HAXBALL_TOKEN="thr1.AAAAAGj7a_pH8fhRVncNCA.pVybg3bPtyI" LANGUAGE="en" pm2 start npm --name botoh -- run start:league
+
+GEO SP = HAXBALL_GEO="BR,-23.5505,-46.6333"

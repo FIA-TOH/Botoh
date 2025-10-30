@@ -305,6 +305,11 @@ export default function en_commands(
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject
+  ) => void,
+  handleRRPositionCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
   ) => void
 ): Commands {
   return {
@@ -371,5 +376,6 @@ export default function en_commands(
     "!move_to_box": handleMoveToBoxCommand,
     "!player_quantity": handlePlayerQuantity,
     "!set_max_players": handleLimitPlayerQuantity,
+    "!set_rr": handleRRPositionCommand,
   };
 }

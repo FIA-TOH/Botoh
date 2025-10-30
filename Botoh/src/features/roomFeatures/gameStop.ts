@@ -40,6 +40,7 @@ import { gameStarted, setGameStarted } from "./gameTick";
 import { positionList } from "../changeGameState/race/positionList";
 import { sendDiscordMessage } from "../discord/sendDiscordLink";
 import { clearPlayersLeftInfo } from "../comeBackRace.ts/comeBackToRaceFunctions";
+import { clearRRPosition } from "../commands/adminThings/handleRRPositionCommand";
 
 export function GameStop(room: RoomObject) {
   room.onGameStop = function (byPlayer) {
@@ -120,5 +121,6 @@ export function GameStop(room: RoomObject) {
     handleFlagCommand(undefined, ["reset"], room);
     clearPlayerBuffAndNerfLists();
     clearPlayersLeftInfo();
+    clearRRPosition();
   };
 }

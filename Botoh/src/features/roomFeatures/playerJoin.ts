@@ -32,7 +32,6 @@ import {
 } from "../comeBackRace.ts/comeBackToRaceFunctions";
 import { positionList } from "../changeGameState/race/positionList";
 import { sendDiscordGeneralChatQualy } from "../discord/discord";
-import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
 import { PLAYER_LIMIT } from "../commands/adminThings/handleLimitPlayerQuantity";
 
 const HARD_QUALY_PASSWORD = "hardqualy";

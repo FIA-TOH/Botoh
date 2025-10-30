@@ -14,14 +14,22 @@ import { getPlayerAndDiscs } from "../../playerFeatures/getPlayerAndDiscs";
 import { getRunningPlayers } from "../../utils";
 import { CIRCUITS, currentMapIndex } from "../../zones/maps";
 import { rrEnabled } from "../adminThings/handleRREnabledCommand";
+import { RR_POSITION } from "../adminThings/handleRRPositionCommand";
 
 export function handleRRAllCommand(room: RoomObject) {
   const playersAndDiscs = getPlayerAndDiscs(room);
   const runningPlayers = getRunningPlayers(playersAndDiscs);
 
   runningPlayers.forEach((player) => {
-    const pad = getPlayerAndDiscs(room).filter((p) => p.p.id === player.p.id);
+    if (
+      room.getScores() === null ||
+      !CIRCUITS[currentMapIndex].info.lastPlace
+    ) {
+      sendErrorMessage(room, MESSAGES.NOT_STARTED());
+      return;
+    }
 
+    const pad = getPlayerAndDiscs(room).filter((p) => p.p.id === player.p.id);
     resetPlayer(player.p, room, player.p.id);
 
     if (
@@ -38,14 +46,16 @@ export function handleRRAllCommand(room: RoomObject) {
       updatePlayerCollision(room, pad, room.CollisionFlags.red);
     }
 
-    room.setPlayerDiscProperties(player.p.id, { radius: 15 });
+    const position = RR_POSITION ?? CIRCUITS[currentMapIndex].info.lastPlace;
+
     room.setPlayerDiscProperties(player.p.id, {
+      radius: 15,
       xspeed: 0,
       yspeed: 0,
       xgravity: 0,
       ygravity: 0,
-      x: CIRCUITS[currentMapIndex].info.lastPlace.x,
-      y: CIRCUITS[currentMapIndex].info.lastPlace.y,
+      x: position.x,
+      y: position.y,
     });
   });
 }
@@ -55,34 +65,43 @@ export function handleRRCommand(
   _: string[],
   room: RoomObject
 ) {
-  const playersAndDiscs = getPlayerAndDiscs(room);
-  const pad = playersAndDiscs.filter((p) => p.p.id === byPlayer.id);
   if (!rrEnabled) {
     sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id);
     return;
   }
+  if (room.getScores() === null || !CIRCUITS[currentMapIndex].info.lastPlace) {
+    sendErrorMessage(room, MESSAGES.NOT_STARTED());
+    return;
+  }
+
+  const playersAndDiscs = getPlayerAndDiscs(room);
+  const pad = playersAndDiscs.filter((p) => p.p.id === byPlayer.id);
+
   resetPlayer(byPlayer, room, byPlayer.id);
+
   if (
     generalGameMode === GeneralGameMode.GENERAL_QUALY ||
-    gameMode == GameMode.TRAINING
+    gameMode === GameMode.TRAINING
   ) {
     playerList[byPlayer.id].kers = 100;
     playerList[byPlayer.id].wear = 20;
   }
+
   if (ghostMode) {
     updatePlayerCollision(room, pad, room.CollisionFlags.c0);
   } else {
     updatePlayerCollision(room, pad, room.CollisionFlags.red);
   }
+
+  const position = RR_POSITION ?? CIRCUITS[currentMapIndex].info.lastPlace;
+
   room.setPlayerDiscProperties(byPlayer.id, {
     radius: 15,
-  });
-  room.setPlayerDiscProperties(byPlayer.id, {
     xspeed: 0,
     yspeed: 0,
     xgravity: 0,
     ygravity: 0,
-    x: CIRCUITS[currentMapIndex].info.lastPlace.x,
-    y: CIRCUITS[currentMapIndex].info.lastPlace.y,
+    x: position.x,
+    y: position.y,
   });
 }
