@@ -1633,4 +1633,46 @@ export const MESSAGES = {
     tr: replaceTemplateString(tr_messages.CANNOT_LEAVE_BOX, {}),
     pt: replaceTemplateString(pt_messages.CANNOT_LEAVE_BOX, {}),
   }),
+  WHO_IS_AFK_SECTORS: (
+    player: string,
+    sector: number
+  ): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.WHO_IS_AFK_SECTORS, {
+      player: player.toString(),
+      sector: sector.toString(),
+    }),
+    es: replaceTemplateString(es_messages.WHO_IS_AFK_SECTORS, {
+      player: player.toString(),
+      sector: sector.toString(),
+    }),
+    fr: replaceTemplateString(fr_messages.WHO_IS_AFK_SECTORS, {
+      player: player.toString(),
+      sector: sector.toString(),
+    }),
+    tr: replaceTemplateString(tr_messages.WHO_IS_AFK_SECTORS, {
+      player: player.toString(),
+      sector: sector.toString(),
+    }),
+    pt: replaceTemplateString(pt_messages.WHO_IS_AFK_SECTORS, {
+      player: player.toString(),
+      sector: sector.toString(),
+    }),
+  }),
+  WHO_IS_AFK: (player: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.WHO_IS_AFK, {
+      player: player.toString(),
+    }),
+    es: replaceTemplateString(es_messages.WHO_IS_AFK, {
+      player: player.toString(),
+    }),
+    fr: replaceTemplateString(fr_messages.WHO_IS_AFK, {
+      player: player.toString(),
+    }),
+    tr: replaceTemplateString(tr_messages.WHO_IS_AFK, {
+      player: player.toString(),
+    }),
+    pt: replaceTemplateString(pt_messages.WHO_IS_AFK, {
+      player: player.toString(),
+    }),
+  }),
 };

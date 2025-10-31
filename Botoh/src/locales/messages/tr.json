@@ -143,5 +143,7 @@
   "CAME_BACK_RACE_ONE": "🏁 Yarışa geri döndünüz! Pit alanından çıkmak için ilk sıradaki sürücünün bitiş çizgisini geçmesini bekleyin — aksi takdirde diskalifiye edileceksiniz.",
   "CAME_BACK_RACE_TWO": "📢 Pit alanından çıkmanıza izin verildiğinde sohbet ve avatarınızda bir bildirim gösterilecektir.",
   "TYPE_REJOIN": "⚠️ Yarış sırasında ayrıldınız. Yarışa geri dönmek için !rejoin yazın.",
-  "CANNOT_LEAVE_BOX": "⛔ Henüz pit alanından çıkamazsınız!"
+  "CANNOT_LEAVE_BOX": "⛔ Henüz pit alanından çıkamazsınız!",
+  "WHO_IS_AFK_SECTORS": "{{player}} {{sector}} sektöründe afk",
+  "WHO_IS_AFK": "{{player}} afk sektörde"
 }

@@ -145,5 +145,7 @@
   "CAME_BACK_RACE_ONE": "🏁 Você voltou para a corrida! Aguarde o primeiro colocado passar pela linha de chegada para sair do box — caso contrário, será desclassificado.",
   "CAME_BACK_RACE_TWO": "📢 O aviso será mostrado no chat e no seu avatar quando for permitido sair.",
   "TYPE_REJOIN": "⚠️ Você saiu durante a corrida. Digite !rejoin para voltar a correr.",
-  "CANNOT_LEAVE_BOX": "⛔ Você não pode sair do box ainda!"
+  "CANNOT_LEAVE_BOX": "⛔ Você não pode sair do box ainda!",
+  "WHO_IS_AFK_SECTORS": "{{player}} está afk no setor {{sector}}",
+  "WHO_IS_AFK": "{{player}} está afk no setor"
 }

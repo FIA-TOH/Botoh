@@ -143,5 +143,7 @@
   "CAME_BACK_RACE_ONE": "🏁 You're back in the race! Wait for the leader to cross the finish line before leaving the pit—otherwise, you will be disqualified.",
   "CAME_BACK_RACE_TWO": "📢 A notification will be shown in the chat and on your avatar when you are allowed to leave.",
   "TYPE_REJOIN": "⚠️ You left during the race. Type !rejoin to return to racing.",
-  "CANNOT_LEAVE_BOX": "⛔ You cannot leave the box yet!"
+  "CANNOT_LEAVE_BOX": "⛔ You cannot leave the box yet!",
+  "WHO_IS_AFK_SECTORS": "{{player}} is afk in sector {{sector}}",
+  "WHO_IS_AFK": "{{player}} is afk in sector"
 }

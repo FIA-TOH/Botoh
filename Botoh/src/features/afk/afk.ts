@@ -13,6 +13,7 @@ import { MESSAGES } from "../chat/messages";
 import { handleVSCCommand } from "../commands/flagsAndVSC/handleVSCCommand";
 import { presentationLap } from "../commands/gameState/handlePresentationLapCommand";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
+import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { vsc } from "../speed/handleSpeed";
 
 const activities: { [key: number]: number } = {};
@@ -45,8 +46,38 @@ export function afkKick(room: RoomObject) {
           if (LEAGUE_MODE) {
             if (!vsc && !presentationLap) {
               handleVSCCommand(undefined, undefined, room);
+              if (
+                ACTUAL_CIRCUIT.info.sectorOne &&
+                ACTUAL_CIRCUIT.info.sectorTwo &&
+                ACTUAL_CIRCUIT.info.sectorThree
+              ) {
+                sendAlertMessage(
+                  room,
+                  MESSAGES.WHO_IS_AFK_SECTORS(
+                    player.name,
+                    playerPropierties.currentSector
+                  )
+                );
+              } else {
+                sendAlertMessage(room, MESSAGES.WHO_IS_AFK(player.name));
+              }
             } else {
               updatePlayerActivity(player);
+              if (
+                ACTUAL_CIRCUIT.info.sectorOne &&
+                ACTUAL_CIRCUIT.info.sectorTwo &&
+                ACTUAL_CIRCUIT.info.sectorThree
+              ) {
+                sendAlertMessage(
+                  room,
+                  MESSAGES.WHO_IS_AFK_SECTORS(
+                    player.name,
+                    playerPropierties.currentSector
+                  )
+                );
+              } else {
+                sendAlertMessage(room, MESSAGES.WHO_IS_AFK(player.name));
+              }
             }
           } else {
             room.kickPlayer(playerId, "AFK", false);

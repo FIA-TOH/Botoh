@@ -42,9 +42,7 @@ export function changeTires(
   playerList[player.p.id].lapsOnCurrentTire = -1;
   playerList[player.p.id].gripCounter = 0;
   playerList[player.p.id].maxSpeed = TIRE_STARTING_SPEED[chosen];
-  if (chosen === Tires.FLAT) {
-    sendChatMessage(room, MESSAGES.TYRE_BLOW(player.p.name));
-  } else {
+  if (chosen !== Tires.FLAT) {
     if (pitTime > 1) {
       const isPitRecord = trySetBestPit(
         player.p.name,
