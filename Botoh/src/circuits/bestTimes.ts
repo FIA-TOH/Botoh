@@ -37,6 +37,7 @@ const trackNameMapping: { [key: string]: string } = {
   miami: "Miami by Rodri",
   las_vegas: "Las Vegas Strip Circuit - By Ximb",
   zandvoort: "Zandvoort by Rodri",
+  barcelona: "Circuit de Barcelona-Catalunya by Rodri",
 };
 
 export const bestTimes: { [key: string]: [number, string, string] } = {
@@ -45,7 +46,7 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   sepang: [49.65, "Lib Wallard ", trackNameMapping["sepang"]],
   bahrein: [32.884, "Alberto Ulasscari", trackNameMapping["bahrein"]],
   sochi: [40.15, "Alberto Ulasscari", trackNameMapping["sochi"]],
-  monaco: [34.467, "Alberto Ulasscari", trackNameMapping["monaco"]],
+  monaco: [34.442, "Liberty", trackNameMapping["monaco"]],
   valencia: [44.433, "Alberto Ulasscari", trackNameMapping["valencia"]],
   paulRicard: [42.567, "Ximbastian Vettel", trackNameMapping["paulRicard"]],
   silverstone: [41.483, "Alberto Ulasscari", trackNameMapping["silverstone"]],
@@ -79,6 +80,11 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   miami: [43.05, "Ximbastian Vettel", trackNameMapping["miami"]],
   las_vegas: [43.569, "Ximbastian Vettel", "Las Vegas Strip Circuit - By Ximb"],
   zandvoort: [37.358, "Ximbastian Vettel", "Zandvoort by Rodri"],
+  barcelona: [
+    37.7,
+    "Ximbastian Vettel",
+    "Circuit de Barcelona-Catalunya by Rodri",
+  ],
 };
 export const getAbbreviatedTrackName = (
   fullTrackName: string
