@@ -61,9 +61,11 @@ function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
         gameState === "running" &&
         generalGameMode === GeneralGameMode.GENERAL_RACE
       ) {
-        console.log("Went spec on running and general race");
         room.setPlayerTeam(player.id, Teams.SPECTATORS);
-      } else if (wasRunning && GeneralGameMode.GENERAL_RACE) {
+      } else if (
+        wasRunning &&
+        generalGameMode === GeneralGameMode.GENERAL_RACE
+      ) {
         const leftInfoIndex = playersLeftInfo.findIndex(
           (info) => info.name === player.name
         );
@@ -76,12 +78,10 @@ function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
           if (diffInSeconds <= REJOIN_TIME_LIMIT) {
             sendAlertMessage(room, MESSAGES.TYPE_REJOIN(), player.id);
           }
-          console.log("Went spec on wasRunning and general race");
 
           room.setPlayerTeam(player.id, Teams.SPECTATORS);
           return;
         }
-        console.log("Went spec after all");
 
         room.setPlayerTeam(player.id, Teams.SPECTATORS);
       } else {
