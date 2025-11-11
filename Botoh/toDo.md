@@ -8,10 +8,15 @@ Atualizar alguns mapas
 
 # To-do rapidos
 
+Memory Leak
+Memoria pneus estao estourando, box box
+ENviar resultado do training a cada X horas
+Treino reiniciar a cada X minutos
+Erro rejoin
+mensagens discord sem lag
+
 Tentar fazer banking como o rodri falou
 Add daytonna Rodri
-
-Ver a questao do replay nao funfando
 
 # To-Do longos
 

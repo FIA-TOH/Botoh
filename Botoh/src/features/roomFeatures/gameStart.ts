@@ -24,7 +24,7 @@ export function GameStart(room: RoomObject) {
     handleGameStateChange("running", room);
 
     if (gameMode !== GameMode.TRAINING) {
-      // room.startRecording();
+      room.startRecording();
     }
     resetBestLap();
     resetBestPit();
