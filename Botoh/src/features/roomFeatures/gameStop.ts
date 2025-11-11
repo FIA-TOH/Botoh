@@ -42,6 +42,8 @@ import { sendDiscordMessage } from "../discord/sendDiscordLink";
 import { clearPlayersLeftInfo } from "../comeBackRace.ts/comeBackToRaceFunctions";
 import { clearRRPosition } from "../commands/adminThings/handleRRPositionCommand";
 
+let replayData: Uint8Array | null = null;
+
 export function GameStop(room: RoomObject) {
   room.onGameStop = function (byPlayer) {
     if (byPlayer == null) {
@@ -53,13 +55,12 @@ export function GameStop(room: RoomObject) {
 
     handleGameStateChange(null, room);
     if (gameMode !== GameMode.TRAINING) {
-      // const replay = room.stopRecording();
-      // console.log(replay?.length, replay);
-      // if (replay && gameStarted) {
-      //   sendDiscordReplay(replay);
-      // } else {
-      //   log("Replay discarted");
-      // }
+      replayData = room.stopRecording();
+      if (replayData && gameStarted) {
+        sendDiscordReplay(replayData);
+      } else {
+        log("Replay discarted");
+      }
     }
     setGameStarted(false);
 

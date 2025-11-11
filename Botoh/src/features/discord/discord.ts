@@ -3,7 +3,6 @@ import { getPlayerTeam } from "../commands/teams/getTeam";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { getTimestamp } from "../utils";
-import FormData from "form-data";
 
 const PUBLIC_CHAT_URL =
   "https://discord.com/api/webhooks/1409976523330682950/9SS0ZO32tm8KzreIq0PcQi3C3_isAF27CjGlHeYFDDxev3bTHJ5xUlkRDIx-N6gNhTvV";
@@ -62,14 +61,17 @@ async function safeSend(
   try {
     if (!body)
       return console.warn(`⚠️ [Discord SKIPPED] (${source}): body empty`);
-    const headers = isFormData
-      ? body.getHeaders()
-      : { "Content-Type": "application/json" };
-    const res = await fetch(url, {
+
+    const options: RequestInit = {
       method: "POST",
-      headers,
       body: isFormData ? body : JSON.stringify(body),
-    });
+    };
+
+    if (!isFormData) {
+      options.headers = { "Content-Type": "application/json" };
+    }
+
+    const res = await fetch(url, options);
 
     if (!res.ok) {
       if (res.status === 429) {
@@ -90,9 +92,11 @@ async function safeSend(
 export function sendDiscordFile(data: any, fileName: string, source: string) {
   try {
     const FILE_URL = LEAGUE_MODE ? LEAGUE_LOG_URL : PUBLIC_LOG_URL;
-    const buffer = Buffer.from(JSON.stringify(data, null, 2), "utf-8");
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: "application/json",
+    });
     const formData = new FormData();
-    formData.append("file", buffer, fileName);
+    formData.append("file", blob, fileName);
     safeSend(FILE_URL, formData, source, true);
   } catch (err) {
     console.error("❌ [sendDiscordFile ERROR]:", err);
@@ -226,9 +230,15 @@ function generateFileName() {
 export function sendDiscordReplay(replay: Uint8Array) {
   try {
     const REPLAYS_URL = LEAGUE_MODE ? LEAGUE_REPLAY_URL : PUBLIC_REPLAY_URL;
+
     const buffer = Buffer.from(replay);
+    const blob = new Blob([new Uint8Array(buffer)], {
+      type: "application/octet-stream",
+    });
+
     const formData = new FormData();
-    formData.append("file", buffer, generateFileName());
+    formData.append("file", blob, generateFileName());
+
     safeSend(REPLAYS_URL, formData, "REPLAY", true);
   } catch (err) {
     console.error("❌ [sendDiscordReplay ERROR]:", err);
