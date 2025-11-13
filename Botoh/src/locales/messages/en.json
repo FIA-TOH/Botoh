@@ -145,5 +145,6 @@
   "TYPE_REJOIN": "⚠️ You left during the race. Type !rejoin to return to racing.",
   "CANNOT_LEAVE_BOX": "⛔ You cannot leave the box yet!",
   "WHO_IS_AFK_SECTORS": "{{player}} is afk in sector {{sector}}",
-  "WHO_IS_AFK": "{{player}} is afk in sector"
+  "WHO_IS_AFK": "{{player}} is afk in sector",
+  "TYRES_ABOUT_TO_BLOWN": "⚠️🛞 BOX BOX! We’re seeing heavy graining — Expect a possible blowout — box, box! 🛞⚠️"
 }

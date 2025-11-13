@@ -14,7 +14,6 @@ import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { vsc } from "../speed/handleSpeed";
 import { laps } from "../zones/laps";
 import { changeTires } from "./changeTires";
-import { getBlowoutChance } from "./tireBlowFunctions";
 import { applyTrackTireDegradation } from "./tireDegradationFunction";
 import { TYRE_DURABILITY, Tires } from "./tires";
 
@@ -36,7 +35,6 @@ export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
     return;
   }
 
-  //Tyre durability calculation
   let totalDurability = TYRE_DURABILITY(laps);
   const trackDegradation = ACTUAL_CIRCUIT?.info?.TireDegradationPercentage ?? 0;
   totalDurability = applyTrackTireDegradation(
@@ -100,16 +98,5 @@ export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
       p.alertSent[alert.key] = true;
       break;
     }
-  }
-
-  const blowoutChance = getBlowoutChance(remainingPercentage);
-  if (Math.random() < blowoutChance) {
-    changeTires(
-      { p: player, disc: room.getPlayerDiscProperties(player.id) },
-      Tires.FLAT,
-      room
-    );
-    sendAlertMessage(room, MESSAGES.BLOWN_OUT_UNLUCKY_TIRES(), player.id);
-    sendChatMessage(room, MESSAGES.TYRE_BLOW(player.name));
   }
 }

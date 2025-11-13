@@ -145,5 +145,6 @@
   "TYPE_REJOIN": "⚠️ Yarış sırasında ayrıldınız. Yarışa geri dönmek için !rejoin yazın.",
   "CANNOT_LEAVE_BOX": "⛔ Henüz pit alanından çıkamazsınız!",
   "WHO_IS_AFK_SECTORS": "{{player}} {{sector}} sektöründe afk",
-  "WHO_IS_AFK": "{{player}} afk sektörde"
+  "WHO_IS_AFK": "{{player}} afk sektörde",
+  "TYRES_ABOUT_TO_BLOWN": "⚠️🛞 BOX BOX! Lastikte ciddi tanelenme graining — Her an patlama riski var — box, box! 🛞⚠️"
 }

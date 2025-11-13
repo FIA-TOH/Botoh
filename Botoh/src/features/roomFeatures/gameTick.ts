@@ -21,6 +21,7 @@ import { detectCut } from "../detectCut/detectCut";
 import { GameMode, gameMode } from "../changeGameState/changeGameModes";
 import { updatePreviousPos } from "../zones/updateAccuranteTime.";
 import { kickIfQualyTimeEnded } from "../commands/gameMode/qualy/hardQualyFunctions";
+import { checkTireStatus } from "../tires&pits/tireBlowManager";
 
 const detectCutThrottledByPlayer: Map<
   number,
@@ -52,6 +53,7 @@ export function GameTick(room: RoomObject) {
     players.forEach((pad) => {
       const p = pad.p;
       handleTireWear(p, room);
+      checkTireStatus(p, room);
 
       handleChangePlayerSizeSuzuka(pad, room);
       handleChangeCollisionPlayerSuzuka(pad, room);

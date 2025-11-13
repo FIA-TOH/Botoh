@@ -5,10 +5,8 @@ import { changeLaps } from "../commands/adminThings/handleChangeLaps";
 import { handleRREnabledCommand } from "../commands/adminThings/handleRREnabledCommand";
 import {
   handleEnableTyresCommand,
-  tyresActivated,
 } from "../commands/tyres/handleEnableTyresCommand";
 import { enableGas, enableSlipstream } from "../speed/handleSlipstream";
-import HandleTireWear from "../tires&pits/handleTireWear";
 import { laps } from "../zones/laps";
 import { qualiTime, raceTime } from "./qualy/qualiMode";
 

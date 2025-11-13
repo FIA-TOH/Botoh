@@ -8,8 +8,6 @@ Atualizar alguns mapas
 
 # To-do rapidos
 
-Memory Leak
-Memoria pneus estao estourando, box box
 ENviar resultado do training a cada X horas
 Treino reiniciar a cada X minutos
 Erro rejoin

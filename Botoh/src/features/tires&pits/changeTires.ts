@@ -8,6 +8,7 @@ import {
 } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { ifInBoxZone } from "./pits";
+import { decideBlowoutPoint } from "./tireBlowManager";
 import { Tires, TIRE_STARTING_SPEED } from "./tires";
 import { trySetBestPit } from "./trackBestPit";
 
@@ -43,6 +44,7 @@ export function changeTires(
   playerList[player.p.id].gripCounter = 0;
   playerList[player.p.id].maxSpeed = TIRE_STARTING_SPEED[chosen];
   if (chosen !== Tires.FLAT) {
+    decideBlowoutPoint(player.p);
     if (pitTime > 1) {
       const isPitRecord = trySetBestPit(
         player.p.name,

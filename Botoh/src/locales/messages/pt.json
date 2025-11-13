@@ -147,5 +147,6 @@
   "TYPE_REJOIN": "⚠️ Você saiu durante a corrida. Digite !rejoin para voltar a correr.",
   "CANNOT_LEAVE_BOX": "⛔ Você não pode sair do box ainda!",
   "WHO_IS_AFK_SECTORS": "{{player}} está afk no setor {{sector}}",
-  "WHO_IS_AFK": "{{player}} está afk no setor"
+  "WHO_IS_AFK": "{{player}} está afk no setor",
+  "TYRES_ABOUT_TO_BLOWN": "⚠️🛞 BOX BOX! Estamos vendo muito graining — Possível estouro de pneu a qualquer momento — box, box! 🛞⚠️"
 }

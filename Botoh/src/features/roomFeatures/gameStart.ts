@@ -15,6 +15,8 @@ import { resetBestPit } from "../tires&pits/trackBestPit";
 import { resetBestLap } from "../zones/laps/trackBestLap";
 import { clearPlayersLeftInfo } from "../comeBackRace.ts/comeBackToRaceFunctions";
 import { clearRRPosition } from "../commands/adminThings/handleRRPositionCommand";
+import { decideBlowoutPoint } from "../tires&pits/tireBlowManager";
+import { Teams } from "../changeGameState/teams";
 
 export function GameStart(room: RoomObject) {
   room.onGameStart = function (byPlayer) {
@@ -36,6 +38,9 @@ export function GameStart(room: RoomObject) {
     room.getPlayerList().forEach((p) => {
       resetPlayer(p, room, p.id, true);
       updatePlayerActivity(p);
+      if (p.team === Teams.RUNNERS) {
+        decideBlowoutPoint(p);
+      }
     });
     finishList.splice(0, finishList.length);
     positionList.splice(0, positionList.length);

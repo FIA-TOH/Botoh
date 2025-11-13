@@ -61,6 +61,9 @@ export interface PlayerInfo {
   pitFailures?: PitResult;
   pitSteps?: PitStep[] | undefined;
   canLeavePitLane: boolean;
+  blowAtWear: number;
+  warningAtWear?: number | null;
+  warningShown?: boolean;
 
   // Recursos de corrida
   speedEnabled: boolean;
