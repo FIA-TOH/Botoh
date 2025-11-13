@@ -63,6 +63,7 @@ export interface PlayerInfo {
   canLeavePitLane: boolean;
   blowAtWear: number;
   warningAtWear?: number | null;
+  warningIsFalse?: boolean;
   warningShown?: boolean;
 
   // Recursos de corrida

@@ -60,6 +60,7 @@ export function createPlayerInfo(ip?: string) {
     canLeavePitLane: true,
     blowAtWear: 100,
     warningAtWear: null,
+    warningIsFalse: false,
     warningShown: false,
 
     // Recursos de corrida
@@ -165,6 +166,7 @@ export function resetPlayer(
   playerList[id].slipstreamEndTime = undefined;
   playerList[id].blowAtWear = 100;
   playerList[id].warningAtWear = null;
+  playerList[id].warningIsFalse = false;
   playerList[id].warningShown = false;
 
   playerList[id].penaltyCounter = 0;
