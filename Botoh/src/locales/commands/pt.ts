@@ -116,7 +116,7 @@ export default function pt_commands(
     args: string[],
     room: RoomObject
   ) => void,
-  handleSlipstreamCommand: (
+  handleToggleSystems: (
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject
@@ -161,11 +161,7 @@ export default function pt_commands(
     args: string[],
     room: RoomObject
   ) => void,
-  handleEnableTyresCommand: (
-    byPlayer: PlayerObject,
-    args: string[],
-    room: RoomObject
-  ) => void,
+
   handleTipsCommands: (
     byPlayer: PlayerObject,
     args: string[],
@@ -340,7 +336,7 @@ export default function pt_commands(
     "!clear_time": handleClearTimeCommand,
     "!mute": handleMuteCommand,
     "!rain": handleRainCommand,
-    "!slipstream": handleSlipstreamCommand,
+    "!enable": handleToggleSystems,
     "!gas": handleGasCommand,
     "!ghost": handleGhostCommand,
     "!toggle_rr": handleRREnabledCommand,
@@ -350,7 +346,7 @@ export default function pt_commands(
     "!afk": handleAfkCommand,
     "!voltar": handleAfkCommand,
     "!enable_qualy_for_pub": handleEnableQualyForPub,
-    "!enable_tyres": handleEnableTyresCommand,
+
     "!dicas": handleTipsCommands,
     "!explain_tyres": handleExplainTyresCommand,
     "!explain_server": handleExplainServerCommand,

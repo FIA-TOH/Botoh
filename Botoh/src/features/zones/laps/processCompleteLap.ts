@@ -20,7 +20,6 @@ import {
   sendSuccessMessage,
 } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
-import { tyresActivated } from "../../commands/tyres/handleEnableTyresCommand";
 import {
   sendDiscordGeneralChatQualy,
   sendDiscordTrackRecord,
@@ -29,7 +28,7 @@ import { log } from "../../discord/logger";
 import { getPlayerAndDiscs } from "../../playerFeatures/getPlayerAndDiscs";
 // import { rainEnabled, rainIntensity } from "../../rain/rain";
 import { ACTUAL_CIRCUIT } from "../../roomFeatures/stadiumChange";
-import { Tires } from "../../tires&pits/tires";
+import { Tires, tyresActivated } from "../../tires&pits/tires";
 import { serialize, someArray } from "../../utils";
 import { drsOn, enableDRS } from "../handleDRSZone";
 import { broadcastLapTimeToPlayers } from "./broadcastTimeToPlayer";

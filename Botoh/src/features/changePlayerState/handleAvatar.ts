@@ -1,6 +1,6 @@
-import { tyresActivated } from "../commands/tyres/handleEnableTyresCommand";
 import { log } from "../discord/logger";
 import { TIRE_AVATAR } from "../speed/handleSpeed";
+import { tyresActivated } from "../tires&pits/tires";
 import { playerList } from "./playerList";
 
 export enum Situacions {
@@ -14,6 +14,7 @@ export enum Situacions {
   Correct = "Correct",
   Wrong = "Wrong",
   NeedPit = "NeedPit",
+  BlowoutWarning = "BlowoutWarning",
 }
 
 const currentSituacion: Record<number, Situacions> = {};
@@ -23,7 +24,8 @@ const SITUATION_PRIORITY: Record<Situacions, number> = {
   [Situacions.Flag]: 7,
   [Situacions.CanLeavePit]: 7,
   [Situacions.Wrong]: 6,
-  [Situacions.Correct]: 5,
+  [Situacions.Correct]: 6,
+  [Situacions.BlowoutWarning]: 5,
   [Situacions.NeedPit]: 5,
   [Situacions.Ers]: 4,
   [Situacions.Speed]: 3,
@@ -119,6 +121,33 @@ const situationHandlers: Record<
       restoreTyreOrCar(player.id, room);
       currentSituacion[player.id] = Situacions.Null;
     }, wrongDurationSeconnds * 1000);
+  },
+  [Situacions.BlowoutWarning]: (player, room) => {
+    const blowoutEmoijis = ["🛞", "💥", "⚠️", "🛞", "💥", "⚠️"];
+    const emojiDurations = [750, 750, 750, 750, 750, 750];
+    if (!blowoutEmoijis || !emojiDurations) return;
+    let currentEmojiIndex = 0;
+
+    const showNextEmoji = () => {
+      if (!playerList[player.id]) return;
+      room.setPlayerAvatar(player.id, blowoutEmoijis[currentEmojiIndex]);
+      const delay = emojiDurations[currentEmojiIndex];
+      currentEmojiIndex++;
+
+      if (currentEmojiIndex < blowoutEmoijis.length) {
+        playerTimers[player.id].timeout = setTimeout(showNextEmoji, delay);
+      }
+    };
+
+    showNextEmoji();
+
+    playerTimers[player.id].timeout = setTimeout(
+      () => {
+        restoreTyreOrCar(player.id, room);
+        currentSituacion[player.id] = Situacions.Null;
+      },
+      emojiDurations.reduce((a, b) => a + b, 0)
+    );
   },
   [Situacions.NeedPit]: (player, room) => {
     const needPitDurationSeconds = 5;

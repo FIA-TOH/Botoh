@@ -16,6 +16,17 @@ import { playerBuffList } from "../../commands/adjustThings/handleNerfListComman
 const ERS_DURATION_SECONDS = 7;
 const ERS_RECHARGE_MINUTES = 2;
 
+export let ersActivated = true;
+export let ersPenalty = false;
+
+export function enableErs(boolean: boolean) {
+  ersActivated = boolean;
+}
+
+export function enableErsPenalty(boolean: boolean) {
+  ersPenalty = boolean;
+}
+
 export function updateErs(
   playersAndDiscs: { p: PlayerObject; disc: DiscPropertiesObject }[],
   room: RoomObject
@@ -31,9 +42,9 @@ export function updateErs(
       (nerfPlayer) => nerfPlayer.name === p.name
     );
 
-    if (!gasEnabled) {
+    if (ersActivated) {
       handleERS(p, properties, playerInfo, isNerfed, room);
-    } else {
+    } else if (gasEnabled) {
       handleFuel(p, properties, playerInfo, room);
     }
   });

@@ -1,15 +1,24 @@
+import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
 import { playerList } from "../changePlayerState/playerList";
 import { sendAlertMessage, sendChatMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { changeTires } from "./changeTires";
 import { Tires } from "./tires";
 
+export let blowoutTyresActivated = true;
+
+export function setBlowoutTyresActivated(boolean: boolean) {
+  blowoutTyresActivated = boolean;
+}
+
 export function decideBlowoutPoint(player: PlayerObject) {
   const p = playerList[player.id];
   if (!p) return;
 
-  const willBlow = Math.random() <= 0.1;
+  const tyreBlownChance = 10;
   let wearPoint = 100;
+
+  const willBlow = Math.random() <= tyreBlownChance / 100;
 
   if (willBlow) {
     const ranges = [
@@ -84,7 +93,10 @@ export function checkTireStatus(player: PlayerObject, room: RoomObject) {
   const p = playerList[player.id];
   if (!p || typeof p.blowAtWear !== "number") return;
 
+  if (!blowoutTyresActivated) return;
+
   if (p.warningAtWear && p.wear >= p.warningAtWear && !p.warningShown) {
+    handleAvatar(Situacions.BlowoutWarning, player, room);
     sendAlertMessage(room, MESSAGES.TYRES_ABOUT_TO_BLOWN(), player.id);
     p.warningShown = true;
   }
@@ -95,6 +107,7 @@ export function checkTireStatus(player: PlayerObject, room: RoomObject) {
       Tires.FLAT,
       room
     );
+
     sendAlertMessage(room, MESSAGES.BLOWN_OUT_UNLUCKY_TIRES(), player.id);
     sendChatMessage(room, MESSAGES.TYRE_BLOW(player.name));
   }

@@ -5,7 +5,6 @@ import { handleMuteCommand } from "../../commands/chat/handleMuteCommand";
 import { handleExplainErsCommand } from "../../commands/ersAndFuel/handleExplainErsCommand";
 import { qualyForPub } from "../../commands/gameMode/qualy/handleEnableQualyForPub";
 import { handleExplainRainCommand } from "../../commands/rain/handleExplainRainCommand";
-import { tyresActivated } from "../../commands/tyres/handleEnableTyresCommand";
 import { handleExplainTyresCommand } from "../../commands/tyres/handleExplainTyresCommand";
 import {
   sendQualiResultsToDiscord,
@@ -17,6 +16,7 @@ import {
   reorderPlayersByRacePosition,
   reorderPlayersInRoomRace,
 } from "../../movePlayers/reorderPlayersInRoom";
+import { tyresActivated } from "../../tires&pits/tires";
 // import { rainEnabled } from "../../rain/rain";
 import { delay } from "../../utils";
 import { CIRCUITS, handleChangeMap } from "../../zones/maps";

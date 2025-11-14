@@ -9,13 +9,12 @@ import { sendAlertMessage, sendChatMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { playerBuffList } from "../commands/adjustThings/handleNerfListCommand";
 import { presentationLap } from "../commands/gameState/handlePresentationLapCommand";
-import { tyresActivated } from "../commands/tyres/handleEnableTyresCommand";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { vsc } from "../speed/handleSpeed";
 import { laps } from "../zones/laps";
 import { changeTires } from "./changeTires";
 import { applyTrackTireDegradation } from "./tireDegradationFunction";
-import { TYRE_DURABILITY, Tires } from "./tires";
+import { TYRE_DURABILITY, Tires, tyresActivated } from "./tires";
 
 export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
   const p = playerList[player.id];

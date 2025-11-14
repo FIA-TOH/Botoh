@@ -3,10 +3,9 @@ import { sendSuccessMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { changeLaps } from "../commands/adminThings/handleChangeLaps";
 import { handleRREnabledCommand } from "../commands/adminThings/handleRREnabledCommand";
-import {
-  handleEnableTyresCommand,
-} from "../commands/tyres/handleEnableTyresCommand";
+
 import { enableGas, enableSlipstream } from "../speed/handleSlipstream";
+import { enableTyres } from "../tires&pits/tires";
 import { laps } from "../zones/laps";
 import { qualiTime, raceTime } from "./qualy/qualiMode";
 
@@ -58,7 +57,7 @@ function handleQualyMode(room: RoomObject) {
   enableSlipstream(false);
   setGhostMode(room, true);
   handleRREnabledCommand(undefined, ["true"], room);
-  handleEnableTyresCommand(undefined, ["true"], room);
+  enableTyres(true);
   sendSuccessMessage(room, MESSAGES.TIME_TO_QUALY());
   changeGeneralGameMode(GeneralGameMode.GENERAL_QUALY);
 }
@@ -69,7 +68,7 @@ function handleTrainingMode(room: RoomObject) {
   setGhostMode(room, true);
   handleRREnabledCommand(undefined, ["true"], room);
   changeLaps("999", undefined, room);
-  handleEnableTyresCommand(undefined, ["true"], room);
+  enableTyres(true);
   changeGeneralGameMode(GeneralGameMode.NONE);
 }
 
@@ -78,7 +77,7 @@ function handleIndyMode(room: RoomObject) {
   enableSlipstream(false);
   setGhostMode(room, false);
   handleRREnabledCommand(undefined, ["false"], room);
-  handleEnableTyresCommand(undefined, ["true"], room);
+  enableTyres(true);
   changeGeneralGameMode(GeneralGameMode.GENERAL_RACE);
 }
 
@@ -87,7 +86,7 @@ function handleRaceMode(room: RoomObject) {
   enableSlipstream(true);
   setGhostMode(room, false);
   handleRREnabledCommand(undefined, ["false"], room);
-  handleEnableTyresCommand(undefined, ["true"], room);
+  enableTyres(true);
   sendSuccessMessage(room, MESSAGES.TIME_TO_RACE(laps));
   changeGeneralGameMode(GeneralGameMode.GENERAL_RACE);
 }
@@ -97,7 +96,7 @@ function handleWaintingRoom(room: RoomObject) {
   enableSlipstream(false);
   setGhostMode(room, false);
   handleRREnabledCommand(undefined, ["false"], room);
-  handleEnableTyresCommand(undefined, ["false"], room);
+  enableTyres(false);
   changeGeneralGameMode(GeneralGameMode.NONE);
 }
 
@@ -108,7 +107,7 @@ function handleHardQualyMode(room: RoomObject) {
   enableSlipstream(false);
   setGhostMode(room, false);
   handleRREnabledCommand(undefined, ["false"], room);
-  handleEnableTyresCommand(undefined, ["false"], room);
+  enableTyres(false);
   sendSuccessMessage(room, MESSAGES.TIME_TO_QUALY());
   changeGeneralGameMode(GeneralGameMode.GENERAL_QUALY);
 }
