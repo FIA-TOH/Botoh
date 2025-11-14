@@ -1,10 +1,9 @@
 import { gameMode, GameMode } from "../changeGameState/changeGameModes";
 import { playerList } from "../changePlayerState/playerList";
-import { tyresActivated } from "../commands/tyres/handleEnableTyresCommand";
 import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
 import { grip } from "../rain/rainGrip";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
-import { Tires } from "../tires&pits/tires";
+import { Tires, tyresActivated } from "../tires&pits/tires";
 import { getRunningPlayers } from "../utils";
 import { constants } from "./constants";
 import { applyLateralSlip } from "./damping";
@@ -92,8 +91,8 @@ export function controlPlayerSpeed(
         : slipstream;
       hasSlipstream = effectiveSlipstream > 0;
     }
-
-    const isUsingErsInco = playerInfo.kers <= 0 && disc.damping === 0.986;
+    const isUsingErs = disc.damping === 0.986;
+    const isUsingErsInco = playerInfo.kers <= 0 && isUsingErs;
 
     let gripMultiplier = calculateGripMultiplierForConditions(
       p,
@@ -102,7 +101,8 @@ export function controlPlayerSpeed(
       norm,
       disc,
       effectiveSlipstream,
-      isUsingErsInco
+      isUsingErsInco,
+      isUsingErs
     );
 
     // Situações especiais (pit lane / VSC)

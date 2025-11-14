@@ -34,7 +34,6 @@ export function resetPlayerComeBack(
   }
 
   playerList[id].canLeavePitLane = false;
-
   playerList[id].isInTheRoom = true;
   playerList[id].afk = false;
   playerList[id].afkAlert = false;
@@ -55,6 +54,7 @@ export function resetPlayerComeBack(
   playerList[id].slipDir = undefined;
   playerList[id].previousPos = { x: null, y: null };
   playerList[id].timeWhenEntered = 0;
+  playerList[id].warningShown = false;
 
   playerList[id].currentLap = finalLapsCompleted;
   playerList[id].lapChanged = false;

@@ -58,6 +58,10 @@ export function createPlayerInfo(ip?: string) {
     pitFailures: undefined,
     pitSteps: undefined,
     canLeavePitLane: true,
+    blowAtWear: 100,
+    warningAtWear: null,
+    warningIsFalse: false,
+    warningShown: false,
 
     // Recursos de corrida
     speedEnabled: false,
@@ -160,6 +164,10 @@ export function resetPlayer(
   playerList[id].gas = 100;
   playerList[id].prevGas = 100;
   playerList[id].slipstreamEndTime = undefined;
+  playerList[id].blowAtWear = 100;
+  playerList[id].warningAtWear = null;
+  playerList[id].warningIsFalse = false;
+  playerList[id].warningShown = false;
 
   playerList[id].penaltyCounter = 0;
   playerList[id].lastCheckTime = 0;

@@ -1675,4 +1675,11 @@ export const MESSAGES = {
       player: player.toString(),
     }),
   }),
+  TYRES_ABOUT_TO_BLOWN: (): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.TYRES_ABOUT_TO_BLOWN, {}),
+    es: replaceTemplateString(es_messages.TYRES_ABOUT_TO_BLOWN, {}),
+    fr: replaceTemplateString(fr_messages.TYRES_ABOUT_TO_BLOWN, {}),
+    tr: replaceTemplateString(tr_messages.TYRES_ABOUT_TO_BLOWN, {}),
+    pt: replaceTemplateString(pt_messages.TYRES_ABOUT_TO_BLOWN, {}),
+  }),
 };

@@ -2,12 +2,12 @@ import { vsc } from "../handleSpeed";
 
 import { playerList } from "../../changePlayerState/playerList";
 // import { isRaining } from "../../rain/rain";
-import { Tires } from "../../tires&pits/tires";
+import { Tires, tyresActivated } from "../../tires&pits/tires";
 import { constants } from "../constants";
 import { calculateGripForDryConditions } from "./dryCondition";
 import { calculateGripForWetConditions } from "./wetCondition";
 import { slipstreamEnabled, gasEnabled } from "../handleSlipstream";
-import { tyresActivated } from "../../commands/tyres/handleEnableTyresCommand";
+import { ersActivated, ersPenalty } from "../fuel&Ers/ers";
 
 const isRaining = false;
 
@@ -18,7 +18,8 @@ export function calculateGripMultiplierForConditions(
   norm: number,
   playerDisc: DiscPropertiesObject,
   effectiveSlipstream: number,
-  isUsingErsInco: boolean
+  isUsingErsInco: boolean,
+  isUsingErs: boolean
 ) {
   const p = playerList[player.id];
   if (playerList.inPitLane || vsc) {
@@ -31,7 +32,10 @@ export function calculateGripMultiplierForConditions(
     if (effectiveSlipstream && slipstreamEnabled) {
       grip += effectiveSlipstream;
     }
-    if (isUsingErsInco) {
+    if (isUsingErsInco && ersPenalty) {
+      grip += constants.ERS_PENALTY;
+    }
+    if (isUsingErs && !ersActivated && ersPenalty) {
       grip += constants.ERS_PENALTY;
     }
     if (gasEnabled) {
@@ -48,7 +52,10 @@ export function calculateGripMultiplierForConditions(
     if (effectiveSlipstream > 0 && slipstreamEnabled) {
       grip += effectiveSlipstream;
     }
-    if (isUsingErsInco) {
+    if (isUsingErsInco && ersPenalty) {
+      grip += constants.ERS_PENALTY;
+    }
+    if (isUsingErs && !ersActivated && ersPenalty) {
       grip += constants.ERS_PENALTY;
     }
     if (gasEnabled && p.tires != Tires.TRAIN) {

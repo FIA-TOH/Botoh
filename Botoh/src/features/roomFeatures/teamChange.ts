@@ -13,6 +13,7 @@ import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
 import { updatePlayerActivity } from "../afk/afk";
 import { followPlayerId } from "../camera/cameraFollow";
 import { moveToBox } from "../comeBackRace.ts/moveToBox";
+import { decideBlowoutPoint } from "../tires&pits/tireBlowManager";
 
 export function TeamChange(room: RoomObject) {
   room.onPlayerTeamChange = function (changedPlayer: PlayerObject) {
@@ -28,6 +29,7 @@ export function TeamChange(room: RoomObject) {
 
     if (changedPlayer.team === Teams.RUNNERS && room.getScores()) {
       handleAvatar(Situacions.ChangeTyre, changedPlayer, room);
+      decideBlowoutPoint(changedPlayer);
       if (
         room.getScores().time > 0 &&
         gameMode !== GameMode.HARD_QUALY &&
