@@ -1,3 +1,8 @@
+import {
+  gameMode,
+  GeneralGameMode,
+  generalGameMode,
+} from "../changeGameState/changeGameModes";
 import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
 import { playerList } from "../changePlayerState/playerList";
 import { sendAlertMessage, sendChatMessage } from "../chat/chat";
@@ -93,7 +98,11 @@ export function checkTireStatus(player: PlayerObject, room: RoomObject) {
   const p = playerList[player.id];
   if (!p || typeof p.blowAtWear !== "number") return;
 
-  if (!blowoutTyresActivated) return;
+  if (
+    !blowoutTyresActivated ||
+    generalGameMode !== GeneralGameMode.GENERAL_RACE
+  )
+    return;
 
   if (p.warningAtWear && p.wear >= p.warningAtWear && !p.warningShown) {
     handleAvatar(Situacions.BlowoutWarning, player, room);
