@@ -8,7 +8,6 @@ import { getRunningPlayers } from "../utils";
 import { updateGripCounter } from "../speed/grip/grip";
 import handleTireWear from "../tires&pits/handleTireWear";
 import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
-import { presentationLap } from "../commands/gameState/handlePresentationLapCommand";
 import {
   handleChangeCollisionPlayerSuzuka,
   handleChangePlayerSizeSuzuka,
@@ -18,10 +17,10 @@ import { setBallPosition } from "../camera/setBallPosition";
 import { detectPitPerTick } from "../tires&pits/performPitStop";
 import { detectCut } from "../detectCut/detectCut";
 import { GameMode, gameMode } from "../changeGameState/changeGameModes";
-import { updatePreviousPos } from "../zones/updateAccuranteTime.";
 import { kickIfQualyTimeEnded } from "../commands/gameMode/qualy/hardQualyFunctions";
 import { checkTireStatus } from "../tires&pits/tireBlowManager";
 import { mainLapCommand } from "../zones/laps/mainLapCommands";
+import { checkTrainingHourlyLog } from "../counters/checkTrainingHourlyLog";
 
 const detectCutThrottledByPlayer: Map<
   number,
@@ -42,6 +41,7 @@ export function GameTick(room: RoomObject) {
     updateGripCounter(playersAndDiscs);
     updateErs(playersAndDiscs, room);
     setBallPosition(room);
+    checkTrainingHourlyLog();
 
     if (gameMode !== GameMode.WAITING) {
       handlePitlane(playersAndDiscs, room);

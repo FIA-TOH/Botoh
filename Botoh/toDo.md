@@ -8,15 +8,8 @@ Atualizar alguns mapas
 
 # To-do rapidos
 
-Invalidar voltas para recordes, personal best e qualys quando cortar caminho
-Conseguiu sair e voltar para qualy, talvez nome diferente?
-
-ENviar resultado do training a cada X horas
-Treino reiniciar a cada X minutos
 Erro rejoin
 mensagens discord sem lag
-
-Qualy room mais potente
 
 Tentar fazer banking como o rodri falou
 Add daytonna Rodri

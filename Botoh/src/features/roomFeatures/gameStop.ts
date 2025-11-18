@@ -1,7 +1,5 @@
-import { sendChatMessage } from "../chat/chat";
 import { handleGameStateChange } from "../changeGameState/gameState";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
-import { MESSAGES } from "../chat/messages";
 import { resetPlayers } from "../changePlayerState/players";
 
 // import { rainEnabled, resetAllRainEvents, setRainChances } from "../rain/rain";
@@ -17,13 +15,10 @@ import {
   generalGameMode,
   GeneralGameMode,
 } from "../changeGameState/changeGameModes";
-import {
-  clearPlayers,
-  getPlayersOrderedByQualiTime,
-} from "../changeGameState/qualy/playerTime";
+import { clearPlayers } from "../changeGameState/qualy/playerTime";
 import { printAllTimes } from "../changeGameState/qualy/printAllTimes";
 import { reorderPlayersInRoomRace } from "../movePlayers/reorderPlayersInRoom";
-import { getTimestamp, timerController } from "../utils";
+import { timerController } from "../utils";
 import { printAllPositions } from "../changeGameState/race/printAllPositions";
 import { log } from "../discord/logger";
 import { changeLaps } from "../commands/adminThings/handleChangeLaps";
@@ -31,13 +26,12 @@ import { handleRREnabledCommand } from "../commands/adminThings/handleRREnabledC
 import { handleFlagCommand } from "../commands/flagsAndVSC/handleFlagCommand";
 import { clearPlayerBuffAndNerfLists } from "../commands/adjustThings/handleNerfListCommand";
 import PublicGameFlow from "../changeGameState/publicGameFlow/publicGameFLow";
-import { sendDiscordFile, sendDiscordReplay } from "../discord/discord";
+import { sendDiscordReplay } from "../discord/discord";
 import {
   sendQualiResultsToDiscord,
   sendRaceResultsToDiscord,
 } from "../discord/logResults";
 import { gameStarted, setGameStarted } from "./gameTick";
-import { positionList } from "../changeGameState/race/positionList";
 import { sendDiscordMessage } from "../discord/sendDiscordLink";
 import { clearPlayersLeftInfo } from "../comeBackRace.ts/comeBackToRaceFunctions";
 import { clearRRPosition } from "../commands/adminThings/handleRRPositionCommand";
