@@ -9,13 +9,14 @@ Atualizar alguns mapas
 # To-do rapidos
 
 Cut penalty só depois q bota !tmode ou !qmode depois de selecionar mapa
-E o somatorio das % de estourar o pneu q nao tao dando 100%
 Conseguiu sair e voltar para qualy, talvez nome diferente?
 
 ENviar resultado do training a cada X horas
 Treino reiniciar a cada X minutos
 Erro rejoin
 mensagens discord sem lag
+
+Qualy room mais potente
 
 Tentar fazer banking como o rodri falou
 Add daytonna Rodri

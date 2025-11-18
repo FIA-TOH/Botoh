@@ -85,7 +85,7 @@ export function handleMoveToBoxCommand(
     return false;
   }
 
-  const playerPad = getPlayerById(byPlayer.id, room);
+  const playerPad = getPlayerById(playerId, room);
 
   if (!playerPad) {
     room.sendAnnouncement("❌ Player not found.", byPlayer.id, 0xff0000);
