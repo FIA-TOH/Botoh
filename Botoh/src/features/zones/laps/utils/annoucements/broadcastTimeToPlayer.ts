@@ -1,8 +1,8 @@
-import { playerList } from "../../changePlayerState/playerList";
-import { sendSuccessMessage } from "../../chat/chat";
-import { MESSAGES } from "../../chat/messages";
-import { getPlayerAndDiscs } from "../../playerFeatures/getPlayerAndDiscs";
-import { getPlayerByName } from "../../playerFeatures/getPlayerBy";
+import { playerList } from "../../../../changePlayerState/playerList";
+import { sendSuccessMessage } from "../../../../chat/chat";
+import { MESSAGES } from "../../../../chat/messages";
+import { getPlayerAndDiscs } from "../../../../playerFeatures/getPlayerAndDiscs";
+import { getPlayerByName } from "../../../../playerFeatures/getPlayerBy";
 
 export async function broadcastLapTimeToPlayers(
   room: RoomObject,

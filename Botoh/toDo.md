@@ -8,6 +8,7 @@ Atualizar alguns mapas
 
 # To-do rapidos
 
+Invalidar voltas para recordes, personal best e qualys quando cortar caminho
 Conseguiu sair e voltar para qualy, talvez nome diferente?
 
 ENviar resultado do training a cada X horas

@@ -75,6 +75,7 @@ export function createPlayerInfo(ip?: string) {
     penaltyCounter: 0,
     alertSent: {},
     lastCheckTime: 0,
+    cuttedTheTrackOnThisLap: false,
 
     // Preferências e estado geral
     language: DEFAULT_LANGUAGE,
@@ -179,6 +180,7 @@ export function resetPlayer(
 
   playerList[id].cutPenaltyEndTime = undefined;
   playerList[id].cutPenaltyMultiplier = 1;
+  playerList[id].cuttedTrackOnThisLap = false;
   handleAvatar(Situacions.ChangeTyre, player, room);
 
   playerList[id].lastDir = undefined;

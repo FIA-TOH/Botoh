@@ -1,6 +1,6 @@
 import { getRunningPlayers, inHitbox } from "../utils";
 import { playerList } from "../changePlayerState/playerList";
-import { CIRCUITS, currentMapIndex } from "./maps";
+import { CIRCUITS, currentMapIndex } from "../zones/maps";
 import { log } from "../discord/logger";
 
 function ifInDRSStartZone(
