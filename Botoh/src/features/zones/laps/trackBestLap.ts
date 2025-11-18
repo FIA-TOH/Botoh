@@ -17,8 +17,12 @@ export function getBestLap(): BestLapInfo {
 export function trySetBestLap(
   playerName: string,
   lapTime: number,
-  lapNumber: number
+  lapNumber: number,
+  validLap: boolean
 ): boolean {
+  if (validLap === false) {
+    return false;
+  }
   if (!bestLap || lapTime < bestLap.lapTime) {
     bestLap = { playerName, lapTime, lapNumber };
     return true;

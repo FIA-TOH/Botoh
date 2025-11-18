@@ -15,8 +15,6 @@ const DEFAULT_PENALTY_PUBLIC = 5;
 const DEFAULT_PENALTY_LEAGUE = 2;
 
 function decidePenalty(seg: any) {
-  console.log(generalGameMode);
-
   const PENALTY =
     LEAGUE_MODE && generalGameMode === GeneralGameMode.GENERAL_RACE
       ? DEFAULT_PENALTY_LEAGUE

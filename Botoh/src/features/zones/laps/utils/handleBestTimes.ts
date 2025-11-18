@@ -23,7 +23,7 @@ export function handleBestTimes(
   const playerData = playerList[p.id];
   const bestTimeP = serialize(playerData.bestTime);
 
-  if (lapTime < circuitBestTime) {
+  if (playerData.lastLapValid && lapTime < circuitBestTime) {
     updateBestTime(ACTUAL_CIRCUIT.info.name, lapTime, p.name);
     playerData.bestTime = lapTime;
 
@@ -33,20 +33,35 @@ export function handleBestTimes(
     return;
   }
 
-  if (isFastestLapRace) {
+  if (playerData.lastLapValid && isFastestLapRace) {
     sendBestTimeRace(room, MESSAGES.FASTEST_LAP(p.name, lapTime));
   }
 
-  if (lapTime < bestTimeP || bestTimeP === undefined) {
+  if (
+    (playerData.lastLapValid && lapTime < bestTimeP) ||
+    (playerData.lastLapValid && bestTimeP === undefined)
+  ) {
     sendSuccessMessage(room, MESSAGES.LAP_TIME(lapTime), p.id);
     playerData.bestTime = lapTime;
 
     broadcastLapTimeToPlayers(room, lapTime, p.name);
     updatePlayerTime(p.name, lapTime, p.id, playerData.leagueTeam);
   } else {
+    console.log("bestTimeP:", bestTimeP, "lapTime:", lapTime);
+
+    const MAX_REASONABLE_LAP = 600; // 10 minutes
+
+    const isValidBestTime =
+      typeof bestTimeP === "number" &&
+      isFinite(bestTimeP) &&
+      bestTimeP > 0 &&
+      bestTimeP < MAX_REASONABLE_LAP;
+
+    const differenceToBestTime = isValidBestTime ? lapTime - bestTimeP : 0;
+
     sendWorseTime(
       room,
-      MESSAGES.WORSE_TIME(lapTime, serialize(lapTime - bestTimeP)),
+      MESSAGES.WORSE_TIME(lapTime, serialize(differenceToBestTime)),
       p.id
     );
 

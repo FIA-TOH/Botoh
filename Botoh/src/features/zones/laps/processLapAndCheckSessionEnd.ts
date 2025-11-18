@@ -64,7 +64,9 @@ function handleRaceLap(
 }
 
 function handleQualyLap(p: PlayerObject, room: RoomObject) {
-  showPlayerQualiPosition(room, p.id);
+  if (playerList[p.id].lastLapValid) {
+    showPlayerQualiPosition(room, p.id);
+  }
 
   if (gameMode === GameMode.HARD_QUALY) {
     return;

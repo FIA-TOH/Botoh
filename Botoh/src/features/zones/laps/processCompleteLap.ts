@@ -14,6 +14,8 @@ import { handleBestTimes } from "./utils/handleBestTimes";
 import { handleHardQualiAttempts } from "../../commands/gameMode/qualy/hardQualyFunctions";
 import { announceSectorTimes } from "./utils/annoucements/annouceSectorTimes";
 import { annouceTyreWear } from "./utils/annoucements/annouceTyreWear";
+import { InvalidateLap } from "../../detectCut/invalidateLap";
+import { log } from "../../discord/logger";
 
 export function processCompletedLap(
   pad: { p: PlayerObject; disc: DiscPropertiesObject },
@@ -31,14 +33,17 @@ export function processCompletedLap(
     ACTUAL_CIRCUIT.info.name
   );
   if (!abbreviatedTrackName)
-    return console.log("No circuit abreviated track name found");
+    return log("No circuit abreviated track name found");
+
+  InvalidateLap(playerData, room, p);
 
   const circuitBestTime = getBestTime(ACTUAL_CIRCUIT.info.name);
-  if (!circuitBestTime) return console.log("No circuit best time found");
+  if (!circuitBestTime) return log("No circuit best time found");
   const isFastestLapRace = trySetBestLap(
     p.name,
     lapTime,
-    playerData.currentLap - 1
+    playerData.currentLap - 1,
+    playerData.lastLapValid ?? true
   );
 
   handleBestTimes(room, p, lapTime, circuitBestTime[0], isFastestLapRace);
