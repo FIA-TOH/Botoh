@@ -7,6 +7,7 @@ import { handleRREnabledCommand } from "../commands/adminThings/handleRREnabledC
 import { enableGas, enableSlipstream } from "../speed/handleSlipstream";
 import { enableTyres } from "../tires&pits/tires";
 import { laps } from "../zones/laps";
+import { CIRCUITS, currentMapIndex } from "../zones/maps";
 import { qualiTime, raceTime } from "./qualy/qualiMode";
 
 export enum GameMode {
@@ -32,20 +33,32 @@ export function changeGameMode(newMode: GameMode, room: RoomObject) {
   const timeLimit = newMode === GameMode.QUALY ? qualiTime : raceTime;
   room.setTimeLimit(timeLimit);
 
+  let result;
+
   switch (newMode) {
     case GameMode.QUALY:
-      return handleQualyMode(room);
+      result = handleQualyMode(room);
+      break;
     case GameMode.TRAINING:
-      return handleTrainingMode(room);
+      result = handleTrainingMode(room);
+      break;
     case GameMode.INDY:
-      return handleIndyMode(room);
+      result = handleIndyMode(room);
+      break;
     case GameMode.WAITING:
-      return handleWaintingRoom(room);
+      result = handleWaintingRoom(room);
+      break;
     case GameMode.RACE:
-      return handleRaceMode(room);
+      result = handleRaceMode(room);
+      break;
     case GameMode.HARD_QUALY:
-      return handleHardQualyMode(room);
+      result = handleHardQualyMode(room);
+      break;
   }
+
+  room.setCustomStadium(CIRCUITS[currentMapIndex].map);
+
+  return result;
 }
 
 export function changeGeneralGameMode(newGeneralMode: GeneralGameMode) {

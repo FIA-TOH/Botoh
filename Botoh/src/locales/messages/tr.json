@@ -146,5 +146,6 @@
   "CANNOT_LEAVE_BOX": "⛔ Henüz pit alanından çıkamazsınız!",
   "WHO_IS_AFK_SECTORS": "{{player}} {{sector}} sektöründe afk",
   "WHO_IS_AFK": "{{player}} afk sektörde",
-  "TYRES_ABOUT_TO_BLOWN": "⚠️🛞 BOX BOX! Lastikte ciddi tanelenme graining — Her an patlama riski var — box, box! 🛞⚠️"
+  "TYRES_ABOUT_TO_BLOWN": "⚠️🛞 BOX BOX! Lastikte ciddi tanelenme graining — Her an patlama riski var — box, box! 🛞⚠️",
+  "INVALID_LAP_CUT": "Yol kesme nedeniyle geçersiz tur."
 }

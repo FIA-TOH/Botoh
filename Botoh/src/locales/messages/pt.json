@@ -148,5 +148,6 @@
   "CANNOT_LEAVE_BOX": "⛔ Você não pode sair do box ainda!",
   "WHO_IS_AFK_SECTORS": "{{player}} está afk no setor {{sector}}",
   "WHO_IS_AFK": "{{player}} está afk no setor",
-  "TYRES_ABOUT_TO_BLOWN": "⚠️🛞 BOX BOX! Estamos vendo muito graining — Possível estouro de pneu a qualquer momento — box, box! 🛞⚠️"
+  "TYRES_ABOUT_TO_BLOWN": "⚠️🛞 BOX BOX! Estamos vendo muito graining — Possível estouro de pneu a qualquer momento — box, box! 🛞⚠️",
+  "INVALID_LAP_CUT": "Volta inválida devido a corte de pista."
 }

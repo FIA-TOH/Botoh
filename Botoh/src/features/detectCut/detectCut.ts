@@ -1,16 +1,12 @@
 import { Circuit, CutSegment } from "../../circuits/Circuit";
 import {
-  GameMode,
-  gameMode,
   generalGameMode,
   GeneralGameMode,
 } from "../changeGameState/changeGameModes";
 import { sendAlertMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
-import { sendDiscordCutTrack } from "../discord/discord";
 import { log } from "../discord/logger";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
-import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { getTimestamp } from "../utils";
 import { applyCutPenalty } from "./applyCutPenalty";
 

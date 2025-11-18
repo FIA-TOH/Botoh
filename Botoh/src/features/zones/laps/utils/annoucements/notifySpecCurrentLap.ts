@@ -1,8 +1,8 @@
-import { printAllPositions } from "../../changeGameState/race/printAllPositions";
-import { Teams } from "../../changeGameState/teams";
-import { sendChatMessage } from "../../chat/chat";
-import { MESSAGES } from "../../chat/messages";
-import { laps } from "../laps";
+import { printAllPositions } from "../../../../changeGameState/race/printAllPositions";
+import { Teams } from "../../../../changeGameState/teams";
+import { sendChatMessage } from "../../../../chat/chat";
+import { MESSAGES } from "../../../../chat/messages";
+import { laps } from "../../../laps";
 
 export function notifySpectatorsCurrentLap(
   room: RoomObject,

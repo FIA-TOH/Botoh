@@ -88,6 +88,8 @@ export interface PlayerInfo {
 
   cutPenaltyEndTime?: number;
   cutPenaltyMultiplier?: number;
+  cuttedTrackOnThisLap?: boolean;
+  lastLapValid?: boolean;
 
   lastDir?: Direction;
   slipTicks?: number;

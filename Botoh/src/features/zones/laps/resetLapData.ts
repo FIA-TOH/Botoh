@@ -23,4 +23,6 @@ export function resetLapData(
   playerData.sectorTime = [];
   playerData.currentSector = 1;
   playerList[playerId].totalTime = room.getScores().time;
+  playerData.cuttedTrackOnThisLap = false;
+  playerData.lastLapValid = true;
 }

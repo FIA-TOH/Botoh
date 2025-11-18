@@ -1682,4 +1682,11 @@ export const MESSAGES = {
     tr: replaceTemplateString(tr_messages.TYRES_ABOUT_TO_BLOWN, {}),
     pt: replaceTemplateString(pt_messages.TYRES_ABOUT_TO_BLOWN, {}),
   }),
+  INVALID_LAP_CUT: (): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.INVALID_LAP_CUT, {}),
+    es: replaceTemplateString(es_messages.INVALID_LAP_CUT, {}),
+    fr: replaceTemplateString(fr_messages.INVALID_LAP_CUT, {}),
+    tr: replaceTemplateString(tr_messages.INVALID_LAP_CUT, {}),
+    pt: replaceTemplateString(pt_messages.INVALID_LAP_CUT, {}),
+  }),
 };
