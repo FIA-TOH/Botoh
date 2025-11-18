@@ -8,7 +8,6 @@ Atualizar alguns mapas
 
 # To-do rapidos
 
-Cut penalty só depois q bota !tmode ou !qmode depois de selecionar mapa
 Conseguiu sair e voltar para qualy, talvez nome diferente?
 
 ENviar resultado do training a cada X horas
