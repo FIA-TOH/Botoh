@@ -8,6 +8,9 @@ Atualizar alguns mapas
 
 # To-do rapidos
 
+cut track annoucement e desabilitar penalziacao comando
+detritos
+
 Erro rejoin
 mensagens discord sem lag
 
@@ -20,7 +23,7 @@ Damping modifier
 Rain system
 Crash system
 Car broken system
-Auto yellow flag system
+Auto yellow flag system and safety car commands
 New tyres
 P&D
 API para fazer gráfico de posicão

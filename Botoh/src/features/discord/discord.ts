@@ -260,9 +260,22 @@ export function sendDiscordGeneralChatQualy(message: string) {
 
 export function sendDiscordCutTrack(message: string) {
   try {
-    const codeMessage = "```" + message + "```";
-    safeSend(CUT_TRACK_URL, { content: codeMessage }, "CUT_TRACK_DETECTOR");
+    safeSend(CUT_TRACK_URL, { content: message }, "CUT_TRACK_DETECTOR");
   } catch (err) {
     console.error("❌ [sendDiscordCutTrack ERROR]:", err);
   }
+}
+
+export function splitCutMessageIntoSafeBlocks(
+  msg: string,
+  size = 1900
+): string[] {
+  const parts: string[] = [];
+
+  for (let i = 0; i < msg.length; i += size) {
+    const chunk = msg.slice(i, i + size);
+    parts.push("```" + chunk + "```");
+  }
+
+  return parts;
 }

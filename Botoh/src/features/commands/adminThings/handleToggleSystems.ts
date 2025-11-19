@@ -1,6 +1,7 @@
 import { setGhostMode } from "../../changePlayerState/ghost";
 import { sendErrorMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
+import { enableCutPenalty } from "../../detectCut/enableCutPenalty";
 import { log } from "../../discord/logger";
 import { enableErs, enableErsPenalty } from "../../speed/fuel&Ers/ers";
 import { enableGas, enableSlipstream } from "../../speed/handleSlipstream";
@@ -17,6 +18,7 @@ export enum ToggleableSystems {
   TYRES_BLOWOUT = "tyres_blowout",
   ERS = "ers",
   ERS_PENALTY = "ers_penalty",
+  CUT_PENALTY = "cut_penalty",
 }
 
 export function handleToggleSystems(
@@ -39,11 +41,12 @@ export function handleToggleSystems(
     system !== ToggleableSystems.RR &&
     system !== ToggleableSystems.TYRES_BLOWOUT &&
     system !== ToggleableSystems.ERS &&
-    system !== ToggleableSystems.ERS_PENALTY
+    system !== ToggleableSystems.ERS_PENALTY &&
+    system !== ToggleableSystems.CUT_PENALTY
   ) {
     room.sendAnnouncement(`System "${args[0]}" does not exist.`, byPlayer.id);
     room.sendAnnouncement(
-      `Try "slipstream", "tyres", "gas", "ghost", "rr", "tyres_blowout", "ers" or "ers_penalty".`,
+      `Try "slipstream", "tyres", "gas", "ghost", "rr", "tyres_blowout", "ers", "cut_penalty" or "ers_penalty".`,
       byPlayer.id
     );
     return;
@@ -128,6 +131,16 @@ export function handleToggleSystems(
       log(`Ers penalty mode enabled by ${byPlayer.name}`);
       room.sendAnnouncement("Ers penalty mode!");
       enableErsPenalty(true);
+    }
+  } else if (system === ToggleableSystems.CUT_PENALTY) {
+    if (boolean === "false") {
+      log(`Cut penalty mode disabled by ${byPlayer.name}`);
+      room.sendAnnouncement("No Cut penalty mode!");
+      enableCutPenalty(false);
+    } else {
+      log(`Cut penalty mode enabled by ${byPlayer.name}`);
+      room.sendAnnouncement("Cut penalty mode!");
+      enableCutPenalty(true);
     }
   }
 }

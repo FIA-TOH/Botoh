@@ -35,6 +35,10 @@ import { gameStarted, setGameStarted } from "./gameTick";
 import { sendDiscordMessage } from "../discord/sendDiscordLink";
 import { clearPlayersLeftInfo } from "../comeBackRace.ts/comeBackToRaceFunctions";
 import { clearRRPosition } from "../commands/adminThings/handleRRPositionCommand";
+import {
+  clearCutTrackStorage,
+  sendAllCutsToDiscord,
+} from "../detectCut/cutsOfTracksStorage";
 
 let replayData: Uint8Array | null = null;
 
@@ -92,6 +96,7 @@ export function GameStop(room: RoomObject) {
           changeLaps("7", undefined, room);
           resetPlayers(room);
           handleRREnabledCommand(undefined, ["false"], room);
+          sendAllCutsToDiscord();
         } else if (gameMode == GameMode.TRAINING) {
           sendQualiResultsToDiscord();
           printAllTimes(room);
@@ -105,6 +110,7 @@ export function GameStop(room: RoomObject) {
           movePlayersToCorrectSide();
           resetPlayers(room);
           sendDiscordMessage(room);
+          sendAllCutsToDiscord();
         }
       }
       clearPlayers();
@@ -117,5 +123,6 @@ export function GameStop(room: RoomObject) {
     clearPlayerBuffAndNerfLists();
     clearPlayersLeftInfo();
     clearRRPosition();
+    clearCutTrackStorage();
   };
 }

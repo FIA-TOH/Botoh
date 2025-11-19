@@ -3,12 +3,16 @@ import {
   generalGameMode,
   GeneralGameMode,
 } from "../changeGameState/changeGameModes";
+import { playerList } from "../changePlayerState/playerList";
 import { sendAlertMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { log } from "../discord/logger";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
-import { getTimestamp } from "../utils";
+import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
+import { formatRaceTime, getTimestamp } from "../utils";
 import { applyCutPenalty } from "./applyCutPenalty";
+import { addCutTrackToStorage } from "./cutsOfTracksStorage";
+import { detectCutEnabled } from "./enableCutPenalty";
 
 const SEGMENT_CUT_COLOUR = "696969";
 const DEFAULT_PENALTY_PUBLIC = 5;
@@ -98,6 +102,7 @@ export function detectCut(
   pad: { p: PlayerObject; disc: { x: number; y: number; radius: number } },
   room: RoomObject
 ) {
+  if (!detectCutEnabled) return;
   if (!pad.disc) return;
 
   const playerId = pad.p.id;
@@ -123,16 +128,19 @@ export function detectCut(
       ) {
         realPeanlty = decidePenalty(seg) / 2;
       }
-      // sendDiscordCutTrack(
-      //   `${pad.p.name} cutted the track at ${getTimestamp()} -$ ${
-      //     ACTUAL_CIRCUIT.info.name
-      //   }`
-      // );
+
       log(`${pad.p.name} cutted the track at ${getTimestamp()}`);
       sendAlertMessage(room, MESSAGES.CUTTED_TRACK(realPeanlty || 5), pad.p.id);
 
       lastSet.add(seg.index);
       applyCutPenalty(pad, realPeanlty || 5, room);
+      addCutTrackToStorage({
+        trackName: ACTUAL_CIRCUIT.info.name,
+        cutLap: playerList[pad.p.id].currentLap,
+        cutTime: formatRaceTime(room.getScores().time),
+        cutSectors: playerList[pad.p.id].currentSector,
+        playerName: pad.p.name,
+      });
     }
 
     if (dist >= pad.disc.radius && lastSet.has(seg.index)) {
