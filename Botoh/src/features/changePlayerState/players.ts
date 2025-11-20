@@ -12,7 +12,7 @@ export function createPlayerInfo(ip?: string) {
     isInTheRoom: true,
     afk: false,
     afkAlert: false,
-    leagueTeam: null,
+    leagueScuderia: null,
     didHardQualy: false,
 
     // Propriedades de corrida e volta

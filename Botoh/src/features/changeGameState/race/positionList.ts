@@ -40,7 +40,7 @@ export function updatePositionList(
       lap: playerData.currentLap,
       active: true,
       currentSector: playerData.currentSector,
-      team: playerData.leagueTeam,
+      team: playerData.leagueScuderia,
     };
 
     // Atualiza ou adiciona o jogador na lista de posições

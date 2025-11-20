@@ -50,7 +50,7 @@ export function PlayerLeave(room: RoomObject) {
           id: player.id,
           name: player.name,
           ip: playerObj.ip,
-          leagueTeam: playerObj.leagueTeam,
+          leagueScuderia: playerObj.leagueScuderia,
           didHardQualy: playerObj.didHardQualy,
           totalTime: playerObj.totalTime,
           bestTime: playerObj.bestTime,

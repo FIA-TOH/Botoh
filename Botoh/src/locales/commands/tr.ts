@@ -242,12 +242,12 @@ export default function tr_commands(
     args: string[],
     room: RoomObject
   ) => void,
-  handleSetTeam: (
+  handleSetScuderia: (
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject
   ) => void,
-  handleSeeTeams: (
+  handleSeeScuderias: (
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject
@@ -365,8 +365,8 @@ export default function tr_commands(
     "!nerf": handleNerfListCommand,
     "!presentation": handlePresentationLapCommand,
     "!constants": handleChangePropierties,
-    "!team": handleSetTeam,
-    "!takimlari_goster": handleSeeTeams,
+    "!team": handleSetScuderia,
+    "!takimlari_goster": handleSeeScuderias,
     "!discord": handleDiscordCommand,
     "!camera_properties": handleCameraProperties,
     "!camera_id": handleCameraPlayerFollow,

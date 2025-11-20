@@ -242,12 +242,12 @@ export default function pt_commands(
     args: string[],
     room: RoomObject
   ) => void,
-  handleSetTeam: (
+  handleSetScuderia: (
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject
   ) => void,
-  handleSeeTeams: (
+  handleSeeScuderias: (
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject
@@ -368,8 +368,8 @@ export default function pt_commands(
     "!nerf": handleNerfListCommand,
     "!presentation": handlePresentationLapCommand,
     "!constants": handleChangePropierties,
-    "!team": handleSetTeam,
-    "!ver_times": handleSeeTeams,
+    "!team": handleSetScuderia,
+    "!ver_times": handleSeeScuderias,
     "!discord": handleDiscordCommand,
     "!camera_properties": handleCameraProperties,
     "!camera_id": handleCameraPlayerFollow,
