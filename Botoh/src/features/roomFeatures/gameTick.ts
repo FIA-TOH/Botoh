@@ -21,6 +21,7 @@ import { kickIfQualyTimeEnded } from "../commands/gameMode/qualy/hardQualyFuncti
 import { checkTireStatus } from "../tires&pits/tireBlowManager";
 import { mainLapCommand } from "../zones/laps/mainLapCommands";
 import { checkTrainingHourlyLog } from "../counters/checkTrainingHourlyLog";
+import { updateDebrisTouch } from "../debris/detectCollisionDebris";
 
 const detectCutThrottledByPlayer: Map<
   number,
@@ -42,6 +43,7 @@ export function GameTick(room: RoomObject) {
     updateErs(playersAndDiscs, room);
     setBallPosition(room);
     checkTrainingHourlyLog();
+    updateDebrisTouch(room);
 
     if (gameMode !== GameMode.WAITING) {
       handlePitlane(playersAndDiscs, room);

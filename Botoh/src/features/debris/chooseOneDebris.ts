@@ -2,7 +2,7 @@ import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { teleportDisc } from "../cameraAndBall/teleportDisc";
 import { log } from "../discord/logger";
 
-let usedDebrisDiscs: number[] = [];
+export let usedDebrisDiscs: number[] = [];
 
 export function resetDebrisUsedList() {
   usedDebrisDiscs = [];
@@ -49,8 +49,4 @@ export function chooseOneDebris(room: RoomObject, playerId: number) {
   }
 
   teleportDisc(room, availableDisc.realIndex, playerDisc);
-
-  log(
-    `[Debris] Disc ${availableDisc.realIndex} (292929) moved to ${player.name} (id=${playerId}).`
-  );
 }

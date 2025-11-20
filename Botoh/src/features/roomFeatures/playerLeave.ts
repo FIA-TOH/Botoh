@@ -78,14 +78,14 @@ export function PlayerLeave(room: RoomObject) {
 
           leftAt: new Date().toISOString(),
         };
-        console.log(
-          "LEFT SAVE",
-          player.name,
-          "lapsCompletedWhenLeft",
-          lapsCompleted,
-          "lapsBehind",
-          playerObj.currentLap - firstPlacePlayerLap
-        );
+        // console.log(
+        //   "LEFT SAVE",
+        //   player.name,
+        //   "lapsCompletedWhenLeft",
+        //   lapsCompleted,
+        //   "lapsBehind",
+        //   playerObj.currentLap - firstPlacePlayerLap
+        // );
 
         addPlayerLeftInfo(playerLeft);
       }
