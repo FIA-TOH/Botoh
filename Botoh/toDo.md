@@ -8,8 +8,6 @@ Atualizar alguns mapas
 
 # To-do rapidos
 
-debrisos
-
 Erro rejoin
 mensagens discord sem lag
 

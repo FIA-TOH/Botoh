@@ -2,9 +2,10 @@ import { teleportDisc } from "../cameraAndBall/teleportDisc";
 import { log } from "../discord/logger";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { resetDebrisUsedList } from "./chooseOneDebris";
+import { debrisEnabled } from "./enableDebris";
 
 export function clearDebris(room: RoomObject) {
-  if (ACTUAL_CIRCUIT.info.haveDebris === false) {
+  if (ACTUAL_CIRCUIT.info.haveDebris === false && debrisEnabled === false) {
     return;
   }
   const mapJson = JSON.parse(ACTUAL_CIRCUIT.map) as { discs: any[] };

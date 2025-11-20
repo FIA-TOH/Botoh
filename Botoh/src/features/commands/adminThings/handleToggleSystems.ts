@@ -1,6 +1,7 @@
 import { setGhostMode } from "../../changePlayerState/ghost";
 import { sendErrorMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
+import { enableDebris } from "../../debris/enableDebris";
 import { enableCutPenalty } from "../../detectCut/enableCutPenalty";
 import { log } from "../../discord/logger";
 import { enableErs, enableErsPenalty } from "../../speed/fuel&Ers/ers";
@@ -19,6 +20,7 @@ export enum ToggleableSystems {
   ERS = "ers",
   ERS_PENALTY = "ers_penalty",
   CUT_PENALTY = "cut_penalty",
+  DEBRIS = "debris",
 }
 
 export function handleToggleSystems(
@@ -42,11 +44,12 @@ export function handleToggleSystems(
     system !== ToggleableSystems.TYRES_BLOWOUT &&
     system !== ToggleableSystems.ERS &&
     system !== ToggleableSystems.ERS_PENALTY &&
-    system !== ToggleableSystems.CUT_PENALTY
+    system !== ToggleableSystems.CUT_PENALTY &&
+    system !== ToggleableSystems.DEBRIS
   ) {
     room.sendAnnouncement(`System "${args[0]}" does not exist.`, byPlayer.id);
     room.sendAnnouncement(
-      `Try "slipstream", "tyres", "gas", "ghost", "rr", "tyres_blowout", "ers", "cut_penalty" or "ers_penalty".`,
+      `Try "slipstream", "tyres", "gas", "ghost", "rr", "tyres_blowout", "ers", "cut_penalty", "debris" or "ers_penalty".`,
       byPlayer.id
     );
     return;
@@ -63,31 +66,31 @@ export function handleToggleSystems(
   if (system === ToggleableSystems.SLIPSTREAM) {
     if (boolean === "false") {
       log(`Slipstream mode disabled by ${byPlayer.name}`);
-      room.sendAnnouncement("No Slipstream mode!", byPlayer.id);
+      room.sendAnnouncement("Slipstream disabled!", byPlayer.id);
       enableSlipstream(false);
     } else {
       log(`Slipstream mode enabled by ${byPlayer.name}`);
-      room.sendAnnouncement("Slipstream mode!");
+      room.sendAnnouncement("Slipstream enabled!");
       enableSlipstream(true);
     }
   } else if (system === ToggleableSystems.TYRES) {
     if (boolean === "false") {
       log(`Tyres mode disabled by ${byPlayer.name}`);
-      room.sendAnnouncement("No Tyres mode!");
+      room.sendAnnouncement("Tyres disabled!");
       enableTyres(false);
     } else {
       log(`Tyres mode enabled by ${byPlayer.name}`);
-      room.sendAnnouncement("Tyres mode!");
+      room.sendAnnouncement("Tyres enabled!");
       enableTyres(true);
     }
   } else if (system === ToggleableSystems.GAS) {
     if (boolean === "false") {
       log(`Gas mode disabled by ${byPlayer.name}`);
-      room.sendAnnouncement("No Gas mode!");
+      room.sendAnnouncement("Gas disabled!");
       enableGas(false);
     } else {
       log(`Gas mode enabled by ${byPlayer.name}`);
-      room.sendAnnouncement("Tyres mode!");
+      room.sendAnnouncement("Gas enabled!");
       enableGas(true);
     }
   } else if (system === ToggleableSystems.GHOST) {
@@ -105,42 +108,52 @@ export function handleToggleSystems(
   } else if (system === ToggleableSystems.TYRES_BLOWOUT) {
     if (boolean === "false") {
       log(`Tyres blowout mode disabled by ${byPlayer.name}`);
-      room.sendAnnouncement("No Tyres blowout mode!");
+      room.sendAnnouncement("Tyres blowout disabled!");
       setBlowoutTyresActivated(false);
     } else {
       log(`Tyres blowout mode enabled by ${byPlayer.name}`);
-      room.sendAnnouncement("Tyres blowout mode!");
+      room.sendAnnouncement("Tyres blowout enabled!");
       setBlowoutTyresActivated(true);
     }
   } else if (system === ToggleableSystems.ERS) {
     if (boolean === "false") {
       log(`Ers mode disabled by ${byPlayer.name}`);
-      room.sendAnnouncement("No Ers mode!");
+      room.sendAnnouncement("Ers disabled!");
       enableErs(false);
     } else {
       log(`Ers mode enabled by ${byPlayer.name}`);
-      room.sendAnnouncement("Ers mode!");
+      room.sendAnnouncement("Ers enabled!");
       enableErs(true);
     }
   } else if (system === ToggleableSystems.ERS_PENALTY) {
     if (boolean === "false") {
       log(`Ers penalty mode disabled by ${byPlayer.name}`);
-      room.sendAnnouncement("No Ers penalty mode!");
+      room.sendAnnouncement("Ers penalty disabled!");
       enableErsPenalty(false);
     } else {
       log(`Ers penalty mode enabled by ${byPlayer.name}`);
-      room.sendAnnouncement("Ers penalty mode!");
+      room.sendAnnouncement("Ers penalty enabled!");
       enableErsPenalty(true);
     }
   } else if (system === ToggleableSystems.CUT_PENALTY) {
     if (boolean === "false") {
       log(`Cut penalty mode disabled by ${byPlayer.name}`);
-      room.sendAnnouncement("No Cut penalty mode!");
+      room.sendAnnouncement("Cut penalty disabled!");
       enableCutPenalty(false);
     } else {
       log(`Cut penalty mode enabled by ${byPlayer.name}`);
-      room.sendAnnouncement("Cut penalty mode!");
+      room.sendAnnouncement("Cut penalty enabled!");
       enableCutPenalty(true);
+    }
+  } else if (system === ToggleableSystems.DEBRIS) {
+    if (boolean === "false") {
+      log(`Debris mode disabled by ${byPlayer.name}`);
+      room.sendAnnouncement("Debris disabled!");
+      enableDebris(false);
+    } else {
+      log(`Debris mode enabled by ${byPlayer.name}`);
+      room.sendAnnouncement("Debris enabled!");
+      enableDebris(true);
     }
   }
 }
