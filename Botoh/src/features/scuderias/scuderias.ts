@@ -1,9 +1,9 @@
-export interface LeagueTeam {
+export interface leagueScuderia {
   name: string;
   tag: string;
   color: number;
 }
-export enum TeamColors {
+export enum ScuderiaColors {
   PENSHIRYU = 0xb45568,
   ASTONMAIA = 0x059988,
   RUBYBISON = 0x4458a2,
@@ -26,105 +26,105 @@ export enum TeamColors {
   PHM = 0x5ef102,
 }
 
-export const LeagueTeam: { [key: string]: LeagueTeam } = {
+export const leagueScuderia: { [key: string]: leagueScuderia } = {
   Penshiryu: {
     name: "Penshiryu",
     tag: "PE",
-    color: TeamColors.PENSHIRYU,
+    color: ScuderiaColors.PENSHIRYU,
   },
   AstonMaia: {
     name: "Aston Maia",
     tag: "AM",
-    color: TeamColors.ASTONMAIA,
+    color: ScuderiaColors.ASTONMAIA,
   },
   RubyBison: {
     name: "Ruby Bison",
     tag: "RB",
-    color: TeamColors.RUBYBISON,
+    color: ScuderiaColors.RUBYBISON,
   },
   McLarper: {
     name: "McLarper",
     tag: "MC",
-    color: TeamColors.MCLARPER,
+    color: ScuderiaColors.MCLARPER,
   },
   Haax: {
     name: "Haax",
     tag: "HX",
-    color: TeamColors.HAAX,
+    color: ScuderiaColors.HAAX,
   },
   MotorForce: {
     name: "BMW MotorForce",
     tag: "MF",
-    color: TeamColors.MOTORFORCE,
+    color: ScuderiaColors.MOTORFORCE,
   },
   SART: {
     name: "SART",
     tag: "SA",
-    color: TeamColors.SART,
+    color: ScuderiaColors.SART,
   },
   Konardi: {
     name: "Konardi",
     tag: "KO",
-    color: TeamColors.KONARDI,
+    color: ScuderiaColors.KONARDI,
   },
   LenaultMoreo: {
     name: "Lenaut Moreo",
     tag: "LM",
-    color: TeamColors.LENAULTMOREO,
+    color: ScuderiaColors.LENAULTMOREO,
   },
   Questi: {
     name: "Questi",
     tag: "QE",
-    color: TeamColors.QUESTI,
+    color: ScuderiaColors.QUESTI,
   },
   Sixdent: {
     name: "Sixdent",
     tag: "SX",
-    color: TeamColors.SIXDENT,
+    color: ScuderiaColors.SIXDENT,
   },
   JeanBorghini: {
     name: "JeanBorghini",
     tag: "JB",
-    color: TeamColors.JEANBORGHINI,
+    color: ScuderiaColors.JEANBORGHINI,
   },
   Pejo: {
     name: "Pejo",
     tag: "PJ",
-    color: TeamColors.PEJO,
+    color: ScuderiaColors.PEJO,
   },
   Brawndesco: {
     name: "Brawndesco",
     tag: "BW",
-    color: TeamColors.BRAWNDESCO,
+    color: ScuderiaColors.BRAWNDESCO,
   },
   Interforce: {
     name: "BMW Interforce",
     tag: "IF",
-    color: TeamColors.INTERFORCE,
+    color: ScuderiaColors.INTERFORCE,
   },
   Alpino: {
     name: "Alpino",
     tag: "AP",
-    color: TeamColors.ALPINO,
+    color: ScuderiaColors.ALPINO,
   },
   Toyossi: {
     name: "BMW Toyossi",
     tag: "TY",
-    color: TeamColors.TOYOSSI,
+    color: ScuderiaColors.TOYOSSI,
   },
   BMW: {
     name: "Swiss BMW",
     tag: "BM",
-    color: TeamColors.BMW,
+    color: ScuderiaColors.BMW,
   },
   Bracchiari: {
     name: "Bracchiari",
     tag: "SB",
-    color: TeamColors.BRACCHIARI,
+    color: ScuderiaColors.BRACCHIARI,
   },
   PHM: {
     name: "PHM FAX",
     tag: "PH",
-    color: TeamColors.PHM,
+    color: ScuderiaColors.PHM,
   },
 };

@@ -5154,14 +5154,19 @@ room.onPlayerChat = function (player, message) {
               playerList[p.name].lapTimes.push(0);
             }
           });
-          room.setTeamColors(1, 45, 0xffffff, [0x218a6a, 0x196951, 0x145441]);
+          room.setScuderiaColors(
+            1,
+            45,
+            0xffffff,
+            [0x218a6a, 0x196951, 0x145441]
+          );
 
           return false;
         } else if (option === "off") {
           generalSafetyCar = false;
           generalVirtualSC = false;
           flag = "green";
-          room.setTeamColors(1, 45, 0xffffff, [0xa62808]);
+          room.setScuderiaColors(1, 45, 0xffffff, [0xa62808]);
           for (const playerName in playerList) {
             if (playerList.hasOwnProperty(playerName)) {
               playerList[playerName].inSafetyCar = false;
@@ -6131,14 +6136,19 @@ room.onPlayerChat = function (player, message) {
                 playerList[p.name].lapTimes.push(0);
               }
             });
-            room.setTeamColors(1, 45, 0xffffff, [0x218a6a, 0x196951, 0x145441]);
+            room.setScuderiaColors(
+              1,
+              45,
+              0xffffff,
+              [0x218a6a, 0x196951, 0x145441]
+            );
 
             return false;
           } else if (option === "off") {
             generalSafetyCar = false;
             generalVirtualSC = false;
             flag = "green";
-            room.setTeamColors(1, 45, 0xffffff, [0xa62808]);
+            room.setScuderiaColors(1, 45, 0xffffff, [0xa62808]);
             for (const playerName in playerList) {
               if (playerList.hasOwnProperty(playerName)) {
                 playerList[playerName].inSafetyCar = false;
@@ -6989,7 +6999,7 @@ room.onStadiumChange = function (newStadiumName, byPlayer) {
         ID: c.ID,
       };
       limit = c.Limit ? c.Limit : 10;
-      room.setTeamColors(c.Team, c.Angle, c.AvatarColor, c.MainColor);
+      room.setScuderiaColors(c.Team, c.Angle, c.AvatarColor, c.MainColor);
     } else {
       admins.length > 0
         ? admins.forEach((p) =>

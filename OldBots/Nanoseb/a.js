@@ -624,7 +624,7 @@ room.onStadiumChange = function (newStadiumName, byPlayer) {
         Team: c.Team,
         ID: c.ID,
       };
-      room.setTeamColors(c.Team, c.Angle, c.AvatarColor, c.MainColor);
+      room.setScuderiaColors(c.Team, c.Angle, c.AvatarColor, c.MainColor);
     } else {
       admins.length > 0
         ? admins.forEach((p) =>

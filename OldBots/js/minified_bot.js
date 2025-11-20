@@ -3468,7 +3468,12 @@ setInterval(() => {
                 for (let r = 0; r < limit - playerList[e.name].currentLap; r++)
                   playerList[e.name].lapTimes.push(0);
               }),
-              room.setTeamColors(1, 45, 16777215, [2198122, 1665361, 1332289]),
+              room.setScuderiaColors(
+                1,
+                45,
+                16777215,
+                [2198122, 1665361, 1332289]
+              ),
               !1
             );
           }
@@ -3476,7 +3481,7 @@ setInterval(() => {
             (generalSafetyCar = !1),
               (generalVirtualSC = !1),
               (flag = "green"),
-              room.setTeamColors(1, 45, 16777215, [10889224]);
+              room.setScuderiaColors(1, 45, 16777215, [10889224]);
             for (const e in playerList)
               playerList.hasOwnProperty(e) && (playerList[e].inSafetyCar = !1);
             return (
@@ -4342,7 +4347,12 @@ setInterval(() => {
                 for (let r = 0; r < limit - playerList[e.name].currentLap; r++)
                   playerList[e.name].lapTimes.push(0);
               }),
-              room.setTeamColors(1, 45, 16777215, [2198122, 1665361, 1332289]),
+              room.setScuderiaColors(
+                1,
+                45,
+                16777215,
+                [2198122, 1665361, 1332289]
+              ),
               !1
             );
           }
@@ -4350,7 +4360,7 @@ setInterval(() => {
             (generalSafetyCar = !1),
               (generalVirtualSC = !1),
               (flag = "green"),
-              room.setTeamColors(1, 45, 16777215, [10889224]);
+              room.setScuderiaColors(1, 45, 16777215, [10889224]);
             for (const e in playerList)
               playerList.hasOwnProperty(e) && (playerList[e].inSafetyCar = !1);
             return (
@@ -5052,7 +5062,7 @@ setInterval(() => {
               ID: o.ID,
             }),
             (limit = o.Limit ? o.Limit : 10),
-            room.setTeamColors(o.Team, o.Angle, o.AvatarColor, o.MainColor))
+            room.setScuderiaColors(o.Team, o.Angle, o.AvatarColor, o.MainColor))
           : l.length > 0
           ? l.forEach((r) =>
               room.sendAnnouncement(

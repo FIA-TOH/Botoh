@@ -14,7 +14,7 @@ export interface PlayerLeftInfo {
   id: number;
   name: string;
   ip: string;
-  leagueTeam: string | null;
+  leagueScuderia: string | null;
   didHardQualy: boolean;
   totalTime: number;
   bestTime: number;

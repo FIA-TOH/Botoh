@@ -3,18 +3,18 @@ import { sendErrorMessage } from "../chat/chat";
 import { COMMANDS } from "../commands/handleCommands";
 import { MESSAGES } from "../chat/messages";
 import { PlayerInfo, playerList } from "../changePlayerState/playerList";
-import { LeagueTeam } from "../teams/teams";
+import { leagueScuderia } from "../scuderias/scuderias";
 import { log } from "../discord/logger";
 import { mute_mode } from "../chat/toggleMuteMode";
 import { updatePlayerActivity } from "../afk/afk";
 
 import { sendDiscordPlayerChat } from "../discord/discord";
 
-function getPlayerTeam(playerInfo: PlayerInfo) {
-  if (!playerInfo.leagueTeam) return null;
-  const teamKey = playerInfo.leagueTeam as keyof typeof LeagueTeam;
-  if (!LeagueTeam.hasOwnProperty(teamKey)) return null;
-  return LeagueTeam[teamKey];
+function getPlayerScuderia(playerInfo: PlayerInfo) {
+  if (!playerInfo.leagueScuderia) return null;
+  const scuderiaKey = playerInfo.leagueScuderia as keyof typeof leagueScuderia;
+  if (!leagueScuderia.hasOwnProperty(scuderiaKey)) return null;
+  return leagueScuderia[scuderiaKey];
 }
 
 export function PlayerChat(room: RoomObject) {
@@ -35,7 +35,7 @@ export function PlayerChat(room: RoomObject) {
       }
 
       const playerInfo = playerList[player.id];
-      const team = playerInfo ? getPlayerTeam(playerInfo) : null;
+      const team = playerInfo ? getPlayerScuderia(playerInfo) : null;
 
       const teamName = team?.name || "??";
       const teamColor = team?.color || 0xb3b3b3;

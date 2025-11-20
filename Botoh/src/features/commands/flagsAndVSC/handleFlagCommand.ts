@@ -9,6 +9,7 @@ import {
   sendBlackMessage,
 } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
+import { clearDebris } from "../../debris/clearDebris";
 import { getPlayerAndDiscs } from "../../playerFeatures/getPlayerAndDiscs";
 import { vsc, changeVSC } from "../../speed/handleSpeed";
 import { getRunningPlayers } from "../../utils";
@@ -77,6 +78,7 @@ export function handleFlagCommand(
     flag = "green";
     sendGreenMessage(room, MESSAGES.GREEN_FLAG());
     sendGreenMessage(room, MESSAGES.GREEN_FLAG_TWO());
+    clearDebris(room);
 
     players.forEach((player) => {
       handleAvatar(Situacions.Flag, player.p, room, undefined, ["🟩"], [5000]);

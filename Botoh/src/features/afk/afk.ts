@@ -12,6 +12,8 @@ import { sendAlertMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { handleVSCCommand } from "../commands/flagsAndVSC/handleVSCCommand";
 import { presentationLap } from "../commands/gameState/handlePresentationLapCommand";
+import { chooseOneDebris } from "../debris/chooseOneDebris";
+import { debrisEnabled } from "../debris/enableDebris";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { vsc } from "../speed/handleSpeed";
@@ -46,6 +48,9 @@ export function afkKick(room: RoomObject) {
           if (LEAGUE_MODE) {
             if (!vsc && !presentationLap) {
               handleVSCCommand(undefined, undefined, room);
+              if (ACTUAL_CIRCUIT.info.haveDebris && debrisEnabled) {
+                chooseOneDebris(room, playerId);
+              }
               if (
                 ACTUAL_CIRCUIT.info.sectorOne &&
                 ACTUAL_CIRCUIT.info.sectorTwo &&

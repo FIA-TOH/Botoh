@@ -13,7 +13,7 @@ import {
 } from "../changeGameState/changeGameModes";
 import { log } from "../discord/logger";
 import { updatePlayerActivity } from "../afk/afk";
-import { followPlayerId } from "../camera/cameraFollow";
+import { followPlayerId } from "../cameraAndBall/cameraFollow";
 import { checkRunningPlayers } from "../changeGameState/publicGameFlow/startStopGameFlow";
 import { changeGameStoppedNaturally } from "../changeGameState/gameStopeedNaturally";
 import { sendQualiResultsToDiscord } from "../discord/logResults";
@@ -50,7 +50,7 @@ export function PlayerLeave(room: RoomObject) {
           id: player.id,
           name: player.name,
           ip: playerObj.ip,
-          leagueTeam: playerObj.leagueTeam,
+          leagueScuderia: playerObj.leagueScuderia,
           didHardQualy: playerObj.didHardQualy,
           totalTime: playerObj.totalTime,
           bestTime: playerObj.bestTime,
@@ -78,14 +78,14 @@ export function PlayerLeave(room: RoomObject) {
 
           leftAt: new Date().toISOString(),
         };
-        console.log(
-          "LEFT SAVE",
-          player.name,
-          "lapsCompletedWhenLeft",
-          lapsCompleted,
-          "lapsBehind",
-          playerObj.currentLap - firstPlacePlayerLap
-        );
+        // console.log(
+        //   "LEFT SAVE",
+        //   player.name,
+        //   "lapsCompletedWhenLeft",
+        //   lapsCompleted,
+        //   "lapsBehind",
+        //   playerObj.currentLap - firstPlacePlayerLap
+        // );
 
         addPlayerLeftInfo(playerLeft);
       }

@@ -1,7 +1,7 @@
 import { positionList } from "../../changeGameState/race/positionList";
 import { sendErrorMessage, sendChatMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
-import { setFollowPosition } from "../../camera/cameraFollow";
+import { setFollowPosition } from "../../cameraAndBall/cameraFollow";
 
 export function handleCameraPositionFollow(
   byPlayer?: PlayerObject,

@@ -136,3 +136,15 @@ export function getTimestamp(): string {
   const t = formatInTimeZone(now, "America/Sao_Paulo");
   return `[${t.year}-${t.month}-${t.day} ${t.hour}:${t.minute}:${t.second}]`;
 }
+
+export function formatRaceTime(totalSeconds: number): string {
+  if (!isFinite(totalSeconds) || totalSeconds < 0) return "00:00:00";
+
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = Math.floor(totalSeconds % 60);
+
+  const pad = (n: number) => n.toString().padStart(2, "0");
+
+  return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+}

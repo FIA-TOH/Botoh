@@ -1,5 +1,5 @@
 import { playerList } from "../changePlayerState/playerList";
-import { getPlayerTeam } from "../commands/teams/getTeam";
+import { getPlayerScuderia } from "../commands/scuderia/getScuderia";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { getTimestamp } from "../utils";
@@ -133,7 +133,7 @@ export function sendDiscordPlayerChat(userInfo: PlayerObject, message: string) {
   try {
     const MESSAGES_URL = LEAGUE_MODE ? LEAGUE_CHAT_URL : PUBLIC_CHAT_URL;
     const sanitized = message.replace(/@(?=[a-zA-Z])/g, "@ ");
-    const team = getPlayerTeam(playerList[userInfo.id]);
+    const team = getPlayerScuderia(playerList[userInfo.id]);
     const embedColor = team?.color ?? 0xb3b3b3;
 
     splitMessage(sanitized).forEach((part) => {
@@ -260,9 +260,22 @@ export function sendDiscordGeneralChatQualy(message: string) {
 
 export function sendDiscordCutTrack(message: string) {
   try {
-    const codeMessage = "```" + message + "```";
-    safeSend(CUT_TRACK_URL, { content: codeMessage }, "CUT_TRACK_DETECTOR");
+    safeSend(CUT_TRACK_URL, { content: message }, "CUT_TRACK_DETECTOR");
   } catch (err) {
     console.error("❌ [sendDiscordCutTrack ERROR]:", err);
   }
+}
+
+export function splitCutMessageIntoSafeBlocks(
+  msg: string,
+  size = 1900
+): string[] {
+  const parts: string[] = [];
+
+  for (let i = 0; i < msg.length; i += size) {
+    const chunk = msg.slice(i, i + size);
+    parts.push("```" + chunk + "```");
+  }
+
+  return parts;
 }

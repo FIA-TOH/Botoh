@@ -46,6 +46,7 @@ export interface CircuitInfo {
   pitSpeed?: number;
   TireDegradationPercentage?: number;
   CutDetectSegments?: CutSegment[];
+  haveDebris?: boolean;
 }
 
 export interface Circuit {

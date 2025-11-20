@@ -90,6 +90,7 @@ const SUZUKA_INFO: CircuitInfo = {
   Limit: 5,
   Votes: 0,
   pitSpeed: 0.97,
+  haveDebris: true,
   CutDetectSegments: [
     {
       v0: [2938, -562],

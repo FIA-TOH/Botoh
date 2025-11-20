@@ -1,6 +1,6 @@
 import { sendErrorMessage, sendChatMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
-import { setFollowPlayer } from "../../camera/cameraFollow";
+import { setFollowPlayer } from "../../cameraAndBall/cameraFollow";
 import { log } from "../../discord/logger";
 
 export function handleCameraPlayerFollow(

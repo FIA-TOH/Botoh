@@ -11,7 +11,7 @@ import {
 } from "../changeGameState/changeGameModes";
 import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
 import { updatePlayerActivity } from "../afk/afk";
-import { followPlayerId } from "../camera/cameraFollow";
+import { followPlayerId } from "../cameraAndBall/cameraFollow";
 import { moveToBox } from "../comeBackRace.ts/moveToBox";
 import { decideBlowoutPoint } from "../tires&pits/tireBlowManager";
 

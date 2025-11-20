@@ -29,7 +29,7 @@ export function handleBestTimes(
 
     sendBestTimeEver(room, MESSAGES.TRACK_RECORD(p.name, lapTime));
     sendDiscordTrackRecord(p.name, lapTime);
-    updatePlayerTime(p.name, lapTime, p.id, playerData.leagueTeam);
+    updatePlayerTime(p.name, lapTime, p.id, playerData.leagueScuderia);
     return;
   }
 
@@ -45,7 +45,7 @@ export function handleBestTimes(
     playerData.bestTime = lapTime;
 
     broadcastLapTimeToPlayers(room, lapTime, p.name);
-    updatePlayerTime(p.name, lapTime, p.id, playerData.leagueTeam);
+    updatePlayerTime(p.name, lapTime, p.id, playerData.leagueScuderia);
   } else {
     console.log("bestTimeP:", bestTimeP, "lapTime:", lapTime);
 
