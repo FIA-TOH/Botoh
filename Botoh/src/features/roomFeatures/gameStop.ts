@@ -39,6 +39,7 @@ import {
   clearCutTrackStorage,
   sendAllCutsToDiscord,
 } from "../detectCut/cutsOfTracksStorage";
+import { resetDebrisUsedList } from "../debris/chooseOneDebris";
 
 let replayData: Uint8Array | null = null;
 
@@ -124,5 +125,6 @@ export function GameStop(room: RoomObject) {
     clearPlayersLeftInfo();
     clearRRPosition();
     clearCutTrackStorage();
+    resetDebrisUsedList();
   };
 }

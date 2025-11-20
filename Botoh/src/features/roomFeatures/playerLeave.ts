@@ -13,7 +13,7 @@ import {
 } from "../changeGameState/changeGameModes";
 import { log } from "../discord/logger";
 import { updatePlayerActivity } from "../afk/afk";
-import { followPlayerId } from "../camera/cameraFollow";
+import { followPlayerId } from "../cameraAndBall/cameraFollow";
 import { checkRunningPlayers } from "../changeGameState/publicGameFlow/startStopGameFlow";
 import { changeGameStoppedNaturally } from "../changeGameState/gameStopeedNaturally";
 import { sendQualiResultsToDiscord } from "../discord/logResults";

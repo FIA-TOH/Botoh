@@ -66,6 +66,7 @@ import { handleMoveToBoxCommand } from "../comeBackRace.ts/moveToBox";
 import { handlePlayerQuantity } from "./adminThings/handlePlayerQuantity";
 import { handleLimitPlayerQuantity } from "./adminThings/handleLimitPlayerQuantity";
 import { handleRRPositionCommand } from "./adminThings/handleRRPositionCommand";
+import { handleClearDebrisCommand } from "./debris/handleClearDebrisCommand";
 
 export type CommandFunction = (
   handleAdminCommand: (
@@ -372,6 +373,11 @@ export type CommandFunction = (
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject
+  ) => void,
+  handleClearDebrisCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
   ) => void
 ) => Commands;
 
@@ -443,7 +449,8 @@ function importCommandsByLanguage(commandFunctions: {
         handleMoveToBoxCommand,
         handlePlayerQuantity,
         handleLimitPlayerQuantity,
-        handleRRPositionCommand
+        handleRRPositionCommand,
+        handleClearDebrisCommand
       ),
     }),
     {}
@@ -515,7 +522,8 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
         handleMoveToBoxCommand,
         handlePlayerQuantity,
         handleLimitPlayerQuantity,
-        handleRRPositionCommand
+        handleRRPositionCommand,
+        handleClearDebrisCommand
       ),
     }),
     {}

@@ -8,8 +8,7 @@ Atualizar alguns mapas
 
 # To-do rapidos
 
-cut track annoucement e desabilitar penalziacao comando
-detritos
+debrisos
 
 Erro rejoin
 mensagens discord sem lag

@@ -13,7 +13,7 @@ import {
   handleChangePlayerSizeSuzuka,
 } from "../zones/handleSuzukaTp";
 import { afkKick } from "../afk/afk";
-import { setBallPosition } from "../camera/setBallPosition";
+import { setBallPosition } from "../cameraAndBall/setBallPosition";
 import { detectPitPerTick } from "../tires&pits/performPitStop";
 import { detectCut } from "../detectCut/detectCut";
 import { GameMode, gameMode } from "../changeGameState/changeGameModes";

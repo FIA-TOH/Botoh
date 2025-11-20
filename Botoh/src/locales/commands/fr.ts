@@ -306,6 +306,11 @@ export default function fr_commands(
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject
+  ) => void,
+  handleClearDebrisCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
   ) => void
 ): Commands {
   return {
@@ -374,5 +379,6 @@ export default function fr_commands(
     "!player_quantity": handlePlayerQuantity,
     "!set_max_players": handleLimitPlayerQuantity,
     "!set_rr": handleRRPositionCommand,
+    "!clear_debris": handleClearDebrisCommand,
   };
 }
