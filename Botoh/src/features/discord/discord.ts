@@ -36,6 +36,9 @@ const GENERAL_CHAT_FTOH_URL =
 const CUT_TRACK_URL =
   "https://discord.com/api/webhooks/1431458818042233004/M53GPd84SCq-g68AyI65kdvuCEiLCpYhZOb0W6a8VlojNQOlWU9XChz6CI5zApoZg9-j";
 
+const LEAGUE_REPLAY_URL_FH =
+  "https://discord.com/api/webhooks/1347947425620299777/JVH8u7nG-mt602JpxpUV4Vr8_g5unMNJMO60IRPDTfTsnsvpf5-PjDbJx_Mwn7Id7TR-";
+
 function splitMessage(msg: string, size = 2000): string[] {
   const chunks: string[] = [];
   for (let i = 0; i < msg.length; i += size) {
@@ -163,6 +166,9 @@ export function sendDiscordResult(message: string) {
       LOG_URL = LEAGUE_MODE ? LEAGUE_REPLAY_URL_HAXBULA : PUBLIC_REPLAY_URL;
     } else {
       LOG_URL = LEAGUE_MODE ? LEAGUE_REPLAY_URL : PUBLIC_REPLAY_URL;
+    }
+    if (envName === "fh") {
+      LOG_URL = LEAGUE_MODE ? LEAGUE_REPLAY_URL_FH : PUBLIC_REPLAY_URL;
     }
 
     const sanitized = message.replace(/@(?=[a-zA-Z])/g, "@ ");
