@@ -149,5 +149,6 @@
   "WHO_IS_AFK_SECTORS": "{{player}} está afk no setor {{sector}}",
   "WHO_IS_AFK": "{{player}} está afk no setor",
   "TYRES_ABOUT_TO_BLOWN": "⚠️🛞 BOX BOX! Estamos vendo muito graining — Possível estouro de pneu a qualquer momento — box, box! 🛞⚠️",
-  "INVALID_LAP_CUT": "Volta inválida devido a corte de pista."
+  "INVALID_LAP_CUT": "Volta inválida devido a corte de pista.",
+  "SOFT_CUT_PENALTY": "⚠️ Você cortou a pista! Passe por dentro da linha azul ou será punido!"
 }

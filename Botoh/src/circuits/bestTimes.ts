@@ -28,7 +28,7 @@ const trackNameMapping: { [key: string]: string } = {
   fuji: "Fuji International - By Ximb",
   hungaroing: "Hungaroring - By Ximb",
   mexico: "Mexico City - Autodromo Hermanos Rodriquez By Ximb",
-  austria: "Redbull Ring MGP by Rodri",
+  austria: "Redbull Ring by Rodri",
   laguna_seca: "Laguna Seca by Rodri",
   balaton: "Balaton Park by Rodri",
   nurburgringNano: "Nurburgring GP By Nanoseb",

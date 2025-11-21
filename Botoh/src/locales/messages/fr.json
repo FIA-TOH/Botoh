@@ -147,5 +147,6 @@
   "WHO_IS_AFK_SECTORS": "{{player}} est afk dans le secteur {{sector}}",
   "WHO_IS_AFK": "{{player}} est afk dans le secteur",
   "TYRES_ABOUT_TO_BLOWN": "⚠️🛞 BOX BOX! Nous voyons un fort grainage — Risque d’éclatement imminent — box, box! 🛞⚠️",
-  "INVALID_LAP_CUT": "Tour invalide à cause d’un coup de piste."
+  "INVALID_LAP_CUT": "Tour invalide à cause d’un coup de piste.",
+  "SOFT_CUT_PENALTY": "⚠️ Vous avez coupé la piste! Passez par la ligne bleue ou vous serez pénalisé!"
 }

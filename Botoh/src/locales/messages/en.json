@@ -147,5 +147,6 @@
   "WHO_IS_AFK_SECTORS": "{{player}} is afk in sector {{sector}}",
   "WHO_IS_AFK": "{{player}} is afk in sector",
   "TYRES_ABOUT_TO_BLOWN": "⚠️🛞 BOX BOX! We’re seeing heavy graining — Expect a possible blowout — box, box! 🛞⚠️",
-  "INVALID_LAP_CUT": "Invalid lap due to track cutting."
+  "INVALID_LAP_CUT": "Invalid lap due to track cutting.",
+  "SOFT_CUT_PENALTY": "⚠️ You cut the track! Go through the blue line or you will be penalized!"
 }

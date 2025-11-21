@@ -2,7 +2,10 @@ import { setGhostMode } from "../../changePlayerState/ghost";
 import { sendErrorMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { enableDebris } from "../../debris/enableDebris";
-import { enableCutPenalty } from "../../detectCut/enableCutPenalty";
+import {
+  enableCutPenalty,
+  enableSoftCutPenalty,
+} from "../../detectCut/enableCutPenalty";
 import { log } from "../../discord/logger";
 import { enableErs, enableErsPenalty } from "../../speed/fuel&Ers/ers";
 import { enableGas, enableSlipstream } from "../../speed/handleSlipstream";
@@ -21,6 +24,7 @@ export enum ToggleableSystems {
   ERS_PENALTY = "ers_penalty",
   CUT_PENALTY = "cut_penalty",
   DEBRIS = "debris",
+  SOFT_CUT_PENALTY = "soft_cut_penalty",
 }
 
 export function handleToggleSystems(
@@ -45,11 +49,12 @@ export function handleToggleSystems(
     system !== ToggleableSystems.ERS &&
     system !== ToggleableSystems.ERS_PENALTY &&
     system !== ToggleableSystems.CUT_PENALTY &&
-    system !== ToggleableSystems.DEBRIS
+    system !== ToggleableSystems.DEBRIS &&
+    system !== ToggleableSystems.SOFT_CUT_PENALTY
   ) {
     room.sendAnnouncement(`System "${args[0]}" does not exist.`, byPlayer.id);
     room.sendAnnouncement(
-      `Try "slipstream", "tyres", "gas", "ghost", "rr", "tyres_blowout", "ers", "cut_penalty", "debris" or "ers_penalty".`,
+      `Try "slipstream", "tyres", "gas", "ghost", "rr", "tyres_blowout", "ers", "cut_penalty", "debris", "soft_cut_penalty" or "ers_penalty".`,
       byPlayer.id
     );
     return;
@@ -154,6 +159,16 @@ export function handleToggleSystems(
       log(`Debris mode enabled by ${byPlayer.name}`);
       room.sendAnnouncement("Debris enabled!");
       enableDebris(true);
+    }
+  } else if (system === ToggleableSystems.SOFT_CUT_PENALTY) {
+    if (boolean === "false") {
+      log(`Soft cut penalty mode disabled by ${byPlayer.name}`);
+      room.sendAnnouncement("Soft cut penalty disabled!");
+      enableSoftCutPenalty(false, room);
+    } else {
+      log(`Soft cut penalty mode enabled by ${byPlayer.name}`);
+      room.sendAnnouncement("Soft cut penalty enabled!");
+      enableSoftCutPenalty(true, room);
     }
   }
 }
