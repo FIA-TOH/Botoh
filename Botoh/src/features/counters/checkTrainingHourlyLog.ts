@@ -8,10 +8,8 @@ export function checkTrainingHourlyLog() {
 
   const now = Date.now();
 
-  // 1 hour = 3600000 ms
   if (now - lastTrainingLogTime >= 3600000) {
     lastTrainingLogTime = now;
+    sendQualiResultsToDiscord();
   }
-
-  sendQualiResultsToDiscord();
 }
