@@ -1689,4 +1689,11 @@ export const MESSAGES = {
     tr: replaceTemplateString(tr_messages.INVALID_LAP_CUT, {}),
     pt: replaceTemplateString(pt_messages.INVALID_LAP_CUT, {}),
   }),
+  SOFT_CUT_PENALTY: (): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.SOFT_CUT_PENALTY, {}),
+    es: replaceTemplateString(es_messages.SOFT_CUT_PENALTY, {}),
+    fr: replaceTemplateString(fr_messages.SOFT_CUT_PENALTY, {}),
+    tr: replaceTemplateString(tr_messages.SOFT_CUT_PENALTY, {}),
+    pt: replaceTemplateString(pt_messages.SOFT_CUT_PENALTY, {}),
+  }),
 };

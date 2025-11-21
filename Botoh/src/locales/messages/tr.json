@@ -147,5 +147,6 @@
   "WHO_IS_AFK_SECTORS": "{{player}} {{sector}} sektöründe afk",
   "WHO_IS_AFK": "{{player}} afk sektörde",
   "TYRES_ABOUT_TO_BLOWN": "⚠️🛞 BOX BOX! Lastikte ciddi tanelenme graining — Her an patlama riski var — box, box! 🛞⚠️",
-  "INVALID_LAP_CUT": "Yol kesme nedeniyle geçersiz tur."
+  "INVALID_LAP_CUT": "Yol kesme nedeniyle geçersiz tur.",
+  "SOFT_CUT_PENALTY": "⚠️ Yolu kestiniz! Mavi çizginin içinden geçin veya ceza alacaksınız!"
 }

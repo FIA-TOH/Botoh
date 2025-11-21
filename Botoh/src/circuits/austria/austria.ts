@@ -44,7 +44,7 @@ const AUSTRIA_INFO: CircuitInfo = {
     },
     passingDirection: Direction.UP,
   },
-  name: "Redbull Ring MGP by Rodri",
+  name: "Redbull Ring by Rodri",
   boxLine: {
     minX: -1000,
     maxX: 1,
@@ -92,6 +92,38 @@ const AUSTRIA_INFO: CircuitInfo = {
   Votes: 0,
   pitSpeed: 0.97,
   TireDegradationPercentage: -5,
+  CutDetectSegments: [
+    {
+      v0: [835, 780],
+      v1: [546, 688],
+      index: 178,
+      penalty: 5,
+    },
+    {
+      v0: [177, 2786],
+      v1: [429.9235558325382, 2834.088585502436],
+      index: 181,
+      penalty: 5,
+    },
+    {
+      v0: [486, 415],
+      v1: [900, 20],
+      index: 182,
+      penalty: 5,
+    },
+    {
+      v0: [-2456, 888],
+      v1: [-2075, 350],
+      index: 183,
+      penalty: 5,
+    },
+    {
+      v0: [-742, 1008],
+      v1: [-617, 1119],
+      index: 184,
+      penalty: 5,
+    },
+  ],
 };
 
 export const AUSTRIA: Circuit = {

@@ -29,7 +29,7 @@ export function StadiumChange(room: RoomObject) {
       c.info.AvatarColor !== 0 &&
       c.info.MainColor
     ) {
-      room.setScuderiaColors(
+      room.setTeamColors(
         Teams.RUNNERS,
         c.info.Angle,
         c.info.AvatarColor,

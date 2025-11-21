@@ -12,7 +12,7 @@ import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { formatRaceTime, getTimestamp } from "../utils";
 import { applyCutPenalty } from "./applyCutPenalty";
 import { addCutTrackToStorage } from "./cutsOfTracksStorage";
-import { detectCutEnabled } from "./enableCutPenalty";
+import { detectCutEnabled, softCutPenalty } from "./enableCutPenalty";
 
 const SEGMENT_CUT_COLOUR = "696969";
 const DEFAULT_PENALTY_PUBLIC = 5;
@@ -121,19 +121,29 @@ export function detectCut(
     );
 
     if (dist < pad.disc.radius && !lastSet.has(seg.index)) {
-      let realPeanlty = decidePenalty(seg);
-      if (
-        room.getScores().time < 30 &&
-        generalGameMode === GeneralGameMode.GENERAL_RACE
-      ) {
-        realPeanlty = decidePenalty(seg) / 2;
+      if (!softCutPenalty) {
+        let realPeanlty = decidePenalty(seg);
+        if (
+          room.getScores().time < 30 &&
+          generalGameMode === GeneralGameMode.GENERAL_RACE
+        ) {
+          realPeanlty = decidePenalty(seg) / 2;
+        }
+
+        log(`${pad.p.name} cutted the track at ${getTimestamp()}`);
+        sendAlertMessage(
+          room,
+          MESSAGES.CUTTED_TRACK(realPeanlty || 5),
+          pad.p.id
+        );
+
+        applyCutPenalty(pad, realPeanlty || 5, room);
+      } else {
+        sendAlertMessage(room, MESSAGES.SOFT_CUT_PENALTY(), pad.p.id);
       }
 
-      log(`${pad.p.name} cutted the track at ${getTimestamp()}`);
-      sendAlertMessage(room, MESSAGES.CUTTED_TRACK(realPeanlty || 5), pad.p.id);
-
       lastSet.add(seg.index);
-      applyCutPenalty(pad, realPeanlty || 5, room);
+
       addCutTrackToStorage({
         trackName: ACTUAL_CIRCUIT.info.name,
         cutLap: playerList[pad.p.id].currentLap,

@@ -1,7 +1,18 @@
+import { Batery } from "./batery";
+import { Chassis } from "./chassis";
+import { Engine } from "./engine";
+import { PitCrew } from "./pitstop";
+import { Suspension } from "./tyres";
+
 export interface leagueScuderia {
   name: string;
   tag: string;
   color: number;
+  engine?: Engine;
+  chassis?: Chassis;
+  batery?: Batery;
+  suspension?: Suspension;
+  pitCrew?: PitCrew;
 }
 export enum ScuderiaColors {
   PENSHIRYU = 0xb45568,
