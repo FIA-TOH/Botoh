@@ -39,86 +39,6 @@ const CUT_TRACK_URL =
 const LEAGUE_REPLAY_URL_FH =
   "https://discord.com/api/webhooks/1347947425620299777/JVH8u7nG-mt602JpxpUV4Vr8_g5unMNJMO60IRPDTfTsnsvpf5-PjDbJx_Mwn7Id7TR-";
 
-const MIN_DELAY = 400; // ms
-
-const MAX_BACKOFF = 15000; // 15s
-
-const webhookQueues: Record<string, any[]> = {};
-const webhookProcessing: Record<string, boolean> = {};
-const webhookBackoff: Record<string, number> = {};
-
-function enqueue(url: string, payload: any) {
-  if (!webhookQueues[url]) webhookQueues[url] = [];
-  webhookQueues[url].push(payload);
-  processQueue(url);
-}
-
-function wait(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-async function processQueue(url: string) {
-  if (webhookProcessing[url]) return; // já está processando
-  webhookProcessing[url] = true;
-
-  if (!webhookBackoff[url]) webhookBackoff[url] = MIN_DELAY;
-
-  while (webhookQueues[url].length > 0) {
-    const { body, source, isFormData } = webhookQueues[url].shift();
-
-    try {
-      const res = await fetch(url, {
-        method: "POST",
-        body: isFormData ? body : JSON.stringify(body),
-        headers: isFormData
-          ? undefined
-          : { "Content-Type": "application/json" },
-      });
-
-      // Discord respondeu OK → resetar backoff
-      if (res.ok) {
-        webhookBackoff[url] = MIN_DELAY;
-      } else if (res.status === 429) {
-        // RATE LIMIT — Discord informa quanto esperar
-        const retry = parseInt(res.headers.get("Retry-After") || "1") * 1000;
-
-        console.warn(`⚠️ [Discord RATE LIMIT] Esperando ${retry}ms`);
-
-        webhookBackoff[url] = Math.min(webhookBackoff[url] * 1.5, MAX_BACKOFF);
-
-        // Reenfileirar a mensagem
-        webhookQueues[url].unshift({ body, source, isFormData });
-
-        await wait(retry);
-      } else {
-        console.error(
-          `❌ [Discord ERROR ${res.status}] (${source}) ->`,
-          await res.text()
-        );
-
-        // Erros 5xx geralmente são instabilidade do Discord
-        if (res.status >= 500) {
-          webhookBackoff[url] = Math.min(webhookBackoff[url] * 2, MAX_BACKOFF);
-          webhookQueues[url].unshift({ body, source, isFormData });
-        }
-      }
-    } catch (err) {
-      console.error(`❌ [NETWORK ERROR] (${source}):`, err);
-
-      // erro real de rede → aplicar backoff
-      webhookBackoff[url] = Math.min(webhookBackoff[url] * 2, MAX_BACKOFF);
-
-      // colocar de volta para tentar depois
-      webhookQueues[url].unshift({ body, source, isFormData });
-    }
-
-    // intervalo obrigatório para evitar flood (respeita backoff)
-    await wait(webhookBackoff[url]);
-  }
-
-  webhookProcessing[url] = false;
-}
-
 function splitMessage(msg: string, size = 2000): string[] {
   const chunks: string[] = [];
   for (let i = 0; i < msg.length; i += size) {
@@ -134,19 +54,44 @@ function splitCodeMessage(msg: string, size = 1900): string[] {
   }
   return chunks;
 }
-export function safeSend(
+
+async function safeSend(
   url: string,
   body: any,
   source: string,
   isFormData = false
 ) {
-  if (!body) {
-    console.warn(`⚠️ [Discord SKIPPED] (${source}): body empty`);
-    return;
-  }
+  try {
+    if (!body)
+      return console.warn(`⚠️ [Discord SKIPPED] (${source}): body empty`);
 
-  enqueue(url, { body, source, isFormData });
+    const options: RequestInit = {
+      method: "POST",
+      body: isFormData ? body : JSON.stringify(body),
+    };
+
+    if (!isFormData) {
+      options.headers = { "Content-Type": "application/json" };
+    }
+
+    const res = await fetch(url, options);
+
+    if (!res.ok) {
+      if (res.status === 429) {
+        const delay = 1000;
+        setTimeout(() => safeSend(url, body, source, isFormData), delay);
+      } else {
+        console.error(
+          `❌ [Discord ERROR ${res.status}] (${source}):`,
+          await res.text()
+        );
+      }
+    }
+  } catch (err) {
+    console.error(`❌ [Discord NETWORK ERROR] (${source}):`, err);
+  }
 }
+
 export function sendDiscordFile(data: any, fileName: string, source: string) {
   try {
     const FILE_URL = LEAGUE_MODE ? LEAGUE_LOG_URL : PUBLIC_LOG_URL;
