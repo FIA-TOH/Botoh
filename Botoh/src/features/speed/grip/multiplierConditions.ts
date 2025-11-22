@@ -109,7 +109,7 @@ export function calculateGripMultiplierForConditions(
     grip = chassiGripCalc(p, grip);
 
     const speed = vectorSpeed(playerDisc.xspeed, playerDisc.yspeed);
-    room.setPlayerAvatar(player.id, speed.toString());
+    // room.setPlayerAvatar(player.id, speed.toString());
 
     return grip;
   } else {
