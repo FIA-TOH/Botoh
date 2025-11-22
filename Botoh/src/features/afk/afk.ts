@@ -16,7 +16,7 @@ import { chooseOneDebris } from "../debris/chooseOneDebris";
 import { debrisEnabled } from "../debris/enableDebris";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
-import { vsc } from "../speed/handleSpeed";
+import { vsc } from "../safetyCar/vsc";
 
 const activities: { [key: number]: number } = {};
 export function afkKick(room: RoomObject) {

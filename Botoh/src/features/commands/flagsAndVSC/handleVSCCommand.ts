@@ -1,6 +1,6 @@
 import { sendErrorMessage, sendChatMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
-import { changeVSC, vsc } from "../../speed/handleSpeed";
+import { changeVSC, vsc } from "../../safetyCar/vsc";
 
 export function handleVSCCommand(
   byPlayer?: PlayerObject,

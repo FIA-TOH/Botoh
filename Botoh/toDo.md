@@ -8,6 +8,7 @@ Atualizar alguns mapas
 
 # To-do rapidos
 
+Erro treino toda hora
 Erro rejoin
 mensagens discord sem lag
 

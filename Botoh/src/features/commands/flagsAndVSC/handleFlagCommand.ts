@@ -11,7 +11,8 @@ import {
 import { MESSAGES } from "../../chat/messages";
 import { clearDebris } from "../../debris/clearDebris";
 import { getPlayerAndDiscs } from "../../playerFeatures/getPlayerAndDiscs";
-import { vsc, changeVSC } from "../../speed/handleSpeed";
+import { vsc, changeVSC } from "../../safetyCar/vsc";
+
 import { getRunningPlayers } from "../../utils";
 import {
   handlePresentationLapCommand,

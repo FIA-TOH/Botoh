@@ -5,12 +5,12 @@ import {
   GeneralGameMode,
 } from "../changeGameState/changeGameModes";
 import { playerList } from "../changePlayerState/playerList";
-import { sendAlertMessage, sendChatMessage } from "../chat/chat";
+import { sendAlertMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { playerBuffList } from "../commands/adjustThings/handleNerfListCommand";
 import { presentationLap } from "../commands/gameState/handlePresentationLapCommand";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
-import { vsc } from "../speed/handleSpeed";
+import { vsc } from "../safetyCar/vsc";
 import { laps } from "../zones/laps";
 import { changeTires } from "./changeTires";
 import { applyTrackTireDegradation } from "./tireDegradationFunction";

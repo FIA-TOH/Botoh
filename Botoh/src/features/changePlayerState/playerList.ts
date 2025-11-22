@@ -1,5 +1,4 @@
 import { Language } from "../chat/language";
-import { leagueScuderia } from "../scuderias/scuderias";
 import { PitStep } from "../tires&pits/pitMessaging";
 import { PitResult } from "../tires&pits/pitStopFunctions";
 
