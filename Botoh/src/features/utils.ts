@@ -3,7 +3,9 @@ import { Direction, HitboxBounds } from "../circuits/Circuit";
 import { Teams } from "./changeGameState/teams";
 
 export function vectorSpeed(xSpeed: number, ySpeed: number): number {
-  return Math.floor(10 * Math.hypot(xSpeed, ySpeed));
+  const speed = 10 * Math.hypot(xSpeed, ySpeed);
+
+  return speed;
 }
 
 export function getRunningPlayers(

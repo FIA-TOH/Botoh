@@ -31,13 +31,6 @@ export const constants = {
   // Chuva e Aderência
   // ===============================
   SLIDE_FACTOR: 2.5, // Multiplicador de deslizamento na chuva
-
-  ASTON_MAIA_ENGINE_INITIAL_ACCELERATION_BOOST: 0.0005,
-  ASTON_MAIA_ENGINE_MEDIAL_ACCELERATION_BOOST: 0.0003,
-  ASTON_MAIA_ENGINE_FINAL_ACCELERATION_BOOST: 0.0001,
-  PENSHIRYU_ENGINE_INITIAL_ACCELERATION_BOOST: 0.0001,
-  PENSHIRYU_ENGINE_MEDIAL_ACCELERATION_BOOST: 0.0003,
-  PENSHIRYU_ENGINE_FINAL_ACCELERATION_BOOST: 0.0005,
 };
 
 export function changeConstant(key: keyof typeof constants, value: number) {

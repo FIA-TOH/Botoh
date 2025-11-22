@@ -1,8 +1,8 @@
 export interface Engine {
   name: string;
-  initialAcceleration: number;
-  medialAcceleration: number;
-  finalAcceleration: number;
-  topSpeedBoost: number;
+  initialAccelerationNerf: number;
+  medialAccelerationNerf: number;
+  finalAccelerationNerf: number;
+  topSpeedBoostNerf: number;
   confiability: number;
 }

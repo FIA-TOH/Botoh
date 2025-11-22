@@ -3,6 +3,9 @@ import { Chassis } from "./chassis";
 import { Engine } from "./engine";
 import { PitCrew } from "./pitstop";
 import { AstonMaia } from "./scuderia/astonMaia";
+import { Bracchiari } from "./scuderia/bracchiari";
+import { McLarper } from "./scuderia/mclarper";
+import { Penshiryu } from "./scuderia/penshiryu";
 import { ScuderiaColors } from "./scuderiaColours";
 import { Suspension } from "./tyres";
 
@@ -18,22 +21,16 @@ export interface leagueScuderia {
 }
 
 export const leagueScuderia: { [key: string]: leagueScuderia } = {
-  Penshiryu: {
-    name: "Penshiryu",
-    tag: "PE",
-    color: ScuderiaColors.PENSHIRYU,
-  },
+  Penshiryu,
   AstonMaia,
+  McLarper,
+  Bracchiari,
   RubyBison: {
     name: "Ruby Bison",
     tag: "RB",
     color: ScuderiaColors.RUBYBISON,
   },
-  McLarper: {
-    name: "McLarper",
-    tag: "MC",
-    color: ScuderiaColors.MCLARPER,
-  },
+
   Haax: {
     name: "Haax",
     tag: "HX",
@@ -104,11 +101,7 @@ export const leagueScuderia: { [key: string]: leagueScuderia } = {
     tag: "BM",
     color: ScuderiaColors.BMW,
   },
-  Bracchiari: {
-    name: "Bracchiari",
-    tag: "SB",
-    color: ScuderiaColors.BRACCHIARI,
-  },
+
   PHM: {
     name: "PHM FAX",
     tag: "PH",

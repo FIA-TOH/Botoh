@@ -6,33 +6,33 @@ import { ScuderiaColors } from "../scuderiaColours";
 import { leagueScuderia } from "../scuderias";
 import { Suspension } from "../tyres";
 
-export const AstonMaiaEngine: Engine = {
-  name: "Aston Maia Engine",
-  initialAccelerationNerf: 500,
-  medialAccelerationNerf: 200,
+export const BracchiariEngine: Engine = {
+  name: "Bracchiari Engine",
+  initialAccelerationNerf: 0,
+  medialAccelerationNerf: 0,
   finalAccelerationNerf: 0,
   topSpeedBoostNerf: 0,
   confiability: 100,
 };
 
-export const AstonMaiaChassis: Chassis = {
-  name: "Aston Maia Chassis",
-  accelerationNerf: 200,
+export const BracchiariChassis: Chassis = {
+  name: "Bracchiari Chassis",
+  accelerationNerf: 50,
   slipstreamBoost: 0,
   dirtyAirBoost: 0,
   confiability: 100,
 };
 
-export const AstonMaiaBatery: Batery = {
-  name: "Aston Maia Batery",
+export const BracchiariBatery: Batery = {
+  name: "Bracchiari Batery",
   ERSConsputionReduction: 0,
   ERSSpeedBoost: 0,
   ERSChargeBoost: 0,
   confiability: 100,
 };
 
-export const AstonMaiaSuspension: Suspension = {
-  name: "Aston Maia Suspension",
+export const BracchiariSuspension: Suspension = {
+  name: "Bracchiari Suspension",
   tyreDurabilityBoost: 0,
   tyreSpeedDegradatedBoost: 0,
   peakTimeBoost: 0,
@@ -41,20 +41,20 @@ export const AstonMaiaSuspension: Suspension = {
   confiability: 100,
 };
 
-export const AstonMaiaPitCrew: PitCrew = {
-  name: "Aston Maia Pit Crew",
+export const BracchiariPitCrew: PitCrew = {
+  name: "Bracchiari Pit Crew",
   errorChanceReduction: 0,
   fastPitChanceBoost: 0,
   normalPitSpeedTimeBoost: 0,
 };
 
-export const AstonMaia: leagueScuderia = {
-  name: "Aston Maia",
-  tag: "AM",
-  color: ScuderiaColors.ASTONMAIA,
-  engine: AstonMaiaEngine,
-  chassis: AstonMaiaChassis,
-  batery: AstonMaiaBatery,
-  suspension: AstonMaiaSuspension,
-  pitCrew: AstonMaiaPitCrew,
+export const Bracchiari: leagueScuderia = {
+  name: "Bracchiari",
+  tag: "BR",
+  color: ScuderiaColors.BRACCHIARI,
+  engine: BracchiariEngine,
+  chassis: BracchiariChassis,
+  batery: BracchiariBatery,
+  suspension: BracchiariSuspension,
+  pitCrew: BracchiariPitCrew,
 };

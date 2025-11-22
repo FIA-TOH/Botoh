@@ -10,7 +10,8 @@ export function calculateTotalGripMultiplier(
   disc: DiscPropertiesObject,
   playerInfo: PlayerInfo,
   effectiveSlipstream: number,
-  currentTime: number
+  currentTime: number,
+  room: RoomObject
 ) {
   const norm = Math.hypot(disc.xspeed, disc.yspeed);
 
@@ -25,7 +26,8 @@ export function calculateTotalGripMultiplier(
     disc,
     effectiveSlipstream,
     isIncoherentErs,
-    isUsingERS
+    isUsingERS,
+    room
   );
 
   if (!gripMultiplier) {

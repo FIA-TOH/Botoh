@@ -1,3 +1,4 @@
+import { constants } from "../../speed/constants";
 import { Batery } from "../batery";
 import { Chassis } from "../chassis";
 import { Engine } from "../engine";
@@ -6,33 +7,33 @@ import { ScuderiaColors } from "../scuderiaColours";
 import { leagueScuderia } from "../scuderias";
 import { Suspension } from "../tyres";
 
-export const AstonMaiaEngine: Engine = {
-  name: "Aston Maia Engine",
-  initialAccelerationNerf: 500,
-  medialAccelerationNerf: 200,
+export const McLarperEngine: Engine = {
+  name: "McLarper Engine",
+  initialAccelerationNerf: 0,
+  medialAccelerationNerf: 0,
   finalAccelerationNerf: 0,
   topSpeedBoostNerf: 0,
   confiability: 100,
 };
 
-export const AstonMaiaChassis: Chassis = {
-  name: "Aston Maia Chassis",
+export const McLarperChassis: Chassis = {
+  name: "McLarper Chassis",
   accelerationNerf: 200,
   slipstreamBoost: 0,
   dirtyAirBoost: 0,
   confiability: 100,
 };
 
-export const AstonMaiaBatery: Batery = {
-  name: "Aston Maia Batery",
+export const McLarperBatery: Batery = {
+  name: "McLarper Batery",
   ERSConsputionReduction: 0,
   ERSSpeedBoost: 0,
   ERSChargeBoost: 0,
   confiability: 100,
 };
 
-export const AstonMaiaSuspension: Suspension = {
-  name: "Aston Maia Suspension",
+export const McLarperSuspension: Suspension = {
+  name: "McLarper Suspension",
   tyreDurabilityBoost: 0,
   tyreSpeedDegradatedBoost: 0,
   peakTimeBoost: 0,
@@ -41,20 +42,20 @@ export const AstonMaiaSuspension: Suspension = {
   confiability: 100,
 };
 
-export const AstonMaiaPitCrew: PitCrew = {
-  name: "Aston Maia Pit Crew",
+export const McLarperPitCrew: PitCrew = {
+  name: "McLarper Pit Crew",
   errorChanceReduction: 0,
   fastPitChanceBoost: 0,
   normalPitSpeedTimeBoost: 0,
 };
 
-export const AstonMaia: leagueScuderia = {
-  name: "Aston Maia",
-  tag: "AM",
-  color: ScuderiaColors.ASTONMAIA,
-  engine: AstonMaiaEngine,
-  chassis: AstonMaiaChassis,
-  batery: AstonMaiaBatery,
-  suspension: AstonMaiaSuspension,
-  pitCrew: AstonMaiaPitCrew,
+export const McLarper: leagueScuderia = {
+  name: "McLarper",
+  tag: "MC",
+  color: ScuderiaColors.MCLARPER,
+  engine: McLarperEngine,
+  chassis: McLarperChassis,
+  batery: McLarperBatery,
+  suspension: McLarperSuspension,
+  pitCrew: McLarperPitCrew,
 };

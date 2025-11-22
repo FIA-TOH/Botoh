@@ -9,6 +9,8 @@ import { ersActivated, ersPenalty } from "../fuel&Ers/ers";
 import { vsc } from "../../safetyCar/vsc";
 import { fuelGripCalc } from "../fuel&Ers/fuelGrip";
 import { engineGripCalc } from "../development/engine";
+import { chassiGripCalc } from "../development/chassi";
+import { vectorSpeed } from "../../utils";
 
 const isRaining = false;
 
@@ -20,7 +22,8 @@ export function calculateGripMultiplierForConditions(
   playerDisc: DiscPropertiesObject,
   effectiveSlipstream: number,
   isUsingErsInco: boolean,
-  isUsingErs: boolean
+  isUsingErs: boolean,
+  room: RoomObject
 ) {
   const p = playerList[player.id];
 
@@ -100,7 +103,13 @@ export function calculateGripMultiplierForConditions(
     grip = fuelGripCalc(p, grip);
 
     // Engine calculation penalty
-    grip = engineGripCalc(p, grip, playerDisc);
+    grip = engineGripCalc(p, grip, playerDisc, player, room);
+
+    // Chassis calculation penalty
+    grip = chassiGripCalc(p, grip);
+
+    const speed = vectorSpeed(playerDisc.xspeed, playerDisc.yspeed);
+    room.setPlayerAvatar(player.id, speed.toString());
 
     return grip;
   } else {

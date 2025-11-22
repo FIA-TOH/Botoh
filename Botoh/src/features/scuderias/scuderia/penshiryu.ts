@@ -9,16 +9,16 @@ import { Suspension } from "../tyres";
 
 export const PenshiryuEngine: Engine = {
   name: "Penshiryu Engine",
-  initialAcceleration: constants.PENSHIRYU_ENGINE_INITIAL_ACCELERATION_BOOST,
-  medialAcceleration: constants.PENSHIRYU_ENGINE_MEDIAL_ACCELERATION_BOOST,
-  finalAcceleration: constants.PENSHIRYU_ENGINE_FINAL_ACCELERATION_BOOST,
-  topSpeedBoost: 0,
+  initialAccelerationNerf: 0,
+  medialAccelerationNerf: 0,
+  finalAccelerationNerf: 0,
+  topSpeedBoostNerf: 0,
   confiability: 100,
 };
 
 export const PenshiryuChassis: Chassis = {
   name: "Penshiryu Chassis",
-  accelerationBoost: 0,
+  accelerationNerf: 100,
   slipstreamBoost: 0,
   dirtyAirBoost: 0,
   confiability: 100,

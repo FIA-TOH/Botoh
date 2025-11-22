@@ -43,7 +43,8 @@ export function controlPlayerSpeed(
       disc,
       playerInfo,
       slipstreamData.effectiveSlipstream,
-      currentTime
+      currentTime,
+      room
     );
 
     applyPitAndVscRules(

@@ -1,5 +1,6 @@
 import { sendErrorMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
+import { leagueScuderia } from "../../scuderias/scuderias";
 import { changeConstant, constants } from "../../speed/constants";
 
 export function handleChangePropierties(
@@ -37,5 +38,25 @@ export function handleChangePropierties(
   }
 
   changeConstant(key, value);
+  // for (const scudName in leagueScuderia) {
+  //   const scud = leagueScuderia[scudName];
+  //   if (!scud?.engine) continue;
+
+  //   if (key.startsWith("ASTON_MAIA_ENGINE")) {
+  //     scud.engine.initialAccelerationNerf =
+  //       constants.ASTON_MAIA_ENGINE_INITIAL_ACCELERATION_BOOST;
+  //     scud.engine.medialAccelerationNerf =
+  //       constants.ASTON_MAIA_ENGINE_MEDIAL_ACCELERATION_BOOST;
+  //     scud.engine.finalAccelerationNerf =
+  //       constants.ASTON_MAIA_ENGINE_FINAL_ACCELERATION_BOOST;
+  //   } else if (key.startsWith("PENSHIRYU_ENGINE")) {
+  //     scud.engine.initialAccelerationNerf =
+  //       constants.PENSHIRYU_ENGINE_INITIAL_ACCELERATION_BOOST;
+  //     scud.engine.medialAccelerationNerf =
+  //       constants.PENSHIRYU_ENGINE_MEDIAL_ACCELERATION_BOOST;
+  //     scud.engine.finalAccelerationNerf =
+  //       constants.PENSHIRYU_ENGINE_FINAL_ACCELERATION_BOOST;
+  //   }
+  // }
   room.sendAnnouncement(`${key} changed to: ${value}`, byPlayer.id);
 }
