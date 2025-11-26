@@ -27,16 +27,16 @@ export function decideBlowoutPoint(player: PlayerObject) {
 
   if (willBlow) {
     const ranges = [
-      { min: 0, max: 10, chance: 0.0001 },
-      { min: 10, max: 20, chance: 0.0005 },
-      { min: 20, max: 30, chance: 0.01 },
-      { min: 30, max: 40, chance: 0.08 },
-      { min: 40, max: 50, chance: 0.05 },
-      { min: 50, max: 60, chance: 0.14 },
+      { min: 0, max: 10, chance: 0 },
+      { min: 10, max: 20, chance: 0 },
+      { min: 20, max: 30, chance: 0 },
+      { min: 30, max: 40, chance: 0 },
+      { min: 40, max: 50, chance: 0 },
+      { min: 50, max: 60, chance: 0.25 },
       { min: 60, max: 70, chance: 0.3 },
       { min: 70, max: 80, chance: 0.25 },
       { min: 80, max: 90, chance: 0.15 },
-      { min: 90, max: 99, chance: 0.0594 },
+      { min: 90, max: 99, chance: 0.05 },
     ];
 
     const roll = Math.random();
