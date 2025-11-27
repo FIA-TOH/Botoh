@@ -18,7 +18,7 @@ export const AstonMaiaEngine: Engine = {
 export const AstonMaiaChassis: Chassis = {
   name: "Aston Maia Chassis",
   accelerationNerf: 200,
-  slipstreamBoost: 0,
+  slipstreamNerf: 10,
   dirtyAirBoost: 0,
   confiability: 100,
 };

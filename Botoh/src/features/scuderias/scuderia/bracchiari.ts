@@ -18,7 +18,7 @@ export const BracchiariEngine: Engine = {
 export const BracchiariChassis: Chassis = {
   name: "Bracchiari Chassis",
   accelerationNerf: 50,
-  slipstreamBoost: 0,
+  slipstreamNerf: 0,
   dirtyAirBoost: 0,
   confiability: 100,
 };

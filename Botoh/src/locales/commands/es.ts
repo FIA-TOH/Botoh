@@ -311,6 +311,11 @@ export default function es_commands(
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject
+  ) => void,
+  handleUpgradeCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
   ) => void
 ): Commands {
   return {
@@ -382,5 +387,6 @@ export default function es_commands(
     "!set_max_players": handleLimitPlayerQuantity,
     "!set_rr": handleRRPositionCommand,
     "!clear_debris": handleClearDebrisCommand,
+    "!upgrade": handleUpgradeCommand,
   };
 }

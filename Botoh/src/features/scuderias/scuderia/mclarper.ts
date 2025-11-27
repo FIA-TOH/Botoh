@@ -19,7 +19,7 @@ export const McLarperEngine: Engine = {
 export const McLarperChassis: Chassis = {
   name: "McLarper Chassis",
   accelerationNerf: 200,
-  slipstreamBoost: 0,
+  slipstreamNerf: -10,
   dirtyAirBoost: 0,
   confiability: 100,
 };

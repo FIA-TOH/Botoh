@@ -1,5 +1,6 @@
-import { PlayerInfo } from "../../changePlayerState/playerList";
+import { PlayerInfo, playerList } from "../../changePlayerState/playerList";
 import { leagueScuderia } from "../../scuderias/scuderias";
+import { constants } from "../constants";
 
 const NERF_FACTOR = 100000;
 
@@ -23,3 +24,35 @@ export function chassiGripCalc(p: PlayerInfo, grip: number) {
 
   return finalGrip;
 }
+
+export function getPlayerSlipstreamBoost(player: PlayerObject) {
+  const pInfo = playerList[player.id];
+  if (!pInfo.leagueScuderia) return constants.MAX_SLIPSTREAM;
+
+  const scud = leagueScuderia[pInfo.leagueScuderia];
+  if (!scud || !scud.chassis) return constants.MAX_SLIPSTREAM;
+
+  const nerf = scud.chassis.slipstreamNerf ?? 0;
+
+  const slipBoost = nerf / 100000;
+
+  let newMax = constants.MAX_SLIPSTREAM - slipBoost;
+  if (newMax < 0) newMax = 0;
+
+  return newMax;
+}
+
+// export function getCarDirtyAir(p: PlayerObject) {
+//   const info = playerList[p.id];
+//   if (!info.leagueScuderia) return constants.DIRTY_AIR_DEFAULT;
+
+//   const scud = leagueScuderia[info.leagueScuderia];
+//   if (!scud?.chassis) return constants.DIRTY_AIR_DEFAULT;
+
+//   const boost = scud.chassis.dirtyAirBoost ?? 0;
+
+//   // dirtyAirBoost 10 → 0.0001
+//   const converted = boost / 100000;
+
+//   return converted;
+// }

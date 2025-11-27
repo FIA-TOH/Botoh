@@ -26,6 +26,9 @@ export const constants = {
   SLIPSTREAM_RESIDUAL_VALUE: 0.0003 * 0.2, // How much powerfull is the slipstream when you are closer
   SLIPSTREAM_ACTIVATION_DISTANCE: 600, // The distance you have to be to the slipstream start to act
   SLIPSTREAM_LATERAL_TOLERANCE: 38, // The width of the slipstream effects
+  // MAX_DIRTY_AIR: 0.0001,
+  // DIRTY_AIR_DEFAULT: 0,
+  // DIRTY_AIR_DISTANCE: 200,
 
   // ===============================
   // Chuva e Aderência

@@ -67,6 +67,7 @@ import { handlePlayerQuantity } from "./adminThings/handlePlayerQuantity";
 import { handleLimitPlayerQuantity } from "./adminThings/handleLimitPlayerQuantity";
 import { handleRRPositionCommand } from "./adminThings/handleRRPositionCommand";
 import { handleClearDebrisCommand } from "./debris/handleClearDebrisCommand";
+import { handleUpgradeCommand } from "./scuderia/handleUpgradeCommand";
 
 export type CommandFunction = (
   handleAdminCommand: (
@@ -378,6 +379,11 @@ export type CommandFunction = (
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject
+  ) => void,
+  handleUpgradeCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject
   ) => void
 ) => Commands;
 
@@ -450,7 +456,8 @@ function importCommandsByLanguage(commandFunctions: {
         handlePlayerQuantity,
         handleLimitPlayerQuantity,
         handleRRPositionCommand,
-        handleClearDebrisCommand
+        handleClearDebrisCommand,
+        handleUpgradeCommand
       ),
     }),
     {}
@@ -523,7 +530,8 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
         handlePlayerQuantity,
         handleLimitPlayerQuantity,
         handleRRPositionCommand,
-        handleClearDebrisCommand
+        handleClearDebrisCommand,
+        handleUpgradeCommand
       ),
     }),
     {}
