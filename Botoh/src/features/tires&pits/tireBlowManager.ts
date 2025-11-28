@@ -20,7 +20,7 @@ export function decideBlowoutPoint(player: PlayerObject) {
   const p = playerList[player.id];
   if (!p) return;
 
-  const tyreBlownChance = 10;
+  const tyreBlownChance = 5;
   let wearPoint = 100;
 
   const willBlow = Math.random() <= tyreBlownChance / 100;
