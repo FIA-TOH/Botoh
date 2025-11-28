@@ -1,6 +1,5 @@
 import { log } from "../discord/logger";
-import { TIRE_AVATAR } from "../speed/handleSpeed";
-import { tyresActivated } from "../tires&pits/tires";
+import { Tires, tyresActivated } from "../tires&pits/tires";
 import { playerList } from "./playerList";
 
 export enum Situacions {
@@ -16,6 +15,16 @@ export enum Situacions {
   NeedPit = "NeedPit",
   BlowoutWarning = "BlowoutWarning",
 }
+
+export const TIRE_AVATAR: { [key in Tires]: string } = {
+  SOFT: "🔴",
+  MEDIUM: "🟡",
+  HARD: "⚪",
+  INTER: "🟢",
+  WET: "🔵",
+  FLAT: "⚫",
+  TRAIN: "🟣",
+};
 
 const currentSituacion: Record<number, Situacions> = {};
 

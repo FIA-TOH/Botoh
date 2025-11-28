@@ -1,7 +1,7 @@
 export interface Chassis {
   name: string;
-  accelerationBoost: number;
-  slipstreamBoost: number;
+  accelerationNerf: number;
+  slipstreamNerf: number;
   dirtyAirBoost: number;
   confiability: number;
 }

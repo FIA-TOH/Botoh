@@ -1,17 +1,15 @@
 import { handleAvatar, Situacions } from "../../changePlayerState/handleAvatar";
-import { vsc } from "../handleSpeed";
 import { ifInBoxZone } from "../../tires&pits/pits";
 import { playerList } from "../../changePlayerState/playerList";
 import { getRunningPlayers } from "../../utils";
 import { gasEnabled } from "../handleSlipstream";
 import {
-  gameMode,
-  GameMode,
   generalGameMode,
   GeneralGameMode,
 } from "../../changeGameState/changeGameModes";
 import { presentationLap } from "../../commands/gameState/handlePresentationLapCommand";
 import { playerBuffList } from "../../commands/adjustThings/handleNerfListCommand";
+import { vsc } from "../../safetyCar/vsc";
 
 const ERS_DURATION_SECONDS = 7;
 const ERS_RECHARGE_MINUTES = 2;

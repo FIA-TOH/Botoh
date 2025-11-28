@@ -91,6 +91,13 @@ function calculateSlipstream(
     }
   });
 
+  //   const playerMaxSlipstream = getPlayerSlipstreamBoost(player.p);
+
+  // const finalSlipstream = Math.min(
+  //   gameMode !== GameMode.INDY ? playerMaxSlipstream : playerMaxSlipstream / 2,
+  //   minSlipstream / 100
+  // );
+
   const finalSlipstream = Math.min(
     gameMode !== GameMode.INDY
       ? constants.MAX_SLIPSTREAM

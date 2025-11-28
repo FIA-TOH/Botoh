@@ -6,8 +6,8 @@ import {
 } from "../changeGameState/changeGameModes";
 import { getPlayersOrderedByQualiTime } from "../changeGameState/qualy/playerTime";
 import { positionList } from "../changeGameState/race/positionList";
+import { TIRE_AVATAR } from "../changePlayerState/handleAvatar";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
-import { TIRE_AVATAR } from "../speed/handleSpeed";
 import { getBestPit } from "../tires&pits/trackBestPit";
 import { getTimestamp } from "../utils";
 import { laps } from "../zones/laps";

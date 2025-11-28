@@ -3,5 +3,4 @@ export interface PitCrew {
   errorChanceReduction: number;
   fastPitChanceBoost: number;
   normalPitSpeedTimeBoost: number;
-  confiability: number;
 }
