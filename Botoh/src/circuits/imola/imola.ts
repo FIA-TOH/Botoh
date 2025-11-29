@@ -199,6 +199,12 @@ const IMOLA_INFO: CircuitInfo = {
       index: 253,
       penalty: 5,
     },
+    {
+      v0: [2218, -1788],
+      v1: [2254, -1662],
+      index: 254,
+      penalty: 5,
+    },
   ],
 };
 
