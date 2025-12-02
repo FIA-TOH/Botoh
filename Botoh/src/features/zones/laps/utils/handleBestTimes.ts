@@ -47,8 +47,6 @@ export function handleBestTimes(
     broadcastLapTimeToPlayers(room, lapTime, p.name);
     updatePlayerTime(p.name, lapTime, p.id, playerData.leagueScuderia);
   } else {
-    console.log("bestTimeP:", bestTimeP, "lapTime:", lapTime);
-
     const MAX_REASONABLE_LAP = 600; // 10 minutes
 
     const isValidBestTime =

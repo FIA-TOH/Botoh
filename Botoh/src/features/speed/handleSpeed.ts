@@ -1,22 +1,27 @@
 import { playerList } from "../changePlayerState/playerList";
-import { getRunningPlayers } from "../utils";
+import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
 import { vsc } from "../safetyCar/vsc";
+import { getRunningPlayers } from "../utils";
 import { calculateTotalGripMultiplier } from "./grip/calculateTotalGripMultiplier";
 import { applyPitAndVscRules } from "./pitAndVscRules";
 import { calculateSlipstreamEffect } from "./slipstream/slipstreamUtils";
 
 /**
- * Main controller function
+ * Function that sets a players max speed.
+ *
+ * Note: This does require a high tick-rate. At least on Chrome, this requires the headless host tab to be visible/selected.
  */
 export function controlPlayerSpeed(
-  playersAndDiscs: { p: PlayerObject; disc: DiscPropertiesObject }[],
+  playersAndDiscsSubset: { p: PlayerObject; disc: DiscPropertiesObject }[],
   room: RoomObject
 ) {
   const currentTime = room.getScores()?.time || 0;
 
+  const playersAndDiscs = getPlayerAndDiscs(room);
+
   const playersRunning = getRunningPlayers(playersAndDiscs);
 
-  playersAndDiscs.forEach(({ p, disc }) => {
+  playersAndDiscsSubset.forEach(({ p, disc }) => {
     const playerInfo = playerList[p.id];
 
     if (playerInfo.inPitStop) {
