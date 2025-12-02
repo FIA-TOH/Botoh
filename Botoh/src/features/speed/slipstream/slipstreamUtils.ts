@@ -20,7 +20,6 @@ export function calculateSlipstreamEffect(
     { p, disc },
     playersRunning.filter((o) => o.p.id !== p.id)
   );
-  console.log(`Slipstream bruto para ${p.id}:`, slipstream.toFixed(4));
 
   const isActive =
     slipstream > constants.SLIPSTREAM_RESIDUAL_VALUE &&
@@ -32,15 +31,7 @@ export function calculateSlipstreamEffect(
   } else if (playerInfo.slipstreamEndTime === undefined) {
     playerInfo.slipstreamEndTime = currentTime;
   }
-  console.log(`Slipstream aplicado (${p.id}) =>`, {
-    slipstream: slipstream.toFixed(4),
-    active: isActive,
-    residualWindow:
-      playerInfo.slipstreamEndTime !== undefined
-        ? (currentTime - playerInfo.slipstreamEndTime).toFixed(2)
-        : null,
-    effectiveSlipstream: effectiveSlipstream.toFixed(4),
-  });
+
   const withinResidual =
     playerInfo.slipstreamEndTime !== undefined &&
     currentTime - playerInfo.slipstreamEndTime <=
