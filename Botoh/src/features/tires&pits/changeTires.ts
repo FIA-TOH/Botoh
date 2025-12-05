@@ -7,7 +7,7 @@ import {
   sendBestTimeRace,
 } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
-import { ifInBoxZone } from "./pits";
+import { ifInBoxZone } from "./pitLane";
 import { decideBlowoutPoint } from "./tireBlowManager";
 import { Tires, TIRE_STARTING_SPEED } from "./tires";
 import { trySetBestPit } from "./trackBestPit";

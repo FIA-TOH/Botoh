@@ -6,7 +6,7 @@ import { sendErrorMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 
 import { handlePitStop } from "../../tires&pits/handlePitStop";
-import { ifInBoxZone } from "../../tires&pits/pits";
+import { ifInBoxZone } from "../../tires&pits/pitLane";
 import { Tires } from "../../tires&pits/tires";
 
 export function handleTiresCommand(

@@ -3,7 +3,7 @@ import { distributeSpeed } from "../speed/distributrSpeed";
 import { updateErs } from "../speed/fuel&Ers/ers";
 import { checkPlayerSector } from "../zones/handleSectorChange";
 
-import { handlePitlane } from "../tires&pits/pits";
+import { handlePitlane } from "../tires&pits/pitLane";
 import { getRunningPlayers, vectorSpeed } from "../utils";
 import { updateGripCounter } from "../speed/grip/grip";
 import handleTireWear from "../tires&pits/handleTireWear";

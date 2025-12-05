@@ -1,5 +1,5 @@
 import { handleAvatar, Situacions } from "../../changePlayerState/handleAvatar";
-import { ifInBoxZone } from "../../tires&pits/pits";
+import { ifInBoxZone } from "../../tires&pits/pitLane";
 import { playerList } from "../../changePlayerState/playerList";
 import { getRunningPlayers } from "../../utils";
 import { gasEnabled } from "../handleSlipstream";
