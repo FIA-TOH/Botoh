@@ -123,4 +123,9 @@ export function handleUpgradeCommand(
     0x00ff00
   );
 }
-//!upgrade astonmaia chassis accelerationNerf 1000
+//!upgrade astonmaia chassis accelerationNerf 0
+//!upgrade astonmaia chassis slipstreamNerf 20
+//!upgrade penshiryu engine medialAccelerationNerf 200
+//!upgrade astonmaia engine initialAccelerationNerf 700
+//!upgrade astonmaia engine finalAccelerationNerf 0
+//!upgrade astonmaia engine topSpeedBoostNerf 10
