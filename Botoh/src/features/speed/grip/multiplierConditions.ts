@@ -11,6 +11,7 @@ import { fuelGripCalc } from "../fuel&Ers/fuelGrip";
 import { engineGripCalc } from "../development/engine";
 import { chassiGripCalc } from "../development/chassi";
 import { vectorSpeed } from "../../utils";
+import { maxSpeedFromGrip } from "../getMaxSpeed";
 
 const isRaining = false;
 
@@ -78,7 +79,6 @@ export function calculateGripMultiplierForConditions(
      */
     // Base grip from tyre behavior in dry conditions
     let grip = calculateGripForDryConditions(tyres, wear, norm) ?? 1;
-
     // DRS bonus
     if (p.drs) {
       grip += constants.DRS_SPEED_GAIN;
@@ -102,15 +102,15 @@ export function calculateGripMultiplierForConditions(
     // Fuel load penalty (except with TRAIN tyres)
     grip = fuelGripCalc(p, grip);
 
-    // Engine calculation penalty
-    grip = engineGripCalc(p, grip, playerDisc, player, room);
-
     // Chassis calculation penalty
     grip = chassiGripCalc(p, grip);
 
-    const speed = vectorSpeed(playerDisc.xspeed, playerDisc.yspeed);
-    // room.setPlayerAvatar(player.id, speed.toString());
+    // Engine calculation penalty
+    // NOTE: this SHOULD be the last modifier applied because of grid
+    grip = engineGripCalc(p, grip, playerDisc, player, room);
 
+    // const speed = vectorSpeed(playerDisc.xspeed, playerDisc.yspeed);
+    // room.setPlayerAvatar(player.id, speed.toString());
     return grip;
   } else {
     /**

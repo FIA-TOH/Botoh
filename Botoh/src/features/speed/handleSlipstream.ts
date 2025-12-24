@@ -1,6 +1,7 @@
 import { gameMode, GameMode } from "../changeGameState/changeGameModes";
 import { vectorSpeed } from "../utils";
 import { constants } from "./constants";
+import { getPlayerSlipstreamBoost } from "./development/chassi";
 
 export let slipstreamEnabled = false;
 export let gasEnabled = false;
@@ -91,12 +92,13 @@ function calculateSlipstream(
     }
   });
 
+  const playerMaxSlipstream = getPlayerSlipstreamBoost(player.p);
+
   const finalSlipstream = Math.min(
-    gameMode !== GameMode.INDY
-      ? constants.MAX_SLIPSTREAM
-      : constants.MAX_SLIPSTREAM / 2,
+    gameMode !== GameMode.INDY ? playerMaxSlipstream : playerMaxSlipstream / 2,
     minSlipstream / 100
   );
+
   // console.log(`\n Final slipstream to the player ${player.p.id}: ${finalSlipstream.toFixed(5)}\n`);
   return finalSlipstream;
 }

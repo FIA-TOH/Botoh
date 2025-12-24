@@ -45,6 +45,7 @@ export function resetPlayerComeBack(
   playerList[id].pitSteps = undefined;
   playerList[id].drs = false;
   playerList[id].slipstreamEndTime = undefined;
+  playerList[id].finalSlipstream = 0;
   playerList[id].penaltyCounter = 0;
   playerList[id].alertSent = {};
   playerList[id].lastCheckTime = 0;
