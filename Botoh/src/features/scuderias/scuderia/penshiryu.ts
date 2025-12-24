@@ -18,8 +18,8 @@ export const PenshiryuEngine: Engine = {
 
 export const PenshiryuChassis: Chassis = {
   name: "Penshiryu Chassis",
-  accelerationNerf: 100,
-  slipstreamNerf: 20,
+  accelerationNerf: 0,
+  slipstreamNerf: 0,
   dirtyAirBoost: 0,
   confiability: 100,
 };

@@ -1,8 +1,7 @@
-import { PlayerInfo } from "../../changePlayerState/playerList";
+import { PlayerInfo, playerList } from "../../changePlayerState/playerList";
 import { leagueScuderia } from "../../scuderias/scuderias";
 import { vectorSpeed } from "../../utils";
-import { BASE_MAX_SPEED, maxSpeedFromGrip } from "../getMaxSpeed";
-
+import { maxSpeedFromGrip } from "../getMaxSpeed";
 const smoothedBoostMap: Record<number, number> = {};
 const NERF_FACTOR = 100000;
 
@@ -56,7 +55,8 @@ function calcAccelerationGrip(
 function calcTopSpeedLimitGrip(
   grip: number,
   speed: number,
-  topSpeedBoostNerf: number
+  topSpeedBoostNerf: number,
+  slipstream: number
 ) {
   const baseMaxSpeed = maxSpeedFromGrip(grip);
 
@@ -75,7 +75,7 @@ function calcTopSpeedLimitGrip(
   const excess = speed - finalMaxSpeed;
   const hardDrag = 0.0003 + excess * 0.0001;
 
-  return grip - hardDrag;
+  return grip - hardDrag + slipstream;
 }
 
 export function engineGripCalc(
@@ -92,6 +92,7 @@ export function engineGripCalc(
 
   const engine = scud.engine;
   const speed = vectorSpeed(playerDisc.xspeed, playerDisc.yspeed);
+  const slip = playerList[player.id]?.finalSlipstream ?? 0;
 
   const gripAfterAcceleration = calcAccelerationGrip(
     player.id,
@@ -104,7 +105,8 @@ export function engineGripCalc(
   const finalGrip = calcTopSpeedLimitGrip(
     gripAfterAcceleration,
     speed,
-    engine.topSpeedBoostNerf
+    engine.topSpeedBoostNerf,
+    slip
   );
 
   return finalGrip;

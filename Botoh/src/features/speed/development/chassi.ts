@@ -34,9 +34,9 @@ export function getPlayerSlipstreamBoost(player: PlayerObject) {
 
   const nerf = scud.chassis.slipstreamNerf ?? 0;
 
-  const slipBoost = nerf / 100000;
+  const slipNerf = nerf / NERF_FACTOR;
 
-  let newMax = constants.MAX_SLIPSTREAM - slipBoost;
+  let newMax = constants.MAX_SLIPSTREAM - slipNerf;
   if (newMax < 0) newMax = 0;
 
   return newMax;

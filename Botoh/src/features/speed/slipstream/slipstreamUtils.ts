@@ -41,5 +41,7 @@ export function calculateSlipstreamEffect(
     ? constants.SLIPSTREAM_RESIDUAL_VALUE
     : slipstream;
 
+  playerInfo.finalSlipstream = effectiveSlipstream;
+
   return { effectiveSlipstream };
 }

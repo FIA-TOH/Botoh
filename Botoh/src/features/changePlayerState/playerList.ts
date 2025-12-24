@@ -72,6 +72,7 @@ export interface PlayerInfo {
   gas: number;
   prevGas: number;
   slipstreamEndTime: number | undefined;
+  finalSlipstream: number;
 
   // Penalidades e alertas
   penaltyCounter: number;
