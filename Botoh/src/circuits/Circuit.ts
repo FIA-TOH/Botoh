@@ -47,9 +47,19 @@ export interface CircuitInfo {
   TireDegradationPercentage?: number;
   CutDetectSegments?: CutSegment[];
   haveDebris?: boolean;
+  physicsType?: CircuitPhysics;
 }
 
 export interface Circuit {
   map: string;
   info: CircuitInfo;
+}
+
+export enum CircuitPhysics {
+  CLASSIC = "classic",
+  F1_NEWGEN = "f1_newgen",
+  INDY = "indy",
+  WEC_NEWGEN = "wec_newgen",
+  SEMINEWGEN = "seminewgen",
+  RALLY = "rally",
 }

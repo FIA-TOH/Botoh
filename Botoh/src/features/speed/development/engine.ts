@@ -60,6 +60,10 @@ function calcTopSpeedLimitGrip(
 ) {
   const baseMaxSpeed = maxSpeedFromGrip(grip);
 
+  if (topSpeedBoostNerf === 0) {
+    return grip;
+  }
+
   const finalMaxSpeed = baseMaxSpeed * (1 - topSpeedBoostNerf / 100);
 
   const softZone = finalMaxSpeed * 0.9;
