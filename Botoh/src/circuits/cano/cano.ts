@@ -1,27 +1,27 @@
-import { bestTimes } from '../bestTimes';
-import { Circuit, CircuitInfo, Direction } from '../Circuit';
-import { readFileSync } from 'fs';
-import { join } from 'path';
+import { bestTimes } from "../bestTimes";
+import { Circuit, CircuitInfo, Direction } from "../Circuit";
+import { readFileSync } from "fs";
+import { join } from "path";
 
-const cano_raw = readFileSync(join(__dirname, 'cano.hbs'), 'utf-8');
+const cano_raw = readFileSync(join(__dirname, "cano.hbs"), "utf-8");
 const cano_json = JSON.parse(cano_raw);
 
 const CANO_INFO: CircuitInfo = {
   finishLine: {
     bounds: {
-      minX: 2149,
-      maxX: 2181,
-      minY: -243,
-      maxY: 400,
+      minX: 2171,
+      maxX: 2203,
+      minY: -246,
+      maxY: 520,
     },
     passingDirection: Direction.LEFT,
   },
   sectorOne: {
     bounds: {
-      minX: 2149,
-      maxX: 2181,
-      minY: -243,
-      maxY: 400,
+      minX: 2171,
+      maxX: 2203,
+      minY: -246,
+      maxY: 520,
     },
     passingDirection: Direction.LEFT,
   },
@@ -29,8 +29,8 @@ const CANO_INFO: CircuitInfo = {
     bounds: {
       minX: -1152,
       maxX: -112,
-      minY: -112,
-      maxY: -80,
+      minY: -1232,
+      maxY: -1200,
     },
     passingDirection: Direction.UP,
   },
@@ -43,7 +43,7 @@ const CANO_INFO: CircuitInfo = {
     },
     passingDirection: Direction.RIGHT,
   },
-  name: 'Zandvoort by Rodri',
+  name: "Circuito Urbano de La Villa Cano - By Ximb",
   boxLine: {
     minX: 1540,
     maxX: 2540,
@@ -156,13 +156,13 @@ const CANO_INFO: CircuitInfo = {
       v0: [267, -59],
       v1: [655, -278],
       index: 243,
-      penalty: 5,
+      penalty: 15,
     },
     {
       v0: [655, -278],
       v1: [1123, -15],
       index: 244,
-      penalty: 5,
+      penalty: 15,
     },
     {
       v0: [162, 109],
@@ -192,7 +192,7 @@ const CANO_INFO: CircuitInfo = {
       v0: [2373, -785],
       v1: [2229, -398],
       index: 249,
-      penalty: 5,
+      penalty: 10,
     },
     {
       v0: [2539, -762],

@@ -43,7 +43,7 @@ const CANOPUBLIC_INFO: CircuitInfo = {
     },
     passingDirection: Direction.RIGHT,
   },
-  name: 'Zandvoort by Rodri',
+  name: 'Circuito Urbano de La Villa Cano - By Ximb',
   boxLine: {
     minX: 1540,
     maxX: 2540,
