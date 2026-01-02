@@ -1,14 +1,21 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
-const MAP_FILE = path.join(__dirname, '..', 'src', 'circuits', 'cano', 'cano.json');
+const MAP_FILE = path.join(
+  __dirname,
+  "..",
+  "src",
+  "circuits",
+  "spa",
+  "spa.json",
+);
 
-const SEGMENT_COLOR = '696969';
+const SEGMENT_COLOR = "696969";
 
-const mapJson = JSON.parse(fs.readFileSync(MAP_FILE, 'utf-8'));
+const mapJson = JSON.parse(fs.readFileSync(MAP_FILE, "utf-8"));
 
 if (!mapJson.segments || !mapJson.vertexes) {
-  console.error('Mapa inválido');
+  console.error("Mapa inválido");
   process.exit(1);
 }
 
@@ -27,7 +34,7 @@ const CutDetectSegments = mapJson.segments
   })
   .filter(Boolean);
 
-console.log('CutDetectSegments: ');
+console.log("CutDetectSegments: ");
 console.log(JSON.stringify(CutDetectSegments, null, 2));
 
 //node generateCutSegments.js
