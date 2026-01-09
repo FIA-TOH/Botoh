@@ -72,7 +72,7 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
     trackNameMapping["hockenheimring"],
   ],
   fuji: [37.183, "Ximbastian Vettel", trackNameMapping["fuji"]],
-  hungaroing: [37.617, "Jean Dany-Vegne", trackNameMapping["hungaroing"]],
+  hungaroing: [42.7, "Ximb", trackNameMapping["hungaroing"]],
   mexico: [37.603, "Ximbastian Vettel", trackNameMapping["mexico"]],
   austria: [30.916, "Jean Dany Vegne", trackNameMapping["austria"]],
   laguna_seca: [34.331, "Cano", trackNameMapping["laguna_seca"]],
