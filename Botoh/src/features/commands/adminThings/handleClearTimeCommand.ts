@@ -1,15 +1,15 @@
-import { updatePlayerTime } from "../../changeGameState/qualy/playerTime";
 import { playerList } from "../../changePlayerState/playerList";
 import {
   sendErrorMessage,
   sendNonLocalizedSmallChatMessage,
 } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
+import { updatePlayerTime } from "../gameMode/qualy/playerTime";
 
 export function handleClearTimeCommand(
   byPlayer: PlayerObject,
   args: string[],
-  room: RoomObject
+  room: RoomObject,
 ) {
   if (!byPlayer.admin) {
     sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id);
@@ -25,14 +25,14 @@ export function handleClearTimeCommand(
 
   const listPlayer = room.getPlayerList();
   const player = listPlayer.find(
-    (p) => p.name.toLowerCase() === argsString.toLowerCase()
+    (p) => p.name.toLowerCase() === argsString.toLowerCase(),
   );
 
   if (player) {
     playerList[player.id].bestTime = Number.MAX_VALUE;
   } else {
     room.sendAnnouncement(
-      "IMPORTANT: The player isn't in the room at the moment, reset their time when they enter again."
+      "IMPORTANT: The player isn't in the room at the moment, reset their time when they enter again.",
     );
   }
 
@@ -41,6 +41,6 @@ export function handleClearTimeCommand(
   sendNonLocalizedSmallChatMessage(
     room,
     "Cleared " + argsString + "'s best time",
-    byPlayer.id
+    byPlayer.id,
   );
 }

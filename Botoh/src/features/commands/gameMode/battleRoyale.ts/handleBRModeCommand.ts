@@ -1,14 +1,11 @@
 import {
-  gameMode,
+  changeGameMode,
   GameMode,
-  generalGameMode,
-  GeneralGameMode,
 } from "../../../changeGameState/changeGameModes";
 import { sendErrorMessage } from "../../../chat/chat";
 import { MESSAGES } from "../../../chat/messages";
-import { setQualiTime } from "./qualiMode";
 
-export function handleQTimeCommand(
+export function handleBRModeCommand(
   byPlayer: PlayerObject,
   args: string[],
   room: RoomObject,
@@ -22,14 +19,6 @@ export function handleQTimeCommand(
     sendErrorMessage(room, MESSAGES.ALREADY_STARTED(), byPlayer.id);
     return;
   }
-  if (generalGameMode !== GeneralGameMode.GENERAL_QUALY) {
-    sendErrorMessage(room, MESSAGES.NOT_IN_QUALI(), byPlayer.id);
-    return false;
-  }
-  if (args.length === 0) {
-    sendErrorMessage(room, MESSAGES.QTIME_COMMAND_USAGE(), byPlayer.id);
-  }
 
-  setQualiTime(byPlayer, parseInt(args[0]), room);
-  return false;
+  changeGameMode(GameMode.BATTLE_ROYALE, room);
 }

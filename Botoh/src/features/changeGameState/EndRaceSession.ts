@@ -1,3 +1,4 @@
+import { qualiTime, raceTime } from "../commands/gameMode/qualy/qualiMode";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { getRunningPlayers } from "../utils";
 import {
@@ -7,11 +8,10 @@ import {
   generalGameMode,
 } from "./changeGameModes";
 import { changeGameStoppedNaturally } from "./gameStopeedNaturally";
-import { qualiTime, raceTime } from "./qualy/qualiMode";
 
 export function endRaceSession(
   playersAndDiscs: { p: PlayerObject; disc: DiscPropertiesObject }[],
-  room: RoomObject
+  room: RoomObject,
 ) {
   const players = getRunningPlayers(playersAndDiscs);
   const scores = room.getScores();

@@ -1,5 +1,4 @@
 import { updateBestTime } from "../../../../circuits/bestTimes";
-import { updatePlayerTime } from "../../../changeGameState/qualy/playerTime";
 import { playerList } from "../../../changePlayerState/playerList";
 import {
   sendBestTimeEver,
@@ -8,6 +7,7 @@ import {
   sendWorseTime,
 } from "../../../chat/chat";
 import { MESSAGES } from "../../../chat/messages";
+import { updatePlayerTime } from "../../../commands/gameMode/qualy/playerTime";
 import { sendDiscordTrackRecord } from "../../../discord/discord";
 import { ACTUAL_CIRCUIT } from "../../../roomFeatures/stadiumChange";
 import { serialize } from "../../../utils";
@@ -18,7 +18,7 @@ export function handleBestTimes(
   p: PlayerObject,
   lapTime: number,
   circuitBestTime: number,
-  isFastestLapRace: boolean
+  isFastestLapRace: boolean,
 ) {
   const playerData = playerList[p.id];
   const bestTimeP = serialize(playerData.bestTime);
@@ -60,7 +60,7 @@ export function handleBestTimes(
     sendWorseTime(
       room,
       MESSAGES.WORSE_TIME(lapTime, serialize(differenceToBestTime)),
-      p.id
+      p.id,
     );
 
     broadcastLapTimeToPlayers(room, lapTime, p.name, false);

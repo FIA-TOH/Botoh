@@ -118,6 +118,7 @@
   "TIME_TO_VOTE": "Oy verme zamanı! Aşağıdaki pistlerden birini seçmek için !vote (Numara) yazın",
   "TIME_TO_QUALY": "🚨Kualifikasyon! En iyi zamanınızı yapın!🚨",
   "TIME_TO_RACE": "🚨Yarış! {{laps}} laps. En iyisi kazansın!🚨",
+  "TIME_TO_BATTLE_ROYALE": "🚨 Battle Royale!! Son kalan sen olma!🚨",
   "WORSE_TIME": "Tur zamanı: {{lapTime}} (-{{diferenca}})",
   "CODE_BOX": "PitStop kodunuz {{codigo}}, lastik tipinden sonra ters olarak girin.",
   "CODE_WRONG": "Hatalı kod! Doğru kodu ters olarak girin.",

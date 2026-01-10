@@ -3,12 +3,12 @@ import { sendSuccessMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { changeLaps } from "../commands/adminThings/handleChangeLaps";
 import { handleRREnabledCommand } from "../commands/adminThings/handleRREnabledCommand";
+import { qualiTime, raceTime } from "../commands/gameMode/qualy/qualiMode";
 
 import { enableGas, enableSlipstream } from "../speed/handleSlipstream";
 import { enableTyres } from "../tires&pits/tires";
 import { laps } from "../zones/laps";
 import { CIRCUITS, currentMapIndex } from "../zones/maps";
-import { qualiTime, raceTime } from "./qualy/qualiMode";
 
 export enum GameMode {
   RACE = "race",
@@ -17,6 +17,7 @@ export enum GameMode {
   INDY = "indy",
   WAITING = "waiting",
   HARD_QUALY = "hard_qualy",
+  BATTLE_ROYALE = "battle_royale",
 }
 
 export enum GeneralGameMode {
@@ -53,6 +54,9 @@ export function changeGameMode(newMode: GameMode, room: RoomObject) {
       break;
     case GameMode.HARD_QUALY:
       result = handleHardQualyMode(room);
+      break;
+    case GameMode.BATTLE_ROYALE:
+      result = handleBattleRoyaleMode(room);
       break;
   }
 
@@ -123,4 +127,14 @@ function handleHardQualyMode(room: RoomObject) {
   enableTyres(false);
   sendSuccessMessage(room, MESSAGES.TIME_TO_QUALY());
   changeGeneralGameMode(GeneralGameMode.GENERAL_QUALY);
+}
+
+function handleBattleRoyaleMode(room: RoomObject) {
+  enableGas(false);
+  enableSlipstream(true);
+  setGhostMode(room, false);
+  handleRREnabledCommand(undefined, ["false"], room);
+  enableTyres(false);
+  sendSuccessMessage(room, MESSAGES.TIME_TO_RACE(laps));
+  changeGeneralGameMode(GeneralGameMode.GENERAL_RACE);
 }

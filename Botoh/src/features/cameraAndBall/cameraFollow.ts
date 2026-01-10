@@ -1,11 +1,11 @@
 import {
-  gameMode,
-  GameMode,
   generalGameMode,
   GeneralGameMode,
+  gameMode,
+  GameMode,
 } from "../changeGameState/changeGameModes";
-import { getPlayersOrderedByQualiTime } from "../changeGameState/qualy/playerTime";
-import { positionList } from "../changeGameState/race/positionList";
+import { getPlayersOrderedByQualiTime } from "../commands/gameMode/qualy/playerTime";
+import { positionList } from "../commands/gameMode/race/positionList";
 import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
 import { getRunningPlayers } from "../utils";
 import { isFollowPlayerValid } from "./setBallPosition";

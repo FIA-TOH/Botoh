@@ -26,6 +26,7 @@ import { handleHelpCommand } from "./chat/handleHelpCommand";
 import { handleIndyModeCommand } from "./gameMode/indy/handleIndyModeCommand";
 import { handleQTimeCommand } from "./gameMode/qualy/handleQTimeCommand";
 import { handleRModeCommand } from "./gameMode/race/handleRModeCommand";
+
 import { handleWaitTimeCommand } from "./gameMode/race/handleWaitTimeCommand";
 import { handleLapsCommand } from "./laps/handleLapsCommand";
 import { handleTiresCommand } from "./tyres/handleTiresCommand";
@@ -68,323 +69,329 @@ import { handleLimitPlayerQuantity } from "./adminThings/handleLimitPlayerQuanti
 import { handleRRPositionCommand } from "./adminThings/handleRRPositionCommand";
 import { handleClearDebrisCommand } from "./debris/handleClearDebrisCommand";
 import { handleUpgradeCommand } from "./scuderia/handleUpgradeCommand";
+import { handleBRModeCommand } from "./gameMode/battleRoyale.ts/handleBRModeCommand";
 
 export type CommandFunction = (
   handleAdminCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleCircuitCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleCommandsCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleMapsCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleSpeedCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleTimesCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handlePositionsCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleVSCCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleQModeCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleTModeCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleQTimeCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleRModeCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
+  ) => void,
+  handleBRodeCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
   ) => void,
   handleBBCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleTiresCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleHelpCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleClearBansCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleLapsCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleWaitTimeCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleLanguageCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleAvatarCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleClearTimeCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleMuteCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleRainCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleToggleSystems: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleGasCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleGhostCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleRREnabledCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleRRCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleRainItensity: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleEndRainCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleAfkCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleEnableQualyForPub: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleTipsCommands: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleExplainTyresCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleExplainServerCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleExplainRainCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleExplainErsCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleEveryoneLapsCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleTpCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleIndyModeCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleFlagCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleVoteCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleClearCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleRecordCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleAjustPlayerCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleNerfListCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handlePresentationLapCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleChangePropierties: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleSetScuderia: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleSeeScuderias: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleDiscordCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleCameraProperties: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleCameraPlayerFollow: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleCameraPositionFollow: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleChangeGameFLow: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleSetMinimumPit: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleRejoinCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleMoveToBoxCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handlePlayerQuantity: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleLimitPlayerQuantity: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleRRPositionCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleClearDebrisCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
+    room: RoomObject,
   ) => void,
   handleUpgradeCommand: (
     byPlayer: PlayerObject,
     args: string[],
-    room: RoomObject
-  ) => void
+    room: RoomObject,
+  ) => void,
 ) => Commands;
 
 function importCommandsByLanguage(commandFunctions: {
@@ -406,6 +413,7 @@ function importCommandsByLanguage(commandFunctions: {
         handleTModeCommand,
         handleQTimeCommand,
         handleRModeCommand,
+        handleBRModeCommand,
         handleBBCommand,
         handleTiresCommand,
         handleHelpCommand,
@@ -457,10 +465,10 @@ function importCommandsByLanguage(commandFunctions: {
         handleLimitPlayerQuantity,
         handleRRPositionCommand,
         handleClearDebrisCommand,
-        handleUpgradeCommand
+        handleUpgradeCommand,
       ),
     }),
-    {}
+    {},
   );
 }
 
@@ -481,6 +489,7 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
         handleTModeCommand,
         handleQTimeCommand,
         handleRModeCommand,
+        handleBRModeCommand,
         handleBBCommand,
         handleTiresCommand,
         handleHelpCommand,
@@ -531,10 +540,10 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
         handleLimitPlayerQuantity,
         handleRRPositionCommand,
         handleClearDebrisCommand,
-        handleUpgradeCommand
+        handleUpgradeCommand,
       ),
     }),
-    {}
+    {},
   );
 }
 
@@ -551,5 +560,5 @@ export const COMMANDS: Commands = importCommands(
   es_commands,
   fr_commands,
   tr_commands,
-  pt_commands
+  pt_commands,
 );

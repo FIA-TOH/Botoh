@@ -4,14 +4,15 @@ import {
   generalGameMode,
   GeneralGameMode,
 } from "../changeGameState/changeGameModes";
-import {
-  updatePositionList,
-  positionList,
-} from "../changeGameState/race/positionList";
+
 import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
 import { playerList } from "../changePlayerState/playerList";
 import { sendBlueMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
+import {
+  updatePositionList,
+  positionList,
+} from "../commands/gameMode/race/positionList";
 import { presentationLap } from "../commands/gameState/handlePresentationLapCommand";
 import { inHitbox, getRunningPlayers } from "../utils";
 import { CIRCUITS, currentMapIndex } from "./maps";
@@ -22,7 +23,7 @@ function serialize(number: number) {
 
 function ifInSectorOneChangeZone(
   player: { p: PlayerObject; disc: DiscPropertiesObject },
-  room: RoomObject
+  room: RoomObject,
 ) {
   const scores = room.getScores();
   const circuit = CIRCUITS[currentMapIndex];
@@ -34,7 +35,7 @@ function ifInSectorOneChangeZone(
 
 function ifInSectorTwoChangeZone(
   player: { p: PlayerObject; disc: DiscPropertiesObject },
-  room: RoomObject
+  room: RoomObject,
 ) {
   const scores = room.getScores();
   const circuit = CIRCUITS[currentMapIndex];
@@ -46,7 +47,7 @@ function ifInSectorTwoChangeZone(
 
 function ifInSectorThreeChangeZone(
   player: { p: PlayerObject; disc: DiscPropertiesObject },
-  room: RoomObject
+  room: RoomObject,
 ) {
   const scores = room.getScores();
   const circuit = CIRCUITS[currentMapIndex];
@@ -58,7 +59,7 @@ function ifInSectorThreeChangeZone(
 
 export function checkPlayerSector(
   playersAndDiscs: { p: PlayerObject; disc: DiscPropertiesObject }[],
-  room: RoomObject
+  room: RoomObject,
 ) {
   const players = getRunningPlayers(playersAndDiscs);
   if (presentationLap) return;
@@ -99,7 +100,7 @@ export function checkPlayerSector(
 
     if (ifInSectorOneChangeZone(pad, room)) {
       playerList[p.id].sectorTime[2] = serialize(
-        playerList[p.id].sectorTimeCounter
+        playerList[p.id].sectorTimeCounter,
       );
       playerList[p.id].sectorTimeCounter = 0;
       updatePositionList(players, room);
@@ -107,12 +108,12 @@ export function checkPlayerSector(
       playerList[p.id].totalTime = room.getScores().time;
       playerList[p.id].currentSector = 2;
       playerList[p.id].sectorTime[0] = serialize(
-        playerList[p.id].sectorTimeCounter
+        playerList[p.id].sectorTimeCounter,
       );
       room.sendAnnouncement(
         `Sector 1: ${playerList[p.id].sectorTime[0]}s`,
         p.id,
-        0xff8f00
+        0xff8f00,
       );
 
       playerList[p.id].sectorTimeCounter = 0;
@@ -122,12 +123,12 @@ export function checkPlayerSector(
       playerList[p.id].totalTime = room.getScores().time;
       playerList[p.id].currentSector = 3;
       playerList[p.id].sectorTime[1] = serialize(
-        playerList[p.id].sectorTimeCounter
+        playerList[p.id].sectorTimeCounter,
       );
       room.sendAnnouncement(
         `Sector 2: ${playerList[p.id].sectorTime[1]}s`,
         p.id,
-        0xff8f00
+        0xff8f00,
       );
 
       playerList[p.id].sectorTimeCounter = 0;
@@ -161,7 +162,7 @@ export function checkBlueFlag(p: PlayerObject, room: RoomObject) {
       sendBlueMessage(
         room,
         MESSAGES.BLUE_FLAG_OPPONENT(opponent.name, playerInfo.name),
-        opponentInfo.id
+        opponentInfo.id,
       );
       handleAvatar(
         Situacions.Flag,
@@ -169,7 +170,7 @@ export function checkBlueFlag(p: PlayerObject, room: RoomObject) {
         room,
         undefined,
         ["🟦"],
-        [5000]
+        [5000],
       );
     }
   });

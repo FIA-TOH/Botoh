@@ -4,8 +4,9 @@ import {
   gameMode,
   GameMode,
 } from "../../changeGameState/changeGameModes";
-import { updatePositionList } from "../../changeGameState/race/positionList";
 import { playerList } from "../../changePlayerState/playerList";
+import { handleBattleRoyaleLap } from "../../commands/gameMode/battleRoyale.ts/handleBattleRoyaleLaps";
+import { updatePositionList } from "../../commands/gameMode/race/positionList";
 import { checkBlueFlag } from "../handleSectorChange";
 import { processCompletedLap } from "./processCompleteLap";
 import { resetLapData } from "./resetLapData";
@@ -20,7 +21,7 @@ export function handleLapCompletion(
   players: {
     p: PlayerObject;
     disc: DiscPropertiesObject;
-  }[]
+  }[],
 ) {
   const p = pad.p;
   const data = playerList[p.id];
@@ -33,6 +34,11 @@ export function handleLapCompletion(
   }
 
   resetLapData(data, p.id, room);
+
+  if (gameMode === GameMode.BATTLE_ROYALE) {
+    handleBattleRoyaleLap(p, room);
+    return;
+  }
 
   if (
     generalGameMode !== GeneralGameMode.GENERAL_QUALY &&

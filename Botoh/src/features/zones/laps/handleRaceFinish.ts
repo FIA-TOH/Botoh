@@ -1,8 +1,8 @@
-import { updatePositionList } from "../../changeGameState/race/positionList";
 import { Teams } from "../../changeGameState/teams";
 import { playerList } from "../../changePlayerState/playerList";
 import { sendSuccessMessage, sendAlertMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
+import { updatePositionList } from "../../commands/gameMode/race/positionList";
 import { LEAGUE_MODE } from "../../hostLeague/leagueMode";
 import { getPlayerAndDiscs } from "../../playerFeatures/getPlayerAndDiscs";
 import { getRunningPlayers, timerController } from "../../utils";
@@ -14,7 +14,7 @@ export function handleRaceFinish(
   p: PlayerObject,
   room: RoomObject,
   lapTime: number,
-  isWinner: boolean
+  isWinner: boolean,
 ) {
   const playersAndDiscs = getPlayerAndDiscs(room);
   const fullTime =
@@ -39,7 +39,7 @@ export function handleRaceFinish(
     sendAlertMessage(room, MESSAGES.SECONDS_TO_FINISH(SECONDS_AFTER_FIRST_END));
     timerController.positionTimer = setTimeout(() => {
       getRunningPlayers(playersAndDiscs).forEach((fp) =>
-        room.setPlayerTeam(fp.p.id, Teams.SPECTATORS)
+        room.setPlayerTeam(fp.p.id, Teams.SPECTATORS),
       );
       timerController.positionTimer = null;
     }, SECONDS_AFTER_FIRST_END * 1000);

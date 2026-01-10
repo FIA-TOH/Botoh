@@ -2,7 +2,6 @@ import { handleGameStateChange } from "../changeGameState/gameState";
 import { laps } from "../zones/laps";
 import { resetPlayer } from "../changePlayerState/players";
 // import { resetAllRainEvents } from "../rain/rain";
-import { positionList } from "../changeGameState/race/positionList";
 import { finishList, lapPositions } from "../zones/laps/handleLapChange";
 import { log } from "../discord/logger";
 import { updatePlayerActivity } from "../afk/afk";
@@ -16,6 +15,7 @@ import { clearPlayersLeftInfo } from "../comeBackRace.ts/comeBackToRaceFunctions
 import { clearRRPosition } from "../commands/adminThings/handleRRPositionCommand";
 import { decideBlowoutPoint } from "../tires&pits/tireBlowManager";
 import { Teams } from "../changeGameState/teams";
+import { positionList } from "../commands/gameMode/race/positionList";
 
 export function GameStart(room: RoomObject) {
   room.onGameStart = function (byPlayer) {
