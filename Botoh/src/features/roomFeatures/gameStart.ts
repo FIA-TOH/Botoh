@@ -16,6 +16,7 @@ import { clearRRPosition } from "../commands/adminThings/handleRRPositionCommand
 import { decideBlowoutPoint } from "../tires&pits/tireBlowManager";
 import { Teams } from "../changeGameState/teams";
 import { positionList } from "../commands/gameMode/race/positionList";
+import { initBattleRoyale } from "../commands/gameMode/battleRoyale.ts/handleBattleRoyaleLaps";
 
 export function GameStart(room: RoomObject) {
   room.onGameStart = function (byPlayer) {
@@ -26,6 +27,9 @@ export function GameStart(room: RoomObject) {
 
     if (gameMode !== GameMode.TRAINING) {
       room.startRecording();
+    }
+    if (gameMode === GameMode.BATTLE_ROYALE) {
+      initBattleRoyale(room);
     }
     resetBestLap();
     resetBestPit();

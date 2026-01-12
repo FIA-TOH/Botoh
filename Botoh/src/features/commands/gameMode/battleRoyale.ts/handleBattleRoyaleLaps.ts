@@ -5,45 +5,57 @@ import { getRunningPlayers, timerController } from "../../../utils";
 
 const END_DELAY = 30;
 
+const battleRoyaleLapState = {
+  lap: 0,
+  finishedIds: new Set<number>(),
+  initialPlayers: 0,
+};
+
+export function initBattleRoyale(room: RoomObject) {
+  const initial = getRunningPlayers(getPlayerAndDiscs(room)).length;
+
+  battleRoyaleLapState.lap = 0;
+  battleRoyaleLapState.finishedIds.clear();
+  battleRoyaleLapState.initialPlayers = initial;
+}
+
 export function handleBattleRoyaleLap(p: PlayerObject, room: RoomObject) {
   const playersAndDiscs = getPlayerAndDiscs(room);
   const runningPlayers = getRunningPlayers(playersAndDiscs);
+  const playerData = playerList[p.id];
 
-  if (runningPlayers.length <= 1) return;
+  if (playerData.currentLap < 2) {
+    return;
+  }
 
-  const sorted = [...runningPlayers].sort(
-    (a, b) => playerList[b.p.id].currentLap - playerList[a.p.id].currentLap,
-  );
+  if (battleRoyaleLapState.lap !== playerData.currentLap) {
+    battleRoyaleLapState.lap = playerData.currentLap;
+    battleRoyaleLapState.finishedIds.clear();
+  }
+  battleRoyaleLapState.finishedIds.add(p.id);
 
-  const lastPlayer = sorted[sorted.length - 1];
+  if (battleRoyaleLapState.finishedIds.size < runningPlayers.length) {
+    return;
+  }
 
-  if (lastPlayer.p.id === p.id) {
-    room.setPlayerTeam(p.id, Teams.SPECTATORS);
+  room.setPlayerTeam(p.id, Teams.SPECTATORS);
 
-    const remaining = sorted.length - 1;
+  const remaining = runningPlayers.length - 1;
 
-    room.sendAnnouncement(`${p.name} eliminated, ${remaining} remaning.`);
-    // sendAlertMessage(
-    //   room,
-    //   MESSAGES.BATTLE_ROYALE_ELIMINATED(p.name, remaining),
-    // );
+  room.sendAnnouncement(`${p.name} eliminated, ${remaining} remaining.`);
 
-    // Sobrou só um → vitória
-    if (remaining === 1) {
-      const winner = sorted[0].p;
+  if (remaining === 1) {
+    const winner = runningPlayers.find((rp) => rp.p.id !== p.id)!.p;
 
-      room.sendAnnouncement(`${p.name} won!, ${sorted.length - 1} eliminated.`);
-      //   sendAlertMessage(
-      //     room,
-      //     MESSAGES.BATTLE_ROYALE_WINNER(winner.name, sorted.length - 1),
-      //   );
+    const eliminated = battleRoyaleLapState.initialPlayers - 1;
 
-      timerController.positionTimer = setTimeout(() => {
-        getRunningPlayers(playersAndDiscs).forEach((rp) =>
-          room.setPlayerTeam(rp.p.id, Teams.SPECTATORS),
-        );
-        timerController.positionTimer = null;
-      }, END_DELAY * 1000);
-    }
+    room.sendAnnouncement(`${winner.name} won!, ${eliminated} eliminated.`);
+    timerController.positionTimer = setTimeout(() => {
+      getRunningPlayers(getPlayerAndDiscs(room)).forEach((rp) =>
+        room.setPlayerTeam(rp.p.id, Teams.SPECTATORS),
+      );
+
+      timerController.positionTimer = null;
+    }, END_DELAY * 1000);
   }
 }

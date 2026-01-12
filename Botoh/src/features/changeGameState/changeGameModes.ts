@@ -135,6 +135,6 @@ function handleBattleRoyaleMode(room: RoomObject) {
   setGhostMode(room, false);
   handleRREnabledCommand(undefined, ["false"], room);
   enableTyres(false);
-  sendSuccessMessage(room, MESSAGES.TIME_TO_RACE(laps));
+  sendSuccessMessage(room, MESSAGES.TIME_TO_BATTLE_ROYALE());
   changeGeneralGameMode(GeneralGameMode.GENERAL_RACE);
 }

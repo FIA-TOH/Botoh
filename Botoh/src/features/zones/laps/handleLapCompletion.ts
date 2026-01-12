@@ -39,7 +39,6 @@ export function handleLapCompletion(
     handleBattleRoyaleLap(p, room);
     return;
   }
-
   if (
     generalGameMode !== GeneralGameMode.GENERAL_QUALY &&
     gameMode !== GameMode.TRAINING

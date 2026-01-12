@@ -1390,22 +1390,12 @@ export const MESSAGES = {
     }),
   }),
 
-  TIME_TO_BATTLE_ROYALE: (laps: number): LocalizedMessageFunction => ({
-    en: replaceTemplateString(en_messages.TIME_TO_BATTLE_ROYALE, {
-      laps: laps.toString(),
-    }),
-    es: replaceTemplateString(es_messages.TIME_TO_BATTLE_ROYALE, {
-      laps: laps.toString(),
-    }),
-    fr: replaceTemplateString(fr_messages.TIME_TO_BATTLE_ROYALE, {
-      laps: laps.toString(),
-    }),
-    tr: replaceTemplateString(tr_messages.TIME_TO_BATTLE_ROYALE, {
-      laps: laps.toString(),
-    }),
-    pt: replaceTemplateString(pt_messages.TIME_TO_BATTLE_ROYALE, {
-      laps: laps.toString(),
-    }),
+  TIME_TO_BATTLE_ROYALE: (): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.TIME_TO_BATTLE_ROYALE, {}),
+    es: replaceTemplateString(es_messages.TIME_TO_BATTLE_ROYALE, {}),
+    fr: replaceTemplateString(fr_messages.TIME_TO_BATTLE_ROYALE, {}),
+    tr: replaceTemplateString(tr_messages.TIME_TO_BATTLE_ROYALE, {}),
+    pt: replaceTemplateString(pt_messages.TIME_TO_BATTLE_ROYALE, {}),
   }),
 
   PRESENTATION_LAP: (): LocalizedMessageFunction => ({
