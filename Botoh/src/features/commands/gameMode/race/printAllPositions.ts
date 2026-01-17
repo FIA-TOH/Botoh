@@ -1,18 +1,18 @@
+import { log } from "console";
+import {
+  generalGameMode,
+  GeneralGameMode,
+  gameMode,
+  GameMode,
+} from "../../../changeGameState/changeGameModes";
 import {
   sendErrorMessage,
   MAX_PLAYER_NAME,
   sendNonLocalizedSmallChatMessage,
-} from "../../chat/chat";
-import { MESSAGES } from "../../chat/messages";
-import { log } from "../../discord/logger";
-import { getBestPit } from "../../tires&pits/trackBestPit";
-import { getBestLap } from "../../zones/laps/trackBestLap";
-import {
-  gameMode,
-  GameMode,
-  generalGameMode,
-  GeneralGameMode,
-} from "../changeGameModes";
+} from "../../../chat/chat";
+import { MESSAGES } from "../../../chat/messages";
+import { getBestPit } from "../../../tires&pits/trackBestPit";
+import { getBestLap } from "../../../zones/laps/trackBestLap";
 import { positionList } from "./positionList";
 
 const HAXBALL_MSG_LIMIT = 124;
@@ -20,7 +20,7 @@ const HAXBALL_MSG_LIMIT = 124;
 export function printAllPositions(
   room: RoomObject,
   toPlayerID?: number,
-  sendToDiscord?: boolean
+  sendToDiscord?: boolean,
 ) {
   if (
     generalGameMode === GeneralGameMode.GENERAL_QUALY ||

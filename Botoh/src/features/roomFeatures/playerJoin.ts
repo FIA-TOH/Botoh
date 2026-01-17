@@ -30,9 +30,10 @@ import {
   playersLeftInfo,
   REJOIN_TIME_LIMIT,
 } from "../comeBackRace.ts/comeBackToRaceFunctions";
-import { positionList } from "../changeGameState/race/positionList";
+
 import { sendDiscordGeneralChatQualy } from "../discord/discord";
 import { PLAYER_LIMIT } from "../commands/adminThings/handleLimitPlayerQuantity";
+import { positionList } from "../commands/gameMode/race/positionList";
 
 const HARD_QUALY_PASSWORD = "hardqualy";
 
@@ -67,7 +68,7 @@ function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
         generalGameMode === GeneralGameMode.GENERAL_RACE
       ) {
         const leftInfoIndex = playersLeftInfo.findIndex(
-          (info) => info.name === player.name
+          (info) => info.name === player.name,
         );
 
         if (leftInfoIndex !== -1) {
@@ -130,7 +131,7 @@ export function PlayerJoin(room: RoomObject) {
       kickPlayer(
         player.id,
         "Your name cannot be bigger than 22 characters",
-        room
+        room,
       );
       log(`BIG NAME! The IP ${ip} tried to join!`);
       return;
@@ -140,7 +141,7 @@ export function PlayerJoin(room: RoomObject) {
       kickPlayer(
         player.id,
         `Sorry, your auth is not set. Please try again.`,
-        room
+        room,
       );
       return;
     }
@@ -163,7 +164,7 @@ export function PlayerJoin(room: RoomObject) {
         kickPlayer(
           player.id,
           `❌ Room full! The limit is ${PLAYER_LIMIT} players.`,
-          room
+          room,
         );
         room.setPassword(null);
         return;

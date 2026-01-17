@@ -38,6 +38,8 @@ const trackNameMapping: { [key: string]: string } = {
   las_vegas: "Las Vegas Strip Circuit - By Ximb",
   zandvoort: "Zandvoort by Rodri",
   barcelona: "Circuit de Barcelona-Catalunya by Rodri",
+  daytona: "24H Daytona edited by Rodri&Samusca",
+  cano: "Circuito Urbano de La Villa Cano - By Ximb",
 };
 
 export const bestTimes: { [key: string]: [number, string, string] } = {
@@ -50,7 +52,7 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   valencia: [44.433, "Alberto Ulasscari", trackNameMapping["valencia"]],
   paulRicard: [42.567, "Ximbastian Vettel", trackNameMapping["paulRicard"]],
   silverstone: [41.483, "Alberto Ulasscari", trackNameMapping["silverstone"]],
-  spa: [51.1, "Alberto Ulasscari", trackNameMapping["spa"]],
+  spa: [56.0, "Alberto Ulasscari", trackNameMapping["spa"]],
   istanbul: [34.483, "Artistic", trackNameMapping["istanbul"]],
   nurburgring: [39.433, "HiroShiryu Fushida", trackNameMapping["nurburgring"]],
   monza: [45.933, "Alberto Ulasscari", trackNameMapping["monza"]],
@@ -65,12 +67,12 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   jeddah: [43.433, "HiroShiryu Fushida", trackNameMapping["jeddah"]],
   yasMarina: [39.733, "HiroShiryu Fushida", trackNameMapping["yasMarina"]],
   hockenheimring: [
-    39.233,
+    999.233,
     "Jean Dany-Vegne",
     trackNameMapping["hockenheimring"],
   ],
   fuji: [37.183, "Ximbastian Vettel", trackNameMapping["fuji"]],
-  hungaroing: [37.617, "Jean Dany-Vegne", trackNameMapping["hungaroing"]],
+  hungaroing: [42.7, "Ximb", trackNameMapping["hungaroing"]],
   mexico: [37.603, "Ximbastian Vettel", trackNameMapping["mexico"]],
   austria: [30.916, "Jean Dany Vegne", trackNameMapping["austria"]],
   laguna_seca: [34.331, "Cano", trackNameMapping["laguna_seca"]],
@@ -85,17 +87,23 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
     "Ximbastian Vettel",
     "Circuit de Barcelona-Catalunya by Rodri",
   ],
+  daytona: [81.234, "Rodri&Samusca", "24H Daytona edited by Rodri&Samusca"],
+  cano: [
+    49.764,
+    "Ximbastian Vettel",
+    "Circuito Urbano de La Villa Cano - By Ximb",
+  ],
 };
 export const getAbbreviatedTrackName = (
-  fullTrackName: string
+  fullTrackName: string,
 ): string | undefined => {
   return Object.keys(trackNameMapping).find(
-    (key) => trackNameMapping[key] === fullTrackName
+    (key) => trackNameMapping[key] === fullTrackName,
   );
 };
 
 export const getBestTime = (
-  trackName: string
+  trackName: string,
 ): [number, string, string] | null => {
   const abbreviatedTrackName = getAbbreviatedTrackName(trackName) || trackName;
 
@@ -109,7 +117,7 @@ export const getBestTime = (
 export const updateBestTime = (
   trackName: string,
   newTime: number,
-  driverName: string
+  driverName: string,
 ) => {
   const abbreviatedTrackName = getAbbreviatedTrackName(trackName) || trackName;
 
@@ -123,7 +131,7 @@ export const updateBestTime = (
     }
   } else {
     log(
-      `The track ${abbreviatedTrackName} wasn't found on the mapping to update the best time.`
+      `The track ${abbreviatedTrackName} wasn't found on the mapping to update the best time.`,
     );
   }
 };
@@ -131,7 +139,7 @@ export const updateBestTime = (
 export const clearBestTime = (
   trackName: string,
   newTime: number,
-  driverName: string
+  driverName: string,
 ) => {
   const abbreviatedTrackName = getAbbreviatedTrackName(trackName) || trackName;
 
@@ -140,7 +148,7 @@ export const clearBestTime = (
     bestTimes[abbreviatedTrackName] = [newTime, driverName, circuitName];
   } else {
     log(
-      `The track ${abbreviatedTrackName} wasn't found on the mapping to clear the best time.`
+      `The track ${abbreviatedTrackName} wasn't found on the mapping to clear the best time.`,
     );
   }
 };

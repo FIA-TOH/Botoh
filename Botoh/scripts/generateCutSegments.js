@@ -1,8 +1,15 @@
 const fs = require("fs");
 const path = require("path");
 
-const MAP_FILE =
-  "C:\\Users\\senho\\Documents\\Ftoh\\FTOH-Bot\\Botoh\\src\\circuits\\imola\\imola.json";
+const MAP_FILE = path.join(
+  __dirname,
+  "..",
+  "src",
+  "circuits",
+  "hungary",
+  "hungary.json",
+);
+
 const SEGMENT_COLOR = "696969";
 
 const mapJson = JSON.parse(fs.readFileSync(MAP_FILE, "utf-8"));

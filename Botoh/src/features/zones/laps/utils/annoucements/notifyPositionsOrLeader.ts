@@ -2,8 +2,8 @@ import {
   generalGameMode,
   GeneralGameMode,
 } from "../../../../changeGameState/changeGameModes";
-import { printAllPositions } from "../../../../changeGameState/race/printAllPositions";
 import { allowPlayersRejoinRace } from "../../../../comeBackRace.ts/comeBackToRaceFunctions";
+import { printAllPositions } from "../../../../commands/gameMode/race/printAllPositions";
 import { notifyGapToCarAhead } from "./notifyGapToCarAhead";
 import { notifySpectatorsCurrentLap } from "./notifySpecCurrentLap";
 
@@ -13,7 +13,7 @@ export function notifyPositionOrLeaders(
   lapIndex: number,
   position: number,
   currentLap: number,
-  playerAndDiscs: { p: PlayerObject; disc: DiscPropertiesObject }[]
+  playerAndDiscs: { p: PlayerObject; disc: DiscPropertiesObject }[],
 ) {
   if (position > 1) {
     notifyGapToCarAhead(p, room, lapIndex, position, currentLap);

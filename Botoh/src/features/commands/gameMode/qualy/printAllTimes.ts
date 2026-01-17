@@ -1,17 +1,15 @@
-import { centerText } from "../../chat/centerText";
 import {
-  MAX_PLAYER_NAME,
-  sendChatMessage,
-  sendErrorMessage,
-  sendNonLocalizedSmallChatMessage,
-} from "../../chat/chat";
-import { MESSAGES } from "../../chat/messages";
-import {
-  GameMode,
-  gameMode,
-  GeneralGameMode,
   generalGameMode,
-} from "../changeGameModes";
+  GeneralGameMode,
+} from "../../../changeGameState/changeGameModes";
+import { centerText } from "../../../chat/centerText";
+import {
+  sendErrorMessage,
+  sendChatMessage,
+  MAX_PLAYER_NAME,
+  sendNonLocalizedSmallChatMessage,
+} from "../../../chat/chat";
+import { MESSAGES } from "../../../chat/messages";
 import { getPlayersOrderedByQualiTime } from "./playerTime";
 
 const HAXBALL_MSG_LIMIT = 124;
@@ -31,7 +29,7 @@ export function printAllTimes(room: RoomObject, toPlayerID?: number) {
 
   let messageBuffer = ` P - ${centerText(
     "Name",
-    MAX_PLAYER_NAME
+    MAX_PLAYER_NAME,
   )} | Best Lap\n`;
 
   orderedList.forEach((p, index: number) => {

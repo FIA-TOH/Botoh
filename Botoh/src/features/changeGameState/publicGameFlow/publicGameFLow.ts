@@ -4,6 +4,8 @@ import { MESSAGES } from "../../chat/messages";
 import { handleMuteCommand } from "../../commands/chat/handleMuteCommand";
 import { handleExplainErsCommand } from "../../commands/ersAndFuel/handleExplainErsCommand";
 import { qualyForPub } from "../../commands/gameMode/qualy/handleEnableQualyForPub";
+import { printAllTimes } from "../../commands/gameMode/qualy/printAllTimes";
+import { printAllPositions } from "../../commands/gameMode/race/printAllPositions";
 import { handleExplainRainCommand } from "../../commands/rain/handleExplainRainCommand";
 import { handleExplainTyresCommand } from "../../commands/tyres/handleExplainTyresCommand";
 import {
@@ -23,13 +25,10 @@ import { CIRCUITS, handleChangeMap } from "../../zones/maps";
 import {
   changeGameMode,
   GameMode,
-  gameMode,
   generalGameMode,
   GeneralGameMode,
 } from "../changeGameModes";
 import { changeGameStoppedNaturally } from "../gameStopeedNaturally";
-import { printAllTimes } from "../qualy/printAllTimes";
-import { printAllPositions } from "../race/printAllPositions";
 import {
   finalizeVoteAndLockWinner,
   getLockedWinnerVotes,
@@ -40,10 +39,10 @@ export let lastWinningVotes: number = 0;
 
 export default async function PublicGameFlow(room: RoomObject) {
   const waitRoomIndex = CIRCUITS.findIndex(
-    (c) => c.info?.name === "Wait Room - By Ximb"
+    (c) => c.info?.name === "Wait Room - By Ximb",
   );
   const waitRoomQualyIndex = CIRCUITS.findIndex(
-    (c) => c.info?.name === "Wait Qualy Room - By Ximb"
+    (c) => c.info?.name === "Wait Qualy Room - By Ximb",
   );
 
   if (generalGameMode === GeneralGameMode.GENERAL_RACE) {

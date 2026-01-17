@@ -17,7 +17,7 @@ export type LocalizedMessageFunction = {
 
 function replaceTemplateString(
   template: string,
-  variables: Record<string, string>
+  variables: Record<string, string>,
 ): string {
   return template.replace(/\{\{(\w+)\}\}/g, (_, v) => variables[v] || "");
 }
@@ -86,7 +86,7 @@ export const MESSAGES = {
     }),
   }),
   WEAR_ON_CURRENT_TIRE: (
-    remainingPercentage: number
+    remainingPercentage: number,
   ): LocalizedMessageFunction => {
     if (remainingPercentage <= 0) {
       return {
@@ -235,7 +235,7 @@ export const MESSAGES = {
   CHANGED_TIRES: (
     name: string,
     tires: string,
-    seconds: number
+    seconds: number,
   ): LocalizedMessageFunction => ({
     en: replaceTemplateString(en_messages.CHANGED_TIRES, {
       name: name,
@@ -266,7 +266,7 @@ export const MESSAGES = {
   FASTEST_PIT: (
     name: string,
 
-    seconds: number
+    seconds: number,
   ): LocalizedMessageFunction => ({
     en: replaceTemplateString(en_messages.FASTEST_PIT, {
       name: name,
@@ -753,7 +753,7 @@ export const MESSAGES = {
   }),
   CURRENT_LAP: (
     currentLap: number,
-    laps: number
+    laps: number,
   ): LocalizedMessageFunction => ({
     en: replaceTemplateString(en_messages.CURRENT_LAP, {
       currentLap: currentLap.toString(),
@@ -779,7 +779,7 @@ export const MESSAGES = {
   POSITION_AND_DISTANCE_AHEAD: (
     position: number,
     distance: number,
-    unit: string
+    unit: string,
   ): LocalizedMessageFunction => ({
     en: replaceTemplateString(en_messages.POSITION_AND_DISTANCE_AHEAD, {
       position: position.toString(),
@@ -1000,7 +1000,7 @@ export const MESSAGES = {
     fltstatus: string,
     frtstatus: string,
     bltstatus: string,
-    brtstatus: string
+    brtstatus: string,
   ): LocalizedMessageFunction => ({
     en: replaceTemplateString(en_messages.TYRE_STEP_CHANGING, {
       fltstatus,
@@ -1037,7 +1037,7 @@ export const MESSAGES = {
     fltstatus: string,
     frtstatus: string,
     bltstatus: string,
-    brtstatus: string
+    brtstatus: string,
   ): LocalizedMessageFunction => ({
     en: replaceTemplateString(en_messages.TYRE_STEP_ERROR, {
       fltstatus,
@@ -1074,7 +1074,7 @@ export const MESSAGES = {
     fltstatus: string,
     frtstatus: string,
     bltstatus: string,
-    brtstatus: string
+    brtstatus: string,
   ): LocalizedMessageFunction => ({
     en: replaceTemplateString(en_messages.TYRE_STEP_SUCCESS, {
       fltstatus,
@@ -1213,7 +1213,7 @@ export const MESSAGES = {
   }),
   BLUE_FLAG_OPPONENT: (
     citedPlayer: string,
-    opponent: string
+    opponent: string,
   ): LocalizedMessageFunction => ({
     en: replaceTemplateString(en_messages.BLUE_FLAG_OPPONENT, {
       citedPlayer: citedPlayer,
@@ -1300,7 +1300,7 @@ export const MESSAGES = {
   }),
   CIRCUIT_CHOOSED: (
     circuit: string,
-    votes: number
+    votes: number,
   ): LocalizedMessageFunction => ({
     en: replaceTemplateString(en_messages.CIRCUIT_CHOOSED, {
       circuit,
@@ -1390,6 +1390,14 @@ export const MESSAGES = {
     }),
   }),
 
+  TIME_TO_BATTLE_ROYALE: (): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.TIME_TO_BATTLE_ROYALE, {}),
+    es: replaceTemplateString(es_messages.TIME_TO_BATTLE_ROYALE, {}),
+    fr: replaceTemplateString(fr_messages.TIME_TO_BATTLE_ROYALE, {}),
+    tr: replaceTemplateString(tr_messages.TIME_TO_BATTLE_ROYALE, {}),
+    pt: replaceTemplateString(pt_messages.TIME_TO_BATTLE_ROYALE, {}),
+  }),
+
   PRESENTATION_LAP: (): LocalizedMessageFunction => ({
     en: replaceTemplateString(en_messages.PRESENTATION_LAP, {}),
     es: replaceTemplateString(es_messages.PRESENTATION_LAP, {}),
@@ -1413,7 +1421,7 @@ export const MESSAGES = {
   }),
   WORSE_TIME: (
     lapTime: number,
-    diferenca: number
+    diferenca: number,
   ): LocalizedMessageFunction => ({
     en: replaceTemplateString(en_messages.WORSE_TIME, {
       lapTime: lapTime.toString(),
@@ -1635,7 +1643,7 @@ export const MESSAGES = {
   }),
   WHO_IS_AFK_SECTORS: (
     player: string,
-    sector: number
+    sector: number,
   ): LocalizedMessageFunction => ({
     en: replaceTemplateString(en_messages.WHO_IS_AFK_SECTORS, {
       player: player.toString(),

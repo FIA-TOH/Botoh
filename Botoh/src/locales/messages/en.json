@@ -118,6 +118,7 @@
   "TIME_TO_VOTE": "It's time to vote! Choose one of the circuits below by typing !vote (Number)",
   "TIME_TO_QUALY": "🚨Qualifying! Do your best time!🚨",
   "TIME_TO_RACE": "🚨Race with {{laps}} laps! May the best win!🚨",
+  "TIME_TO_BATTLE_ROYALE": "🚨Battle Royale!! Don't be the last!🚨",
   "WORSE_TIME": "Lap time: {{lapTime}} (-{{diferenca}})",
   "CODE_BOX": "Your PitStop code is {{codigo}}, enter it reversed after the tire type.",
   "CODE_WRONG": "Wrong code! Enter the correct code reversed.",
