@@ -6,8 +6,8 @@ const MAP_FILE = path.join(
   "..",
   "src",
   "circuits",
-  "hungary",
-  "hungary.json",
+  "istanbul",
+  "istanbul.json",
 );
 
 const SEGMENT_COLOR = "696969";
