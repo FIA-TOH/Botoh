@@ -1704,4 +1704,77 @@ export const MESSAGES = {
     tr: replaceTemplateString(tr_messages.SOFT_CUT_PENALTY, {}),
     pt: replaceTemplateString(pt_messages.SOFT_CUT_PENALTY, {}),
   }),
+  TWO_LAPS: (currentLap: number): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.TWO_LAPS, {
+      currentLap: currentLap.toString(),
+    }),
+    es: replaceTemplateString(es_messages.TWO_LAPS, {
+      currentLap: currentLap.toString(),
+    }),
+    fr: replaceTemplateString(fr_messages.TWO_LAPS, {
+      currentLap: currentLap.toString(),
+    }),
+    tr: replaceTemplateString(tr_messages.TWO_LAPS, {
+      currentLap: currentLap.toString(),
+    }),
+    pt: replaceTemplateString(pt_messages.TWO_LAPS, {
+      currentLap: currentLap.toString(),
+    }),
+  }),
+  BR_ELIMINATED: (name: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.BR_ELIMINATED, {
+      name: name.toString(),
+    }),
+    es: replaceTemplateString(es_messages.BR_ELIMINATED, {
+      name: name.toString(),
+    }),
+    fr: replaceTemplateString(fr_messages.BR_ELIMINATED, {
+      name: name.toString(),
+    }),
+    tr: replaceTemplateString(tr_messages.BR_ELIMINATED, {
+      name: name.toString(),
+    }),
+    pt: replaceTemplateString(pt_messages.BR_ELIMINATED, {
+      name: name.toString(),
+    }),
+  }),
+  BR_REMAINING: (remaining: number): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.BR_REMAINING, {
+      remaining: remaining.toString(),
+    }),
+    es: replaceTemplateString(es_messages.BR_REMAINING, {
+      remaining: remaining.toString(),
+    }),
+    fr: replaceTemplateString(fr_messages.BR_REMAINING, {
+      remaining: remaining.toString(),
+    }),
+    tr: replaceTemplateString(tr_messages.BR_REMAINING, {
+      remaining: remaining.toString(),
+    }),
+    pt: replaceTemplateString(pt_messages.BR_REMAINING, {
+      remaining: remaining.toString(),
+    }),
+  }),
+  BR_WINNER: (name: string, eliminated: number): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.BR_WINNER, {
+      name: name.toString(),
+      eliminated: eliminated.toString(),
+    }),
+    es: replaceTemplateString(es_messages.BR_WINNER, {
+      name: name.toString(),
+      eliminated: eliminated.toString(),
+    }),
+    fr: replaceTemplateString(fr_messages.BR_WINNER, {
+      name: name.toString(),
+      eliminated: eliminated.toString(),
+    }),
+    tr: replaceTemplateString(tr_messages.BR_WINNER, {
+      name: name.toString(),
+      eliminated: eliminated.toString(),
+    }),
+    pt: replaceTemplateString(pt_messages.BR_WINNER, {
+      name: name.toString(),
+      eliminated: eliminated.toString(),
+    }),
+  }),
 };
