@@ -66,6 +66,11 @@ export default function fr_commands(
     args: string[],
     room: RoomObject,
   ) => void,
+  handleBRTwoLapsCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
   handleBBCommand: (
     byPlayer: PlayerObject,
     args: string[],
@@ -337,6 +342,7 @@ export default function fr_commands(
     "!qtime": handleQTimeCommand,
     "!rmode": handleRModeCommand,
     "!brmode": handleBRModeCommand,
+    "!br_twolaps": handleBRTwoLapsCommand,
     "!bb": handleBBCommand,
     "!tyres": handleTiresCommand,
     "!tires": handleTiresCommand,
