@@ -115,7 +115,7 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   indianapolis_road: [999.99, "undefined", "Indianapolis Motor Speedway By Nanoseb"],
   bmw_ring: [999.99, "undefined", "BMW Ring By Nanoseb"],
   hungary_nano: [999.99, "undefined", "Hungaroring By Nanoseb"],
-  spaNano: [999.99, "undefined", "Circuit de Spa-Francorchamps By Nanoseb"],
+  spaNano: [48.609, "BL", "Circuit de Spa-Francorchamps By Nanoseb"],
   cano: [999.99, "undefined", "Circuito Urbano de La Villa Cano - By Ximb"],
 };
 export const getAbbreviatedTrackName = (
