@@ -46,10 +46,10 @@ const VIRGINIA_INFO: CircuitInfo = {
     passingDirection: Direction.DOWN,
   },
   boxLine: {
-    minX: 0,
-    maxX: 0,
-    minY: 0,
-    maxY: 0,
+    minX: 825,
+    maxX: 825,
+    minY: 90,
+    maxY: 90,
   },
   pitlaneStart: {
     minX: 0,
