@@ -81,7 +81,7 @@ import { BARCELONA } from "../../circuits/barcelona/barcelona";
 import { DAYTONA } from "../../circuits/daytona/daytona";
 import { CANO } from "../../circuits/cano/cano";
 import { CANOPUBLIC } from "../../circuits/cano/canoPublic";
-import { PORTERO } from "../../circuits/portero/portero";
+import { VIRGINIA } from "../../circuits/virginia/virginia";
 
 // import {DAYTONA} from "../circuits/daytona/daytona";
 // import {BARCELONA} from "../circuits/barcelona/barcelona";
@@ -131,7 +131,7 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
       ZANDVOORT,
       BARCELONA,
       CANO,
-      PORTERO,
+      VIRGINIA,
       INDIANAPOLIS,
       PODIUM,
       WAITROOM,

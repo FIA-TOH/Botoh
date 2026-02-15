@@ -40,7 +40,7 @@ const trackNameMapping: { [key: string]: string } = {
   barcelona: "Circuit de Barcelona-Catalunya by Rodri",
   daytona: "24H Daytona edited by Rodri&Samusca",
   cano: "Circuito Urbano de La Villa Cano - By Ximb",
-  portero: "Potrero de los funes by Metilazo",
+  virginia: "Virginia International Raceway by DavidMC49",
 };
 
 export const bestTimes: { [key: string]: [number, string, string] } = {
@@ -94,7 +94,7 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
     "Ximbastian Vettel",
     "Circuito Urbano de La Villa Cano - By Ximb",
   ],
-  portero: [999.999, "noboyd", "Potrero de los funes by Metilazo"],
+  virginia: [999.999, "noboyd", "Virginia International Raceway by DavidMC49"],
 };
 export const getAbbreviatedTrackName = (
   fullTrackName: string,

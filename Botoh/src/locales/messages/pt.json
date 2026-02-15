@@ -153,8 +153,8 @@
   "INVALID_LAP_CUT": "Volta inválida devido a corte de pista.",
   "SOFT_CUT_PENALTY": "⚠️ Você cortou a pista! Passe por dentro da linha azul ou será punido!",
 
-  "TWO_LAPS": "☠️🛡️ Volta {{playerData.currentLap}}, eliminação NA PRÓXIMA VOLTA 🛡️☠️",
-  "BR_ELIMINATED": "☠️🔥 {{p.name}} eliminado 🔥☠️",
+  "TWO_LAPS": "☠️🛡️ Volta {{currentLap}}, eliminação NA PRÓXIMA VOLTA 🛡️☠️",
+  "BR_ELIMINATED": "☠️🔥 {{name}} eliminado 🔥☠️",
   "BR_REMAINING": "☠️👥 {{remaining}} restantes. 👥☠️",
-  "BR_WINNER": "👑🏆 {{winner.name}} venceu, {{eliminated}} eliminados. 👑🏆"
+  "BR_WINNER": "👑🏆 {{name}} venceu, {{eliminated}} eliminados. 👑🏆"
 }
