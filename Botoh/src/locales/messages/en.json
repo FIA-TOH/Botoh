@@ -150,8 +150,8 @@
   "TYRES_ABOUT_TO_BLOWN": "⚠️🛞 BOX BOX! We’re seeing heavy graining — Expect a possible blowout — box, box! 🛞⚠️",
   "INVALID_LAP_CUT": "Invalid lap due to track cutting.",
   "SOFT_CUT_PENALTY": "⚠️ You cut the track! Go through the blue line or you will be penalized!",
-  "TWO_LAPS": "☠️🛡️ Lap {{playerData.currentLap}}, elimination NEXT LAP 🛡️☠️",
-  "BR_ELIMINATED": "☠️🔥 {{p.name}} eliminated 🔥☠️",
+  "TWO_LAPS": "☠️🛡️ Lap {{currentLap}}, elimination NEXT LAP 🛡️☠️",
+  "BR_ELIMINATED": "☠️🔥 {{name}} eliminated 🔥☠️",
   "BR_REMAINING": "☠️👥 {{remaining}} remaining. 👥☠️",
-  "BR_WINNER": "👑🏆 {{winner.name}} won!, {{eliminated}} eliminated. 👑🏆"
+  "BR_WINNER": "👑🏆 {{name}} won!, {{eliminated}} eliminated. 👑🏆"
 }

@@ -46,9 +46,11 @@ export function initBattleRoyale(room: RoomObject) {
 function shouldEliminateThisLap(lap: number): boolean {
   if (lap < 2) return false;
 
-  if (battleRoyaleLapState.twoLapsUsed < battleRoyaleLapState.twoLapsTotal) {
-    battleRoyaleLapState.twoLapsUsed++;
-    return false;
+  const lapIndex = lap - 1;
+  const roundIndex = Math.floor((lapIndex - 1) / 2);
+
+  if (roundIndex < battleRoyaleTwoLapsConfig) {
+    return lapIndex % 2 === 0;
   }
 
   return true;
