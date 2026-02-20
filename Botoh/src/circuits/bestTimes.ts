@@ -24,6 +24,7 @@ const trackNameMapping: { [key: string]: string } = {
   marinaBay: "Marina Bay Street Circuit - By Ximb",
   jeddah: "Jeddah Street Circuit - By Ximb",
   yasMarina: "Yas Marina Circuit - By Ximb",
+  yasMarinaNano: "Yas Marina Circuit By Nanoseb",
   hockenheimring: "Hockenheimring - By Ximb",
   fuji: "Fuji International - By Ximb",
   hungaroing: "Hungaroring - By Ximb",
@@ -40,6 +41,10 @@ const trackNameMapping: { [key: string]: string } = {
   barcelona: "Circuit de Barcelona-Catalunya by Rodri",
   daytona: "24H Daytona edited by Rodri&Samusca",
   cano: "Circuito Urbano de La Villa Cano - By Ximb",
+  virginia: "Virginia International Raceway by DavidMC49",
+  tanga: "Tanga Automobile by PYOTER",
+  tandil: "Tandil City by Metilazo",
+  colorado: "Colorado Street Circuit by New Era",
 };
 
 export const bestTimes: { [key: string]: [number, string, string] } = {
@@ -53,7 +58,7 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   paulRicard: [42.567, "Ximbastian Vettel", trackNameMapping["paulRicard"]],
   silverstone: [41.483, "Alberto Ulasscari", trackNameMapping["silverstone"]],
   spa: [56.0, "Alberto Ulasscari", trackNameMapping["spa"]],
-  istanbul: [34.483, "Artistic", trackNameMapping["istanbul"]],
+  istanbul: [999.999, "Artistic", trackNameMapping["istanbul"]],
   nurburgring: [39.433, "HiroShiryu Fushida", trackNameMapping["nurburgring"]],
   monza: [45.933, "Alberto Ulasscari", trackNameMapping["monza"]],
   canada: [37.716, "Alberto Ulasscari", trackNameMapping["canada"]],
@@ -66,6 +71,7 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   marinaBay: [48.717, "Ximbastian Vettel", trackNameMapping["marinaBay"]],
   jeddah: [43.433, "HiroShiryu Fushida", trackNameMapping["jeddah"]],
   yasMarina: [39.733, "HiroShiryu Fushida", trackNameMapping["yasMarina"]],
+  yasMarinaNano: [999.999, "undefined", trackNameMapping["yasMarina"]],
   hockenheimring: [
     999.233,
     "Jean Dany-Vegne",
@@ -93,6 +99,10 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
     "Ximbastian Vettel",
     "Circuito Urbano de La Villa Cano - By Ximb",
   ],
+  virginia: [999.999, "nobody", "Virginia International Raceway by DavidMC49"],
+  tanga: [999.999, "nobody", "Tanga Automobile by PYOTER"],
+  tandil: [999.999, "nobody", "Tandil City by Metilazo"],
+  colorado: [999.999, "nobody", "Colorado Street Circuit by New Era"],
 };
 export const getAbbreviatedTrackName = (
   fullTrackName: string,

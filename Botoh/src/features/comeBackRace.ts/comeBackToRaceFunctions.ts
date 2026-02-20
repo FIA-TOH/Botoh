@@ -18,6 +18,7 @@ export interface PlayerLeftInfo {
   didHardQualy: boolean;
   totalTime: number;
   bestTime: number;
+  bestSectorTimes: [number, number, number];
   tires: Tires;
   wear: number;
   lapsOnCurrentTire: number;

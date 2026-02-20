@@ -30,6 +30,11 @@ export function handleClearTimeCommand(
 
   if (player) {
     playerList[player.id].bestTime = Number.MAX_VALUE;
+    playerList[player.id].bestSectorTimes = [
+      Number.MAX_VALUE,
+      Number.MAX_VALUE,
+      Number.MAX_VALUE,
+    ];
   } else {
     room.sendAnnouncement(
       "IMPORTANT: The player isn't in the room at the moment, reset their time when they enter again.",

@@ -90,7 +90,7 @@ const CANO_INFO: CircuitInfo = {
   Limit: 5,
   Votes: 0,
   pitSpeed: 0.97,
-  TireDegradationPercentage: 0,
+  TireDegradationPercentage: 75,
   CutDetectSegments: [
     {
       v0: [258, 1290],

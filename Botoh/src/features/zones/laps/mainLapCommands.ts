@@ -13,7 +13,7 @@ import { updateLapTimers } from "./utils/updateLapTimers";
 
 export function mainLapCommand(
   playersAndDiscs: { p: PlayerObject; disc: DiscPropertiesObject }[],
-  room: RoomObject
+  room: RoomObject,
 ) {
   if (presentationLap) return;
 
@@ -22,7 +22,7 @@ export function mainLapCommand(
   const hasSector = !!circuit.sectorOne;
 
   players.forEach((pad) =>
-    handlePlayerLap(pad, room, circuit, hasSector, players)
+    handlePlayerLap(pad, room, circuit, hasSector, players),
   );
 }
 
@@ -31,12 +31,12 @@ function handlePlayerLap(
   room: RoomObject,
   circuit: CircuitInfo,
   hasSector: boolean,
-  players: { p: PlayerObject; disc: DiscPropertiesObject }[]
+  players: { p: PlayerObject; disc: DiscPropertiesObject }[],
 ) {
   const p = pad.p;
   const playerData = playerList[p.id];
 
-  updateLapTimers(playerData);
+  updateLapTimers(playerData, room);
 
   if (!isInValidLapZone(pad, room)) {
     playerData.lapChanged = false;

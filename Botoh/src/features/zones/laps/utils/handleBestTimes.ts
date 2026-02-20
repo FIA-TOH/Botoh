@@ -1,6 +1,7 @@
 import { updateBestTime } from "../../../../circuits/bestTimes";
 import { playerList } from "../../../changePlayerState/playerList";
 import {
+  COLORS,
   sendBestTimeEver,
   sendBestTimeRace,
   sendSuccessMessage,
@@ -28,6 +29,7 @@ export function handleBestTimes(
     playerData.bestTime = lapTime;
 
     sendBestTimeEver(room, MESSAGES.TRACK_RECORD(p.name, lapTime));
+    playerData.sectorColour = COLORS.PURPLE;
     sendDiscordTrackRecord(p.name, lapTime);
     updatePlayerTime(p.name, lapTime, p.id, playerData.leagueScuderia);
     return;
@@ -35,6 +37,7 @@ export function handleBestTimes(
 
   if (playerData.lastLapValid && isFastestLapRace) {
     sendBestTimeRace(room, MESSAGES.FASTEST_LAP(p.name, lapTime));
+    playerData.sectorColour = COLORS.MAGENTA;
   }
 
   if (
@@ -42,6 +45,7 @@ export function handleBestTimes(
     (playerData.lastLapValid && bestTimeP === undefined)
   ) {
     sendSuccessMessage(room, MESSAGES.LAP_TIME(lapTime), p.id);
+    playerData.sectorColour = COLORS.GREEN;
     playerData.bestTime = lapTime;
 
     broadcastLapTimeToPlayers(room, lapTime, p.name);
@@ -62,6 +66,7 @@ export function handleBestTimes(
       MESSAGES.WORSE_TIME(lapTime, serialize(differenceToBestTime)),
       p.id,
     );
+    playerData.sectorColour = COLORS.DARK_YELLOW;
 
     broadcastLapTimeToPlayers(room, lapTime, p.name, false);
   }

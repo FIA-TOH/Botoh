@@ -1,3 +1,4 @@
+import { playerList } from "../changePlayerState/playerList";
 import { log } from "../discord/logger";
 import { DEFAULT_LANGUAGE } from "./language";
 import { getPlayerLanguage, LocalizedMessageFunction } from "./messages";
@@ -6,7 +7,7 @@ const defaultLang: keyof LocalizedMessageFunction = DEFAULT_LANGUAGE;
 
 export const MAX_PLAYER_NAME = 22;
 
-enum COLORS {
+export enum COLORS {
   BLUE = 0x0000ff,
   GREEN = 0x65ff33,
   CYAN = 0x00ffff,
@@ -14,7 +15,7 @@ enum COLORS {
   MAGENTA = 0xff75d1,
   YELLOW = 0xffff00,
   WHITE = 0xffffff,
-  ORANGE = 0xf78b2d,
+  ORANGE = 0xffa500,
   DARK_YELLOW = 0x93bf0f,
   PURPLE = 0xff33d0,
   DARK_GREEN = 0x00ff04,
@@ -42,7 +43,7 @@ export function sendMessage(
   toPlayerID?: number,
   color?: COLORS,
   font?: FONTS,
-  sound?: SOUNDS
+  sound?: SOUNDS,
 ) {
   if (toPlayerID) {
     const language = getPlayerLanguage(toPlayerID);
@@ -60,7 +61,7 @@ export function sendMessage(
 export function sendNonLocalizedSmallChatMessage(
   room: RoomObject,
   message: string,
-  toPlayerID?: number
+  toPlayerID?: number,
 ) {
   if (!toPlayerID) {
     log(message);
@@ -70,14 +71,14 @@ export function sendNonLocalizedSmallChatMessage(
     toPlayerID,
     COLORS.WHITE,
     FONTS.SMALL,
-    SOUNDS.CHAT
+    SOUNDS.CHAT,
   );
 }
 
 export function sendErrorMessage(
   room: RoomObject,
   message: LocalizedMessageFunction,
-  toPlayerID?: number
+  toPlayerID?: number,
 ) {
   sendMessage(
     room,
@@ -85,14 +86,14 @@ export function sendErrorMessage(
     toPlayerID,
     COLORS.RED,
     FONTS.BOLD,
-    SOUNDS.NOTIFICATION
+    SOUNDS.NOTIFICATION,
   );
 }
 
 export function sendAlertMessage(
   room: RoomObject,
   message: LocalizedMessageFunction,
-  toPlayerID?: number
+  toPlayerID?: number,
 ) {
   sendMessage(
     room,
@@ -100,14 +101,14 @@ export function sendAlertMessage(
     toPlayerID,
     COLORS.YELLOW,
     FONTS.BOLD,
-    SOUNDS.NOTIFICATION
+    SOUNDS.NOTIFICATION,
   );
 }
 
 export function sendSuccessMessage(
   room: RoomObject,
   message: LocalizedMessageFunction,
-  toPlayerID?: number
+  toPlayerID?: number,
 ) {
   sendMessage(
     room,
@@ -115,14 +116,14 @@ export function sendSuccessMessage(
     toPlayerID,
     COLORS.GREEN,
     FONTS.BOLD,
-    SOUNDS.NOTIFICATION
+    SOUNDS.NOTIFICATION,
   );
 }
 
 export function sendChatMessage(
   room: RoomObject,
   message: LocalizedMessageFunction,
-  toPlayerID?: number
+  toPlayerID?: number,
 ) {
   sendMessage(
     room,
@@ -130,14 +131,14 @@ export function sendChatMessage(
     toPlayerID,
     COLORS.WHITE,
     FONTS.NORMAL,
-    SOUNDS.CHAT
+    SOUNDS.CHAT,
   );
 }
 
 export function sendSmallChatMessage(
   room: RoomObject,
   message: LocalizedMessageFunction,
-  toPlayerID?: number
+  toPlayerID?: number,
 ) {
   sendMessage(
     room,
@@ -145,14 +146,14 @@ export function sendSmallChatMessage(
     toPlayerID,
     COLORS.WHITE,
     FONTS.SMALL,
-    SOUNDS.CHAT
+    SOUNDS.CHAT,
   );
 }
 
 export function sendBestTimeEver(
   room: RoomObject,
   message: LocalizedMessageFunction,
-  toPlayerID?: number
+  toPlayerID?: number,
 ) {
   sendMessage(
     room,
@@ -160,14 +161,14 @@ export function sendBestTimeEver(
     toPlayerID,
     COLORS.PURPLE,
     FONTS.NORMAL,
-    SOUNDS.NOTIFICATION
+    SOUNDS.NOTIFICATION,
   );
 }
 
 export function sendBestTimeRace(
   room: RoomObject,
   message: LocalizedMessageFunction,
-  toPlayerID?: number
+  toPlayerID?: number,
 ) {
   sendMessage(
     room,
@@ -175,14 +176,14 @@ export function sendBestTimeRace(
     toPlayerID,
     COLORS.MAGENTA,
     FONTS.NORMAL,
-    SOUNDS.NOTIFICATION
+    SOUNDS.NOTIFICATION,
   );
 }
 
 export function sendWorseTime(
   room: RoomObject,
   message: LocalizedMessageFunction,
-  toPlayerID?: number
+  toPlayerID?: number,
 ) {
   sendMessage(
     room,
@@ -190,14 +191,14 @@ export function sendWorseTime(
     toPlayerID,
     COLORS.DARK_YELLOW,
     FONTS.NORMAL,
-    SOUNDS.CHAT
+    SOUNDS.CHAT,
   );
 }
 
 export function sendRedMessage(
   room: RoomObject,
   message: LocalizedMessageFunction,
-  toPlayerID?: number
+  toPlayerID?: number,
 ) {
   sendMessage(
     room,
@@ -205,14 +206,14 @@ export function sendRedMessage(
     toPlayerID,
     COLORS.RED,
     FONTS.NORMAL,
-    SOUNDS.NOTIFICATION
+    SOUNDS.NOTIFICATION,
   );
 }
 
 export function sendYellowMessage(
   room: RoomObject,
   message: LocalizedMessageFunction,
-  toPlayerID?: number
+  toPlayerID?: number,
 ) {
   sendMessage(
     room,
@@ -220,14 +221,14 @@ export function sendYellowMessage(
     toPlayerID,
     COLORS.YELLOW,
     FONTS.NORMAL,
-    SOUNDS.NOTIFICATION
+    SOUNDS.NOTIFICATION,
   );
 }
 
 export function sendGreenMessage(
   room: RoomObject,
   message: LocalizedMessageFunction,
-  toPlayerID?: number
+  toPlayerID?: number,
 ) {
   sendMessage(
     room,
@@ -235,14 +236,14 @@ export function sendGreenMessage(
     toPlayerID,
     COLORS.GREEN,
     FONTS.NORMAL,
-    SOUNDS.NOTIFICATION
+    SOUNDS.NOTIFICATION,
   );
 }
 
 export function sendBlueMessage(
   room: RoomObject,
   message: LocalizedMessageFunction,
-  toPlayerID?: number
+  toPlayerID?: number,
 ) {
   sendMessage(
     room,
@@ -250,14 +251,14 @@ export function sendBlueMessage(
     toPlayerID,
     COLORS.BLUE,
     FONTS.NORMAL,
-    SOUNDS.NOTIFICATION
+    SOUNDS.NOTIFICATION,
   );
 }
 
 export function sendBlackMessage(
   room: RoomObject,
   message: LocalizedMessageFunction,
-  toPlayerID?: number
+  toPlayerID?: number,
 ) {
   sendMessage(
     room,
@@ -265,6 +266,6 @@ export function sendBlackMessage(
     toPlayerID,
     COLORS.BLACK,
     FONTS.NORMAL,
-    SOUNDS.NOTIFICATION
+    SOUNDS.NOTIFICATION,
   );
 }

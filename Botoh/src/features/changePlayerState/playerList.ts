@@ -1,3 +1,4 @@
+import { COLORS } from "../chat/chat";
 import { Language } from "../chat/language";
 import { PitStep } from "../tires&pits/pitMessaging";
 import { PitResult } from "../tires&pits/pitStopFunctions";
@@ -40,7 +41,8 @@ export interface PlayerInfo {
   sectorChanged: boolean;
   sectorTime: number[];
   sectorTimeCounter: number;
-
+  bestSectorTimes: [number, number, number];
+  sectorColour: COLORS;
   // Pneus
   tires: Tires;
   wear: number;

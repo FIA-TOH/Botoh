@@ -70,6 +70,7 @@ import { handleRRPositionCommand } from "./adminThings/handleRRPositionCommand";
 import { handleClearDebrisCommand } from "./debris/handleClearDebrisCommand";
 import { handleUpgradeCommand } from "./scuderia/handleUpgradeCommand";
 import { handleBRModeCommand } from "./gameMode/battleRoyale.ts/handleBRModeCommand";
+import { handleBRTwoLapsCommand } from "./gameMode/battleRoyale.ts/handleBRTwoLapsCommand";
 
 export type CommandFunction = (
   handleAdminCommand: (
@@ -132,7 +133,12 @@ export type CommandFunction = (
     args: string[],
     room: RoomObject,
   ) => void,
-  handleBRodeCommand: (
+  handleBRmodeCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
+  handleBRTwoLapsCommand: (
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject,
@@ -414,6 +420,7 @@ function importCommandsByLanguage(commandFunctions: {
         handleQTimeCommand,
         handleRModeCommand,
         handleBRModeCommand,
+        handleBRTwoLapsCommand,
         handleBBCommand,
         handleTiresCommand,
         handleHelpCommand,
@@ -490,6 +497,7 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
         handleQTimeCommand,
         handleRModeCommand,
         handleBRModeCommand,
+        handleBRTwoLapsCommand,
         handleBBCommand,
         handleTiresCommand,
         handleHelpCommand,
