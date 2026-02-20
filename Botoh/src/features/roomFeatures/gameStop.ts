@@ -15,11 +15,10 @@ import {
   generalGameMode,
   GeneralGameMode,
 } from "../changeGameState/changeGameModes";
-import { clearPlayers } from "../changeGameState/qualy/playerTime";
-import { printAllTimes } from "../changeGameState/qualy/printAllTimes";
+
 import { reorderPlayersInRoomRace } from "../movePlayers/reorderPlayersInRoom";
 import { timerController } from "../utils";
-import { printAllPositions } from "../changeGameState/race/printAllPositions";
+
 import { log } from "../discord/logger";
 import { changeLaps } from "../commands/adminThings/handleChangeLaps";
 import { handleRREnabledCommand } from "../commands/adminThings/handleRREnabledCommand";
@@ -40,6 +39,9 @@ import {
   sendAllCutsToDiscord,
 } from "../detectCut/cutsOfTracksStorage";
 import { resetDebrisUsedList } from "../debris/chooseOneDebris";
+import { clearPlayers } from "../commands/gameMode/qualy/playerTime";
+import { printAllTimes } from "../commands/gameMode/qualy/printAllTimes";
+import { printAllPositions } from "../commands/gameMode/race/printAllPositions";
 import { exportAllLapTimesCsv } from "../changePlayerState/lapRecorder";
 import { sendFileToWebhook } from "../discord/discord";
 
@@ -73,7 +75,8 @@ export function GameStop(room: RoomObject) {
     }
 
     try {
-      const WEBHOOK = "https://discord.com/api/webhooks/1445546615715921992/6Z4h19srHYhvwr4tVggs_mms0C85BiiCNuqeJQhv7dTm-jc6s5NbYbTQshVVMI3z-6_J";
+      const WEBHOOK =
+        "https://discord.com/api/webhooks/1445546615715921992/6Z4h19srHYhvwr4tVggs_mms0C85BiiCNuqeJQhv7dTm-jc6s5NbYbTQshVVMI3z-6_J";
       const csvPath = exportAllLapTimesCsv(room);
       if (csvPath) {
         sendFileToWebhook(csvPath, WEBHOOK, "LAP_TIMES_CSV");

@@ -4,9 +4,10 @@ import {
   generalGameMode,
   GeneralGameMode,
 } from "../changeGameState/changeGameModes";
-import { getPlayersOrderedByQualiTime } from "../changeGameState/qualy/playerTime";
-import { positionList } from "../changeGameState/race/positionList";
+
 import { TIRE_AVATAR } from "../changePlayerState/handleAvatar";
+import { getPlayersOrderedByQualiTime } from "../commands/gameMode/qualy/playerTime";
+import { positionList } from "../commands/gameMode/race/positionList";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { getBestPit } from "../tires&pits/trackBestPit";
 import { getTimestamp } from "../utils";
@@ -62,7 +63,7 @@ export function sendQualiResultsToDiscord() {
     }
 
     body += `\n${pos}  | ${nameWithTeam} | ${gap.padEnd(9)} | ${bestLap.padEnd(
-      9
+      9,
     )}`;
   });
 
@@ -75,6 +76,8 @@ export function sendRaceResultsToDiscord() {
     gameModeResult = "RACE";
   } else if (gameMode === GameMode.INDY) {
     gameModeResult = "INDY";
+  } else if (gameMode === GameMode.BATTLE_ROYALE) {
+    gameModeResult = "BATTLE ROYALE";
   } else {
     gameModeResult = "OTHER";
   }
@@ -111,9 +114,9 @@ export function sendRaceResultsToDiscord() {
     }
 
     body += `\n${pos}  | ${nameWithTeam} | ${gap.padEnd(
-      9
+      9,
     )} | ${totalTime.padEnd(10)} | ${fastLap.padEnd(
-      9
+      9,
     )} | ${lapsStr}  | ${pitsVisual}`;
   });
 
@@ -122,7 +125,7 @@ export function sendRaceResultsToDiscord() {
 
   if (bestLap) {
     body += `\n\n⚡ Fastest Lap: ${bestLap.playerName} - ${formatTimeSec(
-      bestLap.lapTime
+      bestLap.lapTime,
     )} (Lap ${bestLap.lapNumber})`;
   }
 

@@ -80,6 +80,13 @@ import { CHILE } from "../../circuits/chile/chile";
 import { JARAMA } from "../../circuits/jarama/jarama";
 import { BRANDS_HATCH } from "../../circuits/brands_hatch/brands_hatch";
 import { BARCELONA } from "../../circuits/barcelona/barcelona";
+import { DAYTONA } from "../../circuits/daytona/daytona";
+import { CANOPUBLIC } from "../../circuits/cano/canoPublic";
+import { VIRGINIA } from "../../circuits/virginia/virginia";
+import { YAS_MARINA_NANO } from "../../circuits/abu_dhabi/yas_marina_nano";
+import { TANGA } from "../../circuits/tanga/tanga";
+import { TANDIL } from "../../circuits/tandil/tandil";
+import { COLORADO } from "../../circuits/colorado/colorado";
 import { CANADA_NANO } from "../../circuits/canada_nano/canada_nano";
 import { AUTODROMO_NANOSEB } from "../../circuits/autodromo_nanoseb/autodromo_nanoseb";
 import { DUBAI } from "../../circuits/dubai/dubai";
@@ -143,6 +150,12 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
       JARAMA,
       BRANDS_HATCH,
       BARCELONA,
+      CANO,
+      VIRGINIA,
+      TANGA,
+      TANDIL,
+      COLORADO,
+      YAS_MARINA_NANO,
       CANADA_NANO,
       AUTODROMO_NANOSEB,
       DUBAI,
@@ -156,7 +169,6 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
       BMW_RING,
       HUNGARY_NANO,
       SPANANO,
-      CANO,
       PODIUM,
       WAITROOM,
     ]
@@ -198,6 +210,7 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
       JARAMA,
       BRANDS_HATCH,
       BARCELONA,
+      CANOPUBLIC,
       CANADA_NANO,
       AUTODROMO_NANOSEB,
       DUBAI,
@@ -211,7 +224,6 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
       BMW_RING,
       HUNGARY_NANO,
       SPANANO,
-      CANO,
       WAITROOM,
       WAITROOMQUALY,
     ];
@@ -242,7 +254,7 @@ export function handleChangeMap(index: number, room: RoomObject) {
     if (gameMode !== GameMode.WAITING) {
       sendSuccessMessage(
         room,
-        MESSAGES.CHANGE_MAP_SUCCESS(CIRCUITS[currentMapIndex].info.name)
+        MESSAGES.CHANGE_MAP_SUCCESS(CIRCUITS[currentMapIndex].info.name),
       );
     }
   } catch (error) {

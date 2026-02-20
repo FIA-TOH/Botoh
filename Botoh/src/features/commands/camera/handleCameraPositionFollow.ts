@@ -1,12 +1,12 @@
-import { positionList } from "../../changeGameState/race/positionList";
 import { sendErrorMessage, sendChatMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { setFollowPosition } from "../../cameraAndBall/cameraFollow";
+import { positionList } from "../gameMode/race/positionList";
 
 export function handleCameraPositionFollow(
   byPlayer?: PlayerObject,
   args?: string[],
-  room?: RoomObject
+  room?: RoomObject,
 ) {
   if (!room) return;
 
@@ -19,7 +19,7 @@ export function handleCameraPositionFollow(
     if (byPlayer) {
       room.sendAnnouncement(
         "Correct use: !camera_position [posição]",
-        byPlayer.id
+        byPlayer.id,
       );
     }
     return;
@@ -42,7 +42,7 @@ export function handleCameraPositionFollow(
   if (byPlayer) {
     room.sendAnnouncement(
       `Camera now following the position ${pos}.`,
-      byPlayer.id
+      byPlayer.id,
     );
   }
 }

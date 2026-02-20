@@ -1,9 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
-import { playerList } from "../../changePlayerState/playerList";
 import { positionList } from "./positionList";
-import { getBestLap } from "../../zones/laps/trackBestLap";
-import { getBestPit } from "../../tires&pits/trackBestPit";
+import { playerList } from "../../../changePlayerState/playerList";
+import { getBestPit } from "../../../tires&pits/trackBestPit";
+import { getBestLap } from "../../../zones/laps/trackBestLap";
 
 export interface StandingsRow {
   position: number;
@@ -29,7 +29,8 @@ export function generateStandingsHtml(): string {
     pits: p.pits,
     bestLap: p.time,
     laps: playerList[p.id]?.currentLap ?? 0,
-    gap: idx === 0 ? "+0.00" : `+${(p.time - positionList[0].time).toFixed(3)}s`,
+    gap:
+      idx === 0 ? "+0.00" : `+${(p.time - positionList[0].time).toFixed(3)}s`,
     team: p.team ?? null,
   }));
 
@@ -175,7 +176,7 @@ export function generateStandingsHtml(): string {
           <td class="laps">${r.laps}</td>
           <td class="pits">${r.pits}</td>
         </tr>
-        `
+        `,
           )
           .join("")}
       </tbody>
@@ -185,14 +186,14 @@ export function generateStandingsHtml(): string {
       ${
         bestLap
           ? `<div class="info-row"><span class="small">⚡ Fastest Lap:</span> <span>${escapeHtml(
-              bestLap.playerName
+              bestLap.playerName,
             )} - ${bestLap.lapTime.toFixed(3)}s (Lap ${bestLap.lapNumber})</span></div>`
           : ""
       }
       ${
         bestPit
           ? `<div class="info-row"><span class="small">🔧 Fastest Pit:</span> <span>${escapeHtml(
-              bestPit.playerName
+              bestPit.playerName,
             )} - ${bestPit.pitTime.toFixed(3)}s (Stop ${bestPit.pitNumber})</span></div>`
           : ""
       }

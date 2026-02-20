@@ -4,6 +4,7 @@ import { handleAvatar, Situacions } from "./handleAvatar";
 import { Tires, TIRE_STARTING_SPEED } from "../tires&pits/tires";
 import { gameMode, GameMode } from "../changeGameState/changeGameModes";
 import { start } from "repl";
+import { COLORS } from "../chat/chat";
 
 export function createPlayerInfo(ip?: string) {
   return {
@@ -30,6 +31,12 @@ export function createPlayerInfo(ip?: string) {
     sectorChanged: false,
     sectorTime: [],
     sectorTimeCounter: 0,
+    bestSectorTimes: [Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE] as [
+      number,
+      number,
+      number,
+    ],
+    sectorColour: COLORS.WHITE,
 
     // Pneus
     tires: Tires.SOFT,
@@ -111,13 +118,18 @@ export function resetPlayer(
   player: PlayerObject,
   room: RoomObject,
   id: number,
-  startingRace?: boolean
+  startingRace?: boolean,
 ) {
   if (playerList[id] === undefined) {
     playerList[id] = createPlayerInfo();
   }
   if (startingRace) {
     playerList[id].bestTime = Number.MAX_VALUE;
+    playerList[id].bestSectorTimes = [
+      Number.MAX_VALUE,
+      Number.MAX_VALUE,
+      Number.MAX_VALUE,
+    ] as [number, number, number];
   }
   if (gameMode !== GameMode.TRAINING) {
     playerList[id].tires = Tires.SOFT;
@@ -138,6 +150,7 @@ export function resetPlayer(
   playerList[id].sectorChanged = false;
   playerList[id].sectorTime = [];
   playerList[id].sectorTimeCounter = 0;
+  playerList[id].sectorColour = COLORS.WHITE;
 
   playerList[id].lapsOnCurrentTire = -1;
   playerList[id].wear = 0;
@@ -161,10 +174,10 @@ export function resetPlayer(
       },
     ],
   };
-  (playerList[id].pitCountdown = 0),
+  ((playerList[id].pitCountdown = 0),
     (playerList[id].pitTargetTires = Tires.SOFT),
     (playerList[id].pitInitialPos = { x: 0, y: 0 }),
-    (playerList[id].drs = false);
+    (playerList[id].drs = false));
   playerList[id].kers = 100;
   playerList[id].gas = 100;
   playerList[id].prevGas = 100;

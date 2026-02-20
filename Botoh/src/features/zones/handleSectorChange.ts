@@ -4,16 +4,17 @@ import {
   generalGameMode,
   GeneralGameMode,
 } from "../changeGameState/changeGameModes";
-import {
-  updatePositionList,
-  positionList,
-} from "../changeGameState/race/positionList";
 import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
 import { playerList } from "../changePlayerState/playerList";
 import { sendBlueMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
+import {
+  updatePositionList,
+  positionList,
+} from "../commands/gameMode/race/positionList";
 import { presentationLap } from "../commands/gameState/handlePresentationLapCommand";
 import { inHitbox, getRunningPlayers } from "../utils";
+import { evaluateSector } from "./laps/trackBestSector";
 import { CIRCUITS, currentMapIndex } from "./maps";
 
 function serialize(number: number) {
@@ -22,7 +23,7 @@ function serialize(number: number) {
 
 function ifInSectorOneChangeZone(
   player: { p: PlayerObject; disc: DiscPropertiesObject },
-  room: RoomObject
+  room: RoomObject,
 ) {
   const scores = room.getScores();
   const circuit = CIRCUITS[currentMapIndex];
@@ -34,7 +35,7 @@ function ifInSectorOneChangeZone(
 
 function ifInSectorTwoChangeZone(
   player: { p: PlayerObject; disc: DiscPropertiesObject },
-  room: RoomObject
+  room: RoomObject,
 ) {
   const scores = room.getScores();
   const circuit = CIRCUITS[currentMapIndex];
@@ -46,7 +47,7 @@ function ifInSectorTwoChangeZone(
 
 function ifInSectorThreeChangeZone(
   player: { p: PlayerObject; disc: DiscPropertiesObject },
-  room: RoomObject
+  room: RoomObject,
 ) {
   const scores = room.getScores();
   const circuit = CIRCUITS[currentMapIndex];
@@ -58,10 +59,11 @@ function ifInSectorThreeChangeZone(
 
 export function checkPlayerSector(
   playersAndDiscs: { p: PlayerObject; disc: DiscPropertiesObject }[],
-  room: RoomObject
+  room: RoomObject,
 ) {
   const players = getRunningPlayers(playersAndDiscs);
   if (presentationLap) return;
+
   players.forEach((pad) => {
     const p = pad.p;
 
@@ -99,21 +101,34 @@ export function checkPlayerSector(
 
     if (ifInSectorOneChangeZone(pad, room)) {
       playerList[p.id].sectorTime[2] = serialize(
-        playerList[p.id].sectorTimeCounter
+        playerList[p.id].sectorTimeCounter,
       );
       playerList[p.id].sectorTimeCounter = 0;
+
       updatePositionList(players, room);
+
+      if (
+        generalGameMode !== GeneralGameMode.GENERAL_RACE &&
+        playerList[p.id].currentLap > 0
+      ) {
+        const result = evaluateSector(3, playerList[p.id].sectorTime[2], p.id);
+        room.sendAnnouncement(result.text, p.id, result.color);
+      }
     } else if (ifInSectorTwoChangeZone(pad, room)) {
       playerList[p.id].totalTime = room.getScores().time;
       playerList[p.id].currentSector = 2;
+
       playerList[p.id].sectorTime[0] = serialize(
-        playerList[p.id].sectorTimeCounter
+        playerList[p.id].sectorTimeCounter,
       );
-      room.sendAnnouncement(
-        `Sector 1: ${playerList[p.id].sectorTime[0]}s`,
-        p.id,
-        0xff8f00
-      );
+
+      if (
+        generalGameMode !== GeneralGameMode.GENERAL_RACE &&
+        playerList[p.id].currentLap > 0
+      ) {
+        const result = evaluateSector(1, playerList[p.id].sectorTime[0], p.id);
+        room.sendAnnouncement(result.text, p.id, result.color);
+      }
 
       playerList[p.id].sectorTimeCounter = 0;
       updatePositionList(players, room);
@@ -121,14 +136,18 @@ export function checkPlayerSector(
     } else if (ifInSectorThreeChangeZone(pad, room)) {
       playerList[p.id].totalTime = room.getScores().time;
       playerList[p.id].currentSector = 3;
+
       playerList[p.id].sectorTime[1] = serialize(
-        playerList[p.id].sectorTimeCounter
+        playerList[p.id].sectorTimeCounter,
       );
-      room.sendAnnouncement(
-        `Sector 2: ${playerList[p.id].sectorTime[1]}s`,
-        p.id,
-        0xff8f00
-      );
+
+      if (
+        generalGameMode !== GeneralGameMode.GENERAL_RACE &&
+        playerList[p.id].currentLap > 0
+      ) {
+        const result = evaluateSector(2, playerList[p.id].sectorTime[1], p.id);
+        room.sendAnnouncement(result.text, p.id, result.color);
+      }
 
       playerList[p.id].sectorTimeCounter = 0;
       updatePositionList(players, room);
@@ -140,6 +159,7 @@ export function checkPlayerSector(
 export function checkBlueFlag(p: PlayerObject, room: RoomObject) {
   const playerInfo = positionList.find((entry) => entry.name === p.name);
   if (!playerInfo) return;
+
   if (
     generalGameMode === GeneralGameMode.GENERAL_QUALY ||
     gameMode == GameMode.TRAINING
@@ -150,6 +170,7 @@ export function checkBlueFlag(p: PlayerObject, room: RoomObject) {
     const opponentInfo = room
       .getPlayerList()
       .find((p) => p.name === opponent.name);
+
     if (
       room.getScores().time > 20 &&
       opponent.lap < playerInfo.lap &&
@@ -161,15 +182,16 @@ export function checkBlueFlag(p: PlayerObject, room: RoomObject) {
       sendBlueMessage(
         room,
         MESSAGES.BLUE_FLAG_OPPONENT(opponent.name, playerInfo.name),
-        opponentInfo.id
+        opponentInfo.id,
       );
+
       handleAvatar(
         Situacions.Flag,
         opponentInfo,
         room,
         undefined,
         ["🟦"],
-        [5000]
+        [5000],
       );
     }
   });

@@ -1,9 +1,20 @@
 import { playerList } from "../changePlayerState/playerList";
 import { CIRCUITS, currentMapIndex } from "./maps";
+let lastGameTime = 0;
+
+export function didGameTimeAdvance(room: RoomObject): boolean {
+  const scores = room.getScores();
+  if (!scores) return false;
+
+  if (scores.time === lastGameTime) return false;
+
+  lastGameTime = scores.time;
+  return true;
+}
 
 export function updatePreviousPos(
   pad: { p: PlayerObject; disc: DiscPropertiesObject },
-  p: PlayerObject
+  p: PlayerObject,
 ) {
   const posX = pad.disc.x;
   const posY = pad.disc.y;
@@ -28,7 +39,7 @@ function updateAccurateTime(p: PlayerObject, room: RoomObject): number {
   const maxY = circuit.finishLine.bounds.maxY;
 
   const startFinishLine = Math.sqrt(
-    Math.pow(maxX - minX, 2) + Math.pow(maxY - minY, 2)
+    Math.pow(maxX - minX, 2) + Math.pow(maxY - minY, 2),
   );
   const timeOfOneTick = 1 / 60;
 
@@ -40,16 +51,16 @@ function updateAccurateTime(p: PlayerObject, room: RoomObject): number {
   }
 
   const currentPreviousSide = Math.sqrt(
-    Math.pow(curr.x - prev.x, 2) + Math.pow(curr.y - prev.y, 2)
+    Math.pow(curr.x - prev.x, 2) + Math.pow(curr.y - prev.y, 2),
   );
   const bottomCornerCurrentSide = Math.sqrt(
-    Math.pow(curr.x - minX, 2) + Math.pow(curr.y - maxY, 2)
+    Math.pow(curr.x - minX, 2) + Math.pow(curr.y - maxY, 2),
   );
   const bottomCornerPreviousSide = Math.sqrt(
-    Math.pow(prev.x - minX, 2) + Math.pow(prev.y - maxY, 2)
+    Math.pow(prev.x - minX, 2) + Math.pow(prev.y - maxY, 2),
   );
   const upperCornerCurrentSide = Math.sqrt(
-    Math.pow(curr.x - maxX, 2) + Math.pow(curr.y - minY, 2)
+    Math.pow(curr.x - maxX, 2) + Math.pow(curr.y - minY, 2),
   );
 
   const anglecurrentPreviousSideBottomCornerCurrentSide =
@@ -57,7 +68,7 @@ function updateAccurateTime(p: PlayerObject, room: RoomObject): number {
       (Math.pow(currentPreviousSide, 2) +
         Math.pow(bottomCornerCurrentSide, 2) -
         Math.pow(bottomCornerPreviousSide, 2)) /
-        (2 * currentPreviousSide * bottomCornerCurrentSide)
+        (2 * currentPreviousSide * bottomCornerCurrentSide),
     ) *
     (180 / Math.PI);
 
@@ -66,7 +77,7 @@ function updateAccurateTime(p: PlayerObject, room: RoomObject): number {
       (Math.pow(bottomCornerCurrentSide, 2) +
         Math.pow(startFinishLine, 2) -
         Math.pow(upperCornerCurrentSide, 2)) /
-        (2 * bottomCornerCurrentSide * startFinishLine)
+        (2 * bottomCornerCurrentSide * startFinishLine),
     ) *
     (180 / Math.PI);
 
@@ -90,8 +101,10 @@ function updateAccurateTime(p: PlayerObject, room: RoomObject): number {
 
 export function updatePlayerLapTime(
   pad: { p: PlayerObject; disc: DiscPropertiesObject },
-  room: RoomObject
+  room: RoomObject,
 ) {
+  // if (!didGameTimeAdvance(room)) return;
+
   const p = pad.p;
   const playerData = playerList[p.id];
 

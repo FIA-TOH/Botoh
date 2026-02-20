@@ -1,20 +1,18 @@
-import { centerText } from "../../chat/centerText";
 import {
-  MAX_PLAYER_NAME,
-  sendChatMessage,
-  sendErrorMessage,
-  sendNonLocalizedSmallChatMessage,
-} from "../../chat/chat";
-import { MESSAGES } from "../../chat/messages";
-import {
-  GameMode,
-  gameMode,
-  GeneralGameMode,
   generalGameMode,
-} from "../changeGameModes";
+  GeneralGameMode,
+} from "../../../changeGameState/changeGameModes";
+import { playerList } from "../../../changePlayerState/playerList";
+import { centerText } from "../../../chat/centerText";
+import {
+  sendErrorMessage,
+  sendChatMessage,
+  MAX_PLAYER_NAME,
+  sendNonLocalizedSmallChatMessage,
+} from "../../../chat/chat";
+import { MESSAGES } from "../../../chat/messages";
+import { leagueScuderia } from "../../../scuderias/scuderias";
 import { getPlayersOrderedByQualiTime } from "./playerTime";
-import { leagueScuderia } from "../../scuderias/scuderias";
-import { playerList } from "../../changePlayerState/playerList";
 
 const HAXBALL_MSG_LIMIT = 124;
 const TEAM_COL_WIDTH = 12;
@@ -32,11 +30,10 @@ export function printAllTimes(room: RoomObject, toPlayerID?: number) {
     return;
   }
 
-  let messageBuffer =
-    ` P - ${centerText("Name", MAX_PLAYER_NAME)} | ${centerText(
-      "Team",
-      TEAM_COL_WIDTH
-    )} | Best Lap\n`;
+  let messageBuffer = ` P - ${centerText("Name", MAX_PLAYER_NAME)} | ${centerText(
+    "Team",
+    TEAM_COL_WIDTH,
+  )} | Best Lap\n`;
 
   orderedList.forEach((p, index: number) => {
     const position = String(index + 1).padStart(2, "0");

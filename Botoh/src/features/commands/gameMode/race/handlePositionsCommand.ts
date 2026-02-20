@@ -1,9 +1,9 @@
-import { printAllPositions } from "../../../changeGameState/race/printAllPositions";
+import { printAllPositions } from "./printAllPositions";
 
 export function handlePositionsCommand(
   byPlayer: PlayerObject,
   _: string[],
-  room: RoomObject
+  room: RoomObject,
 ) {
   if (byPlayer.admin) {
     printAllPositions(room);

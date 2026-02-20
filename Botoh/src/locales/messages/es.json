@@ -118,6 +118,7 @@
   "TIME_TO_VOTE": "¡Hora de votar! Elige uno de los circuitos a continuación escribiendo !voto (Número)",
   "TIME_TO_QUALY": "🚨¡Clasificación! ¡Haz tu mejor tiempo!🚨",
   "TIME_TO_RACE": "🚨¡Carrera con {{laps}} vueltas! ¡Que gane el mejor!🚨",
+  "TIME_TO_BATTLE_ROYALE": "🚨¡Battle Royale! ¡No seas el último!🚨",
   "WORSE_TIME": "Tiempo de vuelta: {{lapTime}} (-{{diferenca}})",
   "CODE_BOX": "Tu código de PitStop es {{codigo}}, escríbelo al revés después del tipo de neumático.",
   "CODE_WRONG": "¡Código incorrecto! Ingresa el código correcto y al revés.",
@@ -155,5 +156,9 @@
   "TIME_TO_WEC": "🚨¡Modo WEC con {{raceTime}} minutos! ¡Prepárate!🚨",
   "NOT_IN_RACE": "No estás en la carrera",
   "WEC_TIME": "El tiempo de clasificación es ahora de {{minutes}} minutos.",
-  "SOFT_CUT_PENALTY": "⚠️ ¡Has cortado la pista! ¡Pasa por dentro de la línea azul o serás penalizado!"
+  "SOFT_CUT_PENALTY": "⚠️ ¡Has cortado la pista! ¡Pasa por dentro de la línea azul o serás penalizado!",
+  "TWO_LAPS": "☠️🛡️ Vuelta {{currentLap}}, eliminación EN LA PRÓXIMA VUELTA 🛡️☠️",
+  "BR_ELIMINATED": "☠️🔥 {{name}} eliminado 🔥☠️",
+  "BR_REMAINING": "☠️👥 {{remaining}} restantes. 👥☠️",
+  "BR_WINNER": "👑🏆 {{name}} ganó, {{eliminated}} eliminados. 👑🏆"
 }

@@ -62,6 +62,7 @@ export function PlayerLeave(room: RoomObject) {
           didHardQualy: playerObj.didHardQualy,
           totalTime: playerObj.totalTime,
           bestTime: playerObj.bestTime,
+          bestSectorTimes: playerObj.bestSectorTimes,
           tires: playerObj.tires,
           wear: playerObj.wear,
           lapsOnCurrentTire: playerObj.lapsOnCurrentTire,
@@ -80,7 +81,7 @@ export function PlayerLeave(room: RoomObject) {
           voted: playerObj.voted,
           lapsBehindLeaderWhenLeft: Math.max(
             0,
-            firstPlacePlayerLap - playerObj.currentLap
+            firstPlacePlayerLap - playerObj.currentLap,
           ),
           lapsCompletedWhenLeft: lapsCompleted,
           leftAt: new Date().toISOString(),

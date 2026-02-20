@@ -1,17 +1,9 @@
-import { centerText } from "../../chat/centerText";
 import {
-  sendNonLocalizedSmallChatMessage,
-  MAX_PLAYER_NAME,
-  sendErrorMessage,
-  sendSmallChatMessage,
-} from "../../chat/chat";
-import { MESSAGES } from "../../chat/messages";
-import {
-  gameMode,
-  GameMode,
   generalGameMode,
   GeneralGameMode,
-} from "../changeGameModes";
+} from "../../../changeGameState/changeGameModes";
+import { sendErrorMessage, sendSmallChatMessage } from "../../../chat/chat";
+import { MESSAGES } from "../../../chat/messages";
 import { getPlayersOrderedByQualiTime } from "./playerTime";
 
 export function getNumberPositionQualy(room: RoomObject, playerId: number) {

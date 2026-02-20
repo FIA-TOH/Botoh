@@ -53,8 +53,8 @@ const ZANDVOORT_INFO: CircuitInfo = {
   pitlaneStart: {
     minX: -290,
     maxX: -132,
-    minY: 469,
-    maxY: 501,
+    minY: 500,
+    maxY: 532,
   },
   pitlaneEnd: {
     minX: 775,

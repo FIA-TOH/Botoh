@@ -4,14 +4,14 @@ import {
   generalGameMode,
   GeneralGameMode,
 } from "../../../changeGameState/changeGameModes";
-import { setQualiTime } from "../../../changeGameState/qualy/qualiMode";
 import { sendErrorMessage } from "../../../chat/chat";
 import { MESSAGES } from "../../../chat/messages";
+import { setQualiTime } from "./qualiMode";
 
 export function handleQTimeCommand(
   byPlayer: PlayerObject,
   args: string[],
-  room: RoomObject
+  room: RoomObject,
 ) {
   if (!byPlayer.admin) {
     sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id);

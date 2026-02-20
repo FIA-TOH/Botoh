@@ -1,9 +1,8 @@
 import { gameMode, GameMode } from "../../../changeGameState/changeGameModes";
-import { getNumberPositionQualy } from "../../../changeGameState/qualy/showPositionQualy";
 import { PlayerInfo, playerList } from "../../../changePlayerState/playerList";
-import { hasQualyTimeEnded } from "../../../counters/timeOnTheRoomCounter";
 import { sendDiscordGeneralChatQualy } from "../../../discord/discord";
 import { kickPlayer } from "../../../utils";
+import { getNumberPositionQualy } from "./showPositionQualy";
 
 export let maxLapsQualy = 3;
 export let maxQualyTime = 300; // seconds
@@ -18,7 +17,7 @@ export function setMaxQualyTime(time: number) {
 
 export function kickIfQualyTimeEnded(
   room: RoomObject,
-  player: PlayerObject
+  player: PlayerObject,
 ): boolean {
   if (player.name === "Admin") {
     return false;
@@ -56,7 +55,7 @@ export function handleHardQualiAttempts(
   room: RoomObject,
   p: PlayerObject,
   lapTime: number,
-  playerData: PlayerInfo
+  playerData: PlayerInfo,
 ) {
   if (gameMode !== GameMode.HARD_QUALY) return;
 
@@ -67,20 +66,20 @@ export function handleHardQualiAttempts(
     lapAttempt === 1
       ? "st"
       : lapAttempt === 2
-      ? "nd"
-      : lapAttempt === 3
-      ? "rd"
-      : "th";
+        ? "nd"
+        : lapAttempt === 3
+          ? "rd"
+          : "th";
 
   sendDiscordGeneralChatQualy(
-    `${lapAttempt}${suffix} attemp: ${lapTime}s - P${pos}`
+    `${lapAttempt}${suffix} attemp: ${lapTime}s - P${pos}`,
   );
 }
 
 export function handleHardQualyEnd(
   p: PlayerObject,
   room: RoomObject,
-  currentLap: number
+  currentLap: number,
 ): boolean {
   if (gameMode !== GameMode.HARD_QUALY) return false;
 

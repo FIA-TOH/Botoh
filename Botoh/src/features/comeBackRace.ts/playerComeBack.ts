@@ -6,7 +6,7 @@ export function resetPlayerComeBack(
   player: PlayerObject,
   room: RoomObject,
   id: number,
-  info: PlayerLeftInfo
+  info: PlayerLeftInfo,
 ) {
   const firstPlayer = getPlayerByRacePosition("first", room);
   const firstPlayerCurrentLap = firstPlayer
@@ -62,5 +62,6 @@ export function resetPlayerComeBack(
   playerList[id].lastLapTimeUpdate = 0;
   playerList[id].currentSector = 3;
   playerList[id].sectorChanged = false;
-  (playerList[id].sectorTime = []), playerList[id].sectorTimeCounter;
+  playerList[id].sectorTime = [];
+  playerList[id].sectorTimeCounter;
 }

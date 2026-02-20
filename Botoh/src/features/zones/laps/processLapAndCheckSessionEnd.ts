@@ -4,13 +4,13 @@ import {
   generalGameMode,
   GeneralGameMode,
 } from "../../changeGameState/changeGameModes";
-import { qualiTime } from "../../changeGameState/qualy/qualiMode";
-import { showPlayerQualiPosition } from "../../changeGameState/qualy/showPositionQualy";
 import { Teams } from "../../changeGameState/teams";
 import { playerList } from "../../changePlayerState/playerList";
 import { sendSuccessMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { handleHardQualyEnd } from "../../commands/gameMode/qualy/hardQualyFunctions";
+import { qualiTime } from "../../commands/gameMode/qualy/qualiMode";
+import { showPlayerQualiPosition } from "../../commands/gameMode/qualy/showPositionQualy";
 import { laps } from "../laps";
 import { handleRaceFinish } from "./handleRaceFinish";
 import { notifyCurrentLapAndPitInfo } from "./utils/annoucements/notifyCurrentLapAndPitInfo";
@@ -21,7 +21,7 @@ export function processLapAndCheckSessionEnd(
   pad: { p: PlayerObject; disc: DiscPropertiesObject },
   room: RoomObject,
   lapTime: number,
-  playerAndDiscs: { p: PlayerObject; disc: DiscPropertiesObject }[]
+  playerAndDiscs: { p: PlayerObject; disc: DiscPropertiesObject }[],
 ) {
   const p = pad.p;
   const playerData = playerList[p.id];
@@ -41,7 +41,7 @@ function handleRaceLap(
   room: RoomObject,
   lapTime: number,
   currentLap: number,
-  playerAndDiscs: { p: PlayerObject; disc: DiscPropertiesObject }[]
+  playerAndDiscs: { p: PlayerObject; disc: DiscPropertiesObject }[],
 ) {
   const lapIndex = currentLap - 2;
   const position = registerLapPosition(p, lapIndex, currentLap, lapTime);
@@ -56,7 +56,7 @@ function handleRaceLap(
       lapIndex,
       position,
       currentLap,
-      playerAndDiscs
+      playerAndDiscs,
     );
   } else {
     handleRaceFinish(p, room, lapTime, position === 1);

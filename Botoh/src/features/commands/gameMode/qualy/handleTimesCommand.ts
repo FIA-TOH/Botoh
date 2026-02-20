@@ -1,9 +1,9 @@
-import { printAllTimes } from "../../../changeGameState/qualy/printAllTimes";
+import { printAllTimes } from "./printAllTimes";
 
 export function handleTimesCommand(
   byPlayer: PlayerObject,
   _: string[],
-  room: RoomObject
+  room: RoomObject,
 ) {
   if (byPlayer.admin) {
     printAllTimes(room);

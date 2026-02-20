@@ -118,6 +118,7 @@
   "TIME_TO_VOTE": "Oy verme zamanı! Aşağıdaki pistlerden birini seçmek için !vote (Numara) yazın",
   "TIME_TO_QUALY": "🚨Kualifikasyon! En iyi zamanınızı yapın!🚨",
   "TIME_TO_RACE": "🚨Yarış! {{laps}} laps. En iyisi kazansın!🚨",
+  "TIME_TO_BATTLE_ROYALE": "🚨 Battle Royale!! Son kalan sen olma!🚨",
   "WORSE_TIME": "Tur zamanı: {{lapTime}} (-{{diferenca}})",
   "CODE_BOX": "PitStop kodunuz {{codigo}}, lastik tipinden sonra ters olarak girin.",
   "CODE_WRONG": "Hatalı kod! Doğru kodu ters olarak girin.",
@@ -155,5 +156,9 @@
   "TIME_TO_WEC": "🚨WEC Modu {{raceTime}} dakika! Hazırlanın!🚨",
   "NOT_IN_RACE": "Yarışta değilsiniz ",
   "WEC_TIME": "Sıralama süresi artık {{minutes}} dakika.",
-  "SOFT_CUT_PENALTY": "⚠️ Yolu kestiniz! Mavi çizginin içinden geçin veya ceza alacaksınız!"
+  "SOFT_CUT_PENALTY": "⚠️ Yolu kestiniz! Mavi çizginin içinden geçin veya ceza alacaksınız!",
+  "TWO_LAPS": "☠️🛡️ Tur {{currentLap}}, ELEME BİR SONRAKİ TURDA 🛡️☠️",
+  "BR_ELIMINATED": "☠️🔥 {{name}} elendi 🔥☠️",
+  "BR_REMAINING": "☠️👥 {{remaining}} kaldı. 👥☠️",
+  "BR_WINNER": "👑🏆 {{name}} kazandı, {{eliminated}} elendi. 👑🏆"
 }

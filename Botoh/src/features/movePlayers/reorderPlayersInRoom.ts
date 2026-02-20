@@ -1,6 +1,6 @@
-import { getPlayersOrderedByQualiTime } from "../changeGameState/qualy/playerTime";
 import { Teams } from "../changeGameState/teams";
 import { playerList } from "../changePlayerState/playerList";
+import { getPlayersOrderedByQualiTime } from "../commands/gameMode/qualy/playerTime";
 import { finishList } from "../zones/laps/handleLapChange";
 
 export function reorderPlayersInRoomRace(room: RoomObject) {
@@ -85,7 +85,7 @@ export function reorderPlayersByRacePosition(room: RoomObject) {
       (p) =>
         p.team === Teams.RUNNERS &&
         !activePositionIds.includes(p.id) &&
-        !playerList[p.id]?.afk
+        !playerList[p.id]?.afk,
     )
     .map((p) => p.id);
 

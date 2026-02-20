@@ -1,19 +1,17 @@
 import {
-  gameMode,
-  GameMode,
   generalGameMode,
   GeneralGameMode,
 } from "../../../changeGameState/changeGameModes";
-import { qualiTime } from "../../../changeGameState/qualy/qualiMode";
 import { sendChatMessage } from "../../../chat/chat";
 import { MESSAGES } from "../../../chat/messages";
 import { laps } from "../../../zones/laps";
 import { lapPositions } from "../../../zones/laps/handleLapChange";
+import { qualiTime } from "../qualy/qualiMode";
 
 export function handleWaitTimeCommand(
   byPlayer: PlayerObject,
   args: string[],
-  room: RoomObject
+  room: RoomObject,
 ) {
   if (room.getScores() === null) {
     sendChatMessage(room, MESSAGES.NO_WAIT_TIME(), byPlayer.id);

@@ -118,6 +118,7 @@
   "TIME_TO_VOTE": "It's time to vote! Choose one of the circuits below by typing !vote (Number)",
   "TIME_TO_QUALY": "🚨Qualifying! Do your best time!🚨",
   "TIME_TO_RACE": "🚨Race with {{laps}} laps! May the best win!🚨",
+  "TIME_TO_BATTLE_ROYALE": "🚨Battle Royale!! Don't be the last!🚨",
   "WORSE_TIME": "Lap time: {{lapTime}} (-{{diferenca}})",
   "CODE_BOX": "Your PitStop code is {{codigo}}, enter it reversed after the tire type.",
   "CODE_WRONG": "Wrong code! Enter the correct code reversed.",
@@ -155,5 +156,9 @@
   "TIME_TO_WEC": "🚨WEC Mode with {{raceTime}} minutes! Get ready!🚨",
   "NOT_IN_RACE": "You are not in the race",
   "WEC_TIME": "Qualification time is now {{minutes}} minutes.",
-  "SOFT_CUT_PENALTY": "⚠️ You cut the track! Go through the blue line or you will be penalized!"
+  "SOFT_CUT_PENALTY": "⚠️ You cut the track! Go through the blue line or you will be penalized!",
+  "TWO_LAPS": "☠️🛡️ Lap {{currentLap}}, elimination NEXT LAP 🛡️☠️",
+  "BR_ELIMINATED": "☠️🔥 {{name}} eliminated 🔥☠️",
+  "BR_REMAINING": "☠️👥 {{remaining}} remaining. 👥☠️",
+  "BR_WINNER": "👑🏆 {{name}} won!, {{eliminated}} eliminated. 👑🏆"
 }
