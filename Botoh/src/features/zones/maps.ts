@@ -82,6 +82,10 @@ import { DAYTONA } from "../../circuits/daytona/daytona";
 import { CANO } from "../../circuits/cano/cano";
 import { CANOPUBLIC } from "../../circuits/cano/canoPublic";
 import { VIRGINIA } from "../../circuits/virginia/virginia";
+import { YAS_MARINA_NANO } from "../../circuits/abu_dhabi/yas_marina_nano";
+import { TANGA } from "../../circuits/tanga/tanga";
+import { TANDIL } from "../../circuits/tandil/tandil";
+import { COLORADO } from "../../circuits/colorado/colorado";
 
 // import {DAYTONA} from "../circuits/daytona/daytona";
 // import {BARCELONA} from "../circuits/barcelona/barcelona";
@@ -132,6 +136,10 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
       BARCELONA,
       CANO,
       VIRGINIA,
+      TANGA,
+      TANDIL,
+      COLORADO,
+      YAS_MARINA_NANO,
       INDIANAPOLIS,
       PODIUM,
       WAITROOM,
