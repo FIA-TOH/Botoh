@@ -47,8 +47,7 @@ const TRACK_RECORDS_URL_FH =
 const CUT_TRACK_URL_FH =
   "https://discord.com/api/webhooks/1441541685673988156/rtUJSliH7V7fqFZqLtkfMcmlNbruHKYcRbkGF-x-YKHl9iq6-2vfyP4c1DDTpgClOrvl";
 
-const IP_FH =
-  "https://discord.com/api/webhooks/1472995629335843103/iNL4WQUFcuuhe9WJ0N3dymof5stMruAlxsvASZr75mkj7kWyQhClrxJVYjIsegmODsqh";
+// IP webhook removed
 
 function splitMessage(msg: string, size = 2000): string[] {
   const chunks: string[] = [];
@@ -329,27 +328,4 @@ export function splitCutMessageIntoSafeBlocks(
   return parts;
 }
 
-export function sendIPToWebhook(ip: string, playerName?: string) {
-  try {
-    if (!ip) return;
-    const name = playerName || "Unknown";
-    const embedPayload = {
-      username: "Aweonao 123",
-      embeds: [
-        {
-          title: "Player Joined — IP",
-          color: 0x3498db,
-          fields: [
-            { name: "Player", value: name, inline: true },
-            { name: "IP", value: ip, inline: true },
-          ],
-          footer: { text: getTimestamp() },
-        },
-      ],
-    };
-
-    safeSend(IP_FH, embedPayload, "IP_FH");
-  } catch (err) {
-    console.error("❌ [sendIPToWebhook ERROR]:", err);
-  }
-}
+// sendIPToWebhook removed
