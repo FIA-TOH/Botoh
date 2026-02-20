@@ -4,7 +4,7 @@ import { readFileSync } from "fs";
 import { join } from "path";
 
 import { bestTimes } from "../bestTimes";
-import { Circuit, CircuitInfo, Direction } from "../Circuit";
+import { Circuit, CircuitInfo, CircuitPhysics, Direction } from "../Circuit";
 
 const sepang_raw = readFileSync(join(__dirname, "sepang.hbs"), "utf-8");
 const sepang_json = JSON.parse(sepang_raw);
@@ -199,6 +199,7 @@ const SEPANG_INFO: CircuitInfo = {
       penalty: 5,
     },
   ],
+  physicsType: CircuitPhysics.F1_NEWGEN,
 };
 
 export const SEPANG: Circuit = {
