@@ -151,5 +151,10 @@
   "WHO_IS_AFK": "{{player}} está afk no setor",
   "TYRES_ABOUT_TO_BLOWN": "⚠️🛞 BOX BOX! Estamos vendo muito graining — Possível estouro de pneu a qualquer momento — box, box! 🛞⚠️",
   "INVALID_LAP_CUT": "Volta inválida devido a corte de pista.",
-  "SOFT_CUT_PENALTY": "⚠️ Você cortou a pista! Passe por dentro da linha azul ou será punido!"
+  "SOFT_CUT_PENALTY": "⚠️ Você cortou a pista! Passe por dentro da linha azul ou será punido!",
+
+  "TWO_LAPS": "☠️🛡️ Volta {{currentLap}}, eliminação NA PRÓXIMA VOLTA 🛡️☠️",
+  "BR_ELIMINATED": "☠️🔥 {{name}} eliminado 🔥☠️",
+  "BR_REMAINING": "☠️👥 {{remaining}} restantes. 👥☠️",
+  "BR_WINNER": "👑🏆 {{name}} venceu, {{eliminated}} eliminados. 👑🏆"
 }

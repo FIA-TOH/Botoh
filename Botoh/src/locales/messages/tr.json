@@ -149,5 +149,9 @@
   "WHO_IS_AFK": "{{player}} afk sektörde",
   "TYRES_ABOUT_TO_BLOWN": "⚠️🛞 BOX BOX! Lastikte ciddi tanelenme graining — Her an patlama riski var — box, box! 🛞⚠️",
   "INVALID_LAP_CUT": "Yol kesme nedeniyle geçersiz tur.",
-  "SOFT_CUT_PENALTY": "⚠️ Yolu kestiniz! Mavi çizginin içinden geçin veya ceza alacaksınız!"
+  "SOFT_CUT_PENALTY": "⚠️ Yolu kestiniz! Mavi çizginin içinden geçin veya ceza alacaksınız!",
+  "TWO_LAPS": "☠️🛡️ Tur {{currentLap}}, ELEME BİR SONRAKİ TURDA 🛡️☠️",
+  "BR_ELIMINATED": "☠️🔥 {{name}} elendi 🔥☠️",
+  "BR_REMAINING": "☠️👥 {{remaining}} kaldı. 👥☠️",
+  "BR_WINNER": "👑🏆 {{name}} kazandı, {{eliminated}} elendi. 👑🏆"
 }

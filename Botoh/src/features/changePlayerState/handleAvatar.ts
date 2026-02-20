@@ -64,7 +64,7 @@ function restoreTyreOrCar(playerId: number, room: RoomObject) {
   if (tireType && TIRE_AVATAR[tireType] && p.showTires && tyresActivated) {
     room.setPlayerAvatar(playerId, TIRE_AVATAR[tireType]);
   } else {
-    room.setPlayerAvatar(playerId, "🏎️");
+    room.setPlayerAvatar(playerId, null);
   }
 }
 
@@ -75,7 +75,7 @@ const situationHandlers: Record<
     room: RoomObject,
     arg?: string,
     emoji?: string[],
-    durations?: number[]
+    durations?: number[],
   ) => void
 > = {
   [Situacions.Rain]: (player, room, _, emoji, durations) => {
@@ -100,7 +100,7 @@ const situationHandlers: Record<
         restoreTyreOrCar(player.id, room);
         currentSituacion[player.id] = Situacions.Null;
       },
-      durations.reduce((a, b) => a + b, 0)
+      durations.reduce((a, b) => a + b, 0),
     );
   },
 
@@ -155,7 +155,7 @@ const situationHandlers: Record<
         restoreTyreOrCar(player.id, room);
         currentSituacion[player.id] = Situacions.Null;
       },
-      emojiDurations.reduce((a, b) => a + b, 0)
+      emojiDurations.reduce((a, b) => a + b, 0),
     );
   },
   [Situacions.NeedPit]: (player, room) => {
@@ -198,7 +198,7 @@ const situationHandlers: Record<
   },
 
   [Situacions.Null]: (player, room) => {
-    room.setPlayerAvatar(player.id, "🏎️");
+    room.setPlayerAvatar(player.id, null);
   },
 };
 
@@ -208,7 +208,7 @@ export function handleAvatar(
   room: RoomObject,
   arg?: string,
   emoji?: string[],
-  durations?: number[]
+  durations?: number[],
 ): void {
   const p = playerList[player.id];
   if (!p) {

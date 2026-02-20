@@ -71,6 +71,11 @@ export default function tr_commands(
     args: string[],
     room: RoomObject,
   ) => void,
+  handleBRTwoLapsCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
   handleTiresCommand: (
     byPlayer: PlayerObject,
     args: string[],
@@ -337,6 +342,7 @@ export default function tr_commands(
     "!qtime": handleQTimeCommand,
     "!rmode": handleRModeCommand,
     "!brmode": handleBRModeCommand,
+    "!br_twolaps": handleBRTwoLapsCommand,
     "!bb": handleBBCommand,
     "!tyres": handleTiresCommand,
     "!tires": handleTiresCommand,
