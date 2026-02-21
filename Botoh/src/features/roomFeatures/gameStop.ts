@@ -42,6 +42,7 @@ import { resetDebrisUsedList } from "../debris/chooseOneDebris";
 import { clearPlayers } from "../commands/gameMode/qualy/playerTime";
 import { printAllTimes } from "../commands/gameMode/qualy/printAllTimes";
 import { printAllPositions } from "../commands/gameMode/race/printAllPositions";
+import { resetSessionBestSectors } from "../zones/laps/trackBestSector";
 
 let replayData: Uint8Array | null = null;
 
@@ -128,5 +129,6 @@ export function GameStop(room: RoomObject) {
     clearRRPosition();
     clearCutTrackStorage();
     resetDebrisUsedList();
+    resetSessionBestSectors();
   };
 }

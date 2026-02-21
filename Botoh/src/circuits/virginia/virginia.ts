@@ -52,16 +52,16 @@ const VIRGINIA_INFO: CircuitInfo = {
     maxY: 90,
   },
   pitlaneStart: {
-    minX: 0,
-    maxX: 0,
-    minY: 0,
-    maxY: 0,
+    minX: 2149,
+    maxX: 2181,
+    minY: 222,
+    maxY: 373,
   },
   pitlaneEnd: {
-    minX: 0,
-    maxX: 0,
-    minY: 0,
-    maxY: 0,
+    minX: 352,
+    maxX: 384,
+    minY: 241,
+    maxY: 373,
   },
   drsStart: [
     {

@@ -45,6 +45,8 @@ const trackNameMapping: { [key: string]: string } = {
   tanga: "Tanga Automobile by PYOTER",
   tandil: "Tandil City by Metilazo",
   colorado: "Colorado Street Circuit by New Era",
+  rivadavia: "Callejero de Parque Rivadavia by Peter",
+  austin_crespo: "Austin by Crespo",
 };
 
 export const bestTimes: { [key: string]: [number, string, string] } = {
@@ -103,6 +105,8 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   tanga: [999.999, "nobody", "Tanga Automobile by PYOTER"],
   tandil: [999.999, "nobody", "Tandil City by Metilazo"],
   colorado: [999.999, "nobody", "Colorado Street Circuit by New Era"],
+  rivadavia: [999.999, "nobody", "Callejero de Parque Rivadavia by Peter"],
+  austin_crespo: [999.999, "nobody", "Austin by Crespo"],
 };
 export const getAbbreviatedTrackName = (
   fullTrackName: string,
