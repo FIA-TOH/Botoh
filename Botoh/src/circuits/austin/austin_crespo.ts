@@ -1,5 +1,5 @@
 import { bestTimes } from "../bestTimes";
-import { Circuit, CircuitInfo, Direction } from "../Circuit";
+import { Circuit, CircuitInfo, CircuitPhysics, Direction } from "../Circuit";
 import { readFileSync } from "fs";
 import { join } from "path";
 
@@ -97,6 +97,7 @@ const AUSTIN_CRESPO_INFO: CircuitInfo = {
   Limit: 5,
   Votes: 0,
   pitSpeed: 1,
+  physicsType: CircuitPhysics.CLASSIC,
 };
 
 export const AUSTIN_CRESPO: Circuit = {

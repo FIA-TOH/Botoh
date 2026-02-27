@@ -1,12 +1,13 @@
-import { Tires } from "../../tires&pits/tires";
+import { Tires, tyresActivated } from "../../tires&pits/tires";
 import { laps } from "../../zones/laps";
+import { constants } from "../constants";
 
 import { calculateGripMultiplier } from "./grip";
 
 export function calculateGripForDryConditions(
   tyres: Tires,
   wear: number,
-  norm: Number
+  norm: Number,
 ) {
   if (!norm) return;
   if (laps >= 15) {

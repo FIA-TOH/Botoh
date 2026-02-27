@@ -47,6 +47,8 @@ const trackNameMapping: { [key: string]: string } = {
   colorado: "Colorado Street Circuit by New Era",
   rivadavia: "Callejero de Parque Rivadavia by Peter",
   austin_crespo: "Austin by Crespo",
+  sexcano: "Cano Sexcuit by Rodri",
+  meersburg: "Meersburg by Splinter",
 };
 
 export const bestTimes: { [key: string]: [number, string, string] } = {
@@ -107,6 +109,8 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   colorado: [999.999, "nobody", "Colorado Street Circuit by New Era"],
   rivadavia: [999.999, "nobody", "Callejero de Parque Rivadavia by Peter"],
   austin_crespo: [999.999, "nobody", "Austin by Crespo"],
+  sexcano: [999.999, "nobody", "Cano Sexcuit by Rodri"],
+  meersburg: [999.999, "nobody", "Meersburg by Splinter"],
 };
 export const getAbbreviatedTrackName = (
   fullTrackName: string,

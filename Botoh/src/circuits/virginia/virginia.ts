@@ -2,7 +2,7 @@ import { readFileSync } from "fs";
 import { join } from "path";
 
 import { bestTimes } from "../bestTimes";
-import { Circuit, CircuitInfo, Direction } from "../Circuit";
+import { Circuit, CircuitInfo, CircuitPhysics, Direction } from "../Circuit";
 
 const virginia_raw = readFileSync(join(__dirname, "virginia.hbs"), "utf-8");
 const virginia_json = JSON.parse(virginia_raw);
@@ -92,6 +92,7 @@ const VIRGINIA_INFO: CircuitInfo = {
   Votes: 0,
   pitSpeed: 1,
   TireDegradationPercentage: 0,
+  physicsType: CircuitPhysics.CLASSIC,
 };
 
 export const VIRGINIA: Circuit = {

@@ -3,11 +3,11 @@ import { bestTimes } from "../bestTimes";
 import { readFileSync } from "fs";
 import { join } from "path";
 
-import { Circuit, CircuitInfo, Direction } from "../Circuit";
+import { Circuit, CircuitInfo, CircuitPhysics, Direction } from "../Circuit";
 
 const hungaryNano_raw = readFileSync(
   join(__dirname, "hungaryNano.hbs"),
-  "utf-8"
+  "utf-8",
 );
 const hungaryNano_json = JSON.parse(hungaryNano_raw);
 
@@ -78,6 +78,7 @@ const HUNGARYNANO_INFO: CircuitInfo = {
       hungaryNano_json.redSpawnPoints.length - 1
     ][1],
   },
+  physicsType: CircuitPhysics.CLASSIC,
 };
 
 export const HUNGARYNANO: Circuit = {

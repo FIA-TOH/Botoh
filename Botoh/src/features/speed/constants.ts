@@ -34,6 +34,8 @@ export const constants = {
   // Chuva e Aderência
   // ===============================
   SLIDE_FACTOR: 2.5, // Multiplicador de deslizamento na chuva
+  // ===============================
+  SANDBAG_PENALTY: 0.003,
 };
 
 export function changeConstant(key: keyof typeof constants, value: number) {
