@@ -11,7 +11,7 @@ export const HRTEngine: Engine = {
   initialAccelerationNerf: 107,
   medialAccelerationNerf: 33,
   finalAccelerationNerf: 68,
-  topSpeedBoostNerf: 0.4,
+  topSpeedBoostNerf: -0.4,
   confiability: 100,
 };
 

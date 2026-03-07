@@ -11,14 +11,14 @@ export const PremaEngine: Engine = {
   initialAccelerationNerf: 120,
   medialAccelerationNerf: 40,
   finalAccelerationNerf: 74,
-  topSpeedBoostNerf: 1.6,
+  topSpeedBoostNerf: 1.4,
   confiability: 100,
 };
 
 export const PremaChassis: Chassis = {
   name: "Prema Chassis",
   accelerationNerf: 0,
-  slipstreamNerf: 10,
+  slipstreamNerf: 2,
   dirtyAirBoost: 0,
   confiability: 100,
 };

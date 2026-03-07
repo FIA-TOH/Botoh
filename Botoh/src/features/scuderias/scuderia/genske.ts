@@ -11,7 +11,7 @@ export const GenskeEngine: Engine = {
   initialAccelerationNerf: 120,
   medialAccelerationNerf: 30,
   finalAccelerationNerf: 54,
-  topSpeedBoostNerf: 0.2,
+  topSpeedBoostNerf: -0.6,
   confiability: 100,
 };
 

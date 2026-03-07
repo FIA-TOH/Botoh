@@ -11,7 +11,7 @@ export const AudiEngine: Engine = {
   initialAccelerationNerf: 120,
   medialAccelerationNerf: 31,
   finalAccelerationNerf: 64,
-  topSpeedBoostNerf: 1,
+  topSpeedBoostNerf: 0.2,
   confiability: 100,
 };
 

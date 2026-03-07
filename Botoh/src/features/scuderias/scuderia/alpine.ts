@@ -11,7 +11,7 @@ export const AlpineEngine: Engine = {
   initialAccelerationNerf: 120,
   medialAccelerationNerf: 31,
   finalAccelerationNerf: 64,
-  topSpeedBoostNerf: 0.8,
+  topSpeedBoostNerf: -0.6,
   confiability: 100,
 };
 

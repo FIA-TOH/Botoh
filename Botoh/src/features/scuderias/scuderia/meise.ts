@@ -11,7 +11,7 @@ export const MeiseEngine: Engine = {
   initialAccelerationNerf: 107,
   medialAccelerationNerf: 33,
   finalAccelerationNerf: 68,
-  topSpeedBoostNerf: 0.8,
+  topSpeedBoostNerf: -0.4,
   confiability: 100,
 };
 

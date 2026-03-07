@@ -18,7 +18,7 @@ export const FerrariEngine: Engine = {
 export const FerrariChassis: Chassis = {
   name: "Ferrari Chassis",
   accelerationNerf: 0,
-  slipstreamNerf: 36,
+  slipstreamNerf: 26,
   dirtyAirBoost: 0,
   confiability: 100,
 };
