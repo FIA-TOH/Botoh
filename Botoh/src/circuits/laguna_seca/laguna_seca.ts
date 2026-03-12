@@ -2,7 +2,7 @@ import { readFileSync } from "fs";
 import { join } from "path";
 
 import { bestTimes } from "../bestTimes";
-import { Circuit, CircuitInfo, Direction } from "../Circuit";
+import { Circuit, CircuitInfo, CircuitPhysics, Direction } from "../Circuit";
 
 const laguna_seca_raw = readFileSync(
   join(__dirname, "laguna_seca.hbs"),
@@ -98,6 +98,7 @@ const LAGUNA_SECA_INFO: CircuitInfo = {
   Limit: 5,
   Votes: 0,
   pitSpeed: 0.97,
+  physicsType: CircuitPhysics.F1_NEWGEN,
   CutDetectSegments: [
     {
       v0: [695.9964182729977, 1355.9839868659146],
