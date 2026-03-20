@@ -61,6 +61,7 @@ const trackNameMapping: { [key: string]: string } = {
   bmw_ring: "BMW Ring By Nanoseb",
   hungary_nano: "Hungaroring By Nanoseb",
   spaNano: "Circuit de Spa-Francorchamps By Nanoseb",
+  baku_clic: "Baku - Clicquot",
 };
 
 export const bestTimes: { [key: string]: [number, string, string] } = {
@@ -146,6 +147,7 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   bmw_ring: [999.99, "undefined", "BMW Ring By Nanoseb"],
   hungary_nano: [999.99, "undefined", "Hungaroring By Nanoseb"],
   spaNano: [48.609, "BL", "Circuit de Spa-Francorchamps By Nanoseb"],
+  baku_clic: [44.000, "Cliquot", "Baku - Clicquot"],
 };
 export const getAbbreviatedTrackName = (
   fullTrackName: string,
