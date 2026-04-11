@@ -62,6 +62,7 @@ const trackNameMapping: { [key: string]: string } = {
   hungary_nano: "Hungaroring By Nanoseb",
   spaNano: "Circuit de Spa-Francorchamps By Nanoseb",
   baku_clic: "Baku - Clicquot",
+  cano_sexcuit: "Cano Sexcuit by Rodri",
 };
 
 export const bestTimes: { [key: string]: [number, string, string] } = {
