@@ -14,6 +14,7 @@ export enum Situacions {
   Wrong = "Wrong",
   NeedPit = "NeedPit",
   BlowoutWarning = "BlowoutWarning",
+  Direction = "Direction",
   Sandbag = "Sandbag",
 }
 
@@ -30,6 +31,7 @@ export const TIRE_AVATAR: { [key in Tires]: string } = {
 const currentSituacion: Record<number, Situacions> = {};
 
 const SITUATION_PRIORITY: Record<Situacions, number> = {
+  [Situacions.Direction]: 9,
   [Situacions.Rain]: 8,
   [Situacions.Flag]: 7,
   [Situacions.CanLeavePit]: 7,
@@ -203,6 +205,12 @@ const situationHandlers: Record<
 
   [Situacions.ChangeTyre]: (player, room) => {
     restoreTyreOrCar(player.id, room);
+  },
+
+  [Situacions.Direction]: (player, room, arg) => {
+    if (arg) {
+      room.setPlayerAvatar(player.id, arg);
+    }
   },
 
   [Situacions.Null]: (player, room) => {
