@@ -7,6 +7,8 @@ import { handlePitlane } from '../tires&pits/pitLane';
 import { getRunningPlayers, vectorSpeed } from '../utils';
 import { updateGripCounter } from '../speed/grip/grip';
 import handleTireWear from '../tires&pits/handleTireWear';
+import { handleAvatar, Situacions } from '../changePlayerState/handleAvatar';
+import { playerList } from '../changePlayerState/playerList';
 import { getPlayerAndDiscs } from '../playerFeatures/getPlayerAndDiscs';
 import {
   handleChangeCollisionPlayerSuzuka,
@@ -23,6 +25,7 @@ import { mainLapCommand } from '../zones/laps/mainLapCommands';
 import { checkTrainingHourlyLog } from '../counters/checkTrainingHourlyLog';
 import { updateDebrisTouch } from '../debris/detectCollisionDebris';
 import { handleChangeCollisionPlayerCano, handleChangePlayerSizeCano } from '../zones/handleCanoTp';
+import { updatePlayerDirection } from '../direction/direction';
 
 const detectCutThrottledByPlayer: Map<number, ReturnType<typeof throttlePerSecond>> = new Map();
 
@@ -46,6 +49,10 @@ export function GameTick(room: RoomObject) {
     if (gameMode !== GameMode.WAITING) {
       handlePitlane(playersAndDiscs, room);
       distributeSpeed(playersAndDiscs, room);
+      //Avatar Updated based on direction
+      // playersAndDiscs.forEach(({ p, disc }) => {
+      //   updatePlayerDirection(p, disc, room);
+      // });
       checkPlayerSector(playersAndDiscs, room);
       mainLapCommand(playersAndDiscs, room);
     }
