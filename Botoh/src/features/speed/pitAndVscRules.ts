@@ -4,15 +4,19 @@ import { tyresActivated } from "../tires&pits/tires";
 import { PlayerInfo } from "../changePlayerState/playerList";
 import { constants } from "./constants";
 
-export function applyPitAndVscRules(
+export interface GravityVector {
+  xgravity: number;
+  ygravity: number;
+}
+
+export function getPitAndVscGravity(
   p: PlayerObject,
   disc: DiscPropertiesObject,
-  room: RoomObject,
   gripMultiplier: number,
   playerInfo: PlayerInfo,
   currentTime: number,
   vsc: boolean,
-) {
+): GravityVector {
   let limiter = 0;
 
   if (playerInfo.inPitlane) {
@@ -27,14 +31,36 @@ export function applyPitAndVscRules(
   const { xspeed: x, yspeed: y } = disc;
 
   if (limiter > 0) {
-    room.setPlayerDiscProperties(p.id, {
+    return {
       xgravity: -x * (1 - limiter),
       ygravity: -y * (1 - limiter),
-    });
-  } else if (gripMultiplier) {
-    room.setPlayerDiscProperties(p.id, {
-      xgravity: -x * (1 - gripMultiplier),
-      ygravity: -y * (1 - gripMultiplier),
-    });
+    };
   }
+
+  return {
+    xgravity: -x * (1 - gripMultiplier),
+    ygravity: -y * (1 - gripMultiplier),
+  };
+}
+
+export function applyPitAndVscRules(
+  p: PlayerObject,
+  disc: DiscPropertiesObject,
+  room: RoomObject,
+  gripMultiplier: number,
+  playerInfo: PlayerInfo,
+  currentTime: number,
+  vsc: boolean,
+): GravityVector {
+  const gravity = getPitAndVscGravity(
+    p,
+    disc,
+    gripMultiplier,
+    playerInfo,
+    currentTime,
+    vsc,
+  );
+
+  room.setPlayerDiscProperties(p.id, gravity);
+  return gravity;
 }

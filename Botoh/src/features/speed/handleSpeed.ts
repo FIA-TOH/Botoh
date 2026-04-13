@@ -1,10 +1,11 @@
-import { playerList } from "../changePlayerState/playerList";
+import { playerList, PlayerInfo } from "../changePlayerState/playerList";
 import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
 import { vsc } from "../safetyCar/vsc";
 import { getRunningPlayers } from "../utils";
 import { calculateTotalGripMultiplier } from "./grip/calculateTotalGripMultiplier";
 import { applyPitAndVscRules } from "./pitAndVscRules";
 import { calculateSlipstreamEffect } from "./slipstream/slipstreamUtils";
+import { calculateCurveResistance } from "../rain/curveResistance";
 
 /**
  * Function that sets a players max speed.
@@ -52,7 +53,7 @@ export function controlPlayerSpeed(
       room
     );
 
-    applyPitAndVscRules(
+    const baseGravity = applyPitAndVscRules(
       p,
       disc,
       room,
@@ -61,6 +62,15 @@ export function controlPlayerSpeed(
       currentTime,
       vsc
     );
+
+    const extraGravity = calculateCurveResistance(playerInfo, disc);
+
+    if (extraGravity.x !== 0 || extraGravity.y !== 0) {
+      room.setPlayerDiscProperties(p.id, {
+        xgravity: baseGravity.xgravity + extraGravity.x,
+        ygravity: baseGravity.ygravity + extraGravity.y,
+      });
+    }
 
     playerList[p.id] = playerInfo;
   });

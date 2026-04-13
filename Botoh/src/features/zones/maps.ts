@@ -102,11 +102,11 @@ import { LIEGE } from "../../circuits/liege/liege";
 
 export const CIRCUITS: Circuit[] = LEAGUE_MODE
   ? [
+      IMOLA,
       SUZUKA,
       MELBOURNE,
       BAKU,
       SPA,
-      IMOLA,
       NURBURGRING,
       SHANGHAI,
       AUSTIN,
