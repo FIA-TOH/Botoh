@@ -99,6 +99,10 @@ export interface PlayerInfo {
   curveResistanceTicks?: number;
   slipTicks?: number;
   slipDir?: Direction;
+  directionChangerEndTime?: number;
+  directionChangerX?: number;
+  directionChangerY?: number;
+  directionChangerForce?: number;
 
   currentDirection?: string;
   currentDirectionEmoji?: string;

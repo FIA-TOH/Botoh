@@ -1,5 +1,5 @@
 import { bestTimes } from "../bestTimes";
-import { Circuit, CircuitInfo, Direction } from "../Circuit";
+import { Circuit, CircuitInfo, Direction, SpecificDirection } from "../Circuit";
 
 import { readFileSync } from "fs";
 import { join } from "path";
@@ -206,6 +206,135 @@ const IMOLA_INFO: CircuitInfo = {
       penalty: 5,
     },
   ],
+  DirectionChangerDetector: [
+
+  // 000000
+  {
+    v0: [1682, 879],
+    v1: [1925, 1237],
+    index: "000000",
+    direction: SpecificDirection.RIGHT,
+    force: 0.9
+  },
+
+  // 000001
+  {
+    v0: [1962, 688],
+    v1: [1597, 847],
+    index: "000001",
+    direction: SpecificDirection.UP,
+    force: 0.3
+  },
+
+  // 000002
+  {
+    v0: [2265, 18],
+    v1: [2335, 537],
+    index: "000002",
+    direction: SpecificDirection.RIGHT,
+    force: 0.2
+  },
+
+  // 000003
+  {
+    v0: [2439, -785],
+    v1: [2715, -747],
+    index: "000003",
+    direction: SpecificDirection.UP,
+    force: 0.6
+  },
+
+  // 000004
+  {
+    v0: [2487, -1119],
+    v1: [2299, -868],
+    index: "000004",
+    direction: SpecificDirection.LEFTUP,
+    force: 0.4
+  },
+
+  // 000005
+  {
+    v0: [2977, -1607],
+    v1: [3043, -1402],
+    index: "000005",
+    direction: SpecificDirection.RIGHTUP,
+    force: 0.8
+  },
+
+  // 000006
+  {
+    v0: [1462, -1542],
+    v1: [1463, -1738],
+    index: "000006",
+    direction: SpecificDirection.LEFT,
+    force: 0.7
+  },
+
+  // 000007
+  {
+    v0: [1325, 212],
+    v1: [1677, 203],
+    index: "000007",
+    direction: SpecificDirection.DOWN,
+    force: 0.9
+  },
+
+  // 000008
+  {
+    v0: [1333, 274],
+    v1: [1311, 579],
+    index: "000008",
+    direction: SpecificDirection.LEFT,
+    force: 0.3
+  },
+
+  // 000009
+  {
+    v0: [1152, 226],
+    v1: [1246, 85],
+    index: "000009",
+    direction: SpecificDirection.LEFTUP,
+    force: 0.2
+  },
+
+  // 000010
+  {
+    v0: [-643, 216],
+    v1: [-624, 418],
+    index: "000010",
+    direction: SpecificDirection.LEFT,
+    force: 0.7
+  },
+
+  // 000011
+  {
+    v0: [-810, 162],
+    v1: [-620, 13],
+    index: "000011",
+    direction: SpecificDirection.UP,
+    force: 0.4
+  },
+
+  // 000012
+  {
+    v0: [-2634, 1187],
+    v1: [-2692, 950],
+    index: "000012",
+    direction: SpecificDirection.LEFT,
+    force: 0.7
+  },
+
+  // 000013
+  {
+    v0: [-2603, 1505],
+    v1: [-3162, 1753],
+    index: "000013",
+    direction: SpecificDirection.DOWN,
+    force: 0.4
+  }
+
+]
 };
 
 export const IMOLA: Circuit = {

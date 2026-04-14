@@ -5,7 +5,7 @@ import { getRunningPlayers } from "../utils";
 import { calculateTotalGripMultiplier } from "./grip/calculateTotalGripMultiplier";
 import { applyPitAndVscRules } from "./pitAndVscRules";
 import { calculateSlipstreamEffect } from "./slipstream/slipstreamUtils";
-import { calculateCurveResistance } from "../rain/curveResistance";
+import { getDirectionChangerGravity } from "./directionChanger";
 
 /**
  * Function that sets a players max speed.
@@ -63,14 +63,15 @@ export function controlPlayerSpeed(
       vsc
     );
 
-    const extraGravity = calculateCurveResistance(playerInfo, disc);
+    const directionChangerGravity = getDirectionChangerGravity(
+      playerInfo,
+      currentTime
+    );
 
-    if (extraGravity.x !== 0 || extraGravity.y !== 0) {
-      room.setPlayerDiscProperties(p.id, {
-        xgravity: baseGravity.xgravity + extraGravity.x,
-        ygravity: baseGravity.ygravity + extraGravity.y,
-      });
-    }
+    room.setPlayerDiscProperties(p.id, {
+      xgravity: baseGravity.xgravity + directionChangerGravity.x,
+      ygravity: baseGravity.ygravity + directionChangerGravity.y,
+    });
 
     playerList[p.id] = playerInfo;
   });
