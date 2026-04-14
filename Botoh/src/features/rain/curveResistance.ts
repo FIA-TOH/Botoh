@@ -4,6 +4,10 @@ export function calculateCurveResistance(
   playerInfo: PlayerInfo,
   disc: DiscPropertiesObject,
 ): { x: number; y: number } {
+  // TEMPORÁRIO: Desabilitado para teste
+  return { x: 0, y: 0 };
+
+  /* Código original comentado para reativação futura
   const x = disc.xspeed;
   const y = disc.yspeed;
   const speed = Math.sqrt(x * x + y * y);
@@ -56,4 +60,4 @@ export function calculateCurveResistance(
     x: extraX,
     y: extraY,
   };
-}
+  */
