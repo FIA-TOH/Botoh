@@ -36,15 +36,11 @@ import { handleAvatarCommand } from "./avatar/handleAvatarCommand";
 import { handleLanguageCommand } from "./chat/handleLanguageCommand";
 import { handleMuteCommand } from "./chat/handleMuteCommand";
 import { handleEnableQualyForPub } from "./gameMode/qualy/handleEnableQualyForPub";
-import { handleEndRainCommand } from "./rain/handleEndRainCommand";
-import { handleRainCommand } from "./rain/handleRainCommand";
-import { handleRainItensity } from "./rain/handleRainIntensity";
 import { handleTipsCommands } from "./chat/handleTipsCommands";
 import { handleExplainErsCommand } from "./ersAndFuel/handleExplainErsCommand";
 import { handleFlagCommand } from "./flagsAndVSC/handleFlagCommand";
 import { handlePresentationLapCommand } from "./gameState/handlePresentationLapCommand";
 import { handleEveryoneLapsCommand } from "./laps/handleEveryoneLapsCommand";
-import { handleExplainRainCommand } from "./rain/handleExplainRainCommand";
 import { handleExplainTyresCommand } from "./tyres/handleExplainTyresCommand";
 import { handleRREnabledCommand } from "./adminThings/handleRREnabledCommand";
 import { handleTpCommand } from "./adminThings/handleTpCommand";
@@ -194,11 +190,7 @@ export type CommandFunction = (
     args: string[],
     room: RoomObject,
   ) => void,
-  handleRainCommand: (
-    byPlayer: PlayerObject,
-    args: string[],
-    room: RoomObject,
-  ) => void,
+
   handleToggleSystems: (
     byPlayer: PlayerObject,
     args: string[],
@@ -220,16 +212,6 @@ export type CommandFunction = (
     room: RoomObject,
   ) => void,
   handleRRCommand: (
-    byPlayer: PlayerObject,
-    args: string[],
-    room: RoomObject,
-  ) => void,
-  handleRainItensity: (
-    byPlayer: PlayerObject,
-    args: string[],
-    room: RoomObject,
-  ) => void,
-  handleEndRainCommand: (
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject,
@@ -259,11 +241,7 @@ export type CommandFunction = (
     args: string[],
     room: RoomObject,
   ) => void,
-  handleExplainRainCommand: (
-    byPlayer: PlayerObject,
-    args: string[],
-    room: RoomObject,
-  ) => void,
+
   handleExplainErsCommand: (
     byPlayer: PlayerObject,
     args: string[],
@@ -437,21 +415,20 @@ function importCommandsByLanguage(commandFunctions: {
         handleAvatarCommand,
         handleClearTimeCommand,
         handleMuteCommand,
-        handleRainCommand,
+       
         handleToggleSystems,
         handleGasCommand,
         handleGhostCommand,
         handleRREnabledCommand,
         handleRRCommand,
-        handleRainItensity,
-        handleEndRainCommand,
+       
         handleAfkCommand,
         handleEnableQualyForPub,
 
         handleTipsCommands,
         handleExplainTyresCommand,
         handleExplainServerCommand,
-        handleExplainRainCommand,
+       
         handleExplainErsCommand,
         handleEveryoneLapsCommand,
         handleTpCommand,
@@ -515,20 +492,19 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
         handleAvatarCommand,
         handleClearTimeCommand,
         handleMuteCommand,
-        handleRainCommand,
+       
         handleToggleSystems,
         handleGasCommand,
         handleGhostCommand,
         handleRREnabledCommand,
         handleRRCommand,
-        handleRainItensity,
-        handleEndRainCommand,
+      
         handleAfkCommand,
         handleEnableQualyForPub,
         handleTipsCommands,
         handleExplainTyresCommand,
         handleExplainServerCommand,
-        handleExplainRainCommand,
+       
         handleExplainErsCommand,
         handleEveryoneLapsCommand,
         handleTpCommand,

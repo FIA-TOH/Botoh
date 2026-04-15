@@ -1,9 +1,7 @@
 import { playerList } from "../../changePlayerState/playerList";
-// import { isRaining } from "../../rain/rain";
 import { Tires, tyresActivated } from "../../tires&pits/tires";
 import { constants } from "../constants";
 import { calculateGripForDryConditions } from "./dryCondition";
-import { calculateGripForWetConditions } from "./wetCondition";
 import { slipstreamEnabled, gasEnabled } from "../handleSlipstream";
 import { ersActivated, ersPenalty } from "../fuel&Ers/ers";
 import { vsc } from "../../safetyCar/vsc";
@@ -14,7 +12,6 @@ import { vectorSpeed } from "../../utils";
 import { maxSpeedFromGrip } from "../getMaxSpeed";
 import { sandbagEnabled } from "../../commands/gameMode/battleRoyale.ts/handleSandbag";
 
-const isRaining = false;
 
 export function calculateGripMultiplierForConditions(
   player: PlayerObject,
@@ -32,7 +29,7 @@ export function calculateGripMultiplierForConditions(
   // Player is in the pitlane or VSC is active → car should be restricted
   if (playerList.inPitLane || vsc) {
     return;
-  } else if (!isRaining) {
+  } else {
     /**
      * ===========================================
      *  CASE 2 — DRY CONDITIONS AND TYRES ENABLED
@@ -85,12 +82,5 @@ export function calculateGripMultiplierForConditions(
     // const speed = vectorSpeed(playerDisc.xspeed, playerDisc.yspeed);
     // room.setPlayerAvatar(player.id, speed.toString());
     return grip;
-  } else {
-    /**
-     * ======================
-     *  CASE 3 — WET CONDITIONS
-     * ======================
-     */
-    return calculateGripForWetConditions(tyres, wear, norm);
   }
 }

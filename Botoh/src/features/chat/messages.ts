@@ -807,119 +807,6 @@ export const MESSAGES = {
       unit: unit,
     }),
   }),
-  RAIN_ONE_MINUTE: (): LocalizedMessageFunction => ({
-    en: en_messages.RAIN_ONE_MINUTE,
-    es: es_messages.RAIN_ONE_MINUTE,
-    fr: fr_messages.RAIN_ONE_MINUTE,
-    tr: tr_messages.RAIN_ONE_MINUTE,
-    pt: pt_messages.RAIN_ONE_MINUTE,
-  }),
-  RAIN_STARTED: (): LocalizedMessageFunction => ({
-    en: en_messages.RAIN_STARTED,
-    es: es_messages.RAIN_STARTED,
-    fr: fr_messages.RAIN_STARTED,
-    tr: tr_messages.RAIN_STARTED,
-    pt: pt_messages.RAIN_STARTED,
-  }),
-  RAIN_STARTING_IN: (number: number): LocalizedMessageFunction => ({
-    en: replaceTemplateString(en_messages.RAIN_STARTING_IN, {
-      number: number.toString(),
-    }),
-    es: replaceTemplateString(es_messages.RAIN_STARTING_IN, {
-      number: number.toString(),
-    }),
-    fr: replaceTemplateString(fr_messages.RAIN_STARTING_IN, {
-      number: number.toString(),
-    }),
-    tr: replaceTemplateString(tr_messages.RAIN_STARTING_IN, {
-      number: number.toString(),
-    }),
-    pt: replaceTemplateString(pt_messages.RAIN_STARTING_IN, {
-      number: number.toString(),
-    }),
-  }),
-  RAIN_STOP_ONE_MINUTE: (): LocalizedMessageFunction => ({
-    en: en_messages.RAIN_STOP_ONE_MINUTE,
-    es: es_messages.RAIN_STOP_ONE_MINUTE,
-    fr: fr_messages.RAIN_STOP_ONE_MINUTE,
-    tr: tr_messages.RAIN_STOP_ONE_MINUTE,
-    pt: pt_messages.RAIN_STOP_ONE_MINUTE,
-  }),
-  RAIN_STOPPED: (): LocalizedMessageFunction => ({
-    en: en_messages.RAIN_STOPPED,
-    es: es_messages.RAIN_STOPPED,
-    fr: fr_messages.RAIN_STOPPED,
-    tr: tr_messages.RAIN_STOPPED,
-    pt: pt_messages.RAIN_STOPPED,
-  }),
-  RAIN_STOPING_IN: (number: number): LocalizedMessageFunction => ({
-    en: replaceTemplateString(en_messages.RAIN_STOPING_IN, {
-      number: number.toString(),
-    }),
-    es: replaceTemplateString(es_messages.RAIN_STOPING_IN, {
-      number: number.toString(),
-    }),
-    fr: replaceTemplateString(fr_messages.RAIN_STOPING_IN, {
-      number: number.toString(),
-    }),
-    tr: replaceTemplateString(tr_messages.RAIN_STOPING_IN, {
-      number: number.toString(),
-    }),
-    pt: replaceTemplateString(pt_messages.RAIN_STOPING_IN, {
-      number: number.toString(),
-    }),
-  }),
-  RAIN_CHANCES: (number: number): LocalizedMessageFunction => ({
-    en: replaceTemplateString(en_messages.RAIN_CHANCES, {
-      number: number.toString(),
-    }),
-    es: replaceTemplateString(es_messages.RAIN_CHANCES, {
-      number: number.toString(),
-    }),
-    fr: replaceTemplateString(fr_messages.RAIN_CHANCES, {
-      number: number.toString(),
-    }),
-    tr: replaceTemplateString(tr_messages.RAIN_CHANCES, {
-      number: number.toString(),
-    }),
-    pt: replaceTemplateString(pt_messages.RAIN_CHANCES, {
-      number: number.toString(),
-    }),
-  }),
-  NEW_RAIN_INTENSITY: (number: number): LocalizedMessageFunction => ({
-    en: replaceTemplateString(en_messages.RAIN_INTENSITY, {
-      number: number.toString(),
-    }),
-    es: replaceTemplateString(es_messages.RAIN_INTENSITY, {
-      number: number.toString(),
-    }),
-    fr: replaceTemplateString(fr_messages.RAIN_INTENSITY, {
-      number: number.toString(),
-    }),
-    tr: replaceTemplateString(tr_messages.RAIN_INTENSITY, {
-      number: number.toString(),
-    }),
-    pt: replaceTemplateString(pt_messages.RAIN_INTENSITY, {
-      number: number.toString(),
-    }),
-  }),
-  RAIN_INTENSITY_LAP: (number: number): LocalizedMessageFunction => ({
-    en: replaceTemplateString(en_messages.RAIN_INTENSITY, {
-      number: number.toString(),
-    }),
-    es: replaceTemplateString(es_messages.RAIN_INTENSITY, {
-      number: number.toString(),
-    }),
-    fr: replaceTemplateString(fr_messages.RAIN_INTENSITY, {
-      number: number.toString(),
-    }),
-    tr: replaceTemplateString(tr_messages.RAIN_INTENSITY, {
-      number: number.toString(),
-    }),
-    pt: replaceTemplateString(pt_messages.RAIN_INTENSITY, {
-      number: number.toString(),
-    }),
-  }),
   IN_MUTE_MODE: (): LocalizedMessageFunction => ({
     en: en_messages.IN_MUTE_MODE,
     es: es_messages.IN_MUTE_MODE,
@@ -1120,13 +1007,6 @@ export const MESSAGES = {
     fr: fr_messages.EXPLAIN_SERVER,
     tr: tr_messages.EXPLAIN_SERVER,
     pt: pt_messages.EXPLAIN_SERVER,
-  }),
-  EXPLAIN_RAIN: (): LocalizedMessageFunction => ({
-    en: en_messages.EXPLAIN_RAIN,
-    es: es_messages.EXPLAIN_RAIN,
-    fr: fr_messages.EXPLAIN_RAIN,
-    tr: tr_messages.EXPLAIN_RAIN,
-    pt: pt_messages.EXPLAIN_RAIN,
   }),
   EXPLAIN_ERS: (): LocalizedMessageFunction => ({
     en: en_messages.EXPLAIN_ERS,

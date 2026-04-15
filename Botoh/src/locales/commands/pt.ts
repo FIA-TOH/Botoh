@@ -122,11 +122,7 @@ export default function pt_commands(
     args: string[],
     room: RoomObject,
   ) => void,
-  handleRainCommand: (
-    byPlayer: PlayerObject,
-    args: string[],
-    room: RoomObject,
-  ) => void,
+
   handleToggleSystems: (
     byPlayer: PlayerObject,
     args: string[],
@@ -152,16 +148,7 @@ export default function pt_commands(
     args: string[],
     room: RoomObject,
   ) => void,
-  handleRainItensity: (
-    byPlayer: PlayerObject,
-    args: string[],
-    room: RoomObject,
-  ) => void,
-  handleEndRainCommand: (
-    byPlayer: PlayerObject,
-    args: string[],
-    room: RoomObject,
-  ) => void,
+  
   handleAfkCommand: (
     byPlayer: PlayerObject,
     args: string[],
@@ -188,11 +175,7 @@ export default function pt_commands(
     args: string[],
     room: RoomObject,
   ) => void,
-  handleExplainRainCommand: (
-    byPlayer: PlayerObject,
-    args: string[],
-    room: RoomObject,
-  ) => void,
+ 
   handleExplainErsCommand: (
     byPlayer: PlayerObject,
     args: string[],
@@ -363,14 +346,13 @@ export default function pt_commands(
     "!avatar": handleAvatarCommand,
     "!clear_time": handleClearTimeCommand,
     "!mute": handleMuteCommand,
-    "!rain": handleRainCommand,
+    
     "!enable": handleToggleSystems,
     "!gas": handleGasCommand,
     "!ghost": handleGhostCommand,
     "!toggle_rr": handleRREnabledCommand,
     "!rr": handleRRCommand,
-    "!rain_intensity": handleRainItensity,
-    "!end_rain": handleEndRainCommand,
+
     "!afk": handleAfkCommand,
     "!voltar": handleAfkCommand,
     "!enable_qualy_for_pub": handleEnableQualyForPub,
@@ -378,7 +360,7 @@ export default function pt_commands(
     "!dicas": handleTipsCommands,
     "!explain_tyres": handleExplainTyresCommand,
     "!explain_server": handleExplainServerCommand,
-    "!explain_rain": handleExplainRainCommand,
+ 
     "!explain_ers": handleExplainErsCommand,
     "!everyone_laps": handleEveryoneLapsCommand,
     "!tp": handleTpCommand,

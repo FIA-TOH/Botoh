@@ -1,7 +1,6 @@
 import { handleGameStateChange } from "../changeGameState/gameState";
 import { laps } from "../zones/laps";
 import { resetPlayer } from "../changePlayerState/players";
-// import { resetAllRainEvents } from "../rain/rain";
 import { finishList, lapPositions } from "../zones/laps/handleLapChange";
 import { log } from "../discord/logger";
 import { updatePlayerActivity } from "../afk/afk";
@@ -36,7 +35,6 @@ export function GameStart(room: RoomObject) {
     clearPlayersLeftInfo();
     clearRRPosition();
 
-    // resetAllRainEvents();
     setCameraAuto();
     room.getPlayerList().forEach((p) => {
       resetPlayer(p, room, p.id, true);

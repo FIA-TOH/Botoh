@@ -5,7 +5,6 @@ import { checkPlayerSector } from '../zones/handleSectorChange';
 
 import { handlePitlane } from '../tires&pits/pitLane';
 import { getRunningPlayers, vectorSpeed } from '../utils';
-import { updateGripCounter } from '../speed/grip/grip';
 import handleTireWear from '../tires&pits/handleTireWear';
 import { handleAvatar, Situacions } from '../changePlayerState/handleAvatar';
 import { playerList } from '../changePlayerState/playerList';
@@ -40,7 +39,6 @@ export function GameTick(room: RoomObject) {
     const players = getRunningPlayers(playersAndDiscs);
 
     endRaceSession(playersAndDiscs, room);
-    updateGripCounter(playersAndDiscs);
     updateErs(playersAndDiscs, room);
     setBallPosition(room);
     checkTrainingHourlyLog();
