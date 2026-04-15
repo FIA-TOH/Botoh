@@ -315,6 +315,11 @@ export default function fr_commands(
     args: string[],
     room: RoomObject,
   ) => void,
+  handleDefineRain: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
 ): Commands {
   return {
     "!admin": handleAdminCommand,
@@ -386,5 +391,6 @@ export default function fr_commands(
     "!clear_debris": handleClearDebrisCommand,
     "!upgrade": handleUpgradeCommand,
     "!sandbag": handleSandbagCommand,
+    "!rain": handleDefineRain,
   };
 }
