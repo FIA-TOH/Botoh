@@ -69,6 +69,7 @@ import { handleBRModeCommand } from "./gameMode/battleRoyale.ts/handleBRModeComm
 import { handleBRTwoLapsCommand } from "./gameMode/battleRoyale.ts/handleBRTwoLapsCommand";
 import { handleSandbagCommand } from "./gameMode/battleRoyale.ts/handleSandbagCommand";
 import { handleDefineRain } from "./weather/handleDefineRain";
+import { handleSetNewWeatherId } from "./weather/handleSetNewWeatherId";
 
 export type CommandFunction = (
   handleAdminCommand: (
@@ -388,6 +389,11 @@ export type CommandFunction = (
     args: string[],
     room: RoomObject,
   ) => void,
+  handleSetNewWeatherId: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
 ) => Commands;
 
 function importCommandsByLanguage(commandFunctions: {
@@ -464,6 +470,7 @@ function importCommandsByLanguage(commandFunctions: {
         handleUpgradeCommand,
         handleSandbagCommand,
         handleDefineRain,
+        handleSetNewWeatherId,
       ),
     }),
     {},
@@ -541,6 +548,7 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
         handleUpgradeCommand,
         handleSandbagCommand,
         handleDefineRain,
+        handleSetNewWeatherId,
       ),
     }),
     {},

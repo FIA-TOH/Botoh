@@ -320,6 +320,11 @@ export default function es_commands(
     args: string[],
     room: RoomObject,
   ) => void,
+  handleSetNewWeatherId: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
 ): Commands {
   return {
     "!admin": handleAdminCommand,
@@ -394,5 +399,6 @@ export default function es_commands(
     "!upgrade": handleUpgradeCommand,
     "!sandbag": handleSandbagCommand,
     "!rain": handleDefineRain,
+    "!set_weather_id": handleSetNewWeatherId,
   };
 }

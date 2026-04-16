@@ -321,6 +321,11 @@ export default function pt_commands(
     args: string[],
     room: RoomObject,
   ) => void,
+  handleSetNewWeatherId: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
 ): Commands {
   return {
     "!admin": handleAdminCommand,
@@ -395,5 +400,6 @@ export default function pt_commands(
     "!upgrade": handleUpgradeCommand,
     "!sandbag": handleSandbagCommand,
     "!rain": handleDefineRain,
+    "!set_weather_id": handleSetNewWeatherId,
   };
 }

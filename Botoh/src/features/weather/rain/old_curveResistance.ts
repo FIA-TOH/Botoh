@@ -1,3 +1,4 @@
+/* 
 import { PlayerInfo } from "../changePlayerState/playerList";
 
 export function calculateCurveResistance(
@@ -60,4 +61,5 @@ export function calculateCurveResistance(
     x: extraX,
     y: extraY,
   };
+  }
   */

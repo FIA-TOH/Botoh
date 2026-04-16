@@ -8,6 +8,9 @@ const fs = require("fs");
 const { ChartJSNodeCanvas } = require("chartjs-node-canvas");
 const { createNoise2D } = require("simplex-noise");
 
+// =========================
+// SIMULAÇÃO
+// =========================
 function simulateWeather(rainProbabilityPercent, raceMinutes) {
   const warmupMinutes = raceMinutes > 0 ? Math.floor(raceMinutes / 2) : 10;
   const totalSimMinutes = raceMinutes + warmupMinutes;
@@ -25,6 +28,10 @@ function simulateWeather(rainProbabilityPercent, raceMinutes) {
   let wetS1 = 0;
   let wetS2 = 0;
   let wetS3 = 0;
+
+  // 🔥 NOVO: estabilização
+  let rainIsStabilized = false;
+  let stabilizedIntensity = 0;
 
   const data = {
     time: [],
@@ -46,10 +53,19 @@ function simulateWeather(rainProbabilityPercent, raceMinutes) {
 
     const rainThreshold = 1 - (rainProbabilityPercent / 100);
 
-    if (chanceNoise > rainThreshold) {
+    // 🔥 ESTABILIZAÇÃO
+    if (rainIsStabilized) {
+      rainGlobal = stabilizedIntensity;
+    } else if (chanceNoise > rainThreshold) {
       let rainIntensity = intensityNoise * rainProbabilityPercent * 1.5;
       rainGlobal = Math.max(0, Math.min(100, rainIntensity));
+
       if (rainGlobal < 5) rainGlobal = 0;
+
+      if (rainGlobal > 20 && Math.random() < 0.0005) {
+        rainIsStabilized = true;
+        stabilizedIntensity = rainGlobal;
+      }
     } else {
       rainGlobal = 0;
     }
@@ -104,61 +120,197 @@ function simulateWeather(rainProbabilityPercent, raceMinutes) {
 }
 
 // =========================
-// CLI
+// UTIL
+// =========================
+function tstr(t) {
+  const s = Math.floor(t * 60);
+  const m = String(Math.floor(s / 60)).padStart(2, "0");
+  const sec = String(s % 60).padStart(2, "0");
+  return `${m}:${sec}`;
+}
+
+function future(data, idx, offset) {
+  const j = idx + offset;
+  if (j < data.time.length) return data.rain_global[j];
+  return null; // 🔥 FIX
+}
+
+// =========================
+// RELATÓRIO PRO
+// =========================
+function generateReport(data) {
+  const report = [];
+  report.push("📻 METEOROLOGISTA PRO:\n");
+
+  let raining = false;
+  let lastEventTime = -10;
+  let lastTrackState = null;
+  let lastSectorAlert = -10;
+
+  for (let i = 0; i < data.time.length; i++) {
+    const t = data.time[i];
+    const rain = data.rain_global[i];
+    const wet = data.wet_avg[i];
+
+    const time = tstr(t);
+
+    const rain1 = future(data, i, 2);
+    const rain2 = future(data, i, 4);
+    const rain4 = future(data, i, 8);
+
+    if (i === 0) {
+      if (rain > 10) {
+        report.push(`${time} - 🎙️ Já chove no circuito (${rain.toFixed(0)}%).`);
+        raining = true;
+      } else if (wet > 20) {
+        report.push(`${time} - 🎙️ Pista começa molhada (${wet.toFixed(0)}%).`);
+      } else {
+        report.push(`${time} - 🎙️ Céu limpo e pista seca.`);
+      }
+      continue;
+    }
+
+    if (t - lastEventTime < 1) continue;
+
+    // INÍCIO CHUVA
+    if (rain > 10 && !raining) {
+      report.push(`${time} - 🌧️ Começou a chover (${rain.toFixed(0)}%).`);
+      raining = true;
+      lastEventTime = t;
+      continue;
+    }
+
+    // FIM
+    if (rain === 0 && raining) {
+      report.push(`${time} - 🌤️ A chuva parou completamente.`);
+      raining = false;
+      lastEventTime = t;
+      continue;
+    }
+
+    // PREVISÕES
+    if (!raining) {
+      if (rain1 !== null && rain1 > 10) {
+        report.push(`${time} - 🌧️ Chuva prevista em cerca de 1 minuto.`);
+        lastEventTime = t;
+        continue;
+      }
+      if (rain4 !== null && rain4 > 10) {
+        report.push(`${time} - ☁️ Nuvens se formando.`);
+        lastEventTime = t;
+        continue;
+      }
+    }
+
+    if (raining) {
+      if (rain1 !== null && rain1 === 0) {
+        report.push(`${time} - 🌤️ Chuva deve parar em cerca de 1 minuto.`);
+        lastEventTime = t;
+        continue;
+      }
+      if (rain4 !== null && rain4 === 0) {
+        report.push(`${time} - 🌥️ Chuva enfraquecendo.`);
+        lastEventTime = t;
+        continue;
+      }
+    }
+
+    // PISTA
+    if (wet > 40 && lastTrackState !== "wet") {
+      report.push(`${time} - 🛣️ Pista bastante molhada.`);
+      lastTrackState = "wet";
+      lastEventTime = t;
+      continue;
+    }
+
+    if (wet < 10 && lastTrackState !== "dry") {
+      report.push(`${time} - ☀️ Pista seca.`);
+      lastTrackState = "dry";
+      lastEventTime = t;
+      continue;
+    }
+
+    // SETORES
+    const s1 = data.wet_s1[i];
+    const s2 = data.wet_s2[i];
+    const s3 = data.wet_s3[i];
+
+    if (Math.max(s1, s2, s3) - Math.min(s1, s2, s3) > 25) {
+      if (t - lastSectorAlert > 2) {
+        report.push(`${time} - ⚠️ Diferença entre setores.`);
+        lastSectorAlert = t;
+      }
+    }
+  }
+
+  return report;
+}
+
+// =========================
+// EXECUÇÃO
 // =========================
 const args = process.argv.slice(2);
 const rainPercent = Number(args[0] || 50);
 const raceMinutes = Number(args[1] || 20);
-const weatherId = args[2] || `weather_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+const weatherId = args[2] || `weather_${Date.now()}`;
 
 const result = simulateWeather(rainPercent, raceMinutes);
 
+// salvar JSON
+fs.mkdirSync("./weather_data", { recursive: true });
+fs.writeFileSync(
+  `./weather_data/weather_${weatherId}.json`,
+  JSON.stringify(result, null, 2)
+);
 
-fs.mkdirSync("./weather_data", { recursive: true }); fs.writeFileSync(`./weather_data/weather_data_${weatherId}.json`, JSON.stringify(result, null, 2));
-console.log(`./weather_data/weather_data_\${weatherId}.json gerado!`);
+// gerar relatório
+const report = generateReport(result);
+fs.writeFileSync(
+  `./weather_data/weather_report_${weatherId}.txt`,
+  report.join("\n")
+);
 
+console.log(report.join("\n"));
 
-const width = 1200;
-const height = 600;
-const chartCanvas = new ChartJSNodeCanvas({ width, height });
+// =========================
+// GRÁFICOS
+// =========================
+const chartCanvas = new ChartJSNodeCanvas({ width: 1200, height: 600 });
 
 async function generateCharts() {
-  const rainConfig = {
+  const rainBuffer = await chartCanvas.renderToBuffer({
     type: "line",
     data: {
       labels: result.time,
       datasets: [
         { label: "Global", data: result.rain_global },
-        { label: "Setor 1", data: result.rain_s1 },
-        { label: "Setor 2", data: result.rain_s2 },
-        { label: "Setor 3", data: result.rain_s3 }
+        { label: "S1", data: result.rain_s1 },
+        { label: "S2", data: result.rain_s2 },
+        { label: "S3", data: result.rain_s3 }
       ]
     }
-  };
+  });
 
-  const rainBuffer = await chartCanvas.renderToBuffer(rainConfig);
-  fs.mkdirSync("./rain_charts", { recursive: true }); fs.writeFileSync(`./rain_charts/rain_chart_${weatherId}.png`, rainBuffer);
+  fs.mkdirSync("./rain_charts", { recursive: true });
+  fs.writeFileSync(`./rain_charts/rain_${weatherId}.png`, rainBuffer);
 
-  const wetConfig = {
+  const wetBuffer = await chartCanvas.renderToBuffer({
     type: "line",
     data: {
       labels: result.time,
       datasets: [
         { label: "Média", data: result.wet_avg },
-        { label: "Setor 1", data: result.wet_s1 },
-        { label: "Setor 2", data: result.wet_s2 },
-        { label: "Setor 3", data: result.wet_s3 }
+        { label: "S1", data: result.wet_s1 },
+        { label: "S2", data: result.wet_s2 },
+        { label: "S3", data: result.wet_s3 }
       ]
     }
-  };
+  });
 
-  const wetBuffer = await chartCanvas.renderToBuffer(wetConfig);
-  fs.mkdirSync("./wet_charts", { recursive: true }); fs.writeFileSync(`./wet_charts/wet_chart_${weatherId}.png`, wetBuffer);
+  fs.mkdirSync("./wet_charts", { recursive: true });
+  fs.writeFileSync(`./wet_charts/wet_${weatherId}.png`, wetBuffer);
 
-  console.log(`Gráficos gerados! (ID: ${weatherId})`);
+  console.log(`\n✅ Tudo gerado! ID: ${weatherId}`);
 }
 
 generateCharts();
-
-
-
