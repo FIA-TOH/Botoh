@@ -214,7 +214,8 @@ const IMOLA_INFO: CircuitInfo = {
     v1: [1925, 1237],
     index: "000000",
     direction: SpecificDirection.RIGHT,
-    force: 0.9
+    force: 0.9,
+    sector: 1
   },
 
   // 000001
@@ -223,7 +224,8 @@ const IMOLA_INFO: CircuitInfo = {
     v1: [1597, 847],
     index: "000001",
     direction: SpecificDirection.UP,
-    force: 0.3
+    force: 0.4,
+    sector: 1
   },
 
   // 000002
@@ -232,7 +234,8 @@ const IMOLA_INFO: CircuitInfo = {
     v1: [2335, 537],
     index: "000002",
     direction: SpecificDirection.RIGHT,
-    force: 0.2
+    force: 0.3,
+    sector: 1
   },
 
   // 000003
@@ -240,8 +243,9 @@ const IMOLA_INFO: CircuitInfo = {
     v0: [2439, -785],
     v1: [2715, -747],
     index: "000003",
-    direction: SpecificDirection.UP,
-    force: 0.6
+    direction: SpecificDirection.RIGHTUP,
+    force: 0.4,
+    sector: 1
   },
 
   // 000004
@@ -250,7 +254,8 @@ const IMOLA_INFO: CircuitInfo = {
     v1: [2299, -868],
     index: "000004",
     direction: SpecificDirection.LEFTUP,
-    force: 0.4
+    force: 0.3,
+    sector: 1
   },
 
   // 000005
@@ -259,7 +264,8 @@ const IMOLA_INFO: CircuitInfo = {
     v1: [3043, -1402],
     index: "000005",
     direction: SpecificDirection.RIGHTUP,
-    force: 0.8
+    force: 0.8,
+    sector: 2
   },
 
   // 000006
@@ -268,7 +274,8 @@ const IMOLA_INFO: CircuitInfo = {
     v1: [1463, -1738],
     index: "000006",
     direction: SpecificDirection.LEFT,
-    force: 0.7
+    force: 0.6,
+    sector: 2
   },
 
   // 000007
@@ -277,7 +284,8 @@ const IMOLA_INFO: CircuitInfo = {
     v1: [1677, 203],
     index: "000007",
     direction: SpecificDirection.DOWN,
-    force: 0.9
+    force: 0.8,
+    sector: 2
   },
 
   // 000008
@@ -286,7 +294,8 @@ const IMOLA_INFO: CircuitInfo = {
     v1: [1311, 579],
     index: "000008",
     direction: SpecificDirection.LEFT,
-    force: 0.3
+    force: 0.4,
+    sector: 2
   },
 
   // 000009
@@ -295,7 +304,8 @@ const IMOLA_INFO: CircuitInfo = {
     v1: [1246, 85],
     index: "000009",
     direction: SpecificDirection.LEFTUP,
-    force: 0.2
+    force: 0.2,
+    sector: 2
   },
 
   // 000010
@@ -304,7 +314,8 @@ const IMOLA_INFO: CircuitInfo = {
     v1: [-624, 418],
     index: "000010",
     direction: SpecificDirection.LEFT,
-    force: 0.7
+    force: 0.7,
+    sector: 3
   },
 
   // 000011
@@ -313,7 +324,8 @@ const IMOLA_INFO: CircuitInfo = {
     v1: [-620, 13],
     index: "000011",
     direction: SpecificDirection.UP,
-    force: 0.4
+    force: 0.4,
+    sector: 3
   },
 
   // 000012
@@ -322,7 +334,8 @@ const IMOLA_INFO: CircuitInfo = {
     v1: [-2692, 950],
     index: "000012",
     direction: SpecificDirection.LEFT,
-    force: 0.7
+    force: 0.7,
+    sector: 3
   },
 
   // 000013
@@ -331,7 +344,8 @@ const IMOLA_INFO: CircuitInfo = {
     v1: [-3162, 1753],
     index: "000013",
     direction: SpecificDirection.DOWN,
-    force: 0.4
+    force: 0.4,
+    sector: 3
   }
 
 ]

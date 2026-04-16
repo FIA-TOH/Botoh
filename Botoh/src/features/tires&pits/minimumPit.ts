@@ -31,15 +31,6 @@ export function processIfMinimumPitStopsMet(
   const effectivePitStops = pitStops;
   const missingPits = requiredPits - effectivePitStops;
 
-  console.log("----- CHECK MINIMUM PITS -----");
-  console.log("Player:", player.id);
-  console.log("CurrentLap:", currentLap);
-  console.log("TotalLaps:", totalLaps);
-  console.log("PitStops(param):", pitStops);
-  console.log("EffectivePitStops:", effectivePitStops);
-  console.log("RequiredPits:", requiredPits);
-  console.log("MissingPits:", missingPits);
-  console.log("LapsLeftAfterThis:", lapsLeftAfterThis);
 
   if (missingPits <= 0) {
     console.log("✔ Minimum met. Clearing timer.");

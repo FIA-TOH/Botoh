@@ -34,7 +34,8 @@ export type DirectionChangerDetector = {
   direction: SpecificDirection;
   v0: [number, number];
   v1: [number, number];
-  force: number
+  force: number,
+  sector: number,
 };
 
 export type CutSegment = {

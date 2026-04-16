@@ -5,7 +5,7 @@ import { join } from "path";
 import { lastWeatherId } from "../../weather/lastWeatherId";
 import { writeFileSync } from "fs";
 import { currentWeather } from "../../weather/currentWeather";
-import { stopWeatherMonitoring } from "../../weather/weatherManager";
+import { stopWeatherMonitoring, startWeatherMonitoring } from "../../weather/weatherManager";
 
 
 function generateWeatherId(): string {
@@ -180,6 +180,9 @@ export function handleDefineRain(
     // Save the last weather ID
     (global as any).lastWeatherId = weatherId;
     writeFileSync(join(weatherDir, "lastWeatherId.json"), JSON.stringify({ lastWeatherId: weatherId }));
+
+    // Start weather monitoring with room reference
+    startWeatherMonitoring(weatherId, room);
 
     // Send success message with weather ID
     room.sendAnnouncement(
