@@ -1,6 +1,7 @@
 import { readFileSync, existsSync } from "fs";
 import { join } from "path";
 import { currentWeather } from "./currentWeather";
+import { checkWeatherReportAnnouncements, resetWeatherReportAnnouncements } from "./rain/weatherReportAnnouncer";
 
 let lastRainGlobal: number = 0;
 let lastRainS1: number = 0;
@@ -12,6 +13,7 @@ let weatherInterval: NodeJS.Timeout | null = null;
 let lastDataIndex: number = 0;
 let interpolationProgress: number = 0;
 let lastUpdateTime: number = 0;
+let currentWeatherId: string = '';
 
 export function startWeatherMonitoring(weatherId: string, room?: RoomObject) {
   try {
@@ -23,6 +25,7 @@ export function startWeatherMonitoring(weatherId: string, room?: RoomObject) {
     }
     
     weatherData = JSON.parse(readFileSync(dataPath, "utf-8"));
+    currentWeatherId = weatherId;
 
     lastRainGlobal = 0;
     lastRainS1 = 0;
@@ -37,6 +40,9 @@ export function startWeatherMonitoring(weatherId: string, room?: RoomObject) {
     }
 
     console.log(`Weather monitoring started for ID: ${weatherId}`);
+    if (room) {
+      checkWeatherReportAnnouncements(0, currentWeatherId, room);
+    }
   } catch (error) {
     console.error("Failed to start weather monitoring:", error);
   }
@@ -53,6 +59,8 @@ export function checkWeatherUpdate(room: RoomObject) {
   updateCurrentWeather(room);
   
   checkAndAnnounceRainChanges(room);
+  
+  checkWeatherReportAnnouncements(gameScores.time, currentWeatherId, room);
   
   if (gameScores.time - lastUpdateTime >= 30) {
     lastUpdateTime = gameScores.time;
