@@ -110,7 +110,6 @@ export function checkWeatherReportAnnouncements(currentTime: number, weatherId: 
       const message = getWeatherMessage(report.id, report.meta);
       
       sendCyanMessage(room, message);
-      console.log(`[Weather] ${currentTimeStr}: ${message.pt || message.en}`);
       
       weatherReportData.lastReportIndex = i + 1;
       break; 
