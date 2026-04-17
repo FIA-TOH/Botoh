@@ -32,7 +32,7 @@ export function PlayerLeave(room: RoomObject) {
       ? playerList[firstPlacePlayer.id].currentLap
       : 0;
 
-    const lapsCompleted = Math.max(0, playerList[player.id].currentLap - 1);
+    const lapsCompleted = Math.max(0, (playerList[player.id]?.currentLap || 1) - 1);
 
     if (LEAGUE_MODE) {
       const hash = playerObj !== undefined ? sha256(playerObj.ip) : "";

@@ -81,15 +81,14 @@ export function handleDefineRain(
     currentWeather.rainS2 = intensity;
     currentWeather.rainS3 = intensity;
     
-    // Set wet values based on intensity (higher rain = more wet)
-    const wetLevel = intensity * 0.8; // 80% of rain intensity for wetness
-    currentWeather.wetS1 = wetLevel;
-    currentWeather.wetS2 = wetLevel;
-    currentWeather.wetS3 = wetLevel;
-    currentWeather.wetAvg = wetLevel;
+    // Set wet values to 100% for all sectors when rain starts
+    currentWeather.wetS1 = 100;
+    currentWeather.wetS2 = 100;
+    currentWeather.wetS3 = 100;
+    currentWeather.wetAvg = 100;
     
     room.sendAnnouncement(
-      `🌧️ Rain started with intensity: ${intensity}%\n💧 Track wetness: ${wetLevel.toFixed(0)}%`,
+      `🌧️ Rain started with intensity: ${intensity}%\n💧 Track wetness: 100%`,
       byPlayer.id,
       COLORS.GREEN,
       FONTS.BOLD

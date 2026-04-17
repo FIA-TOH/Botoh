@@ -19,9 +19,9 @@ export function calculateGripForDryConditions(
       case "HARD":
         return calculateGripMultiplier(wear, norm, 0.9998, 0.995);
       case "INTER":
-        return calculateGripMultiplier(wear, norm, 0.998, 0.995);
+        return calculateGripMultiplier(wear, norm, 0.9996, 0.994);
       case "WET":
-        return calculateGripMultiplier(wear, norm, 0.997, 0.994);
+        return calculateGripMultiplier(wear, norm, 0.9992, 0.995);
       case "FLAT":
         return 0.99;
       case "TRAIN":

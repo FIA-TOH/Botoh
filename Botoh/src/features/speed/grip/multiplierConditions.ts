@@ -8,9 +8,8 @@ import { vsc } from "../../safetyCar/vsc";
 import { fuelGripCalc } from "../fuel&Ers/fuelGrip";
 import { engineGripCalc } from "../development/engine";
 import { chassiGripCalc } from "../development/chassi";
-import { vectorSpeed } from "../../utils";
-import { maxSpeedFromGrip } from "../getMaxSpeed";
 import { sandbagEnabled } from "../../commands/gameMode/battleRoyale.ts/handleSandbag";
+import { calculateTotalDrift, getCurrentTireType } from "../../weather/rain/driftCalculator";
 
 
 export function calculateGripMultiplierForConditions(
@@ -74,6 +73,21 @@ export function calculateGripMultiplierForConditions(
 
     // Chassis calculation penalty
     grip = chassiGripCalc(p, grip);
+
+    // Soft tire drift penalty
+    if (tyres === Tires.SOFT) {
+      const playerInfo = playerList[player.id];
+      if (playerInfo) {
+        const currentTireType = getCurrentTireType(playerInfo);
+        const currentSector = playerInfo.currentSector || 1;
+        const currentTime = room.getScores()?.time ?? 0;
+        const totalDrift = calculateTotalDrift(currentTireType, currentSector, currentTime);
+        
+        // 100 drift = -0.001 speed
+        const driftPenalty = (totalDrift / 100) * 0.001;
+        grip -= driftPenalty;
+      }
+    }
 
     // Engine calculation penalty
     // NOTE: this SHOULD be the last modifier applied because of grid

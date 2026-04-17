@@ -1,6 +1,8 @@
 import { DirectionChangerDetector, SpecificDirection } from "../../circuits/Circuit";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { playerList, PlayerInfo } from "../changePlayerState/playerList";
+import { calculateTotalDrift, driftToForceMultiplier, getCurrentTireType, shouldCalculateDrift } from "../weather/rain/driftCalculator";
+import { DRIFT_CONFIG } from "../weather/driftConfig";
 
 const playerPassedDetectors = new Map<number, Set<string>>();
 
@@ -109,12 +111,22 @@ function applyDirectionChangerEffect(
   if (!playerInfo) return;
 
   const vector = directionToVector(detector.direction);
-  const effectDurationSeconds = 2;
+  const effectDurationSeconds = DRIFT_CONFIG.DIRECTION_CHANGER_DURATION;
+
+  const currentTireType = getCurrentTireType(playerInfo);
+  const detectorSector = detector.sector;
+  const totalDrift = calculateTotalDrift(currentTireType, detectorSector);
+  
+  if (totalDrift === 0) {
+    return;
+  }
+  
+  const forceMultiplier = driftToForceMultiplier(totalDrift, detector.force);
 
   playerInfo.directionChangerEndTime = currentTime + effectDurationSeconds;
   playerInfo.directionChangerX = vector.x;
   playerInfo.directionChangerY = vector.y;
-  playerInfo.directionChangerForce = detector.force;
+  playerInfo.directionChangerForce = forceMultiplier;
 }
 
 export function getDirectionChangerGravity(
@@ -145,9 +157,8 @@ export function getDirectionChangerGravity(
     return { x: 0, y: 0 };
   }
 
-  const progress = remaining / 2;
-  // full effect starts immediately and fades linearly to zero over 2 seconds
-  const intensity = force * 0.09 * progress;
+  const progress = remaining / DRIFT_CONFIG.DIRECTION_CHANGER_DURATION;
+  const intensity = force * progress;
 
   return {
     x: vectorX * intensity,

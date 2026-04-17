@@ -25,6 +25,7 @@ import { mainLapCommand } from '../zones/laps/mainLapCommands';
 import { checkTrainingHourlyLog } from '../counters/checkTrainingHourlyLog';
 import { updateDebrisTouch } from '../debris/detectCollisionDebris';
 import { handleChangeCollisionPlayerCano, handleChangePlayerSizeCano } from '../zones/handleCanoTp';
+import { checkWeatherUpdate } from '../weather/weatherManager';
 
 const detectCutThrottledByPlayer: Map<number, ReturnType<typeof throttlePerSecond>> = new Map();
 
@@ -80,6 +81,7 @@ export function GameTick(room: RoomObject) {
     });
 
     afkKick(room);
+    checkWeatherUpdate(room);
 
     if (room.getScores()?.time && room.getScores().time > 0) {
       gameStarted = true;
