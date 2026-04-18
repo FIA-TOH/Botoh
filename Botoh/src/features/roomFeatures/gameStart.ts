@@ -9,6 +9,7 @@ import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { checkRunningPlayers } from "../changeGameState/publicGameFlow/startStopGameFlow";
 import { GameMode, gameMode } from "../changeGameState/changeGameModes";
 import { startWeatherMonitoring } from "../weather/weatherManager";
+import { sendInitialWeatherAnnouncement } from "../weather/rain/weatherReportAnnouncer";
 import { resetBestPit } from "../tires&pits/trackBestPit";
 import { resetBestLap } from "../zones/laps/trackBestLap";
 import { clearPlayersLeftInfo } from "../comeBackRace.ts/comeBackToRaceFunctions";
@@ -34,7 +35,9 @@ export function GameStart(room: RoomObject) {
       if (fs.existsSync(lastWeatherPath)) {
         const lastWeatherData = JSON.parse(fs.readFileSync(lastWeatherPath, "utf-8"));
         if (lastWeatherData.lastWeatherId) {
-          startWeatherMonitoring(lastWeatherData.lastWeatherId);
+          startWeatherMonitoring(lastWeatherData.lastWeatherId, room);
+          // Send initial weather announcement for this game
+          sendInitialWeatherAnnouncement(lastWeatherData.lastWeatherId, room);
         }
       }
     } catch (error) {

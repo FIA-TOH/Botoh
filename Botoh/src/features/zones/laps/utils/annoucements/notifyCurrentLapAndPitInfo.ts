@@ -11,26 +11,34 @@ export function notifyCurrentLapAndPitInfo(
   room: RoomObject,
   currentLap: number
 ) {
-  sendChatMessage(room, MESSAGES.CURRENT_LAP(currentLap, laps), p.id);
-
   const data = playerList[p.id];
+  let combinedInfo = [];
+
+  // Add lap information
+  combinedInfo.push(`Volta ${currentLap}/${laps}`);
+
+  // Add tire information if active
+  if (data.tires && data.wear !== undefined) {
+    combinedInfo.push(`Pneus: ${(100 - data.wear).toFixed(0)}%`);
+  }
 
   // Add weather information if there's rain or wet track
-  if (currentWeather.rainGlobal > 0 || currentWeather.wetAvg > 0) {
-    let weatherInfo = "";
-    
-    if (currentWeather.rainGlobal > 0) {
-      weatherInfo += `🌧️ Chuva: ${currentWeather.rainGlobal.toFixed(0)}% `;
-    }
-    
-    if (currentWeather.wetAvg > 0) {
-      weatherInfo += `💧 Pista: ${currentWeather.wetAvg.toFixed(0)}% molhada`;
-    }
-    
-    if (weatherInfo) {
-      room.sendAnnouncement(weatherInfo.trim(), p.id, COLORS.CYAN, FONTS.NORMAL);
-    }
+  const weatherParts = [];
+  if (currentWeather.rainGlobal > 0) {
+    weatherParts.push(`🌧️: ${currentWeather.rainGlobal.toFixed(0)}%`);
   }
+  
+  if (currentWeather.wetAvg > 0) {
+    weatherParts.push(`💧: ${currentWeather.wetAvg.toFixed(0)}%`);
+  }
+
+  if (weatherParts.length > 0) {
+    combinedInfo.push(weatherParts.join(' | '));
+  }
+
+  // Send combined message
+  const finalMessage = combinedInfo.join(' | ');
+  room.sendAnnouncement(finalMessage, p.id, COLORS.CYAN, FONTS.NORMAL);
 
   processIfMinimumPitStopsMet(p, currentLap, laps, data.pits.pitsNumber, room);
 }

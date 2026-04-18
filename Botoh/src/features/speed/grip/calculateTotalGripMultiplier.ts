@@ -14,7 +14,7 @@ export function calculateTotalGripMultiplier(
 ) {
   const norm = Math.hypot(disc.xspeed, disc.yspeed);
 
-  const isUsingERS = disc.damping === 0.986;
+  const isUsingERS = disc.damping === 0.986 || disc.damping === 0.9905;
   const isIncoherentErs = playerInfo.kers <= 0 && isUsingERS;
 
   let gripMultiplier = calculateGripMultiplierForConditions(

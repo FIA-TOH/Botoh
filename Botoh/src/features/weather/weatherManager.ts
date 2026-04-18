@@ -1,7 +1,7 @@
 import { readFileSync, existsSync } from "fs";
 import { join } from "path";
 import { currentWeather } from "./currentWeather";
-import { checkWeatherReportAnnouncements, resetWeatherReportAnnouncements } from "./rain/weatherReportAnnouncer";
+import { checkWeatherReportAnnouncements, sendInitialWeatherAnnouncement, resetWeatherReportAnnouncements } from "./rain/weatherReportAnnouncer";
 
 let lastRainGlobal: number = 0;
 let lastRainS1: number = 0;
@@ -40,9 +40,7 @@ export function startWeatherMonitoring(weatherId: string, room?: RoomObject) {
     }
 
     console.log(`Weather monitoring started for ID: ${weatherId}`);
-    if (room) {
-      checkWeatherReportAnnouncements(0, currentWeatherId, room);
-    }
+    // Initial announcement is now handled by gameStart.ts to avoid duplicates
   } catch (error) {
     console.error("Failed to start weather monitoring:", error);
   }

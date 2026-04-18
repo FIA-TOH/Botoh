@@ -24,6 +24,8 @@ let weatherReportData: WeatherReportData = {
   weatherId: ''
 };
 
+let initialAnnouncementShown = false;
+
 function getWeatherMessage(id: string, meta?: { rain?: number; wet?: number }) {
   const weatherMessages: { [key: string]: { en: string; es: string; fr: string; tr: string; pt: string } } = {
     'CLEAR_START': MESSAGES.CLEAR_START(),
@@ -94,9 +96,30 @@ function loadWeatherReport(weatherId: string): boolean {
   }
 }
 
+export function sendInitialWeatherAnnouncement(weatherId: string, room: any): void {
+  if (!loadWeatherReport(weatherId)) return;
+  
+  weatherReportData.lastReportIndex = 0;
+  initialAnnouncementShown = true;
+  
+  // Check for events at 00:00
+  const report = weatherReportData.reports.find(r => r.time === "00:00");
+  if (report) {
+    const message = getWeatherMessage(report.id, report.meta);
+    sendCyanMessage(room, message);
+    console.log(`[Weather] Initial announcement: ${message.pt || message.en}`);
+  }
+}
+
 export function checkWeatherReportAnnouncements(currentTime: number, weatherId: string, room: any): void {
+  // Skip processing at time 0 - initial announcement is handled by sendInitialWeatherAnnouncement
+  if (currentTime === 0) return;
+  
+  // Reset index when weather changes
   if (weatherReportData.weatherId !== weatherId) {
     if (!loadWeatherReport(weatherId)) return;
+    weatherReportData.lastReportIndex = 0;
+    console.log(`[Weather] Reset index for weatherId: ${weatherId}`);
   }
   
   const minutes = Math.floor(currentTime / 60);
@@ -110,11 +133,13 @@ export function checkWeatherReportAnnouncements(currentTime: number, weatherId: 
       const message = getWeatherMessage(report.id, report.meta);
       
       sendCyanMessage(room, message);
+      console.log(`[Weather] ${currentTimeStr}: ${message.pt || message.en}`);
       
       weatherReportData.lastReportIndex = i + 1;
       break; 
     }
     
+    // Pula eventos que já ficaram para trás (evita spam ao carregar)
     if (timeToSeconds(report.time) < currentTime) {
       weatherReportData.lastReportIndex = i + 1;
     }
@@ -127,4 +152,5 @@ export function resetWeatherReportAnnouncements(): void {
     lastReportIndex: 0,
     weatherId: ''
   };
+  initialAnnouncementShown = false;
 }
