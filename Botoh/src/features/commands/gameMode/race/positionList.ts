@@ -1,4 +1,5 @@
 import { PitsInfo, playerList } from "../../../changePlayerState/playerList";
+import { checkSandbagLeader } from "../battleRoyale.ts/handleSandbag";
 
 export const positionList: {
   id: number;
@@ -68,4 +69,6 @@ export function updatePositionList(
     }
     return b.lap - a.lap; // quem completou mais voltas está na frente
   });
+
+  checkSandbagLeader(room);
 }

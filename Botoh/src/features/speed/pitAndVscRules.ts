@@ -11,7 +11,7 @@ export function applyPitAndVscRules(
   gripMultiplier: number,
   playerInfo: PlayerInfo,
   currentTime: number,
-  vsc: boolean
+  vsc: boolean,
 ) {
   let limiter = 0;
 
@@ -31,7 +31,7 @@ export function applyPitAndVscRules(
       xgravity: -x * (1 - limiter),
       ygravity: -y * (1 - limiter),
     });
-  } else if (tyresActivated && gripMultiplier) {
+  } else if (gripMultiplier) {
     room.setPlayerDiscProperties(p.id, {
       xgravity: -x * (1 - gripMultiplier),
       ygravity: -y * (1 - gripMultiplier),

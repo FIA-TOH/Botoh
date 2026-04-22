@@ -1,5 +1,4 @@
 import { calculateGripMultiplierForConditions } from "../grip/multiplierConditions";
-import { constants } from "../constants";
 import { PlayerInfo } from "../../changePlayerState/playerList";
 
 /**
@@ -11,7 +10,7 @@ export function calculateTotalGripMultiplier(
   playerInfo: PlayerInfo,
   effectiveSlipstream: number,
   currentTime: number,
-  room: RoomObject
+  room: RoomObject,
 ) {
   const norm = Math.hypot(disc.xspeed, disc.yspeed);
 
@@ -27,10 +26,10 @@ export function calculateTotalGripMultiplier(
     effectiveSlipstream,
     isIncoherentErs,
     isUsingERS,
-    room
+    room,
   );
 
-  if (!gripMultiplier) {
+  if (gripMultiplier == null) {
     return 0;
   }
 

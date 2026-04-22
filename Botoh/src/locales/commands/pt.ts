@@ -328,6 +328,11 @@ export default function pt_commands(
     args: string[],
     room: RoomObject,
   ) => void,
+  handleSandbagCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
 ): Commands {
   return {
     "!admin": handleAdminCommand,
@@ -401,5 +406,6 @@ export default function pt_commands(
     "!set_rr": handleRRPositionCommand,
     "!clear_debris": handleClearDebrisCommand,
     "!upgrade": handleUpgradeCommand,
+    "!sandbag": handleSandbagCommand,
   };
 }

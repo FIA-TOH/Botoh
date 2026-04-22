@@ -22,6 +22,7 @@ export interface PlayerLeftInfo {
   tires: Tires;
   wear: number;
   lapsOnCurrentTire: number;
+  sandbagPenalty: number;
   showTires: boolean;
   maxSpeed: number;
   pits: any;

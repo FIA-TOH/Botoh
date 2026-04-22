@@ -15,6 +15,7 @@ export function createPlayerInfo(ip?: string) {
     afkAlert: false,
     leagueScuderia: null,
     didHardQualy: false,
+    sandbagPenalty: 0,
 
     // Propriedades de corrida e volta
     totalTime: 0,
@@ -136,6 +137,8 @@ export function resetPlayer(
   playerList[id].isInTheRoom = true;
   playerList[id].afkAlert = false;
   playerList[id].didHardQualy = false;
+
+  playerList[id].sandbagPenalty = 0;
 
   playerList[id].totalTime = 0;
   playerList[id].currentLap = 0;

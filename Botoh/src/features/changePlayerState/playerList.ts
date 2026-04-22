@@ -27,6 +27,8 @@ export interface PlayerInfo {
   leagueScuderia: string | null;
   didHardQualy: boolean;
 
+  sandbagPenalty: number;
+
   // Propriedades de corrida e volta
   totalTime: number;
   currentLap: number;
