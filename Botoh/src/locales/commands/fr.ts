@@ -41,6 +41,11 @@ export default function fr_commands(
     args: string[],
     room: RoomObject,
   ) => void,
+  handleSCCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
   handleQModeCommand: (
     byPlayer: PlayerObject,
     args: string[],
@@ -335,6 +340,7 @@ export default function fr_commands(
     "!timings": handleTimesCommand,
     "!positions": handlePositionsCommand,
     "!vsc": handleVSCCommand,
+    "!sc": handleSCCommand,
     "!qmode": handleQModeCommand,
     "!tmode": handleTModeCommand,
     "!qtime": handleQTimeCommand,

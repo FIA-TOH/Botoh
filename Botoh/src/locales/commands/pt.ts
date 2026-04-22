@@ -41,6 +41,11 @@ export default function pt_commands(
     args: string[],
     room: RoomObject,
   ) => void,
+  handleSCCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
   handleQModeCommand: (
     byPlayer: PlayerObject,
     args: string[],
@@ -336,6 +341,7 @@ export default function pt_commands(
     "!times": handleTimesCommand,
     "!positions": handlePositionsCommand,
     "!vsc": handleVSCCommand,
+    "!sc": handleSCCommand,
     "!qmode": handleQModeCommand,
     "!tmode": handleTModeCommand,
     "!qtime": handleQTimeCommand,

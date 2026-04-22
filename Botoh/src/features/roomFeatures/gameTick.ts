@@ -45,7 +45,7 @@ export function GameTick(room: RoomObject) {
     setBallPosition(room);
     checkTrainingHourlyLog();
     updateDebrisTouch(room);
-    logPlayerSpeed(playersAndDiscs, room);
+    // logPlayerSpeed(playersAndDiscs, room);
 
     if (gameMode !== GameMode.WAITING) {
       handlePitlane(playersAndDiscs, room);

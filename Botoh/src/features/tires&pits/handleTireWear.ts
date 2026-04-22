@@ -11,6 +11,7 @@ import { playerBuffList } from "../commands/adjustThings/handleNerfListCommand";
 import { presentationLap } from "../commands/gameState/handlePresentationLapCommand";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { vsc } from "../safetyCar/vsc";
+import { isSCActive } from "../commands/flagsAndVSC/handleSCCommand";
 import { laps } from "../zones/laps";
 import { changeTires } from "./changeTires";
 import { applyTrackTireDegradation } from "./tireDegradationFunction";
@@ -21,7 +22,7 @@ export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
   const currentTime = room.getScores().time;
   if (!p.lastCheckTime) p.lastCheckTime = currentTime;
 
-  if (presentationLap || vsc || p.inPitlane) {
+  if (presentationLap || vsc || isSCActive() || p.inPitlane) {
     p.lastCheckTime = currentTime;
     return;
   }

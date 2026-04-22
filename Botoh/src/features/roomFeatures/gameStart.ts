@@ -19,6 +19,7 @@ import { Teams } from "../changeGameState/teams";
 import { positionList } from "../commands/gameMode/race/positionList";
 import { initBattleRoyale } from "../commands/gameMode/battleRoyale.ts/handleBattleRoyaleLaps";
 import { playerList } from "../changePlayerState/playerList";
+import { updatePlayerCollision } from "../changePlayerState/updatePlayerCollision";
 
 export function GameStart(room: RoomObject) {
   room.onGameStart = function (byPlayer) {
@@ -74,4 +75,5 @@ export function GameStart(room: RoomObject) {
       // }
     }
   };
+  
 }

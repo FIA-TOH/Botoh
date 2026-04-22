@@ -54,6 +54,7 @@ export interface CircuitInfo {
   drsStart: HitboxBounds[];
   drsEnd: HitboxBounds[];
   checkpoints: DirectedHitboxBounds[];
+    firstPlace?: { x: number; y: number };
   lastPlace: { x: number; y: number };
   BestTime?: (string | number)[];
   MainColor?: number[];
@@ -69,7 +70,8 @@ export interface CircuitInfo {
   CutDetectSegments?: CutSegment[];
   haveDebris?: boolean;
   physicsType?: CircuitPhysics;
-  DirectionChangerDetector?: DirectionChangerDetector[]
+  DirectionChangerDetector?: DirectionChangerDetector[],
+  new_safetycar?: boolean,
 }
 
 export interface Circuit {

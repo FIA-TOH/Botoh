@@ -376,6 +376,30 @@ export const MESSAGES = {
     pt: pt_messages.NO_MANUAL_MAPS,
   }),
 
+  SAFETY_CAR: (): LocalizedMessageFunction => ({
+    en: en_messages.SAFETY_CAR,
+    es: es_messages.SAFETY_CAR,
+    fr: fr_messages.SAFETY_CAR,
+    tr: tr_messages.SAFETY_CAR,
+    pt: pt_messages.SAFETY_CAR,
+  }),
+
+  SAFETY_CAR_ENTERING_TRACK: (): LocalizedMessageFunction => ({
+    en: en_messages.SAFETY_CAR_ENTERING_TRACK,
+    es: es_messages.SAFETY_CAR_ENTERING_TRACK,
+    fr: fr_messages.SAFETY_CAR_ENTERING_TRACK,
+    tr: tr_messages.SAFETY_CAR_ENTERING_TRACK,
+    pt: pt_messages.SAFETY_CAR_ENTERING_TRACK,
+  }),
+
+  OVERTAKING_PROHIBITED: (): LocalizedMessageFunction => ({
+    en: en_messages.OVERTAKING_PROHIBITED,
+    es: es_messages.OVERTAKING_PROHIBITED,
+    fr: fr_messages.OVERTAKING_PROHIBITED,
+    tr: tr_messages.OVERTAKING_PROHIBITED,
+    pt: pt_messages.OVERTAKING_PROHIBITED,
+  }),
+
   INFINITE_QUALI: (): LocalizedMessageFunction => ({
     en: en_messages.INFINITE_QUALI,
     es: es_messages.INFINITE_QUALI,

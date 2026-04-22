@@ -12,6 +12,7 @@ import { MESSAGES } from "../../chat/messages";
 import { clearDebris } from "../../debris/clearDebris";
 import { getPlayerAndDiscs } from "../../playerFeatures/getPlayerAndDiscs";
 import { vsc, changeVSC } from "../../safetyCar/vsc";
+import { isSCActive } from "./handleSCCommand";
 
 import { getRunningPlayers } from "../../utils";
 import {
@@ -68,7 +69,7 @@ export function handleFlagCommand(
     flag = "green";
   } else if (
     flagChoosen === "green" &&
-    (vsc === true || presentationLap === true)
+    (vsc === true || presentationLap === true || isSCActive())
   ) {
     if (vsc === true) {
       changeVSC();
@@ -76,6 +77,13 @@ export function handleFlagCommand(
     if (presentationLap === true) {
       handlePresentationLapCommand(undefined, ["false"], room);
     }
+    
+    // Deactivate safety car if active
+    const { handleSCCommand } = require("./handleSCCommand");
+    if (isSCActive()) {
+      handleSCCommand(undefined, ["off"], room);
+    }
+    
     flag = "green";
     sendGreenMessage(room, MESSAGES.GREEN_FLAG());
     sendGreenMessage(room, MESSAGES.GREEN_FLAG_TWO());
@@ -84,7 +92,7 @@ export function handleFlagCommand(
     players.forEach((player) => {
       handleAvatar(Situacions.Flag, player.p, room, undefined, ["🟩"], [5000]);
     });
-  } else if (flagChoosen === "yellow" && vsc === false) {
+  } else if (flagChoosen === "yellow" && vsc === false && !isSCActive()) {
     changeVSC();
     flag = "yellow";
 
