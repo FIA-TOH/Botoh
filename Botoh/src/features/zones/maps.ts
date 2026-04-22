@@ -86,6 +86,11 @@ import { YAS_MARINA_NANO } from "../../circuits/abu_dhabi/yas_marina_nano";
 import { TANGA } from "../../circuits/tanga/tanga";
 import { TANDIL } from "../../circuits/tandil/tandil";
 import { COLORADO } from "../../circuits/colorado/colorado";
+import { RIVADAVIA } from "../../circuits/rivadavia/rivadavia";
+import { AUSTIN_CRESPO } from "../../circuits/austin/austin_crespo";
+import { SEXCANO } from "../../circuits/sexcano/sexcano";
+import { MEERSBURG } from "../../circuits/meersburg/meersburg";
+import { LIEGE } from "../../circuits/liege/liege";
 
 // import {DAYTONA} from "../circuits/daytona/daytona";
 // import {BARCELONA} from "../circuits/barcelona/barcelona";
@@ -139,7 +144,12 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
       TANGA,
       TANDIL,
       COLORADO,
+      AUSTIN_CRESPO,
       YAS_MARINA_NANO,
+      RIVADAVIA,
+      SEXCANO,
+      MEERSBURG,
+      LIEGE,
       INDIANAPOLIS,
       PODIUM,
       WAITROOM,

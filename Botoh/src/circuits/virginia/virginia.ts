@@ -2,7 +2,7 @@ import { readFileSync } from "fs";
 import { join } from "path";
 
 import { bestTimes } from "../bestTimes";
-import { Circuit, CircuitInfo, Direction } from "../Circuit";
+import { Circuit, CircuitInfo, CircuitPhysics, Direction } from "../Circuit";
 
 const virginia_raw = readFileSync(join(__dirname, "virginia.hbs"), "utf-8");
 const virginia_json = JSON.parse(virginia_raw);
@@ -52,16 +52,16 @@ const VIRGINIA_INFO: CircuitInfo = {
     maxY: 90,
   },
   pitlaneStart: {
-    minX: 0,
-    maxX: 0,
-    minY: 0,
-    maxY: 0,
+    minX: 2149,
+    maxX: 2181,
+    minY: 222,
+    maxY: 373,
   },
   pitlaneEnd: {
-    minX: 0,
-    maxX: 0,
-    minY: 0,
-    maxY: 0,
+    minX: 352,
+    maxX: 384,
+    minY: 241,
+    maxY: 373,
   },
   drsStart: [
     {
@@ -92,6 +92,7 @@ const VIRGINIA_INFO: CircuitInfo = {
   Votes: 0,
   pitSpeed: 1,
   TireDegradationPercentage: 0,
+  physicsType: CircuitPhysics.CLASSIC,
 };
 
 export const VIRGINIA: Circuit = {

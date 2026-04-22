@@ -58,6 +58,7 @@ export function PlayerLeave(room: RoomObject) {
           tires: playerObj.tires,
           wear: playerObj.wear,
           lapsOnCurrentTire: playerObj.lapsOnCurrentTire,
+          sandbagPenalty: playerObj.sandbagPenalty,
           showTires: playerObj.showTires,
           maxSpeed: playerObj.maxSpeed,
           pits: playerObj.pits,

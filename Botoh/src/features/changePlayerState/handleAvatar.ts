@@ -14,6 +14,7 @@ export enum Situacions {
   Wrong = "Wrong",
   NeedPit = "NeedPit",
   BlowoutWarning = "BlowoutWarning",
+  Sandbag = "Sandbag",
 }
 
 export const TIRE_AVATAR: { [key in Tires]: string } = {
@@ -38,8 +39,9 @@ const SITUATION_PRIORITY: Record<Situacions, number> = {
   [Situacions.NeedPit]: 5,
   [Situacions.Ers]: 4,
   [Situacions.Speed]: 3,
-  [Situacions.ChangeTyre]: 2,
-  [Situacions.Null]: 1,
+  [Situacions.Sandbag]: 2,
+  [Situacions.ChangeTyre]: 1,
+  [Situacions.Null]: 0,
 };
 
 const playerTimers: Record<
@@ -60,14 +62,20 @@ function clearPlayerTimers(playerId: number) {
 function restoreTyreOrCar(playerId: number, room: RoomObject) {
   const p = playerList[playerId];
   if (!p) return;
+
+  if (p.sandbagPenalty && p.sandbagPenalty > 0) {
+    room.setPlayerAvatar(playerId, "🐢");
+    return;
+  }
+
   const tireType = p.tires;
+
   if (tireType && TIRE_AVATAR[tireType] && p.showTires && tyresActivated) {
     room.setPlayerAvatar(playerId, TIRE_AVATAR[tireType]);
   } else {
     room.setPlayerAvatar(playerId, null);
   }
 }
-
 const situationHandlers: Record<
   Situacions,
   (
@@ -199,6 +207,10 @@ const situationHandlers: Record<
 
   [Situacions.Null]: (player, room) => {
     room.setPlayerAvatar(player.id, null);
+  },
+
+  [Situacions.Sandbag]: (player, room) => {
+    room.setPlayerAvatar(player.id, "🐢");
   },
 };
 
