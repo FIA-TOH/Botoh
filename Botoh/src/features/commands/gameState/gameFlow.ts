@@ -16,6 +16,11 @@ export function handleChangeGameFLow(
     return;
   }
 
+  if (!args[0]) {
+    room.sendAnnouncement("!game_flow [start|stop]", byPlayer.id);
+    return;
+  }
+
   if (args[0] === "start") {
     if (gameState !== null) {
       room.sendAnnouncement(
@@ -28,7 +33,7 @@ export function handleChangeGameFLow(
   } else if (args[0] === "stop") {
     stopPublicFlow(room);
   } else {
-    room.sendAnnouncement("!game_flow [true|false]", byPlayer.id);
+    room.sendAnnouncement("!game_flow [start|stop]", byPlayer.id);
     return;
   }
 

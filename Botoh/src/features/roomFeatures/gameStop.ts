@@ -2,7 +2,7 @@ import { handleGameStateChange } from "../changeGameState/gameState";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { resetPlayers } from "../changePlayerState/players";
 
-// import { rainEnabled, resetAllRainEvents, setRainChances } from "../rain/rain";
+
 import {
   changeGameStoppedNaturally,
   gameStopedNaturally,
@@ -18,6 +18,7 @@ import {
 
 import { reorderPlayersInRoomRace } from "../movePlayers/reorderPlayersInRoom";
 import { timerController } from "../utils";
+import { stopWeatherMonitoring } from "../weather/weatherManager";
 
 import { log } from "../discord/logger";
 import { changeLaps } from "../commands/adminThings/handleChangeLaps";
@@ -44,11 +45,16 @@ import { printAllTimes } from "../commands/gameMode/qualy/printAllTimes";
 import { printAllPositions } from "../commands/gameMode/race/printAllPositions";
 import { resetSessionBestSectors } from "../zones/laps/trackBestSector";
 import { resetSandbag } from "../commands/gameMode/battleRoyale.ts/handleSandbag";
+import { writeFileSync } from "fs";
+import { join } from "path";
 
 let replayData: Uint8Array | null = null;
 
 export function GameStop(room: RoomObject) {
   room.onGameStop = function (byPlayer) {
+    // Stop weather monitoring
+    stopWeatherMonitoring();
+
     if (byPlayer == null) {
       log(`Game stopped`);
     } else {
@@ -85,7 +91,7 @@ export function GameStop(room: RoomObject) {
     //   sendDiscordFile(qualiResults, fileName, "QUALI_RESULTS");
     // }
 
-    // resetAllRainEvents();
+
     if (gameMode !== GameMode.WAITING) {
       if (gameStopedNaturally && !LEAGUE_MODE) {
         PublicGameFlow(room);
@@ -119,9 +125,7 @@ export function GameStop(room: RoomObject) {
         }
       }
       clearPlayers();
-      // if (rainEnabled) {
-      //   setRainChances(0);
-      // }
+  
     }
 
     handleFlagCommand(undefined, ["reset"], room);
@@ -132,5 +136,14 @@ export function GameStop(room: RoomObject) {
     resetDebrisUsedList();
     resetSessionBestSectors();
     resetSandbag(room);
+    
+    // Reset lastWeatherId when game stops
+    try {
+      const weatherDir = join(__dirname, "../weather");
+      const lastWeatherPath = join(weatherDir, "lastWeatherId.json");
+      writeFileSync(lastWeatherPath, JSON.stringify({ lastWeatherId: null }));
+    } catch (error) {
+      console.error("Failed to reset lastWeatherId:", error);
+    }
   };
 }

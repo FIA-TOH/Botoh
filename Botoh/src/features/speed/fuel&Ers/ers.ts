@@ -59,7 +59,7 @@ function handleERS(
   room: RoomObject
 ) {
   if (room.getScores()?.time > 0) {
-    if (properties.damping === 0.986) {
+    if (properties.damping === 0.986 || properties.damping === 0.9905) {
       handleAvatar(Situacions.Ers, p, room);
       if (playerInfo.kers > 0) {
         playerInfo.kers -= 100 / (ERS_DURATION_SECONDS * 60);

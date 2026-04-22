@@ -807,119 +807,6 @@ export const MESSAGES = {
       unit: unit,
     }),
   }),
-  RAIN_ONE_MINUTE: (): LocalizedMessageFunction => ({
-    en: en_messages.RAIN_ONE_MINUTE,
-    es: es_messages.RAIN_ONE_MINUTE,
-    fr: fr_messages.RAIN_ONE_MINUTE,
-    tr: tr_messages.RAIN_ONE_MINUTE,
-    pt: pt_messages.RAIN_ONE_MINUTE,
-  }),
-  RAIN_STARTED: (): LocalizedMessageFunction => ({
-    en: en_messages.RAIN_STARTED,
-    es: es_messages.RAIN_STARTED,
-    fr: fr_messages.RAIN_STARTED,
-    tr: tr_messages.RAIN_STARTED,
-    pt: pt_messages.RAIN_STARTED,
-  }),
-  RAIN_STARTING_IN: (number: number): LocalizedMessageFunction => ({
-    en: replaceTemplateString(en_messages.RAIN_STARTING_IN, {
-      number: number.toString(),
-    }),
-    es: replaceTemplateString(es_messages.RAIN_STARTING_IN, {
-      number: number.toString(),
-    }),
-    fr: replaceTemplateString(fr_messages.RAIN_STARTING_IN, {
-      number: number.toString(),
-    }),
-    tr: replaceTemplateString(tr_messages.RAIN_STARTING_IN, {
-      number: number.toString(),
-    }),
-    pt: replaceTemplateString(pt_messages.RAIN_STARTING_IN, {
-      number: number.toString(),
-    }),
-  }),
-  RAIN_STOP_ONE_MINUTE: (): LocalizedMessageFunction => ({
-    en: en_messages.RAIN_STOP_ONE_MINUTE,
-    es: es_messages.RAIN_STOP_ONE_MINUTE,
-    fr: fr_messages.RAIN_STOP_ONE_MINUTE,
-    tr: tr_messages.RAIN_STOP_ONE_MINUTE,
-    pt: pt_messages.RAIN_STOP_ONE_MINUTE,
-  }),
-  RAIN_STOPPED: (): LocalizedMessageFunction => ({
-    en: en_messages.RAIN_STOPPED,
-    es: es_messages.RAIN_STOPPED,
-    fr: fr_messages.RAIN_STOPPED,
-    tr: tr_messages.RAIN_STOPPED,
-    pt: pt_messages.RAIN_STOPPED,
-  }),
-  RAIN_STOPING_IN: (number: number): LocalizedMessageFunction => ({
-    en: replaceTemplateString(en_messages.RAIN_STOPING_IN, {
-      number: number.toString(),
-    }),
-    es: replaceTemplateString(es_messages.RAIN_STOPING_IN, {
-      number: number.toString(),
-    }),
-    fr: replaceTemplateString(fr_messages.RAIN_STOPING_IN, {
-      number: number.toString(),
-    }),
-    tr: replaceTemplateString(tr_messages.RAIN_STOPING_IN, {
-      number: number.toString(),
-    }),
-    pt: replaceTemplateString(pt_messages.RAIN_STOPING_IN, {
-      number: number.toString(),
-    }),
-  }),
-  RAIN_CHANCES: (number: number): LocalizedMessageFunction => ({
-    en: replaceTemplateString(en_messages.RAIN_CHANCES, {
-      number: number.toString(),
-    }),
-    es: replaceTemplateString(es_messages.RAIN_CHANCES, {
-      number: number.toString(),
-    }),
-    fr: replaceTemplateString(fr_messages.RAIN_CHANCES, {
-      number: number.toString(),
-    }),
-    tr: replaceTemplateString(tr_messages.RAIN_CHANCES, {
-      number: number.toString(),
-    }),
-    pt: replaceTemplateString(pt_messages.RAIN_CHANCES, {
-      number: number.toString(),
-    }),
-  }),
-  NEW_RAIN_INTENSITY: (number: number): LocalizedMessageFunction => ({
-    en: replaceTemplateString(en_messages.RAIN_INTENSITY, {
-      number: number.toString(),
-    }),
-    es: replaceTemplateString(es_messages.RAIN_INTENSITY, {
-      number: number.toString(),
-    }),
-    fr: replaceTemplateString(fr_messages.RAIN_INTENSITY, {
-      number: number.toString(),
-    }),
-    tr: replaceTemplateString(tr_messages.RAIN_INTENSITY, {
-      number: number.toString(),
-    }),
-    pt: replaceTemplateString(pt_messages.RAIN_INTENSITY, {
-      number: number.toString(),
-    }),
-  }),
-  RAIN_INTENSITY_LAP: (number: number): LocalizedMessageFunction => ({
-    en: replaceTemplateString(en_messages.RAIN_INTENSITY, {
-      number: number.toString(),
-    }),
-    es: replaceTemplateString(es_messages.RAIN_INTENSITY, {
-      number: number.toString(),
-    }),
-    fr: replaceTemplateString(fr_messages.RAIN_INTENSITY, {
-      number: number.toString(),
-    }),
-    tr: replaceTemplateString(tr_messages.RAIN_INTENSITY, {
-      number: number.toString(),
-    }),
-    pt: replaceTemplateString(pt_messages.RAIN_INTENSITY, {
-      number: number.toString(),
-    }),
-  }),
   IN_MUTE_MODE: (): LocalizedMessageFunction => ({
     en: en_messages.IN_MUTE_MODE,
     es: es_messages.IN_MUTE_MODE,
@@ -1120,13 +1007,6 @@ export const MESSAGES = {
     fr: fr_messages.EXPLAIN_SERVER,
     tr: tr_messages.EXPLAIN_SERVER,
     pt: pt_messages.EXPLAIN_SERVER,
-  }),
-  EXPLAIN_RAIN: (): LocalizedMessageFunction => ({
-    en: en_messages.EXPLAIN_RAIN,
-    es: es_messages.EXPLAIN_RAIN,
-    fr: fr_messages.EXPLAIN_RAIN,
-    tr: tr_messages.EXPLAIN_RAIN,
-    pt: pt_messages.EXPLAIN_RAIN,
   }),
   EXPLAIN_ERS: (): LocalizedMessageFunction => ({
     en: en_messages.EXPLAIN_ERS,
@@ -1776,5 +1656,98 @@ export const MESSAGES = {
       name: name.toString(),
       eliminated: eliminated.toString(),
     }),
+  }),
+
+  // Weather Report Messages
+  CLEAR_START: (): LocalizedMessageFunction => ({
+    en: "☀️ Clear skies at start.",
+    es: "☀️ Cielo despejado al inicio.",
+    fr: "☀️ Ciel dégagé au début.",
+    tr: "☀️ Başlangıçta gökyüzü açık.",
+    pt: "☀️ Céu limpo no início da sessão.",
+  }),
+  RAIN_ALREADY_STARTED: (): LocalizedMessageFunction => ({
+    en: "🌧️ Starting under rain!",
+    es: "🌧️ ¡Empezamos con lluvia!",
+    fr: "🌧️ On commence sous la pluie !",
+    tr: "🌧️ Yağmur altında başlıyoruz!",
+    pt: "🌧️ A sessão já começa sob chuva!",
+  }),
+  TRACK_ALREADY_WET: (): LocalizedMessageFunction => ({
+    en: "💧 Track is already wet.",
+    es: "💧 La pista ya está mojada.",
+    fr: "💧 La piste est déjà mouillée.",
+    tr: "💧 Pist zaten ıslak.",
+    pt: "💧 A pista já está molhada.",
+  }),
+  RAIN_STARTED: (): LocalizedMessageFunction => ({
+    en: "🌧️ IT'S RAINING NOW!",
+    es: "🌧️ ¡EMPEZÓ A LLOVER!",
+    fr: "🌧️ IL PLEUT MAINTENANT !",
+    tr: "🌧️ YAĞMUR BAŞLADI!",
+    pt: "🌧️ COMEÇOU A CHOVER AGORA!",
+  }),
+  RAIN_STOPPED: (): LocalizedMessageFunction => ({
+    en: "🌤️ The rain has stopped.",
+    es: "🌤️ La lluvia ha parado.",
+    fr: "🌤️ La pluie s'est arrêtée.",
+    tr: "🌤️ Yağmur durdu.",
+    pt: "🌤️ A chuva parou.",
+  }),
+  TRACK_WET: (): LocalizedMessageFunction => ({
+    en: "🌊 TRACK SOAKED (100%)",
+    es: "🌊 PISTA EMPAPADA (100%)",
+    fr: "🌊 PISTE TREMPÉE (100%)",
+    tr: "🌊 PİST SIRILSIKLAM (100%)",
+    pt: "🌊 PISTA ENCHARCADA (100% MOLHADA)",
+  }),
+  TRACK_DRY: (): LocalizedMessageFunction => ({
+    en: "🏎️ Dry line appearing.",
+    es: "🏎️ Carril seco aparecendo.",
+    fr: "🏎️ Trajectoire sèche visible.",
+    tr: "🏎️ Kuru hat oluşuyor.",
+    pt: "🏎️ A pista está secando, trilho seco aparente.",
+  }),
+  CLOUDS_FORMING: (): LocalizedMessageFunction => ({
+    en: "☁️ Heavy clouds arriving.",
+    es: "☁️ Nubes pesadas llegando.",
+    fr: "☁️ Nuages lourds arrivent.",
+    tr: "☁️ Ağır bulutlar geliyor.",
+    pt: "☁️ Nuvens pesadas se aproximando.",
+  }),
+  RAIN_IN_1_MIN: (): LocalizedMessageFunction => ({
+    en: "⏳ RAIN IN 1 MINUTE!",
+    es: "⏳ ¡LLUVIA EN 1 MINUTO!",
+    fr: "⏳ PLUIE DANS 1 MINUTE !",
+    tr: "⏳ 1 DAKİKA İÇİNDE YAĞMUR!",
+    pt: "⏳ CHUVA CHEGANDO EM 1 MINUTO!",
+  }),
+  RAIN_STOPPING_1_MIN: (): LocalizedMessageFunction => ({
+    en: "⏳ Rain stops in 1 min.",
+    es: "⏳ Lluvia para en 1 min.",
+    fr: "⏳ Fin de pluie dans 1 min.",
+    tr: "⏳ Yağmur 1 dk içinde biter.",
+    pt: "⏳ A chuva deve parar em 1 minuto.",
+  }),
+  RAIN_INTENSIFYING: (): LocalizedMessageFunction => ({
+    en: "⛈️ Rain is getting HEAVIER!",
+    es: "⛈️ ¡Aumenta la INTENSIDAD!",
+    fr: "⛈️ La pluie REDOUBLE !",
+    tr: "⛈️ Yağmur ŞİDDETLENİYOR!",
+    pt: "⛈️ A chuva está APERTANDO, cuidado!",
+  }),
+  RAIN_WEAKENING: (): LocalizedMessageFunction => ({
+    en: "🌦️ Rain is weakening.",
+    es: "🌦️ La lluvia disminuye.",
+    fr: "🌦️ La pluie faiblit.",
+    tr: "🌦️ Yağmur hafifliyor.",
+    pt: "🌦️ A chuva está perdendo força.",
+  }),
+  SECTOR_DIFFERENCE: (): LocalizedMessageFunction => ({
+    en: "📊 Water varies by sector!",
+    es: "📊 ¡Agua varia por sector!",
+    fr: "📊 L'eau varie par secteur !",
+    tr: "📊 Sektöre göre su değişiyor!",
+    pt: "📊 Nível de água diferente entre os setores! (Pista mista)",
   }),
 };

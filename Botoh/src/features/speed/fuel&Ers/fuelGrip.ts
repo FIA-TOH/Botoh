@@ -1,5 +1,4 @@
 import { PlayerInfo } from "../../changePlayerState/playerList";
-import { grip } from "../../rain/rainGrip";
 import { Tires } from "../../tires&pits/tires";
 import { constants } from "../constants";
 import { gasEnabled } from "../handleSlipstream";

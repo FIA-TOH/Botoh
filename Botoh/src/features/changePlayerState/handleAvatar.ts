@@ -6,7 +6,6 @@ export enum Situacions {
   ChangeTyre = "ChangeTyre",
   Ers = "Ers",
   Speed = "Speed",
-  Rain = "Rain",
   Flag = "Flag",
   Null = "Null",
   CanLeavePit = "CanLeavePit",
@@ -14,6 +13,7 @@ export enum Situacions {
   Wrong = "Wrong",
   NeedPit = "NeedPit",
   BlowoutWarning = "BlowoutWarning",
+  Direction = "Direction",
   Sandbag = "Sandbag",
 }
 
@@ -30,7 +30,7 @@ export const TIRE_AVATAR: { [key in Tires]: string } = {
 const currentSituacion: Record<number, Situacions> = {};
 
 const SITUATION_PRIORITY: Record<Situacions, number> = {
-  [Situacions.Rain]: 8,
+  [Situacions.Direction]: 9,
   [Situacions.Flag]: 7,
   [Situacions.CanLeavePit]: 7,
   [Situacions.Wrong]: 6,
@@ -86,31 +86,6 @@ const situationHandlers: Record<
     durations?: number[],
   ) => void
 > = {
-  [Situacions.Rain]: (player, room, _, emoji, durations) => {
-    if (!emoji || !durations) return;
-    let currentEmojiIndex = 0;
-
-    const showNextEmoji = () => {
-      if (!playerList[player.id]) return;
-      room.setPlayerAvatar(player.id, emoji[currentEmojiIndex]);
-      const delay = durations[currentEmojiIndex];
-      currentEmojiIndex++;
-
-      if (currentEmojiIndex < emoji.length) {
-        playerTimers[player.id].timeout = setTimeout(showNextEmoji, delay);
-      }
-    };
-
-    showNextEmoji();
-
-    playerTimers[player.id].timeout = setTimeout(
-      () => {
-        restoreTyreOrCar(player.id, room);
-        currentSituacion[player.id] = Situacions.Null;
-      },
-      durations.reduce((a, b) => a + b, 0),
-    );
-  },
 
   [Situacions.Flag]: (player, room, _, emoji, durations) => {
     if (!emoji || !durations) return;
@@ -203,6 +178,12 @@ const situationHandlers: Record<
 
   [Situacions.ChangeTyre]: (player, room) => {
     restoreTyreOrCar(player.id, room);
+  },
+
+  [Situacions.Direction]: (player, room, arg) => {
+    if (arg) {
+      room.setPlayerAvatar(player.id, arg);
+    }
   },
 
   [Situacions.Null]: (player, room) => {

@@ -121,11 +121,7 @@ export default function fr_commands(
     args: string[],
     room: RoomObject,
   ) => void,
-  handleRainCommand: (
-    byPlayer: PlayerObject,
-    args: string[],
-    room: RoomObject,
-  ) => void,
+ 
   handleToggleSystems: (
     byPlayer: PlayerObject,
     args: string[],
@@ -151,16 +147,7 @@ export default function fr_commands(
     args: string[],
     room: RoomObject,
   ) => void,
-  handleRainItensity: (
-    byPlayer: PlayerObject,
-    args: string[],
-    room: RoomObject,
-  ) => void,
-  handleEndRainCommand: (
-    byPlayer: PlayerObject,
-    args: string[],
-    room: RoomObject,
-  ) => void,
+ 
   handleAfkCommand: (
     byPlayer: PlayerObject,
     args: string[],
@@ -187,11 +174,7 @@ export default function fr_commands(
     args: string[],
     room: RoomObject,
   ) => void,
-  handleExplainRainCommand: (
-    byPlayer: PlayerObject,
-    args: string[],
-    room: RoomObject,
-  ) => void,
+ 
   handleExplainErsCommand: (
     byPlayer: PlayerObject,
     args: string[],
@@ -332,6 +315,16 @@ export default function fr_commands(
     args: string[],
     room: RoomObject,
   ) => void,
+  handleDefineRain: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
+  handleSetNewWeatherId: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
 ): Commands {
   return {
     "!admin": handleAdminCommand,
@@ -360,14 +353,13 @@ export default function fr_commands(
     "!avatar": handleAvatarCommand,
     "!clear_time": handleClearTimeCommand,
     "!mute": handleMuteCommand,
-    "!pluie": handleRainCommand,
+    
     "!enable": handleToggleSystems,
     "!essence": handleGasCommand,
     "!fantome": handleGhostCommand,
     "!toggle_rr": handleRREnabledCommand,
     "!rr": handleRRCommand,
-    "!rain_intensity": handleRainItensity,
-    "!end_rain": handleEndRainCommand,
+   
     "!afk": handleAfkCommand,
     "!revenir": handleAfkCommand,
     "!enable_qualy_for_pub": handleEnableQualyForPub,
@@ -375,7 +367,7 @@ export default function fr_commands(
     "!astuce": handleTipsCommands,
     "!explain_tyres": handleExplainTyresCommand,
     "!explain_server": handleExplainServerCommand,
-    "!explain_rain": handleExplainRainCommand,
+   
     "!explain_ers": handleExplainErsCommand,
     "!everyone_laps": handleEveryoneLapsCommand,
     "!tp": handleTpCommand,
@@ -404,5 +396,7 @@ export default function fr_commands(
     "!clear_debris": handleClearDebrisCommand,
     "!upgrade": handleUpgradeCommand,
     "!sandbag": handleSandbagCommand,
+    "!rain": handleDefineRain,
+    "!set_weather_id": handleSetNewWeatherId,
   };
 }

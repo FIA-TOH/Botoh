@@ -1,22 +1,4 @@
 import { playerList } from "../../changePlayerState/playerList";
-// import { isRaining, rainEnabled } from "../../rain/rain";
-
-const isRaining = false;
-const rainEnabled = false;
-
-export function updateGripCounter(
-  playersAndDiscs: { p: PlayerObject; disc: DiscPropertiesObject }[]
-) {
-  playersAndDiscs.forEach((player) => {
-    const playerInfo = playerList[player.p.id];
-
-    if (isRaining && rainEnabled) {
-      playerInfo.gripCounter++;
-    }
-
-    playerList[player.p.id] = playerInfo;
-  });
-}
 
 export function calculateGripMultiplier(
   wear: number,

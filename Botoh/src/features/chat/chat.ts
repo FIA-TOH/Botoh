@@ -58,6 +58,19 @@ export function sendMessage(
   }
 }
 
+export function sendCyanMessage(
+  room: RoomObject,
+  message: LocalizedMessageFunction,
+  sound?: SOUNDS,
+) {
+  room.getPlayerList().forEach((player) => {
+    const language = getPlayerLanguage(player.id);
+    room.sendAnnouncement(message[language], player.id, COLORS.CYAN, FONTS.BOLD, sound);
+  });
+
+  log(message[defaultLang] as string);
+}
+
 export function sendNonLocalizedSmallChatMessage(
   room: RoomObject,
   message: string,

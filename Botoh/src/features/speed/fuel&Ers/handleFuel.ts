@@ -15,7 +15,7 @@ export function updateErs(
     const playerInfo = playerList[p.id];
 
     if (room.getScores()?.time > 0) {
-      if (properties.damping === 0.986) {
+      if (properties.damping === 0.986 || properties.damping === 0.9905) {
         handleAvatar(Situacions.Ers, p, room);
       } else {
         if (playerInfo.kers < 100) {

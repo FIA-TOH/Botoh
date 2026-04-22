@@ -5,6 +5,18 @@ export enum Direction {
   DOWN,
 }
 
+export enum SpecificDirection {
+  LEFT,
+  RIGHT,
+  UP,
+  DOWN,
+  LEFTDOWN,
+  LEFTUP,
+  RIGHTDOWN,
+  RIGHTUP,
+}
+
+
 export interface HitboxBounds {
   minX: number;
   maxX: number;
@@ -16,6 +28,15 @@ export interface DirectedHitboxBounds {
   bounds: HitboxBounds;
   passingDirection: Direction;
 }
+
+export type DirectionChangerDetector = {
+  index: string;
+  direction: SpecificDirection;
+  v0: [number, number];
+  v1: [number, number];
+  force: number,
+  sector: number,
+};
 
 export type CutSegment = {
   index: number;
@@ -48,6 +69,7 @@ export interface CircuitInfo {
   CutDetectSegments?: CutSegment[];
   haveDebris?: boolean;
   physicsType?: CircuitPhysics;
+  DirectionChangerDetector?: DirectionChangerDetector[]
 }
 
 export interface Circuit {

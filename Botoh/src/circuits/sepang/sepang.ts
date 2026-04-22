@@ -4,7 +4,7 @@ import { readFileSync } from "fs";
 import { join } from "path";
 
 import { bestTimes } from "../bestTimes";
-import { Circuit, CircuitInfo, Direction } from "../Circuit";
+import { Circuit, CircuitInfo, CircuitPhysics, Direction, SpecificDirection } from "../Circuit";
 
 const sepang_raw = readFileSync(join(__dirname, "sepang.hbs"), "utf-8");
 const sepang_json = JSON.parse(sepang_raw);
@@ -107,6 +107,7 @@ const SEPANG_INFO: CircuitInfo = {
   Angle: 0,
   Limit: 5,
   Votes: 0,
+  physicsType: CircuitPhysics.WEC_NEWGEN,
   CutDetectSegments: [
     {
       v0: [1749, -82],
@@ -199,6 +200,161 @@ const SEPANG_INFO: CircuitInfo = {
       penalty: 5,
     },
   ],
+DirectionChangerDetector: [
+
+  // 000001
+  {
+    v0: [-2204, -187],
+    v1: [-2206, 2],
+    index: "000001",
+    direction: SpecificDirection.LEFT,
+    force: 0.6,
+    sector: 1
+  },
+
+  // 000002
+  {
+    v0: [-2333, -186],
+    v1: [-2742, -642],
+    index: "000002",
+    direction: SpecificDirection.UP,
+    force: 0.2,
+    sector: 1
+  },
+
+  // 000003
+  {
+    v0: [-2045, -512],
+    v1: [-2240, -195],
+    index: "000003",
+    direction: SpecificDirection.RIGHTDOWN,
+    force: 0.4,
+    sector: 1
+  },
+
+  // 000004
+  {
+    v0: [-1834, -1345],
+    v1: [-2365, -1456],
+    index: "000004",
+    direction: SpecificDirection.UP,
+    force: 0.4,
+    sector: 1
+  },
+
+  // 000005
+  {
+    v0: [66, -1881],
+    v1: [16, -2180],
+    index: "000005",
+    direction: SpecificDirection.RIGHT,
+    force: 0.6,
+    sector: 2
+  },
+
+  // 000006
+  {
+    v0: [211, -1124],
+    v1: [500, -1130],
+    index: "000006",
+    direction: SpecificDirection.DOWN,
+    force: 0.4,
+    sector: 2
+  },
+
+
+  // 000008
+  {
+    v0: [1453, -868],
+    v1: [1159, -870],
+    index: "000008",
+    direction: SpecificDirection.UP,
+    force: 0.5,
+    sector: 2
+  },
+
+  // 000009
+  {
+    v0: [2226, -129],
+    v1: [2411, -283],
+    index: "000009",
+    direction: SpecificDirection.RIGHTDOWN,
+    force: 0.7,
+    sector: 2
+  },
+
+  // 000010
+  {
+    v0: [2100, 193],
+    v1: [2526, 500],
+    index: "000010",
+    direction: SpecificDirection.LEFTDOWN,
+    force: 0.4,
+    sector: 2
+  },
+
+  // 000011
+  {
+    v0: [459, 413],
+    v1: [468, 651],
+    index: "000011",
+    direction: SpecificDirection.LEFT,
+    force: 0.8,
+    sector: 2
+  },
+
+  // 000012
+  {
+    v0: [692, 1100],
+    v1: [798, 834],
+    index: "000012",
+    direction: SpecificDirection.RIGHT,
+    force: 0.5,
+    sector: 2
+  },
+
+  // 000013
+  {
+    v0: [674, 1685],
+    v1: [1109, 2019],
+    index: "000013",
+    direction: SpecificDirection.LEFTDOWN,
+    force: 0.4,
+    sector: 2
+  },
+
+  // 000014
+  {
+    v0: [-402, 947],
+    v1: [-145, 789],
+    index: "000014",
+    direction: SpecificDirection.UP,
+    force: 0.6,
+    sector: 3
+  },
+
+  // 000015
+  {
+    v0: [-1970, 710],
+    v1: [-2443, 761],
+    index: "000015",
+    direction: SpecificDirection.UP,
+    force: 0.7,
+    sector: 3
+  },
+
+  // 000016
+  {
+    v0: [1394, 48],
+    v1: [1430, 361],
+    index: "000016",
+    direction: SpecificDirection.RIGHT,
+    force: 0.9,
+    sector: 2
+  }
+
+
+]
 };
 
 export const SEPANG: Circuit = {

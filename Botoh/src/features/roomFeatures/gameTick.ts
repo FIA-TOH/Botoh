@@ -5,9 +5,11 @@ import { checkPlayerSector } from '../zones/handleSectorChange';
 
 import { handlePitlane } from '../tires&pits/pitLane';
 import { getRunningPlayers, vectorSpeed } from '../utils';
-import { updateGripCounter } from '../speed/grip/grip';
 import handleTireWear from '../tires&pits/handleTireWear';
+import { handleAvatar, Situacions } from '../changePlayerState/handleAvatar';
+import { playerList } from '../changePlayerState/playerList';
 import { getPlayerAndDiscs } from '../playerFeatures/getPlayerAndDiscs';
+import { detectDirectionChangers } from '../speed/directionChanger';
 import {
   handleChangeCollisionPlayerSuzuka,
   handleChangePlayerSizeSuzuka,
@@ -23,6 +25,8 @@ import { mainLapCommand } from '../zones/laps/mainLapCommands';
 import { checkTrainingHourlyLog } from '../counters/checkTrainingHourlyLog';
 import { updateDebrisTouch } from '../debris/detectCollisionDebris';
 import { handleChangeCollisionPlayerCano, handleChangePlayerSizeCano } from '../zones/handleCanoTp';
+import { checkWeatherUpdate } from '../weather/weatherManager';
+import { logPlayerSpeed } from '../speed/logPlayerSpeed';
 
 const detectCutThrottledByPlayer: Map<number, ReturnType<typeof throttlePerSecond>> = new Map();
 
@@ -37,15 +41,20 @@ export function GameTick(room: RoomObject) {
     const players = getRunningPlayers(playersAndDiscs);
 
     endRaceSession(playersAndDiscs, room);
-    updateGripCounter(playersAndDiscs);
     updateErs(playersAndDiscs, room);
     setBallPosition(room);
     checkTrainingHourlyLog();
     updateDebrisTouch(room);
+    logPlayerSpeed(playersAndDiscs, room);
 
     if (gameMode !== GameMode.WAITING) {
       handlePitlane(playersAndDiscs, room);
+      detectDirectionChangers(playersAndDiscs, room);
       distributeSpeed(playersAndDiscs, room);
+      //Avatar Updated based on direction
+      // playersAndDiscs.forEach(({ p, disc }) => {
+      //   updatePlayerDirection(p, disc, room);
+      // });
       checkPlayerSector(playersAndDiscs, room);
       mainLapCommand(playersAndDiscs, room);
     }
@@ -74,6 +83,7 @@ export function GameTick(room: RoomObject) {
     });
 
     afkKick(room);
+    checkWeatherUpdate(room);
 
     if (room.getScores()?.time && room.getScores().time > 0) {
       gameStarted = true;

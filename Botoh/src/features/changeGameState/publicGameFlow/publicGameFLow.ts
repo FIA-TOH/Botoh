@@ -6,7 +6,6 @@ import { handleExplainErsCommand } from "../../commands/ersAndFuel/handleExplain
 import { qualyForPub } from "../../commands/gameMode/qualy/handleEnableQualyForPub";
 import { printAllTimes } from "../../commands/gameMode/qualy/printAllTimes";
 import { printAllPositions } from "../../commands/gameMode/race/printAllPositions";
-import { handleExplainRainCommand } from "../../commands/rain/handleExplainRainCommand";
 import { handleExplainTyresCommand } from "../../commands/tyres/handleExplainTyresCommand";
 import {
   sendQualiResultsToDiscord,
@@ -19,7 +18,6 @@ import {
   reorderPlayersInRoomRace,
 } from "../../movePlayers/reorderPlayersInRoom";
 import { tyresActivated } from "../../tires&pits/tires";
-// import { rainEnabled } from "../../rain/rain";
 import { delay } from "../../utils";
 import { CIRCUITS, handleChangeMap } from "../../zones/maps";
 import {
@@ -68,10 +66,6 @@ export default async function PublicGameFlow(room: RoomObject) {
       handleExplainTyresCommand(undefined, undefined, room);
       await delay(5);
     }
-    // if (rainEnabled) {
-    //   handleExplainRainCommand(undefined, undefined, room);
-    //   await delay(5);
-    // }
     handleExplainErsCommand(undefined, undefined, room);
     await delay(5);
 
@@ -124,10 +118,6 @@ export default async function PublicGameFlow(room: RoomObject) {
       handleExplainTyresCommand(undefined, undefined, room);
       await delay(5);
     }
-    // if (rainEnabled) {
-    //   handleExplainRainCommand(undefined, undefined, room);
-    //   await delay(5);
-    // }
     handleExplainErsCommand(undefined, undefined, room);
     await delay(5);
 

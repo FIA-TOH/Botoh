@@ -96,8 +96,16 @@ export interface PlayerInfo {
   lastLapValid?: boolean;
 
   lastDir?: Direction;
+  curveResistanceTicks?: number;
   slipTicks?: number;
   slipDir?: Direction;
+  directionChangerEndTime?: number;
+  directionChangerX?: number;
+  directionChangerY?: number;
+  directionChangerForce?: number;
+
+  currentDirection?: string;
+  currentDirectionEmoji?: string;
 
   previousPos: { x: number | null; y: number | null };
 

@@ -1,0 +1,1 @@
+export let lastWeatherId: string | null = null;
