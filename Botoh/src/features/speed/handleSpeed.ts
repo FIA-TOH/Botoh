@@ -1,17 +1,12 @@
 import { playerList, PlayerInfo } from "../changePlayerState/playerList";
 import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
 import { vsc } from "../safetyCar/vsc";
-import { getRunningPlayers } from "../utils";
+import { getRunningPlayers, vectorSpeed } from "../utils";
 import { calculateTotalGripMultiplier } from "./grip/calculateTotalGripMultiplier";
 import { applyPitAndVscRules } from "./pitAndVscRules";
 import { calculateSlipstreamEffect } from "./slipstream/slipstreamUtils";
 import { getDirectionChangerGravity } from "./directionChanger";
 
-/**
- * Function that sets a players max speed.
- *
- * Note: This does require a high tick-rate. At least on Chrome, this requires the headless host tab to be visible/selected.
- */
 export function controlPlayerSpeed(
   playersAndDiscsSubset: { p: PlayerObject; disc: DiscPropertiesObject }[],
   room: RoomObject
@@ -34,6 +29,8 @@ export function controlPlayerSpeed(
       });
       return;
     }
+
+    const currentSpeed = vectorSpeed(disc.xspeed, disc.yspeed);
 
     const slipstreamData = calculateSlipstreamEffect(
       p,
@@ -64,8 +61,12 @@ export function controlPlayerSpeed(
     );
 
     const directionChangerGravity = getDirectionChangerGravity(
+      p,
       playerInfo,
-      currentTime
+      currentTime,
+      currentSpeed,
+      disc,
+      room
     );
 
     room.setPlayerDiscProperties(p.id, {
@@ -84,8 +85,8 @@ function calculateCurveResistance(
   const x = disc.xspeed;
   const y = disc.yspeed;
   const speed = Math.sqrt(x * x + y * y);
-  const MIN_SPEED_FOR_RESISTANCE = 0.15; // Velocidade mínima para aplicar resistência
-  const MIN_CURVE_ANGLE = 0.15; // ~8.5°
+  const MIN_SPEED_FOR_RESISTANCE = 0.15;
+  const MIN_CURVE_ANGLE = 0.15;
 
   if (speed < MIN_SPEED_FOR_RESISTANCE) {
     return { x: 0, y: 0 };
@@ -135,39 +136,3 @@ function calculateCurveResistance(
   };
 }
 
-// function detectStartJump(
-//     p: PlayerObject, disc: DiscPropertiesObject,
-//     room: RoomObject
-//   ): boolean {
-//     const scores = room.getScores();
-//     if (!scores) return false;
-
-//     const reactionTimeTooFast = scores.time > 0 && scores.time < 0.05;
-//     const playerMoving = disc.xspeed != 0 || disc.yspeed != 0;
-//     const playerData = playerList[p.id];
-
-//     if (!playerData) return false;
-
-//     if(reactionTimeTooFast){
-//         console.log(disc.xspeed, disc.yspeed);
-//     }
-
-//     if(scores.time == 0){
-//         room.setPlayerDiscProperties(p.id, {
-//             xspeed: 0,
-//             yspeed: 0
-//         })
-//         return false;
-//     }
-//     if (playerData.penaltyCounter > 0) {
-//       playerData.penaltyCounter -= 1;
-//       return true;
-//     }
-
-//     if (reactionTimeTooFast && playerMoving) {
-//       playerData.penaltyCounter = 120;
-//       return true;
-//     }
-//     playerData.penaltyCounter = 0;
-//     return false;
-//   }

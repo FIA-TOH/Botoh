@@ -3,6 +3,15 @@ import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { playerList, PlayerInfo } from "../changePlayerState/playerList";
 import { calculateTotalDrift, driftToForceMultiplier, getCurrentTireType, shouldCalculateDrift } from "../weather/rain/driftCalculator";
 import { DRIFT_CONFIG } from "../weather/driftConfig";
+import { maxSpeedFromGrip } from "./getMaxSpeed";
+import { calculateTotalGripMultiplier } from "./grip/calculateTotalGripMultiplier";
+import { calculateSlipstreamEffect } from "./slipstream/slipstreamUtils";
+
+function calculateSpeedDriftReduction(speedRatio: number): number {
+  if (speedRatio >= 1.0) return 1.0;
+  const reductionFactor = Math.max(0.05, speedRatio * 1.5 - 0.5);
+  return Math.min(1.0, reductionFactor);
+}
 
 const playerPassedDetectors = new Map<number, Set<string>>();
 
@@ -130,8 +139,12 @@ function applyDirectionChangerEffect(
 }
 
 export function getDirectionChangerGravity(
+  player: PlayerObject,
   playerInfo: PlayerInfo,
-  currentTime: number
+  currentTime: number,
+  currentSpeed: number = 0,
+  playerDisc?: DiscPropertiesObject,
+  room?: RoomObject
 ) {
   const directionChangerEndTime = playerInfo.directionChangerEndTime;
   const vectorX = playerInfo.directionChangerX;
@@ -158,7 +171,40 @@ export function getDirectionChangerGravity(
   }
 
   const progress = remaining / DRIFT_CONFIG.DIRECTION_CHANGER_DURATION;
-  const intensity = force * progress;
+  
+  // Calcular grip atual do jogador para determinar velocidade máxima
+  let currentGrip = 1.0;
+  if (playerDisc && room) {
+    const slipstreamData = calculateSlipstreamEffect(
+      player,
+      playerDisc,
+      [],
+      currentTime,
+      playerInfo,
+      false
+    );
+    
+    currentGrip = calculateTotalGripMultiplier(
+      player,
+      playerDisc,
+      playerInfo,
+      slipstreamData.effectiveSlipstream,
+      currentTime,
+      room
+    );
+  }
+  
+  // Obter velocidade máxima baseada no grip atual
+  const maxSpeedForGrip = maxSpeedFromGrip(currentGrip);
+  
+  // Calcular razão de velocidade (velocidade atual / velocidade máxima)
+  const speedRatio = maxSpeedForGrip > 0 ? currentSpeed / maxSpeedForGrip : 0;
+  
+  // Aplicar redução linear baseada na velocidade
+  const speedDriftFactor = calculateSpeedDriftReduction(speedRatio);
+  
+  // Aplicar todos os cálculos de drift (pneu, chuva, molhado, força do detector) e depois aplicar fator de velocidade
+  const intensity = force * progress * speedDriftFactor;
 
   return {
     x: vectorX * intensity,

@@ -1,5 +1,5 @@
 import { bestTimes } from "../bestTimes";
-import { Circuit, CircuitInfo, Direction, SpecificDirection } from "../Circuit";
+import { Circuit, CircuitInfo, CircuitPhysics, Direction, SpecificDirection } from "../Circuit";
 
 import { readFileSync } from "fs";
 import { join } from "path";
@@ -90,6 +90,7 @@ const IMOLA_INFO: CircuitInfo = {
   Limit: 5,
   Votes: 0,
   TireDegradationPercentage: 5,
+  physicsType: CircuitPhysics.WEC_NEWGEN,
   CutDetectSegments: [
     {
       v0: [1862, 909],

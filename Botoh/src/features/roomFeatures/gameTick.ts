@@ -26,6 +26,7 @@ import { checkTrainingHourlyLog } from '../counters/checkTrainingHourlyLog';
 import { updateDebrisTouch } from '../debris/detectCollisionDebris';
 import { handleChangeCollisionPlayerCano, handleChangePlayerSizeCano } from '../zones/handleCanoTp';
 import { checkWeatherUpdate } from '../weather/weatherManager';
+import { logPlayerSpeed } from '../speed/logPlayerSpeed';
 
 const detectCutThrottledByPlayer: Map<number, ReturnType<typeof throttlePerSecond>> = new Map();
 
@@ -44,6 +45,7 @@ export function GameTick(room: RoomObject) {
     setBallPosition(room);
     checkTrainingHourlyLog();
     updateDebrisTouch(room);
+    logPlayerSpeed(playersAndDiscs, room);
 
     if (gameMode !== GameMode.WAITING) {
       handlePitlane(playersAndDiscs, room);
@@ -87,49 +89,6 @@ export function GameTick(room: RoomObject) {
       gameStarted = true;
     }
   };
-}
-
-function getDirectionFromVelocity(x: number, y: number) {
-  const speed = Math.sqrt(x * x + y * y);
-  if (speed < 0.005) {
-    return { direction: "Parado", emoji: "⏹️" };
-  }
-
-  const angle = (Math.atan2(y, x) * 180) / Math.PI;
-  if (angle >= -22.5 && angle < 22.5) {
-    return { direction: "Leste", emoji: "➡️" };
-  }
-  if (angle >= 22.5 && angle < 67.5) {
-    return { direction: "Sudeste", emoji: "↘️" };
-  }
-  if (angle >= 67.5 && angle < 112.5) {
-    return { direction: "Sul", emoji: "⬇️" };
-  }
-  if (angle >= 112.5 && angle < 157.5) {
-    return { direction: "Sudoeste", emoji: "↙️" };
-  }
-  if (angle >= 157.5 || angle < -157.5) {
-    return { direction: "Oeste", emoji: "⬅️" };
-  }
-  if (angle >= -157.5 && angle < -112.5) {
-    return { direction: "Noroeste", emoji: "↖️" };
-  }
-  if (angle >= -112.5 && angle < -67.5) {
-    return { direction: "Norte", emoji: "⬆️" };
-  }
-  return { direction: "Nordeste", emoji: "↗️" };
-}
-
-function updatePlayerDirection(player: PlayerObject, disc: DiscPropertiesObject, room: RoomObject) {
-  const playerInfo = playerList[player.id];
-  if (!playerInfo || !disc) return;
-
-  const { direction, emoji } = getDirectionFromVelocity(disc.xspeed, disc.yspeed);
-  playerInfo.currentDirection = direction;
-  playerInfo.currentDirectionEmoji = emoji;
-  playerList[player.id] = playerInfo;
-
-  handleAvatar(Situacions.Direction, player, room, emoji);
 }
 
 export function throttlePerSecond<T extends any[]>(fn: (...args: T) => void, perSecond: number) {

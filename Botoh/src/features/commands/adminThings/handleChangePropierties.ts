@@ -12,12 +12,13 @@ export function handleChangePropierties(
     sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id);
     return;
   }
-  if (!args) {
+  if (!args || !args[0] || !args[1]) {
     room.sendAnnouncement(
       "Correct use: !constants [CONSTANT] [value]",
       byPlayer.id,
       0xff0000
     );
+    return;
   }
   const key = args[0].toUpperCase() as keyof typeof constants;
   const value = Number(args[1]);

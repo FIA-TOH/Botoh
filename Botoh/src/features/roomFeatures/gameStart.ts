@@ -18,6 +18,7 @@ import { decideBlowoutPoint } from "../tires&pits/tireBlowManager";
 import { Teams } from "../changeGameState/teams";
 import { positionList } from "../commands/gameMode/race/positionList";
 import { initBattleRoyale } from "../commands/gameMode/battleRoyale.ts/handleBattleRoyaleLaps";
+import { playerList } from "../changePlayerState/playerList";
 
 export function GameStart(room: RoomObject) {
   room.onGameStart = function (byPlayer) {
@@ -25,8 +26,6 @@ export function GameStart(room: RoomObject) {
       ? log(`Game started`)
       : log(`Game started by ${byPlayer.name}`);
     handleGameStateChange("running", room);
-
-    // Start weather monitoring if last weather ID exists
     try {
       const fs = require("fs");
       const path = require("path");
@@ -36,7 +35,6 @@ export function GameStart(room: RoomObject) {
         const lastWeatherData = JSON.parse(fs.readFileSync(lastWeatherPath, "utf-8"));
         if (lastWeatherData.lastWeatherId) {
           startWeatherMonitoring(lastWeatherData.lastWeatherId, room);
-          // Send initial weather announcement for this game
           sendInitialWeatherAnnouncement(lastWeatherData.lastWeatherId, room);
         }
       }
@@ -59,6 +57,7 @@ export function GameStart(room: RoomObject) {
     room.getPlayerList().forEach((p) => {
       resetPlayer(p, room, p.id, true);
       updatePlayerActivity(p);
+      playerList[p.id].speedEnabled = true;
       if (p.team === Teams.RUNNERS) {
         decideBlowoutPoint(p);
       }

@@ -12,7 +12,11 @@ export function maxSpeedFromGrip(grip: number) {
   if (Physics === CircuitPhysics.F1_NEWGEN) {
     coef = 2451.5588;
     intercept = -2356.99881;
-  } else if (Physics === CircuitPhysics.INDY) {
+  }  if (Physics === CircuitPhysics.WEC_NEWGEN) {
+    coef = 2451.5588;
+    intercept = -2356.99881;
+  }
+  else if (Physics === CircuitPhysics.INDY) {
     coef = 18898.58;
     intercept = -18699.3803;
   } else {

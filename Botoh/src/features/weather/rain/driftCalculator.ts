@@ -66,7 +66,7 @@ let lastWeatherUpdate = 0;
 
 
 export function shouldCalculateDrift(rainAmount: number, wetness: number): boolean {
-  return wetness > 0 && rainAmount > 0;
+  return wetness > 0 || rainAmount > 0;
 }
 
 
@@ -117,7 +117,11 @@ export function calculateTotalDrift(tireType: TireType, sector: number, currentT
   const rainDrift = calculateRainDrift(rainAmount, tireType);
   
   const totalDrift = wetnessDrift + rainDrift;
-  const finalDrift = Math.min(totalDrift, DEFAULT_VALUES.MAX_TOTAL_DRIFT);
+  let finalDrift = Math.min(totalDrift, DEFAULT_VALUES.MAX_TOTAL_DRIFT);
+  
+  if (tireType === TireType.DRY) {
+    finalDrift = Math.min(finalDrift * 4, DEFAULT_VALUES.MAX_TOTAL_DRIFT);
+  }
   
   driftCache.set(cacheKey, finalDrift);
   

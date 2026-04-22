@@ -4,7 +4,7 @@ import { readFileSync } from "fs";
 import { join } from "path";
 
 import { bestTimes } from "../bestTimes";
-import { Circuit, CircuitInfo, Direction, SpecificDirection } from "../Circuit";
+import { Circuit, CircuitInfo, CircuitPhysics, Direction, SpecificDirection } from "../Circuit";
 
 const sepang_raw = readFileSync(join(__dirname, "sepang.hbs"), "utf-8");
 const sepang_json = JSON.parse(sepang_raw);
@@ -107,6 +107,7 @@ const SEPANG_INFO: CircuitInfo = {
   Angle: 0,
   Limit: 5,
   Votes: 0,
+  physicsType: CircuitPhysics.WEC_NEWGEN,
   CutDetectSegments: [
     {
       v0: [1749, -82],
