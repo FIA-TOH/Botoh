@@ -64,6 +64,7 @@ const trackNameMapping: { [key: string]: string } = {
   baku_clic: "Baku - Clicquot",
   cano_sexcuit: "Cano Sexcuit by Rodri",
   sroda: "Sroda Track",
+    le_mans: "Le Mans By Nanoseb Remake",
 };
 
 export const bestTimes: { [key: string]: [number, string, string] } = {
@@ -152,6 +153,7 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   baku_clic: [44.000, "Cliquot", "Baku - Clicquot"],
   cano_sexcuit: [999.99, "undefined", "Cano Sexcuit by Rodri"],
   sroda: [999.99, "undefined", "Sroda Track"],
+  le_mans: [999.99, "undefined", "Le Mans By Nanoseb Remake"],
 };
 export const getAbbreviatedTrackName = (
   fullTrackName: string,

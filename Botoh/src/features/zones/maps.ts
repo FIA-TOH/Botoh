@@ -103,6 +103,7 @@ import { BAKU_CLIC } from "../../circuits/baku/baku_clic";
 import { CANO } from "../../circuits/cano/cano";
 import { CANO_SEXCUIT } from "../../circuits/cano_sexcuit/cano_sexcuit";
 import { SRODA } from "../../circuits/sroda/sroda";
+import { LE_MANS } from "../../circuits/le_mans/le_mans";
 // import {DAYTONA} from "../circuits/daytona/daytona";
 // import {BARCELONA} from "../circuits/barcelona/barcelona";
 // import {MACAU} from "../circuits/macau/macau";
@@ -175,6 +176,7 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
       BAKU_CLIC,
       CANO_SEXCUIT,
       SRODA,
+      LE_MANS,
       PODIUM,
       WAITROOM,
     ]
