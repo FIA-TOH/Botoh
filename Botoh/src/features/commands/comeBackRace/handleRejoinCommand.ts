@@ -1,3 +1,8 @@
+// TODO: This is an unfinished feature that allows players to rejoin races after disconnecting.
+// The functionality is not complete and may cause issues, so it's been disabled.
+// Uncomment this code when the rejoin feature is properly implemented and tested.
+
+/*
 import {
   GeneralGameMode,
   generalGameMode,
@@ -66,3 +71,4 @@ export function handleRejoinCommand(
 
   playersLeftInfo.splice(index, 1);
 }
+*/

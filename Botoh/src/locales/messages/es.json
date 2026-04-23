@@ -22,6 +22,7 @@
   "SAFETY_CAR": "¡Safety Car!",
   "SAFETY_CAR_ENTERING_TRACK": "Safety Car entrando a la pista en 10 segundos, ve al centro o quedarás atrapado fuera de la pista",
   "OVERTAKING_PROHIBITED": "Adelantamiento prohibido, reduce la velocidad",
+  "LAPPED_CARS_OVERTAKE": "Todos los pilotos retardatarios pueden adelantar al safety car hasta que alcancen el grid",
   "INFINITE_QUALI": "El tiempo de clasificación es ahora infinito",
   "QUALI_TIME": "El tiempo de clasificación es ahora de {{minutes}} minutos.",
   "NOT_IN_QUALI": "No estás en la clasificación",

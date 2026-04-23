@@ -408,6 +408,14 @@ export const MESSAGES = {
     pt: pt_messages.OVERTAKING_PROHIBITED,
   }),
 
+  LAPPED_CARS_OVERTAKE: (): LocalizedMessageFunction => ({
+    en: en_messages.LAPPED_CARS_OVERTAKE,
+    es: es_messages.LAPPED_CARS_OVERTAKE,
+    fr: fr_messages.LAPPED_CARS_OVERTAKE,
+    tr: tr_messages.LAPPED_CARS_OVERTAKE,
+    pt: pt_messages.LAPPED_CARS_OVERTAKE,
+  }),
+
   INFINITE_QUALI: (): LocalizedMessageFunction => ({
     en: en_messages.INFINITE_QUALI,
     es: es_messages.INFINITE_QUALI,

@@ -24,6 +24,7 @@ import { log } from "../discord/logger";
 import { changeLaps } from "../commands/adminThings/handleChangeLaps";
 import { handleRREnabledCommand } from "../commands/adminThings/handleRREnabledCommand";
 import { handleFlagCommand } from "../commands/flagsAndVSC/handleFlagCommand";
+import { handleSCCommand } from "../commands/flagsAndVSC/handleSCCommand";
 import { clearPlayerBuffAndNerfLists } from "../commands/adjustThings/handleNerfListCommand";
 import PublicGameFlow from "../changeGameState/publicGameFlow/publicGameFLow";
 import { sendDiscordReplay } from "../discord/discord";
@@ -136,6 +137,9 @@ export function GameStop(room: RoomObject) {
     resetDebrisUsedList();
     resetSessionBestSectors();
     resetSandbag(room);
+    
+    // Reset safety car state when game stops
+    handleSCCommand(undefined, ["off"], room);
     
     // Reset lastWeatherId when game stops
     try {

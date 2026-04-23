@@ -60,7 +60,13 @@ import { handleCameraPositionFollow } from "./camera/handleCameraPositionFollow"
 import { handleCameraProperties } from "./camera/handleCameraProperties";
 import { handleChangeGameFLow } from "./gameState/gameFlow";
 import { handleSetMinimumPit } from "./tyres/handleSetMinimumPit";
-import { handleRejoinCommand } from "./comeBackRace/handleRejoinCommand";
+// import { handleRejoinCommand } from "./comeBackRace/handleRejoinCommand"; // Disabled - unfinished feature
+
+// Placeholder function to maintain correct parameter count
+const handleRejoinCommand = (byPlayer: PlayerObject, args: string[], room: RoomObject) => {
+  // This feature is disabled - unfinished functionality
+  return;
+};
 import { handleMoveToBoxCommand } from "../comeBackRace.ts/moveToBox";
 import { handlePlayerQuantity } from "./adminThings/handlePlayerQuantity";
 import { handleLimitPlayerQuantity } from "./adminThings/handleLimitPlayerQuantity";
@@ -360,7 +366,7 @@ export type CommandFunction = (
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject,
-  ) => void,
+  ) => void, // Disabled - unfinished feature
   handleMoveToBoxCommand: (
     byPlayer: PlayerObject,
     args: string[],

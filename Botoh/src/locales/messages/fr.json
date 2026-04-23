@@ -22,6 +22,7 @@
   "SAFETY_CAR": "Voiture de sécurité !",
   "SAFETY_CAR_ENTERING_TRACK": "Voiture de sécurité entrant sur la piste dans 10 secondes, allez au centre ou vous serez coincé hors de la piste",
   "OVERTAKING_PROHIBITED": "Dépassement interdit, réduisez la vitesse",
+  "LAPPED_CARS_OVERTAKE": "Tous les pilotes retardataires peuvent dépasser la voiture de sécurité jusqu'à atteindre la grille",
   "INFINITE_QUALI": "Le temps de qualification est maintenant infini",
   "QUALI_TIME": "Le temps de qualification est maintenant {{minutes}}.",
   "NOT_IN_QUALI": "Vous n'êtes pas en mode qualifications",

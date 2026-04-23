@@ -403,7 +403,7 @@ export default function pt_commands(
     "!camera_position": handleCameraPositionFollow,
     "!game_flow": handleChangeGameFLow,
     "!min_pit": handleSetMinimumPit,
-    "!rejoin": handleRejoinCommand,
+    // "!rejoin": handleRejoinCommand, // Disabled - unfinished feature
     "!move_to_box": handleMoveToBoxCommand,
     "!player_quantity": handlePlayerQuantity,
     "!set_max_players": handleLimitPlayerQuantity,

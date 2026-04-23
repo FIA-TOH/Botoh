@@ -22,6 +22,7 @@
   "SAFETY_CAR": "Safety Car!",
   "SAFETY_CAR_ENTERING_TRACK": "Safety Car entering the track in 10 seconds, go to the center or you will be stuck outside the track",
   "OVERTAKING_PROHIBITED": "Overtaking prohibited, reduce speed",
+  "LAPPED_CARS_OVERTAKE": "All lapped drivers may overtake the safety car until they reach the grid",
   "INFINITE_QUALI": "Qualification time is now infinite",
   "QUALI_TIME": "Qualification time is now {{minutes}} minutes.",
   "NOT_IN_QUALI": "You are not in qualification",

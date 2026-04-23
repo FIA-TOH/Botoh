@@ -16,12 +16,14 @@ export function getPitAndVscGravity(
   playerInfo: PlayerInfo,
   currentTime: number,
   vsc: boolean,
+  isLapped: boolean = false,
 ): GravityVector {
   let limiter = 0;
 
   if (playerInfo.inPitlane) {
     limiter = ACTUAL_CIRCUIT.info.pitSpeed ?? constants.DEFAULT_PIT_SPEED;
-  } else if (vsc) {
+  } else if (vsc && !isLapped) {
+    // Only apply safety car speed if NOT lapped
     limiter =
       gameMode === GameMode.INDY
         ? constants.SAFETY_CAR_INDY_SPEED
@@ -51,6 +53,7 @@ export function applyPitAndVscRules(
   playerInfo: PlayerInfo,
   currentTime: number,
   vsc: boolean,
+  isLapped: boolean = false,
 ): GravityVector {
   const gravity = getPitAndVscGravity(
     p,
@@ -59,6 +62,7 @@ export function applyPitAndVscRules(
     playerInfo,
     currentTime,
     vsc,
+    isLapped,
   );
 
   room.setPlayerDiscProperties(p.id, gravity);

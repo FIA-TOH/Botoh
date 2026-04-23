@@ -22,6 +22,7 @@
   "SAFETY_CAR": "Safety Car!",
   "SAFETY_CAR_ENTERING_TRACK": "Safety Car 10 saniye içinde pisteye girecek, merkeze gidin veya pistin dışında sıkışacaksınız",
   "OVERTAKING_PROHIBITED": "Yasaklanmış geçiş, hızı azaltın",
+  "LAPPED_CARS_OVERTAKE": "Tüm geri kalan sürücüler safety car'i grid'e ulaşana kadar geçebilir",
   "INFINITE_QUALI": "Sıralama süresi artık sınırsız",
   "QUALI_TIME": "Sıralama süresi artık {{minutes}} dakika.",
   "NOT_IN_QUALI": "Sıralama modunda değilsiniz",

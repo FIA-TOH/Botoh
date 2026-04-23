@@ -43,6 +43,7 @@ function shouldPauseAfkDetection(playerId: number): boolean {
   if (playerProps.inPitlane) return true;
   if (vsc || isSCActive()) return true;
   if (presentationLap) return true;
+  if (gameState === "paused") return true; // Pause AFK detection when game is paused
   
   return false;
 }
@@ -78,6 +79,34 @@ export function updatePlayerActivity(player: PlayerObject, room?: RoomObject) {
   if (playerProps) {
     playerProps.afkAlert = false;
   }
+}
+
+export function resetAllAfkCounters(room: RoomObject) {
+  const currentTime = getCurrentGameTime(room);
+  const players = room.getPlayerList();
+  
+  players.forEach(player => {
+    const playerId = player.id;
+    const playerProps = playerList[playerId];
+    
+    if (playerProps && player.team === Teams.RUNNERS) {
+      // Reset AFK counter for all active players
+      if (!playerActivities[playerId]) {
+        playerActivities[playerId] = {
+          lastActivityTime: currentTime,
+          lastWarningTime: 0,
+          warningSent: false,
+          vscActivated: false,
+          wasAfkWhenLeft: false,
+        };
+      }
+      
+      playerActivities[playerId].lastActivityTime = currentTime;
+      playerActivities[playerId].warningSent = false;
+      playerActivities[playerId].lastWarningTime = 0;
+      playerProps.afkAlert = false;
+    }
+  });
 }
 
 export function handlePlayerLeave(player: PlayerObject, room: RoomObject) {
