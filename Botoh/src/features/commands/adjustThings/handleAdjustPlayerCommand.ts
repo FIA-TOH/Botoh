@@ -1,4 +1,4 @@
-import { playerList } from "../../changePlayerState/playerList";
+﻿import { playerList } from "../../changePlayerState/playerList";
 import { sendErrorMessage, sendChatMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { getPlayerAndDiscs } from "../../playerFeatures/getPlayerAndDiscs";
@@ -60,33 +60,17 @@ export function handleAjustPlayerCommand(
     );
     return;
   }
+
   const playersAndDiscs = getPlayerAndDiscs(room);
-
   const players = getRunningPlayers(playersAndDiscs);
-  let playerEscolhido: { p: PlayerObject; disc: DiscPropertiesObject }[] = [];
-  const playerInfo = playerList[playerEscolhido[0].p.id];
+  const playerEscolhido = players.filter((p) => p.p.id === playerNumero);
 
-  if (!playerChoosen) {
-    room.sendAnnouncement("Choose a player.", byPlayer.id, 0xff0000);
-    return;
-  }
-
-  if (playerNumero !== undefined) {
-    playerEscolhido = players.filter((p) => p.p.id === playerNumero);
-  } else {
-    room.sendAnnouncement("Player not found.", byPlayer.id, 0xff0000);
-    return;
-  }
-  if (valueNumber !== undefined) {
-    playerEscolhido = players.filter((p) => p.p.id === playerNumero);
-  } else {
-    room.sendAnnouncement("Value must be a number.", byPlayer.id, 0xff0000);
-  }
-
-  if (playerEscolhido?.length === 0) {
+  if (playerEscolhido.length === 0) {
     room.sendAnnouncement("Choose a valid player.", byPlayer.id, 0xff0000);
     return;
   }
+
+  const playerInfo = playerList[playerEscolhido[0].p.id];
 
   if (adjust === "wear") {
     playerInfo.wear = valueNumber as number;
