@@ -28,6 +28,7 @@ import { handleChangeCollisionPlayerCano, handleChangePlayerSizeCano } from '../
 import { checkWeatherUpdate } from '../weather/weatherManager';
 import { logPlayerSpeed } from '../speed/logPlayerSpeed';
 import { updateLeagueStartAFKDetection } from '../afk/leagueStartAFKDetection';
+import { checkVSCDuration } from '../safetyCar/vsc';
 
 const detectCutThrottledByPlayer: Map<number, ReturnType<typeof throttlePerSecond>> = new Map();
 
@@ -88,6 +89,9 @@ export function GameTick(room: RoomObject) {
 
     // Update league start AFK detection
     updateLeagueStartAFKDetection(room);
+
+    // Check VSC duration for auto-deployment
+    checkVSCDuration(room);
 
     if (room.getScores()?.time && room.getScores().time > 0) {
       gameStarted = true;

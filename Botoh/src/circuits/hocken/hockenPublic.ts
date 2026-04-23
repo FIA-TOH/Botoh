@@ -4,40 +4,64 @@ import { join } from "path";
 import { bestTimes } from "../bestTimes";
 import { Circuit, CircuitInfo, Direction } from "../Circuit";
 
-const hockenPublic_raw = readFileSync(
-  join(__dirname, "hockenPublic.hbs"),
-  "utf-8"
-);
+const hockenPublic_raw = readFileSync(join(__dirname, "hockenPublic.hbs"), "utf-8");
 const hockenPublic_json = JSON.parse(hockenPublic_raw);
 
 const HOCKENPUBLIC_INFO: CircuitInfo = {
   finishLine: {
     bounds: {
-      minX: -4395,
-      maxX: -3977,
-      minY: 610,
-      maxY: 640,
+      minX: -3061,
+      maxX: -2643,
+      minY: -100,
+      maxY: -70,
     },
     passingDirection: Direction.UP,
   },
+  sectorOne: {
+    bounds: {
+      minX: -3061,
+      maxX: -2643,
+      minY: -100,
+      maxY: -70,
+    },
+    passingDirection: Direction.UP,
+  },
+  sectorTwo: {
+    bounds: {
+      minX: -1595,
+      maxX: -781,
+      minY: -984,
+      maxY: -952,
+    },
+    passingDirection: Direction.DOWN,
+  },
+  sectorThree: {
+    bounds: {
+      minX: -580,
+      maxX: -548,
+      minY: 1641,
+      maxY: 1984,
+    },
+    passingDirection: Direction.LEFT,
+  },
   name: "Hockenheimring - By Ximb",
   boxLine: {
-    minX: -4067,
-    maxX: -3975,
-    minY: 647,
-    maxY: 1647,
+    minX: -2733,
+    maxX: -2641,
+    minY: -63,
+    maxY: 937,
   },
   pitlaneStart: {
-    minX: -4144,
-    maxX: -4067,
-    minY: 2130,
-    maxY: 2160,
+    minX: -2810,
+    maxX: -2733,
+    minY: 1420,
+    maxY: 1450,
   },
   pitlaneEnd: {
-    minX: -4143,
-    maxX: -4067,
-    minY: -215,
-    maxY: -185,
+    minX: -2809,
+    maxX: -2733,
+    minY: -925,
+    maxY: -895,
   },
   drsStart: [
     {
@@ -69,14 +93,10 @@ const HOCKENPUBLIC_INFO: CircuitInfo = {
   ],
   checkpoints: [],
   lastPlace: {
-    x: hockenPublic_json.redSpawnPoints[
-      hockenPublic_json.redSpawnPoints.length - 1
-    ][0],
-    y: hockenPublic_json.redSpawnPoints[
-      hockenPublic_json.redSpawnPoints.length - 1
-    ][1],
+    x: hockenPublic_json.redSpawnPoints[hockenPublic_json.redSpawnPoints.length - 1][0],
+    y: hockenPublic_json.redSpawnPoints[hockenPublic_json.redSpawnPoints.length - 1][1],
   },
-  BestTime: bestTimes.hockenheimring,
+  BestTime: bestTimes.hockenPublicheimring,
   MainColor: [0x000001, 0xed2939, 0xfae042],
   AvatarColor: 0xffffff,
   Angle: 90,

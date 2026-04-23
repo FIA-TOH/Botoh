@@ -195,7 +195,7 @@ const situationHandlers: Record<
   },
 
   [Situacions.Sandbag]: (player, room) => {
-    room.setPlayerAvatar(player.id, "");
+    room.setPlayerAvatar(player.id, "🐢");
   },
 
   [Situacions.SafetyCar]: (player, room) => {

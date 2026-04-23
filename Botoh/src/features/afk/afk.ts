@@ -10,7 +10,7 @@ import { Teams } from "../changeGameState/teams";
 import { playerList } from "../changePlayerState/playerList";
 import { sendAlertMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
-import { handleVSCCommand } from "../commands/flagsAndVSC/handleVSCCommand";
+import { deployVSCAutomatically } from "../safetyCar/vsc";
 import { handleSCCommand } from "../commands/flagsAndVSC/handleSCCommand";
 import { presentationLap } from "../commands/gameState/handlePresentationLapCommand";
 import { chooseOneDebris } from "../debris/chooseOneDebris";
@@ -205,7 +205,7 @@ export function afkKick(room: RoomObject) {
 
     if (isRealSafetyEnabled() && afkDuration >= 2 && !activity.vscActivated) {
       if (!vsc && !presentationLap) {
-        handleVSCCommand(undefined, undefined, room);
+        deployVSCAutomatically(room);
         
         if (
           ACTUAL_CIRCUIT.info.sectorOne &&

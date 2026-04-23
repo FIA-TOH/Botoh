@@ -2,6 +2,7 @@ import { handleGameStateChange } from "../changeGameState/gameState";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { resetPlayers } from "../changePlayerState/players";
 import { cleanupLeagueStartAFKDetection } from "../afk/leagueStartAFKDetection";
+import { resetVSCState } from "../safetyCar/vsc";
 
 
 import {
@@ -144,6 +145,9 @@ export function GameStop(room: RoomObject) {
     
     // Clean up league start AFK detection
     cleanupLeagueStartAFKDetection();
+    
+    // Reset VSC state
+    resetVSCState();
     
     // Reset lastWeatherId when game stops
     try {
