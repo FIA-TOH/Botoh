@@ -3,7 +3,7 @@ import { laps } from "../zones/laps";
 import { resetPlayer } from "../changePlayerState/players";
 import { finishList, lapPositions } from "../zones/laps/handleLapChange";
 import { log } from "../discord/logger";
-import { updatePlayerActivity } from "../afk/afk";
+import { updatePlayerActivity, resetSafetyCarActivationForRace } from "../afk/afk";
 import { setCameraAuto } from "../cameraAndBall/cameraFollow";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { checkRunningPlayers } from "../changeGameState/publicGameFlow/startStopGameFlow";
@@ -53,6 +53,7 @@ export function GameStart(room: RoomObject) {
     resetBestPit();
     clearPlayersLeftInfo();
     clearRRPosition();
+    resetSafetyCarActivationForRace();
 
     setCameraAuto();
     room.getPlayerList().forEach((p) => {

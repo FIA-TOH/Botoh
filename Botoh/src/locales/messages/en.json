@@ -55,6 +55,7 @@
   "LIST_MAPS": "Available maps: {{maps}}",
   "VSC_ACTIVE": "VSC is active",
   "VSC_NOT_ACTIVE": "VSC is no longer active",
+  "VSC_DEPLOYED": "⚠️ VSC DEPLOYED! Overtaking prohibited, speed reduced!",
   "NOT_STARTED": "Game not started",
   "CLEAR_TIME_USAGE": "Usage: !clear_time <name>",
   "NO_WAIT_TIME": "No race/quali is happening",

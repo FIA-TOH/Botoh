@@ -17,6 +17,7 @@ import { handleVoteCommand } from "./gameState/handleVoteCommand";
 import { handleRecordCommand } from "./laps/handleRecordCommands";
 import { handleVSCCommand } from "./flagsAndVSC/handleVSCCommand";
 import { handleSCCommand } from "./flagsAndVSC/handleSCCommand";
+import { handleSafetyCommand } from "./flagsAndVSC/handleSafetyCommand";
 import { handleQModeCommand } from "./gameMode/qualy/handleQModeCommand";
 import { handleTimesCommand } from "./gameMode/qualy/handleTimesCommand";
 import { handlePositionsCommand } from "./gameMode/race/handlePositionsCommand";
@@ -114,6 +115,11 @@ export type CommandFunction = (
     room: RoomObject,
   ) => void,
   handleSCCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
+  handleSafetyCommand: (
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject,
@@ -418,6 +424,7 @@ function importCommandsByLanguage(commandFunctions: {
         handlePositionsCommand,
         handleVSCCommand,
         handleSCCommand,
+        handleSafetyCommand,
         handleQModeCommand,
         handleTModeCommand,
         handleQTimeCommand,
@@ -498,6 +505,7 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
         handlePositionsCommand,
         handleVSCCommand,
         handleSCCommand,
+        handleSafetyCommand,
         handleQModeCommand,
         handleTModeCommand,
         handleQTimeCommand,

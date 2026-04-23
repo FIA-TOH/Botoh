@@ -55,6 +55,7 @@
   "LIST_MAPS": "Mevcut haritalar: {{maps}}",
   "VSC_ACTIVE": "VSC aktif",
   "VSC_NOT_ACTIVE": "VSC artık aktif değil",
+  "VSC_DEPLOYED": "⚠️ VSC DEVREYE ALINDI! Geçiş yasak, hız düşürüldü!",
   "NOT_STARTED": "Oyun başlamadı",
   "CLEAR_TIME_USAGE": "Kullanım: !clear_time <name>",
   "NO_WAIT_TIME": "Bir yarış/sıralama yok.",

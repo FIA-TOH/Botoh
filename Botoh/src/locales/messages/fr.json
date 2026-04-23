@@ -55,6 +55,7 @@
   "LIST_MAPS": "Circuits disponibles: {{maps}}",
   "VSC_ACTIVE": "La VSC est maintenant active",
   "VSC_NOT_ACTIVE": "La VSC est maintenant inactive",
+  "VSC_DEPLOYED": "⚠️ VSC DÉPLOYÉE! Dépassements interdits, vitesse réduite!",
   "NOT_STARTED": "La session n'a pas encore commencé",
   "CLEAR_TIME_USAGE": "Utilisation: !clear_time <name>",
   "NO_WAIT_TIME": "Il n'y a pas de race/quali.",
