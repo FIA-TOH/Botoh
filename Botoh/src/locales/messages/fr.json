@@ -150,6 +150,7 @@
   "SOFT_CUT_PENALTY": "⚠️ Vous avez coupé la piste! Passez par la ligne bleue ou vous serez pénalisé!",
   "LAPPED_NORMALIZED_LAPS": "{{name}} a normalisé ses tours et est maintenant avec le grid",
   "LAPPED_REMAINING_LAPS": "{{name}} a encore {{laps}} tour(s) pour rejoindre le grid",
+  "LEAGUE_START_STATIONARY_PLAYERS": "⚠️ {{playerNames}} est immobile sur la piste",
   "TWO_LAPS": "☠️🛡️ Tour {{currentLap}}, élimination PROCHAIN TOUR 🛡️☠️",
   "BR_ELIMINATED": "☠️🔥 {{name}} éliminé 🔥☠️",
   "BR_REMAINING": "☠️👥 {{remaining}} restants. 👥☠️",

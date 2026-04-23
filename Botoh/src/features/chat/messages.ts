@@ -432,6 +432,14 @@ export const MESSAGES = {
     pt: replaceTemplateString(pt_messages.LAPPED_REMAINING_LAPS, { name, laps: laps.toString() }),
   }),
 
+  LEAGUE_START_STATIONARY_PLAYERS: (playerNames: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.LEAGUE_START_STATIONARY_PLAYERS, { playerNames }),
+    es: replaceTemplateString(es_messages.LEAGUE_START_STATIONARY_PLAYERS, { playerNames }),
+    fr: replaceTemplateString(fr_messages.LEAGUE_START_STATIONARY_PLAYERS, { playerNames }),
+    tr: replaceTemplateString(tr_messages.LEAGUE_START_STATIONARY_PLAYERS, { playerNames }),
+    pt: replaceTemplateString(pt_messages.LEAGUE_START_STATIONARY_PLAYERS, { playerNames }),
+  }),
+
   INFINITE_QUALI: (): LocalizedMessageFunction => ({
     en: en_messages.INFINITE_QUALI,
     es: es_messages.INFINITE_QUALI,

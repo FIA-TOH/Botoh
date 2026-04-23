@@ -1,6 +1,7 @@
 import { handleGameStateChange } from "../changeGameState/gameState";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { resetPlayers } from "../changePlayerState/players";
+import { cleanupLeagueStartAFKDetection } from "../afk/leagueStartAFKDetection";
 
 
 import {
@@ -140,6 +141,9 @@ export function GameStop(room: RoomObject) {
     
     // Reset safety car state when game stops
     handleSCCommand(undefined, ["off"], room);
+    
+    // Clean up league start AFK detection
+    cleanupLeagueStartAFKDetection();
     
     // Reset lastWeatherId when game stops
     try {

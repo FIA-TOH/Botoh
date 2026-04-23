@@ -152,8 +152,8 @@
   "SOFT_CUT_PENALTY": "⚠️ Você cortou a pista! Passe por dentro da linha azul ou será punido!",
   "LAPPED_NORMALIZED_LAPS": "{{name}} normalizou suas voltas e está junto do grid",
   "LAPPED_REMAINING_LAPS": "{{name}} ainda tem mais {{laps}} volta(s) para se juntar ao grid",
-
-  "TWO_LAPS": "☠️🛡️ Volta {{currentLap}}, eliminação NA PRÓXIMA VOLTA 🛡️☠️",
+  "LEAGUE_START_STATIONARY_PLAYERS": "⚠️ {{playerNames}} está parado na pista",
+  "TWO_LAPS": "☠️🛡️ Volta {{currentLap}}, eliminação PRÓXIMA VOLTA 🛡️☠️",
   "BR_ELIMINATED": "☠️🔥 {{name}} eliminado 🔥☠️",
   "BR_REMAINING": "☠️👥 {{remaining}} restantes. 👥☠️",
   "BR_WINNER": "👑🏆 {{name}} venceu, {{eliminated}} eliminados. 👑🏆"

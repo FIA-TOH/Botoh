@@ -150,6 +150,7 @@
   "SOFT_CUT_PENALTY": "⚠️ You cut the track! Go through the blue line or you will be penalized!",
   "LAPPED_NORMALIZED_LAPS": "{{name}} has normalized their laps and is now with the grid",
   "LAPPED_REMAINING_LAPS": "{{name}} still has {{laps}} more lap(s) to join the grid",
+  "LEAGUE_START_STATIONARY_PLAYERS": "⚠️ {{playerNames}} is stationary on the track",
   "TWO_LAPS": "☠️🛡️ Lap {{currentLap}}, elimination NEXT LAP 🛡️☠️",
   "BR_ELIMINATED": "☠️🔥 {{name}} eliminated 🔥☠️",
   "BR_REMAINING": "☠️👥 {{remaining}} remaining. 👥☠️",

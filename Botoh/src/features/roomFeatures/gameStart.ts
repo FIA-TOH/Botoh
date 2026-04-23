@@ -20,6 +20,7 @@ import { positionList } from "../commands/gameMode/race/positionList";
 import { initBattleRoyale } from "../commands/gameMode/battleRoyale.ts/handleBattleRoyaleLaps";
 import { playerList } from "../changePlayerState/playerList";
 import { updatePlayerCollision } from "../changePlayerState/updatePlayerCollision";
+import { initializeLeagueStartAFKDetection, cleanupLeagueStartAFKDetection } from "../afk/leagueStartAFKDetection";
 
 export function GameStart(room: RoomObject) {
   room.onGameStart = function (byPlayer) {
@@ -49,6 +50,12 @@ export function GameStart(room: RoomObject) {
     if (gameMode === GameMode.BATTLE_ROYALE) {
       initBattleRoyale(room);
     }
+    
+    // Initialize league start AFK detection for league mode
+    if (LEAGUE_MODE) {
+      initializeLeagueStartAFKDetection(room);
+    }
+    
     resetBestLap();
     resetBestPit();
     clearPlayersLeftInfo();
