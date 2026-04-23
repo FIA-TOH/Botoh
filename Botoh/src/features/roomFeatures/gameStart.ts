@@ -3,7 +3,7 @@ import { laps } from "../zones/laps";
 import { resetPlayer } from "../changePlayerState/players";
 import { finishList, lapPositions } from "../zones/laps/handleLapChange";
 import { log } from "../discord/logger";
-import { updatePlayerActivity } from "../afk/afk";
+import { updatePlayerActivity, resetSafetyCarActivationForRace } from "../afk/afk";
 import { setCameraAuto } from "../cameraAndBall/cameraFollow";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { checkRunningPlayers } from "../changeGameState/publicGameFlow/startStopGameFlow";
@@ -19,6 +19,8 @@ import { Teams } from "../changeGameState/teams";
 import { positionList } from "../commands/gameMode/race/positionList";
 import { initBattleRoyale } from "../commands/gameMode/battleRoyale.ts/handleBattleRoyaleLaps";
 import { playerList } from "../changePlayerState/playerList";
+import { updatePlayerCollision } from "../changePlayerState/updatePlayerCollision";
+import { initializeLeagueStartAFKDetection, cleanupLeagueStartAFKDetection } from "../afk/leagueStartAFKDetection";
 
 export function GameStart(room: RoomObject) {
   room.onGameStart = function (byPlayer) {
@@ -48,10 +50,17 @@ export function GameStart(room: RoomObject) {
     if (gameMode === GameMode.BATTLE_ROYALE) {
       initBattleRoyale(room);
     }
+    
+    // Initialize league start AFK detection for league mode
+    if (LEAGUE_MODE) {
+      initializeLeagueStartAFKDetection(room);
+    }
+    
     resetBestLap();
     resetBestPit();
     clearPlayersLeftInfo();
     clearRRPosition();
+    resetSafetyCarActivationForRace();
 
     setCameraAuto();
     room.getPlayerList().forEach((p) => {
@@ -74,4 +83,5 @@ export function GameStart(room: RoomObject) {
       // }
     }
   };
+  
 }

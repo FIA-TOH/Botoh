@@ -1,6 +1,7 @@
 import { playerList, PlayerInfo } from "../changePlayerState/playerList";
 import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
 import { vsc } from "../safetyCar/vsc";
+import { isSCActive, isPlayerLapped } from "../commands/flagsAndVSC/handleSCCommand";
 import { getRunningPlayers, vectorSpeed } from "../utils";
 import { calculateTotalGripMultiplier } from "./grip/calculateTotalGripMultiplier";
 import { applyPitAndVscRules } from "./pitAndVscRules";
@@ -38,7 +39,7 @@ export function controlPlayerSpeed(
       playersRunning,
       currentTime,
       playerInfo,
-      vsc
+      vsc || isSCActive()
     );
 
     const gripMultiplier = calculateTotalGripMultiplier(
@@ -57,7 +58,8 @@ export function controlPlayerSpeed(
       gripMultiplier,
       playerInfo,
       currentTime,
-      vsc
+      vsc || isSCActive(),
+      isPlayerLapped(p.id)
     );
 
     const directionChangerGravity = getDirectionChangerGravity(

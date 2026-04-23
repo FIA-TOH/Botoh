@@ -15,6 +15,8 @@ export enum Situacions {
   BlowoutWarning = "BlowoutWarning",
   Direction = "Direction",
   Sandbag = "Sandbag",
+  SafetyCar = "SafetyCar",
+  LappedCar = "LappedCar",
 }
 
 export const TIRE_AVATAR: { [key in Tires]: string } = {
@@ -41,6 +43,8 @@ const SITUATION_PRIORITY: Record<Situacions, number> = {
   [Situacions.Speed]: 3,
   [Situacions.Sandbag]: 2,
   [Situacions.ChangeTyre]: 1,
+  [Situacions.SafetyCar]: 8,
+  [Situacions.LappedCar]: 6,
   [Situacions.Null]: 0,
 };
 
@@ -59,7 +63,7 @@ function clearPlayerTimers(playerId: number) {
   playerTimers[playerId] = {};
 }
 
-function restoreTyreOrCar(playerId: number, room: RoomObject) {
+export function restoreTyreOrCar(playerId: number, room: RoomObject) {
   const p = playerList[playerId];
   if (!p) return;
 
@@ -167,7 +171,7 @@ const situationHandlers: Record<
 
   [Situacions.Ers]: (player, room) => {
     const p = playerList[player.id];
-    if (!p || p.speedEnabled) return;
+    if (!p) return;
     room.setPlayerAvatar(player.id, Math.floor(p.kers).toString());
 
     playerTimers[player.id].timeout = setTimeout(() => {
@@ -191,7 +195,38 @@ const situationHandlers: Record<
   },
 
   [Situacions.Sandbag]: (player, room) => {
-    room.setPlayerAvatar(player.id, "🐢");
+    room.setPlayerAvatar(player.id, "");
+  },
+
+  [Situacions.SafetyCar]: (player, room) => {
+    const safetyCarEmojis = ["🚗", "🚨", "🚗", "🚨", "🚗", "🚨", "🚗", "🚨"];
+    const emojiDurations = [875, 875, 875, 875, 875, 875, 875, 875];
+    let currentEmojiIndex = 0;
+
+    const showNextEmoji = () => {
+      if (!playerList[player.id]) return;
+      room.setPlayerAvatar(player.id, safetyCarEmojis[currentEmojiIndex]);
+      const delay = emojiDurations[currentEmojiIndex];
+      currentEmojiIndex = (currentEmojiIndex + 1) % safetyCarEmojis.length;
+
+      playerTimers[player.id].interval = setTimeout(showNextEmoji, delay);
+    };
+
+    showNextEmoji();
+
+    playerTimers[player.id].timeout = setTimeout(
+      () => {
+        clearPlayerTimers(player.id);
+        restoreTyreOrCar(player.id, room);
+        currentSituacion[player.id] = Situacions.Null;
+      },
+      10000, // 10 seconds total
+    );
+  },
+
+  [Situacions.LappedCar]: (player, room) => {
+    room.setPlayerAvatar(player.id, "🔁");
+    // Lapped car avatar stays until manually cleared
   },
 };
 

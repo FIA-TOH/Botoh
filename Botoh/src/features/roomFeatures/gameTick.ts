@@ -27,6 +27,7 @@ import { updateDebrisTouch } from '../debris/detectCollisionDebris';
 import { handleChangeCollisionPlayerCano, handleChangePlayerSizeCano } from '../zones/handleCanoTp';
 import { checkWeatherUpdate } from '../weather/weatherManager';
 import { logPlayerSpeed } from '../speed/logPlayerSpeed';
+import { updateLeagueStartAFKDetection } from '../afk/leagueStartAFKDetection';
 
 const detectCutThrottledByPlayer: Map<number, ReturnType<typeof throttlePerSecond>> = new Map();
 
@@ -45,7 +46,7 @@ export function GameTick(room: RoomObject) {
     setBallPosition(room);
     checkTrainingHourlyLog();
     updateDebrisTouch(room);
-    logPlayerSpeed(playersAndDiscs, room);
+    // logPlayerSpeed(playersAndDiscs, room);
 
     if (gameMode !== GameMode.WAITING) {
       handlePitlane(playersAndDiscs, room);
@@ -84,6 +85,9 @@ export function GameTick(room: RoomObject) {
 
     afkKick(room);
     checkWeatherUpdate(room);
+
+    // Update league start AFK detection
+    updateLeagueStartAFKDetection(room);
 
     if (room.getScores()?.time && room.getScores().time > 0) {
       gameStarted = true;

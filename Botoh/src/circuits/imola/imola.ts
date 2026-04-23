@@ -79,6 +79,10 @@ const IMOLA_INFO: CircuitInfo = {
     },
   ],
   checkpoints: [],
+    firstPlace: {
+  x: imola_json.redSpawnPoints[0][0],
+  y: imola_json.redSpawnPoints[0][1],
+},
   lastPlace: {
     x: imola_json.redSpawnPoints[imola_json.redSpawnPoints.length - 1][0],
     y: imola_json.redSpawnPoints[imola_json.redSpawnPoints.length - 1][1],
@@ -91,6 +95,7 @@ const IMOLA_INFO: CircuitInfo = {
   Votes: 0,
   TireDegradationPercentage: 5,
   physicsType: CircuitPhysics.WEC_NEWGEN,
+  new_safetycar: true,
   CutDetectSegments: [
     {
       v0: [1862, 909],

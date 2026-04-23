@@ -41,6 +41,16 @@ export default function tr_commands(
     args: string[],
     room: RoomObject,
   ) => void,
+  handleSCCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
+  handleSafetyCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
   handleQModeCommand: (
     byPlayer: PlayerObject,
     args: string[],
@@ -335,6 +345,8 @@ export default function tr_commands(
     "!times": handleTimesCommand,
     "!positions": handlePositionsCommand,
     "!vsc": handleVSCCommand,
+    "!sc": handleSCCommand,
+    "!safety": handleSafetyCommand,
     "!qmode": handleQModeCommand,
     "!tmode": handleTModeCommand,
     "!qtime": handleQTimeCommand,
@@ -387,7 +399,7 @@ export default function tr_commands(
     "!camera_position": handleCameraPositionFollow,
     "!game_flow": handleChangeGameFLow,
     "!min_pit": handleSetMinimumPit,
-    "!rejoin": handleRejoinCommand,
+    // "!rejoin": handleRejoinCommand, // Disabled - unfinished feature
     "!move_to_box": handleMoveToBoxCommand,
     "!player_quantity": handlePlayerQuantity,
     "!set_max_players": handleLimitPlayerQuantity,

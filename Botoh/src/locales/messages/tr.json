@@ -19,6 +19,10 @@
   "DISCORD_INVITE": "🏎️ Discord'a katılın: | https://discord.gg/MAXhQNKRjS 🏎️",
   "LEAGUE_INVITE": "🏎️ Lig'e katılın: | https://discord.gg/MAXhQNKRjS 🏎️",
   "NO_MANUAL_MAPS": "Lütfen haritayı manuel olarak değiştirmeyin! Haritayı değiştirmek için !circuit <index> kullanın",
+  "SAFETY_CAR": "Safety Car!",
+  "SAFETY_CAR_ENTERING_TRACK": "Safety Car 10 saniye içinde pisteye girecek, merkeze gidin veya pistin dışında sıkışacaksınız",
+  "OVERTAKING_PROHIBITED": "Yasaklanmış geçiş, hızı azaltın",
+  "LAPPED_CARS_OVERTAKE": "Tüm geri kalan sürücüler safety car'i grid'e ulaşana kadar geçebilir",
   "INFINITE_QUALI": "Sıralama süresi artık sınırsız",
   "QUALI_TIME": "Sıralama süresi artık {{minutes}} dakika.",
   "NOT_IN_QUALI": "Sıralama modunda değilsiniz",
@@ -52,6 +56,7 @@
   "LIST_MAPS": "Mevcut haritalar: {{maps}}",
   "VSC_ACTIVE": "VSC aktif",
   "VSC_NOT_ACTIVE": "VSC artık aktif değil",
+  "VSC_DEPLOYED": "⚠️ VSC DEVREYE ALINDI! Geçiş yasak, hız düşürüldü!",
   "NOT_STARTED": "Oyun başlamadı",
   "CLEAR_TIME_USAGE": "Kullanım: !clear_time <name>",
   "NO_WAIT_TIME": "Bir yarış/sıralama yok.",
@@ -143,8 +148,11 @@
   "TYRES_ABOUT_TO_BLOWN": "⚠️🛞 BOX BOX! Lastikte ciddi tanelenme graining — Her an patlama riski var — box, box! 🛞⚠️",
   "INVALID_LAP_CUT": "Yol kesme nedeniyle geçersiz tur.",
   "SOFT_CUT_PENALTY": "⚠️ Yolu kestiniz! Mavi çizginin içinden geçin veya ceza alacaksınız!",
-  "TWO_LAPS": "☠️🛡️ Tur {{currentLap}}, ELEME BİR SONRAKİ TURDA 🛡️☠️",
+  "LEAGUE_START_STATIONARY_PLAYERS": "⚠️ {{playerNames}} pistte duruyor",
+  "TWO_LAPS": "☠️🛡️ {{currentLap}}. Tur, SONRAKİ TURDA elenme 🛡️☠️",
   "BR_ELIMINATED": "☠️🔥 {{name}} elendi 🔥☠️",
   "BR_REMAINING": "☠️👥 {{remaining}} kaldı. 👥☠️",
-  "BR_WINNER": "👑🏆 {{name}} kazandı, {{eliminated}} elendi. 👑🏆"
+  "BR_WINNER": "👑🏆 {{name}} kazandı, {{eliminated}} elendi. 👑🏆",
+  "LAPPED_NORMALIZED_LAPS": "{{name}} turlarını normalleştirdi ve şimdi grid ile birlikte",
+  "LAPPED_REMAINING_LAPS": "{{name}} grid'e katılmak için {{laps}} daha tur(lar) var"
 }

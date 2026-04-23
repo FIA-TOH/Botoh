@@ -12,7 +12,7 @@ import {
   GeneralGameMode,
 } from "../changeGameState/changeGameModes";
 import { log } from "../discord/logger";
-import { updatePlayerActivity } from "../afk/afk";
+import { updatePlayerActivity, handlePlayerLeave } from "../afk/afk";
 import { followPlayerId } from "../cameraAndBall/cameraFollow";
 import { checkRunningPlayers } from "../changeGameState/publicGameFlow/startStopGameFlow";
 import { changeGameStoppedNaturally } from "../changeGameState/gameStopeedNaturally";
@@ -25,6 +25,7 @@ export function PlayerLeave(room: RoomObject) {
   room.onPlayerLeave = function (player) {
     if (player.admin) delete afkAdmins[player.id];
     updatePlayerActivity(player);
+    handlePlayerLeave(player, room);
 
     const playerObj = playerList[player.id];
     const firstPlacePlayer = getPlayerByRacePosition("first", room);

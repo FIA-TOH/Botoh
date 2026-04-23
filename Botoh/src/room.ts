@@ -20,6 +20,7 @@ import { StadiumChange } from "./features/roomFeatures/stadiumChange";
 import { PlayerChat } from "./features/roomFeatures/playerChat";
 import { GameStop } from "./features/roomFeatures/gameStop";
 import { PlaerActivity } from "./features/roomFeatures/playerActivitie";
+import { resetAllAfkCounters } from "./features/afk/afk";
 import { log } from "./features/discord/logger";
 
 const envName = process.env.LEAGUE_ENV || "ftoh";
@@ -57,7 +58,7 @@ export const roomPromise: Promise<any> = HaxballJS().then((HBInit: any) => {
     maxPlayers: maxPlayers,
     password: roomPassword ?? undefined,
     token:
-      process.env.HAXBALL_TOKEN ?? "thr1.AAAAAGnoJq4eDhOJp9BW3w.mjXf78Gm4so",
+      process.env.HAXBALL_TOKEN ?? "thr1.AAAAAGnqUwsz_ASewsymhg.S54ZrjkWC14",
     geo: getGeo(),
   });
 
@@ -86,6 +87,10 @@ export const roomPromise: Promise<any> = HaxballJS().then((HBInit: any) => {
     byPlayer == null
       ? log(`Game paused`)
       : log(`Game paused by ${byPlayer.name}`);
+    
+    // Reset all AFK counters when game is paused
+    resetAllAfkCounters(room);
+    
     handleGameStateChange("paused", room);
   };
   room.onGameUnpause = function (byPlayer: any) {

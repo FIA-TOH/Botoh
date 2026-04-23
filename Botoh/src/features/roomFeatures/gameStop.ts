@@ -1,6 +1,7 @@
 import { handleGameStateChange } from "../changeGameState/gameState";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { resetPlayers } from "../changePlayerState/players";
+import { cleanupLeagueStartAFKDetection } from "../afk/leagueStartAFKDetection";
 
 
 import {
@@ -24,6 +25,7 @@ import { log } from "../discord/logger";
 import { changeLaps } from "../commands/adminThings/handleChangeLaps";
 import { handleRREnabledCommand } from "../commands/adminThings/handleRREnabledCommand";
 import { handleFlagCommand } from "../commands/flagsAndVSC/handleFlagCommand";
+import { handleSCCommand } from "../commands/flagsAndVSC/handleSCCommand";
 import { clearPlayerBuffAndNerfLists } from "../commands/adjustThings/handleNerfListCommand";
 import PublicGameFlow from "../changeGameState/publicGameFlow/publicGameFLow";
 import { sendDiscordReplay } from "../discord/discord";
@@ -136,6 +138,12 @@ export function GameStop(room: RoomObject) {
     resetDebrisUsedList();
     resetSessionBestSectors();
     resetSandbag(room);
+    
+    // Reset safety car state when game stops
+    handleSCCommand(undefined, ["off"], room);
+    
+    // Clean up league start AFK detection
+    cleanupLeagueStartAFKDetection();
     
     // Reset lastWeatherId when game stops
     try {

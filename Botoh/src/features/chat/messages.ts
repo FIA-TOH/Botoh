@@ -352,6 +352,14 @@ export const MESSAGES = {
     pt: pt_messages.VSC_NOT_ACTIVE,
   }),
 
+  VSC_DEPLOYED: (): LocalizedMessageFunction => ({
+    en: en_messages.VSC_DEPLOYED,
+    es: es_messages.VSC_DEPLOYED,
+    fr: fr_messages.VSC_DEPLOYED,
+    tr: tr_messages.VSC_DEPLOYED,
+    pt: pt_messages.VSC_DEPLOYED,
+  }),
+
   DISCORD_INVITE: (link: string): LocalizedMessageFunction => ({
     en: replaceTemplateString(en_messages.DISCORD_INVITE, { link: link }),
     es: replaceTemplateString(es_messages.DISCORD_INVITE, { link: link }),
@@ -374,6 +382,62 @@ export const MESSAGES = {
     fr: fr_messages.NO_MANUAL_MAPS,
     tr: tr_messages.NO_MANUAL_MAPS,
     pt: pt_messages.NO_MANUAL_MAPS,
+  }),
+
+  SAFETY_CAR: (): LocalizedMessageFunction => ({
+    en: en_messages.SAFETY_CAR,
+    es: es_messages.SAFETY_CAR,
+    fr: fr_messages.SAFETY_CAR,
+    tr: tr_messages.SAFETY_CAR,
+    pt: pt_messages.SAFETY_CAR,
+  }),
+
+  SAFETY_CAR_ENTERING_TRACK: (): LocalizedMessageFunction => ({
+    en: en_messages.SAFETY_CAR_ENTERING_TRACK,
+    es: es_messages.SAFETY_CAR_ENTERING_TRACK,
+    fr: fr_messages.SAFETY_CAR_ENTERING_TRACK,
+    tr: tr_messages.SAFETY_CAR_ENTERING_TRACK,
+    pt: pt_messages.SAFETY_CAR_ENTERING_TRACK,
+  }),
+
+  OVERTAKING_PROHIBITED: (): LocalizedMessageFunction => ({
+    en: en_messages.OVERTAKING_PROHIBITED,
+    es: es_messages.OVERTAKING_PROHIBITED,
+    fr: fr_messages.OVERTAKING_PROHIBITED,
+    tr: tr_messages.OVERTAKING_PROHIBITED,
+    pt: pt_messages.OVERTAKING_PROHIBITED,
+  }),
+
+  LAPPED_CARS_OVERTAKE: (): LocalizedMessageFunction => ({
+    en: en_messages.LAPPED_CARS_OVERTAKE,
+    es: es_messages.LAPPED_CARS_OVERTAKE,
+    fr: fr_messages.LAPPED_CARS_OVERTAKE,
+    tr: tr_messages.LAPPED_CARS_OVERTAKE,
+    pt: pt_messages.LAPPED_CARS_OVERTAKE,
+  }),
+
+  LAPPED_NORMALIZED_LAPS: (name: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.LAPPED_NORMALIZED_LAPS, { name }),
+    es: replaceTemplateString(es_messages.LAPPED_NORMALIZED_LAPS, { name }),
+    fr: replaceTemplateString(fr_messages.LAPPED_NORMALIZED_LAPS, { name }),
+    tr: replaceTemplateString(tr_messages.LAPPED_NORMALIZED_LAPS, { name }),
+    pt: replaceTemplateString(pt_messages.LAPPED_NORMALIZED_LAPS, { name }),
+  }),
+
+  LAPPED_REMAINING_LAPS: (name: string, laps: number): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.LAPPED_REMAINING_LAPS, { name, laps: laps.toString() }),
+    es: replaceTemplateString(es_messages.LAPPED_REMAINING_LAPS, { name, laps: laps.toString() }),
+    fr: replaceTemplateString(fr_messages.LAPPED_REMAINING_LAPS, { name, laps: laps.toString() }),
+    tr: replaceTemplateString(tr_messages.LAPPED_REMAINING_LAPS, { name, laps: laps.toString() }),
+    pt: replaceTemplateString(pt_messages.LAPPED_REMAINING_LAPS, { name, laps: laps.toString() }),
+  }),
+
+  LEAGUE_START_STATIONARY_PLAYERS: (playerNames: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.LEAGUE_START_STATIONARY_PLAYERS, { playerNames }),
+    es: replaceTemplateString(es_messages.LEAGUE_START_STATIONARY_PLAYERS, { playerNames }),
+    fr: replaceTemplateString(fr_messages.LEAGUE_START_STATIONARY_PLAYERS, { playerNames }),
+    tr: replaceTemplateString(tr_messages.LEAGUE_START_STATIONARY_PLAYERS, { playerNames }),
+    pt: replaceTemplateString(pt_messages.LEAGUE_START_STATIONARY_PLAYERS, { playerNames }),
   }),
 
   INFINITE_QUALI: (): LocalizedMessageFunction => ({

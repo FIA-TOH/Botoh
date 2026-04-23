@@ -16,6 +16,8 @@ import { handleSpeedCommand } from "./avatar/handleSpeedCommand";
 import { handleVoteCommand } from "./gameState/handleVoteCommand";
 import { handleRecordCommand } from "./laps/handleRecordCommands";
 import { handleVSCCommand } from "./flagsAndVSC/handleVSCCommand";
+import { handleSCCommand } from "./flagsAndVSC/handleSCCommand";
+import { handleSafetyCommand } from "./flagsAndVSC/handleSafetyCommand";
 import { handleQModeCommand } from "./gameMode/qualy/handleQModeCommand";
 import { handleTimesCommand } from "./gameMode/qualy/handleTimesCommand";
 import { handlePositionsCommand } from "./gameMode/race/handlePositionsCommand";
@@ -58,7 +60,13 @@ import { handleCameraPositionFollow } from "./camera/handleCameraPositionFollow"
 import { handleCameraProperties } from "./camera/handleCameraProperties";
 import { handleChangeGameFLow } from "./gameState/gameFlow";
 import { handleSetMinimumPit } from "./tyres/handleSetMinimumPit";
-import { handleRejoinCommand } from "./comeBackRace/handleRejoinCommand";
+// import { handleRejoinCommand } from "./comeBackRace/handleRejoinCommand"; // Disabled - unfinished feature
+
+// Placeholder function to maintain correct parameter count
+const handleRejoinCommand = (byPlayer: PlayerObject, args: string[], room: RoomObject) => {
+  // This feature is disabled - unfinished functionality
+  return;
+};
 import { handleMoveToBoxCommand } from "../comeBackRace.ts/moveToBox";
 import { handlePlayerQuantity } from "./adminThings/handlePlayerQuantity";
 import { handleLimitPlayerQuantity } from "./adminThings/handleLimitPlayerQuantity";
@@ -108,6 +116,16 @@ export type CommandFunction = (
     room: RoomObject,
   ) => void,
   handleVSCCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
+  handleSCCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
+  handleSafetyCommand: (
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject,
@@ -348,7 +366,7 @@ export type CommandFunction = (
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject,
-  ) => void,
+  ) => void, // Disabled - unfinished feature
   handleMoveToBoxCommand: (
     byPlayer: PlayerObject,
     args: string[],
@@ -411,6 +429,8 @@ function importCommandsByLanguage(commandFunctions: {
         handleTimesCommand,
         handlePositionsCommand,
         handleVSCCommand,
+        handleSCCommand,
+        handleSafetyCommand,
         handleQModeCommand,
         handleTModeCommand,
         handleQTimeCommand,
@@ -490,6 +510,8 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
         handleTimesCommand,
         handlePositionsCommand,
         handleVSCCommand,
+        handleSCCommand,
+        handleSafetyCommand,
         handleQModeCommand,
         handleTModeCommand,
         handleQTimeCommand,
