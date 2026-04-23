@@ -86,6 +86,8 @@ function calculateCurveResistance(
 ): { x: number; y: number } {
   const x = disc.xspeed;
   const y = disc.yspeed;
+  
+  // Math.sqrt mantido - valor exato da velocidade usado em cálculos posteriores
   const speed = Math.sqrt(x * x + y * y);
   const MIN_SPEED_FOR_RESISTANCE = 0.15;
   const MIN_CURVE_ANGLE = 0.15;

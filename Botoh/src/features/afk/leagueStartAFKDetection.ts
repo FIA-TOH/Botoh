@@ -86,12 +86,14 @@ export function trackPlayerMovement(playerId: number, currentX: number, currentY
 
   // Check if player has moved more than a small threshold (to account for tiny movements)
   const movementThreshold = 1; // 1 unit movement threshold
-  const distance = Math.sqrt(
+  const movementThresholdSq = movementThreshold * movementThreshold;
+  
+  // Math.sqrt removido - usado apenas para comparação com threshold
+  const distanceSq = 
     Math.pow(currentX - initialPos.x, 2) + 
-    Math.pow(currentY - initialPos.y, 2)
-  );
+    Math.pow(currentY - initialPos.y, 2);
 
-  if (distance > movementThreshold) {
+  if (distanceSq > movementThresholdSq) {
     tracker.hasMoved = true;
   }
 }

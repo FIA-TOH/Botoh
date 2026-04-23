@@ -49,7 +49,7 @@ interface PlayerInfo {
       const perpX = -playerInfo.lastDir.y;
       const perpY = playerInfo.lastDir.x;
 
-      // Normaliza a direção perpendicular
+      // Math.sqrt mantido - valor exato da normalização usado em cálculos de direção
       const perpNorm = Math.sqrt(perpX * perpX + perpY * perpY) || 1;
       playerInfo.slipDir = { x: perpX / perpNorm, y: perpY / perpNorm };
 

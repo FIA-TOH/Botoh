@@ -95,7 +95,9 @@ function pointToSegmentDistance(
 
   const dx = px - xx;
   const dy = py - yy;
-  return Math.sqrt(dx * dx + dy * dy);
+  // Math.sqrt removido - função usada apenas para comparação com radius
+  // Retorna distância ao quadrado para otimização
+  return dx * dx + dy * dy;
 }
 
 export function detectCut(
@@ -111,7 +113,7 @@ export function detectCut(
   const lastSet = playerLastSegment.get(playerId)!;
 
   for (const seg of cutSegments) {
-    const dist = pointToSegmentDistance(
+    const distSq = pointToSegmentDistance(
       pad.disc.x,
       pad.disc.y,
       seg.v0[0],
@@ -119,8 +121,9 @@ export function detectCut(
       seg.v1[0],
       seg.v1[1]
     );
+    const radiusSq = pad.disc.radius * pad.disc.radius;
 
-    if (dist < pad.disc.radius && !lastSet.has(seg.index)) {
+    if (distSq < radiusSq && !lastSet.has(seg.index)) {
       if (!softCutPenalty) {
         let realPeanlty = decidePenalty(seg);
         if (
@@ -153,7 +156,7 @@ export function detectCut(
       });
     }
 
-    if (dist >= pad.disc.radius && lastSet.has(seg.index)) {
+    if (distSq >= radiusSq && lastSet.has(seg.index)) {
       lastSet.delete(seg.index);
     }
   }

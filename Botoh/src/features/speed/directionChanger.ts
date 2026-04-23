@@ -29,10 +29,9 @@ function pointToSegmentDistance(
   const D = y2 - y1;
   const dot = A * C + B * D;
   const lenSq = C * C + D * D;
-  const param = lenSq !== 0 ? dot / lenSq : -1;
+  let param = lenSq !== 0 ? dot / lenSq : -1;
 
-  let xx: number;
-  let yy: number;
+  let xx: number, yy: number;
   if (param < 0) {
     xx = x1;
     yy = y1;
@@ -46,7 +45,7 @@ function pointToSegmentDistance(
 
   const dx = px - xx;
   const dy = py - yy;
-  return Math.sqrt(dx * dx + dy * dy);
+  return dx * dx + dy * dy;
 }
 
 function directionToVector(direction: SpecificDirection) {
@@ -89,7 +88,7 @@ export function detectDirectionChangers(
     const passedSet = playerPassedDetectors.get(playerId)!;
 
     for (const detector of detectors) {
-      const dist = pointToSegmentDistance(
+      const distSq = pointToSegmentDistance(
         pad.disc.x,
         pad.disc.y,
         detector.v0[0],
@@ -97,14 +96,15 @@ export function detectDirectionChangers(
         detector.v1[0],
         detector.v1[1]
       );
+      const radiusSq = pad.disc.radius * pad.disc.radius;
 
-      if (dist <= pad.disc.radius && !passedSet.has(detector.index)) {
+      if (distSq <= radiusSq && !passedSet.has(detector.index)) {
         const currentTime = room.getScores()?.time ?? 0;
         applyDirectionChangerEffect(pad.p.id, detector, currentTime);
         passedSet.add(detector.index);
       }
 
-      if (dist > pad.disc.radius && passedSet.has(detector.index)) {
+      if (distSq > radiusSq && passedSet.has(detector.index)) {
         passedSet.delete(detector.index);
       }
     }

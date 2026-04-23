@@ -55,6 +55,8 @@ function calculateSlipstream(
 
     const dx = otherDisc.x - disc.x;
     const dy = otherDisc.y - disc.y;
+    
+    // Math.sqrt mantido - valor exato da distância usado em múltiplos cálculos posteriores
     const distance = Math.sqrt(dx * dx + dy * dy);
 
     if (distance > 0 && distance <= constants.SLIPSTREAM_ACTIVATION_DISTANCE) {
