@@ -150,6 +150,8 @@
   "TYRES_ABOUT_TO_BLOWN": "⚠️🛞 BOX BOX! Estamos vendo muito graining — Possível estouro de pneu a qualquer momento — box, box! 🛞⚠️",
   "INVALID_LAP_CUT": "Volta inválida devido a corte de pista.",
   "SOFT_CUT_PENALTY": "⚠️ Você cortou a pista! Passe por dentro da linha azul ou será punido!",
+  "LAPPED_NORMALIZED_LAPS": "{{name}} normalizou suas voltas e está junto do grid",
+  "LAPPED_REMAINING_LAPS": "{{name}} ainda tem mais {{laps}} volta(s) para se juntar ao grid",
 
   "TWO_LAPS": "☠️🛡️ Volta {{currentLap}}, eliminação NA PRÓXIMA VOLTA 🛡️☠️",
   "BR_ELIMINATED": "☠️🔥 {{name}} eliminado 🔥☠️",

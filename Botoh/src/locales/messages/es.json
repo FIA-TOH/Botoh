@@ -148,7 +148,9 @@
   "TYRES_ABOUT_TO_BLOWN": "⚠️🛞 BOX BOX! Vemos un fuerte graining — Posible reventón de neumático en cualquier momento — box, box! 🛞⚠️",
   "INVALID_LAP_CUT": "Vuelta inválida debido a corte de pista.",
   "SOFT_CUT_PENALTY": "⚠️ ¡Has cortado la pista! ¡Pasa por dentro de la línea azul o serás penalizado!",
-  "TWO_LAPS": "☠️🛡️ Vuelta {{currentLap}}, eliminación EN LA PRÓXIMA VUELTA 🛡️☠️",
+  "LAPPED_NORMALIZED_LAPS": "{{name}} ha normalizado sus vueltas y está ahora con el grid",
+  "LAPPED_REMAINING_LAPS": "{{name}} todavía tiene {{laps}} más vuelta(s) para unirse al grid",
+  "TWO_LAPS": "☠️🛡️ Vuelta {{currentLap}}, eliminación PRÓXIMA VUELTA 🛡️☠️",
   "BR_ELIMINATED": "☠️🔥 {{name}} eliminado 🔥☠️",
   "BR_REMAINING": "☠️👥 {{remaining}} restantes. 👥☠️",
   "BR_WINNER": "👑🏆 {{name}} ganó, {{eliminated}} eliminados. 👑🏆"

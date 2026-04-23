@@ -151,5 +151,7 @@
   "TWO_LAPS": "☠️🛡️ Tur {{currentLap}}, ELEME BİR SONRAKİ TURDA 🛡️☠️",
   "BR_ELIMINATED": "☠️🔥 {{name}} elendi 🔥☠️",
   "BR_REMAINING": "☠️👥 {{remaining}} kaldı. 👥☠️",
-  "BR_WINNER": "👑🏆 {{name}} kazandı, {{eliminated}} elendi. 👑🏆"
+  "BR_WINNER": "👑🏆 {{name}} kazandı, {{eliminated}} elendi. 👑🏆",
+  "LAPPED_NORMALIZED_LAPS": "{{name}} turlarını normalleştirdi ve şimdi grid ile birlikte",
+  "LAPPED_REMAINING_LAPS": "{{name}} grid'e katılmak için {{laps}} daha tur(lar) var"
 }

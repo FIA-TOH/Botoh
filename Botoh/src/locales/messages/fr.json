@@ -148,7 +148,9 @@
   "TYRES_ABOUT_TO_BLOWN": "⚠️🛞 BOX BOX! Nous voyons un fort grainage — Risque d’éclatement imminent — box, box! 🛞⚠️",
   "INVALID_LAP_CUT": "Tour invalide à cause d’un coup de piste.",
   "SOFT_CUT_PENALTY": "⚠️ Vous avez coupé la piste! Passez par la ligne bleue ou vous serez pénalisé!",
-  "TWO_LAPS": "☠️🛡️ Tour {{currentLap}}, élimination AU PROCHAIN TOUR 🛡️☠️",
+  "LAPPED_NORMALIZED_LAPS": "{{name}} a normalisé ses tours et est maintenant avec le grid",
+  "LAPPED_REMAINING_LAPS": "{{name}} a encore {{laps}} tour(s) pour rejoindre le grid",
+  "TWO_LAPS": "☠️🛡️ Tour {{currentLap}}, élimination PROCHAIN TOUR 🛡️☠️",
   "BR_ELIMINATED": "☠️🔥 {{name}} éliminé 🔥☠️",
   "BR_REMAINING": "☠️👥 {{remaining}} restants. 👥☠️",
   "BR_WINNER": "👑🏆 {{name}} a gagné, {{eliminated}} éliminés. 👑🏆"

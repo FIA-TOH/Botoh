@@ -2,7 +2,7 @@ import { sendErrorMessage, sendAlertMessage, sendGreenMessage, COLORS, FONTS } f
 import { MESSAGES } from "../../chat/messages";
 import { DEFAULT_LANGUAGE } from "../../chat/language";
 import { CIRCUITS, currentMapIndex } from "../../zones/maps";
-import { handleAvatar, Situacions } from "../../changePlayerState/handleAvatar";
+import { handleAvatar, Situacions, restoreTyreOrCar } from "../../changePlayerState/handleAvatar";
 import { clearDebris } from "../../debris/clearDebris";
 import { getPlayerAndDiscs } from "../../playerFeatures/getPlayerAndDiscs";
 import { getRunningPlayers } from "../../utils";
@@ -14,6 +14,7 @@ let scCountdownTimeout: NodeJS.Timeout | undefined;
 let scDriverId: number | undefined;
 let scDriverInterval: NodeJS.Timeout | undefined;
 let lappedCars: Set<number> = new Set(); // Track lapped car IDs
+let lappedCarDeficits: { [key: number]: number } = {}; // Track lap deficit for each lapped car
 
 export function handleSCCommand(
   byPlayer?: PlayerObject,
@@ -143,7 +144,9 @@ export function handleSCCommand(
         actuallyLappedPlayers.forEach(lappedPosition => {
           const player = allPlayers.find(p => p.id === lappedPosition.id);
           if (player) {
+            const lapDeficit = leaderLap - lappedPosition.lap;
             setPlayerLapped(player.id, true);
+            setLapDeficit(player.id, lapDeficit);
             handleAvatar(Situacions.LappedCar, player, room);
           }
         });
@@ -290,11 +293,8 @@ export function getSafetyCarDriverId(): number | undefined {
 export function clearLappedCarAvatar(playerId: number, room: RoomObject) {
   setPlayerLapped(playerId, false); // Clear lapped status
   
-  // Get the real PlayerObject from room
-  const player = room.getPlayerList().find(p => p.id === playerId);
-  if (player) {
-    handleAvatar(Situacions.Null, player, room);
-  }
+  // Use restoreTyreOrCar to properly restore the default avatar
+  restoreTyreOrCar(playerId, room);
 }
 
 export function isPlayerLapped(playerId: number): boolean {
@@ -306,7 +306,17 @@ export function setPlayerLapped(playerId: number, isLapped: boolean) {
     lappedCars.add(playerId);
   } else {
     lappedCars.delete(playerId);
+    // Clear lap deficit when no longer lapped
+    delete lappedCarDeficits[playerId];
   }
+}
+
+export function setLapDeficit(playerId: number, deficit: number) {
+  lappedCarDeficits[playerId] = deficit;
+}
+
+export function getLapDeficit(playerId: number): number {
+  return lappedCarDeficits[playerId] || 0;
 }
 
 // Function to call when a lapped car reaches the grid and should no longer be lapped

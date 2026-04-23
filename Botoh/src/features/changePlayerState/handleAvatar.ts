@@ -63,7 +63,7 @@ function clearPlayerTimers(playerId: number) {
   playerTimers[playerId] = {};
 }
 
-function restoreTyreOrCar(playerId: number, room: RoomObject) {
+export function restoreTyreOrCar(playerId: number, room: RoomObject) {
   const p = playerList[playerId];
   if (!p) return;
 

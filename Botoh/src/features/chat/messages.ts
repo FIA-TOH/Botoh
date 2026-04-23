@@ -416,6 +416,22 @@ export const MESSAGES = {
     pt: pt_messages.LAPPED_CARS_OVERTAKE,
   }),
 
+  LAPPED_NORMALIZED_LAPS: (name: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.LAPPED_NORMALIZED_LAPS, { name }),
+    es: replaceTemplateString(es_messages.LAPPED_NORMALIZED_LAPS, { name }),
+    fr: replaceTemplateString(fr_messages.LAPPED_NORMALIZED_LAPS, { name }),
+    tr: replaceTemplateString(tr_messages.LAPPED_NORMALIZED_LAPS, { name }),
+    pt: replaceTemplateString(pt_messages.LAPPED_NORMALIZED_LAPS, { name }),
+  }),
+
+  LAPPED_REMAINING_LAPS: (name: string, laps: number): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.LAPPED_REMAINING_LAPS, { name, laps: laps.toString() }),
+    es: replaceTemplateString(es_messages.LAPPED_REMAINING_LAPS, { name, laps: laps.toString() }),
+    fr: replaceTemplateString(fr_messages.LAPPED_REMAINING_LAPS, { name, laps: laps.toString() }),
+    tr: replaceTemplateString(tr_messages.LAPPED_REMAINING_LAPS, { name, laps: laps.toString() }),
+    pt: replaceTemplateString(pt_messages.LAPPED_REMAINING_LAPS, { name, laps: laps.toString() }),
+  }),
+
   INFINITE_QUALI: (): LocalizedMessageFunction => ({
     en: en_messages.INFINITE_QUALI,
     es: es_messages.INFINITE_QUALI,
