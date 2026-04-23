@@ -54,6 +54,7 @@
   "LIST_MAPS": "Mapas disponíveis: {{maps}}",
   "VSC_ACTIVE": "VSC está ativo",
   "VSC_NOT_ACTIVE": "VSC não está mais ativo",
+  "VSC_DEPLOYED": "⚠️ VSC IMPLANTADO! Ultrapassagens proibidas, velocidade reduzida!",
   "NOT_STARTED": "Jogo não iniciado",
   "CLEAR_TIME_USAGE": "Uso: !clear_time <name>",
   "NO_WAIT_TIME": "Nenhuma corrida/qualificação está acontecendo",

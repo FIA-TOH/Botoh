@@ -352,6 +352,14 @@ export const MESSAGES = {
     pt: pt_messages.VSC_NOT_ACTIVE,
   }),
 
+  VSC_DEPLOYED: (): LocalizedMessageFunction => ({
+    en: en_messages.VSC_DEPLOYED,
+    es: es_messages.VSC_DEPLOYED,
+    fr: fr_messages.VSC_DEPLOYED,
+    tr: tr_messages.VSC_DEPLOYED,
+    pt: pt_messages.VSC_DEPLOYED,
+  }),
+
   DISCORD_INVITE: (link: string): LocalizedMessageFunction => ({
     en: replaceTemplateString(en_messages.DISCORD_INVITE, { link: link }),
     es: replaceTemplateString(es_messages.DISCORD_INVITE, { link: link }),

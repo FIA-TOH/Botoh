@@ -55,6 +55,7 @@
   "LIST_MAPS": "Mapas disponibles: {{maps}}",
   "VSC_ACTIVE": "VSC está activa",
   "VSC_NOT_ACTIVE": "VSC no está activa",
+  "VSC_DEPLOYED": "⚠️ VSC IMPLANTADO! Adelantamientos prohibidos, velocidad reducida!",
   "NOT_STARTED": "Carrera no iniciada",
   "CLEAR_TIME_USAGE": "Uso: !clear_time <nombre>",
   "NO_WAIT_TIME": "No hay ninguna carrera/clasificación en curso.",

@@ -22,7 +22,7 @@ export function PlayerChat(room: RoomObject) {
     log(`${player.name}: ${message}`);
 
     if (player.admin) afkAdmins[player.id] = 0;
-    updatePlayerActivity(player);
+    updatePlayerActivity(player, room);
 
     const command = message.toLowerCase().split(" ")[0];
     const args = message.toLowerCase().split(" ").slice(1);

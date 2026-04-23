@@ -1,4 +1,4 @@
-import { sendErrorMessage, sendChatMessage } from "../../chat/chat";
+import { sendErrorMessage, sendChatMessage, sendYellowMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { changeVSC, vsc } from "../../safetyCar/vsc";
 
@@ -16,6 +16,10 @@ export function handleVSCCommand(
   }
 
   changeVSC();
-  const message = vsc ? MESSAGES.VSC_ACTIVE() : MESSAGES.VSC_NOT_ACTIVE();
-  sendChatMessage(room, message);
+  
+  if (vsc) {
+    sendYellowMessage(room, MESSAGES.VSC_DEPLOYED());
+  } else {
+    sendChatMessage(room, MESSAGES.VSC_NOT_ACTIVE());
+  }
 }
