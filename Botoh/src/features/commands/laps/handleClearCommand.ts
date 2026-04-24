@@ -1,4 +1,4 @@
-import { clearBestTime } from "../../../circuits/bestTimes";
+﻿import { clearBestTime } from "../../../circuits/bestTimes";
 import { playerList } from "../../changePlayerState/playerList";
 import { sendErrorMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
@@ -18,7 +18,7 @@ export function handleClearCommand(
   clearBestTime(ACTUAL_CIRCUIT.info.name, 999.999, "Limpado");
   const players = room.getPlayerList();
   players.forEach((p) => {
-    playerList[p.id].bestTime === 999.999;
+    playerList[p.id].bestTime = 999.999;
     playerList[p.id].bestSectorTimes = [
       Number.MAX_VALUE,
       Number.MAX_VALUE,
