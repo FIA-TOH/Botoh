@@ -54,6 +54,44 @@ export const MESSAGES = {
     tr: tr_messages.ADMIN_ALREADY_IN_ROOM,
     pt: pt_messages.ADMIN_ALREADY_IN_ROOM,
   }),
+  ADMIN_ONLY: (): LocalizedMessageFunction => ({
+    en: en_messages.ADMIN_ONLY,
+    es: es_messages.ADMIN_ONLY,
+    fr: fr_messages.ADMIN_ONLY,
+    tr: tr_messages.ADMIN_ONLY,
+    pt: pt_messages.ADMIN_ONLY,
+  }),
+  CONFIG_MISSING_ARGUMENT: (): LocalizedMessageFunction => ({
+    en: en_messages.CONFIG_MISSING_ARGUMENT,
+    es: es_messages.CONFIG_MISSING_ARGUMENT,
+    fr: fr_messages.CONFIG_MISSING_ARGUMENT,
+    tr: tr_messages.CONFIG_MISSING_ARGUMENT,
+    pt: pt_messages.CONFIG_MISSING_ARGUMENT,
+  }),
+  CONFIG_INVALID_ARGUMENT: (): LocalizedMessageFunction => ({
+    en: en_messages.CONFIG_INVALID_ARGUMENT,
+    es: es_messages.CONFIG_INVALID_ARGUMENT,
+    fr: fr_messages.CONFIG_INVALID_ARGUMENT,
+    tr: tr_messages.CONFIG_INVALID_ARGUMENT,
+    pt: pt_messages.CONFIG_INVALID_ARGUMENT,
+  }),
+  CONFIG_SUCCESS: (configType: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.CONFIG_SUCCESS, {
+      configType: configType,
+    }),
+    es: replaceTemplateString(es_messages.CONFIG_SUCCESS, {
+      configType: configType,
+    }),
+    fr: replaceTemplateString(fr_messages.CONFIG_SUCCESS, {
+      configType: configType,
+    }),
+    tr: replaceTemplateString(tr_messages.CONFIG_SUCCESS, {
+      configType: configType,
+    }),
+    pt: replaceTemplateString(pt_messages.CONFIG_SUCCESS, {
+      configType: configType,
+    }),
+  }),
   AVAILABLE_COMMANDS: (): LocalizedMessageFunction => ({
     en: en_messages.AVAILABLE_COMMANDS,
     es: es_messages.AVAILABLE_COMMANDS,

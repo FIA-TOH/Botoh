@@ -335,6 +335,11 @@ export default function fr_commands(
     args: string[],
     room: RoomObject,
   ) => void,
+  handleConfigCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
 ): Commands {
   return {
     "!admin": handleAdminCommand,
@@ -410,5 +415,6 @@ export default function fr_commands(
     "!sandbag": handleSandbagCommand,
     "!rain": handleDefineRain,
     "!set_weather_id": handleSetNewWeatherId,
+    "!config": handleConfigCommand,
   };
 }
