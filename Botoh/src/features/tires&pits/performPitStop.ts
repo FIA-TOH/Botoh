@@ -5,6 +5,7 @@ import { emitPitMessage } from "./pitMessaging";
 import { sendAlertMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
+import { resetPitState } from "./newPitSystem/newPitManager";
 
 export function performPitStop(
   room: RoomObject,
@@ -44,6 +45,9 @@ export function performPitStop(
   delete playerState.pitInitialPos;
   delete playerState.pitSteps;
   playerState.inPitStop = false;
+  
+  resetPitState(byPlayer.id);
+  
   handleAvatar(Situacions.Correct, byPlayer, room);
 }
 export function detectPitPerTick(
@@ -65,7 +69,12 @@ export function detectPitPerTick(
     delete state.pitInitialPos;
     delete state.pitSteps;
     state.inPitStop = false;
-    sendAlertMessage(room, MESSAGES.CANCELED_CHANGE_TYRES(), pad.p.id);
+    
+    resetPitState(pad.p.id);
+    
+    if (state.pitInitialPos) {
+      sendAlertMessage(room, MESSAGES.CANCELED_CHANGE_TYRES(), pad.p.id);
+    }
     return;
   }
 

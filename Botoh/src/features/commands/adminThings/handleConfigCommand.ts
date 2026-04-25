@@ -15,6 +15,7 @@ import { handleRREnabledCommand } from "./handleRREnabledCommand";
 import { handleSpeedCommand } from "../avatar/handleSpeedCommand";
 import { handleSafetyCommand } from "../flagsAndVSC/handleSafetyCommand";
 import { handleRModeCommand } from "../gameMode/race/handleRModeCommand";
+import { handlePitCommand } from "./handlePitCommand";
 
 export function handleConfigCommand(
   byPlayer: PlayerObject,
@@ -68,6 +69,7 @@ function applyFTOHConfig(room: RoomObject, byPlayer: PlayerObject) {
   enableCutPenalty(true);
   enableDebris(true);
   enableSoftCutPenalty(false, room);
+  handlePitCommand(byPlayer, ["new"], room);
 }
 
 function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {
@@ -86,6 +88,7 @@ function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {
   enableCutPenalty(true);
   enableDebris(false);
   enableSoftCutPenalty(false, room);
+  handlePitCommand(byPlayer, ["old"], room);
 }
 
 function applyHaxbulaConfig(room: RoomObject, byPlayer: PlayerObject) {
@@ -104,4 +107,5 @@ function applyHaxbulaConfig(room: RoomObject, byPlayer: PlayerObject) {
   enableCutPenalty(false);
   enableDebris(false);
   enableSoftCutPenalty(false, room);
+  handlePitCommand(byPlayer, ["old"], room);
 }

@@ -3,6 +3,7 @@ import { ifInBoxZone } from "../../tires&pits/pitLane";
 import { playerList } from "../../changePlayerState/playerList";
 import { getRunningPlayers } from "../../utils";
 import { gasEnabled } from "../handleSlipstream";
+import { isXKeyPressed } from "../../utils/dampingValues";
 import {
   generalGameMode,
   GeneralGameMode,
@@ -59,7 +60,7 @@ function handleERS(
   room: RoomObject
 ) {
   if (room.getScores()?.time > 0) {
-    if (properties.damping === 0.986 || properties.damping === 0.9905) {
+    if (isXKeyPressed(properties.damping)) {
       handleAvatar(Situacions.Ers, p, room);
       if (playerInfo.kers > 0) {
         playerInfo.kers -= 100 / (ERS_DURATION_SECONDS * 60);

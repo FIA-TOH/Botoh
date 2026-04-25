@@ -3,6 +3,7 @@ import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { resetPlayers } from "../changePlayerState/players";
 import { cleanupLeagueStartAFKDetection } from "../afk/leagueStartAFKDetection";
 import { resetVSCState } from "../safetyCar/vsc";
+import { resetPitState } from "../tires&pits/newPitSystem/newPitManager";
 
 
 import {
@@ -109,6 +110,9 @@ export function GameStop(room: RoomObject) {
           changeGameMode(GameMode.RACE, room);
           changeLaps("7", undefined, room);
           resetPlayers(room);
+          room.getPlayerList().forEach(player => {
+            resetPitState(player.id);
+          });
           handleRREnabledCommand(undefined, ["false"], room);
           sendAllCutsToDiscord();
         } else if (gameMode == GameMode.TRAINING) {
@@ -117,12 +121,18 @@ export function GameStop(room: RoomObject) {
           reorderPlayersInRoomRace(room);
           movePlayersToCorrectSide();
           resetPlayers(room);
+          room.getPlayerList().forEach(player => {
+            resetPitState(player.id);
+          });
           handleRREnabledCommand(undefined, ["false"], room);
         } else {
           sendRaceResultsToDiscord();
           printAllPositions(room);
           movePlayersToCorrectSide();
           resetPlayers(room);
+          room.getPlayerList().forEach(player => {
+            resetPitState(player.id);
+          });
           sendDiscordMessage(room);
           sendAllCutsToDiscord();
         }

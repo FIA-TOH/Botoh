@@ -43,7 +43,14 @@ const PIT_TABLE: PitTimeEntry[] = [
   // { time: 15.0, prob: 0.4 }, // pit catastrófico
 ];
 
-export function generatePitCountdown(): number {
+export function generatePitCountdown(playerId?: number): number {
+  if (playerId && playerList[playerId]?.newPitState?.isPitNewEnabled && playerList[playerId].newPitState.reactionTime) {
+    const reactionTime = playerList[playerId].newPitState.reactionTime;
+    const emojiDelayTime = playerList[playerId]?.newPitState?.emojiDelayTime || 0;
+    const pitTime = reactionTime * 5 + 2 - emojiDelayTime;
+    return Math.max(2.0, Math.min(15.0, Math.round(pitTime * 100) / 100));
+  }
+
   const totalProb = PIT_TABLE.reduce((acc, entry) => acc + entry.prob, 0);
 
   const r = Math.random() * totalProb;
@@ -68,7 +75,7 @@ export function generatePitCountdown(): number {
   return PIT_TABLE[PIT_TABLE.length - 1].time;
 }
 export function generatePitResult(player: PlayerObject): PitResult {
-  const totalTime = generatePitCountdown();
+  const totalTime = generatePitCountdown(player.id);
   playerList[player.id].pitCountdown = totalTime;
 
   let errorType: PitResult["errorType"] = "none";
@@ -126,6 +133,80 @@ export function generatePitResult(player: PlayerObject): PitResult {
       perTyreTimes[t] = Math.max(1.5, share + randomInRange(-0.3, 0.3));
     }
   }
+  return {
+    totalTime,
+    errorType,
+    tyres,
+    perTyreTimes: perTyreTimes.map((t) => Math.round(t * 100) / 100),
+  };
+}
+
+export function generatePitResultFromReaction(playerId: number): PitResult {
+  const reactionTime = playerList[playerId]?.newPitState?.reactionTime;
+  if (!reactionTime) {
+    return generatePitResult({ id: playerId } as PlayerObject);
+  }
+
+  const emojiDelayTime = playerList[playerId]?.newPitState?.emojiDelayTime || 0;
+  const totalTime = Math.max(2.0, Math.min(15.0, Math.round((reactionTime * 5 + 2 - emojiDelayTime) * 100) / 100));
+  playerList[playerId].pitCountdown = totalTime;
+
+  let errorType: PitResult["errorType"] = "none";
+  const tyres: number[] = [];
+
+  if (totalTime >= 3 && totalTime <= 6.0) {
+    errorType = "light";
+    tyres.push(Math.floor(Math.random() * 4));
+  } else if (totalTime >= 6.1) {
+    errorType = "heavy";
+    const tyre1 = Math.floor(Math.random() * 4);
+    tyres.push(tyre1);
+    if (Math.random() < 0.5) {
+      let tyre2 = tyre1;
+      while (tyre2 === tyre1) tyre2 = Math.floor(Math.random() * 4);
+      tyres.push(tyre2);
+    }
+  }
+
+  const perTyreTimes = Array(4).fill(0);
+  if (errorType === "none") {
+    const bad = Math.floor(Math.random() * 4);
+
+    let remaining = totalTime;
+    for (let i = 0; i < 4; i++) {
+      if (i === bad) continue;
+      perTyreTimes[i] = randomInRange(0.3, 0.7);
+      remaining -= perTyreTimes[i];
+    }
+
+    perTyreTimes[bad] = Math.max(0.4, remaining);
+  } else if (errorType === "light") {
+    const bad = tyres[0];
+    let remaining = totalTime;
+
+    for (let i = 0; i < 4; i++) {
+      if (i === bad) continue;
+      perTyreTimes[i] = randomInRange(0.4, 0.8);
+      remaining -= perTyreTimes[i];
+    }
+
+    perTyreTimes[bad] = Math.max(1.5, remaining);
+  } else {
+    let remaining = totalTime;
+    const badTyres = new Set(tyres);
+
+    for (let i = 0; i < 4; i++) {
+      if (badTyres.has(i)) continue;
+      perTyreTimes[i] = randomInRange(0.4, 0.8);
+      remaining -= perTyreTimes[i];
+    }
+
+    const share = remaining / tyres.length;
+    for (const t of tyres) {
+      perTyreTimes[t] = Math.max(1.5, share + randomInRange(-0.3, 0.3));
+    }
+  }
+
   return {
     totalTime,
     errorType,

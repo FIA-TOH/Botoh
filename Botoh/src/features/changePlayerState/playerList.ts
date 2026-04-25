@@ -18,6 +18,19 @@ type Direction = {
   y: number;
 };
 
+export interface NewPitState {
+  isWaitingForPit: boolean;
+  pitStartTime?: number;
+  pKeyPressed: boolean;
+  isPitNewEnabled: boolean;
+  selectedTires?: Tires;
+  pitReadyTime?: number;
+  pitEmojiShowTime?: number;
+  reactionTime?: number;
+  emojiDelayTime?: number;
+  reactionTimeout?: number;
+}
+
 export interface PlayerInfo {
   // Identificação e status de presença
   ip: string;
@@ -111,6 +124,8 @@ export interface PlayerInfo {
 
   //contadores
   timeWhenEntered: number;
+
+  newPitState?: NewPitState;
 }
 
 type PlayerList = {

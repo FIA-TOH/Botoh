@@ -80,14 +80,12 @@ export function createPlayerInfo(ip?: string) {
     slipstreamEndTime: undefined,
     finalSlipstream: 0,
 
-    // Penalidades e alertas
     penaltyCounter: 0,
     alertSent: {},
     lastCheckTime: 0,
     cuttedTrackOnThisLap: false,
     lastLapValid: true,
 
-    // Preferências e estado geral
     language: DEFAULT_LANGUAGE,
     everyoneLaps: false,
     voted: false,
@@ -103,8 +101,20 @@ export function createPlayerInfo(ip?: string) {
 
     previousPos: { x: null, y: null },
 
-    //contadores
     timeWhenEntered: 0,
+
+    newPitState: {
+      isWaitingForPit: false,
+      pKeyPressed: false,
+      isPitNewEnabled: false,
+      pitStartTime: undefined,
+      pitReadyTime: undefined,
+      pitEmojiShowTime: undefined,
+      reactionTime: undefined,
+      selectedTires: undefined,
+      emojiDelayTime: undefined,
+      reactionTimeout: undefined,
+    },
   };
 }
 

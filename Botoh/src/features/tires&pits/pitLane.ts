@@ -7,6 +7,7 @@ import { inHitbox, getRunningPlayers } from "../utils";
 import { handleExplainTyresCommand } from "../commands/tyres/handleExplainTyresCommand";
 import { generatePitResult } from "./pitStopFunctions";
 import { Teams } from "../changeGameState/teams";
+import { isPitNewSystemEnabled } from "./newPitSystem/newPitManager";
 
 function ifInPitlaneStart(
   player: { p: PlayerObject; disc: DiscPropertiesObject },
@@ -36,7 +37,9 @@ export function handlePitlane(
   players.forEach((player) => {
     const p = player.p;
     if (ifInPitlaneStart(player, room) && !playerList[p.id].inPitlane) {
-      playerList[p.id].pitFailures = generatePitResult(p);
+      if (!isPitNewSystemEnabled()) {
+        playerList[p.id].pitFailures = generatePitResult(p);
+      }
 
       playerList[p.id].pits.pitsNumber += 1;
       playerList[p.id].inPitlane = true;

@@ -92,6 +92,37 @@ export const MESSAGES = {
       configType: configType,
     }),
   }),
+  PIT_MISSING_ARGUMENT: (): LocalizedMessageFunction => ({
+    en: en_messages.PIT_MISSING_ARGUMENT,
+    es: es_messages.PIT_MISSING_ARGUMENT,
+    fr: fr_messages.PIT_MISSING_ARGUMENT,
+    tr: tr_messages.PIT_MISSING_ARGUMENT,
+    pt: pt_messages.PIT_MISSING_ARGUMENT,
+  }),
+  PIT_INVALID_ARGUMENT: (): LocalizedMessageFunction => ({
+    en: en_messages.PIT_INVALID_ARGUMENT,
+    es: es_messages.PIT_INVALID_ARGUMENT,
+    fr: fr_messages.PIT_INVALID_ARGUMENT,
+    tr: tr_messages.PIT_INVALID_ARGUMENT,
+    pt: pt_messages.PIT_INVALID_ARGUMENT,
+  }),
+  PIT_SUCCESS: (pitType: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.PIT_SUCCESS, {
+      pitType: pitType,
+    }),
+    es: replaceTemplateString(es_messages.PIT_SUCCESS, {
+      pitType: pitType,
+    }),
+    fr: replaceTemplateString(fr_messages.PIT_SUCCESS, {
+      pitType: pitType,
+    }),
+    tr: replaceTemplateString(tr_messages.PIT_SUCCESS, {
+      pitType: pitType,
+    }),
+    pt: replaceTemplateString(pt_messages.PIT_SUCCESS, {
+      pitType: pitType,
+    }),
+  }),
   AVAILABLE_COMMANDS: (): LocalizedMessageFunction => ({
     en: en_messages.AVAILABLE_COMMANDS,
     es: es_messages.AVAILABLE_COMMANDS,

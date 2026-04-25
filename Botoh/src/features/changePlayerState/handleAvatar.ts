@@ -17,6 +17,8 @@ export enum Situacions {
   Sandbag = "Sandbag",
   SafetyCar = "SafetyCar",
   LappedCar = "LappedCar",
+  PitReady = "PitReady",
+  None = "None",
 }
 
 export const TIRE_AVATAR: { [key in Tires]: string } = {
@@ -46,6 +48,8 @@ const SITUATION_PRIORITY: Record<Situacions, number> = {
   [Situacions.SafetyCar]: 8,
   [Situacions.LappedCar]: 6,
   [Situacions.Null]: 0,
+  [Situacions.PitReady]: 10,
+  [Situacions.None]: 0,
 };
 
 const playerTimers: Record<
@@ -227,6 +231,14 @@ const situationHandlers: Record<
   [Situacions.LappedCar]: (player, room) => {
     room.setPlayerAvatar(player.id, "🔁");
     // Lapped car avatar stays until manually cleared
+  },
+
+  [Situacions.PitReady]: (player, room) => {
+    room.setPlayerAvatar(player.id, "⚡");
+  },
+
+  [Situacions.None]: (player, room) => {
+    restoreTyreOrCar(player.id, room);
   },
 };
 

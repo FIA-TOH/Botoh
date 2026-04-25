@@ -8,6 +8,7 @@ import { MESSAGES } from "../../chat/messages";
 import { handlePitStop } from "../../tires&pits/handlePitStop";
 import { ifInBoxZone } from "../../tires&pits/pitLane";
 import { Tires } from "../../tires&pits/tires";
+import { isPitNewSystemEnabled, startNewPitSequence, handlePitKeyPress } from "../../tires&pits/newPitSystem/newPitManager";
 
 export function handleTiresCommand(
   byPlayer: PlayerObject,
@@ -68,6 +69,15 @@ export function handleTiresCommand(
       sendErrorMessage(room, MESSAGES.INVALID_TIRES(), byPlayer.id);
       return;
     }
-    handlePitStop(room, byPlayer, tiresKey);
+
+    if (isPitNewSystemEnabled()) {
+      if (room.getScores().time <= 0) {
+        handlePitStop(room, byPlayer, tiresKey);
+      } else {
+        startNewPitSequence(byPlayer.id, room, tiresKey);
+      }
+    } else {
+      handlePitStop(room, byPlayer, tiresKey);
+    }
   }
 }

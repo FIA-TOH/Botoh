@@ -2,6 +2,7 @@ import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
 import { sendSmallChatMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { PitResult } from "./pitStopFunctions";
+import { isPitNewSystemEnabled } from "./newPitSystem/newPitManager";
 
 type TyreStatus = "⬜" | "🟨" | "🟥" | "🟩";
 type PitStepKind = "changing" | "error" | "success";
@@ -52,6 +53,11 @@ export function buildPitSteps(pit: PitResult | undefined): PitStep[] {
   const total = pit.totalTime;
   const errSet = new Set(pit.tyres);
 
+  const isPitNew = isPitNewSystemEnabled();
+  const errorThreshold = isPitNew ? 5.0 : 3.0;
+  
+  const shouldShowError = total > errorThreshold;
+
   const steps: PitStep[] = [];
   const s: TyreStatus[] = ["⬜", "⬜", "⬜", "⬜"];
   s[0] = "🟨";
@@ -63,7 +69,7 @@ export function buildPitSteps(pit: PitResult | undefined): PitStep[] {
     const startRemaining = total - elapsed;
     const last = i === 3;
 
-    if (errSet.has(i)) {
+    if (errSet.has(i) && shouldShowError) {
       const third = t / 3;
 
       steps.push({

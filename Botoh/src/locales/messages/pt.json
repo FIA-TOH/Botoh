@@ -6,6 +6,9 @@
   "CONFIG_MISSING_ARGUMENT": "Uso: !config <ftoh|fh|haxbula>",
   "CONFIG_INVALID_ARGUMENT": "Argumento inválido. Use: ftoh, fh ou haxbula",
   "CONFIG_SUCCESS": "Configuração '{{configType}}' aplicada com sucesso",
+  "PIT_MISSING_ARGUMENT": "Uso: !pit <old|new>",
+  "PIT_INVALID_ARGUMENT": "Argumento inválido. Use: old ou new",
+  "PIT_SUCCESS": "Configuração pit '{{pitType}}' aplicada com sucesso",
 
   "LAPS_ON_CURRENT_TIRE": "Você completou {{currentLaps}} voltas com os pneus atuais.",
   "FLAT_TYRE": "❗ Seus pneus estão furados, faça o pitstop! (Digite !tyres dentro do BOX) ❗",

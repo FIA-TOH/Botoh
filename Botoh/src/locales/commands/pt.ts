@@ -341,6 +341,11 @@ export default function pt_commands(
     args: string[],
     room: RoomObject,
   ) => void,
+  handlePitCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
 ): Commands {
   return {
     "!admin": handleAdminCommand,
@@ -419,5 +424,6 @@ export default function pt_commands(
     "!rain": handleDefineRain,
     "!set_weather_id": handleSetNewWeatherId,
     "!config": handleConfigCommand,
+    "!pit": handlePitCommand,
   };
 }

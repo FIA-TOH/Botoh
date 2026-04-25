@@ -15,6 +15,7 @@ import { getRunningPlayers } from "../../utils";
 import { CIRCUITS, currentMapIndex } from "../../zones/maps";
 import { rrEnabled } from "../adminThings/handleRREnabledCommand";
 import { RR_POSITION } from "../adminThings/handleRRPositionCommand";
+import { resetPitState } from "../../tires&pits/newPitSystem/newPitManager";
 
 export function handleRRAllCommand(room: RoomObject) {
   const playersAndDiscs = getPlayerAndDiscs(room);
@@ -31,6 +32,7 @@ export function handleRRAllCommand(room: RoomObject) {
 
     const pad = getPlayerAndDiscs(room).filter((p) => p.p.id === player.p.id);
     resetPlayer(player.p, room, player.p.id);
+    resetPitState(player.p.id);
 
     if (
       generalGameMode === GeneralGameMode.GENERAL_QUALY ||
@@ -78,6 +80,7 @@ export function handleRRCommand(
   const pad = playersAndDiscs.filter((p) => p.p.id === byPlayer.id);
 
   resetPlayer(byPlayer, room, byPlayer.id);
+  resetPitState(byPlayer.id);
 
   if (
     generalGameMode === GeneralGameMode.GENERAL_QUALY ||
