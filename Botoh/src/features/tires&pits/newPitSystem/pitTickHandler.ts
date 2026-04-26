@@ -2,8 +2,11 @@ import { handlePitKeyPress } from "./newPitManager";
 import { playerList } from "../../changePlayerState/playerList";
 import { isPitNewSystemEnabled } from "./newPitManager";
 import { handlePitStop } from "../handlePitStop";
-import { handleAvatar, Situacions } from "../../changePlayerState/handleAvatar";
+import { handleAvatar, restoreTyreOrCar, Situacions } from "../../changePlayerState/handleAvatar";
 import { PitResult } from "../pitStopFunctions";
+import { sendAlertMessage } from "../../chat/chat";
+import { MESSAGES } from "../../chat/messages";
+import { resetPitState } from "./newPitManager";
 
 export function updateNewPitSystemForPlayer(
   p: PlayerObject,
@@ -19,6 +22,23 @@ export function updateNewPitSystemForPlayer(
   if (!playerInfo?.newPitState) return;
   
   if(!playerInfo?.inPitlane) return;
+
+  if (playerInfo.newPitState.isWaitingForPit) {
+    const disc = room.getPlayerDiscProperties(p.id);
+    if (!disc) return;
+    
+    const isMoving = Math.hypot(disc.xspeed, disc.yspeed) > 0.5;
+    
+    if (isMoving) {
+      resetPitState(p.id);
+      
+      restoreTyreOrCar(p.id, room);
+      
+      sendAlertMessage(room, MESSAGES.CANCELED_CHANGE_TYRES(), p.id);
+      
+      return;
+    }
+  }
 
   if (playerInfo.newPitState.isWaitingForPit && 
       !playerInfo.newPitState.pKeyPressed && 
