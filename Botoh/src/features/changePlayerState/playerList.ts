@@ -31,6 +31,13 @@ export interface NewPitState {
   reactionTimeout?: number;
 }
 
+export interface XKeyState {
+  isPressed: boolean;
+  pressTimes: number[];
+  releaseTimes: number[];
+  lastCheckTime: number;
+}
+
 export interface PlayerInfo {
   // Identificação e status de presença
   ip: string;
@@ -126,6 +133,12 @@ export interface PlayerInfo {
   timeWhenEntered: number;
 
   newPitState?: NewPitState;
+  
+  // X key tracking para detecção de duplo clique
+  xKeyState?: XKeyState;
+  
+  // Gerenciamento de pneus via X key
+  managing_tyres: boolean;
 }
 
 type PlayerList = {

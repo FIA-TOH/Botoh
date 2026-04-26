@@ -1883,4 +1883,35 @@ export const MESSAGES = {
     tr: "📊 Sektöre göre su değişiyor!",
     pt: "📊 Nível de água diferente entre os setores! (Pista mista)",
   }),
+  MANAGE_TYRES_MISSING_ARGUMENT: (): LocalizedMessageFunction => ({
+    en: en_messages.MANAGE_TYRES_MISSING_ARGUMENT,
+    es: es_messages.MANAGE_TYRES_MISSING_ARGUMENT,
+    fr: fr_messages.MANAGE_TYRES_MISSING_ARGUMENT,
+    tr: tr_messages.MANAGE_TYRES_MISSING_ARGUMENT,
+    pt: pt_messages.MANAGE_TYRES_MISSING_ARGUMENT,
+  }),
+  MANAGE_TYRES_INVALID_ARGUMENT: (): LocalizedMessageFunction => ({
+    en: en_messages.MANAGE_TYRES_INVALID_ARGUMENT,
+    es: es_messages.MANAGE_TYRES_INVALID_ARGUMENT,
+    fr: fr_messages.MANAGE_TYRES_INVALID_ARGUMENT,
+    tr: tr_messages.MANAGE_TYRES_INVALID_ARGUMENT,
+    pt: pt_messages.MANAGE_TYRES_INVALID_ARGUMENT,
+  }),
+  MANAGE_TYRES_SUCCESS: (enabled: boolean): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.MANAGE_TYRES_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+    es: replaceTemplateString(es_messages.MANAGE_TYRES_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+    fr: replaceTemplateString(fr_messages.MANAGE_TYRES_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+    tr: replaceTemplateString(tr_messages.MANAGE_TYRES_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+    pt: replaceTemplateString(pt_messages.MANAGE_TYRES_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+  }),
 };

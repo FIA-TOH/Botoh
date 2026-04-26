@@ -8,6 +8,7 @@ import {
 import { gameState } from "../changeGameState/gameState";
 import { Teams } from "../changeGameState/teams";
 import { playerList } from "../changePlayerState/playerList";
+import { getRunningPlayers, vectorSpeed } from "../utils";
 import { sendAlertMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { deployVSCAutomatically } from "../safetyCar/vsc";
@@ -31,6 +32,8 @@ interface PlayerActivity {
 
 const playerActivities: { [key: number]: PlayerActivity } = {};
 let safetyCarActivatedForAfkLeave = false;
+
+const MIN_SPEED_FOR_ACTIVITY = 20;
 
 function getCurrentGameTime(room: RoomObject): number {
   return room.getScores()?.time || 0;
@@ -56,9 +59,35 @@ function getWarningTimeout(): number {
   return isRealSafetyEnabled() ? 0 : afkKickTime - 5;
 }
 
+function isPlayerMovingAtSpeed(playerId: number, room: RoomObject): boolean {
+  if (!room) return false;
+  
+  const playersAndDiscs = room.getPlayerList().map(player => ({
+    p: player,
+    disc: room.getPlayerDiscProperties(player.id)
+  }));
+  
+  const runningPlayer = getRunningPlayers(playersAndDiscs).find(
+    pad => pad.p.id === playerId
+  );
+  
+  if (!runningPlayer) return false;
+  
+  const speed = vectorSpeed(runningPlayer.disc.xspeed, runningPlayer.disc.yspeed);
+  return speed >= MIN_SPEED_FOR_ACTIVITY;
+}
+
 export function updatePlayerActivity(player: PlayerObject, room?: RoomObject) {
   const playerId = player.id;
   const currentTime = room ? getCurrentGameTime(room) : 0;
+  
+  if (room && isPlayerMovingAtSpeed(playerId, room)) {
+    const playerProps = playerList[playerId];
+    if (playerProps) {
+      playerProps.afkAlert = false;
+    }
+    return;
+  }
   
   if (!playerActivities[playerId]) {
     playerActivities[playerId] = {
@@ -202,6 +231,15 @@ export function afkKick(room: RoomObject) {
 
     const activity = playerActivities[playerId];
     const afkDuration = currentGameTime - activity.lastActivityTime;
+
+    // Se o jogador está se movendo acima da velocidade mínima, resetar o contador AFK
+    if (isPlayerMovingAtSpeed(playerId, room)) {
+      activity.lastActivityTime = currentGameTime;
+      activity.warningSent = false;
+      activity.lastWarningTime = 0;
+      activity.vscActivated = false;
+      continue;
+    }
 
     if (isRealSafetyEnabled() && afkDuration >= 2 && !activity.vscActivated) {
       if (!vsc && !presentationLap) {

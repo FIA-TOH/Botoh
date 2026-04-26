@@ -341,6 +341,11 @@ export default function pt_commands(
     args: string[],
     room: RoomObject,
   ) => void,
+  handleManageTyresCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
   handlePitCommand: (
     byPlayer: PlayerObject,
     args: string[],
@@ -424,6 +429,7 @@ export default function pt_commands(
     "!rain": handleDefineRain,
     "!set_weather_id": handleSetNewWeatherId,
     "!config": handleConfigCommand,
+    "!manage_tyres": handleManageTyresCommand,
     "!pit": handlePitCommand,
   };
 }
