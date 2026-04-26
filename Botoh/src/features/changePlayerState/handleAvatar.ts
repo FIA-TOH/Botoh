@@ -19,6 +19,8 @@ export enum Situacions {
   LappedCar = "LappedCar",
   PitReady = "PitReady",
   None = "None",
+  ManagingTyresOn = "ManagingTyresOn",
+  ManagingTyresOff = "ManagingTyresOff",
 }
 
 export const TIRE_AVATAR: { [key in Tires]: string } = {
@@ -50,6 +52,8 @@ const SITUATION_PRIORITY: Record<Situacions, number> = {
   [Situacions.Null]: 0,
   [Situacions.PitReady]: 10,
   [Situacions.None]: 0,
+  [Situacions.ManagingTyresOn]: 7,
+  [Situacions.ManagingTyresOff]: 7,
 };
 
 const playerTimers: Record<
@@ -239,6 +243,24 @@ const situationHandlers: Record<
 
   [Situacions.None]: (player, room) => {
     restoreTyreOrCar(player.id, room);
+  },
+
+  [Situacions.ManagingTyresOn]: (player, room) => {
+    room.setPlayerAvatar(player.id, "🧊");
+
+    playerTimers[player.id].timeout = setTimeout(() => {
+      restoreTyreOrCar(player.id, room);
+      currentSituacion[player.id] = Situacions.Null;
+    }, 3000);
+  },
+
+  [Situacions.ManagingTyresOff]: (player, room) => {
+    room.setPlayerAvatar(player.id, "🔥");
+
+    playerTimers[player.id].timeout = setTimeout(() => {
+      restoreTyreOrCar(player.id, room);
+      currentSituacion[player.id] = Situacions.Null;
+    }, 3000);
   },
 };
 

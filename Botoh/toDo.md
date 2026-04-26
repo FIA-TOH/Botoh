@@ -10,17 +10,13 @@ Atualizar alguns mapas
 
 Erro rejoin
 mensagens discord sem lag
-
 Tentar fazer banking como o rodri falou
 Add daytonna Rodri
 
 # To-Do longos
 
-Damping modifier
-Rain system
 Crash system
 Car broken system
-Auto yellow flag system and safety car commands
 New tyres
 P&D
 API para fazer gráfico de posicão

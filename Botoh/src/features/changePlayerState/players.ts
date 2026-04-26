@@ -115,6 +115,15 @@ export function createPlayerInfo(ip?: string) {
       emojiDelayTime: undefined,
       reactionTimeout: undefined,
     },
+
+    xKeyState: {
+      isPressed: false,
+      pressTimes: [],
+      releaseTimes: [],
+      lastCheckTime: 0,
+    },
+
+    managing_tyres: false,
   };
 }
 
@@ -221,4 +230,15 @@ export function resetPlayer(
 
   //contadores
   playerList[id].timeWhenEntered = 0;
+
+  // Reset X key tracking
+  playerList[id].xKeyState = {
+    isPressed: false,
+    pressTimes: [],
+    releaseTimes: [],
+    lastCheckTime: 0,
+  };
+
+  // Reset managing tyres
+  playerList[id].managing_tyres = false;
 }

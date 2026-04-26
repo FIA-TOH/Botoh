@@ -1,6 +1,7 @@
 import { sendErrorMessage } from "../../chat/chat";
 import { MESSAGES, getPlayerLanguage } from "../../chat/messages";
 import { setGhostMode } from "../../changePlayerState/ghost";
+import { getGameState } from "../../changeGameState/gameState";
 import { enableDebris } from "../../debris/enableDebris";
 import {
   enableCutPenalty,
@@ -16,12 +17,19 @@ import { handleSpeedCommand } from "../avatar/handleSpeedCommand";
 import { handleSafetyCommand } from "../flagsAndVSC/handleSafetyCommand";
 import { handleRModeCommand } from "../gameMode/race/handleRModeCommand";
 import { handlePitCommand } from "./handlePitCommand";
+import { setManageTyresEnabled } from "./handleManageTyresCommand";
+
 
 export function handleConfigCommand(
   byPlayer: PlayerObject,
   args: string[],
   room: RoomObject
 ) {
+    const gameState = getGameState();
+    if (gameState === "running") {
+      sendErrorMessage(room, MESSAGES.ALREADY_STARTED(), byPlayer.id);
+      return;
+    }
   if (!byPlayer.admin) {
     sendErrorMessage(room, MESSAGES.ADMIN_ONLY(), byPlayer.id);
     return;
@@ -55,7 +63,7 @@ export function handleConfigCommand(
 
 function applyFTOHConfig(room: RoomObject, byPlayer: PlayerObject) {
   log(`FTOH configuration applied by ${byPlayer.name}`);
-  handleSpeedCommand(byPlayer, ["false"], room);
+  // handleSpeedCommand(byPlayer, ["false"], room);
   handleSafetyCommand(byPlayer, ["true"], room);
   handleRModeCommand(byPlayer, [], room);
   enableSlipstream(true);
@@ -65,16 +73,17 @@ function applyFTOHConfig(room: RoomObject, byPlayer: PlayerObject) {
   handleRREnabledCommand(undefined, ["false"], room);
   setBlowoutTyresActivated(true);
   enableErs(true);
-  enableErsPenalty(false);
+  enableErsPenalty(true);
   enableCutPenalty(true);
   enableDebris(true);
   enableSoftCutPenalty(false, room);
   handlePitCommand(byPlayer, ["new"], room);
+  setManageTyresEnabled(true);
 }
 
 function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {
   log(`FH configuration applied by ${byPlayer.name}`);
-  handleSpeedCommand(byPlayer, ["false"], room);
+  // handleSpeedCommand(byPlayer, ["false"], room);
   handleSafetyCommand(byPlayer, ["false"], room);
   handleRModeCommand(byPlayer, [], room);
   enableSlipstream(true);
@@ -89,11 +98,12 @@ function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {
   enableDebris(false);
   enableSoftCutPenalty(false, room);
   handlePitCommand(byPlayer, ["old"], room);
+  setManageTyresEnabled(false);
 }
 
 function applyHaxbulaConfig(room: RoomObject, byPlayer: PlayerObject) {
   log(`Haxbula configuration applied by ${byPlayer.name}`);
-  handleSpeedCommand(byPlayer, ["false"], room);
+  // handleSpeedCommand(byPlayer, ["false"], room);
   handleSafetyCommand(byPlayer, ["false"], room);
   handleRModeCommand(byPlayer, [], room);
   enableSlipstream(false);
@@ -108,4 +118,5 @@ function applyHaxbulaConfig(room: RoomObject, byPlayer: PlayerObject) {
   enableDebris(false);
   enableSoftCutPenalty(false, room);
   handlePitCommand(byPlayer, ["old"], room);
+  setManageTyresEnabled(false);
 }
