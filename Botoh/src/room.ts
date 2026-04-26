@@ -58,7 +58,7 @@ export const roomPromise: Promise<any> = HaxballJS().then((HBInit: any) => {
     maxPlayers: maxPlayers,
     password: roomPassword ?? undefined,
     token:
-      process.env.HAXBALL_TOKEN ?? "thr1.AAAAAGnsLU_PUhdIBQgetg.Ceu-OoplKtk",
+      process.env.HAXBALL_TOKEN ?? "thr1.AAAAAGnuQy-xwaRVrCpreg.9peNg37h3Ow",
     geo: getGeo(),
   });
 
@@ -88,15 +88,14 @@ export const roomPromise: Promise<any> = HaxballJS().then((HBInit: any) => {
       ? log(`Game paused`)
       : log(`Game paused by ${byPlayer.name}`);
     
-    // Reset all AFK counters when game is paused
-    resetAllAfkCounters(room);
-    
     handleGameStateChange("paused", room);
   };
   room.onGameUnpause = function (byPlayer: any) {
     byPlayer == null
       ? log(`Game unpaused`)
       : log(`Game unpaused by ${byPlayer.name}`);
+    resetAllAfkCounters(room);
+    
     handleGameStateChange("running", room);
   };
 

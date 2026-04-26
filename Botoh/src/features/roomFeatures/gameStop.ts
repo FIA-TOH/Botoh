@@ -2,6 +2,7 @@ import { handleGameStateChange } from "../changeGameState/gameState";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { resetPlayers } from "../changePlayerState/players";
 import { cleanupLeagueStartAFKDetection } from "../afk/leagueStartAFKDetection";
+import { resetAllAfkCounters } from "../afk/afk";
 import { resetVSCState } from "../safetyCar/vsc";
 import { resetPitState } from "../tires&pits/newPitSystem/newPitManager";
 
@@ -150,16 +151,14 @@ export function GameStop(room: RoomObject) {
     resetSessionBestSectors();
     resetSandbag(room);
     
-    // Reset safety car state when game stops
     handleSCCommand(undefined, ["off"], room);
     
-    // Clean up league start AFK detection
     cleanupLeagueStartAFKDetection();
     
-    // Reset VSC state
+    resetAllAfkCounters(room);
+    
     resetVSCState();
     
-    // Reset lastWeatherId when game stops
     try {
       const weatherDir = join(__dirname, "../weather");
       const lastWeatherPath = join(weatherDir, "lastWeatherId.json");

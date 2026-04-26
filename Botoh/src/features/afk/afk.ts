@@ -68,12 +68,14 @@ export function updatePlayerActivity(player: PlayerObject, room?: RoomObject) {
       vscActivated: false,
       wasAfkWhenLeft: false,
     };
+  } else {
+    if (currentTime > playerActivities[playerId].lastActivityTime) {
+      playerActivities[playerId].lastActivityTime = currentTime;
+      playerActivities[playerId].warningSent = false;
+      playerActivities[playerId].lastWarningTime = 0;
+      playerActivities[playerId].vscActivated = false;
+    }
   }
-  
-  playerActivities[playerId].lastActivityTime = currentTime;
-  playerActivities[playerId].warningSent = false;
-  playerActivities[playerId].lastWarningTime = 0;
-  playerActivities[playerId].vscActivated = false;
   
   const playerProps = playerList[playerId];
   if (playerProps) {
@@ -90,7 +92,6 @@ export function resetAllAfkCounters(room: RoomObject) {
     const playerProps = playerList[playerId];
     
     if (playerProps && player.team === Teams.RUNNERS) {
-      // Reset AFK counter for all active players
       if (!playerActivities[playerId]) {
         playerActivities[playerId] = {
           lastActivityTime: currentTime,
@@ -100,7 +101,6 @@ export function resetAllAfkCounters(room: RoomObject) {
           wasAfkWhenLeft: false,
         };
       }
-      
       playerActivities[playerId].lastActivityTime = currentTime;
       playerActivities[playerId].warningSent = false;
       playerActivities[playerId].lastWarningTime = 0;
