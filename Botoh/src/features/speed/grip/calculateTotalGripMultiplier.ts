@@ -1,5 +1,6 @@
 import { calculateGripMultiplierForConditions } from "../grip/multiplierConditions";
 import { PlayerInfo } from "../../changePlayerState/playerList";
+import { constants } from "../constants";
 
 /**
  * Calculates final grip value after penalties and ERS interactions
@@ -39,6 +40,10 @@ export function calculateTotalGripMultiplier(
     currentTime <= playerInfo.cutPenaltyEndTime
   ) {
     gripMultiplier *= playerInfo.cutPenaltyMultiplier;
+  }
+
+  if (playerInfo.managing_tyres) {
+    gripMultiplier -= constants.MANAGE_TYRES_PENALTY;
   }
 
   return gripMultiplier;
