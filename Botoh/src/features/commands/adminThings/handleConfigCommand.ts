@@ -18,6 +18,7 @@ import { handleSafetyCommand } from "../flagsAndVSC/handleSafetyCommand";
 import { handleRModeCommand } from "../gameMode/race/handleRModeCommand";
 import { handlePitCommand } from "./handlePitCommand";
 import { setManageTyresEnabled } from "./handleManageTyresCommand";
+import { handlePresentationLapCommand } from "../gameState/handlePresentationLapCommand";
 
 
 export function handleConfigCommand(
@@ -63,14 +64,13 @@ export function handleConfigCommand(
 
 function applyFTOHConfig(room: RoomObject, byPlayer: PlayerObject) {
   log(`FTOH configuration applied by ${byPlayer.name}`);
-  // handleSpeedCommand(byPlayer, ["false"], room);
-  handleSafetyCommand(byPlayer, ["true"], room);
+  handleSafetyCommand(byPlayer, ["on"], room);
   handleRModeCommand(byPlayer, [], room);
   enableSlipstream(true);
   enableTyres(true);
   enableGas(false);
   setGhostMode(room, false);
-  handleRREnabledCommand(undefined, ["false"], room);
+  handlePresentationLapCommand(undefined, ["off"], room);
   setBlowoutTyresActivated(true);
   enableErs(true);
   enableErsPenalty(true);
@@ -83,14 +83,13 @@ function applyFTOHConfig(room: RoomObject, byPlayer: PlayerObject) {
 
 function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {
   log(`FH configuration applied by ${byPlayer.name}`);
-  // handleSpeedCommand(byPlayer, ["false"], room);
-  handleSafetyCommand(byPlayer, ["false"], room);
+  handleSafetyCommand(byPlayer, ["off"], room);
   handleRModeCommand(byPlayer, [], room);
   enableSlipstream(true);
   enableTyres(true);
   enableGas(false);
   setGhostMode(room, false);
-  handleRREnabledCommand(undefined, ["false"], room);
+  handlePresentationLapCommand(undefined, ["off"], room);
   setBlowoutTyresActivated(false);
   enableErs(false);
   enableErsPenalty(true);
@@ -103,14 +102,13 @@ function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {
 
 function applyHaxbulaConfig(room: RoomObject, byPlayer: PlayerObject) {
   log(`Haxbula configuration applied by ${byPlayer.name}`);
-  // handleSpeedCommand(byPlayer, ["false"], room);
-  handleSafetyCommand(byPlayer, ["false"], room);
+  handleSafetyCommand(byPlayer, ["off"], room);
   handleRModeCommand(byPlayer, [], room);
   enableSlipstream(false);
   enableTyres(false);
   enableGas(false);
   setGhostMode(room, true);
-  handleRREnabledCommand(undefined, ["false"], room);
+  handlePresentationLapCommand(undefined, ["off"], room);
   setBlowoutTyresActivated(false);
   enableErs(false);
   enableErsPenalty(false);

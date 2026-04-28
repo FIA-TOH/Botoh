@@ -16,13 +16,13 @@ export function handlePresentationLapCommand(
 
     const isPresentation = args[0];
 
-    if (isPresentation !== "true" && isPresentation !== "false" && byPlayer) {
-      room.sendAnnouncement("!presentation [true|false]", byPlayer.id);
+    if (isPresentation !== "on" && isPresentation !== "off" && byPlayer) {
+      room.sendAnnouncement("!presentation [on|off]", byPlayer.id);
       return;
     }
 
     sendAlertMessage(room, MESSAGES.PRESENTATION_LAP());
 
-    presentationLap = isPresentation === "true";
+    presentationLap = isPresentation === "on";
   }
 }

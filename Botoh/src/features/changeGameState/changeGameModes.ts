@@ -73,7 +73,7 @@ function handleQualyMode(room: RoomObject) {
   enableGas(false);
   enableSlipstream(false);
   setGhostMode(room, true);
-  handleRREnabledCommand(undefined, ["true"], room);
+  handleRREnabledCommand(undefined, ["on"], room);
   enableTyres(true);
   sendSuccessMessage(room, MESSAGES.TIME_TO_QUALY());
   changeGeneralGameMode(GeneralGameMode.GENERAL_QUALY);
@@ -83,7 +83,7 @@ function handleTrainingMode(room: RoomObject) {
   enableGas(false);
   enableSlipstream(false);
   setGhostMode(room, true);
-  handleRREnabledCommand(undefined, ["true"], room);
+  handleRREnabledCommand(undefined, ["on"], room);
   changeLaps("999", undefined, room);
   enableTyres(true);
   changeGeneralGameMode(GeneralGameMode.NONE);
@@ -93,7 +93,7 @@ function handleIndyMode(room: RoomObject) {
   enableGas(true);
   enableSlipstream(false);
   setGhostMode(room, false);
-  handleRREnabledCommand(undefined, ["false"], room);
+  handleRREnabledCommand(undefined, ["off"], room);
   enableTyres(true);
   changeGeneralGameMode(GeneralGameMode.GENERAL_RACE);
 }
@@ -102,7 +102,7 @@ function handleRaceMode(room: RoomObject) {
   enableGas(false);
   enableSlipstream(true);
   setGhostMode(room, false);
-  handleRREnabledCommand(undefined, ["false"], room);
+  handleRREnabledCommand(undefined, ["off"], room);
   enableTyres(true);
   sendSuccessMessage(room, MESSAGES.TIME_TO_RACE(laps));
   changeGeneralGameMode(GeneralGameMode.GENERAL_RACE);
@@ -112,7 +112,7 @@ function handleWaintingRoom(room: RoomObject) {
   enableGas(false);
   enableSlipstream(false);
   setGhostMode(room, false);
-  handleRREnabledCommand(undefined, ["false"], room);
+  handleRREnabledCommand(undefined, ["off"], room);
   enableTyres(false);
   changeGeneralGameMode(GeneralGameMode.NONE);
 }
@@ -123,7 +123,7 @@ function handleHardQualyMode(room: RoomObject) {
   enableGas(false);
   enableSlipstream(false);
   setGhostMode(room, false);
-  handleRREnabledCommand(undefined, ["false"], room);
+  handleRREnabledCommand(undefined, ["off"], room);
   enableTyres(false);
   sendSuccessMessage(room, MESSAGES.TIME_TO_QUALY());
   changeGeneralGameMode(GeneralGameMode.GENERAL_QUALY);
@@ -133,7 +133,7 @@ function handleBattleRoyaleMode(room: RoomObject) {
   enableGas(false);
   enableSlipstream(true);
   setGhostMode(room, false);
-  handleRREnabledCommand(undefined, ["false"], room);
+  handleRREnabledCommand(undefined, ["off"], room);
   enableTyres(false);
   sendSuccessMessage(room, MESSAGES.TIME_TO_BATTLE_ROYALE());
   changeGeneralGameMode(GeneralGameMode.GENERAL_RACE);

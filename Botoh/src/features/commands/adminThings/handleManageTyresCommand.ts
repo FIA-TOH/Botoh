@@ -37,12 +37,12 @@ export function handleManageTyresCommand(
 
   const enableValue = args[0].toLowerCase();
   
-  if (enableValue !== "true" && enableValue !== "false") {
+  if (enableValue !== "on" && enableValue !== "off") {
     sendErrorMessage(room, MESSAGES.MANAGE_TYRES_INVALID_ARGUMENT(), byPlayer.id);
     return;
   }
 
-  const shouldEnable: boolean = enableValue === "true";
+  const shouldEnable: boolean = enableValue === "on";
 
   setManageTyresEnabled(shouldEnable);
   sendSuccessMessage(room, MESSAGES.MANAGE_TYRES_SUCCESS(shouldEnable), byPlayer.id);

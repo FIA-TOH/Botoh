@@ -114,7 +114,7 @@ export function GameStop(room: RoomObject) {
           room.getPlayerList().forEach(player => {
             resetPitState(player.id);
           });
-          handleRREnabledCommand(undefined, ["false"], room);
+          handleRREnabledCommand(undefined, ["off"], room);
           sendAllCutsToDiscord();
         } else if (gameMode == GameMode.TRAINING) {
           sendQualiResultsToDiscord();
@@ -125,7 +125,7 @@ export function GameStop(room: RoomObject) {
           room.getPlayerList().forEach(player => {
             resetPitState(player.id);
           });
-          handleRREnabledCommand(undefined, ["false"], room);
+          handleRREnabledCommand(undefined, ["off"], room);
         } else {
           sendRaceResultsToDiscord();
           printAllPositions(room);

@@ -16,13 +16,13 @@ export function handleRREnabledCommand(
         return;
       }
     }
-    if (args && args[0] === "true") {
+    if (args && args[0] === "on") {
       rrEnabled = true;
       if (byPlayer) {
         log("RR mode enabled by admin");
         room.sendAnnouncement("RR mode!");
       }
-    } else if (args && args[0] === "false") {
+    } else if (args && args[0] === "off") {
       rrEnabled = false;
       if (byPlayer) {
         log("RR mode disabled by admin");
