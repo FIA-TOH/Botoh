@@ -58,11 +58,11 @@ export function updateLeagueStartAFKDetection(room: RoomObject) {
 
   // Check if 0.5 seconds have passed
   const elapsedTime = scores.time - detectionStartTime;
-  if (elapsedTime >= 0.5) {
-    checkForStationaryPlayers(room);
-    resetDetection();
-    return;
-  }
+  // if (elapsedTime >= 0.5) {
+  //   checkForStationaryPlayers(room);
+  //   resetDetection();
+  //   return;
+  // }
 
   // Update player positions during detection window
   const players = room.getPlayerList();

@@ -52,11 +52,19 @@ import { resetSessionBestSectors } from "../zones/laps/trackBestSector";
 import { resetSandbag } from "../commands/gameMode/battleRoyale.ts/handleSandbag";
 import { writeFileSync } from "fs";
 import { join } from "path";
+import { handleGameStopForRestore } from "./gameStateRestore";
+import { handleChangeMap, currentMapIndex, CIRCUITS } from "../zones/maps";
 
 let replayData: Uint8Array | null = null;
 
+// Variável para controlar alternância de circuitos
+let circuitToggle = 0;
+
 export function GameStop(room: RoomObject) {
   room.onGameStop = function (byPlayer) {
+    // Handle game state restore POC - capture exact state
+    handleGameStopForRestore(room);
+    
     // Stop weather monitoring
     stopWeatherMonitoring();
 
@@ -99,7 +107,12 @@ export function GameStop(room: RoomObject) {
 
     if (gameMode !== GameMode.WAITING) {
       if (gameStopedNaturally && !LEAGUE_MODE) {
-        PublicGameFlow(room);
+        // Verifica se estamos alternando circuitos - se sim, não executa PublicGameFlow
+        if (byPlayer == null && circuitToggle !== undefined) {
+          log("Skipping PublicGameFlow - circuit switching in progress");
+        } else {
+          PublicGameFlow(room);
+        }
         changeGameStoppedNaturally(false);
       } else {
         handleGameStateChange(null, room);
@@ -165,6 +178,76 @@ export function GameStop(room: RoomObject) {
       writeFileSync(lastWeatherPath, JSON.stringify({ lastWeatherId: null }));
     } catch (error) {
       console.error("Failed to reset lastWeatherId:", error);
+    }
+
+    // Alternar automaticamente entre circuitos 0 e 1
+    if (byPlayer == null) {
+      // Desabilita temporariamente o sistema de restauração para não interferir
+      const { disableGameStateRestore } = require("./gameStateRestore");
+      disableGameStateRestore();
+      
+      // Alterna entre 0 e 1
+      circuitToggle = circuitToggle === 0 ? 1 : 0;
+      const targetCircuit = CIRCUITS[circuitToggle];
+      log(`Auto-switching to circuit ${circuitToggle}: ${targetCircuit.info.name}`);
+      
+      // Troca para o circuito correspondente
+      handleChangeMap(circuitToggle, room);
+      
+      // Verifica se o circuito realmente mudou antes de iniciar (mínimo possível: 1 tick = 16.67ms)
+      setTimeout(() => {
+        log(`Checking circuit change after 1 tick...`);
+        // Verifica se o currentMapIndex corresponde ao circuito que queríamos
+        if (currentMapIndex === circuitToggle) {
+          log(`Circuit successfully changed to: ${targetCircuit.info.name}`);
+          log(`Starting game with circuit ${circuitToggle}`);
+          room.startGame();
+          log(`Auto-started game with circuit ${circuitToggle}`);
+          
+          // Aplica estado capturado do jogador imediatamente após iniciar o jogo
+          setTimeout(() => {
+            const { restorePlayerStates } = require("./gameStateRestore");
+            log(`Restoring captured player states...`);
+            restorePlayerStates(room);
+            log(`Player states restored successfully`);
+          }, 0); // Imediato - sem delay para teleporte instantâneo
+          
+          // Reabilita o sistema de restauração após iniciar o jogo
+          setTimeout(() => {
+            const { enableGameStateRestore } = require("./gameStateRestore");
+            enableGameStateRestore();
+          }, 1000);
+        } else {
+          log(`ERROR: Circuit change failed. Expected ${circuitToggle}, got ${currentMapIndex}`);
+          // Tenta novamente
+          handleChangeMap(circuitToggle, room);
+          setTimeout(() => {
+            if (currentMapIndex === circuitToggle) {
+              log(`Retry successful: Circuit changed to ${targetCircuit.info.name}`);
+              room.startGame();
+              
+              // Aplica estado capturado do jogador imediatamente após iniciar o jogo
+              setTimeout(() => {
+                const { restorePlayerStates } = require("./gameStateRestore");
+                log(`Restoring captured player states...`);
+                restorePlayerStates(room);
+                log(`Player states restored successfully`);
+              }, 0); // Imediato - sem delay para teleporte instantâneo
+              
+              // Reabilita o sistema de restauração
+              setTimeout(() => {
+                const { enableGameStateRestore } = require("./gameStateRestore");
+                enableGameStateRestore();
+              }, 1000);
+            } else {
+              log(`ERROR: Circuit change failed twice. Giving up.`);
+              // Reabilita mesmo assim
+              const { enableGameStateRestore } = require("./gameStateRestore");
+              enableGameStateRestore();
+            }
+          }, 1000);
+        }
+      }, 16); // 16ms = 1 tick a 60fps (mínimo possível)
     }
   };
 }

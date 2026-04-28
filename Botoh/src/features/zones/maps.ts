@@ -89,6 +89,7 @@ import { RIVADAVIA } from "../../circuits/rivadavia/rivadavia";
 import { AUSTIN_CRESPO } from "../../circuits/austin/austin_crespo";
 import { SEXCANO } from "../../circuits/sexcano/sexcano";
 import { MEERSBURG } from "../../circuits/meersburg/meersburg";
+import { IMOLANIGHT } from "../../circuits/imola/imolaNight";
 
 // import {DAYTONA} from "../circuits/daytona/daytona";
 // import {BARCELONA} from "../circuits/barcelona/barcelona";
@@ -101,6 +102,7 @@ import { MEERSBURG } from "../../circuits/meersburg/meersburg";
 export const CIRCUITS: Circuit[] = LEAGUE_MODE
   ? [
       IMOLA,
+      IMOLANIGHT,
       SUZUKA,
       MELBOURNE,
       BAKU,

@@ -3,6 +3,7 @@ import { log } from "../features/discord/logger";
 const trackNameMapping: { [key: string]: string } = {
   melbourne: "Albert-Park Melbourne Circuit - By Ximb",
   imola: "Autodromo Imola - By Ximb",
+  imolaNight: "Autodromo ImolaNight - By Ximb",
   sepang: "Sepang F1 International Circuit - By Ximb",
   bahrein: "Sakhir Bahrain International Circuit - By Ximb",
   sochi: "Sochi Autodrom - By Ximb",
@@ -53,6 +54,7 @@ const trackNameMapping: { [key: string]: string } = {
 export const bestTimes: { [key: string]: [number, string, string] } = {
   melbourne: [27.6, "Lando Canorris", trackNameMapping["melbourne"]],
   imola: [39.967, "Ximbastian Vettel", trackNameMapping["imola"]],
+  imolaNight: [45.123, "Ximbastian Vettel", trackNameMapping["imolaNight"]],
   sepang: [49.65, "Lib Wallard ", trackNameMapping["sepang"]],
   bahrein: [32.884, "Alberto Ulasscari", trackNameMapping["bahrein"]],
   sochi: [40.15, "Alberto Ulasscari", trackNameMapping["sochi"]],

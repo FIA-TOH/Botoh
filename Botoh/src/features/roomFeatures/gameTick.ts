@@ -30,6 +30,7 @@ import { updateLeagueStartAFKDetection } from '../afk/leagueStartAFKDetection';
 import { checkVSCDuration } from '../safetyCar/vsc';
 import { updateNewPitSystemForPlayer } from "../tires&pits/newPitSystem/pitTickHandler";
 import { handleManageTyreXKeyDetection } from "../utils/handleXKeyDetection";
+import { handleGameStateRestore } from "./gameStateRestore";
 
 const detectCutThrottledByPlayer: Map<number, ReturnType<typeof throttlePerSecond>> = new Map();
 
@@ -104,6 +105,9 @@ export function GameTick(room: RoomObject) {
     if (room.getScores()?.time && room.getScores().time > 0) {
       gameStarted = true;
     }
+
+    // Handle game state restore POC
+    handleGameStateRestore(room);
   };
 }
 

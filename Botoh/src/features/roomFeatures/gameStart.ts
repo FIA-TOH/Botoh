@@ -21,6 +21,7 @@ import { initBattleRoyale } from "../commands/gameMode/battleRoyale.ts/handleBat
 import { playerList } from "../changePlayerState/playerList";
 import { updatePlayerCollision } from "../changePlayerState/updatePlayerCollision";
 import { initializeLeagueStartAFKDetection, cleanupLeagueStartAFKDetection } from "../afk/leagueStartAFKDetection";
+import { enableGameStateRestore } from "./gameStateRestore";
 
 export function GameStart(room: RoomObject) {
   room.onGameStart = function (byPlayer) {
@@ -82,6 +83,9 @@ export function GameStart(room: RoomObject) {
       //   handleRRAllCommand(room);
       // }
     }
+
+    // Enable game state restore POC for testing
+    enableGameStateRestore();
   };
   
 }
