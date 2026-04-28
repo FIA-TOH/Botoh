@@ -29,6 +29,7 @@ import { checkWeatherUpdate } from '../weather/weatherManager';
 import { updateLeagueStartAFKDetection } from '../afk/leagueStartAFKDetection';
 import { checkVSCDuration } from '../safetyCar/vsc';
 import { updateNewPitSystemForPlayer } from "../tires&pits/newPitSystem/pitTickHandler";
+import { handleManageTyreXKeyDetection } from "../utils/handleXKeyDetection";
 
 const detectCutThrottledByPlayer: Map<number, ReturnType<typeof throttlePerSecond>> = new Map();
 
@@ -68,6 +69,10 @@ export function GameTick(room: RoomObject) {
       const p = pad.p;
       handleTireWear(p, room);
       checkTireStatus(p, room);
+
+      if (pad.disc && pad.disc.damping !== undefined) {
+        handleManageTyreXKeyDetection(p.id, pad.disc.damping, currentTime, room, 2);
+      }
 
       handleChangePlayerSizeSuzuka(pad, room);
       handleChangePlayerSizeCano(pad, room);

@@ -115,6 +115,17 @@ export function createPlayerInfo(ip?: string) {
       emojiDelayTime: undefined,
       reactionTimeout: undefined,
     },
+
+    xKeyState: {
+      isPressed: false,
+      pressTimes: [],
+      releaseTimes: [],
+      lastCheckTime: 0,
+    },
+
+    isManagingTyres: false,
+    isTyreBlowed: false,
+    blowoutTickCounter: 0,
   };
 }
 
@@ -164,6 +175,7 @@ export function resetPlayer(
   playerList[id].sectorColour = COLORS.WHITE;
 
   playerList[id].lapsOnCurrentTire = -1;
+  playerList[id].showTires = true;
   playerList[id].wear = 0;
   playerList[id].maxSpeed = TIRE_STARTING_SPEED[Tires.SOFT];
   playerList[id].gripCounter = 0;
@@ -185,10 +197,11 @@ export function resetPlayer(
       },
     ],
   };
-  ((playerList[id].pitCountdown = 0),
-    (playerList[id].pitTargetTires = Tires.SOFT),
-    (playerList[id].pitInitialPos = { x: 0, y: 0 }),
-    (playerList[id].drs = false));
+  playerList[id].pitCountdown = 0;
+  playerList[id].pitTargetTires = Tires.SOFT;
+  playerList[id].pitInitialPos = { x: 0, y: 0 };
+  playerList[id].drs = false;
+  playerList[id].speedEnabled = false;
   playerList[id].kers = 100;
   playerList[id].gas = 100;
   playerList[id].prevGas = 100;
@@ -219,6 +232,33 @@ export function resetPlayer(
 
   playerList[id].previousPos = { x: null, y: null };
 
-  //contadores
+  // Resetar propriedades faltantes
   playerList[id].timeWhenEntered = 0;
+  playerList[id].isManagingTyres = false;
+  playerList[id].isTyreBlowed = false;
+  
+  // Resetar newPitState completo
+  playerList[id].newPitState = {
+    isWaitingForPit: false,
+    pKeyPressed: false,
+    isPitNewEnabled: false,
+    pitStartTime: undefined,
+    pitReadyTime: undefined,
+    pitEmojiShowTime: undefined,
+    reactionTime: undefined,
+    selectedTires: undefined,
+    emojiDelayTime: undefined,
+    reactionTimeout: undefined,
+  };
+  
+  playerList[id].xKeyState = {
+    isPressed: false,
+    pressTimes: [],
+    releaseTimes: [],
+    lastCheckTime: 0,
+  };
+  
+  playerList[id].isManagingTyres = false;
+  playerList[id].isTyreBlowed = false;
+  playerList[id].blowoutTickCounter = 0;
 }

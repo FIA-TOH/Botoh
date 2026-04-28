@@ -60,16 +60,16 @@ export function handleToggleSystems(
     return;
   }
 
-  if (boolean !== "true" && boolean !== "false") {
+  if (boolean !== "on" && boolean !== "off") {
     room.sendAnnouncement(
-      `Correct use: !enable [system] [true|false]`,
+      `Correct use: !enable [system] [on|off]`,
       byPlayer.id
     );
     return;
   }
 
   if (system === ToggleableSystems.SLIPSTREAM) {
-    if (boolean === "false") {
+    if (boolean === "off") {
       log(`Slipstream mode disabled by ${byPlayer.name}`);
       room.sendAnnouncement("Slipstream disabled!", byPlayer.id);
       enableSlipstream(false);
@@ -79,7 +79,7 @@ export function handleToggleSystems(
       enableSlipstream(true);
     }
   } else if (system === ToggleableSystems.TYRES) {
-    if (boolean === "false") {
+    if (boolean === "off") {
       log(`Tyres mode disabled by ${byPlayer.name}`);
       room.sendAnnouncement("Tyres disabled!");
       enableTyres(false);
@@ -89,7 +89,7 @@ export function handleToggleSystems(
       enableTyres(true);
     }
   } else if (system === ToggleableSystems.GAS) {
-    if (boolean === "false") {
+    if (boolean === "off") {
       log(`Gas mode disabled by ${byPlayer.name}`);
       room.sendAnnouncement("Gas disabled!");
       enableGas(false);
@@ -99,19 +99,19 @@ export function handleToggleSystems(
       enableGas(true);
     }
   } else if (system === ToggleableSystems.GHOST) {
-    if (boolean === "false") {
+    if (boolean === "off") {
       setGhostMode(room, false);
     } else {
       setGhostMode(room, true);
     }
   } else if (system === ToggleableSystems.RR) {
-    if (boolean === "false") {
-      handleRREnabledCommand(undefined, ["false"], room);
+    if (boolean === "off") {
+      handleRREnabledCommand(undefined, ["off"], room);
     } else {
-      handleRREnabledCommand(undefined, ["true"], room);
+      handleRREnabledCommand(undefined, ["on"], room);
     }
   } else if (system === ToggleableSystems.TYRES_BLOWOUT) {
-    if (boolean === "false") {
+    if (boolean === "off") {
       log(`Tyres blowout mode disabled by ${byPlayer.name}`);
       room.sendAnnouncement("Tyres blowout disabled!");
       setBlowoutTyresActivated(false);
@@ -121,7 +121,7 @@ export function handleToggleSystems(
       setBlowoutTyresActivated(true);
     }
   } else if (system === ToggleableSystems.ERS) {
-    if (boolean === "false") {
+    if (boolean === "off") {
       log(`Ers mode disabled by ${byPlayer.name}`);
       room.sendAnnouncement("Ers disabled!");
       enableErs(false);
@@ -131,7 +131,7 @@ export function handleToggleSystems(
       enableErs(true);
     }
   } else if (system === ToggleableSystems.ERS_PENALTY) {
-    if (boolean === "false") {
+    if (boolean === "off") {
       log(`Ers penalty mode disabled by ${byPlayer.name}`);
       room.sendAnnouncement("Ers penalty disabled!");
       enableErsPenalty(false);
@@ -141,7 +141,7 @@ export function handleToggleSystems(
       enableErsPenalty(true);
     }
   } else if (system === ToggleableSystems.CUT_PENALTY) {
-    if (boolean === "false") {
+    if (boolean === "off") {
       log(`Cut penalty mode disabled by ${byPlayer.name}`);
       room.sendAnnouncement("Cut penalty disabled!");
       enableCutPenalty(false);
@@ -151,7 +151,7 @@ export function handleToggleSystems(
       enableCutPenalty(true);
     }
   } else if (system === ToggleableSystems.DEBRIS) {
-    if (boolean === "false") {
+    if (boolean === "off") {
       log(`Debris mode disabled by ${byPlayer.name}`);
       room.sendAnnouncement("Debris disabled!");
       enableDebris(false);
@@ -161,7 +161,7 @@ export function handleToggleSystems(
       enableDebris(true);
     }
   } else if (system === ToggleableSystems.SOFT_CUT_PENALTY) {
-    if (boolean === "false") {
+    if (boolean === "off") {
       log(`Soft cut penalty mode disabled by ${byPlayer.name}`);
       room.sendAnnouncement("Soft cut penalty disabled!");
       enableSoftCutPenalty(false, room);

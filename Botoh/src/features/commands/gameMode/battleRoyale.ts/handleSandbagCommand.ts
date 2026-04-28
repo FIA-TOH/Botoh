@@ -19,16 +19,16 @@ export function handleSandbagCommand(
 
   const value = args[0];
 
-  if (value !== "true" && value !== "false") {
+  if (value !== "on" && value !== "off") {
     room.sendAnnouncement(
-      "Usage: !sandbag <true|false>",
+      "Usage: !sandbag <on|off>",
       byPlayer.id,
       0xff0000,
     );
     return;
   }
 
-  const enabled = value === "true";
+  const enabled = value === "on";
   setSandbagMode(enabled, room);
 
   room.sendAnnouncement(

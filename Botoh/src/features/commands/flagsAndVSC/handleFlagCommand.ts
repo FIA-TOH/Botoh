@@ -64,7 +64,7 @@ export function handleFlagCommand(
       changeVSC();
     }
     if (presentationLap === true) {
-      handlePresentationLapCommand(undefined, ["false"], room);
+      handlePresentationLapCommand(undefined, ["off"], room);
     }
     flag = "green";
   } else if (
@@ -75,7 +75,7 @@ export function handleFlagCommand(
       changeVSC();
     }
     if (presentationLap === true) {
-      handlePresentationLapCommand(undefined, ["false"], room);
+      handlePresentationLapCommand(undefined, ["off"], room);
     }
     
     // Deactivate safety car if active

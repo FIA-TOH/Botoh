@@ -16,6 +16,7 @@ import { laps } from "../zones/laps";
 import { changeTires } from "./changeTires";
 import { applyTrackTireDegradation } from "./tireDegradationFunction";
 import { TYRE_DURABILITY, Tires, tyresActivated } from "./tires";
+import { constants } from "../speed/constants";
 
 export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
   const p = playerList[player.id];
@@ -49,7 +50,12 @@ export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
   const isBuffed = playerBuffList.some(
     (buffPlayer) => buffPlayer.name === player.name
   );
-  const wearReductionFactor = vsc ? 0.25 : 1;
+  let wearReductionFactor = vsc ? 0.25 : 1;
+  
+  if (p.isManagingTyres) {
+    wearReductionFactor *= constants.MANAGE_TYRES_WEAR_REDUCTION;
+  }
+  
   const wearIncrementPerSecond =
     (100 / currentTireDurability) * wearReductionFactor;
 
@@ -74,7 +80,7 @@ export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
 
   if (!p.alertSent) p.alertSent = {};
 
-  if (remainingPercentage === 0 && p.tires != Tires.FLAT) {
+ if (remainingPercentage === 0 && p.tires != Tires.FLAT) {
     changeTires(
       { p: player, disc: room.getPlayerDiscProperties(player.id) },
       Tires.FLAT,

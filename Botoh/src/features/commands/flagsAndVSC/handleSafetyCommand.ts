@@ -17,20 +17,20 @@ export function handleSafetyCommand(
   }
 
   if (!args || !args[0]) {
-    room.sendAnnouncement("Usage: !safety <true|false>", byPlayer?.id || 0, 0xff0000);
+    room.sendAnnouncement("Usage: !safety <on|off>", byPlayer?.id || 0, 0xff0000);
     return;
   }
 
   const value = args[0].toLowerCase();
   
-  if (value === "true") {
+  if (value === "on") {
     realSafety = true;
     room.sendAnnouncement("Real safety mode ENABLED - VSC will deploy after 2 seconds of inactivity", byPlayer?.id || 0, 0x00ff00);
-  } else if (value === "false") {
+  } else if (value === "off") {
     realSafety = false;
     room.sendAnnouncement("Real safety mode DISABLED - VSC will not auto-deploy", byPlayer?.id || 0, 0x00ff00);
   } else {
-    room.sendAnnouncement("Invalid value. Use: !safety <true|false>", byPlayer?.id || 0, 0xff0000);
+    room.sendAnnouncement("Invalid value. Use: !safety <on|off>", byPlayer?.id || 0, 0xff0000);
   }
 }
 

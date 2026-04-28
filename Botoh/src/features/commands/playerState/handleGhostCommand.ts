@@ -13,9 +13,9 @@ export function handleGhostCommand(
   }
   let boolean = false;
 
-  if (args[0] === "false") {
+  if (args[0] === "off") {
     boolean = false;
-  } else if (args[0] === "true") {
+  } else if (args[0] === "on") {
     boolean = true;
   } else {
     sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id);

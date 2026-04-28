@@ -43,6 +43,7 @@ export function changeTires(
   playerList[player.p.id].lapsOnCurrentTire = -1;
   playerList[player.p.id].gripCounter = 0;
   playerList[player.p.id].maxSpeed = TIRE_STARTING_SPEED[chosen];
+  playerList[player.p.id].isTyreBlowed = false;
   if (chosen !== Tires.FLAT) {
     decideBlowoutPoint(player.p);
     if (pitTime > 1) {

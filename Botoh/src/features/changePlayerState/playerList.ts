@@ -31,6 +31,13 @@ export interface NewPitState {
   reactionTimeout?: number;
 }
 
+export interface XKeyState {
+  isPressed: boolean;
+  pressTimes: number[];
+  releaseTimes: number[];
+  lastCheckTime: number;
+}
+
 export interface PlayerInfo {
   // Identificação e status de presença
   ip: string;
@@ -122,10 +129,17 @@ export interface PlayerInfo {
 
   previousPos: { x: number | null; y: number | null };
 
-  //contadores
   timeWhenEntered: number;
 
   newPitState?: NewPitState;
+  
+  xKeyState?: XKeyState;
+  
+  isManagingTyres: boolean;
+  
+  isTyreBlowed: boolean;
+  
+  blowoutTickCounter: number;
 }
 
 type PlayerList = {
