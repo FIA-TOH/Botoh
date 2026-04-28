@@ -35,7 +35,7 @@ export function calculateTotalGripMultiplier(
   }
 
   if (
-    playerInfo.cutPenaltyEndTime &&
+    playerInfo.cutPenaltyEndTime && 
     playerInfo.cutPenaltyMultiplier &&
     currentTime <= playerInfo.cutPenaltyEndTime
   ) {
@@ -45,6 +45,8 @@ export function calculateTotalGripMultiplier(
   if (playerInfo.isManagingTyres) {
     gripMultiplier -= constants.MANAGE_TYRES_PENALTY;
   }
-
+  if (playerInfo.isTyreBlowed) {
+    gripMultiplier -= constants.TYRES_BLOWED;
+  }
   return gripMultiplier;
 }

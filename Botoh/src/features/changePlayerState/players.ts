@@ -125,6 +125,7 @@ export function createPlayerInfo(ip?: string) {
 
     isManagingTyres: false,
     isTyreBlowed: false,
+    blowoutTickCounter: 0,
   };
 }
 
@@ -250,11 +251,14 @@ export function resetPlayer(
     reactionTimeout: undefined,
   };
   
-  // Resetar xKeyState completo
   playerList[id].xKeyState = {
     isPressed: false,
     pressTimes: [],
     releaseTimes: [],
     lastCheckTime: 0,
   };
+  
+  playerList[id].isManagingTyres = false;
+  playerList[id].isTyreBlowed = false;
+  playerList[id].blowoutTickCounter = 0;
 }

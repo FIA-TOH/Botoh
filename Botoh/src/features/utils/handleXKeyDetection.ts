@@ -21,6 +21,10 @@ export function handleManageTyreXKeyDetection(
     const player = playerList[playerId];
     if (!player) return false;
     
+    if (player.isTyreBlowed && player.isManagingTyres) {
+      return false;
+    }
+    
     if (!player.isManagingTyres) {
       player.isManagingTyres = true;
       handleAvatar(Situacions.ManagingTyresOn, { id: playerId } as PlayerObject, room);

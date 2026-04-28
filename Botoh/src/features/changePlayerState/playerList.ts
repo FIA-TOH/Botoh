@@ -129,19 +129,17 @@ export interface PlayerInfo {
 
   previousPos: { x: number | null; y: number | null };
 
-  //contadores
   timeWhenEntered: number;
 
   newPitState?: NewPitState;
   
-  // X key tracking para detecção de duplo clique
   xKeyState?: XKeyState;
   
-  // Gerenciamento de pneus via X key
   isManagingTyres: boolean;
   
-  // Estado de explosão de pneus
   isTyreBlowed: boolean;
+  
+  blowoutTickCounter: number;
 }
 
 type PlayerList = {

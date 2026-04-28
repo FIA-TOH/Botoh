@@ -40,7 +40,7 @@ export const constants = {
   // ===============================
   MANAGE_TYRES_PENALTY: 0.0001, // Redução de grip quando gerenciando pneus
   MANAGE_TYRES_WEAR_REDUCTION: 0.8, // Redução de 20% no desgaste quando gerenciando pneus
-  
+  TYRES_BLOWED: 0.0007, // Redução de grip quando pneu estourado (aumentado para teste)
   // ===============================
   SANDBAG_PENALTY: 0.002,
 };

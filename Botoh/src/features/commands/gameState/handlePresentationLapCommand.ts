@@ -20,8 +20,9 @@ export function handlePresentationLapCommand(
       room.sendAnnouncement("!presentation [on|off]", byPlayer.id);
       return;
     }
-
-    sendAlertMessage(room, MESSAGES.PRESENTATION_LAP());
+    if (isPresentation === "on") {
+      sendAlertMessage(room, MESSAGES.PRESENTATION_LAP());
+    }
 
     presentationLap = isPresentation === "on";
   }
