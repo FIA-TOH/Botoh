@@ -119,6 +119,7 @@ export function checkTireStatus(player: PlayerObject, room: RoomObject) {
 
     sendAlertMessage(room, MESSAGES.BLOWN_OUT_UNLUCKY_TIRES(), player.id);
     sendChatMessage(room, MESSAGES.TYRE_BLOW(player.name));
+    p.isTyreBlowed = true;
   }
 }
 

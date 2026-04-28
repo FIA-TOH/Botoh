@@ -52,8 +52,7 @@ export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
   );
   let wearReductionFactor = vsc ? 0.25 : 1;
   
-  // Redução de 20% no desgaste quando gerenciando pneus
-  if (p.managing_tyres) {
+  if (p.isManagingTyres) {
     wearReductionFactor *= constants.MANAGE_TYRES_WEAR_REDUCTION;
   }
   

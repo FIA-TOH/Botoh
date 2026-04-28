@@ -123,7 +123,8 @@ export function createPlayerInfo(ip?: string) {
       lastCheckTime: 0,
     },
 
-    managing_tyres: false,
+    isManagingTyres: false,
+    isTyreBlowed: false,
   };
 }
 
@@ -173,6 +174,7 @@ export function resetPlayer(
   playerList[id].sectorColour = COLORS.WHITE;
 
   playerList[id].lapsOnCurrentTire = -1;
+  playerList[id].showTires = true;
   playerList[id].wear = 0;
   playerList[id].maxSpeed = TIRE_STARTING_SPEED[Tires.SOFT];
   playerList[id].gripCounter = 0;
@@ -194,10 +196,11 @@ export function resetPlayer(
       },
     ],
   };
-  ((playerList[id].pitCountdown = 0),
-    (playerList[id].pitTargetTires = Tires.SOFT),
-    (playerList[id].pitInitialPos = { x: 0, y: 0 }),
-    (playerList[id].drs = false));
+  playerList[id].pitCountdown = 0;
+  playerList[id].pitTargetTires = Tires.SOFT;
+  playerList[id].pitInitialPos = { x: 0, y: 0 };
+  playerList[id].drs = false;
+  playerList[id].speedEnabled = false;
   playerList[id].kers = 100;
   playerList[id].gas = 100;
   playerList[id].prevGas = 100;
@@ -228,17 +231,30 @@ export function resetPlayer(
 
   playerList[id].previousPos = { x: null, y: null };
 
-  //contadores
+  // Resetar propriedades faltantes
   playerList[id].timeWhenEntered = 0;
-
-  // Reset X key tracking
+  playerList[id].isManagingTyres = false;
+  playerList[id].isTyreBlowed = false;
+  
+  // Resetar newPitState completo
+  playerList[id].newPitState = {
+    isWaitingForPit: false,
+    pKeyPressed: false,
+    isPitNewEnabled: false,
+    pitStartTime: undefined,
+    pitReadyTime: undefined,
+    pitEmojiShowTime: undefined,
+    reactionTime: undefined,
+    selectedTires: undefined,
+    emojiDelayTime: undefined,
+    reactionTimeout: undefined,
+  };
+  
+  // Resetar xKeyState completo
   playerList[id].xKeyState = {
     isPressed: false,
     pressTimes: [],
     releaseTimes: [],
     lastCheckTime: 0,
   };
-
-  // Reset managing tyres
-  playerList[id].managing_tyres = false;
 }
