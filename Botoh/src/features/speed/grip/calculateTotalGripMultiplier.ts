@@ -42,7 +42,7 @@ export function calculateTotalGripMultiplier(
     gripMultiplier *= playerInfo.cutPenaltyMultiplier;
   }
 
-  if (playerInfo.managing_tyres) {
+  if (playerInfo.isManagingTyres) {
     gripMultiplier -= constants.MANAGE_TYRES_PENALTY;
   }
 

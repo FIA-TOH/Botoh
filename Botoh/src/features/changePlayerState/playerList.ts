@@ -138,7 +138,10 @@ export interface PlayerInfo {
   xKeyState?: XKeyState;
   
   // Gerenciamento de pneus via X key
-  managing_tyres: boolean;
+  isManagingTyres: boolean;
+  
+  // Estado de explosão de pneus
+  isTyreBlowed: boolean;
 }
 
 type PlayerList = {

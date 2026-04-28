@@ -21,11 +21,11 @@ export function handleManageTyreXKeyDetection(
     const player = playerList[playerId];
     if (!player) return false;
     
-    if (!player.managing_tyres) {
-      player.managing_tyres = true;
+    if (!player.isManagingTyres) {
+      player.isManagingTyres = true;
       handleAvatar(Situacions.ManagingTyresOn, { id: playerId } as PlayerObject, room);
     } else {
-      player.managing_tyres = false;
+      player.isManagingTyres = false;
       handleAvatar(Situacions.ManagingTyresOff, { id: playerId } as PlayerObject, room);
     }
     
