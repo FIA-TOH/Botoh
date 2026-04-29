@@ -89,7 +89,6 @@ export function reorderPlayersByRacePosition(room: RoomObject) {
     )
     .map((p) => p.id);
 
-  // 3 - azuis para vermelho
   const blueToRedIds = playersInRoom
     .filter((p) => p.team === Teams.OUTSIDE && !playerList[p.id]?.afk)
     .map((p) => {
@@ -97,7 +96,6 @@ export function reorderPlayersByRacePosition(room: RoomObject) {
       return p.id;
     });
 
-  // 4 - spec para vermelho
   const specToRedIds = playersInRoom
     .filter((p) => p.team === Teams.SPECTATORS && !playerList[p.id]?.afk)
     .map((p) => {
@@ -105,7 +103,6 @@ export function reorderPlayersByRacePosition(room: RoomObject) {
       return p.id;
     });
 
-  // Ordem final
   const finalOrder = [
     ...activePositionIds,
     ...extraRedIds,

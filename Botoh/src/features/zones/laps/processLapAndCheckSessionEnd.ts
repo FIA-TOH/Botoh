@@ -49,7 +49,6 @@ function handleRaceLap(
 
   if (gameMode === GameMode.TRAINING) return;
 
-  // Handle lapped car lap deficit reduction when crossing finish line
   if (isPlayerLapped(p.id) && isSCActive()) {
     const currentDeficit = getLapDeficit(p.id);
     if (currentDeficit > 0) {
@@ -57,11 +56,9 @@ function handleRaceLap(
       setLapDeficit(p.id, newDeficit);
       
       if (newDeficit === 0) {
-        // Lapped car has caught up to the grid
         clearLappedCarAvatar(p.id, room);
         sendBlueMessage(room, MESSAGES.LAPPED_NORMALIZED_LAPS(p.name));
       } else {
-        // Still has laps to catch up
         sendBlueMessage(room, MESSAGES.LAPPED_REMAINING_LAPS(p.name, newDeficit));
       }
     }

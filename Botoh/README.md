@@ -1,1 +1,0 @@
-## Haxball bot for simulating f1 races.

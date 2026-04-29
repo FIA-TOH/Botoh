@@ -29,7 +29,6 @@ export function resetPlayerComeBack(
   let finalLapsCompleted = lapsCompletedWhenLeft;
   const diff = targetLapsCompleted - lapsCompletedWhenLeft;
   if (diff > 1 || diff < -1) {
-    //Sincronize if the leader is far ahead
     finalLapsCompleted = targetLapsCompleted;
   }
 

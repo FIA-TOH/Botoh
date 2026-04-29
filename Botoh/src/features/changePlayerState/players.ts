@@ -3,12 +3,10 @@ import { playerList } from "../changePlayerState/playerList";
 import { handleAvatar, Situacions } from "./handleAvatar";
 import { Tires, TIRE_STARTING_SPEED } from "../tires&pits/tires";
 import { gameMode, GameMode } from "../changeGameState/changeGameModes";
-import { start } from "repl";
 import { COLORS } from "../chat/chat";
 
 export function createPlayerInfo(ip?: string) {
   return {
-    // Identificação e status de presença
     ip: ip || "Not Available",
     isInTheRoom: true,
     afk: false,
@@ -17,7 +15,6 @@ export function createPlayerInfo(ip?: string) {
     didHardQualy: false,
     sandbagPenalty: 0,
 
-    // Propriedades de corrida e volta
     totalTime: 0,
     currentLap: 0,
     lapChanged: false,
@@ -26,7 +23,6 @@ export function createPlayerInfo(ip?: string) {
     bestTime: Number.MAX_VALUE,
     lapsBehindLeaderWhenLeft: null,
 
-    // Setores
     currentSector: 3,
     sectorChanged: false,
     sectorTime: [],
@@ -38,7 +34,6 @@ export function createPlayerInfo(ip?: string) {
     ],
     sectorColour: COLORS.WHITE,
 
-    // Pneus
     tires: Tires.SOFT,
     wear: 0,
     lapsOnCurrentTire: -1,
@@ -46,7 +41,6 @@ export function createPlayerInfo(ip?: string) {
     maxSpeed: TIRE_STARTING_SPEED[Tires.SOFT],
     gripCounter: 0,
 
-    // Pit stop
     inPitlane: false,
     inPitStop: false,
     boxAlert: false,
@@ -71,7 +65,6 @@ export function createPlayerInfo(ip?: string) {
     warningIsFalse: false,
     warningShown: false,
 
-    // Recursos de corrida
     speedEnabled: false,
     drs: false,
     kers: 100,
@@ -232,12 +225,10 @@ export function resetPlayer(
 
   playerList[id].previousPos = { x: null, y: null };
 
-  // Resetar propriedades faltantes
   playerList[id].timeWhenEntered = 0;
   playerList[id].isManagingTyres = false;
   playerList[id].isTyreBlowed = false;
   
-  // Resetar newPitState completo
   playerList[id].newPitState = {
     isWaitingForPit: false,
     pKeyPressed: false,

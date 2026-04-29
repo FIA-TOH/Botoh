@@ -23,12 +23,9 @@ export function handleDefineRain(
     return;
   }
 
-  // Handle stop command (can be used during game)
   if (args[0] === "stop") {
-    // Stop weather monitoring
     stopWeatherMonitoring();
     
-    // Clear all rain values
     currentWeather.rainGlobal = 0;
     currentWeather.rainS1 = 0;
     currentWeather.rainS2 = 0;
@@ -38,7 +35,6 @@ export function handleDefineRain(
     currentWeather.wetS3 = 0;
     currentWeather.wetAvg = 0;
     
-    // Clear last weather ID
     try {
       const weatherDir = join(__dirname, "../../weather");
       writeFileSync(join(weatherDir, "lastWeatherId.json"), JSON.stringify({ lastWeatherId: null }));
@@ -55,9 +51,7 @@ export function handleDefineRain(
     return;
   }
   
-  // Handle start command
   if (args[0] === "start") {
-    // Clear last weather ID
     try {
       const weatherDir = join(__dirname, "../../weather");
       writeFileSync(join(weatherDir, "lastWeatherId.json"), JSON.stringify({ lastWeatherId: null }));
@@ -174,7 +168,6 @@ export function handleDefineRain(
 
   const weatherId = generateWeatherId();
 
-  // Set the rain config
   setRainConfig({
     probability,
     duration,

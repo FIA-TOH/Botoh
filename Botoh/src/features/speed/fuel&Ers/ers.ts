@@ -49,9 +49,6 @@ export function updateErs(
   });
 }
 
-/**
- * --- ERS HANDLING ---
- */
 function handleERS(
   p: PlayerObject,
   properties: DiscPropertiesObject,
@@ -78,9 +75,6 @@ function handleERS(
   }
 }
 
-/**
- * --- FUEL HANDLING ---
- */
 function handleFuel(
   p: PlayerObject,
   properties: DiscPropertiesObject,
@@ -135,11 +129,9 @@ function handleFuel(
       playerInfo.gas -= fuelChange;
     }
 
-    // Limita combustível entre 0 e 100
     if (playerInfo.gas > 100) playerInfo.gas = 100;
     if (playerInfo.gas < 0) playerInfo.gas = 0;
 
-    // Atualiza avatar se mudou
     const currentGasInt = Math.floor(playerInfo.gas);
     if (currentGasInt !== playerInfo.prevGas) {
       room.setPlayerAvatar(p.id, String(currentGasInt));

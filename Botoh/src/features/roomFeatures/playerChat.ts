@@ -28,7 +28,6 @@ export function PlayerChat(room: RoomObject) {
     const args = message.toLowerCase().split(" ").slice(1);
 
     if (command[0] !== "!") {
-      // sendDiscordPlayerChat(player, message);
       if (mute_mode && !player.admin) {
         sendErrorMessage(room, MESSAGES.IN_MUTE_MODE(), player.id);
         return false;
@@ -52,7 +51,6 @@ export function PlayerChat(room: RoomObject) {
       return false;
     }
 
-    // Comando
     if (COMMANDS[command] === undefined) {
       sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), player.id);
       return false;

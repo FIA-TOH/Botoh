@@ -2,36 +2,14 @@ import { playerList } from "../changePlayerState/playerList";
 import { CIRCUITS, currentMapIndex } from "./maps";
 let lastGameTime = 0;
 
-export function didGameTimeAdvance(room: RoomObject): boolean {
-  const scores = room.getScores();
-  if (!scores) return false;
 
-  if (scores.time === lastGameTime) return false;
 
-  lastGameTime = scores.time;
-  return true;
-}
-
-export function updatePreviousPos(
-  pad: { p: PlayerObject; disc: DiscPropertiesObject },
-  p: PlayerObject,
-) {
-  const posX = pad.disc.x;
-  const posY = pad.disc.y;
-  if (!playerList[p.id].previousPos) {
-    playerList[p.id].previousPos = { x: posX, y: posY };
-  } else {
-    playerList[p.id].previousPos.x = posX;
-    playerList[p.id].previousPos.y = posY;
-  }
-}
 
 function updateAccurateTime(p: PlayerObject, room: RoomObject): number {
   const playerData = playerList[p.id];
   const pos = room.getPlayerDiscProperties(p.id);
   if (!pos || !playerData.previousPos) return 0;
 
-  // Constantes de pista
   const circuit = CIRCUITS[currentMapIndex].info;
   const minX = circuit.finishLine.bounds.minX;
   const maxX = circuit.finishLine.bounds.maxX;
@@ -94,8 +72,7 @@ function updateAccurateTime(p: PlayerObject, room: RoomObject): number {
   const additionalTime =
     (timeOfOneTick / currentPreviousSide) * positionStartFinishLineSide;
 
-  playerData.previousPos = curr; // salvar para o próximo tick
-
+  playerData.previousPos = curr;
   return additionalTime;
 }
 
@@ -103,7 +80,6 @@ export function updatePlayerLapTime(
   pad: { p: PlayerObject; disc: DiscPropertiesObject },
   room: RoomObject,
 ) {
-  // if (!didGameTimeAdvance(room)) return;
 
   const p = pad.p;
   const playerData = playerList[p.id];

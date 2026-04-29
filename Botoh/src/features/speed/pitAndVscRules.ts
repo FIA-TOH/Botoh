@@ -23,7 +23,6 @@ export function getPitAndVscGravity(
   if (playerInfo.inPitlane) {
     limiter = ACTUAL_CIRCUIT.info.pitSpeed ?? constants.DEFAULT_PIT_SPEED;
   } else if (vsc && !isLapped) {
-    // Only apply safety car speed if NOT lapped
     limiter =
       gameMode === GameMode.INDY
         ? constants.SAFETY_CAR_INDY_SPEED

@@ -11,7 +11,6 @@ export function enableCutPenalty(enable: boolean) {
 
 export function enableSoftCutPenalty(enable: boolean, room: RoomObject) {
   if (enable && !detectCutEnabled) {
-    // ❗ Opção A: bloquear
     room.sendAnnouncement(
       "softCutPenalty cannot be enabled when detectCutEnabled is false."
     );

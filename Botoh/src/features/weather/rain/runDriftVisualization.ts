@@ -6,10 +6,8 @@ import { generateDriftVisualization, generateSimpleTable } from './driftVisualiz
  */
 console.log('🏁 GENERATING DRIFT SYSTEM VISUALIZATION 🏁\n');
 
-// Generate complete visualization with graphic bars
 generateDriftVisualization();
 
-// Generate simplified table
 generateSimpleTable();
 
 console.log('\n✅ Visualization completed!');
