@@ -276,11 +276,7 @@ export default function pt_commands(
     args: string[],
     room: RoomObject,
   ) => void,
-  handleChangeGameFLow: (
-    byPlayer: PlayerObject,
-    args: string[],
-    room: RoomObject,
-  ) => void,
+
   handleSetMinimumPit: (
     byPlayer: PlayerObject,
     args: string[],
@@ -416,7 +412,6 @@ export default function pt_commands(
     "!camera_properties": handleCameraProperties,
     "!camera_id": handleCameraPlayerFollow,
     "!camera_position": handleCameraPositionFollow,
-    "!game_flow": handleChangeGameFLow,
     "!min_pit": handleSetMinimumPit,
     // "!rejoin": handleRejoinCommand, // Disabled - unfinished feature
     "!move_to_box": handleMoveToBoxCommand,

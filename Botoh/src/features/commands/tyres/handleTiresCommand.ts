@@ -36,22 +36,6 @@ export function handleTiresCommand(
       return;
     }
 
-    //Code system for box
-    // if (LEAGUE_MODE && room.getScores().time > 0) {
-    //   const boxAlertReversed = playerList[byPlayer.id].boxAlert
-    //     .toString()
-    //     .split("")
-    //     .reverse()
-    //     .join("");
-
-    //   if (
-    //     (args[1] !== boxAlertReversed || args.length !== 2) &&
-    //     !playerBuffList.some((player) => player.name === byPlayer.name)
-    //   ) {
-    //     sendErrorMessage(room, MESSAGES.CODE_WRONG(), byPlayer.id);
-    //     return;
-    //   }
-    // }
     const tiresStr = args[0].toUpperCase();
     if (
       gameMode !== GameMode.TRAINING &&

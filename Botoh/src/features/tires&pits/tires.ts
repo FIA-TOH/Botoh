@@ -44,8 +44,8 @@ export const TYRE_DURABILITY = (limit: number | null): TireDurability => {
   if (!LEAGUE_MODE && limit >= 0 && limit <= 7) {
     return {
       [Tires.SOFT]: 150, // 2.5
-      [Tires.MEDIUM]: 185.94, // 3.1 (15% a menos)
-      [Tires.HARD]: 255, // 4.25 (15% a menos)
+      [Tires.MEDIUM]: 185.94, // 3.1
+      [Tires.HARD]: 255, // 4.25
       [Tires.WET]: 200, // 3.33
       [Tires.INTER]: 200, // 3.33
       [Tires.FLAT]: Infinity,
@@ -54,8 +54,8 @@ export const TYRE_DURABILITY = (limit: number | null): TireDurability => {
   } else if (!LEAGUE_MODE && limit >= 14 && limit <= 23) {
     return {
       [Tires.SOFT]: 450, // 7.5
-      [Tires.MEDIUM]: 558.06, // 9.3 (15% a menos)
-      [Tires.HARD]: 765, // 12.75 (15% a menos)
+      [Tires.MEDIUM]: 558.06, // 9.3
+      [Tires.HARD]: 765, // 12.75
       [Tires.WET]: 600, // 10
       [Tires.INTER]: 600, // 10
       [Tires.FLAT]: Infinity,
@@ -64,8 +64,8 @@ export const TYRE_DURABILITY = (limit: number | null): TireDurability => {
   } else if (!LEAGUE_MODE && limit >= 24 && limit <= 33) {
     return {
       [Tires.SOFT]: 750, // 12.5
-      [Tires.MEDIUM]: 928.69, // 15.5 (15% a menos)
-      [Tires.HARD]: 1275, // 21.25 (15% a menos)
+      [Tires.MEDIUM]: 928.69, // 15.5
+      [Tires.HARD]: 1275, // 21.25
       [Tires.WET]: 1000, // 16.67
       [Tires.INTER]: 1000, // 16.67
       [Tires.FLAT]: Infinity,

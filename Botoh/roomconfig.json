@@ -7,8 +7,8 @@
   "leagueName": "🏎️ Formula 1 - FTOH 🏎️",
   "haxbulaPublicName": "🏎️ Formula 1 - HAXBULA 🏎️",
   "haxbulaLeagueName": "🏎️ Formula 1 - HAXBULA 🏎️",
-  "maxPlayers": 22,
+  "maxPlayers": 30,
   "roomPassword": null,
   "afkKickTime": 27,
-  "afkAlertTime": 23
+  "token": "thr1.AAAAAGnxQeSbWefJsA5qKg.ckDY4puh5Q4"
 }

@@ -1,4 +1,4 @@
-import { playerList, PlayerInfo } from "../changePlayerState/playerList";
+import { playerList } from "../changePlayerState/playerList";
 
 export interface DirectionInfo {
   direction: string;
@@ -6,35 +6,34 @@ export interface DirectionInfo {
 }
 
 export function getDirectionFromVelocity(x: number, y: number): DirectionInfo {
-  // Math.sqrt mantido - valor exato da velocidade usado para determinar se está parado
   const speed = Math.sqrt(x * x + y * y);
   if (speed < 0.005) {
-    return { direction: "Parado", emoji: "⏹️" };
+    return { direction: "Stopped", emoji: "⏹️" };
   }
 
   const angle = (Math.atan2(y, x) * 180) / Math.PI;
   if (angle >= -22.5 && angle < 22.5) {
-    return { direction: "Leste", emoji: "➡️" };
+    return { direction: "East", emoji: "➡️" };
   }
   if (angle >= 22.5 && angle < 67.5) {
-    return { direction: "Sudeste", emoji: "↘️" };
+    return { direction: "Southeast", emoji: "↘️" };
   }
   if (angle >= 67.5 && angle < 112.5) {
-    return { direction: "Sul", emoji: "⬇️" };
+    return { direction: "South", emoji: "⬇️" };
   }
   if (angle >= 112.5 && angle < 157.5) {
-    return { direction: "Sudoeste", emoji: "↙️" };
+    return { direction: "Southwest", emoji: "↙️" };
   }
   if (angle >= 157.5 || angle < -157.5) {
-    return { direction: "Oeste", emoji: "⬅️" };
+    return { direction: "West", emoji: "⬅️" };
   }
   if (angle >= -157.5 && angle < -112.5) {
-    return { direction: "Noroeste", emoji: "↖️" };
+    return { direction: "Northwest", emoji: "↖️" };
   }
   if (angle >= -112.5 && angle < -67.5) {
-    return { direction: "Norte", emoji: "⬆️" };
+    return { direction: "North", emoji: "⬆️" };
   }
-  return { direction: "Nordeste", emoji: "↗️" };
+  return { direction: "Northeast", emoji: "↗️" };
 }
 
 export function updatePlayerDirection(player: PlayerObject, disc: DiscPropertiesObject, room: RoomObject) {

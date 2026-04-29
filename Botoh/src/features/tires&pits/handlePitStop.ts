@@ -1,4 +1,3 @@
-// tires&pits/handlePitStop.ts
 import { playerList } from "../changePlayerState/playerList";
 import { sendAlertMessage, sendSmallChatMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";

@@ -10,7 +10,7 @@ type PitStepKind = "changing" | "error" | "success";
 export type PitStep = {
   threshold: number;
   kind: PitStepKind;
-  statuses: [TyreStatus, TyreStatus, TyreStatus, TyreStatus]; // [FLT, FRT, BLT, BRT]
+  statuses: [TyreStatus, TyreStatus, TyreStatus, TyreStatus];
 };
 
 function cloneStatuses(

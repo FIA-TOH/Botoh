@@ -8,7 +8,7 @@ export function handleSpeedCommand(
   room: RoomObject
 ) {
   const tires = !playerList[byPlayer.id].showTires;
-  const speed = !tires; // O oposto de mostrar pneus
+  const speed = !tires;
 
   playerList[byPlayer.id].showTires = tires;
   playerList[byPlayer.id].speedEnabled = speed;

@@ -228,13 +228,12 @@ const situationHandlers: Record<
         restoreTyreOrCar(player.id, room);
         currentSituacion[player.id] = Situacions.Null;
       },
-      10000, // 10 seconds total
+      10000,
     );
   },
 
   [Situacions.LappedCar]: (player, room) => {
     room.setPlayerAvatar(player.id, "🔁");
-    // Lapped car avatar stays until manually cleared
   },
 
   [Situacions.PitReady]: (player, room) => {

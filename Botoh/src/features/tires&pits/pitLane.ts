@@ -43,39 +43,22 @@ export function handlePitlane(
 
       playerList[p.id].pits.pitsNumber += 1;
       playerList[p.id].inPitlane = true;
-      if (LEAGUE_MODE) {
-        //Code system for box
-        // if (playerList[player.p.id].boxAlert === false) {
-        //   const numero = Math.floor(1000 + Math.random() * 9000);
-        //   playerList[player.p.id].boxAlert = numero;
-        //   sendAlertMessage(room, MESSAGES.CODE_BOX(numero), player.p.id);
-        // }
-      } else {
-        //Code system for box
-        // if (playerList[player.p.id].boxAlert === false) {
+      if (!LEAGUE_MODE)  {
         if (!player.p.admin) {
           handleExplainTyresCommand(player.p, undefined, room);
         }
-
-        //   playerList[player.p.id].boxAlert = true;
-        // }
       }
     }
 
-    //Code system for box
     if (ifInPitlaneEnd(player, room) && playerList[p.id].inPitlane) {
       if (playerList[p.id].canLeavePitLane === false) {
         playerList[p.id].canLeavePitLane = true;
         sendErrorMessage(room, MESSAGES.CANNOT_LEAVE_BOX(), p.id);
 
-        room.setPlayerTeam(p.id, Teams.SPECTATORS); //Spectators
+        room.setPlayerTeam(p.id, Teams.SPECTATORS);
         return;
       }
       playerList[p.id].inPitlane = false;
-
-      // if (LEAGUE_MODE && playerList[player.p.id].boxAlert !== false) {
-      //   playerList[player.p.id].boxAlert = false;
-      // }
     }
   });
 }

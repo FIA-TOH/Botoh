@@ -1,5 +1,5 @@
 import { readFileSync, existsSync } from 'fs';
-import { join, dirname } from 'path';
+import { join } from 'path';
 import { sendCyanMessage } from '../../chat/chat';
 import { MESSAGES } from '../../chat/messages';
 
@@ -78,7 +78,7 @@ function loadWeatherReport(weatherId: string): boolean {
   const reportPath = join(__dirname, '..', 'weather_data', `weather_report_${weatherId}.json`);
   
   if (!existsSync(reportPath)) {
-    console.error(`[Weather] Arquivo não encontrado: ${reportPath}`);
+    console.error(`[Weather] File not found: ${reportPath}`);
     return false;
   }
   
@@ -91,7 +91,7 @@ function loadWeatherReport(weatherId: string): boolean {
     };
     return true;
   } catch (error) {
-    console.error(`[Weather] Erro ao ler JSON: ${error}`);
+    console.error(`[Weather] Error reading JSON: ${error}`);
     return false;
   }
 }
@@ -102,7 +102,6 @@ export function sendInitialWeatherAnnouncement(weatherId: string, room: any): vo
   weatherReportData.lastReportIndex = 0;
   initialAnnouncementShown = true;
   
-  // Check for events at 00:00
   const report = weatherReportData.reports.find(r => r.time === "00:00");
   if (report) {
     const message = getWeatherMessage(report.id, report.meta);
@@ -112,10 +111,8 @@ export function sendInitialWeatherAnnouncement(weatherId: string, room: any): vo
 }
 
 export function checkWeatherReportAnnouncements(currentTime: number, weatherId: string, room: any): void {
-  // Skip processing at time 0 - initial announcement is handled by sendInitialWeatherAnnouncement
   if (currentTime === 0) return;
   
-  // Reset index when weather changes
   if (weatherReportData.weatherId !== weatherId) {
     if (!loadWeatherReport(weatherId)) return;
     weatherReportData.lastReportIndex = 0;
@@ -139,7 +136,6 @@ export function checkWeatherReportAnnouncements(currentTime: number, weatherId: 
       break; 
     }
     
-    // Pula eventos que já ficaram para trás (evita spam ao carregar)
     if (timeToSeconds(report.time) < currentTime) {
       weatherReportData.lastReportIndex = i + 1;
     }

@@ -62,7 +62,7 @@ import { handleChangeGameFLow } from "./gameState/gameFlow";
 import { handleSetMinimumPit } from "./tyres/handleSetMinimumPit";
 // import { handleRejoinCommand } from "./comeBackRace/handleRejoinCommand"; // Disabled - unfinished feature
 
-// Placeholder function to maintain correct parameter count
+
 const handleRejoinCommand = (byPlayer: PlayerObject, args: string[], room: RoomObject) => {
   // This feature is disabled - unfinished functionality
   return;

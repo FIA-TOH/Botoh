@@ -1791,7 +1791,6 @@ export const MESSAGES = {
     }),
   }),
 
-  // Weather Report Messages
   CLEAR_START: (): LocalizedMessageFunction => ({
     en: "☀️ Clear skies at start.",
     es: "☀️ Cielo despejado al inicio.",

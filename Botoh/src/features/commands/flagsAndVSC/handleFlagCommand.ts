@@ -78,7 +78,6 @@ export function handleFlagCommand(
       handlePresentationLapCommand(undefined, ["off"], room);
     }
     
-    // Deactivate safety car if active
     const { handleSCCommand } = require("./handleSCCommand");
     if (isSCActive()) {
       handleSCCommand(undefined, ["off"], room);

@@ -7,12 +7,10 @@ type UpgradeCategory =
   | "suspension"
   | "pitCrew";
 
-// Normaliza string: remove acentos, símbolos e deixa lowercase
 function normalizeKey(str: string) {
   return str.normalize("NFKD").replace(/[^\w]/g, "").toLowerCase();
 }
 
-// Mapeia categorias possíveis: normalizado → original
 const CATEGORY_MAP: Record<string, UpgradeCategory> = {
   engine: "engine",
   chassis: "chassis",
@@ -48,9 +46,6 @@ export function handleUpgradeCommand(
     return;
   }
 
-  // --------------------------------------------------
-  // 🔥 NORMALIZA TEAM
-  // --------------------------------------------------
   const normTeam = normalizeKey(teamName);
 
   const foundTeamKey = Object.keys(leagueScuderia).find(
@@ -68,9 +63,6 @@ export function handleUpgradeCommand(
     return;
   }
 
-  // --------------------------------------------------
-  // 🔥 NORMALIZA CATEGORY
-  // --------------------------------------------------
   const normCategory = normalizeKey(category);
 
   if (!(normCategory in CATEGORY_MAP)) {
@@ -94,9 +86,6 @@ export function handleUpgradeCommand(
     return;
   }
 
-  // --------------------------------------------------
-  // 🔥 NORMALIZA PROPERTY
-  // --------------------------------------------------
   const normProperty = normalizeKey(property);
 
   const foundPropKey = Object.keys(target).find(
@@ -112,9 +101,6 @@ export function handleUpgradeCommand(
     return;
   }
 
-  // --------------------------------------------------
-  // ✔ Atribui valor
-  // --------------------------------------------------
   (target as any)[foundPropKey] = value;
 
   room.sendAnnouncement(

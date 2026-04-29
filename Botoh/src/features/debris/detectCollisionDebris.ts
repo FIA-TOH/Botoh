@@ -36,7 +36,6 @@ export function updateDebrisTouch(room: RoomObject) {
       const dx = debrisDisc.x - disc.x;
       const dy = debrisDisc.y - disc.y;
 
-      // Math.sqrt removido - usado apenas para comparação com radius
       const distSq = dx * dx + dy * dy;
       const combinedRadiusSq = (debrisRadius + playerRadius) * (debrisRadius + playerRadius);
       const touching = distSq <= combinedRadiusSq;

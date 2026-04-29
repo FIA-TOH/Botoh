@@ -1,26 +1,3 @@
-## TO-DO
-
-# Testes/Ficar de olho
-
-# To do dos Mapas
-
-Atualizar alguns mapas
-
-# To-do rapidos
-
-Erro rejoin
-mensagens discord sem lag
-Tentar fazer banking como o rodri falou
-Add daytonna Rodri
-
-# To-Do longos
-
-Crash system
-Car broken system
-New tyres
-P&D
-API para fazer gráfico de posicão
-
 # Comandos
 
 npx ts-node index.ts

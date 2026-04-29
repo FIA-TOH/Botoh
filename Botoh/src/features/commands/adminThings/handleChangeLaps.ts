@@ -53,7 +53,7 @@ export function changeLaps(
     } else {
       if (!isNaN(newLaps)) {
         if (newLaps < minPit + 2) {
-          return false; // modo silencioso, se não foi jogador que chamou
+          return false;
         }
         setLaps(newLaps);
         return true;

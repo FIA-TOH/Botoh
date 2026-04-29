@@ -50,7 +50,6 @@ export function setBallPosition(room: RoomObject) {
     return;
   }
 
-  // === Inicialização da física da bola ===
   if (!ballPhysicsInitialized) {
     room.setDiscProperties(0, { cMask: 0, cGroup: 0, radius: 0 });
     ballPhysicsInitialized = true;
@@ -63,8 +62,6 @@ export function setBallPosition(room: RoomObject) {
       setFollowPlayer(runningPlayers[0].p.id, true);
     }
   }
-
-  // === Atualização da bola a cada 15 ticks ===
   tickCounterBall++;
   if (tickCounterBall >= 15) {
     tickCounterBall = 0;
@@ -136,7 +133,6 @@ export function setBallPosition(room: RoomObject) {
     }
   }
 
-  // === Atualização dos olhos a cada 5 ticks ===
   tickCounterEyes++;
   if (tickCounterEyes >= 10) {
     tickCounterEyes = 0;

@@ -26,17 +26,14 @@ function distanceFromPointToLine(
   const x3 = playerDisc.x;
   const y3 = playerDisc.y;
 
-  // Calculate the coefficients of the line equation Ax + By + C = 0
   let A = y2 - y1;
   let B = x1 - x2;
   let C = x2 * y1 - x1 * y2;
 
-  // Calculate the distance using the point-line distance formula
   return Math.abs(A * x3 + B * y3 + C) / Math.sqrt(A * A + B * B);
 }
 
-export // Function to calculate the slipstream effect
-function calculateSlipstream(
+export function calculateSlipstream(
   player: { p: PlayerObject; disc: DiscPropertiesObject },
   others: {
     p: PlayerObject;
@@ -56,7 +53,6 @@ function calculateSlipstream(
     const dx = otherDisc.x - disc.x;
     const dy = otherDisc.y - disc.y;
     
-    // Math.sqrt mantido - valor exato da distância usado em múltiplos cálculos posteriores
     const distance = Math.sqrt(dx * dx + dy * dy);
 
     if (distance > 0 && distance <= constants.SLIPSTREAM_ACTIVATION_DISTANCE) {
@@ -100,7 +96,5 @@ function calculateSlipstream(
     gameMode !== GameMode.INDY ? playerMaxSlipstream : playerMaxSlipstream / 2,
     minSlipstream / 100
   );
-
-  // console.log(`\n Final slipstream to the player ${player.p.id}: ${finalSlipstream.toFixed(5)}\n`);
   return finalSlipstream;
 }

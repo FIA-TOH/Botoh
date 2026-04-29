@@ -54,7 +54,7 @@ export interface CircuitInfo {
   drsStart: HitboxBounds[];
   drsEnd: HitboxBounds[];
   checkpoints: DirectedHitboxBounds[];
-    firstPlace?: { x: number; y: number };
+  firstPlace?: { x: number; y: number };
   lastPlace: { x: number; y: number };
   BestTime?: (string | number)[];
   MainColor?: number[];

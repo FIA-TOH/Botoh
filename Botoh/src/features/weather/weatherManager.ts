@@ -40,7 +40,6 @@ export function startWeatherMonitoring(weatherId: string, room?: RoomObject) {
     }
 
     console.log(`Weather monitoring started for ID: ${weatherId}`);
-    // Initial announcement is now handled by gameStart.ts to avoid duplicates
   } catch (error) {
     console.error("Failed to start weather monitoring:", error);
   }
@@ -157,17 +156,17 @@ function checkAndAnnounceRainChanges(room: RoomObject) {
 
   if (Math.abs(currentRain - lastRainGlobal) >= 20) {
     shouldAnnounce = true;
-    message = `\ud83c\udf27\ufe0f Chuva: ${currentRain.toFixed(0)}%`;
+    message = `\ud83c\udf27\ufe0f Rain: ${currentRain.toFixed(0)}%`;
     lastRainGlobal = currentRain;
   }
   else if (currentRain === 0 && lastRainGlobal !== 0) {
     shouldAnnounce = true;
-    message = `\ud83c\udf27\ufe0f Chuva: 0%`;
+    message = `\ud83c\udf27\ufe0f Rain: 0%`;
     lastRainGlobal = currentRain;
   }
   else if (currentRain === 100 && lastRainGlobal !== 100) {
     shouldAnnounce = true;
-    message = `\ud83c\udf27\ufe0f Chuva: 100%`;
+    message = `\ud83c\udf27\ufe0f Rain: 100%`;
     lastRainGlobal = currentRain;
   }
 

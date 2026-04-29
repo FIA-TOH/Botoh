@@ -1,6 +1,6 @@
 export const constants = {
   // ===============================
-  // Velocidade e Performance Base
+  // Speed and Base Performance
   // ===============================
   NORMAL_SPEED: 1,
   DRS_SPEED_GAIN: 0.001,
@@ -18,7 +18,7 @@ export const constants = {
   SAFETY_CAR_INDY_SPEED: 0.993,
 
   // ===============================
-  // Slipstream (vácuo)
+  // Slipstream
   // ===============================
   // When change MAX_SLIPSTREAM, change the max speed pressing X in Indianapolis too
   MAX_SLIPSTREAM: 0.0003, // Max of speed gains with full slipstream
@@ -31,16 +31,16 @@ export const constants = {
   // DIRTY_AIR_DISTANCE: 200,
 
   // ===============================
-  // Chuva e Aderência
+  // Rain and Grip
   // ===============================
-  SLIDE_FACTOR: 2.5, // Multiplicador de deslizamento na chuva
+  SLIDE_FACTOR: 2.5, // Rain slide multiplier
   
   // ===============================
-  // Gerenciamento de Pneus
+  // Tire Management
   // ===============================
-  MANAGE_TYRES_PENALTY: 0.0001, // Redução de grip quando gerenciando pneus
-  MANAGE_TYRES_WEAR_REDUCTION: 0.8, // Redução de 20% no desgaste quando gerenciando pneus
-  TYRES_BLOWED: 0.0007, // Redução de grip quando pneu estourado (aumentado para teste)
+  MANAGE_TYRES_PENALTY: 0.0001, // Grip reduction when managing tires
+  MANAGE_TYRES_WEAR_REDUCTION: 0.8, // 20% wear reduction when managing tires
+  TYRES_BLOWED: 0.0007, // Grip reduction when tire is blown (increased for testing)
   // ===============================
   SANDBAG_PENALTY: 0.002,
 };

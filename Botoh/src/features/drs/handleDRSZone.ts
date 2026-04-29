@@ -35,7 +35,6 @@ export let drsOn = false;
 
 export function enableDRS(room: RoomObject) {
   drsOn = true;
-  // sendNonLocalizedSmallChatMessage(room, "DRS ENABLED")
 }
 
 export function checkPlayersDRSZone(
@@ -51,12 +50,10 @@ export function checkPlayersDRSZone(
     }
 
     if (ifInDRSEndZone(pad, room) && playerList[pad.p.id].drs) {
-      //EXITING DRS ZONE
       log("Exited DRS ZONE: " + pad.p.name);
       playerList[pad.p.id].drs = false;
     }
     if (ifInDRSStartZone(pad, room) && !playerList[pad.p.id].drs) {
-      ///ENTERED DRS ZONE
       log("ENTERED DRS ZONE: " + pad.p.name);
       if (startZoneLastTime < DRS_DELTA) {
         playerList[pad.p.id].drs = true;
