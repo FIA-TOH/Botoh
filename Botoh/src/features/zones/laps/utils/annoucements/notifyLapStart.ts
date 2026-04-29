@@ -1,4 +1,6 @@
 import {
+  gameMode,
+  GameMode,
   generalGameMode,
   GeneralGameMode,
 } from "../../../../changeGameState/changeGameModes";
@@ -12,9 +14,13 @@ export function notifyLapStart(
   playerData: PlayerInfo
 ) {
   if (playerData.currentLap === 0) {
-    if (generalGameMode === GeneralGameMode.GENERAL_RACE)
+    if(gameMode === GameMode.TRAINING){
+      sendSmallChatMessage(room, MESSAGES.STARTING_TRAINING_LAP(), p.id);
+    }
+    else if (generalGameMode === GeneralGameMode.GENERAL_RACE)
       sendSmallChatMessage(room, MESSAGES.STARTING_LAP(), p.id);
     else if (generalGameMode === GeneralGameMode.GENERAL_QUALY)
       sendSmallChatMessage(room, MESSAGES.STARTING_QUALY_LAP(), p.id);
+
   }
 }

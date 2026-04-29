@@ -86,6 +86,7 @@ function handleTrainingMode(room: RoomObject) {
   handleRREnabledCommand(undefined, ["on"], room);
   changeLaps("999", undefined, room);
   enableTyres(true);
+  sendSuccessMessage(room, MESSAGES.TIME_TO_TRAIN());
   changeGeneralGameMode(GeneralGameMode.NONE);
 }
 
