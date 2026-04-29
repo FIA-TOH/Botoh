@@ -11,7 +11,6 @@ export function fuelGripCalc(p: PlayerInfo, grip: number) {
       const gasFactor = p.gas / 100;
       gasPenalty = constants.FULL_GAS_SPEED * gasFactor;
     } else {
-      // Zero fuel penalty (very small)
       gasPenalty = constants.ZERO_GAS_PENALTY;
     }
 

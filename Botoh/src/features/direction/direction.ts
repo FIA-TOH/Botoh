@@ -7,7 +7,6 @@ export interface DirectionResult {
 }
 
 export function getDirectionFromVelocity(x: number, y: number): DirectionResult {
-  // Math.sqrt mantido - valor exato da velocidade usado para determinar se está parado
   const speed = Math.sqrt(x * x + y * y);
   if (speed < 0.005) {
     return { direction: "Stopped", emoji: "⏹️" };

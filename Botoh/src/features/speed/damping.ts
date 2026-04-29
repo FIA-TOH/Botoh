@@ -1,12 +1,12 @@
 // ---------------------------
-// 🔹 CONFIGURAÇÕES DO SLIP
+// 🔹 SLIP CONFIGURATIONS
 // ---------------------------
-const SLIP_ANGLE_THRESHOLD = 0.15; // ~8.5 graus
+const SLIP_ANGLE_THRESHOLD = 0.15; // ~8.5 degrees
 const TICKS_PER_SECOND = 5;
 const SLIP_DURATION_SECONDS = 0.2;
 const SLIP_MAX_TICKS = Math.ceil(SLIP_DURATION_SECONDS * TICKS_PER_SECOND);
-const SLIP_MAX_FORCE = 0.05; // força máxima aplicada no início do slip
-const SLIP_MIN_NORM = 0.001; // mínima velocidade para calcular direção
+const SLIP_MAX_FORCE = 0.05; // maximum force applied at the start of slip
+const SLIP_MIN_NORM = 0.001; // minimum speed to calculate direction
 
 type Direction = { x: number; y: number };
 
@@ -14,12 +14,12 @@ interface PlayerInfo {
   lastDir?: Direction;
   slipTicks?: number;
   slipDir?: Direction;
-  // outros campos que você já tem...
+  // other fields that you already have...
 }
 
 /**
- * Aplica damping lateral simulando slip quando o jogador entra em curva.
- * Retorna o vetor de gravidade extra que deve ser somado ao controle normal.
+ * Applies lateral damping simulating slip when the player enters a curve.
+ * Returns the extra gravity vector that should be added to normal control.
  */ export function applyLateralSlip(
   p: PlayerObject,
   playerInfo: PlayerInfo,
@@ -44,17 +44,17 @@ interface PlayerInfo {
     ) {
       playerInfo.slipTicks = SLIP_MAX_TICKS;
 
-      // Calcula a direção perpendicular ao movimento para o slip
-      // perp = (-y, x) ou (y, -x) dependendo do lado que quer puxar
+      // Calculate the perpendicular direction to movement for slip
+      // perp = (-y, x) or (y, -x) depending on which side you want to pull
       const perpX = -playerInfo.lastDir.y;
       const perpY = playerInfo.lastDir.x;
 
-      // Math.sqrt mantido - valor exato da normalização usado em cálculos de direção
+      // Math.sqrt kept - exact normalization value used in direction calculations
       const perpNorm = Math.sqrt(perpX * perpX + perpY * perpY) || 1;
       playerInfo.slipDir = { x: perpX / perpNorm, y: perpY / perpNorm };
 
       console.log(
-        `[SLIP] Player ${p.id} iniciou curva: angle=${angle.toFixed(
+        `[SLIP] Player ${p.id} started curve: angle=${angle.toFixed(
           3
         )} rad (~${((angle * 180) / Math.PI).toFixed(1)}°), slipTicks=${
           playerInfo.slipTicks

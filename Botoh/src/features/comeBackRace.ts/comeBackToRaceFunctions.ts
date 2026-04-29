@@ -6,7 +6,7 @@ import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
 import { Tires } from "../tires&pits/tires";
 import { getRunningPlayers } from "../utils";
 
-export const REJOIN_TIME_LIMIT = 60; //seconds
+export const REJOIN_TIME_LIMIT = 60;
 
 export let playersLeftInfo: PlayerLeftInfo[] = [];
 

@@ -95,8 +95,7 @@ function pointToSegmentDistance(
 
   const dx = px - xx;
   const dy = py - yy;
-  // Math.sqrt removido - função usada apenas para comparação com radius
-  // Retorna distância ao quadrado para otimização
+
   return dx * dx + dy * dy;
 }
 

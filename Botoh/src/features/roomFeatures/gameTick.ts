@@ -91,7 +91,6 @@ export function GameTick(room: RoomObject) {
 
       updateNewPitSystemForPlayer(p, pad.disc, room, currentTime);
 
-      // updatePreviousPos(pad, p);
     });
 
     afkKick(room);

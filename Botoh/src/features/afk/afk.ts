@@ -1,4 +1,4 @@
-import { afkKickTime, afkAlertTime } from "../../../roomconfig.json";
+import { afkKickTime } from "../../../roomconfig.json";
 import {
   GameMode,
   gameMode,
@@ -16,7 +16,6 @@ import { handleSCCommand } from "../commands/flagsAndVSC/handleSCCommand";
 import { presentationLap } from "../commands/gameState/handlePresentationLapCommand";
 import { chooseOneDebris } from "../debris/chooseOneDebris";
 import { debrisEnabled } from "../debris/enableDebris";
-import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { vsc } from "../safetyCar/vsc";
 import { isRealSafetyEnabled } from "../commands/flagsAndVSC/handleSafetyCommand";
@@ -46,7 +45,7 @@ function shouldPauseAfkDetection(playerId: number): boolean {
   if (playerProps.inPitlane) return true;
   if (vsc || isSCActive()) return true;
   if (presentationLap) return true;
-  if (gameState === "paused") return true; // Pause AFK detection when game is paused
+  if (gameState === "paused") return true;
   
   return false;
 }
@@ -232,7 +231,6 @@ export function afkKick(room: RoomObject) {
     const activity = playerActivities[playerId];
     const afkDuration = currentGameTime - activity.lastActivityTime;
 
-    // Se o jogador está se movendo acima da velocidade mínima, resetar o contador AFK
     if (isPlayerMovingAtSpeed(playerId, room)) {
       activity.lastActivityTime = currentGameTime;
       activity.warningSent = false;

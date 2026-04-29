@@ -6,7 +6,6 @@ export function calculateGripMultiplier(
   maxGrip: number,
   minGrip: number
 ) {
-  // 100% = tyreWear0, 0% = tyreWear100
   if (wear > 40) {
     const wearFactor = 0.1 * 1.6 ** ((wear - 40) / 10) - 0.1;
     return maxGrip - wearFactor * (maxGrip - minGrip);

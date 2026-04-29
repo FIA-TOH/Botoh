@@ -16,7 +16,6 @@ export function handleTpCommand(
     return false;
   }
 
-  // Verificar se os argumentos necessários foram fornecidos
   if (args.length < 2) {
     room.sendAnnouncement("Correct use: !tp [X] [Y]", byPlayer.id, 0xff0000);
     return false;
@@ -26,7 +25,6 @@ export function handleTpCommand(
   const yPosition = args[1];
   const integerPattern = /^-?\d+$/;
 
-  // Função para validar entradas
   const validatePosition = (pos: string, axis: string) => {
     if (!integerPattern.test(pos)) {
       const errorMessage =
@@ -40,7 +38,6 @@ export function handleTpCommand(
     return true;
   };
 
-  // Validar X e Y
   const isXValid = validatePosition(xPosition, "xPosition");
   const isYValid = validatePosition(yPosition, "yPosition");
 

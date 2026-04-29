@@ -2,9 +2,6 @@ import { calculateGripMultiplierForConditions } from "../grip/multiplierConditio
 import { PlayerInfo } from "../../changePlayerState/playerList";
 import { constants } from "../constants";
 
-/**
- * Calculates final grip value after penalties and ERS interactions
- */
 export function calculateTotalGripMultiplier(
   p: PlayerObject,
   disc: DiscPropertiesObject,

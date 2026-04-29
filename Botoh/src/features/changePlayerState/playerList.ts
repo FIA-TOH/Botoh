@@ -39,7 +39,6 @@ export interface XKeyState {
 }
 
 export interface PlayerInfo {
-  // Identificação e status de presença
   ip: string;
   isInTheRoom: boolean;
   afk: boolean;
@@ -49,7 +48,6 @@ export interface PlayerInfo {
 
   sandbagPenalty: number;
 
-  // Propriedades de corrida e volta
   totalTime: number;
   currentLap: number;
   lapChanged: boolean;
@@ -58,14 +56,13 @@ export interface PlayerInfo {
   bestTime: number;
   lapsBehindLeaderWhenLeft: number | null;
 
-  // Setores
   currentSector: number;
   sectorChanged: boolean;
   sectorTime: number[];
   sectorTimeCounter: number;
   bestSectorTimes: [number, number, number];
   sectorColour: COLORS;
-  // Pneus
+
   tires: Tires;
   wear: number;
   lapsOnCurrentTire: number;
@@ -73,7 +70,6 @@ export interface PlayerInfo {
   maxSpeed: number;
   gripCounter: number;
 
-  // Pit stop
   inPitlane: boolean;
   inPitStop: boolean;
   boxAlert: boolean | number;
@@ -89,7 +85,6 @@ export interface PlayerInfo {
   warningIsFalse?: boolean;
   warningShown?: boolean;
 
-  // Recursos de corrida
   speedEnabled: boolean;
   drs: boolean;
   kers: number;
@@ -98,12 +93,10 @@ export interface PlayerInfo {
   slipstreamEndTime: number | undefined;
   finalSlipstream: number;
 
-  // Penalidades e alertas
   penaltyCounter: number;
   alertSent: { [key: number]: boolean };
   lastCheckTime: number;
 
-  // Preferências e estado geral
   language: Language;
   everyoneLaps: boolean;
   voted: boolean;

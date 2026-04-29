@@ -51,7 +51,6 @@ export function GameStart(room: RoomObject) {
       initBattleRoyale(room);
     }
     
-    // Initialize league start AFK detection for league mode
     if (LEAGUE_MODE) {
       initializeLeagueStartAFKDetection(room);
     }

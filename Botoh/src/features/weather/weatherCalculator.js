@@ -1,5 +1,5 @@
 // =========================
-// INSTALATION
+// INSTALLATION
 // =========================
 // npm init -y
 // npm install simplex-noise chartjs-node-canvas canvas
@@ -291,7 +291,7 @@ async function generateCharts() {
   fs.mkdirSync("./wet_charts", { recursive: true });
   fs.writeFileSync(`./wet_charts/wet_${weatherId}.png`, wetBuffer);
 
-  console.log(`\n✅ Tudo gerado! ID: ${weatherId}`);
+  console.log(`\n✅ Everything generated! ID: ${weatherId}`);
 }
 
 generateCharts();

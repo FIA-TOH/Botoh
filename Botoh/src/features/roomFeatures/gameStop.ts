@@ -57,7 +57,6 @@ let replayData: Uint8Array | null = null;
 
 export function GameStop(room: RoomObject) {
   room.onGameStop = function (byPlayer) {
-    // Stop weather monitoring
     stopWeatherMonitoring();
 
     if (byPlayer == null) {
@@ -83,18 +82,6 @@ export function GameStop(room: RoomObject) {
       timerController.positionTimer = null;
       log("Temporizer canceled by onGameStop");
     }
-
-    // if (positionList.length > 0) {
-    //   const fileName = `RaceResults-${getTimestamp()}.json`;
-
-    //   sendDiscordFile(positionList, fileName, "RACE_RESULTS");
-    // }
-    // const qualiResults = getPlayersOrderedByQualiTime();
-    // if (qualiResults.length > 0) {
-    //   const fileName = `QualiResults-${getTimestamp()}.json`;
-
-    //   sendDiscordFile(qualiResults, fileName, "QUALI_RESULTS");
-    // }
 
 
     if (gameMode !== GameMode.WAITING) {
