@@ -1,13 +1,13 @@
 # Botoh - Advanced Haxball F1 Racing Bot
 <a href="https://discord.gg/dDpbYrtmW2"><img alt="Discord" src="https://img.shields.io/discord/1172318938588262501?color=purple&label=OUR%20DISCORD"></a>
 
-![botoh logo](Botoh\Doc\botohLogo.png)
+![botoh logo](Botoh/Doc/botohLogo.png)
 
 ## What is Botoh?
 
 Botoh is a sophisticated Haxball F1 racing bot that emerged from the Simple bot community, specifically designed to provide an immersive Formula 1 racing experience with advanced features and professional-level race management capabilities.
 
-![Baku F1 GP FTOH S2](Botoh\Doc\botohImage.png)
+![Baku F1 GP FTOH S2](Botoh/Doc/botohImage.png)
 
 ## Quick Overview of Main Systems
 
