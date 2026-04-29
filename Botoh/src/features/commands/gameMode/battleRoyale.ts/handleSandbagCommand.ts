@@ -1,4 +1,4 @@
-import { sendErrorMessage } from "../../../chat/chat";
+import { COLORS, sendErrorMessage } from "../../../chat/chat";
 import { MESSAGES } from "../../../chat/messages";
 import { setSandbagMode } from "./handleSandbag";
 
@@ -23,7 +23,7 @@ export function handleSandbagCommand(
     room.sendAnnouncement(
       "Usage: !sandbag <on|off>",
       byPlayer.id,
-      0xff0000,
+      COLORS.YELLOW
     );
     return;
   }
@@ -33,6 +33,6 @@ export function handleSandbagCommand(
 
   room.sendAnnouncement(
     `Sandbag mode ${enabled ? "activated" : "deactivated"}`,
-    byPlayer.id,
+    byPlayer.id, COLORS.GREEN
   );
 }

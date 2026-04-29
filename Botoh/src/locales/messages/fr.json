@@ -1,6 +1,10 @@
 {
   "CHANGE_MAP_SUCCESS": "Vous avez bien chargé le circuit {{mapName}}",
   "CHANGE_MAP_FAILURE": "Une erreur est survenu lors du changement du circuit. Merci de réessayer.",
+  "BEST_TIME": "Meilleur Temps: {{playerName}} - {{time}}",
+  "TIRES_PERCENTAGE": "Pneus: {{percentage}}%",
+  "RR_ENABLED": "Commande !rr activée",
+  "RR_DISABLED": "Commande !rr désactivée",
   "ADMIN_ALREADY_IN_ROOM": "Il y a déjà un admin dans le lobby",
   "ADMIN_ONLY": "Seuls les administrateurs peuvent utiliser cette commande",
   "CONFIG_MISSING_ARGUMENT": "Usage: !config <ftoh|fh|haxbula>",

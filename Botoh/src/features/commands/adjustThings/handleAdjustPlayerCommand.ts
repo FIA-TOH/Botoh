@@ -1,5 +1,5 @@
 ﻿import { playerList } from "../../changePlayerState/playerList";
-import { sendErrorMessage, sendChatMessage } from "../../chat/chat";
+import { sendErrorMessage, sendChatMessage, COLORS } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { getPlayerAndDiscs } from "../../playerFeatures/getPlayerAndDiscs";
 import { getRunningPlayers } from "../../utils";
@@ -21,7 +21,7 @@ export function handleAjustPlayerCommand(
     room.sendAnnouncement(
       "Correct model !adjust [wear|laps] [id] [value]",
       byPlayer.id,
-      0xff0000
+      COLORS.YELLOW
     );
     return;
   }
@@ -35,7 +35,7 @@ export function handleAjustPlayerCommand(
     room.sendAnnouncement(
       "Correct model !adjust [wear|laps] [id] [value]",
       byPlayer.id,
-      0xff0000
+      COLORS.YELLOW
     );
     return;
   }
@@ -45,7 +45,7 @@ export function handleAjustPlayerCommand(
     room.sendAnnouncement(
       "Correct model !adjust [wear|laps] [id] [value]",
       byPlayer.id,
-      0xff0000
+      COLORS.YELLOW
     );
     return;
   }
@@ -56,7 +56,7 @@ export function handleAjustPlayerCommand(
     room.sendAnnouncement(
       "Correct model !adjust [wear|laps] [id] [value]",
       byPlayer.id,
-      0xff0000
+      COLORS.YELLOW
     );
     return;
   }
@@ -66,7 +66,7 @@ export function handleAjustPlayerCommand(
   const playerEscolhido = players.filter((p) => p.p.id === playerNumero);
 
   if (playerEscolhido.length === 0) {
-    room.sendAnnouncement("Choose a valid player.", byPlayer.id, 0xff0000);
+    room.sendAnnouncement("Choose a valid player.", byPlayer.id, COLORS.YELLOW);
     return;
   }
 
@@ -81,7 +81,7 @@ export function handleAjustPlayerCommand(
     room.sendAnnouncement(
       "Now you can only change wear or laps.",
       byPlayer.id,
-      0xff0000
+      COLORS.GREEN
     );
     return;
   }

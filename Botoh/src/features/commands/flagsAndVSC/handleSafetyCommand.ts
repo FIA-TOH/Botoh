@@ -1,4 +1,4 @@
-import { sendErrorMessage, sendSuccessMessage, sendChatMessage } from "../../chat/chat";
+import { sendErrorMessage, sendSuccessMessage, sendChatMessage, COLORS } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 
 let realSafety = false;
@@ -17,7 +17,7 @@ export function handleSafetyCommand(
   }
 
   if (!args || !args[0]) {
-    room.sendAnnouncement("Usage: !safety <on|off>", byPlayer?.id || 0, 0xff0000);
+    room.sendAnnouncement("Usage: !safety <on|off>", byPlayer?.id || 0, COLORS.YELLOW);
     return;
   }
 
@@ -25,12 +25,12 @@ export function handleSafetyCommand(
   
   if (value === "on") {
     realSafety = true;
-    room.sendAnnouncement("Real safety mode ENABLED - VSC will deploy after 2 seconds of inactivity", byPlayer?.id || 0, 0x00ff00);
+    room.sendAnnouncement("Real safety mode ENABLED - VSC will deploy after 2 seconds of inactivity", byPlayer?.id || 0, COLORS.GREEN);
   } else if (value === "off") {
     realSafety = false;
-    room.sendAnnouncement("Real safety mode DISABLED - VSC will not auto-deploy", byPlayer?.id || 0, 0x00ff00);
+    room.sendAnnouncement("Real safety mode DISABLED - VSC will not auto-deploy", byPlayer?.id || 0, COLORS.GREEN);
   } else {
-    room.sendAnnouncement("Invalid value. Use: !safety <on|off>", byPlayer?.id || 0, 0xff0000);
+    room.sendAnnouncement("Invalid value. Use: !safety <on|off>", byPlayer?.id || 0, COLORS.YELLOW);
   }
 }
 

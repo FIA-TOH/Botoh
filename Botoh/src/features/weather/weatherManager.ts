@@ -2,6 +2,7 @@ import { readFileSync, existsSync } from "fs";
 import { join } from "path";
 import { currentWeather } from "./currentWeather";
 import { checkWeatherReportAnnouncements, sendInitialWeatherAnnouncement, resetWeatherReportAnnouncements } from "./rain/weatherReportAnnouncer";
+import { COLORS } from "../chat/chat";
 
 let lastRainGlobal: number = 0;
 let lastRainS1: number = 0;
@@ -171,6 +172,6 @@ function checkAndAnnounceRainChanges(room: RoomObject) {
   }
 
   if (shouldAnnounce && message) {
-    room.sendAnnouncement(message);
+    room.sendAnnouncement(message, undefined, COLORS.CYAN);
   }
 }

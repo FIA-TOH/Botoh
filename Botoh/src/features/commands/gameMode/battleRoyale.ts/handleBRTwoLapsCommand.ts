@@ -1,4 +1,4 @@
-import { sendErrorMessage } from "../../../chat/chat";
+import { COLORS, sendErrorMessage } from "../../../chat/chat";
 import { MESSAGES } from "../../../chat/messages";
 import { setBattleRoyaleTwoLaps } from "../../gameMode/battleRoyale.ts/handleBattleRoyaleLaps";
 
@@ -23,10 +23,10 @@ export function handleBRTwoLapsCommand(
     room.sendAnnouncement(
       "Usage: !br_twolaps <number >= 0>",
       byPlayer.id,
-      0xff0000,
+      COLORS.YELLOW
     );
     return;
   }
   setBattleRoyaleTwoLaps(value);
-  room.sendAnnouncement(`Battle Royale two laps set to ${value}`, byPlayer.id);
+  room.sendAnnouncement(`Battle Royale two laps set to ${value}`, byPlayer.id, COLORS.GREEN);
 }

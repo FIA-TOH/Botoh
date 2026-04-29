@@ -1,4 +1,4 @@
-import { sendErrorMessage } from "../../chat/chat";
+import { COLORS, sendErrorMessage } from "../../chat/chat";
 import { MESSAGES, getPlayerLanguage } from "../../chat/messages";
 import { setGhostMode } from "../../changePlayerState/ghost";
 import { getGameState } from "../../changeGameState/gameState";
@@ -59,7 +59,7 @@ export function handleConfigCommand(
 
   const message = MESSAGES.CONFIG_SUCCESS(configType);
   const playerLang = getPlayerLanguage(byPlayer.id);
-  room.sendAnnouncement(message[playerLang as keyof typeof message], byPlayer.id, 0x00FF00, "bold");
+  room.sendAnnouncement(message[playerLang as keyof typeof message], byPlayer.id, COLORS.GREEN, "bold");
 }
 
 function applyFTOHConfig(room: RoomObject, byPlayer: PlayerObject) {

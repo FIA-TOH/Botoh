@@ -1,4 +1,4 @@
-import { playerList } from "../changePlayerState/playerList";
+
 import { log } from "../discord/logger";
 import { DEFAULT_LANGUAGE } from "./language";
 import { getPlayerLanguage, LocalizedMessageFunction } from "./messages";
@@ -8,18 +8,24 @@ const defaultLang: keyof LocalizedMessageFunction = DEFAULT_LANGUAGE;
 export const MAX_PLAYER_NAME = 22;
 
 export enum COLORS {
-  BLUE = 0x0000ff,
-  GREEN = 0x65ff33,
-  CYAN = 0x00ffff,
-  RED = 0xff0000,
-  MAGENTA = 0xff75d1,
-  YELLOW = 0xffff00,
-  WHITE = 0xffffff,
-  ORANGE = 0xffa500,
-  DARK_YELLOW = 0x93bf0f,
-  PURPLE = 0xff33d0,
-  DARK_GREEN = 0x00ff04,
   BLACK = 0x000001,
+  GREY = 0xC0C0C0,
+  WHITE = 0xffffff,
+  BLUE = 0x6987ff,
+  CYAN = 0x00E3FF,
+  GREEN = 0x2DF73B,
+  LIGHT_GREEN = 0x80FF00,
+  LIME = 0xcaff4f,
+  YELLOW = 0xffff00,
+  GOLD = 0xFFD700,
+  DARK_YELLOW = 0x93bf0f,
+  BROWN = 0xEE5454,
+  DARK_BROWN = 0xCD7F32,
+  ORANGE = 0xFF8F00,
+  DARK_ORANGE = 0xFFB900,
+  RED = 0xff0000,
+  PINK = 0xFF33D0,
+  PURPLE = 0xa463ff,
 }
 
 export enum FONTS {
@@ -178,6 +184,21 @@ export function sendBestTimeEver(
   );
 }
 
+export function sendPurpleMessage(
+  room: RoomObject,
+  message: LocalizedMessageFunction,
+  toPlayerID?: number,
+) {
+  sendMessage(
+    room,
+    message,
+    toPlayerID,
+    COLORS.PURPLE,
+    FONTS.NORMAL,
+    SOUNDS.CHAT,
+  );
+}
+
 export function sendBestTimeRace(
   room: RoomObject,
   message: LocalizedMessageFunction,
@@ -187,7 +208,7 @@ export function sendBestTimeRace(
     room,
     message,
     toPlayerID,
-    COLORS.MAGENTA,
+    COLORS.PINK,
     FONTS.NORMAL,
     SOUNDS.NOTIFICATION,
   );

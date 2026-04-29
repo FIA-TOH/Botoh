@@ -1,6 +1,10 @@
 {
   "CHANGE_MAP_SUCCESS": "Cambio de mapa a {{mapName}}",
   "CHANGE_MAP_FAILURE": "Algo salió mal al cargar el mapa. Por favor, inténtelo de nuevo!",
+  "BEST_TIME": "Mejor Tiempo: {{playerName}} - {{time}}",
+  "TIRES_PERCENTAGE": "Neumáticos: {{percentage}}%",
+  "RR_ENABLED": "¡Comando !rr habilitado!",
+  "RR_DISABLED": "¡Comando !rr deshabilitado!",
   "ADMIN_ALREADY_IN_ROOM": "Un administrador ya está en la sala",
   "ADMIN_ONLY": "Solo los administradores pueden usar este comando",
   "CONFIG_MISSING_ARGUMENT": "Uso: !config <ftoh|fh|haxbula>",

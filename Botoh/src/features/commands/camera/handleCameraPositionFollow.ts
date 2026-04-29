@@ -1,4 +1,4 @@
-import { sendErrorMessage, sendChatMessage } from "../../chat/chat";
+import { sendErrorMessage, sendChatMessage, COLORS } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { setFollowPosition } from "../../cameraAndBall/cameraFollow";
 import { positionList } from "../gameMode/race/positionList";
@@ -20,6 +20,7 @@ export function handleCameraPositionFollow(
       room.sendAnnouncement(
         "Correct use: !camera_position [posição]",
         byPlayer.id,
+        COLORS.YELLOW
       );
     }
     return;
@@ -33,7 +34,7 @@ export function handleCameraPositionFollow(
   const pos = Number(args[0]);
   if (isNaN(pos) || pos <= 0 || pos > positionList.length) {
     if (byPlayer) {
-      room.sendAnnouncement(`Invalid position.`, byPlayer.id);
+      room.sendAnnouncement(`Invalid position.`, byPlayer.id, COLORS.RED);
     }
     return;
   }
@@ -43,6 +44,7 @@ export function handleCameraPositionFollow(
     room.sendAnnouncement(
       `Camera now following the position ${pos}.`,
       byPlayer.id,
+      COLORS.GREEN
     );
   }
 }

@@ -132,6 +132,11 @@ export default function pt_commands(
     args: string[],
     room: RoomObject,
   ) => void,
+  handleColourTestCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
 
   handleToggleSystems: (
     byPlayer: PlayerObject,
@@ -379,6 +384,7 @@ export default function pt_commands(
     "!avatar": handleAvatarCommand,
     "!clear_time": handleClearTimeCommand,
     "!mute": handleMuteCommand,
+    "!colour_test": handleColourTestCommand,
     
     "!enable": handleToggleSystems,
     "!gas": handleGasCommand,

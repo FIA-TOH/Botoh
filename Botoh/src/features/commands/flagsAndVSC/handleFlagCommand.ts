@@ -7,6 +7,7 @@ import {
   sendRedMessage,
   sendBlueMessage,
   sendBlackMessage,
+  COLORS,
 } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { clearDebris } from "../../debris/clearDebris";
@@ -39,7 +40,7 @@ export function handleFlagCommand(
     room.sendAnnouncement(
       "Correct use !flag color [playerName]",
       byPlayer.id,
-      0xff0000
+      COLORS.RED
     );
     return false;
   }
@@ -112,11 +113,11 @@ export function handleFlagCommand(
     });
   } else if (flagChoosen === "blue") {
     if (byPlayer && !playerChoosen) {
-      room.sendAnnouncement("Choose a player.", byPlayer.id, 0xff0000);
+      room.sendAnnouncement("Choose a player.", byPlayer.id, COLORS.YELLOW);
       return;
     }
     if (byPlayer && playerEscolhido?.length === 0) {
-      room.sendAnnouncement("Choose a valid player.", byPlayer.id, 0xff0000);
+      room.sendAnnouncement("Choose a valid player.", byPlayer.id, COLORS.RED);
       return;
     }
     flag = "blue";
@@ -139,11 +140,11 @@ export function handleFlagCommand(
     );
   } else if (flagChoosen === "black") {
     if (byPlayer && !playerChoosen) {
-      room.sendAnnouncement("Choose a player.", byPlayer.id, 0xff0000);
+      room.sendAnnouncement("Choose a player.", byPlayer.id, COLORS.YELLOW);
       return;
     }
     if (byPlayer && (playerEscolhido?.length === 0 || !playerEscolhido)) {
-      room.sendAnnouncement("Choose a valid player.", byPlayer.id, 0xff0000);
+      room.sendAnnouncement("Choose a valid player.", byPlayer.id, COLORS.RED);
       return;
     }
     flag = "black";

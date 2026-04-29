@@ -37,6 +37,7 @@ import { handleAfkCommand } from "./afk/handleAfkCommand";
 import { handleAvatarCommand } from "./avatar/handleAvatarCommand";
 import { handleLanguageCommand } from "./chat/handleLanguageCommand";
 import { handleMuteCommand } from "./chat/handleMuteCommand";
+import { handleColourTestCommand } from "./chat/handleColourTestCommand";
 import { handleEnableQualyForPub } from "./gameMode/qualy/handleEnableQualyForPub";
 import { handleTipsCommands } from "./chat/handleTipsCommands";
 import { handleExplainErsCommand } from "./ersAndFuel/handleExplainErsCommand";
@@ -209,6 +210,11 @@ export type CommandFunction = (
     room: RoomObject,
   ) => void,
   handleMuteCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
+  handleColourTestCommand: (
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject,
@@ -465,6 +471,7 @@ function importCommandsByLanguage(commandFunctions: {
         handleAvatarCommand,
         handleClearTimeCommand,
         handleMuteCommand,
+        handleColourTestCommand,
        
         handleToggleSystems,
         handleGasCommand,
@@ -549,6 +556,7 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
         handleAvatarCommand,
         handleClearTimeCommand,
         handleMuteCommand,
+        handleColourTestCommand,
        
         handleToggleSystems,
         handleGasCommand,
