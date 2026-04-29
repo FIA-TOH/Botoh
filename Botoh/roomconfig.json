@@ -1,8 +1,8 @@
 {
-  "publicAdminPassword": "toh",
-  "publicModPassword": "mod",
-  "leagueAdminPassword": "toh",
-  "bans": ["90.94.201.31"],
+  "publicAdminPassword": "",
+  "publicModPassword": "",
+  "leagueAdminPassword": "",
+  "bans": [],
   "publicName": "🏎️ Formula 1 - FTOH 🏎️",
   "leagueName": "🏎️ Formula 1 - FTOH 🏎️",
   "haxbulaPublicName": "🏎️ Formula 1 - HAXBULA 🏎️",
@@ -10,5 +10,5 @@
   "maxPlayers": 30,
   "roomPassword": null,
   "afkKickTime": 27,
-  "token": "thr1.AAAAAGnxQeSbWefJsA5qKg.ckDY4puh5Q4"
+  "token": "thr1.AAAAAGnyB4QHu_hJ21YaPA.6wfrbVaDaqk"
 }
