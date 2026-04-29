@@ -69,6 +69,20 @@ export const MESSAGES = {
       time: time,
     }),
   }),
+  STARTING_TRAINING_LAP: (): LocalizedMessageFunction => ({
+    en: en_messages.STARTING_TRAINING_LAP,
+    es: es_messages.STARTING_TRAINING_LAP,
+    fr: fr_messages.STARTING_TRAINING_LAP,
+    tr: tr_messages.STARTING_TRAINING_LAP,
+    pt: pt_messages.STARTING_TRAINING_LAP,
+  }),
+  TIME_TO_TRAIN: (): LocalizedMessageFunction => ({
+    en: en_messages.TIME_TO_TRAIN,
+    es: es_messages.TIME_TO_TRAIN,
+    fr: fr_messages.TIME_TO_TRAIN,
+    tr: tr_messages.TIME_TO_TRAIN,
+    pt: pt_messages.TIME_TO_TRAIN,
+  }),
   TIRES_PERCENTAGE: (percentage: string): LocalizedMessageFunction => ({
     en: replaceTemplateString(en_messages.TIRES_PERCENTAGE, {
       percentage: percentage,

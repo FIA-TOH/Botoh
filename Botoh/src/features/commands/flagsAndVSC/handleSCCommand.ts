@@ -33,7 +33,9 @@ export function handleSCCommand(
   
   if (arg === "on") {
     if (scActive) {
-      sendErrorMessage(room, MESSAGES.SAFETY_CAR(), byPlayer?.id || 0);
+      if (byPlayer) {
+        sendErrorMessage(room, MESSAGES.SAFETY_CAR(), byPlayer.id);
+      }
       return;
     }
 
@@ -69,7 +71,9 @@ export function handleSCCommand(
 
   } else if (arg === "lapped") {
     if (!scActive) {
-      sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer?.id || 0);
+      if (byPlayer) {
+        sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id);
+      }
       return;
     }
 
@@ -80,14 +84,18 @@ export function handleSCCommand(
       const playerId = parseInt(playerIdArg);
       
       if (isNaN(playerId)) {
-        sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer?.id || 0);
+        if (byPlayer) {
+          sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id);
+        }
         return;
       }
 
       const player = room.getPlayerList().find(p => p.id === playerId);
       
       if (!player) {
-        sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer?.id || 0);
+        if (byPlayer) {
+          sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id);
+        }
         return;
       }
 
@@ -151,7 +159,9 @@ export function handleSCCommand(
 
   } else if (arg === "off") {
     if (!scActive && !scCountdownTimeout) {
-      sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer?.id || 0);
+      if (byPlayer) {
+        sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id);
+      }
       return;
     }
 
@@ -188,7 +198,9 @@ export function handleSCCommand(
       });
     }
   } else {
-    sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer?.id || 0);
+    if (byPlayer) {
+      sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id);
+    }
   }
 }
 

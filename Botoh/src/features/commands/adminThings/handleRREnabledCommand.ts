@@ -31,8 +31,6 @@ export function handleRREnabledCommand(
     } else if (byPlayer) {
       sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id);
       return;
-    } else {
-      return;
     }
   }
 }

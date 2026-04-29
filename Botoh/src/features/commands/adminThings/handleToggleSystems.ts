@@ -1,5 +1,5 @@
 import { setGhostMode } from "../../changePlayerState/ghost";
-import { COLORS, sendErrorMessage } from "../../chat/chat";
+import { COLORS, sendErrorMessage, sendBlueMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { enableDebris } from "../../debris/enableDebris";
 import {
@@ -108,8 +108,10 @@ export function handleToggleSystems(
   } else if (system === ToggleableSystems.RR) {
     if (boolean === "off") {
       handleRREnabledCommand(undefined, ["off"], room);
+      sendBlueMessage(room, MESSAGES.RR_DISABLED());
     } else {
       handleRREnabledCommand(undefined, ["on"], room);
+      sendBlueMessage(room, MESSAGES.RR_ENABLED());
     }
   } else if (system === ToggleableSystems.TYRES_BLOWOUT) {
     if (boolean === "off") {
