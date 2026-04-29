@@ -142,29 +142,33 @@ export function sendDiscordPlayerChat(userInfo: PlayerObject, message: string) {
 }
 
 export function sendDiscordResult(message: string) {
-  try {
-    if (!message) return;
-    const envName = process.env.LEAGUE_ENV || "ftoh";
-    const webhooks = getDiscordWebhooks();
-    let LOG_URL = "";
-    if (envName === "haxbula") {
-      LOG_URL = LEAGUE_MODE ? webhooks.LEAGUE_REPLAY_URL_HAXBULA : webhooks.PUBLIC_REPLAY_URL;
-    } else {
-      LOG_URL = LEAGUE_MODE ? webhooks.LEAGUE_REPLAY_URL : webhooks.PUBLIC_REPLAY_URL;
-    }
-    if (envName === "fh") {
-      LOG_URL = LEAGUE_MODE ? webhooks.LEAGUE_REPLAY_URL_FH : webhooks.PUBLIC_REPLAY_URL;
-    }
+  (async () => {
+    try {
+      if (!message) return;
+      const envName = process.env.LEAGUE_ENV || "ftoh";
+      const webhooks = getDiscordWebhooks();
+      let LOG_URL = "";
+      if (envName === "haxbula") {
+        LOG_URL = LEAGUE_MODE ? webhooks.LEAGUE_REPLAY_URL_HAXBULA : webhooks.PUBLIC_REPLAY_URL;
+      } else {
+        LOG_URL = LEAGUE_MODE ? webhooks.LEAGUE_REPLAY_URL : webhooks.PUBLIC_REPLAY_URL;
+      }
+      if (envName === "fh") {
+        LOG_URL = LEAGUE_MODE ? webhooks.LEAGUE_REPLAY_URL_FH : webhooks.PUBLIC_REPLAY_URL;
+      }
 
-    const sanitized = message.replace(/@(?=[a-zA-Z])/g, "@ ");
-    const timestamped = `${sanitized}\n\n📅 ${getTimestamp()}`;
+      const sanitized = message.replace(/@(?=[a-zA-Z])/g, "@ ");
+      const timestamp = `📅 ${getTimestamp()}`;
+      const timestamped = `${sanitized}\n\n${timestamp}`;
 
-    splitCodeMessage(timestamped).forEach((part) =>
-      safeSend(LOG_URL, { content: part }, "RESULT")
-    );
-  } catch (err) {
-    console.error("❌ [sendDiscordResult ERROR]:", err);
-  }
+      const parts = splitMessage(timestamped);
+      for (const part of parts) {
+        await safeSend(LOG_URL, { content: part }, "RESULT");
+      }
+    } catch (err) {
+      console.error("❌ [sendDiscordResult ERROR]:", err);
+    }
+  })();
 }
 
 export function sendDiscordTrackRecord(playerName: string, lapTime: number) {
