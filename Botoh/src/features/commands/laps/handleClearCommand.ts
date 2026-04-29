@@ -1,6 +1,6 @@
 ﻿import { clearBestTime } from "../../../circuits/bestTimes";
 import { playerList } from "../../changePlayerState/playerList";
-import { sendErrorMessage } from "../../chat/chat";
+import { COLORS, sendErrorMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { log } from "../../discord/logger";
 import { ACTUAL_CIRCUIT } from "../../roomFeatures/stadiumChange";
@@ -26,5 +26,5 @@ export function handleClearCommand(
     ];
   });
   log("Best record cleared by admin");
-  room.sendAnnouncement("Record cleared");
+  room.sendAnnouncement("Record cleared", byPlayer.id, COLORS.GREEN);
 }

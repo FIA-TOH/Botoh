@@ -1,4 +1,4 @@
-import { sendErrorMessage, sendChatMessage } from "../../chat/chat";
+import { sendErrorMessage, sendChatMessage, COLORS } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { setFollowPlayer } from "../../cameraAndBall/cameraFollow";
 import { log } from "../../discord/logger";
@@ -20,7 +20,7 @@ export function handleCameraPlayerFollow(
 
   if (!args || args.length === 0) {
     if (byPlayer) {
-      room.sendAnnouncement("Correct use: !camera_id [player id]", byPlayer.id);
+      room.sendAnnouncement("Correct use: !camera_id [player id]", byPlayer.id, COLORS.YELLOW);
     }
     return;
   }
@@ -35,7 +35,7 @@ export function handleCameraPlayerFollow(
 
   if (isNaN(playerId)) {
     if (byPlayer) {
-      room.sendAnnouncement("Correct use: !camera_id [player id]", byPlayer.id);
+      room.sendAnnouncement("Correct use: !camera_id [player id]", byPlayer.id, COLORS.YELLOW);
     }
     return;
   }
@@ -45,7 +45,7 @@ export function handleCameraPlayerFollow(
     if (byPlayer) {
       room.sendAnnouncement(
         `Player with ID ${playerId} not found.`,
-        byPlayer.id
+        byPlayer.id, COLORS.RED
       );
     }
     return;
@@ -55,7 +55,8 @@ export function handleCameraPlayerFollow(
   if (byPlayer) {
     room.sendAnnouncement(
       `Now following the player: ${targetPlayer.name} (ID: ${playerId}).`,
-      byPlayer.id
+      byPlayer.id,
+      COLORS.GREEN
     );
   }
 

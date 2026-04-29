@@ -47,6 +47,59 @@ export const MESSAGES = {
     tr: tr_messages.CHANGE_MAP_FAILURE,
     pt: pt_messages.CHANGE_MAP_FAILURE,
   }),
+  BEST_TIME: (playerName: string, time: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.BEST_TIME, {
+      playerName: playerName,
+      time: time,
+    }),
+    es: replaceTemplateString(es_messages.BEST_TIME, {
+      playerName: playerName,
+      time: time,
+    }),
+    fr: replaceTemplateString(fr_messages.BEST_TIME, {
+      playerName: playerName,
+      time: time,
+    }),
+    tr: replaceTemplateString(tr_messages.BEST_TIME, {
+      playerName: playerName,
+      time: time,
+    }),
+    pt: replaceTemplateString(pt_messages.BEST_TIME, {
+      playerName: playerName,
+      time: time,
+    }),
+  }),
+  TIRES_PERCENTAGE: (percentage: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.TIRES_PERCENTAGE, {
+      percentage: percentage,
+    }),
+    es: replaceTemplateString(es_messages.TIRES_PERCENTAGE, {
+      percentage: percentage,
+    }),
+    fr: replaceTemplateString(fr_messages.TIRES_PERCENTAGE, {
+      percentage: percentage,
+    }),
+    tr: replaceTemplateString(tr_messages.TIRES_PERCENTAGE, {
+      percentage: percentage,
+    }),
+    pt: replaceTemplateString(pt_messages.TIRES_PERCENTAGE, {
+      percentage: percentage,
+    }),
+  }),
+  RR_ENABLED: (): LocalizedMessageFunction => ({
+    en: en_messages.RR_ENABLED,
+    es: es_messages.RR_ENABLED,
+    fr: fr_messages.RR_ENABLED,
+    tr: tr_messages.RR_ENABLED,
+    pt: pt_messages.RR_ENABLED,
+  }),
+  RR_DISABLED: (): LocalizedMessageFunction => ({
+    en: en_messages.RR_DISABLED,
+    es: es_messages.RR_DISABLED,
+    fr: fr_messages.RR_DISABLED,
+    tr: tr_messages.RR_DISABLED,
+    pt: pt_messages.RR_DISABLED,
+  }),
   ADMIN_ALREADY_IN_ROOM: (): LocalizedMessageFunction => ({
     en: en_messages.ADMIN_ALREADY_IN_ROOM,
     es: es_messages.ADMIN_ALREADY_IN_ROOM,

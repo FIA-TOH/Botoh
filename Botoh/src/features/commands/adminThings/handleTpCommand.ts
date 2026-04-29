@@ -1,4 +1,4 @@
-import { sendErrorMessage, sendChatMessage } from "../../chat/chat";
+import { sendErrorMessage, sendChatMessage, COLORS } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 
 export function handleTpCommand(
@@ -17,7 +17,7 @@ export function handleTpCommand(
   }
 
   if (args.length < 2) {
-    room.sendAnnouncement("Correct use: !tp [X] [Y]", byPlayer.id, 0xff0000);
+    room.sendAnnouncement("Correct use: !tp [X] [Y]", byPlayer.id, COLORS.YELLOW);
     return false;
   }
 
@@ -32,7 +32,7 @@ export function handleTpCommand(
           ? `${axis} cannot contain comma or period.`
           : `${axis} must be an positve or negative integer, or zero.`;
 
-      room.sendAnnouncement(`Warning: ${errorMessage}`, byPlayer.id, 0xff0000);
+      room.sendAnnouncement(`Warning: ${errorMessage}`, byPlayer.id, COLORS.RED);
       return false;
     }
     return true;
@@ -55,7 +55,7 @@ export function handleTpCommand(
     room.sendAnnouncement(
       `Teleported to (${newX}, ${newY}).`,
       byPlayer.id,
-      0xffff00
+      COLORS.GREEN
     );
 
     room.setPlayerDiscProperties(byPlayer.id, {
@@ -66,7 +66,7 @@ export function handleTpCommand(
     room.sendAnnouncement(
       "Error: It wasn't possible to obtain the position of the player.",
       byPlayer.id,
-      0xff0000
+      COLORS.RED
     );
   }
 

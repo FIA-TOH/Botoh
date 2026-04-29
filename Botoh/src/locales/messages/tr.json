@@ -1,6 +1,10 @@
 {
   "CHANGE_MAP_SUCCESS": "Harita {{mapName}} olarak değiştirildi",
   "CHANGE_MAP_FAILURE": "Harita yüklenirken bir sorun oluştu. Lütfen tekrar deneyin!",
+  "BEST_TIME": "En İyi Süre: {{playerName}} - {{time}}",
+  "TIRES_PERCENTAGE": "Lastikler: {{percentage}}%",
+  "RR_ENABLED": "!rr komutu etkinleştirildi",
+  "RR_DISABLED": "!rr komutu devre dışı bırakıldı",
   "ADMIN_ALREADY_IN_ROOM": "Bir admin zaten odada",
   "ADMIN_ONLY": "Sadece yöneticiler bu komutu kullanabilir",
   "CONFIG_MISSING_ARGUMENT": "Kullanım: !config <ftoh|fh|haxbula>",

@@ -1,4 +1,4 @@
-import { sendErrorMessage } from "../../chat/chat";
+import { COLORS, sendErrorMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { log } from "../../discord/logger";
 import { enableGas } from "../../speed/handleSlipstream";
@@ -14,7 +14,7 @@ export function handleGasCommand(
   }
 
   if (!args[0]) {
-    room.sendAnnouncement("Usage: !gas <on|off>", byPlayer.id, 0xff0000);
+    room.sendAnnouncement("Usage: !gas <on|off>", byPlayer.id, COLORS.YELLOW);
     return;
   }
 
@@ -22,13 +22,13 @@ export function handleGasCommand(
   
   if (value === "on") {
     log("Gas mode enabled by admin");
-    room.sendAnnouncement("Gas mode!");
+    room.sendAnnouncement("Gas mode!", byPlayer.id, COLORS.GREEN);
     enableGas(true);
   } else if (value === "off") {
     log("Gas mode disabled by admin");
-    room.sendAnnouncement("No Gas mode!");
+    room.sendAnnouncement("No-Gas mode!", byPlayer.id, COLORS.GREEN);
     enableGas(false);
   } else {
-    room.sendAnnouncement("Invalid value. Use: !gas <on|off>", byPlayer.id, 0xff0000);
+    room.sendAnnouncement("Invalid value. Use: !gas <on|off>", byPlayer.id, COLORS.YELLOW);
   }
 }

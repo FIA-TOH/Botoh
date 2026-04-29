@@ -3,7 +3,7 @@ import {
   startPublicFlow,
   stopPublicFlow,
 } from "../../changeGameState/publicGameFlow/startStopGameFlow";
-import { sendErrorMessage } from "../../chat/chat";
+import { COLORS, sendErrorMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 
 export function handleChangeGameFLow(
@@ -17,7 +17,7 @@ export function handleChangeGameFLow(
   }
 
   if (!args[0]) {
-    room.sendAnnouncement("!game_flow [start|stop]", byPlayer.id);
+    room.sendAnnouncement("!game_flow [start|stop]", byPlayer.id, COLORS.YELLOW);
     return;
   }
 
@@ -25,7 +25,8 @@ export function handleChangeGameFLow(
     if (gameState !== null) {
       room.sendAnnouncement(
         `The game need to be stoped to start the flow, now ${gameState}`,
-        byPlayer.id
+        byPlayer.id,
+        COLORS.YELLOW
       );
       return;
     }
@@ -33,10 +34,10 @@ export function handleChangeGameFLow(
   } else if (args[0] === "stop") {
     stopPublicFlow(room);
   } else {
-    room.sendAnnouncement("!game_flow [start|stop]", byPlayer.id);
+    room.sendAnnouncement("!game_flow [start|stop]", byPlayer.id, COLORS.YELLOW);
     return;
   }
 
-  room.sendAnnouncement(`game flow - ${args[0]}`, byPlayer.id);
+  room.sendAnnouncement(`game flow - ${args[0]}`, byPlayer.id, COLORS.GREEN);
   return;
 }

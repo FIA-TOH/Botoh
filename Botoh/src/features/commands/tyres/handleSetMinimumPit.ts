@@ -1,4 +1,4 @@
-import { sendErrorMessage, sendChatMessage } from "../../chat/chat";
+import { sendErrorMessage, sendChatMessage, COLORS } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { defineMinimumPitStops } from "../../tires&pits/minimumPit";
 import { laps } from "../../zones/laps";
@@ -18,7 +18,8 @@ export function handleSetMinimumPit(
   if (args.length === 0 || isNaN(Number(args[0]))) {
     room.sendAnnouncement(
       "Correct use: !set_minimum_pit [number]",
-      byPlayer.id
+      byPlayer.id, 
+      COLORS.YELLOW
     );
     return;
   }
@@ -32,7 +33,7 @@ export function handleSetMinimumPit(
   if (minPit < 0) {
     room.sendAnnouncement(
       "❌ Invalid value. Minimum pitstops cannot be negative.",
-      byPlayer.id
+      byPlayer.id, COLORS.RED
     );
     return;
   }
@@ -42,11 +43,11 @@ export function handleSetMinimumPit(
       `❌ Invalid value. With ${laps} laps, the maximum minimum pitstops allowed is ${
         laps - 2
       }.`,
-      byPlayer.id
+      byPlayer.id, COLORS.RED
     );
     return;
   }
 
   defineMinimumPitStops(minPit);
-  room.sendAnnouncement(`Now the minimum pit stops is ${minPit}`, byPlayer.id);
+  room.sendAnnouncement(`Now the minimum pit stops is ${minPit}`, byPlayer.id, COLORS.GREEN);
 }

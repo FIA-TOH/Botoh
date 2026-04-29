@@ -1,4 +1,6 @@
 import { getBestTime } from "../../../circuits/bestTimes";
+import { sendBlueMessage } from "../../chat/chat";
+import { MESSAGES } from "../../chat/messages";
 import { ACTUAL_CIRCUIT } from "../../roomFeatures/stadiumChange";
 
 export function handleRecordCommand(
@@ -11,10 +13,7 @@ export function handleRecordCommand(
 
     if (record) {
       const [bestTime, driver, track] = record;
-      room.sendAnnouncement(
-        `Record on ${track}: ${bestTime} - ${driver}`,
-        byPlayer.id
-      );
+      sendBlueMessage(room, MESSAGES.BEST_TIME(driver, bestTime.toString()), byPlayer.id);
     }
   }
 }

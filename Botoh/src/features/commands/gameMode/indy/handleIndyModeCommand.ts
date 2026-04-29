@@ -2,7 +2,7 @@ import {
   changeGameMode,
   GameMode,
 } from "../../../changeGameState/changeGameModes";
-import { sendErrorMessage } from "../../../chat/chat";
+import { COLORS, sendErrorMessage } from "../../../chat/chat";
 import { MESSAGES } from "../../../chat/messages";
 import { log } from "../../../discord/logger";
 
@@ -22,5 +22,5 @@ export function handleIndyModeCommand(
   }
   changeGameMode(GameMode.INDY, room);
   log("Indy mode enabled by admin");
-  room.sendAnnouncement("Indy mode on");
+  room.sendAnnouncement("Indy mode on", byPlayer.id, COLORS.GREEN);
 }

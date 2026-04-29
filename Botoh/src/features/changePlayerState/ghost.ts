@@ -1,3 +1,4 @@
+import { COLORS } from "../chat/chat";
 import { log } from "../discord/logger";
 import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
 import { updatePlayerCollision } from "./updatePlayerCollision";
@@ -13,7 +14,7 @@ export function setGhostMode(
   const message = ghostMode ? "Ghost mode enabled" : "Ghost mode disabled";
   if (playerId) {
     log(message);
-    room.sendAnnouncement(message);
+    room.sendAnnouncement(message, playerId, COLORS.GREEN);
   }
 
   const collisionGroup = ghostMode

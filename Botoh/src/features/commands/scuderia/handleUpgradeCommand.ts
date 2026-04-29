@@ -1,3 +1,5 @@
+import { COLORS, sendErrorMessage } from "../../chat/chat";
+import { MESSAGES } from "../../chat/messages";
 import { leagueScuderia } from "../../scuderias/scuderias";
 
 type UpgradeCategory =
@@ -25,7 +27,7 @@ export function handleUpgradeCommand(
   room: RoomObject
 ) {
   if (!byPlayer.admin) {
-    room.sendAnnouncement("You are not admin.", byPlayer.id, 0xff0000);
+    sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id);
     return;
   }
 
@@ -33,7 +35,7 @@ export function handleUpgradeCommand(
     room.sendAnnouncement(
       "Use: !upgrade <Team> <Category> <Property> <Value>",
       byPlayer.id,
-      0xff0000
+      COLORS.YELLOW
     );
     return;
   }
@@ -42,7 +44,7 @@ export function handleUpgradeCommand(
   const value = Number(rawValue);
 
   if (isNaN(value)) {
-    room.sendAnnouncement("Value must be a number.", byPlayer.id, 0xff0000);
+    room.sendAnnouncement("Value must be a number.", byPlayer.id, COLORS.RED);
     return;
   }
 
@@ -58,7 +60,7 @@ export function handleUpgradeCommand(
     room.sendAnnouncement(
       `Team "${teamName}" does not exist.`,
       byPlayer.id,
-      0xff0000
+      COLORS.RED
     );
     return;
   }
@@ -69,7 +71,7 @@ export function handleUpgradeCommand(
     room.sendAnnouncement(
       `Category "${category}" is not upgradeable.`,
       byPlayer.id,
-      0xff0000
+      COLORS.RED
     );
     return;
   }
@@ -81,7 +83,7 @@ export function handleUpgradeCommand(
     room.sendAnnouncement(
       `Category "${category}" is missing on team ${teamName}.`,
       byPlayer.id,
-      0xff0000
+      COLORS.RED
     );
     return;
   }
@@ -96,7 +98,7 @@ export function handleUpgradeCommand(
     room.sendAnnouncement(
       `Property "${property}" does not exist in category "${catKey}".`,
       byPlayer.id,
-      0xff0000
+      COLORS.RED
     );
     return;
   }
@@ -106,7 +108,7 @@ export function handleUpgradeCommand(
   room.sendAnnouncement(
     `Updated ${foundTeamKey}.${catKey}.${foundPropKey} → ${value}`,
     byPlayer.id,
-    0x00ff00
+    COLORS.GREEN
   );
 }
 //!upgrade astonmaia chassis accelerationNerf 0

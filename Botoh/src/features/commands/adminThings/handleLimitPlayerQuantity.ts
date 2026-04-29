@@ -1,4 +1,4 @@
-import { sendErrorMessage, sendSuccessMessage } from "../../chat/chat";
+import { COLORS, sendErrorMessage, sendSuccessMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 
 export let PLAYER_LIMIT = 22;
@@ -19,7 +19,7 @@ export function handleLimitPlayerQuantity(
       room.sendAnnouncement(
         "⚠️ the limit should be a number",
         byPlayer.id,
-        0xff1500
+        COLORS.YELLOW
       );
       return;
     }
@@ -28,7 +28,8 @@ export function handleLimitPlayerQuantity(
 
     room.sendAnnouncement(
       `Now the quantity limit of players is ${PLAYER_LIMIT}`,
-      byPlayer.id
+      byPlayer.id,
+      COLORS.GREEN
     );
   } catch (err) {
     console.error("[handleLimitPlayerQuantity] Erro inesperado:", err);

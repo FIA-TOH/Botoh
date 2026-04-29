@@ -37,7 +37,7 @@ export function handleBestTimes(
 
   if (playerData.lastLapValid && isFastestLapRace) {
     sendBestTimeRace(room, MESSAGES.FASTEST_LAP(p.name, lapTime));
-    playerData.sectorColour = COLORS.MAGENTA;
+    playerData.sectorColour = COLORS.PINK;
   }
 
   if (

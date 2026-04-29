@@ -1,4 +1,4 @@
-import { sendErrorMessage } from "../../../chat/chat";
+import { COLORS, sendErrorMessage } from "../../../chat/chat";
 import { MESSAGES } from "../../../chat/messages";
 
 export let qualyForPub = true;
@@ -13,5 +13,5 @@ export function handleEnableQualyForPub(
     return;
   }
   qualyForPub = !qualyForPub;
-  room.sendAnnouncement(`qualyForPub changed to ${qualyForPub}`, byPlayer.id);
+  room.sendAnnouncement(`qualyForPub changed to ${qualyForPub}`, byPlayer.id, COLORS.GREEN);
 }

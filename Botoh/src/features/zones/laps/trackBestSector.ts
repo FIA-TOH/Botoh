@@ -43,7 +43,7 @@ export function evaluateSector(
     sessionBestSectors[sectorIndex] = sectorTime;
     playerData.bestSectorTimes[sectorIndex - 1] = sectorTime;
 
-    color = COLORS.MAGENTA;
+    color = COLORS.PINK;
     emojiStart = "🌸";
     emojiEnd = "🌸";
 

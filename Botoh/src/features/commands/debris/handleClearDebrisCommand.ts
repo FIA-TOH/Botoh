@@ -1,4 +1,4 @@
-import { sendErrorMessage } from "../../chat/chat";
+import { COLORS, sendErrorMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { clearDebris } from "../../debris/clearDebris";
 
@@ -19,7 +19,7 @@ export function handleClearDebrisCommand(
     }
 
     clearDebris(room);
-    room.sendAnnouncement("All debris cleared on the track", byPlayer.id);
+    room.sendAnnouncement("All debris cleared on the track", byPlayer.id, COLORS.GREEN);
   } catch (err) {
     console.error("[handleClearDebrisCommand] Unknown error:", err);
   }

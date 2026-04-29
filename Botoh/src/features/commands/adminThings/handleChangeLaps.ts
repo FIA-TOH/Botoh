@@ -4,7 +4,7 @@ import {
   GeneralGameMode,
   generalGameMode,
 } from "../../changeGameState/changeGameModes";
-import { sendErrorMessage, sendChatMessage } from "../../chat/chat";
+import { sendErrorMessage, sendChatMessage, COLORS } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { setLaps } from "../../zones/laps";
 import { minPit } from "../tyres/handleSetMinimumPit";
@@ -37,7 +37,8 @@ export function changeLaps(
             `❌ Invalid value. With ${minPit} minimum pitstops, the race must have at least ${
               minPit + 2
             } laps.`,
-            byPlayer.id
+            byPlayer.id, 
+            COLORS.RED
           );
 
           return false;

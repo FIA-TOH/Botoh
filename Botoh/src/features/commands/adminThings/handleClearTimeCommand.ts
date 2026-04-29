@@ -1,5 +1,6 @@
 import { playerList } from "../../changePlayerState/playerList";
 import {
+  COLORS,
   sendErrorMessage,
   sendNonLocalizedSmallChatMessage,
 } from "../../chat/chat";
@@ -38,7 +39,7 @@ export function handleClearTimeCommand(
   } else {
     room.sendAnnouncement(
       "IMPORTANT: The player isn't in the room at the moment, reset their time when they enter again.",
-    );
+    ), COLORS.YELLOW;
   }
 
   updatePlayerTime(argsString, Number.MAX_VALUE, Number.MAX_VALUE, null);

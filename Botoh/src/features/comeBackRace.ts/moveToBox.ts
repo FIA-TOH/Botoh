@@ -1,6 +1,6 @@
 import { Direction } from "../../circuits/Circuit";
 import { playerList } from "../changePlayerState/playerList";
-import { sendErrorMessage } from "../chat/chat";
+import { COLORS, sendErrorMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { getPlayerById } from "../playerFeatures/getPlayerBy";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
@@ -70,7 +70,7 @@ export function handleMoveToBoxCommand(
     room.sendAnnouncement(
       `no player found with id: ${playerIdRaw}`,
       byPlayer.id,
-      0xff0000
+      COLORS.RED
     );
     return false;
   }
@@ -80,7 +80,7 @@ export function handleMoveToBoxCommand(
     room.sendAnnouncement(
       `Correct use: !move_to_box [playerId] [start | middle | end]`,
       byPlayer.id,
-      0xff0000
+      COLORS.YELLOW
     );
     return false;
   }
@@ -88,7 +88,7 @@ export function handleMoveToBoxCommand(
   const playerPad = getPlayerById(playerId, room);
 
   if (!playerPad) {
-    room.sendAnnouncement("❌ Player not found.", byPlayer.id, 0xff0000);
+    room.sendAnnouncement("❌ Player not found.", byPlayer.id, COLORS.RED);
     return;
   }
 
@@ -96,6 +96,7 @@ export function handleMoveToBoxCommand(
 
   room.sendAnnouncement(
     `✅ ${playerPad.p.name} moved to the (${positionRaw} of the box).`,
-    byPlayer.id
+    byPlayer.id,
+    COLORS.GREEN
   );
 }

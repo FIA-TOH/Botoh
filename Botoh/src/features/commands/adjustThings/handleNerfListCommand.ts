@@ -1,4 +1,4 @@
-import { sendErrorMessage, sendChatMessage } from "../../chat/chat";
+import { sendErrorMessage, sendChatMessage, COLORS } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { getPlayerAndDiscs } from "../../playerFeatures/getPlayerAndDiscs";
 import { getRunningPlayers } from "../../utils";
@@ -49,7 +49,7 @@ export function handleNerfListCommand(
   let playerNerfEscolhido: { p: PlayerObject; disc: DiscPropertiesObject }[] =
     [];
   if (!playerBuffId) {
-    room.sendAnnouncement("Choose a player.", byPlayer.id, 0xff0000);
+    room.sendAnnouncement("Choose a player.", byPlayer.id, COLORS.YELLOW);
     return;
   }
   if (playerBuffNumero !== undefined) {
@@ -57,11 +57,11 @@ export function handleNerfListCommand(
     if (playerEscolhido) {
       playerBuffEscolhido = [playerEscolhido];
     } else {
-      room.sendAnnouncement("Player buff not found", byPlayer.id, 0xff0000);
+      room.sendAnnouncement("Player buff not found", byPlayer.id, COLORS.RED);
       return;
     }
   } else {
-    room.sendAnnouncement("Choose a valid buff player", byPlayer.id, 0xff0000);
+    room.sendAnnouncement("Choose a valid buff player", byPlayer.id, COLORS.RED);
     return;
   }
   if (playerNerfNumero !== undefined) {
@@ -69,24 +69,14 @@ export function handleNerfListCommand(
     if (playerEscolhido) {
       playerNerfEscolhido = [playerEscolhido];
     } else {
-      room.sendAnnouncement("Player nerf not found", byPlayer.id, 0xff0000);
+      room.sendAnnouncement("Player nerf not found", byPlayer.id, COLORS.RED);
       return;
     }
   }
   if (playerBuffEscolhido?.length === 0) {
-    room.sendAnnouncement("Choose a valid player", byPlayer.id, 0xff0000);
+    room.sendAnnouncement("Choose a valid player", byPlayer.id, COLORS.RED);
     return;
   }
   playerBuffList.push(playerBuffEscolhido[0]?.p ?? []);
   playerNerfList.push(playerNerfEscolhido[0]?.p ?? []);
-
-  // if(adjust === "wear"){
-  //     playerInfo.wear = valueNumber as number
-  // } else if(adjust === "laps"){
-  //     playerInfo.currentLap = valueNumber as number
-  //     playerInfo.currentSector = 3 as number
-  // } else{
-  //     room.sendAnnouncement("Now you can only change wear or laps", byPlayer.id, 0xff0000);
-  //     return;
-  // }
 }
