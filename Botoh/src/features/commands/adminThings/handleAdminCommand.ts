@@ -3,29 +3,34 @@ import { sendErrorMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { LEAGUE_MODE } from "../../hostLeague/leagueMode";
 import { getAdmins } from "../../utils";
-import {
-  leagueAdminPassword,
-  publicAdminPassword,
-  publicModPassword,
-} from "../../../../roomconfig.json";
+
+const getRoomConfig = () => ({
+  publicAdminPassword: process.env.PUBLIC_ADMIN_PASSWORD || "",
+  publicModPassword: process.env.PUBLIC_MOD_PASSWORD || "",
+  leagueAdminPassword: process.env.LEAGUE_ADMIN_PASSWORD || ""
+});
+
+const roomConfigSecure = getRoomConfig();
 
 export function handleAdminCommand(
   byPlayer: PlayerObject,
   args: string[],
   room: RoomObject
 ) {
+  const currentConfig = getRoomConfig();
+  
+  const SECRET_PASSWORD = LEAGUE_MODE
+    ? currentConfig.leagueAdminPassword
+    : currentConfig.publicAdminPassword;
+  const SECRET_PASSWORD_MOD = LEAGUE_MODE
+    ? currentConfig.leagueAdminPassword
+    : currentConfig.publicModPassword;
+  
   if (byPlayer.admin) {
     room.setPlayerAdmin(byPlayer.id, false);
     delete afkAdmins[byPlayer.id];
     return;
   }
-
-  const SECRET_PASSWORD = LEAGUE_MODE
-    ? leagueAdminPassword
-    : publicAdminPassword;
-  const SECRET_PASSWORD_MOD = LEAGUE_MODE
-    ? leagueAdminPassword
-    : publicModPassword;
 
   if (args[0] === SECRET_PASSWORD) {
     room.setPlayerAdmin(byPlayer.id, true);

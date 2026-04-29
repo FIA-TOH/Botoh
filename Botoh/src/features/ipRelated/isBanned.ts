@@ -1,8 +1,12 @@
 import { sha256 } from "js-sha256";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
-import { bans } from "../../../roomconfig.json";
 
-const BAN_LIST = bans;
+const getRoomConfig = () => ({
+  bans: process.env.BANNED_IPS ? JSON.parse(process.env.BANNED_IPS) : []
+});
+
+const roomConfigSecure = getRoomConfig();
+const BAN_LIST = roomConfigSecure.bans;
 
 export function isBanned(ip: string): boolean {
   const comparableIp = LEAGUE_MODE ? sha256(ip) : ip;

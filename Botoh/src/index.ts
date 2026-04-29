@@ -1,5 +1,9 @@
+import * as dotenv from 'dotenv';
 import { LEAGUE_MODE } from "./features/hostLeague/leagueMode";
 import { roomPromise } from "./room";
+
+// Load environment variables from .env file
+dotenv.config({ path: '../.env' });
 
 process.on("beforeExit", (code) => {
   console.error("⚠️ beforeExit with code:", code);

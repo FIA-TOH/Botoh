@@ -24,6 +24,16 @@ import { PlaerActivity } from "./features/roomFeatures/playerActivitie";
 import { resetAllAfkCounters } from "./features/afk/afk";
 import { log } from "./features/discord/logger";
 
+const getRoomConfig = () => ({
+  publicAdminPassword: process.env.PUBLIC_ADMIN_PASSWORD || roomConfig.publicAdminPassword,
+  publicModPassword: process.env.PUBLIC_MOD_PASSWORD || roomConfig.publicModPassword,
+  leagueAdminPassword: process.env.LEAGUE_ADMIN_PASSWORD || roomConfig.leagueAdminPassword,
+  bans: process.env.BANNED_IPS ? JSON.parse(process.env.BANNED_IPS) : roomConfig.bans,
+  token:roomConfig.token
+});
+
+const roomConfigSecure = getRoomConfig();
+
 const envName = process.env.LEAGUE_ENV || "ftoh";
 const roomName = LEAGUE_MODE
   ? envName === "haxbula"
@@ -59,7 +69,7 @@ export const roomPromise: Promise<any> = HaxballJS().then((HBInit: any) => {
     maxPlayers: maxPlayers,
     password: roomPassword ?? undefined,
     token:
-      process.env.HAXBALL_TOKEN ?? roomConfig.token,
+      roomConfigSecure.token,
     geo: getGeo(),
   });
 
