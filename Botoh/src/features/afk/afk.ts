@@ -17,7 +17,7 @@ import { presentationLap } from "../commands/gameState/handlePresentationLapComm
 import { chooseOneDebris } from "../debris/chooseOneDebris";
 import { debrisEnabled } from "../debris/enableDebris";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
-import { vsc } from "../safetyCar/vsc";
+import { vsc, vscTriggeredByPlayer } from "../safetyCar/vsc";
 import { isRealSafetyEnabled } from "../commands/flagsAndVSC/handleSafetyCommand";
 import { isSCActive } from "../commands/flagsAndVSC/handleSCCommand";
 
@@ -145,6 +145,18 @@ export function handlePlayerLeave(player: PlayerObject, room: RoomObject) {
     return;
   }
   
+  if (vsc && vscTriggeredByPlayer === playerId) {
+    if (Math.random() < 0.25) {
+      handleSCCommand(undefined, ["on"], room);
+    } else {
+      const { extendVSCDuration } = require("../safetyCar/vsc");
+      extendVSCDuration();
+    }
+    
+    delete playerActivities[playerId];
+    return;
+  }
+  
   if (safetyCarActivatedForAfkLeave) {
     delete playerActivities[playerId];
     return;
@@ -241,7 +253,7 @@ export function afkKick(room: RoomObject) {
 
     if (isRealSafetyEnabled() && afkDuration >= 2 && !activity.vscActivated) {
       if (!vsc && !presentationLap) {
-        deployVSCAutomatically(room);
+        deployVSCAutomatically(room, playerId);
         
         if (
           ACTUAL_CIRCUIT.info.sectorOne &&

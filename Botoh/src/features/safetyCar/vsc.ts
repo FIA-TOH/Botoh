@@ -2,16 +2,19 @@ export let vsc = false;
 export let vscStartTime: number | undefined;
 export let vscDuration: number | undefined;
 export let vscAutoDeployed = false;
+export let vscExtended = false;
+export let vscTriggeredByPlayer: number | undefined;
 
 export function changeVSC() {
   vsc = !vsc;
 }
 
-export function deployVSCAutomatically(room: any) {
+export function deployVSCAutomatically(room: any, playerId?: number) {
   if (vsc) return;
   
-  vscDuration = 8 + Math.random() * 8; // 8-16 seconds
+  vscDuration = 10 + Math.random() * 5;
   vscAutoDeployed = true;
+  vscTriggeredByPlayer = playerId;
   
   const scores = room.getScores();
   if (scores) {
@@ -36,6 +39,15 @@ export function checkVSCDuration(room: any) {
   const elapsedTime = scores.time - vscStartTime;
   
   if (elapsedTime >= vscDuration) {
+    if (vscTriggeredByPlayer !== undefined) {
+      const { isPlayerMovingAtSpeed } = require("../afk/afk");
+      const { Teams } = require("../changeGameState/teams");
+      
+      if (!isPlayerMovingAtSpeed(vscTriggeredByPlayer, room)) {
+        room.setPlayerTeam(vscTriggeredByPlayer, Teams.SPECTATORS);
+      }
+    }
+    
     changeVSC();
     
     const { sendGreenMessage } = require("../chat/chat");
@@ -46,7 +58,16 @@ export function checkVSCDuration(room: any) {
     vscAutoDeployed = false;
     vscStartTime = undefined;
     vscDuration = undefined;
+    vscExtended = false;
+    vscTriggeredByPlayer = undefined;
   }
+}
+
+export function extendVSCDuration() {
+  if (!vsc || vscExtended) return;
+  
+  vscExtended = true;
+  vscDuration = (vscDuration || 0) + 20;
 }
 
 export function resetVSCState() {
@@ -54,4 +75,6 @@ export function resetVSCState() {
   vscAutoDeployed = false;
   vscStartTime = undefined;
   vscDuration = undefined;
+  vscExtended = false;
+  vscTriggeredByPlayer = undefined;
 }
