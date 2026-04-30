@@ -1,8 +1,3 @@
-import {
-  generalGameMode,
-  GeneralGameMode,
-} from "../../../../changeGameState/changeGameModes";
-import { allowPlayersRejoinRace } from "../../../../comeBackRace.ts/comeBackToRaceFunctions";
 import { printAllPositions } from "../../../../commands/gameMode/race/printAllPositions";
 import { notifyGapToCarAhead } from "./notifyGapToCarAhead";
 import { notifySpectatorsCurrentLap } from "./notifySpecCurrentLap";
@@ -20,9 +15,5 @@ export function notifyPositionOrLeaders(
   } else {
     printAllPositions(room, 1000);
     notifySpectatorsCurrentLap(room, currentLap, playerAndDiscs);
-
-    if (generalGameMode === GeneralGameMode.GENERAL_RACE) {
-      allowPlayersRejoinRace(room);
-    }
   }
 }

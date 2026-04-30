@@ -58,7 +58,7 @@ function getWarningTimeout(): number {
   return isRealSafetyEnabled() ? 0 : afkKickTime - 5;
 }
 
-function isPlayerMovingAtSpeed(playerId: number, room: RoomObject): boolean {
+export function isPlayerMovingAtSpeed(playerId: number, room: RoomObject): boolean {
   if (!room) return false;
   
   const playersAndDiscs = room.getPlayerList().map(player => ({

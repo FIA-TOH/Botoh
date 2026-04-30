@@ -67,6 +67,14 @@ export function GameTick(room: RoomObject) {
 
     players.forEach((pad) => {
       const p = pad.p;
+      
+      if (pad.disc && playerList[p.id]) {
+        playerList[p.id].previousPos = {
+          x: pad.disc.x,
+          y: pad.disc.y
+        };
+      }
+      
       handleTireWear(p, room);
       checkTireStatus(p, room);
 
