@@ -59,15 +59,8 @@ import { handleDiscordCommand } from "../discord/handleDiscordCommand";
 import { handleCameraPlayerFollow } from "./camera/handleCameraPlayerFollow";
 import { handleCameraPositionFollow } from "./camera/handleCameraPositionFollow";
 import { handleCameraProperties } from "./camera/handleCameraProperties";
-import { handleChangeGameFLow } from "./gameState/gameFlow";
 import { handleSetMinimumPit } from "./tyres/handleSetMinimumPit";
-// import { handleRejoinCommand } from "./comeBackRace/handleRejoinCommand"; // Disabled - unfinished feature
-
-
-const handleRejoinCommand = (byPlayer: PlayerObject, args: string[], room: RoomObject) => {
-  // This feature is disabled - unfinished functionality
-  return;
-};
+import { handleRejoinCommand } from "./comeBackRace/handleRejoinCommand";
 import { handleMoveToBoxCommand } from "../comeBackRace.ts/moveToBox";
 import { handlePlayerQuantity } from "./adminThings/handlePlayerQuantity";
 import { handleLimitPlayerQuantity } from "./adminThings/handleLimitPlayerQuantity";
@@ -361,11 +354,6 @@ export type CommandFunction = (
     args: string[],
     room: RoomObject,
   ) => void,
-  handleChangeGameFLow: (
-    byPlayer: PlayerObject,
-    args: string[],
-    room: RoomObject,
-  ) => void,
   handleSetMinimumPit: (
     byPlayer: PlayerObject,
     args: string[],
@@ -375,7 +363,7 @@ export type CommandFunction = (
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject,
-  ) => void, // Disabled - unfinished feature
+  ) => void,
   handleMoveToBoxCommand: (
     byPlayer: PlayerObject,
     args: string[],
@@ -504,7 +492,6 @@ function importCommandsByLanguage(commandFunctions: {
         handleCameraProperties,
         handleCameraPlayerFollow,
         handleCameraPositionFollow,
-        handleChangeGameFLow,
         handleSetMinimumPit,
         handleRejoinCommand,
         handleMoveToBoxCommand,
@@ -588,7 +575,6 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
         handleCameraProperties,
         handleCameraPlayerFollow,
         handleCameraPositionFollow,
-        handleChangeGameFLow,
         handleSetMinimumPit,
         handleRejoinCommand,
         handleMoveToBoxCommand,

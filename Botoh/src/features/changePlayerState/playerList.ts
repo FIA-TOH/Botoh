@@ -124,6 +124,8 @@ export interface PlayerInfo {
 
   timeWhenEntered: number;
 
+  canRejoin: boolean;
+
   newPitState?: NewPitState;
   
   xKeyState?: XKeyState;

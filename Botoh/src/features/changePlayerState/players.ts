@@ -1,11 +1,12 @@
 import { DEFAULT_LANGUAGE } from "../chat/language";
-import { playerList } from "../changePlayerState/playerList";
+import { playerList, idToAuth } from "../changePlayerState/playerList";
 import { handleAvatar, Situacions } from "./handleAvatar";
 import { Tires, TIRE_STARTING_SPEED } from "../tires&pits/tires";
 import { gameMode, GameMode } from "../changeGameState/changeGameModes";
 import { COLORS } from "../chat/chat";
+import { rejoinManager } from "./rejoinManager";
 
-export function createPlayerInfo(ip?: string) {
+export function createPlayerInfo(ip?: string, playerId?: number) {
   return {
     ip: ip || "Not Available",
     isInTheRoom: true,
@@ -96,6 +97,17 @@ export function createPlayerInfo(ip?: string) {
 
     timeWhenEntered: 0,
 
+    canRejoin: playerId ? (() => {
+      const auth = idToAuth[playerId];
+      if (auth) {
+        const rejoinData = rejoinManager.getPlayerData(auth);
+        if (rejoinData) {
+          return true;
+        }
+      }
+      return false;
+    })() : false,
+
     newPitState: {
       isWaitingForPit: false,
       pKeyPressed: false,
@@ -119,6 +131,14 @@ export function createPlayerInfo(ip?: string) {
     isManagingTyres: false,
     isTyreBlowed: false,
     blowoutTickCounter: 0,
+
+    curveResistanceTicks: undefined,
+    directionChangerEndTime: undefined,
+    directionChangerX: undefined,
+    directionChangerY: undefined,
+    directionChangerForce: undefined,
+    currentDirection: undefined,
+    currentDirectionEmoji: undefined,
   };
 }
 
@@ -252,4 +272,12 @@ export function resetPlayer(
   playerList[id].isManagingTyres = false;
   playerList[id].isTyreBlowed = false;
   playerList[id].blowoutTickCounter = 0;
+  
+  playerList[id].curveResistanceTicks = undefined;
+  playerList[id].directionChangerEndTime = undefined;
+  playerList[id].directionChangerX = undefined;
+  playerList[id].directionChangerY = undefined;
+  playerList[id].directionChangerForce = undefined;
+  playerList[id].currentDirection = undefined;
+  playerList[id].currentDirectionEmoji = undefined;
 }

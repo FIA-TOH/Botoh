@@ -1700,13 +1700,6 @@ export const MESSAGES = {
     tr: replaceTemplateString(tr_messages.CAME_BACK_RACE_ONE, {}),
     pt: replaceTemplateString(pt_messages.CAME_BACK_RACE_ONE, {}),
   }),
-  CAME_BACK_RACE_TWO: (): LocalizedMessageFunction => ({
-    en: replaceTemplateString(en_messages.CAME_BACK_RACE_TWO, {}),
-    es: replaceTemplateString(es_messages.CAME_BACK_RACE_TWO, {}),
-    fr: replaceTemplateString(fr_messages.CAME_BACK_RACE_TWO, {}),
-    tr: replaceTemplateString(tr_messages.CAME_BACK_RACE_TWO, {}),
-    pt: replaceTemplateString(pt_messages.CAME_BACK_RACE_TWO, {}),
-  }),
   TYPE_REJOIN: (): LocalizedMessageFunction => ({
     en: replaceTemplateString(en_messages.TYPE_REJOIN, {}),
     es: replaceTemplateString(es_messages.TYPE_REJOIN, {}),

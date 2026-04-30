@@ -6,8 +6,8 @@ import { createPlayerInfo } from "../changePlayerState/players";
 import {
   MAX_PLAYER_NAME,
   sendAlertMessage,
-  sendChatMessage,
   sendSuccessMessage,
+  sendErrorMessage,
 } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
@@ -16,7 +16,6 @@ import {
   decodeIPFromConn,
   banPlayer,
   kickPlayer,
-  getRunningPlayers,
 } from "../utils";
 import {
   gameMode,
@@ -26,14 +25,11 @@ import {
 } from "../changeGameState/changeGameModes";
 import { log } from "../discord/logger";
 import { checkRunningPlayers } from "../changeGameState/publicGameFlow/startStopGameFlow";
-import {
-  playersLeftInfo,
-  REJOIN_TIME_LIMIT,
-} from "../comeBackRace.ts/comeBackToRaceFunctions";
 
 import { sendDiscordGeneralChatQualy } from "../discord/discord";
 import { PLAYER_LIMIT } from "../commands/adminThings/handleLimitPlayerQuantity";
 import { positionList } from "../commands/gameMode/race/positionList";
+import { rejoinManager } from "../changePlayerState/rejoinManager";
 
 const HARD_QUALY_PASSWORD = "hardqualy";
 
@@ -52,7 +48,7 @@ function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
       playerList[player.id].didHardQualy === true &&
       player.name !== "Admin"
     ) {
-      kickPlayer(player.id, `You already did qualy`, room);
+            kickPlayer(player.id, `You already did qualy`, room);
     }
   }
 
@@ -63,32 +59,26 @@ function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
         generalGameMode === GeneralGameMode.GENERAL_RACE
       ) {
         room.setPlayerTeam(player.id, Teams.SPECTATORS);
-      } else if (
-        wasRunning &&
-        generalGameMode === GeneralGameMode.GENERAL_RACE
-      ) {
-        const leftInfoIndex = playersLeftInfo.findIndex(
-          (info) => info.name === player.name,
-        );
 
-        if (leftInfoIndex !== -1) {
-          const leftInfo = playersLeftInfo[leftInfoIndex];
-          const leftAt = new Date(leftInfo.leftAt);
-          const diffInSeconds = (now.getTime() - leftAt.getTime()) / 1000;
-
-          if (diffInSeconds <= REJOIN_TIME_LIMIT) {
-            sendAlertMessage(room, MESSAGES.TYPE_REJOIN(), player.id);
-          }
-
-          room.setPlayerTeam(player.id, Teams.SPECTATORS);
-          return;
+        if(wasRunning){
+            const rejoinData = rejoinManager.getPlayerData(player.auth);
+            if (rejoinData) {
+              if (playerList[player.id]) {
+                playerList[player.id].canRejoin = rejoinData.playerInfo.canRejoin;
+              }
+            }
+        
+            if (playerList[player.id]?.canRejoin) {
+              sendAlertMessage(room, MESSAGES.TYPE_REJOIN(), player.id);
+            } else {
+              sendErrorMessage(room, MESSAGES.THE_JOIN_TIME_IS_OVER(), player.id);
+            }
         }
-
-        room.setPlayerTeam(player.id, Teams.SPECTATORS);
+      }
       } else {
         room.setPlayerTeam(player.id, Teams.RUNNERS);
       }
-    }
+    
   } else {
     room.setPlayerTeam(player.id, Teams.RUNNERS);
     room.startGame();
@@ -149,7 +139,7 @@ export function PlayerJoin(room: RoomObject) {
     idToAuth[player.id] = player.auth;
 
     if (playerList[player.id] === undefined) {
-      playerList[player.id] = createPlayerInfo(ip);
+      playerList[player.id] = createPlayerInfo(ip, player.id);
     }
 
     if (gameMode === GameMode.HARD_QUALY) {

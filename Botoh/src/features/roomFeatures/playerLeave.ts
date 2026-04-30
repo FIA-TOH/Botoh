@@ -2,7 +2,7 @@ import { sha256 } from "js-sha256";
 import { afkAdmins } from "../afk/afkAdmins";
 import { lapPositions } from "../zones/laps/handleLapChange";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
-import { playerList } from "../changePlayerState/playerList";
+import { idToAuth, playerList } from "../changePlayerState/playerList";
 import { getRunningPlayers } from "../utils";
 import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
 import {
@@ -17,9 +17,9 @@ import { followPlayerId } from "../cameraAndBall/cameraFollow";
 import { checkRunningPlayers } from "../changeGameState/publicGameFlow/startStopGameFlow";
 import { changeGameStoppedNaturally } from "../changeGameState/gameStopeedNaturally";
 import { sendQualiResultsToDiscord } from "../discord/logResults";
-import { addPlayerLeftInfo } from "../comeBackRace.ts/comeBackToRaceFunctions";
 import { getPlayerByRacePosition } from "../playerFeatures/getPlayerBy";
 import { sendDiscordGeneralChatQualy } from "../discord/discord";
+import { rejoinManager } from "../changePlayerState/rejoinManager";
 
 export function PlayerLeave(room: RoomObject) {
   room.onPlayerLeave = function (player) {
@@ -35,58 +35,27 @@ export function PlayerLeave(room: RoomObject) {
 
     const lapsCompleted = Math.max(0, (playerList[player.id]?.currentLap || 1) - 1);
 
+    if (generalGameMode === GeneralGameMode.GENERAL_RACE && playerObj) {
+      const playerAuth = idToAuth[player.id] || player.auth;
+      
+      let position = { x: 0, y: 0 };
+      if (playerObj.previousPos && playerObj.previousPos.x !== null && playerObj.previousPos.y !== null) {
+        position = {
+          x: playerObj.previousPos.x,
+          y: playerObj.previousPos.y
+        };
+      }
+      
+      if (playerAuth) {
+        rejoinManager.savePlayerData(playerAuth, playerObj, position);
+      }
+    }
+
     if (LEAGUE_MODE) {
-      const hash = playerObj !== undefined ? sha256(playerObj.ip) : "";
-      log(`${player.name} has left. (${hash})`);
       if (gameMode === GameMode.HARD_QUALY && player.name !== "Admin") {
         sendDiscordGeneralChatQualy(`${player.name} has left the qualy room!`);
       }
-
-      if (
-        generalGameMode === GeneralGameMode.GENERAL_RACE &&
-        room.getScores()?.time > 0 &&
-        playerObj
-      ) {
-        const playerLeft = {
-          id: player.id,
-          name: player.name,
-          ip: playerObj.ip,
-          leagueScuderia: playerObj.leagueScuderia,
-          didHardQualy: playerObj.didHardQualy,
-          totalTime: playerObj.totalTime,
-          bestTime: playerObj.bestTime,
-          bestSectorTimes: playerObj.bestSectorTimes,
-          tires: playerObj.tires,
-          wear: playerObj.wear,
-          lapsOnCurrentTire: playerObj.lapsOnCurrentTire,
-          sandbagPenalty: playerObj.sandbagPenalty,
-          showTires: playerObj.showTires,
-          maxSpeed: playerObj.maxSpeed,
-          pits: playerObj.pits,
-          pitTargetTires: playerObj.pitTargetTires,
-          pitFailures: playerObj.pitFailures,
-          pitInitialPos: playerObj.pitInitialPos,
-          speedEnabled: playerObj.speedEnabled,
-          kers: playerObj.kers,
-          gas: playerObj.gas,
-          prevGas: playerObj.prevGas,
-          language: playerObj.language,
-          everyoneLaps: playerObj.everyoneLaps,
-          voted: playerObj.voted,
-          lapsBehindLeaderWhenLeft: Math.max(
-            0,
-            firstPlacePlayerLap - playerObj.currentLap,
-          ),
-          lapsCompletedWhenLeft: lapsCompleted,
-
-          leftAt: new Date().toISOString(),
-        };
-
-        addPlayerLeftInfo(playerLeft);
-      }
     } else {
-      const ip = playerObj !== undefined ? playerObj.ip : "";
-      log(`${player.name} has left. (${ip})`);
       checkRunningPlayers(room);
     }
 

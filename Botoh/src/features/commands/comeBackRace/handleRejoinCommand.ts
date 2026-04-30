@@ -1,8 +1,3 @@
-// TODO: This is an unfinished feature that allows players to rejoin races after disconnecting.
-// The functionality is not complete and may cause issues, so it's been disabled.
-// Uncomment this code when the rejoin feature is properly implemented and tested.
-
-/*
 import {
   GeneralGameMode,
   generalGameMode,
@@ -12,46 +7,36 @@ import { handleAvatar, Situacions } from "../../changePlayerState/handleAvatar";
 import { playerList } from "../../changePlayerState/playerList";
 import {
   sendErrorMessage,
-  sendChatMessage,
   sendAlertMessage,
 } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
-import {
-  playersLeftInfo,
-  REJOIN_TIME_LIMIT,
-} from "../../comeBackRace.ts/comeBackToRaceFunctions";
-import { resetPlayerComeBack } from "../../comeBackRace.ts/playerComeBack";
-import { defineMinimumPitStops } from "../../tires&pits/minimumPit";
-import { laps } from "../../zones/laps";
+import { rejoinManager } from "../../changePlayerState/rejoinManager";
+import { idToAuth } from "../../changePlayerState/playerList";
 
 export function handleRejoinCommand(
   byPlayer: PlayerObject,
   args: string[],
   room: RoomObject
 ) {
-  if (
-    room.getScores() === null ||
-    generalGameMode !== GeneralGameMode.GENERAL_RACE
-  ) {
+  if (generalGameMode !== GeneralGameMode.GENERAL_RACE) {
     sendErrorMessage(room, MESSAGES.NOT_STARTED(), byPlayer.id);
-    return false;
+    return;
   }
 
-  const playerName = byPlayer.name;
-  const now = new Date();
+  if (!room.getScores()) {
+    sendErrorMessage(room, MESSAGES.NOT_STARTED(), byPlayer.id);
+    return;
+  }
 
-  const index = playersLeftInfo.findIndex((p) => p.name === playerName);
+  const playerAuth = idToAuth[byPlayer.id] || byPlayer.auth;
 
-  if (index === -1) {
+  const rejoinData = rejoinManager.getPlayerData(playerAuth);
+  if (!rejoinData) {
     sendErrorMessage(room, MESSAGES.YOU_WERENT_RACING_BEFORE(), byPlayer.id);
     return;
   }
 
-  const info = playersLeftInfo[index];
-  const leftAt = new Date(info.leftAt);
-  const diffInSeconds = (now.getTime() - leftAt.getTime()) / 1000;
-
-  if (diffInSeconds > REJOIN_TIME_LIMIT) {
+  if (!playerList[byPlayer.id]?.canRejoin) {
     sendErrorMessage(room, MESSAGES.THE_JOIN_TIME_IS_OVER(), byPlayer.id);
     return;
   }
@@ -59,16 +44,50 @@ export function handleRejoinCommand(
   room.setPlayerTeam(byPlayer.id, Teams.RUNNERS);
 
   setTimeout(() => {
-    Object.assign(playerList[byPlayer.id], info);
-
-    resetPlayerComeBack(byPlayer, room, byPlayer.id, info);
+    const currentPlayerInfo = playerList[byPlayer.id];
+    const savedPlayerInfo = rejoinData.playerInfo;
+    const savedPosition = rejoinData.position;
+    
+    const currentTime = room.getScores()?.time || 0;
+    const timeOutside = currentTime - rejoinData.leftTime;
+    
+    const preservedProps = {
+      ip: currentPlayerInfo.ip,
+      afk: currentPlayerInfo.afk,
+      afkAlert: currentPlayerInfo.afkAlert,
+      cameraFollowing: currentPlayerInfo.cameraFollowing,
+      canRejoin: false 
+    };
+    
+    Object.assign(currentPlayerInfo, savedPlayerInfo);
+    Object.assign(currentPlayerInfo, preservedProps);
+    
+    if (timeOutside > 0) {
+      currentPlayerInfo.totalTime += timeOutside;
+      currentPlayerInfo.lapTime += timeOutside;
+      
+      if (currentPlayerInfo.sectorTime && currentPlayerInfo.sectorTime.length > 0) {
+        const currentSectorIndex = currentPlayerInfo.currentSector - 1;
+        if (currentSectorIndex >= 0 && currentSectorIndex < currentPlayerInfo.sectorTime.length) {
+          currentPlayerInfo.sectorTime[currentSectorIndex] += timeOutside;
+        }
+      }
+      
+      currentPlayerInfo.sectorTimeCounter += timeOutside;
+    }
+    
+    room.setPlayerDiscProperties(byPlayer.id, {
+      x: savedPosition.x,
+      y: savedPosition.y,
+      xspeed: 0,
+      yspeed: 0
+    });
 
     handleAvatar(Situacions.ChangeTyre, byPlayer, room);
-  }, 500);
+    
+    rejoinManager.clearPlayerData(playerAuth);
+  }, 100);
 
   sendAlertMessage(room, MESSAGES.CAME_BACK_RACE_ONE(), byPlayer.id);
-  sendAlertMessage(room, MESSAGES.CAME_BACK_RACE_TWO(), byPlayer.id);
-
-  playersLeftInfo.splice(index, 1);
 }
-*/
+
