@@ -16,6 +16,7 @@ import { presentationLap } from "../commands/gameState/handlePresentationLapComm
 import { inHitbox, getRunningPlayers } from "../utils";
 import { evaluateSector } from "./laps/trackBestSector";
 import { CIRCUITS, currentMapIndex } from "./maps";
+import { getIsGamePaused } from "../changeGameState/gameState";
 
 function serialize(number: number) {
   return parseFloat(number.toFixed(3));
@@ -98,6 +99,8 @@ export function checkPlayerSector(
     ) {
       return;
     }
+
+    if (getIsGamePaused()) return;
 
     if (ifInSectorOneChangeZone(pad, room)) {
       playerList[p.id].sectorTime[2] = serialize(
