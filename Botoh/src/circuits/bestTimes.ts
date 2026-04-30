@@ -52,7 +52,7 @@ const trackNameMapping: { [key: string]: string } = {
 
 export const bestTimes: { [key: string]: [number, string, string] } = {
   melbourne: [27.6, "Lando Canorris", trackNameMapping["melbourne"]],
-  imola: [39.967, "Ximbastian Vettel", trackNameMapping["imola"]],
+  imola: [47.379, "Ximbastian Vettel", trackNameMapping["imola"]],
   sepang: [49.65, "Lib Wallard ", trackNameMapping["sepang"]],
   bahrein: [32.884, "Alberto Ulasscari", trackNameMapping["bahrein"]],
   sochi: [40.15, "Alberto Ulasscari", trackNameMapping["sochi"]],

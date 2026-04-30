@@ -4,9 +4,8 @@ import { updateErs } from '../speed/fuel&Ers/ers';
 import { checkPlayerSector } from '../zones/handleSectorChange';
 
 import { handlePitlane } from '../tires&pits/pitLane';
-import { getRunningPlayers, vectorSpeed } from '../utils';
+import { getRunningPlayers } from '../utils';
 import handleTireWear from '../tires&pits/handleTireWear';
-import { handleAvatar, Situacions } from '../changePlayerState/handleAvatar';
 import { playerList } from '../changePlayerState/playerList';
 import { getPlayerAndDiscs } from '../playerFeatures/getPlayerAndDiscs';
 import { detectDirectionChangers } from '../speed/directionChanger';
