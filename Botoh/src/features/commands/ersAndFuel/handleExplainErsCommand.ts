@@ -1,4 +1,4 @@
-import { sendMessage } from "../../chat/chat";
+import { sendCyanMessage, sendMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 
 export function handleExplainErsCommand(
@@ -10,8 +10,8 @@ export function handleExplainErsCommand(
     return;
   }
   if (!byPlayer || byPlayer.admin) {
-    sendMessage(room, MESSAGES.EXPLAIN_ERS());
+    sendCyanMessage(room, MESSAGES.EXPLAIN_ERS());
   } else {
-    sendMessage(room, MESSAGES.EXPLAIN_ERS(), byPlayer.id);
+    sendCyanMessage(room, MESSAGES.EXPLAIN_ERS(), byPlayer.id);
   }
 }

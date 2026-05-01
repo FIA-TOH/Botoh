@@ -412,7 +412,7 @@ export default function es_commands(
     "!camera_id": handleCameraPlayerFollow,
     "!camera_position": handleCameraPositionFollow,
     "!min_pit": handleSetMinimumPit,
-    // "!rejoin": handleRejoinCommand, // Disabled - unfinished feature
+    "!rejoin": handleRejoinCommand,
     "!move_to_box": handleMoveToBoxCommand,
     "!player_quantity": handlePlayerQuantity,
     "!set_max_players": handleLimitPlayerQuantity,

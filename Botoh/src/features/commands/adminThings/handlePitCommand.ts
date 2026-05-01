@@ -1,4 +1,4 @@
-import { sendErrorMessage } from "../../chat/chat";
+import { COLORS, sendErrorMessage } from "../../chat/chat";
 import { MESSAGES, getPlayerLanguage } from "../../chat/messages";
 import { log } from "../../discord/logger";
 import { enableNewPitSystem } from "../../tires&pits/newPitSystem/newPitManager";
@@ -34,7 +34,7 @@ export function handlePitCommand(
 
   const message = MESSAGES.PIT_SUCCESS(pitType);
   const playerLang = getPlayerLanguage(byPlayer.id);
-  room.sendAnnouncement(message[playerLang as keyof typeof message], byPlayer.id, 0x00FF00, "bold");
+  room.sendAnnouncement(message[playerLang as keyof typeof message], byPlayer.id, COLORS.GREEN, "bold");
 }
 
 function applyOldPitConfig(room: RoomObject, byPlayer: PlayerObject) {

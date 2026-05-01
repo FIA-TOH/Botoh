@@ -8,6 +8,7 @@ import { DEFAULT_LANGUAGE, Language } from "./language";
 
 export function getPlayerLanguage(playerID: number): Language {
   if (playerID === null) return DEFAULT_LANGUAGE;
+  if (!playerList[playerID]) return DEFAULT_LANGUAGE;
   return playerList[playerID].language;
 }
 
@@ -46,6 +47,80 @@ export const MESSAGES = {
     fr: fr_messages.CHANGE_MAP_FAILURE,
     tr: tr_messages.CHANGE_MAP_FAILURE,
     pt: pt_messages.CHANGE_MAP_FAILURE,
+  }),
+  BEST_TIME: (playerName: string, time: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.BEST_TIME, {
+      playerName: playerName,
+      time: time,
+    }),
+    es: replaceTemplateString(es_messages.BEST_TIME, {
+      playerName: playerName,
+      time: time,
+    }),
+    fr: replaceTemplateString(fr_messages.BEST_TIME, {
+      playerName: playerName,
+      time: time,
+    }),
+    tr: replaceTemplateString(tr_messages.BEST_TIME, {
+      playerName: playerName,
+      time: time,
+    }),
+    pt: replaceTemplateString(pt_messages.BEST_TIME, {
+      playerName: playerName,
+      time: time,
+    }),
+  }),
+  STARTING_TRAINING_LAP: (): LocalizedMessageFunction => ({
+    en: en_messages.STARTING_TRAINING_LAP,
+    es: es_messages.STARTING_TRAINING_LAP,
+    fr: fr_messages.STARTING_TRAINING_LAP,
+    tr: tr_messages.STARTING_TRAINING_LAP,
+    pt: pt_messages.STARTING_TRAINING_LAP,
+  }),
+  TIME_TO_TRAIN: (): LocalizedMessageFunction => ({
+    en: en_messages.TIME_TO_TRAIN,
+    es: es_messages.TIME_TO_TRAIN,
+    fr: fr_messages.TIME_TO_TRAIN,
+    tr: tr_messages.TIME_TO_TRAIN,
+    pt: pt_messages.TIME_TO_TRAIN,
+  }),
+  TIRES_PERCENTAGE: (percentage: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.TIRES_PERCENTAGE, {
+      percentage: percentage,
+    }),
+    es: replaceTemplateString(es_messages.TIRES_PERCENTAGE, {
+      percentage: percentage,
+    }),
+    fr: replaceTemplateString(fr_messages.TIRES_PERCENTAGE, {
+      percentage: percentage,
+    }),
+    tr: replaceTemplateString(tr_messages.TIRES_PERCENTAGE, {
+      percentage: percentage,
+    }),
+    pt: replaceTemplateString(pt_messages.TIRES_PERCENTAGE, {
+      percentage: percentage,
+    }),
+  }),
+  RR_ENABLED: (): LocalizedMessageFunction => ({
+    en: en_messages.RR_ENABLED,
+    es: es_messages.RR_ENABLED,
+    fr: fr_messages.RR_ENABLED,
+    tr: tr_messages.RR_ENABLED,
+    pt: pt_messages.RR_ENABLED,
+  }),
+  RR_DISABLED: (): LocalizedMessageFunction => ({
+    en: en_messages.RR_DISABLED,
+    es: es_messages.RR_DISABLED,
+    fr: fr_messages.RR_DISABLED,
+    tr: tr_messages.RR_DISABLED,
+    pt: pt_messages.RR_DISABLED,
+  }),
+  TYRES_DISABLED: (): LocalizedMessageFunction => ({
+    en: en_messages.TYRES_DISABLED,
+    es: es_messages.TYRES_DISABLED,
+    fr: fr_messages.TYRES_DISABLED,
+    tr: tr_messages.TYRES_DISABLED,
+    pt: pt_messages.TYRES_DISABLED,
   }),
   ADMIN_ALREADY_IN_ROOM: (): LocalizedMessageFunction => ({
     en: en_messages.ADMIN_ALREADY_IN_ROOM,
@@ -1632,13 +1707,6 @@ export const MESSAGES = {
     fr: replaceTemplateString(fr_messages.CAME_BACK_RACE_ONE, {}),
     tr: replaceTemplateString(tr_messages.CAME_BACK_RACE_ONE, {}),
     pt: replaceTemplateString(pt_messages.CAME_BACK_RACE_ONE, {}),
-  }),
-  CAME_BACK_RACE_TWO: (): LocalizedMessageFunction => ({
-    en: replaceTemplateString(en_messages.CAME_BACK_RACE_TWO, {}),
-    es: replaceTemplateString(es_messages.CAME_BACK_RACE_TWO, {}),
-    fr: replaceTemplateString(fr_messages.CAME_BACK_RACE_TWO, {}),
-    tr: replaceTemplateString(tr_messages.CAME_BACK_RACE_TWO, {}),
-    pt: replaceTemplateString(pt_messages.CAME_BACK_RACE_TWO, {}),
   }),
   TYPE_REJOIN: (): LocalizedMessageFunction => ({
     en: replaceTemplateString(en_messages.TYPE_REJOIN, {}),

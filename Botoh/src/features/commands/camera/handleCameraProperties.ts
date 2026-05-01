@@ -2,6 +2,7 @@ import {
   sendErrorMessage,
   sendAlertMessage,
   sendChatMessage,
+  COLORS,
 } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 
@@ -36,7 +37,8 @@ export function handleCameraProperties(
     if (byPlayer) {
       room.sendAnnouncement(
         "Correct use: !camera_properties [attraction|maxspeed|deadzone] [number]",
-        byPlayer.id
+        byPlayer.id,
+        COLORS.YELLOW
       );
     }
     return;
@@ -51,6 +53,7 @@ export function handleCameraProperties(
   }
   room.sendAnnouncement(
     `Camera now have the proprietie ${propertie} at ${numberPropertie})`,
-    byPlayer.id
+    byPlayer.id,
+    COLORS.GREEN
   );
 }

@@ -1,5 +1,9 @@
+import * as dotenv from 'dotenv';
 import { LEAGUE_MODE } from "./features/hostLeague/leagueMode";
 import { roomPromise } from "./room";
+
+// Load environment variables from .env file
+dotenv.config({ path: '../.env' });
 
 process.on("beforeExit", (code) => {
   console.error("⚠️ beforeExit with code:", code);
@@ -16,12 +20,12 @@ process.on("SIGTERM", () => {
 });
 
 async function main() {
-  console.log(`Modo: ${LEAGUE_MODE ? "League" : "Public"}`);
+  console.log(`Mode: ${LEAGUE_MODE ? "League" : "Public"}`);
 
   const room = await roomPromise;
-  console.log(`✅ Sala criada`);
+  console.log(`✅ Room created`);
 }
 
 main().catch((err) => {
-  console.error("Erro ao iniciar o bot:", err);
+  console.error("Error on start the bot:", err);
 });

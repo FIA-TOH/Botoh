@@ -37,6 +37,7 @@ import { handleAfkCommand } from "./afk/handleAfkCommand";
 import { handleAvatarCommand } from "./avatar/handleAvatarCommand";
 import { handleLanguageCommand } from "./chat/handleLanguageCommand";
 import { handleMuteCommand } from "./chat/handleMuteCommand";
+import { handleColourTestCommand } from "./chat/handleColourTestCommand";
 import { handleEnableQualyForPub } from "./gameMode/qualy/handleEnableQualyForPub";
 import { handleTipsCommands } from "./chat/handleTipsCommands";
 import { handleExplainErsCommand } from "./ersAndFuel/handleExplainErsCommand";
@@ -58,15 +59,8 @@ import { handleDiscordCommand } from "../discord/handleDiscordCommand";
 import { handleCameraPlayerFollow } from "./camera/handleCameraPlayerFollow";
 import { handleCameraPositionFollow } from "./camera/handleCameraPositionFollow";
 import { handleCameraProperties } from "./camera/handleCameraProperties";
-import { handleChangeGameFLow } from "./gameState/gameFlow";
 import { handleSetMinimumPit } from "./tyres/handleSetMinimumPit";
-// import { handleRejoinCommand } from "./comeBackRace/handleRejoinCommand"; // Disabled - unfinished feature
-
-
-const handleRejoinCommand = (byPlayer: PlayerObject, args: string[], room: RoomObject) => {
-  // This feature is disabled - unfinished functionality
-  return;
-};
+import { handleRejoinCommand } from "./comeBackRace/handleRejoinCommand";
 import { handleMoveToBoxCommand } from "../comeBackRace.ts/moveToBox";
 import { handlePlayerQuantity } from "./adminThings/handlePlayerQuantity";
 import { handleLimitPlayerQuantity } from "./adminThings/handleLimitPlayerQuantity";
@@ -213,6 +207,11 @@ export type CommandFunction = (
     args: string[],
     room: RoomObject,
   ) => void,
+  handleColourTestCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
 
   handleToggleSystems: (
     byPlayer: PlayerObject,
@@ -355,11 +354,6 @@ export type CommandFunction = (
     args: string[],
     room: RoomObject,
   ) => void,
-  handleChangeGameFLow: (
-    byPlayer: PlayerObject,
-    args: string[],
-    room: RoomObject,
-  ) => void,
   handleSetMinimumPit: (
     byPlayer: PlayerObject,
     args: string[],
@@ -369,7 +363,7 @@ export type CommandFunction = (
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject,
-  ) => void, // Disabled - unfinished feature
+  ) => void,
   handleMoveToBoxCommand: (
     byPlayer: PlayerObject,
     args: string[],
@@ -465,6 +459,7 @@ function importCommandsByLanguage(commandFunctions: {
         handleAvatarCommand,
         handleClearTimeCommand,
         handleMuteCommand,
+        handleColourTestCommand,
        
         handleToggleSystems,
         handleGasCommand,
@@ -497,7 +492,6 @@ function importCommandsByLanguage(commandFunctions: {
         handleCameraProperties,
         handleCameraPlayerFollow,
         handleCameraPositionFollow,
-        handleChangeGameFLow,
         handleSetMinimumPit,
         handleRejoinCommand,
         handleMoveToBoxCommand,
@@ -549,6 +543,7 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
         handleAvatarCommand,
         handleClearTimeCommand,
         handleMuteCommand,
+        handleColourTestCommand,
        
         handleToggleSystems,
         handleGasCommand,
@@ -580,7 +575,6 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
         handleCameraProperties,
         handleCameraPlayerFollow,
         handleCameraPositionFollow,
-        handleChangeGameFLow,
         handleSetMinimumPit,
         handleRejoinCommand,
         handleMoveToBoxCommand,

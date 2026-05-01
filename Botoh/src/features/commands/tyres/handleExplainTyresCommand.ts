@@ -1,4 +1,4 @@
-import { sendMessage } from "../../chat/chat";
+import { sendCyanMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 
 export function handleExplainTyresCommand(
@@ -11,8 +11,8 @@ export function handleExplainTyresCommand(
   }
 
   if (!byPlayer || byPlayer.admin) {
-    sendMessage(room, MESSAGES.EXPLAIN_TYRES());
+    sendCyanMessage(room, MESSAGES.EXPLAIN_TYRES());
   } else {
-    sendMessage(room, MESSAGES.EXPLAIN_TYRES(), byPlayer.id);
+    sendCyanMessage(room, MESSAGES.EXPLAIN_TYRES(), byPlayer.id);
   }
 }

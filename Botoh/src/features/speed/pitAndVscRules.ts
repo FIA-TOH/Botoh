@@ -1,6 +1,5 @@
 import { gameMode, GameMode } from "../changeGameState/changeGameModes";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
-import { tyresActivated } from "../tires&pits/tires";
 import { PlayerInfo } from "../changePlayerState/playerList";
 import { constants } from "./constants";
 

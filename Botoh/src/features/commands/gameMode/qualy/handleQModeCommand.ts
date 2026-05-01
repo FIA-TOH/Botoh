@@ -2,7 +2,7 @@ import {
   GameMode,
   changeGameMode,
 } from "../../../changeGameState/changeGameModes";
-import { sendErrorMessage } from "../../../chat/chat";
+import { COLORS, sendErrorMessage } from "../../../chat/chat";
 import { MESSAGES } from "../../../chat/messages";
 import { setMaxLapsQualy, setMaxQualyTime } from "./hardQualyFunctions";
 
@@ -30,13 +30,14 @@ export function handleQModeCommand(
       setMaxLapsQualy(laps);
       room.sendAnnouncement(
         `🏁 Qualy Mode: ${laps} max laps defined.`,
-        byPlayer.id
+        byPlayer.id, 
+        COLORS.GREEN
       );
     } else {
       room.sendAnnouncement(
         "❌ Invalid max laps number",
         byPlayer.id,
-        0xff0000
+        COLORS.RED
       );
 
       return;
@@ -47,9 +48,9 @@ export function handleQModeCommand(
     const time = Number(args[2]);
     if (!isNaN(time) && time > 0) {
       setMaxQualyTime(time);
-      room.sendAnnouncement(`⏱️ Max qualy time: ${time} seconds.`, byPlayer.id);
+      room.sendAnnouncement(`⏱️ Max qualy time: ${time} seconds.`, byPlayer.id, COLORS.GREEN);
     } else {
-      room.sendAnnouncement("❌ Invalid time", byPlayer.id, 0xff0000);
+      room.sendAnnouncement("❌ Invalid time", byPlayer.id, COLORS.RED);
       return;
     }
   }

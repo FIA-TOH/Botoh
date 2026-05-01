@@ -12,15 +12,13 @@ import { startWeatherMonitoring } from "../weather/weatherManager";
 import { sendInitialWeatherAnnouncement } from "../weather/rain/weatherReportAnnouncer";
 import { resetBestPit } from "../tires&pits/trackBestPit";
 import { resetBestLap } from "../zones/laps/trackBestLap";
-import { clearPlayersLeftInfo } from "../comeBackRace.ts/comeBackToRaceFunctions";
 import { clearRRPosition } from "../commands/adminThings/handleRRPositionCommand";
 import { decideBlowoutPoint } from "../tires&pits/tireBlowManager";
 import { Teams } from "../changeGameState/teams";
 import { positionList } from "../commands/gameMode/race/positionList";
 import { initBattleRoyale } from "../commands/gameMode/battleRoyale.ts/handleBattleRoyaleLaps";
 import { playerList } from "../changePlayerState/playerList";
-import { updatePlayerCollision } from "../changePlayerState/updatePlayerCollision";
-import { initializeLeagueStartAFKDetection, cleanupLeagueStartAFKDetection } from "../afk/leagueStartAFKDetection";
+import { initializeLeagueStartAFKDetection } from "../afk/leagueStartAFKDetection";
 
 export function GameStart(room: RoomObject) {
   room.onGameStart = function (byPlayer) {
@@ -57,7 +55,6 @@ export function GameStart(room: RoomObject) {
     
     resetBestLap();
     resetBestPit();
-    clearPlayersLeftInfo();
     clearRRPosition();
     resetSafetyCarActivationForRace();
 

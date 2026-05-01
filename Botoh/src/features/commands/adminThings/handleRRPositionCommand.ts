@@ -1,4 +1,4 @@
-import { sendErrorMessage } from "../../chat/chat";
+import { COLORS, sendErrorMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 
 export interface RR_POSITION_INTERFACE {
@@ -25,7 +25,7 @@ export function handleRRPositionCommand(
     }
 
     setRRPosition(byPlayer.position.x, byPlayer.position.y);
-    room.sendAnnouncement("New RR position setted", byPlayer.id);
+    room.sendAnnouncement("New RR position setted", byPlayer.id, COLORS.GREEN);
   } catch (err) {
     console.error("[handleRRPositionCommand] Unknown error:", err);
   }

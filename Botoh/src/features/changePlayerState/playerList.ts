@@ -124,6 +124,8 @@ export interface PlayerInfo {
 
   timeWhenEntered: number;
 
+  canRejoin: boolean;
+
   newPitState?: NewPitState;
   
   xKeyState?: XKeyState;
@@ -133,6 +135,8 @@ export interface PlayerInfo {
   isTyreBlowed: boolean;
   
   blowoutTickCounter: number;
+  
+  pubAvatar: string;
 }
 
 type PlayerList = {

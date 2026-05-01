@@ -1,4 +1,4 @@
-import { sendErrorMessage } from "../../chat/chat";
+import { COLORS, sendErrorMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { leagueScuderia } from "../../scuderias/scuderias";
 import { changeConstant, constants } from "../../speed/constants";
@@ -16,7 +16,7 @@ export function handleChangePropierties(
     room.sendAnnouncement(
       "Correct use: !constants [CONSTANT] [value]",
       byPlayer.id,
-      0xff0000
+      COLORS.YELLOW
     );
     return;
   }
@@ -24,17 +24,17 @@ export function handleChangePropierties(
   const value = Number(args[1]);
 
   if (!value || !key) {
-    room.sendAnnouncement("Error", byPlayer.id, 0xff0000);
+    room.sendAnnouncement("Error", byPlayer.id, COLORS.RED);
     return;
   }
 
   if (!(key in constants)) {
-    room.sendAnnouncement(`Constant "${args[0]}" not found.`, byPlayer.id);
+    room.sendAnnouncement(`Constant "${args[0]}" not found.`, byPlayer.id, COLORS.RED);
     return;
   }
 
   if (isNaN(value)) {
-    room.sendAnnouncement(`Second argument needs to be a number`, byPlayer.id);
+    room.sendAnnouncement(`Second argument needs to be a number`, byPlayer.id, COLORS.YELLOW);
     return;
   }
 
@@ -59,5 +59,5 @@ export function handleChangePropierties(
   //       constants.PENSHIRYU_ENGINE_FINAL_ACCELERATION_BOOST;
   //   }
   // }
-  room.sendAnnouncement(`${key} changed to: ${value}`, byPlayer.id);
+  room.sendAnnouncement(`${key} changed to: ${value}`, byPlayer.id, COLORS.GREEN);
 }

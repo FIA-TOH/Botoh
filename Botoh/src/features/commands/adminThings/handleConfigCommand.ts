@@ -1,4 +1,4 @@
-import { sendErrorMessage } from "../../chat/chat";
+import { COLORS, sendErrorMessage } from "../../chat/chat";
 import { MESSAGES, getPlayerLanguage } from "../../chat/messages";
 import { setGhostMode } from "../../changePlayerState/ghost";
 import { getGameState } from "../../changeGameState/gameState";
@@ -12,8 +12,6 @@ import { enableErs, enableErsPenalty } from "../../speed/fuel&Ers/ers";
 import { enableGas, enableSlipstream } from "../../speed/handleSlipstream";
 import { setBlowoutTyresActivated } from "../../tires&pits/tireBlowManager";
 import { enableTyres } from "../../tires&pits/tires";
-import { handleRREnabledCommand } from "./handleRREnabledCommand";
-import { handleSpeedCommand } from "../avatar/handleSpeedCommand";
 import { handleSafetyCommand } from "../flagsAndVSC/handleSafetyCommand";
 import { handleRModeCommand } from "../gameMode/race/handleRModeCommand";
 import { handlePitCommand } from "./handlePitCommand";
@@ -42,7 +40,7 @@ export function handleConfigCommand(
   }
 
   const configType = args[0].toLowerCase();
-  const validConfigs = ['ftoh', 'fh', 'haxbula'];
+  const validConfigs = ['ftoh', 'fh', 'haxbula', 'ftohpublic'];
 
   if (!validConfigs.includes(configType)) {
     sendErrorMessage(room, MESSAGES.CONFIG_INVALID_ARGUMENT(), byPlayer.id);
@@ -55,12 +53,15 @@ export function handleConfigCommand(
     applyFHConfig(room, byPlayer);
   } else if (configType === 'haxbula') {
     applyHaxbulaConfig(room, byPlayer);
+  } else if (configType === 'ftohpublic') {
+    applyFTOHPublicConfig(room, byPlayer);
   }
 
   const message = MESSAGES.CONFIG_SUCCESS(configType);
   const playerLang = getPlayerLanguage(byPlayer.id);
-  room.sendAnnouncement(message[playerLang as keyof typeof message], byPlayer.id, 0x00FF00, "bold");
+  room.sendAnnouncement(message[playerLang as keyof typeof message], byPlayer.id, COLORS.GREEN, "bold");
 }
+
 
 function applyFTOHConfig(room: RoomObject, byPlayer: PlayerObject) {
   log(`FTOH configuration applied by ${byPlayer.name}`);
@@ -79,6 +80,26 @@ function applyFTOHConfig(room: RoomObject, byPlayer: PlayerObject) {
   enableSoftCutPenalty(false, room);
   handlePitCommand(byPlayer, ["new"], room);
   setManageTyresEnabled(true);
+}
+
+
+export function applyFTOHPublicConfig(room: RoomObject, byPlayer: PlayerObject) {
+  log(`FTOH Public configuration applied by ${byPlayer.name}`);
+  handleSafetyCommand(byPlayer, ["off"], room);
+  handleRModeCommand(byPlayer, [], room);
+  enableSlipstream(true);
+  enableTyres(false);
+  enableGas(false);
+  setGhostMode(room, false);
+  handlePresentationLapCommand(undefined, ["off"], room);
+  setBlowoutTyresActivated(false);
+  enableErs(true);
+  enableErsPenalty(true);
+  enableCutPenalty(true);
+  enableDebris(false);
+  enableSoftCutPenalty(false, room);
+  handlePitCommand(byPlayer, ["old"], room);
+  setManageTyresEnabled(false);
 }
 
 function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {

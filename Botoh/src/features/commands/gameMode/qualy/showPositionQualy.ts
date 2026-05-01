@@ -2,7 +2,7 @@ import {
   generalGameMode,
   GeneralGameMode,
 } from "../../../changeGameState/changeGameModes";
-import { sendErrorMessage, sendSmallChatMessage } from "../../../chat/chat";
+import { COLORS, sendErrorMessage, sendSmallChatMessage } from "../../../chat/chat";
 import { MESSAGES } from "../../../chat/messages";
 import { getPlayersOrderedByQualiTime } from "./playerTime";
 
@@ -28,5 +28,5 @@ export function showPlayerQualiPosition(room: RoomObject, playerId: number) {
     return;
   }
 
-  sendSmallChatMessage(room, MESSAGES.POSITION_QUALY(position), playerId);
+  sendSmallChatMessage(room, MESSAGES.POSITION_QUALY(position), playerId, COLORS.CYAN);
 }

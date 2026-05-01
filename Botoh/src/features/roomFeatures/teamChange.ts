@@ -2,12 +2,9 @@ import { ghostMode } from "../changePlayerState/ghost";
 import { playerList } from "../changePlayerState/playerList";
 import { resetPlayer } from "../changePlayerState/players";
 import { Teams } from "../changeGameState/teams";
-import { ACTUAL_CIRCUIT } from "./stadiumChange";
 import {
   gameMode,
   GameMode,
-  generalGameMode,
-  GeneralGameMode,
 } from "../changeGameState/changeGameModes";
 import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
 import { updatePlayerActivity } from "../afk/afk";
@@ -17,7 +14,11 @@ import { decideBlowoutPoint } from "../tires&pits/tireBlowManager";
 
 export function TeamChange(room: RoomObject) {
   room.onPlayerTeamChange = function (changedPlayer: PlayerObject) {
-    resetPlayer(changedPlayer, room, changedPlayer.id);
+    const playerObj = playerList[changedPlayer.id];
+    
+    if (!playerObj?.canRejoin) {
+      resetPlayer(changedPlayer, room, changedPlayer.id);
+    }
     updatePlayerActivity(changedPlayer);
 
     if (
@@ -33,7 +34,8 @@ export function TeamChange(room: RoomObject) {
       if (
         room.getScores().time > 0 &&
         gameMode !== GameMode.HARD_QUALY &&
-        gameMode !== GameMode.WAITING
+        gameMode !== GameMode.WAITING &&
+        !playerObj?.canRejoin 
       ) {
         moveToBox(changedPlayer, room, "end");
       }

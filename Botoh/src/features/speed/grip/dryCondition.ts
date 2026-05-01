@@ -1,6 +1,5 @@
-import { Tires, tyresActivated } from "../../tires&pits/tires";
+import { Tires } from "../../tires&pits/tires";
 import { laps } from "../../zones/laps";
-import { constants } from "../constants";
 import { currentWeather } from "../../weather/currentWeather";
 import { playerList } from "../../changePlayerState/playerList";
 

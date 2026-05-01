@@ -132,6 +132,11 @@ export default function pt_commands(
     args: string[],
     room: RoomObject,
   ) => void,
+  handleColourTestCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
 
   handleToggleSystems: (
     byPlayer: PlayerObject,
@@ -379,6 +384,7 @@ export default function pt_commands(
     "!avatar": handleAvatarCommand,
     "!clear_time": handleClearTimeCommand,
     "!mute": handleMuteCommand,
+    "!colour_test": handleColourTestCommand,
     
     "!enable": handleToggleSystems,
     "!gas": handleGasCommand,
@@ -413,7 +419,7 @@ export default function pt_commands(
     "!camera_id": handleCameraPlayerFollow,
     "!camera_position": handleCameraPositionFollow,
     "!min_pit": handleSetMinimumPit,
-    // "!rejoin": handleRejoinCommand, // Disabled - unfinished feature
+    "!rejoin": handleRejoinCommand,
     "!move_to_box": handleMoveToBoxCommand,
     "!player_quantity": handlePlayerQuantity,
     "!set_max_players": handleLimitPlayerQuantity,

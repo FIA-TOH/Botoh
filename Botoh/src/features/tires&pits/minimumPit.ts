@@ -5,7 +5,7 @@ import { MESSAGES } from "../chat/messages";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { playerList } from "../changePlayerState/playerList";
 
-let minimumPitStops = LEAGUE_MODE ? 0 : 1;
+let minimumPitStops = LEAGUE_MODE ? 0 : 0;
 const pitWarningTimers: Record<number, NodeJS.Timeout | undefined> = {};
 
 export function defineMinimumPitStops(quantity: number) {

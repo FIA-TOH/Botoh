@@ -1,4 +1,4 @@
-import { sendErrorMessage, sendAlertMessage } from "../../chat/chat";
+import { sendErrorMessage, sendAlertMessage, COLORS } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 
 export let presentationLap = false;
@@ -17,7 +17,7 @@ export function handlePresentationLapCommand(
     const isPresentation = args[0];
 
     if (isPresentation !== "on" && isPresentation !== "off" && byPlayer) {
-      room.sendAnnouncement("!presentation [on|off]", byPlayer.id);
+      room.sendAnnouncement("!presentation [on|off]", byPlayer.id, COLORS.YELLOW);
       return;
     }
     if (isPresentation === "on") {

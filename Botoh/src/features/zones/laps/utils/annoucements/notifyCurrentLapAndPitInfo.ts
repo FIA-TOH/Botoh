@@ -14,9 +14,12 @@ export function notifyCurrentLapAndPitInfo(
 
   combinedInfo.push(`Lap ${currentLap}/${laps}`);
 
-  if (data.tires && data.wear !== undefined) {
-    combinedInfo.push(`Tires: ${(100 - data.wear).toFixed(0)}%`);
-  }
+  //No more need for this message
+  // if (data.tires && data.wear !== undefined) {
+  //   const playerLang = getPlayerLanguage(p.id);
+  //   const tiresMessage = MESSAGES.TIRES_PERCENTAGE((100 - data.wear).toFixed(0));
+  //   combinedInfo.push(tiresMessage[playerLang]);
+  // }
 
   const weatherParts = [];
   if (currentWeather.rainGlobal > 0) {

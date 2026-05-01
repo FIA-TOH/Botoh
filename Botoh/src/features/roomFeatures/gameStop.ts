@@ -38,8 +38,8 @@ import {
 } from "../discord/logResults";
 import { gameStarted, setGameStarted } from "./gameTick";
 import { sendDiscordMessage } from "../discord/sendDiscordLink";
-import { clearPlayersLeftInfo } from "../comeBackRace.ts/comeBackToRaceFunctions";
 import { clearRRPosition } from "../commands/adminThings/handleRRPositionCommand";
+import { rejoinManager } from "../changePlayerState/rejoinManager";
 import {
   clearCutTrackStorage,
   sendAllCutsToDiscord,
@@ -121,8 +121,10 @@ export function GameStop(room: RoomObject) {
           room.getPlayerList().forEach(player => {
             resetPitState(player.id);
           });
-          sendDiscordMessage(room);
           sendAllCutsToDiscord();
+          setTimeout(() => {
+            sendDiscordMessage(room);
+          }, 3000);
         }
       }
       clearPlayers();
@@ -131,12 +133,15 @@ export function GameStop(room: RoomObject) {
 
     handleFlagCommand(undefined, ["reset"], room);
     clearPlayerBuffAndNerfLists();
-    clearPlayersLeftInfo();
     clearRRPosition();
     clearCutTrackStorage();
     resetDebrisUsedList();
     resetSessionBestSectors();
     resetSandbag(room);
+    
+    if (generalGameMode === GeneralGameMode.GENERAL_RACE) {
+      rejoinManager.clearAllData();
+    }
     
     handleSCCommand(undefined, ["off"], room);
     

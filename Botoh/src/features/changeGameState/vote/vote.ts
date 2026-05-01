@@ -1,5 +1,5 @@
 import { Circuit } from "../../../circuits/Circuit";
-import { sendAlertMessage, sendSuccessMessage } from "../../chat/chat";
+import { sendAlertMessage, sendSuccessMessage, sendPurpleMessage, sendOrangeMessage } from "../../chat/chat";
 import { CIRCUITS, handleChangeMap } from "../../zones/maps";
 import { MESSAGES } from "../../chat/messages";
 import { resetVotes } from "./resetVote";
@@ -29,7 +29,7 @@ export function voteSession(room: RoomObject) {
     .sort(() => Math.random() - 0.5)
     .slice(0, 3);
 
-  sendAlertMessage(room, MESSAGES.TIME_TO_VOTE());
+  sendOrangeMessage(room, MESSAGES.TIME_TO_VOTE());
   announceSelectedCircuits(room);
   resetVotes(players);
 }
@@ -73,9 +73,9 @@ export function changeMapBasedOnVote(
   }
 
   if (winnerInfo.BestTime && winnerInfo.BestTime.length > 1) {
-    log(`Best Time: ${winnerInfo.BestTime[0]} - ${winnerInfo.BestTime[1]}`);
-    room.sendAnnouncement(
-      `Best Time: ${winnerInfo.BestTime[0]} - ${winnerInfo.BestTime[1]}`
+    sendPurpleMessage(
+      room,
+      MESSAGES.BEST_TIME(String(winnerInfo.BestTime[0]), String(winnerInfo.BestTime[1]))
     );
   }
 }

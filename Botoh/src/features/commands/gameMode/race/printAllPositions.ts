@@ -9,6 +9,7 @@ import {
   sendErrorMessage,
   MAX_PLAYER_NAME,
   sendNonLocalizedSmallChatMessage,
+  COLORS,
 } from "../../../chat/chat";
 import { MESSAGES } from "../../../chat/messages";
 import { getBestPit } from "../../../tires&pits/trackBestPit";
@@ -34,8 +35,13 @@ export function printAllPositions(
   const headerLeftSpaces = " ".repeat(Math.ceil(headerSpaces));
   const headerRightSpaces = " ".repeat(Math.trunc(headerSpaces));
 
-  let messageBuffer = ` P - ${headerLeftSpaces}Name${headerRightSpaces} | Pits | Best Lap\n`;
+  setTimeout(() => {
+    const header = ` P - ${headerLeftSpaces}Name${headerRightSpaces} | Pits    | Best Lap`;
+    sendNonLocalizedSmallChatMessage(room, header, toPlayerID, COLORS.ORANGE);
+  }, 1000);
+
   let i = 1;
+  const messages: { text: string; color: number }[] = [];
 
   positionList.forEach((p) => {
     const spaces = (MAX_PLAYER_NAME - p.name.length) / 2.0;
@@ -46,14 +52,18 @@ export function printAllPositions(
     const pits = p.pits.toString().padStart(2, "0");
     const time = p.time < 999.999 ? p.time.toFixed(3) : "N/A";
 
-    const line = `${position} - ${leftSpaces}${p.name}${rightSpaces} | ${pits} | ${time}\n`;
+    const line = `${position} - ${leftSpaces}${p.name}${rightSpaces} | ${pits} | ${time}`;
 
-    if (messageBuffer.length + line.length > HAXBALL_MSG_LIMIT) {
-      sendNonLocalizedSmallChatMessage(room, messageBuffer, toPlayerID);
-      messageBuffer = "";
+    let color = COLORS.WHITE; 
+    if (i === 1) {
+      color = COLORS.GOLD;
+    } else if (i === 2) {
+      color = COLORS.GREY;
+    } else if (i === 3) {
+      color = COLORS.BROWN;
     }
 
-    messageBuffer += line;
+    messages.push({ text: line, color });
     i++;
   });
 
@@ -62,24 +72,36 @@ export function printAllPositions(
     return;
   }
 
+  messages.forEach((msg, index) => {
+    setTimeout(() => {
+      sendNonLocalizedSmallChatMessage(room, msg.text, toPlayerID, msg.color);
+    }, 1000 + index * 100);
+  });
+
+  const additionalMessages: { text: string; color: number }[] = [];
+
   const bestLap = getBestLap();
   if (bestLap) {
-    messageBuffer += `⚡ Fastest Lap: ${
-      bestLap.playerName
-    } - ${bestLap.lapTime.toFixed(3)}s (Lap ${bestLap.lapNumber})\n`;
+    additionalMessages.push({
+      text: `⚡ Fastest Lap: ${bestLap.playerName} - ${bestLap.lapTime.toFixed(3)}s (Lap ${bestLap.lapNumber})`,
+      color: COLORS.PURPLE,
+    });
   }
 
   const bestPit = getBestPit();
   if (bestPit) {
-    messageBuffer += `🔧 Fastest Pit: ${
-      bestPit.playerName
-    } - ${bestPit.pitTime.toFixed(3)}s (Stop ${bestPit.pitNumber})\n`;
+    additionalMessages.push({
+      text: `🔧 Fastest Pit: ${bestPit.playerName} - ${bestPit.pitTime.toFixed(3)}s (Stop ${bestPit.pitNumber})`,
+      color: COLORS.PINK,
+    });
   }
+
+  additionalMessages.forEach((msg, index) => {
+    setTimeout(() => {
+      sendNonLocalizedSmallChatMessage(room, msg.text, toPlayerID, msg.color);
+    }, 1000 + (messages.length + index) * 100);
+  });
 
   log("positionList: ", { sendToDiscord: sendToDiscord ?? true });
   console.log(positionList);
-
-  if (messageBuffer.length > 0) {
-    sendNonLocalizedSmallChatMessage(room, messageBuffer, toPlayerID);
-  }
 }

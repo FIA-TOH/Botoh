@@ -1,5 +1,5 @@
 import { playerList } from "../../changePlayerState/playerList";
-import { sendErrorMessage, sendSuccessMessage } from "../../chat/chat";
+import { COLORS, sendErrorMessage, sendSuccessMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { LEAGUE_MODE } from "../../hostLeague/leagueMode";
 import { leagueScuderia } from "../../scuderias/scuderias";
@@ -18,7 +18,7 @@ export function handleSetScuderia(
   const player = playerList[byPlayer.id];
 
   if (!value) {
-    room.sendAnnouncement("Error: !team [XX]", byPlayer.id, 0xff0000);
+    room.sendAnnouncement("Error: !team [XX]", byPlayer.id, COLORS.RED);
     return;
   }
 

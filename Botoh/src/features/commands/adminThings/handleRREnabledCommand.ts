@@ -1,4 +1,4 @@
-import { sendErrorMessage } from "../../chat/chat";
+import { sendErrorMessage, sendBlueMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { log } from "../../discord/logger";
 
@@ -20,18 +20,16 @@ export function handleRREnabledCommand(
       rrEnabled = true;
       if (byPlayer) {
         log("RR mode enabled by admin");
-        room.sendAnnouncement("RR mode!");
+        sendBlueMessage(room, MESSAGES.RR_ENABLED());
       }
     } else if (args && args[0] === "off") {
       rrEnabled = false;
       if (byPlayer) {
         log("RR mode disabled by admin");
-        room.sendAnnouncement("No RR mode!");
+        sendBlueMessage(room, MESSAGES.RR_DISABLED());
       }
     } else if (byPlayer) {
       sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id);
-      return;
-    } else {
       return;
     }
   }
