@@ -1,5 +1,5 @@
 import { Circuit } from "../../../circuits/Circuit";
-import { sendAlertMessage, sendSuccessMessage, sendPurpleMessage } from "../../chat/chat";
+import { sendAlertMessage, sendSuccessMessage, sendPurpleMessage, sendOrangeMessage } from "../../chat/chat";
 import { CIRCUITS, handleChangeMap } from "../../zones/maps";
 import { MESSAGES } from "../../chat/messages";
 import { resetVotes } from "./resetVote";
@@ -29,7 +29,7 @@ export function voteSession(room: RoomObject) {
     .sort(() => Math.random() - 0.5)
     .slice(0, 3);
 
-  sendAlertMessage(room, MESSAGES.TIME_TO_VOTE());
+  sendOrangeMessage(room, MESSAGES.TIME_TO_VOTE());
   announceSelectedCircuits(room);
   resetVotes(players);
 }

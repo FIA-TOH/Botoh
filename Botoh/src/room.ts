@@ -20,9 +20,11 @@ import { PlayerLeave } from "./features/roomFeatures/playerLeave";
 import { StadiumChange } from "./features/roomFeatures/stadiumChange";
 import { PlayerChat } from "./features/roomFeatures/playerChat";
 import { GameStop } from "./features/roomFeatures/gameStop";
-import { PlaerActivity } from "./features/roomFeatures/playerActivitie";
+import { PlayerActivity } from "./features/roomFeatures/playerActivitie";
 import { resetAllAfkCounters } from "./features/afk/afk";
 import { log } from "./features/discord/logger";
+import { applyFTOHPublicConfig } from "./features/commands/adminThings/handleConfigCommand";
+import { BOT_PLAYER } from "./features/utils/mockPlayer";
 
 const getRoomConfig = () => ({
   publicAdminPassword: process.env.PUBLIC_ADMIN_PASSWORD || roomConfig.publicAdminPassword,
@@ -88,10 +90,13 @@ export const roomPromise: Promise<any> = HaxballJS().then((HBInit: any) => {
   PlayerLeave(room);
   StadiumChange(room);
   TeamChange(room);
-  PlaerActivity(room);
+  PlayerActivity(room);
 
   room.onRoomLink = function (link: any) {
-    console.log("Link da sala:", link);
+      if(!LEAGUE_MODE) {
+      applyFTOHPublicConfig(room, BOT_PLAYER);
+    }
+    console.log("Room link:", link);
   };
 
   room.onGamePause = function (byPlayer: any) {

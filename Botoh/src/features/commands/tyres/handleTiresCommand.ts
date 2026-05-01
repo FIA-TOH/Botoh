@@ -7,14 +7,19 @@ import { MESSAGES } from "../../chat/messages";
 
 import { handlePitStop } from "../../tires&pits/handlePitStop";
 import { ifInBoxZone } from "../../tires&pits/pitLane";
-import { Tires } from "../../tires&pits/tires";
-import { isPitNewSystemEnabled, startNewPitSequence, handlePitKeyPress } from "../../tires&pits/newPitSystem/newPitManager";
+import { Tires, tyresActivated } from "../../tires&pits/tires";
+import { isPitNewSystemEnabled, startNewPitSequence } from "../../tires&pits/newPitSystem/newPitManager";
 
 export function handleTiresCommand(
   byPlayer: PlayerObject,
   args: string[],
   room: RoomObject
 ) {
+  if (!tyresActivated) {
+    sendErrorMessage(room, MESSAGES.TYRES_DISABLED(), byPlayer.id);
+    return;
+  }
+
   if (
     room.getScores() &&
     gameState !== undefined &&

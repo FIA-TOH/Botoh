@@ -4,6 +4,7 @@ import { MESSAGES } from "../chat/messages";
 import { changeLaps } from "../commands/adminThings/handleChangeLaps";
 import { handleRREnabledCommand } from "../commands/adminThings/handleRREnabledCommand";
 import { qualiTime, raceTime } from "../commands/gameMode/qualy/qualiMode";
+import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 
 import { enableGas, enableSlipstream } from "../speed/handleSlipstream";
 import { enableTyres } from "../tires&pits/tires";
@@ -74,7 +75,9 @@ function handleQualyMode(room: RoomObject) {
   enableSlipstream(false);
   setGhostMode(room, true);
   handleRREnabledCommand(undefined, ["on"], room);
-  enableTyres(true);
+  if(LEAGUE_MODE) {
+    enableTyres(true);
+  }
   sendSuccessMessage(room, MESSAGES.TIME_TO_QUALY());
   changeGeneralGameMode(GeneralGameMode.GENERAL_QUALY);
 }
@@ -85,7 +88,9 @@ function handleTrainingMode(room: RoomObject) {
   setGhostMode(room, true);
   handleRREnabledCommand(undefined, ["on"], room);
   changeLaps("999", undefined, room);
-  enableTyres(true);
+  if(LEAGUE_MODE) {
+    enableTyres(true);
+  }
   sendSuccessMessage(room, MESSAGES.TIME_TO_TRAIN());
   changeGeneralGameMode(GeneralGameMode.NONE);
 }
@@ -95,7 +100,9 @@ function handleIndyMode(room: RoomObject) {
   enableSlipstream(false);
   setGhostMode(room, false);
   handleRREnabledCommand(undefined, ["off"], room);
-  enableTyres(true);
+  if(LEAGUE_MODE) {
+    enableTyres(true);
+  }
   changeGeneralGameMode(GeneralGameMode.GENERAL_RACE);
 }
 
@@ -104,7 +111,9 @@ function handleRaceMode(room: RoomObject) {
   enableSlipstream(true);
   setGhostMode(room, false);
   handleRREnabledCommand(undefined, ["off"], room);
-  enableTyres(true);
+  if(LEAGUE_MODE) {
+    enableTyres(true);
+  }
   sendSuccessMessage(room, MESSAGES.TIME_TO_RACE(laps));
   changeGeneralGameMode(GeneralGameMode.GENERAL_RACE);
 }

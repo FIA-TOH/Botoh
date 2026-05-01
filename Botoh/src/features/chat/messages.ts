@@ -8,6 +8,7 @@ import { DEFAULT_LANGUAGE, Language } from "./language";
 
 export function getPlayerLanguage(playerID: number): Language {
   if (playerID === null) return DEFAULT_LANGUAGE;
+  if (!playerList[playerID]) return DEFAULT_LANGUAGE;
   return playerList[playerID].language;
 }
 
@@ -113,6 +114,13 @@ export const MESSAGES = {
     fr: fr_messages.RR_DISABLED,
     tr: tr_messages.RR_DISABLED,
     pt: pt_messages.RR_DISABLED,
+  }),
+  TYRES_DISABLED: (): LocalizedMessageFunction => ({
+    en: en_messages.TYRES_DISABLED,
+    es: es_messages.TYRES_DISABLED,
+    fr: fr_messages.TYRES_DISABLED,
+    tr: tr_messages.TYRES_DISABLED,
+    pt: pt_messages.TYRES_DISABLED,
   }),
   ADMIN_ALREADY_IN_ROOM: (): LocalizedMessageFunction => ({
     en: en_messages.ADMIN_ALREADY_IN_ROOM,

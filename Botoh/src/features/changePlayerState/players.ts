@@ -131,6 +131,7 @@ export function createPlayerInfo(ip?: string, playerId?: number) {
     isManagingTyres: false,
     isTyreBlowed: false,
     blowoutTickCounter: 0,
+    pubAvatar: "🏎️",
 
     curveResistanceTicks: undefined,
     directionChangerEndTime: undefined,

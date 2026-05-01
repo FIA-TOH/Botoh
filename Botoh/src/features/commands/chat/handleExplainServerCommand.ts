@@ -1,4 +1,4 @@
-import { sendMessage } from "../../chat/chat";
+import { sendCyanMessage, sendMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 
 export function handleExplainServerCommand(
@@ -7,8 +7,8 @@ export function handleExplainServerCommand(
   room: RoomObject
 ) {
   if (byPlayer.admin) {
-    sendMessage(room, MESSAGES.EXPLAIN_SERVER());
+    sendCyanMessage(room, MESSAGES.EXPLAIN_SERVER());
   } else {
-    sendMessage(room, MESSAGES.EXPLAIN_SERVER(), byPlayer.id);
+    sendCyanMessage(room, MESSAGES.EXPLAIN_SERVER(), byPlayer.id);
   }
 }

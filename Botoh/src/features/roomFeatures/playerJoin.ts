@@ -16,6 +16,7 @@ import {
   decodeIPFromConn,
   banPlayer,
   kickPlayer,
+  getRandomCarEmoji,
 } from "../utils";
 import {
   gameMode,
@@ -140,6 +141,7 @@ export function PlayerJoin(room: RoomObject) {
 
     if (playerList[player.id] === undefined) {
       playerList[player.id] = createPlayerInfo(ip, player.id);
+      playerList[player.id].pubAvatar = getRandomCarEmoji();
     }
 
     if (gameMode === GameMode.HARD_QUALY) {

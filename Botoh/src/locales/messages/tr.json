@@ -6,6 +6,7 @@
   "TIRES_PERCENTAGE": "Lastikler: {{percentage}}%",
   "RR_ENABLED": "!rr komutu etkinleştirildi",
   "RR_DISABLED": "!rr komutu devre dışı bırakıldı",
+  "TYRES_DISABLED": "Lastik sistemi şu anda devre dışı.",
   "ADMIN_ALREADY_IN_ROOM": "Bir admin zaten odada",
   "ADMIN_ONLY": "Sadece yöneticiler bu komutu kullanabilir",
   "CONFIG_MISSING_ARGUMENT": "Kullanım: !config <ftoh|fh|haxbula>",

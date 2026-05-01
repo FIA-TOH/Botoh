@@ -20,12 +20,12 @@ process.on("SIGTERM", () => {
 });
 
 async function main() {
-  console.log(`Modo: ${LEAGUE_MODE ? "League" : "Public"}`);
+  console.log(`Mode: ${LEAGUE_MODE ? "League" : "Public"}`);
 
   const room = await roomPromise;
-  console.log(`✅ Sala criada`);
+  console.log(`✅ Room created`);
 }
 
 main().catch((err) => {
-  console.error("Erro ao iniciar o bot:", err);
+  console.error("Error on start the bot:", err);
 });

@@ -1,5 +1,5 @@
 import { resetPlayers } from "../../changePlayerState/players";
-import { sendChatMessage } from "../../chat/chat";
+import { COLORS, sendChatMessage, sendSmallChatMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { handleMuteCommand } from "../../commands/chat/handleMuteCommand";
 import { handleExplainErsCommand } from "../../commands/ersAndFuel/handleExplainErsCommand";
@@ -70,9 +70,9 @@ export default async function PublicGameFlow(room: RoomObject) {
     await delay(5);
 
     if (qualyForPub) {
-      sendChatMessage(room, MESSAGES.QUALY_STARTING(15));
+      sendSmallChatMessage(room, MESSAGES.QUALY_STARTING(15), undefined, COLORS.DARK_BROWN);
     } else {
-      sendChatMessage(room, MESSAGES.RACE_STARTING(15));
+      sendSmallChatMessage(room, MESSAGES.RACE_STARTING(15), undefined, COLORS.DARK_BROWN);
     }
     await delay(3);
 
@@ -121,7 +121,7 @@ export default async function PublicGameFlow(room: RoomObject) {
     handleExplainErsCommand(undefined, undefined, room);
     await delay(5);
 
-    sendChatMessage(room, MESSAGES.RACE_STARTING(5));
+    sendSmallChatMessage(room, MESSAGES.RACE_STARTING(5), undefined, COLORS.DARK_BROWN);
     handleMuteCommand(undefined, undefined, room);
     await delay(5);
 

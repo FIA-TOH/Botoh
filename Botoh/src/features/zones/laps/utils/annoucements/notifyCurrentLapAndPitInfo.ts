@@ -3,8 +3,6 @@ import { processIfMinimumPitStopsMet } from "../../../../tires&pits/minimumPit";
 import { laps } from "../../../laps";
 import { currentWeather } from "../../../../weather/currentWeather";
 import { COLORS, FONTS } from "../../../../chat/chat";
-import { getPlayerLanguage } from "../../../../chat/messages";
-import { MESSAGES } from "../../../../chat/messages";
 
 export function notifyCurrentLapAndPitInfo(
   p: PlayerObject,
@@ -16,11 +14,12 @@ export function notifyCurrentLapAndPitInfo(
 
   combinedInfo.push(`Lap ${currentLap}/${laps}`);
 
-  if (data.tires && data.wear !== undefined) {
-    const playerLang = getPlayerLanguage(p.id);
-    const tiresMessage = MESSAGES.TIRES_PERCENTAGE((100 - data.wear).toFixed(0));
-    combinedInfo.push(tiresMessage[playerLang]);
-  }
+  //No more need for this message
+  // if (data.tires && data.wear !== undefined) {
+  //   const playerLang = getPlayerLanguage(p.id);
+  //   const tiresMessage = MESSAGES.TIRES_PERCENTAGE((100 - data.wear).toFixed(0));
+  //   combinedInfo.push(tiresMessage[playerLang]);
+  // }
 
   const weatherParts = [];
   if (currentWeather.rainGlobal > 0) {

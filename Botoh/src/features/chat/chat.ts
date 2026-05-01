@@ -24,7 +24,7 @@ export enum COLORS {
   ORANGE = 0xFF8F00,
   DARK_ORANGE = 0xFFB900,
   RED = 0xff0000,
-  PINK = 0xFF33D0,
+  PINK = 0xff75d1,
   PURPLE = 0xa463ff,
 }
 
@@ -77,10 +77,37 @@ export function sendCyanMessage(
   log(message[defaultLang] as string);
 }
 
+export function sendOrangeMessage(
+  room: RoomObject,
+  message: LocalizedMessageFunction,
+  sound?: SOUNDS,
+) {
+  room.getPlayerList().forEach((player) => {
+    const language = getPlayerLanguage(player.id);
+    room.sendAnnouncement(message[language], player.id, COLORS.ORANGE, FONTS.BOLD, sound);
+  });
+
+  log(message[defaultLang] as string);
+}
+
+export function sendLimeMessage(
+  room: RoomObject,
+  message: LocalizedMessageFunction,
+  sound?: SOUNDS,
+) {
+  room.getPlayerList().forEach((player) => {
+    const language = getPlayerLanguage(player.id);
+    room.sendAnnouncement(message[language], player.id, COLORS.LIME, FONTS.BOLD, sound);
+  });
+
+  log(message[defaultLang] as string);
+}
+
 export function sendNonLocalizedSmallChatMessage(
   room: RoomObject,
   message: string,
   toPlayerID?: number,
+  colour: number = COLORS.WHITE,
 ) {
   if (!toPlayerID) {
     log(message);
@@ -88,7 +115,7 @@ export function sendNonLocalizedSmallChatMessage(
   room.sendAnnouncement(
     message,
     toPlayerID,
-    COLORS.WHITE,
+    colour,
     FONTS.SMALL,
     SOUNDS.CHAT,
   );
@@ -158,12 +185,13 @@ export function sendSmallChatMessage(
   room: RoomObject,
   message: LocalizedMessageFunction,
   toPlayerID?: number,
+  colour: number = COLORS.WHITE,
 ) {
   sendMessage(
     room,
     message,
     toPlayerID,
-    COLORS.WHITE,
+    colour,
     FONTS.SMALL,
     SOUNDS.CHAT,
   );
