@@ -8,6 +8,7 @@ import {
   sendChatMessage,
   MAX_PLAYER_NAME,
   sendNonLocalizedSmallChatMessage,
+  COLORS,
 } from "../../../chat/chat";
 import { MESSAGES } from "../../../chat/messages";
 import { getPlayersOrderedByQualiTime } from "./playerTime";
@@ -27,27 +28,31 @@ export function printAllTimes(room: RoomObject, toPlayerID?: number) {
     return;
   }
 
-  let messageBuffer = ` P - ${centerText(
-    "Name",
-    MAX_PLAYER_NAME,
-  )} | Best Lap\n`;
+  setTimeout(() => {
+    const header = ` P - ${centerText(
+      "Name",
+      MAX_PLAYER_NAME,
+    )} | Best Lap`;
+    sendNonLocalizedSmallChatMessage(room, header, toPlayerID, COLORS.ORANGE);
+  }, 1000);
+
+  const messages: { text: string; color: number }[] = [];
 
   orderedList.forEach((p, index: number) => {
     const position = String(index + 1).padStart(2, "0");
     const nameCentered = centerText(p.name, MAX_PLAYER_NAME);
     const displayedTime =
       p.time === Number.MAX_VALUE ? "N/A" : p.time.toFixed(3);
-    const line = `${position} - ${nameCentered} | ${displayedTime}\n`;
+    const line = `${position} - ${nameCentered} | ${displayedTime}`;
 
-    if (messageBuffer.length + line.length > HAXBALL_MSG_LIMIT) {
-      sendNonLocalizedSmallChatMessage(room, messageBuffer, toPlayerID);
-      messageBuffer = "";
-    }
+    const color = COLORS.WHITE;
 
-    messageBuffer += line;
+    messages.push({ text: line, color });
   });
 
-  if (messageBuffer.length > 0) {
-    sendNonLocalizedSmallChatMessage(room, messageBuffer, toPlayerID);
-  }
+  messages.forEach((msg, index) => {
+    setTimeout(() => {
+      sendNonLocalizedSmallChatMessage(room, msg.text, toPlayerID, msg.color);
+    }, 1000 + index * 100); // 1s initial delay + 0.1s between each message
+  });
 }

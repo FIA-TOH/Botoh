@@ -16,6 +16,7 @@ import { announceSectorTimes } from "./utils/annoucements/annouceSectorTimes";
 import { annouceTyreWear } from "./utils/annoucements/annouceTyreWear";
 import { InvalidateLap } from "../../detectCut/invalidateLap";
 import { log } from "../../discord/logger";
+import { GeneralGameMode, generalGameMode } from "../../changeGameState/changeGameModes";
 
 export function processCompletedLap(
   pad: { p: PlayerObject; disc: DiscPropertiesObject },
@@ -50,7 +51,7 @@ export function processCompletedLap(
 
   handleHardQualiAttempts(room, p, lapTime, playerData);
 
-  if (hasSector) announceSectorTimes(room, p.id, playerData);
+  if (hasSector && generalGameMode !== GeneralGameMode.GENERAL_RACE) announceSectorTimes(room, p.id, playerData);
 
   annouceTyreWear(room, p, playerData);
 

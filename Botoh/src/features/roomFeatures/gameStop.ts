@@ -121,8 +121,10 @@ export function GameStop(room: RoomObject) {
           room.getPlayerList().forEach(player => {
             resetPitState(player.id);
           });
-          sendDiscordMessage(room);
           sendAllCutsToDiscord();
+          setTimeout(() => {
+            sendDiscordMessage(room);
+          }, 3000);
         }
       }
       clearPlayers();

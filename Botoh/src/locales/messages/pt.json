@@ -6,6 +6,7 @@
   "TIRES_PERCENTAGE": "Pneus: {{percentage}}%",
   "RR_ENABLED": "Comando !rr liberado",
   "RR_DISABLED": "Comando !rr desabilitado",
+  "TYRES_DISABLED": "O sistema de pneus está desativado neste momento.",
   "ADMIN_ALREADY_IN_ROOM": "Um administrador já está na sala",
   "ADMIN_ONLY": "Apenas administradores podem usar este comando",
   "CONFIG_MISSING_ARGUMENT": "Uso: !config <ftoh|fh|haxbula>",

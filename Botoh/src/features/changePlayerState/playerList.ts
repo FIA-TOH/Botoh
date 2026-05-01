@@ -135,6 +135,8 @@ export interface PlayerInfo {
   isTyreBlowed: boolean;
   
   blowoutTickCounter: number;
+  
+  pubAvatar: string;
 }
 
 type PlayerList = {

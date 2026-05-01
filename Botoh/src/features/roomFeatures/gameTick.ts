@@ -102,9 +102,7 @@ export function GameTick(room: RoomObject) {
 
     afkKick(room);
     checkWeatherUpdate(room);
-
     updateLeagueStartAFKDetection(room);
-
     checkVSCDuration(room);
 
     if (room.getScores()?.time && room.getScores().time > 0) {

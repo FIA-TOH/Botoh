@@ -150,3 +150,14 @@ export function formatRaceTime(totalSeconds: number): string {
 
   return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 }
+
+export function getRandomCarEmoji(): string {
+  const carEmojis = ["🚗", "🚕", "🚙", "🏎️", "🚓", "🚑", "🚒", "🚐", "🚚", "🚛", "🚜", "🚎", "🏍️", "🛵"];
+  
+  if (Math.random() < 0.01) {
+    return "🛸";
+  }
+  
+  const randomIndex = Math.floor(Math.random() * carEmojis.length);
+  return carEmojis[randomIndex];
+}

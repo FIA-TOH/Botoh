@@ -8,6 +8,7 @@ import { handleExplainTyresCommand } from "../commands/tyres/handleExplainTyresC
 import { generatePitResult } from "./pitStopFunctions";
 import { Teams } from "../changeGameState/teams";
 import { isPitNewSystemEnabled } from "./newPitSystem/newPitManager";
+import { tyresActivated } from "./tires";
 
 function ifInPitlaneStart(
   player: { p: PlayerObject; disc: DiscPropertiesObject },
@@ -43,10 +44,8 @@ export function handlePitlane(
 
       playerList[p.id].pits.pitsNumber += 1;
       playerList[p.id].inPitlane = true;
-      if (!LEAGUE_MODE)  {
-        if (!player.p.admin) {
-          handleExplainTyresCommand(player.p, undefined, room);
-        }
+      if (!LEAGUE_MODE && tyresActivated && !player.p.admin) {
+        handleExplainTyresCommand(player.p, undefined, room);
       }
     }
 

@@ -44,6 +44,9 @@ export function initializeLeagueStartAFKDetection(room: RoomObject) {
 }
 
 export function updateLeagueStartAFKDetection(room: RoomObject) {
+  if(!LEAGUE_MODE) {
+    return;
+  }
   if (!isDetectionActive || detectionStartTime === undefined) {
     return;
   }

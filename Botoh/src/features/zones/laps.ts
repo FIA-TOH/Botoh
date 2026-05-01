@@ -1,4 +1,4 @@
-export const DEFAULT_LAPS = 5
+export const DEFAULT_LAPS = 3
 
 export let laps = DEFAULT_LAPS
 

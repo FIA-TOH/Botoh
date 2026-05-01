@@ -85,7 +85,7 @@ export function restoreTyreOrCar(playerId: number, room: RoomObject) {
   if (tireType && TIRE_AVATAR[tireType] && p.showTires && tyresActivated) {
     room.setPlayerAvatar(playerId, TIRE_AVATAR[tireType]);
   } else {
-    room.setPlayerAvatar(playerId, null);
+    room.setPlayerAvatar(playerId, p.pubAvatar);
   }
 }
 const situationHandlers: Record<

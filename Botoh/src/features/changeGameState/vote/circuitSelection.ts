@@ -1,4 +1,5 @@
 import { Circuit } from "../../../circuits/Circuit";
+import { COLORS } from "../../chat/chat";
 import { log } from "../../discord/logger";
 import { CIRCUITS } from "../../zones/maps";
 import { selectedCircuits } from "./vote";
@@ -10,7 +11,7 @@ export function announceSelectedCircuits(room: RoomObject) {
   selectedCircuits.forEach((circuit, index) => {
     log(`${index + 1}: ${circuit.info?.name || "Name not defined"}`);
     room.sendAnnouncement(
-      `${index + 1}: ${circuit.info?.name || "Name not defined"}`
+      `${index + 1}: ${circuit.info?.name || "Name not defined"}`, undefined, COLORS.DARK_ORANGE
     );
   });
 }
