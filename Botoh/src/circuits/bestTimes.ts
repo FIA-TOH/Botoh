@@ -65,6 +65,7 @@ const trackNameMapping: { [key: string]: string } = {
   cano_sexcuit: "Cano Sexcuit by Rodri",
   sroda: "Sroda Track",
     le_mans: "Le Mans By Nanoseb Remake",
+  river: "Circuito Antonio V. Liberti by New Era",
 };
 
 export const bestTimes: { [key: string]: [number, string, string] } = {
@@ -154,6 +155,7 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   cano_sexcuit: [999.99, "undefined", "Cano Sexcuit by Rodri"],
   sroda: [999.99, "undefined", "Sroda Track"],
   le_mans: [999.99, "undefined", "Le Mans By Nanoseb Remake"],
+  river: [999.99, "undefined", "Circuito Antonio V. Liberti by New Era"],
 };
 export const getAbbreviatedTrackName = (
   fullTrackName: string,
