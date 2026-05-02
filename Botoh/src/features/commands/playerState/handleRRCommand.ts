@@ -17,6 +17,21 @@ import { rrEnabled } from "../adminThings/handleRREnabledCommand";
 import { RR_POSITION } from "../adminThings/handleRRPositionCommand";
 import { resetPitState } from "../../tires&pits/newPitSystem/newPitManager";
 
+export function moveToRRPosition(player: PlayerObject, room: RoomObject) {
+  const rrPosition = RR_POSITION ?? CIRCUITS[currentMapIndex].info.lastPlace;
+  if (rrPosition) {
+    room.setPlayerDiscProperties(player.id, {
+      radius: 15,
+      xspeed: 0,
+      yspeed: 0,
+      xgravity: 0,
+      ygravity: 0,
+      x: rrPosition.x,
+      y: rrPosition.y,
+    });
+  }
+}
+
 export function handleRRAllCommand(room: RoomObject) {
   const playersAndDiscs = getPlayerAndDiscs(room);
   const runningPlayers = getRunningPlayers(playersAndDiscs);
