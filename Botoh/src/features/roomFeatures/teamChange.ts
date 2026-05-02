@@ -5,12 +5,16 @@ import { Teams } from "../changeGameState/teams";
 import {
   gameMode,
   GameMode,
+  generalGameMode,
+  GeneralGameMode,
 } from "../changeGameState/changeGameModes";
 import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
 import { updatePlayerActivity } from "../afk/afk";
 import { followPlayerId } from "../cameraAndBall/cameraFollow";
 import { moveToBox } from "../comeBackRace.ts/moveToBox";
+import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { decideBlowoutPoint } from "../tires&pits/tireBlowManager";
+import { moveToRRPosition } from "../commands/playerState/handleRRCommand";
 
 export function TeamChange(room: RoomObject) {
   room.onPlayerTeamChange = function (changedPlayer: PlayerObject) {
@@ -37,7 +41,11 @@ export function TeamChange(room: RoomObject) {
         gameMode !== GameMode.WAITING &&
         !playerObj?.canRejoin 
       ) {
-        moveToBox(changedPlayer, room, "end");
+        if (generalGameMode === GeneralGameMode.GENERAL_QUALY && !LEAGUE_MODE) {
+          moveToRRPosition(changedPlayer, room);
+        } else {
+          moveToBox(changedPlayer, room, "end");
+        }
       }
     }
 

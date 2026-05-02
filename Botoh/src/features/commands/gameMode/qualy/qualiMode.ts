@@ -6,7 +6,7 @@ import { sendErrorMessage, sendSuccessMessage } from "../../../chat/chat";
 import { MESSAGES } from "../../../chat/messages";
 import { LEAGUE_MODE } from "../../../hostLeague/leagueMode";
 
-export let qualiTime = 2;
+export let qualiTime = 3;
 export let raceTime = LEAGUE_MODE ? 0 : 7;
 
 export function setQualiTime(
