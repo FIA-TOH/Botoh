@@ -36,7 +36,6 @@ const HARD_QUALY_PASSWORD = "hardqualy";
 
 function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
   const players = room.getPlayerList();
-  const now = new Date();
 
   const wasRunning = positionList.some((p) => p.name === player.name);
 
@@ -75,11 +74,12 @@ function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
               sendErrorMessage(room, MESSAGES.THE_JOIN_TIME_IS_OVER(), player.id);
             }
         }
-      }
       } else {
         room.setPlayerTeam(player.id, Teams.RUNNERS);
       }
-    
+    } else {
+      room.setPlayerTeam(player.id, Teams.RUNNERS);
+    }
   } else {
     room.setPlayerTeam(player.id, Teams.RUNNERS);
     room.startGame();
@@ -172,6 +172,13 @@ export function PlayerJoin(room: RoomObject) {
     } else {
       log(`${player.name} has joined. (${ip})`);
       checkRunningPlayers(room);
+    }
+
+    if (!LEAGUE_MODE && generalGameMode === GeneralGameMode.GENERAL_RACE && players.length === 2) {
+        room.stopGame();
+        setTimeout(() => {
+          room.startGame();
+        }, 100);
     }
 
     WhatToDoWhenJoin(room, player);
