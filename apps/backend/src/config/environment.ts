@@ -28,7 +28,7 @@ const config: EnvironmentConfig = {
   rateLimitMaxRequests: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '100'),
   logLevel: process.env.LOG_LEVEL || 'info',
   sentryDsn: process.env.SENTRY_DSN || undefined,
-  databaseUrl: process.env.DATABASE_URL || 'postgresql://postgres:formulatohseason4@db.vcvthfjiyypyzhvbzkkz.supabase.co:5432/postgres',
+  databaseUrl: process.env.DATABASE_URL || 'postgresql://postgres:senha@db.vcvthfjiyypyzhvbzkkz.supabase.co:5432/postgres',
 };
 
 // Validate required environment variables
