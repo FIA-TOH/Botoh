@@ -11,6 +11,16 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 
+# Security - Keep secrets out of version control
+*.key
+*.pem
+*.p12
+*.crt
+*.pfx
+secrets/
+credentials/
+config/secrets/
+
 # Build outputs
 dist/
 build/

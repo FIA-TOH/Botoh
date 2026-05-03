@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { io, Socket } from 'socket.io-client';
+import { useSocket } from '@/hooks/useSocket';
+import config from '@/config/environment';
 
 interface ChatMessage {
   player: string;
@@ -10,39 +11,39 @@ interface ChatMessage {
 }
 
 export default function Home() {
-  const [socket, setSocket] = useState<Socket | null>(null);
-  const [connected, setConnected] = useState(false);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  
+  const { socket, isConnected, error, emit, on, off } = useSocket({
+    autoConnect: true,
+    reconnectAttempts: config.reconnectAttempts,
+    reconnectDelay: config.reconnectDelay,
+  });
 
   useEffect(() => {
-    const newSocket = io(process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:3001');
-    
-    newSocket.on('connect', () => {
-      setConnected(true);
-      console.log('Connected to server');
-    });
+    if (!socket) return;
 
-    newSocket.on('disconnect', () => {
-      setConnected(false);
-      console.log('Disconnected from server');
-    });
+    // Listen for chat messages
+    const handleChatMessage = (data: { type: string; data: ChatMessage }) => {
+      if (data.type === 'chat:message') {
+        setMessages(prev => {
+          const newMessages = [...prev, data.data];
+          // Keep only last N messages
+          return newMessages.slice(-config.maxMessages);
+        });
+      }
+    };
 
-    newSocket.on('chat:message', (data: { data: ChatMessage }) => {
-      console.log('Received chat:message:', data);
-      setMessages(prev => [...prev, data.data]);
-    });
-
-    setSocket(newSocket);
+    on('chat:message', handleChatMessage);
 
     return () => {
-      newSocket.close();
+      off('chat:message', handleChatMessage);
     };
-  }, []);
+  }, [socket, on, off]);
 
   const sendMessage = () => {
     if (socket && message.trim()) {
-      socket.emit('chat:send', { message: message.trim() });
+      emit('chat:send', { message: message.trim() });
       setMessage('');
     }
   };
@@ -62,8 +63,8 @@ export default function Home() {
         <div className="bg-gray-800 rounded-lg p-6 mb-8">
           <h2 className="text-2xl font-semibold mb-4">Connection Status</h2>
           <div className="flex items-center space-x-2">
-            <div className={`w-3 h-3 rounded-full ${connected ? 'bg-green-500' : 'bg-red-500'}`}></div>
-            <span>{connected ? 'Connected' : 'Disconnected'}</span>
+            <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
+            <span>{isConnected ? 'Connected' : 'Disconnected'}</span>
           </div>
         </div>
 
@@ -90,11 +91,11 @@ export default function Home() {
               onKeyPress={handleKeyPress}
               placeholder="Type your message..."
               className="flex-1 bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              disabled={!connected}
+              disabled={!isConnected}
             />
             <button
               onClick={sendMessage}
-              disabled={!connected || !message.trim()}
+              disabled={!isConnected || !message.trim()}
               className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white px-6 py-2 rounded-lg transition-colors"
             >
               Send

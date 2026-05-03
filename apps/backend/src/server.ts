@@ -1,28 +1,85 @@
 import express from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-import morgan from 'morgan';
 import { createServer } from 'http';
-import dotenv from 'dotenv';
-import { setupSocketIO } from './socket';
-import healthRoutes from './routes/health';
+import { Server } from 'socket.io';
+import cors from 'cors';
+import morgan from 'morgan';
+import compression from 'compression';
+import config from './config/environment';
 
-dotenv.config();
+import { setupSocketHandlers } from './socket';
+import healthRoutes from './routes/health';
+import authRoutes from './routes/auth';
+import garageRoutes from './routes/garage';
+import { securityHeaders, rateLimiter, validateRequest, errorHandler, requestLogger } from './middleware/security';
+import { initializeDatabase, healthCheck, closeDatabase } from './config/database';
 
 const app = express();
 const server = createServer(app);
 
-const PORT = process.env.PORT || 3001;
+// Socket.IO configuration with security
+const io = new Server(server, {
+  cors: {
+    origin: config.corsOrigin,
+    methods: ["GET", "POST"],
+    credentials: true
+  },
+  transports: ['websocket', 'polling'],
+  maxHttpBufferSize: 1e8, // 100 MB
+  pingTimeout: 60000,
+  pingInterval: 25000
+});
 
-app.use(helmet());
-app.use(cors());
-app.use(morgan('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Security middleware
+app.use(securityHeaders);
+app.use(compression());
+app.use(requestLogger);
 
+// CORS configuration
+app.use(cors({
+  origin: config.corsOrigin,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Rate limiting
+app.use(rateLimiter);
+
+// Body parsing middleware
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Request validation
+app.use(validateRequest);
+
+// Logging (conditional based on environment)
+if (config.nodeEnv === 'development') {
+  app.use(morgan('combined'));
+} else {
+  app.use(morgan('combined', {
+    skip: (req, res) => res.statusCode < 400
+  }));
+}
+
+// Routes
 app.use('/health', healthRoutes);
+app.use('/auth', authRoutes);
+app.use('/garage', garageRoutes);
 
-const { io, botService } = setupSocketIO(server);
+// 404 handler
+app.use('*', (req, res) => {
+  res.status(404).json({
+    error: 'Route not found',
+    path: req.originalUrl,
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Error handling (must be last)
+app.use(errorHandler);
+
+// Socket.IO setup
+const { botService } = setupSocketHandlers(io);
 
 io.on('connection', (socket: any) => {
   socket.on('register:bot', () => {
@@ -31,6 +88,53 @@ io.on('connection', (socket: any) => {
   });
 });
 
-server.listen(PORT, () => {
-  console.log(`Backend server running on port ${PORT}`);
+// Initialize database and start server
+async function startServer() {
+  try {
+    // Initialize database connection
+    console.log(' Initializing database connection...');
+    await initializeDatabase();
+    
+    // Check database health
+    const dbHealth = await healthCheck();
+    console.log(' Database health check:', dbHealth);
+    
+    // Start server
+    server.listen(config.port, () => {
+      console.log(` Backend server running on port ${config.port}`);
+      console.log(` Environment: ${config.nodeEnv}`);
+      console.log(` Backend URL: ${config.backendUrl}`);
+      console.log(` Frontend URL: ${config.frontendUrl}`);
+      console.log(` Database: ${dbHealth.connected ? 'Connected' : 'Disconnected'}`);
+      
+      if (!dbHealth.connected) {
+        console.warn(' Database connection failed - some features may not work');
+      }
+    });
+  } catch (error) {
+    console.error(' Failed to start server:', error);
+    process.exit(1);
+  }
+}
+
+// Graceful shutdown
+process.on('SIGTERM', async () => {
+  console.log('SIGTERM received, shutting down gracefully');
+  server.close(async () => {
+    await closeDatabase();
+    console.log('Process terminated');
+    process.exit(0);
+  });
 });
+
+process.on('SIGINT', async () => {
+  console.log('SIGINT received, shutting down gracefully');
+  server.close(async () => {
+    await closeDatabase();
+    console.log('Process terminated');
+    process.exit(0);
+  });
+});
+
+// Start the server
+startServer();

@@ -15,11 +15,22 @@
     "build:backend": "npm run build --workspace=apps/backend",
     "build:bot": "npm run build --workspace=apps/bot",
     "build:frontend": "npm run build --workspace=apps/frontend",
+    "build:prod": "NODE_ENV=production npm run build --workspaces",
     "start": "concurrently \"npm run start:backend\" \"npm run start:bot\"",
     "start:backend": "npm run start --workspace=apps/backend",
     "start:bot": "npm run start --workspace=apps/bot",
-    "clean": "npm run clean --workspaces",
-    "install:all": "npm install --workspaces"
+    "start:prod": "NODE_ENV=production concurrently \"npm run start:backend\" \"npm run start:bot\"",
+    "clean": "npm run clean --workspaces && rm -rf node_modules",
+    "clean:full": "npm run clean --workspaces && rm -rf node_modules apps/*/node_modules apps/*/dist",
+    "install:all": "npm install --workspaces",
+    "install:prod": "npm ci --workspaces",
+    "deploy:build": "npm run clean && npm run install:prod && npm run build:prod",
+    "deploy:start": "npm run start:prod",
+    "lint": "npm run lint --workspaces",
+    "lint:fix": "npm run lint:fix --workspaces",
+    "test": "npm run test --workspaces",
+    "docker:build": "docker build -t ftoh-bot .",
+    "docker:run": "docker run -p 3001:3001 -p 3000:3000 --env-file .env ftoh-bot"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",
@@ -28,5 +39,9 @@
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=9.0.0"
+  },
+  "dependencies": {
+    "@types/pg": "^8.20.0",
+    "pg": "^8.20.0"
   }
 }

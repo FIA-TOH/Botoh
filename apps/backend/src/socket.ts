@@ -1,14 +1,7 @@
 import { Server as SocketIOServer } from 'socket.io';
 import { BotService } from './services/botService';
 
-export function setupSocketIO(server: any) {
-  const io = new SocketIOServer(server, {
-    cors: {
-      origin: process.env.FRONTEND_URL || "http://localhost:3000",
-      methods: ["GET", "POST"]
-    }
-  });
-
+export function setupSocketHandlers(io: SocketIOServer) {
   const botService = new BotService(io);
 
   io.on('connection', (socket) => {
@@ -24,5 +17,5 @@ export function setupSocketIO(server: any) {
     });
   });
 
-  return { io, botService };
+  return { botService };
 }
