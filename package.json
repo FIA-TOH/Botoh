@@ -1,0 +1,32 @@
+{
+  "name": "ftoh-monorepo",
+  "version": "1.0.0",
+  "description": "FTOH Haxball Bot - Fullstack Monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:bot\" \"npm run dev:frontend\"",
+    "dev:backend": "npm run dev --workspace=apps/backend",
+    "dev:bot": "npm run dev --workspace=apps/bot",
+    "dev:frontend": "npm run dev --workspace=apps/frontend",
+    "build": "npm run build --workspaces",
+    "build:backend": "npm run build --workspace=apps/backend",
+    "build:bot": "npm run build --workspace=apps/bot",
+    "build:frontend": "npm run build --workspace=apps/frontend",
+    "start": "concurrently \"npm run start:backend\" \"npm run start:bot\"",
+    "start:backend": "npm run start --workspace=apps/backend",
+    "start:bot": "npm run start --workspace=apps/bot",
+    "clean": "npm run clean --workspaces",
+    "install:all": "npm install --workspaces"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}

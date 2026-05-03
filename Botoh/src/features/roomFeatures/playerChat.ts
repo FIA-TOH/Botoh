@@ -7,8 +7,7 @@ import { leagueScuderia } from "../scuderias/scuderias";
 import { log } from "../discord/logger";
 import { mute_mode } from "../chat/toggleMuteMode";
 import { updatePlayerActivity } from "../afk/afk";
-
-import { sendDiscordPlayerChat } from "../discord/discord";
+import { sendToWebsite } from "../website/sendToWebsite";
 
 function getPlayerScuderia(playerInfo: PlayerInfo) {
   if (!playerInfo.leagueScuderia) return null;
@@ -23,6 +22,8 @@ export function PlayerChat(room: RoomObject) {
 
     if (player.admin) afkAdmins[player.id] = 0;
     updatePlayerActivity(player, room);
+
+    sendToWebsite(player, message);
 
     const command = message.toLowerCase().split(" ")[0];
     const args = message.toLowerCase().split(" ").slice(1);

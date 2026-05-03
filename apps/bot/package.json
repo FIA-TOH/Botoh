@@ -1,0 +1,27 @@
+{
+  "name": "@ftoh/bot",
+  "version": "1.0.0",
+  "description": "FTOH Haxball Bot Integration",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "haxball.js": "^3.2.1",
+    "@types/haxball-headless-browser": "^0.2.5",
+    "ws": "^8.14.2",
+    "dotenv": "^16.3.1",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.5.10",
+    "@types/uuid": "^9.0.7",
+    "@types/node": "^20.10.0",
+    "tsx": "^4.6.0",
+    "typescript": "^5.9.3",
+    "rimraf": "^5.0.5"
+  }
+}

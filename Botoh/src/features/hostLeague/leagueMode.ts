@@ -6,5 +6,5 @@ export const LEAGUE_MODE = (() => {
     return process.env.LEAGUE_MODE === "true";
   }
 
-  return false;
+  return true;
 })();
