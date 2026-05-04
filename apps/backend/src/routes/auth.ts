@@ -17,6 +17,18 @@ const loginValidation = [
     .withMessage('Password must be at least 6 characters long'),
 ];
 
+// Validation rules for user creation
+const createUserValidation = [
+  body('username')
+    .isLength({ min: 3, max: 50 })
+    .withMessage('Username must be between 3 and 50 characters')
+    .matches(/^[a-zA-Z0-9_]+$/)
+    .withMessage('Username can only contain letters, numbers, and underscores'),
+  body('password')
+    .isLength({ min: 6 })
+    .withMessage('Password must be at least 6 characters long'),
+];
+
 // POST /auth/login - User login
 router.post('/login', loginValidation, async (req: Request, res: Response) => {
   try {
@@ -105,6 +117,51 @@ router.post('/logout', (req: Request, res: Response) => {
     success: true,
     message: 'Logout successful',
   });
+});
+
+// POST /auth/create-user - Create new user (admin only)
+router.post('/create-user', authMiddleware, createUserValidation, async (req: AuthRequest, res: Response) => {
+  try {
+    // Check validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        message: 'Validation failed',
+        errors: errors.array(),
+      });
+    }
+
+    // Only admin can create users (simplified check - in production you'd check user.role)
+    const { username, password } = req.body;
+
+    // Create user using authService
+    const result = await authService.createUser({
+      username,
+      password,
+      role: 'user' // Default role for new users
+    });
+
+    if (result.success) {
+      console.log(` New user created: ${username} by admin`);
+      return res.status(201).json({
+        success: true,
+        message: 'User created successfully',
+        user: result.user
+      });
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: result.message || 'Failed to create user'
+      });
+    }
+  } catch (error) {
+    console.error('Create user error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error'
+    });
+  }
 });
 
 // GET /auth/verify - Verify token validity

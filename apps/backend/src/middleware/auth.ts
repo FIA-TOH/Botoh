@@ -36,8 +36,7 @@ export const authMiddleware = async (
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       res.status(401).json({
         success: false,
-        message: 'Access token required',
-        error: 'MISSING_TOKEN'
+        message: 'Access token required'
       });
       return;
     }
@@ -51,8 +50,7 @@ export const authMiddleware = async (
     if (!payload) {
       res.status(401).json({
         success: false,
-        message: 'Invalid or expired token',
-        error: 'INVALID_TOKEN'
+        message: 'Invalid or expired token'
       });
       return;
     }
@@ -67,10 +65,9 @@ export const authMiddleware = async (
     next();
   } catch (error) {
     console.error('Auth middleware error:', error);
-    res.status(500).json({
+    res.status(401).json({
       success: false,
-      message: 'Authentication error',
-      error: 'AUTH_ERROR'
+      message: 'Authentication failed'
     });
   }
 };
@@ -81,8 +78,7 @@ export const requireRole = (roles: string[]) => {
     if (!req.user) {
       res.status(401).json({
         success: false,
-        message: 'Authentication required',
-        error: 'NOT_AUTHENTICATED'
+        message: 'Authentication required'
       });
       return;
     }
@@ -90,10 +86,7 @@ export const requireRole = (roles: string[]) => {
     if (!roles.includes(req.user.role)) {
       res.status(403).json({
         success: false,
-        message: 'Insufficient permissions',
-        error: 'INSUFFICIENT_PERMISSIONS',
-        requiredRoles: roles,
-        currentRole: req.user.role
+        message: 'Insufficient permissions'
       });
       return;
     }

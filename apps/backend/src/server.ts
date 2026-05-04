@@ -12,6 +12,7 @@ import authRoutes from './routes/auth';
 import garageRoutes from './routes/garage';
 import { securityHeaders, rateLimiter, validateRequest, errorHandler, requestLogger } from './middleware/security';
 import { initializeDatabase, healthCheck, closeDatabase } from './config/database';
+import seedService from './config/seed';
 
 const app = express();
 const server = createServer(app);
@@ -98,6 +99,14 @@ async function startServer() {
     // Check database health
     const dbHealth = await healthCheck();
     console.log(' Database health check:', dbHealth);
+    
+    // Run database seeds (create admin user, basic upgrades, etc.)
+    if (dbHealth.connected) {
+      console.log(' Running database seeds...');
+      await seedService.runSeeds();
+    } else {
+      console.warn(' Skipping database seeds - database not connected');
+    }
     
     // Start server
     server.listen(config.port, () => {

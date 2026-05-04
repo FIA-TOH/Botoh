@@ -6,17 +6,9 @@ import config from '../config/environment';
 export interface User {
   id: string;
   username: string;
-  email?: string;
   password_hash: string;
-  role: string;
   money: number;
-  experience_points: number;
-  level: number;
-  is_active: boolean;
-  team_id?: string;
-  display_name?: string;
-  avatar_url?: string;
-  created_at?: string;
+  created_at: string;
 }
 
 export interface LoginRequest {
@@ -56,11 +48,11 @@ class AuthService {
     const payload: JwtPayload = {
       userId: user.id,
       username: user.username,
-      role: user.role,
+      role: 'user', // Fixed role for simplified schema
     };
 
     return jwt.sign(payload, config.jwtSecret, {
-      expiresIn: '24h', // Token expires in 24 hours
+      expiresIn: '24h',
       issuer: 'ftoh-bot',
       audience: 'ftoh-users',
     });
@@ -83,19 +75,11 @@ class AuthService {
         `SELECT 
           id, 
           username, 
-          email, 
           password_hash, 
-          role, 
           money, 
-          experience_points, 
-          level, 
-          is_active, 
-          team_id,
-          display_name,
-          avatar_url,
           created_at
         FROM users 
-        WHERE username = $1 AND is_active = true`,
+        WHERE username = $1`,
         [username]
       );
 
@@ -109,26 +93,23 @@ class AuthService {
   // Find user by ID
   async findUserById(userId: string): Promise<Omit<User, 'password_hash'> | null> {
     try {
-      const user = await queryOne<Omit<User, 'password_hash'>>(
+      const user = await queryOne<User>(
         `SELECT 
           id, 
           username, 
-          email, 
-          role, 
+          password_hash, 
           money, 
-          experience_points, 
-          level, 
-          is_active, 
-          team_id,
-          display_name,
-          avatar_url,
           created_at
         FROM users 
-        WHERE id = $1 AND is_active = true`,
+        WHERE id = $1`,
         [userId]
       );
 
-      return user;
+      if (!user) return null;
+
+      // Remove password hash before returning
+      const { password_hash, ...userWithoutPassword } = user;
+      return userWithoutPassword;
     } catch (error) {
       console.error('Error finding user by ID:', error);
       return null;
@@ -181,10 +162,9 @@ class AuthService {
     }
   }
 
-  // Create new user (for future registration)
+  // Create new user (for admin to create users)
   async createUser(userData: {
     username: string;
-    email?: string;
     password: string;
     role?: string;
   }): Promise<AuthResponse> {
@@ -203,18 +183,13 @@ class AuthService {
 
       // Insert new user
       const result = await query(
-        `INSERT INTO users (username, email, password_hash, role, money, experience_points, level, is_active) 
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
-         RETURNING id, username, email, role, money, experience_points, level, is_active, created_at`,
+        `INSERT INTO users (username, password_hash, money, created_at) 
+         VALUES ($1, $2, $3, NOW()) 
+         RETURNING id, username, money, created_at`,
         [
           userData.username,
-          userData.email || null,
           passwordHash,
-          userData.role || 'driver',
           50000, // Starting money
-          0, // Starting experience
-          1, // Starting level
-          true, // Active by default
         ]
       );
 
