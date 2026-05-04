@@ -1,13 +1,21 @@
 import { Pool, PoolConfig, QueryResult } from 'pg';
 import config from './environment';
 
-// Database connection configuration
+// Clean Supabase PostgreSQL connection configuration
 const poolConfig: PoolConfig = {
   connectionString: process.env.DATABASE_URL || config.databaseUrl,
-  ssl: config.nodeEnv === 'production' ? { rejectUnauthorized: false } : false,
+  // Supabase requires SSL with proper configuration
+  ssl: {
+    rejectUnauthorized: false, // Required for Supabase
+    // Don't use SSL mode in connection string, use pg's SSL config instead
+  },
   max: 20, // Maximum number of connections in the pool
   idleTimeoutMillis: 30000, // How long a client is allowed to remain idle before being closed
-  connectionTimeoutMillis: 2000, // How long to wait when connecting a new client
+  connectionTimeoutMillis: 10000, // Connection timeout
+  query_timeout: 30000, // Query timeout in milliseconds
+  // Additional Supabase-specific settings
+  keepAlive: true,
+  keepAliveInitialDelayMillis: 10000,
 };
 
 // Create connection pool
@@ -16,7 +24,7 @@ const pool = new Pool(poolConfig);
 // Database connection status
 let isConnected = false;
 
-// Handle pool events
+// Handle pool events with proper error handling
 pool.on('connect', () => {
   if (!isConnected) {
     console.log('🗄️  Database connected successfully');
@@ -25,29 +33,48 @@ pool.on('connect', () => {
 });
 
 pool.on('error', (err: Error) => {
-  console.error('❌ Database connection error:', err);
+  console.error('❌ Database connection error:', err.message);
   isConnected = false;
 });
 
 pool.on('remove', () => {
-  console.log('🔌 Database connection removed');
+  // Silent - too verbose for development
 });
 
-// Test connection function
+// Test connection function with Supabase-specific error handling
 export const testConnection = async (): Promise<boolean> => {
   try {
     const client = await pool.connect();
-    const result = await client.query('SELECT NOW()');
+    
+    // Simple test query
+    const result = await client.query('SELECT NOW() as current_time, version() as version');
     client.release();
-    console.log('✅ Database test connection successful:', result.rows[0].now);
+    
+    console.log('✅ Database connected successfully');
+    console.log(`🗄️  PostgreSQL ${result.rows[0].version.split(' ')[1]}`);
+    
     return true;
-  } catch (error) {
-    console.error('❌ Database test connection failed:', error);
+  } catch (error: any) {
+    console.error('❌ Database connection failed:', error.message);
+    
+    // Supabase-specific error handling
+    if (error.code === 'ECONNREFUSED') {
+      console.error('🚫 Check Supabase project status');
+    } else if (error.code === 'ETIMEDOUT') {
+      console.error('⏰ Check network connectivity');
+    } else if (error.code === '3D000') {
+      console.error('🗄️  Database does not exist');
+    } else if (error.code === '28P01') {
+      console.error('🔐 Check Supabase credentials');
+    } else if (error.code === 'ECONNRESET') {
+      console.error('🔄 Check SSL configuration');
+    }
+    
     return false;
   }
 };
 
-// Main query function
+// Main query function with proper error handling
 export const query = async <T = any>(
   sql: string, 
   params?: any[]
@@ -58,26 +85,20 @@ export const query = async <T = any>(
     const result = await pool.query<T>(sql, params);
     const duration = Date.now() - start;
     
-    // Log query in development mode
-    if (config.nodeEnv === 'development') {
-      console.log(`🔍 Query executed in ${duration}ms:`, sql.substring(0, 100) + (sql.length > 100 ? '...' : ''));
-      if (params && params.length > 0) {
-        console.log('📋 Parameters:', params);
-      }
+    // Log only slow queries (> 1 second)
+    if (duration > 1000) {
+      console.log(`⚠️  Slow query (${duration}ms):`, sql.substring(0, 50) + '...');
     }
     
     return result;
   } catch (error) {
     const duration = Date.now() - start;
-    console.error(`❌ Query failed after ${duration}ms:`, sql.substring(0, 100) + (sql.length > 100 ? '...' : ''));
-    if (params && params.length > 0) {
-      console.error('📋 Parameters:', params);
-    }
+    console.error(`❌ Query failed (${duration}ms):`, sql.substring(0, 50) + '...');
     throw error;
   }
 };
 
-// Transaction helper
+// Transaction helper with proper error handling
 export const transaction = async <T = any>(
   callback: (client: any) => Promise<T>
 ): Promise<T> => {
@@ -96,9 +117,7 @@ export const transaction = async <T = any>(
   }
 };
 
-// Helper functions for common operations
-
-// Single row query
+// Query helpers
 export const queryOne = async <T = any>(
   sql: string, 
   params?: any[]
@@ -107,7 +126,6 @@ export const queryOne = async <T = any>(
   return result.rows[0] || null;
 };
 
-// Multiple rows query
 export const queryMany = async <T = any>(
   sql: string, 
   params?: any[]
@@ -116,132 +134,125 @@ export const queryMany = async <T = any>(
   return result.rows;
 };
 
-// Insert query helper
-export const insert = async (
+// CRUD helpers
+export const insert = async <T = any>(
   table: string, 
   data: Record<string, any>
-): Promise<QueryResult> => {
-  const keys = Object.keys(data);
+): Promise<T> => {
+  const columns = Object.keys(data).join(', ');
   const values = Object.values(data);
-  const placeholders = keys.map((_, index) => `$${index + 1}`).join(', ');
+  const placeholders = values.map((_, index) => `$${index + 1}`).join(', ');
   
-  const sql = `INSERT INTO ${table} (${keys.join(', ')}) VALUES (${placeholders}) RETURNING *`;
-  return query(sql, values);
+  const sql = `INSERT INTO ${table} (${columns}) VALUES (${placeholders}) RETURNING *`;
+  const result = await query<T>(sql, values);
+  return result.rows[0];
 };
 
-// Update query helper
-export const update = async (
+export const update = async <T = any>(
   table: string, 
-  data: Record<string, any>, 
-  whereClause: string, 
-  whereParams?: any[]
-): Promise<QueryResult> => {
-  const keys = Object.keys(data);
+  id: string | number, 
+  data: Record<string, any>
+): Promise<T | null> => {
+  const columns = Object.keys(data);
   const values = Object.values(data);
-  const setClause = keys.map((key, index) => `${key} = $${index + 1}`).join(', ');
+  const setClause = columns.map((col, index) => `${col} = $${index + 1}`).join(', ');
   
-  const sql = `UPDATE ${table} SET ${setClause} WHERE ${whereClause} RETURNING *`;
-  const allParams = [...values, ...(whereParams || [])];
-  
-  return query(sql, allParams);
+  const sql = `UPDATE ${table} SET ${setClause} WHERE id = $${columns.length + 1} RETURNING *`;
+  const result = await query<T>(sql, [...values, id]);
+  return result.rows[0] || null;
 };
 
-// Delete query helper
 export const deleteRows = async (
   table: string, 
-  whereClause: string, 
+  condition: string, 
   params?: any[]
-): Promise<QueryResult> => {
-  const sql = `DELETE FROM ${table} WHERE ${whereClause} RETURNING *`;
-  return query(sql, params);
+): Promise<number> => {
+  const sql = `DELETE FROM ${table} WHERE ${condition}`;
+  const result = await query(sql, params);
+  return result.rowCount || 0;
 };
 
-// Check if table exists
-export const tableExists = async (tableName: string): Promise<boolean> => {
-  const sql = `
-    SELECT EXISTS (
-      SELECT FROM information_schema.tables 
-      WHERE table_schema = 'public' 
-      AND table_name = $1
-    );
-  `;
-  const result = await queryOne<{ exists: boolean }>(sql, [tableName]);
-  return result?.exists || false;
-};
-
-// Get table row count
-export const getRowCount = async (tableName: string): Promise<number> => {
-  const sql = `SELECT COUNT(*) as count FROM ${tableName}`;
-  const result = await queryOne<{ count: number }>(sql);
-  return result?.count || 0;
-};
-
-// Database health check
-export const healthCheck = async (): Promise<{
-  connected: boolean;
-  tables: Record<string, boolean>;
-  timestamp: string;
-}> => {
+// Health check function for monitoring
+export const healthCheck = async () => {
   const tables = ['users', 'teams', 'upgrades', 'user_upgrades', 'race_history', 'team_members'];
   const tableStatus: Record<string, boolean> = {};
   
-  // Check each table
   for (const table of tables) {
-    tableStatus[table] = await tableExists(table);
+    try {
+      const result = await queryOne(
+        'SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_schema = $1 AND table_name = $2) as exists',
+        ['public', table]
+      );
+      tableStatus[table] = result?.exists || false;
+    } catch (error) {
+      tableStatus[table] = false;
+    }
   }
   
   return {
     connected: isConnected,
     tables: tableStatus,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   };
 };
 
-// Graceful shutdown
+// Close database connection gracefully
 export const closeDatabase = async (): Promise<void> => {
   try {
     await pool.end();
-    console.log('🔌 Database connection pool closed');
-    isConnected = false;
+    console.log('🔌 Database connection closed');
   } catch (error) {
     console.error('❌ Error closing database connection:', error);
   }
 };
 
-// Export pool for advanced usage
-export { pool };
+// Initialize database connection with retry logic
+export const initializeDatabase = async (): Promise<void> => {
+  const maxRetries = 3;
+  const retryDelay = 2000; // 2 seconds
+  
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      // Test connection with timeout
+      const connected = await Promise.race([
+        testConnection(),
+        new Promise<boolean>((_, reject) => 
+          setTimeout(() => reject(new Error('Connection timeout')), 15000)
+        )
+      ]);
+      
+      if (!connected) {
+        throw new Error('Failed to connect to database');
+      }
+      
+      // Check if tables exist
+      const health = await healthCheck();
+      const missingTables = Object.entries(health.tables)
+        .filter(([_, exists]) => !exists)
+        .map(([table]) => table);
+      
+      if (missingTables.length > 0) {
+        console.warn('⚠️  Missing tables:', missingTables.join(', '));
+      }
+      
+      return; // Success, exit retry loop
+      
+    } catch (error) {
+      if (attempt === maxRetries) {
+        console.error('❌ Database connection failed - Check credentials');
+        throw new Error('Failed to connect to database after multiple attempts');
+      }
+      
+      await new Promise(resolve => setTimeout(resolve, retryDelay));
+    }
+  }
+};
 
 // Export connection status
 export const getConnectionStatus = (): boolean => isConnected;
 
-// Initialize database connection
-export const initializeDatabase = async (): Promise<void> => {
-  try {
-    // Test connection
-    const connected = await testConnection();
-    if (!connected) {
-      throw new Error('Failed to connect to database');
-    }
-    
-    // Check if tables exist
-    const health = await healthCheck();
-    const missingTables = Object.entries(health.tables)
-      .filter(([_, exists]) => !exists)
-      .map(([table]) => table);
-    
-    if (missingTables.length > 0) {
-      console.warn('⚠️  Missing tables:', missingTables);
-      console.log('💡 Run the schema.sql file to create missing tables');
-    } else {
-      console.log('✅ All required tables exist');
-    }
-    
-    console.log('🗄️  Database initialized successfully');
-  } catch (error) {
-    console.error('❌ Database initialization failed:', error);
-    throw error;
-  }
-};
+// Export pool for advanced usage
+export { pool };
 
 export default {
   query,
