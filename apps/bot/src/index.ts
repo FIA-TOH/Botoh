@@ -18,14 +18,21 @@ async function setupBackendCommunication() {
   socket.on('chat:send', async (data: any) => {
     console.log('Received chat:send from backend:', data);
     
-    // Import room and send chat message to Haxball
+    // Data is coming as a string, not an object
+    const message = typeof data === 'string' ? data : data.message;
+    
     try {
-      const { roomPromise } = await import('../../../Botoh/src/room');
-      const room = await roomPromise;
+      // Import the getRoom function from Botoh
+      const { getRoom } = await import('../../../Botoh/src/room');
+      const room = await getRoom();
       
-      if (room && data.message) {
-        room.sendAnnouncement(`[Frontend] ${data.message}`, undefined, 0xFFFFFF);
-        console.log('Sent message to Haxball room:', data.message);
+      if (room && message) {
+        room.sendAnnouncement(`[Frontend] ${message}`, undefined, 0xFFFFFF);
+      } else {
+        console.log('❌ No room or message:', { 
+          room: !!room, 
+          message: message
+        });
       }
     } catch (error) {
       console.error('Error sending message to Haxball room:', error);

@@ -98,6 +98,8 @@ function ProtectedHome() {
           // Keep only last N messages
           return newMessages.slice(-config.maxMessages);
         });
+      } else {
+        console.log('❓ Unknown message type:', data.type);
       }
     };
 
@@ -110,18 +112,40 @@ function ProtectedHome() {
 
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('📤 Sending message:', { message: message.trim(), socket: !!socket, isConnected });
+    
     if (message.trim() && socket && isConnected) {
-      emit('chatMessage', message);
+      console.log('✅ Emitting chat:send event');
+      emit('chat:send', message);
       setMessage('');
+      console.log('🔄 Message sent, cleared input');
+    } else {
+      console.log('❌ Cannot send message:', { 
+        hasMessage: !!message.trim(), 
+        hasSocket: !!socket, 
+        isConnected 
+      });
     }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
+    console.log('⌨️ Key pressed:', { key: e.key, shiftKey: e.shiftKey });
+    
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
+      console.log('📤 Sending message via Enter key:', { message: message.trim(), socket: !!socket, isConnected });
+      
       if (message.trim() && socket && isConnected) {
-        emit('chatMessage', message);
+        console.log('✅ Emitting chat:send event via Enter');
+        emit('chat:send', message);
         setMessage('');
+        console.log('🔄 Message sent via Enter, cleared input');
+      } else {
+        console.log('❌ Cannot send message via Enter:', { 
+          hasMessage: !!message.trim(), 
+          hasSocket: !!socket, 
+          isConnected 
+        });
       }
     }
   };
