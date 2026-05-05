@@ -4,6 +4,7 @@ import { positionList } from "./positionList";
 import { playerList } from "../../../changePlayerState/playerList";
 import { getBestPit } from "../../../tires&pits/trackBestPit";
 import { getBestLap } from "../../../zones/laps/trackBestLap";
+import { sendStandingsToApiWithRetry, sendQualyToApiWithRetry } from "./standingsApi";
 
 export interface StandingsRow {
   position: number;
@@ -228,10 +229,40 @@ export function saveStandingsHtml(destFile?: string): string {
   try {
     fs.writeFileSync(out, html, { encoding: "utf8" });
     console.log(`Standings saved to: ${out}`);
+    
+    // Send standings to API asynchronously
+    sendStandingsToApiWithRetry().catch(err => {
+      console.error("Failed to send standings to API:", err);
+    });
+    
     return out;
   } catch (err) {
     console.error("Failed to save standings HTML:", err);
     throw err;
+  }
+}
+
+/**
+ * Send current standings to the API without saving HTML file
+ */
+export async function sendStandingsToApiOnly(): Promise<boolean> {
+  try {
+    return await sendStandingsToApiWithRetry();
+  } catch (error) {
+    console.error("Failed to send standings to API:", error);
+    return false;
+  }
+}
+
+/**
+ * Send qualification standings to the API (simplified data)
+ */
+export async function sendQualyStandingsToApi(): Promise<boolean> {
+  try {
+    return await sendQualyToApiWithRetry();
+  } catch (error) {
+    console.error("Failed to send qualy standings to API:", error);
+    return false;
   }
 }
 
