@@ -40,13 +40,15 @@ class SeedService {
         `INSERT INTO users (
           username, 
           password_hash, 
+          role,
           money, 
           created_at
-        ) VALUES ($1, $2, $3, NOW()) 
-        RETURNING id, username, money, created_at, password_hash`,
+        ) VALUES ($1, $2, $3, $4, NOW()) 
+        RETURNING id, username, role, money, created_at, password_hash`,
         [
           adminUsername,
           passwordHash,
+          'admin', // Set admin role
           1000000.00 // 1M money for admin
         ]
       );
@@ -55,6 +57,7 @@ class SeedService {
       console.log('👤 Default admin user created:');
       console.log(`   Username: ${adminUsername}`);
       console.log(`   Password: ${adminPassword}`);
+      console.log(`   Role: admin`);
       console.log(`   Money: ${adminUser.money}`);
       console.log(`   ID: ${adminUser.id}`);
       console.log(`   Created: ${adminUser.created_at}`);

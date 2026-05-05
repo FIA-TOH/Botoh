@@ -6,6 +6,7 @@ dotenv.config({ path: '../../Botoh/.env' });
 import { io } from 'socket.io-client';
 
 let backendSocket: any = null;
+let room: any = null;
 
 async function setupBackendCommunication() {
   const socket = io('http://localhost:3001');
@@ -69,7 +70,28 @@ async function main() {
   
   // Import the original Botoh entry point
   const { roomPromise } = await import('../../../Botoh/src/room');
-  const room = await roomPromise;
+  room = await roomPromise;
+  
+  // Set room globally for player list service
+  (global as any).room = room;
+  
+  // Start player list broadcasting after room is ready
+  if (backendSocket) {
+    const { PlayerListService } = await import('../../backend/src/services/playerListService');
+    
+    // Create a minimal botService-like object that emits to frontend clients
+    const mockBotService = {
+      broadcastToClients: (event: string, data: any) => {
+        // Emit to backend socket.io server, which will broadcast to frontend clients
+        if (backendSocket && backendSocket.emit) {
+          backendSocket.emit('broadcast:toFrontend', { event, data });
+        }
+      }
+    };
+    
+    const playerListService = new PlayerListService(mockBotService as any);
+    playerListService.startBroadcasting();
+  }
   
   console.log(`✅ Complete Botoh bot started with backend communication`);
 }

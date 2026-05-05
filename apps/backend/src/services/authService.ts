@@ -7,6 +7,7 @@ export interface User {
   id: string;
   username: string;
   password_hash: string;
+  role: string;
   money: number;
   created_at: string;
 }
@@ -48,7 +49,7 @@ class AuthService {
     const payload: JwtPayload = {
       userId: user.id,
       username: user.username,
-      role: 'user', // Fixed role for simplified schema
+      role: user.role || 'user', // Use role from database
     };
 
     return jwt.sign(payload, config.jwtSecret, {
@@ -98,6 +99,7 @@ class AuthService {
           id, 
           username, 
           password_hash, 
+          role,
           money, 
           created_at
         FROM users 
@@ -183,12 +185,13 @@ class AuthService {
 
       // Insert new user
       const result = await query(
-        `INSERT INTO users (username, password_hash, money, created_at) 
-         VALUES ($1, $2, $3, NOW()) 
-         RETURNING id, username, money, created_at`,
+        `INSERT INTO users (username, password_hash, role, money, created_at) 
+         VALUES ($1, $2, $3, $4, NOW()) 
+         RETURNING id, username, role, money, created_at`,
         [
           userData.username,
           passwordHash,
+          userData.role || 'user', // Use provided role or default to 'user'
           50000, // Starting money
         ]
       );

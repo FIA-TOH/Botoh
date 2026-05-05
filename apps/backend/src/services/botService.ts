@@ -27,7 +27,6 @@ export class BotService {
     });
 
     socket.on('chat:message', (data: BotMessage) => {
-      console.log('Received chat:message from bot:', data);
       this.broadcastToClients('chat:message', data);
     });
   }
@@ -40,7 +39,7 @@ export class BotService {
     }
   }
 
-  private broadcastToClients(event: string, data: any) {
+  broadcastToClients(event: string, data: any) {
     this.io.emit(event, data);
   }
 }

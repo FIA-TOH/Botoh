@@ -15,6 +15,11 @@ export function setupSocketHandlers(io: SocketIOServer) {
     socket.on('disconnect', () => {
       console.log(`Client disconnected: ${socket.id}`);
     });
+
+    // Handle broadcast events from bot
+    socket.on('broadcast:toFrontend', (data) => {
+      io.emit(data.event, data.data);
+    });
   });
 
   return { botService };
