@@ -46,6 +46,47 @@ export interface ApiQualyData {
 }
 
 /**
+ * Calculate race gap based on position list order
+ * Gap considers laps, sectors, and total time differences
+ */
+function calculateRaceGap(currentIndex: number): string {
+  if (currentIndex === 0) {
+    return "+0.00";
+  }
+
+  const currentPlayer = positionList[currentIndex];
+  const previousPlayer = positionList[currentIndex - 1];
+
+  if (!currentPlayer || !previousPlayer) {
+    return "+0.00";
+  }
+
+  // Calculate lap difference
+  const lapDiff = previousPlayer.lap - currentPlayer.lap;
+  
+  if (lapDiff > 0) {
+    // Player is laps behind
+    return `-${lapDiff} lap${lapDiff > 1 ? 's' : ''}`;
+  }
+
+  // Same lap, calculate time gap
+  if (currentPlayer.lap === previousPlayer.lap) {
+    const sectorDiff = previousPlayer.currentSector - currentPlayer.currentSector;
+    
+    if (sectorDiff > 0) {
+      // Player is sectors behind
+      return `+${sectorDiff * 2.5}s`; // Approximate sector time
+    }
+    
+    // Same lap and sector, calculate time gap
+    const timeGap = currentPlayer.totalTime - previousPlayer.totalTime;
+    return `+${Math.abs(timeGap).toFixed(3)}s`;
+  }
+
+  return "+0.00";
+}
+
+/**
  * Send qualification standings to the haxball-league API (simplified data)
  */
 export async function sendQualyToApi(): Promise<boolean> {
@@ -132,7 +173,7 @@ export async function sendStandingsToApi(): Promise<boolean> {
           laps: playerData?.currentLap ?? 0,
           pits: p.pits,
           bestLap: p.time,
-          gap: idx === 0 ? "+0.00" : `+${(p.time - positionList[0].time).toFixed(3)}s`,
+          gap: calculateRaceGap(idx),
           totalTime: p.totalTime,
           active: p.active,
           currentTire: playerData?.tires ?? Tires.SOFT,
