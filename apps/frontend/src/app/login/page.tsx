@@ -3,6 +3,9 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import config from '@/config/environment';
+import { FtohInput } from '@/components/FtohInput';
+import { FtohButton } from '@/components/FtohButton';
+import { FtohCard } from '@/components/FtohCard';
 
 interface LoginFormData {
   username: string;
@@ -154,30 +157,19 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 flex items-center justify-center p-4">
-      <div className="max-w-md w-full">
-        {/* Logo/Title */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">FTOH</h1>
-          <p className="text-gray-300">Formula ToH Racing System</p>
-        </div>
-
-        {/* Login Card */}
-        <div className="bg-gray-800/50 backdrop-blur-lg rounded-xl shadow-2xl border border-gray-700 p-8">
-          <h2 className="text-2xl font-semibold text-white text-center mb-6">
-            Sign In
-          </h2>
-
-          {/* Default Credentials Info */}
-          <div className="bg-blue-900/30 border border-blue-700/50 rounded-lg p-3 mb-6">
-            <p className="text-blue-300 text-sm text-center">
-              Default credentials: <span className="font-mono">admin / admin123</span>
-            </p>
-          </div>
-
+    <main className="min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center p-4 relative" style={{ backgroundImage: 'url(/img/bg/loginbg.png)' }}>
+      {/* Black overlay with 29% opacity */}
+      <div className="absolute inset-0 bg-black pointer-events-none" style={{ opacity: 0.29 }}></div>
+      
+      {/* Red block covering 50% of screen on the right with 67% opacity */}
+      <div className="absolute top-0 right-0 w-1/2 h-full pointer-events-none" style={{ backgroundColor: '#AF0034', opacity: 0.67 }}></div>
+      
+      {/* Login container - no opacity inheritance */}
+      <div className="absolute top-0 right-0 w-1/2 h-full flex items-center justify-center pointer-events-none">
+        <FtohCard title="LOGIN">
           {/* Error Message */}
           {error && (
-            <div className="bg-red-900/30 border border-red-700/50 rounded-lg p-3 mb-6">
+            <div className="bg-red-900/30 border border-red-700/50 rounded-lg p-3">
               <p className="text-red-300 text-sm text-center">{error}</p>
             </div>
           )}
@@ -185,71 +177,39 @@ export default function LoginPage() {
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Username Field */}
-            <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-300 mb-2">
-                Username
-              </label>
-              <input
-                id="username"
-                name="username"
-                type="text"
-                value={formData.username}
-                onChange={handleInputChange}
-                required
-                className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                placeholder="Enter your username"
-                disabled={isLoading}
-              />
-            </div>
+            <FtohInput
+              id="username"
+              name="username"
+              type="text"
+              value={formData.username}
+              onChange={handleInputChange}
+              required
+              placeholder="Nome de usuário"
+              disabled={isLoading}
+            />
 
             {/* Password Field */}
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                required
-                className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                placeholder="Enter your password"
-                disabled={isLoading}
-              />
-            </div>
+            <FtohInput
+              id="password"
+              name="password"
+              type="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              required
+              placeholder="Senha"
+              disabled={isLoading}
+            />
 
             {/* Submit Button */}
-            <button
+            <FtohButton
               type="submit"
-              disabled={isLoading}
-              className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-500 disabled:cursor-not-allowed text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center"
+              loading={isLoading}
+              loadingText="Entrando..."
             >
-              {isLoading ? (
-                <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>
-                  <span>Signing in...</span>
-                </>
-              ) : (
-                'Sign In'
-              )}
-            </button>
+              ENTRAR
+            </FtohButton>
           </form>
-
-          {/* Footer */}
-          <div className="mt-8 text-center">
-            <p className="text-gray-400 text-sm">
-              Protected authentication system
-            </p>
-          </div>
-        </div>
-
-        {/* Background decoration */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl"></div>
-        </div>
+        </FtohCard>
       </div>
       
       {/* Snackbar */}

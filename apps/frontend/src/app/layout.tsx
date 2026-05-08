@@ -1,9 +1,13 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Oxanium } from 'next/font/google'
 import { AuthProvider } from '@/hooks/useAuth';
 
-const inter = Inter({ subsets: ['latin'] })
+const oxanium = Oxanium({ 
+  subsets: ['latin'],
+  variable: '--font-oxanium',
+  weight: ['400', '500', '600', '700', '800']
+})
 
 export const metadata: Metadata = {
   title: 'FTOH Haxball Bot',
@@ -17,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${oxanium.className} ${oxanium.variable}`}>
         <AuthProvider>
           {children}
         </AuthProvider>
