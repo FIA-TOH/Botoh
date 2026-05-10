@@ -11,7 +11,7 @@ O sistema FTOH utiliza Socket.IO para comunicação real-time entre três compon
 
 ## 🤖 Bot → Backend Events
 
-### 🏁 Race Control Events
+### 🏁 Pit Wall Events
 
 #### `race:update`
 ```typescript
@@ -347,7 +347,7 @@ socket.emit('chat:announce', {
 });
 ```
 
-### 🏁 Race Control Commands
+### 🏁 Pit Wall Commands
 
 #### `race:pit_command`
 ```typescript
