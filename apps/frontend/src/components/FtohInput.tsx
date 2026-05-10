@@ -4,11 +4,14 @@ import React from 'react';
 
 interface FtohInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
+  variant?: 'red' | 'white';
 }
 
-export function FtohInput({ label, className = '', ...props }: FtohInputProps) {
+export function FtohInput({ label, className = '', variant = 'red', ...props }: FtohInputProps) {
+  const isWhite = variant === 'white';
+  
   return (
-    <div className={label ? 'space-y-2' : ''}>
+    <div className={`w-full ${label ? 'space-y-2' : ''}`}>
       {label && (
         <label 
           htmlFor={props.id} 
@@ -18,14 +21,26 @@ export function FtohInput({ label, className = '', ...props }: FtohInputProps) {
         </label>
       )}
       <input
-        className={`w-full px-4 py-3 border-4 text-white placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all ${className}`}
+        className={`w-full px-4 py-3 focus:outline-none focus:ring-2 transition-all ${isWhite ? 'placeholder:text-gray-500' : ''} ${className}`}
         style={{ 
-          backgroundColor: 'transparent',
-          borderColor: '#FF232B'
+          backgroundColor: '#1E1E1E',
+          borderWidth: '2px',
+          borderStyle: 'solid',
+          borderColor: isWhite ? '#FFFFFF' : '#FF232B',
+          borderRadius: '0',
+          color: isWhite ? '#FFFFFF' : '#FFFFFF',
         }}
         {...props}
-        onFocus={(e) => e.currentTarget.style.borderWidth = '1.5px'}
-        onBlur={(e) => e.currentTarget.style.borderWidth = '4px'}
+        onFocus={(e) => {
+          e.currentTarget.style.borderWidth = '1.5px';
+          if (isWhite) {
+            e.currentTarget.style.borderColor = '#CCCCCC';
+          }
+        }}
+        onBlur={(e) => {
+          e.currentTarget.style.borderWidth = '2px';
+          e.currentTarget.style.borderColor = isWhite ? '#FFFFFF' : '#FF232B';
+        }}
       />
     </div>
   );
