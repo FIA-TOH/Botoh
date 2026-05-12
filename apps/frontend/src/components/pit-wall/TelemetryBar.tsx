@@ -235,7 +235,7 @@ export function TelemetryBar({
       </div>
 
       {/* VALUE */}
-      <div className="text-[16px] font-bold mt-1">
+      <div className="text-[16px] mt-1">
         {Math.round(value)}%
       </div>
     </div>

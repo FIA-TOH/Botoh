@@ -10,15 +10,18 @@ export function DriverCircle({
   return (
     <div
       className="
-        w-[140px]
-        h-[140px]
+        w-[10vw]
+        h-[10vw]
+        max-w-[140px]
+        max-h-[140px]
         rounded-full
         border-[8px]
         border-black
         flex
         items-center
         justify-center
-        text-[64px]
+        text-[4vw]
+        text-[min(64px,5vw)]
         font-bold
       "
       style={{

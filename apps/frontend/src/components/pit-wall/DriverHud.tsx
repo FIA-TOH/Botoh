@@ -58,7 +58,6 @@ export function DriverHud({
      <div
         className={`
           text-[18px]
-          font-bold
           ${
             align === 'right'
               ? 'text-right'
@@ -66,15 +65,15 @@ export function DriverHud({
           }
         `}
       >
-        {align === 'left' ? (
+       {align === 'left' ? (
           <>
-            {driver.position}º{' '}
+            <strong>{driver.position}º</strong>{' '}
             {driver.gapToLeader}
           </>
         ) : (
           <>
             {driver.gapToLeader}{' '}
-            {driver.position}º
+            <strong>{driver.position}º</strong>
           </>
         )}
       </div>
@@ -145,7 +144,7 @@ export function DriverHud({
         mt-4
         text-[24px]
         w-24
-        py-1
+        py-0
       "
     >
       PIT

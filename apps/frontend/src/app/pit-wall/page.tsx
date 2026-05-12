@@ -35,11 +35,11 @@ export default function PitWallPage() {
           'url(/img/bg/pitwallwpp.png)',
       }}
     >
-      <div className="max-w-6xl mx-auto">
+    <div className="max-w-[1440px] mx-auto">
         <div
           className="grid gap-8"
           style={{
-            gridTemplateColumns: '4fr 12fr 7fr',
+            gridTemplateColumns: '200px 12fr 7fr',
             gridTemplateRows: '7fr 5fr',
             gridTemplateAreas: `
               "players map chat"

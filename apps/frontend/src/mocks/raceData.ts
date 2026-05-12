@@ -152,7 +152,7 @@ export const mockRaceData: RaceSession = {
       driverNumber: 55,
       name: "Carlos Sainz",
       shortName: "SAI",
-      tire: "HARD",
+      tire: "MEDIUM",
       tireWear: 50,
       pitCount: 1,
       managingTires: false,
