@@ -10,6 +10,7 @@ import { setupSocketHandlers } from './socket';
 import healthRoutes from './routes/health';
 import authRoutes from './routes/auth';
 import garageRoutes from './routes/garage';
+import roomRoutes from './routes/room';
 import { securityHeaders, rateLimiter, validateRequest, errorHandler, requestLogger } from './middleware/security';
 import { initializeDatabase, healthCheck, closeDatabase } from './config/database';
 import seedService from './config/seed';
@@ -62,13 +63,27 @@ if (config.nodeEnv === 'development') {
   }));
 }
 
+// Debug middleware - log all requests
+app.use((req, res, next) => {
+  console.log(`➡️ Incoming: ${req.method} ${req.originalUrl}`);
+  next();
+});
+
 // Routes
+console.log('🔧 Montando rotas com /api prefix...');
 app.use('/health', healthRoutes);
-app.use('/auth', authRoutes);
-app.use('/garage', garageRoutes);
+console.log('✅ Health routes montadas');
+app.use('/api/auth', authRoutes);
+console.log('✅ Auth routes montadas em /api/auth');
+app.use('/api/garage', garageRoutes);
+console.log('✅ Garage routes montadas em /api/garage');
+app.use('/api/room', roomRoutes);
+console.log('✅ Room routes montadas em /api/room');
+console.log('🔍 Todas as rotas montadas com /api prefix');
 
 // 404 handler
 app.use('*', (req, res) => {
+  console.log('❌ Route not found:', req.method, req.originalUrl);
   res.status(404).json({
     error: 'Route not found',
     path: req.originalUrl,

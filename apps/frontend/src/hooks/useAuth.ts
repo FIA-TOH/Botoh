@@ -54,7 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
           // Verify token with backend (async)
           try {
-            const response = await fetch(`${config.apiUrl}/auth/me`, {
+            const response = await fetch('/api/auth/me', {
               headers: {
                 'Authorization': `Bearer ${storedToken}`,
               },
@@ -93,7 +93,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (username: string, password: string): Promise<{ success: boolean; message?: string }> => {
     try {
-      const response = await fetch(`${config.apiUrl}/auth/login`, {
+      const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -101,7 +101,7 @@ function ProtectedAdmin() {
 
     try {
       const token = localStorage.getItem('auth_token');
-      const response = await fetch(`${config.apiUrl}/auth/create-user`, {
+      const response = await fetch('/api/auth/create-user', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
