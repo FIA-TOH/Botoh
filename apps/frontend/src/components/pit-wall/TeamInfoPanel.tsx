@@ -8,20 +8,44 @@ interface Props {
   error?: string | null;
 }
 
+const EMPTY_DRIVER_SLOT = {
+  isEmptySlot: true,
+  position: null,
+  driverNumber: '??',
+  name: 'Sem piloto',
+  shortName: '---',
+  team: '',
+  tire: '',
+  tireWear: 100,
+  pitCount: 0,
+  managingTires: false,
+  ers: 0,
+  tireWarning: false,
+  tireBurst: false,
+  carDamage: 100,
+  gapToLeader: '',
+  inPit: false,
+  isOut: false,
+  qualyTime: null,
+  bestLapTime: null,
+  gapToLeaderMs: null,
+  teamColor: '#1E1E1E',
+};
+
 export function TeamInfoPanel({
   loading = false,
   error = null,
 }: Props) {
 
-  const ferrariDrivers =
-    mockRaceData.drivers.filter(
-      (d) =>
-        d.name === 'Charles Leclerc' ||
-        d.name === 'Carlos Sainz'
-    );
+  const teamDrivers = mockRaceData.drivers
+    .filter(
+      (driver) =>
+        driver.team === mockRaceData.loggedUserTeam
+    )
+    .slice(0, 2);
 
-  const driver1 = ferrariDrivers[0];
-  const driver2 = ferrariDrivers[1];
+  const driver1 = teamDrivers[0] ?? EMPTY_DRIVER_SLOT;
+  const driver2 = teamDrivers[1] ?? EMPTY_DRIVER_SLOT;
 
   return (
     <div
@@ -103,7 +127,6 @@ export function TeamInfoPanel({
         </div>
       )}
 
-      {/* CONTENT */}
       {!loading &&
         !error && (
           <div className="flex justify-between">

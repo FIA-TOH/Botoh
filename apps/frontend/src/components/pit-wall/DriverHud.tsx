@@ -19,9 +19,20 @@ export function DriverHud({
   driver,
   align,
 }: Props) {
+  const isEmptySlot = driver.isEmptySlot;
+  const isOut = driver.isOut;
+  const showTelemetry = !isEmptySlot && !isOut;
+  const pitDisabled = isEmptySlot || isOut || driver.inPit;
+  const driverVisualOpacity = isOut
+    ? 0.5
+    : 1;
 
   const info = (
-    <>
+    <div
+      style={{
+        opacity: driverVisualOpacity,
+      }}
+    >
       {/* NAME */}
       <div
         className={`
@@ -41,17 +52,19 @@ export function DriverHud({
           {driver.name}
         </span>
 
-        <span
-          style={{
-            color: getTireColor(
+        {!isEmptySlot && (
+          <span
+            style={{
+              color: getTireColor(
+                driver.tire
+              ),
+            }}
+          >
+            {getTireAbbr(
               driver.tire
-            ),
-          }}
-        >
-          {getTireAbbr(
-            driver.tire
-          )}
-        </span>
+            )}
+          </span>
+        )}
       </div>
 
       {/* POSITION */}
@@ -67,17 +80,17 @@ export function DriverHud({
       >
        {align === 'left' ? (
           <>
-            <strong>{driver.position}º</strong>{' '}
+            <strong>{driver.position ?? '-'}º</strong>{' '}
             {driver.gapToLeader}
           </>
         ) : (
           <>
             {driver.gapToLeader}{' '}
-            <strong>{driver.position}º</strong>
+            <strong>{driver.position ?? '-'}º</strong>
           </>
         )}
       </div>
-    </>
+    </div>
   );
 
   const telemetryBars = [
@@ -130,22 +143,34 @@ export function DriverHud({
   );
 
   const circle = (
-    <DriverCircle
-      number={
-        driver.driverNumber
-      }
-      color={driver.teamColor}
-    />
+    <div
+      style={{
+        opacity: driverVisualOpacity,
+      }}
+    >
+      <DriverCircle
+        number={
+          driver.driverNumber
+        }
+        color={driver.teamColor}
+      />
+    </div>
   );
 
   const pit = (
     <FtohButton
+      disabled={pitDisabled}
       className="
         mt-4
         text-[24px]
         w-24
         py-0
       "
+      style={{
+        backgroundColor: pitDisabled
+          ? '#5A5A5A'
+          : '#FF232B',
+      }}
     >
       PIT
     </FtohButton>
@@ -165,15 +190,19 @@ export function DriverHud({
               {pit}
             </div>
 
-            <div className="mr-4">
-              {telemetry}
-            </div>
+            {showTelemetry && (
+              <div className="mr-4">
+                {telemetry}
+              </div>
+            )}
           </>
         ) : (
           <>
-            <div className="ml-4">
-              {telemetry}
-            </div>
+            {showTelemetry && (
+              <div className="ml-4">
+                {telemetry}
+              </div>
+            )}
 
             <div className="flex flex-col items-center">
               {circle}

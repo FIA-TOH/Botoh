@@ -1,19 +1,123 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { mockRaceData } from '@/mocks/raceData';
 import { DriverCircle } from './DriverCircle';
 
-export function RaceInsightsGrid() {
-  const driverOptions = useMemo(
-    () => mockRaceData.drivers.map((driver) => driver.name),
-    []
+interface Props {
+  drivers?: any[];
+  loading?: boolean;
+  error?: string | null;
+}
+
+function RaceInsightsState({
+  title,
+  message,
+  loading = false,
+}: {
+  title: string;
+  message?: string;
+  loading?: boolean;
+}) {
+  return (
+    <section className="mt-8">
+      <div
+        style={{
+          backgroundColor: '#1E1E1E',
+          outline: '8px solid #FF232B',
+        }}
+        className="
+          min-h-[260px]
+          p-4
+          flex
+          flex-col
+          items-center
+          justify-center
+          text-center
+        "
+      >
+        {loading && (
+          <div
+            className="
+              mb-4
+              w-10
+              h-10
+              border-4
+              border-white/20
+              border-t-red-500
+              rounded-full
+              animate-spin
+            "
+          />
+        )}
+
+        <div className="text-2xl font-bold uppercase">
+          {title}
+        </div>
+
+        {message && (
+          <div className="mt-2 text-lg text-gray-300">
+            {message}
+          </div>
+        )}
+      </div>
+    </section>
   );
-  const [paceDriver, setPaceDriver] = useState(driverOptions[0] || 'Joninho');
-  const [compareDriver, setCompareDriver] = useState(driverOptions[1] || 'Nava');
-  const [gapDriverA, setGapDriverA] = useState(driverOptions[0] || 'Joninho');
-  const [gapDriverB, setGapDriverB] = useState(driverOptions[1] || 'Nava');
+}
+
+export function RaceInsightsGrid({
+  drivers = mockRaceData.drivers,
+  loading = false,
+  error = null,
+}: Props) {
+  const driverOptions = useMemo(
+    () => drivers.map((driver) => driver.name),
+    [drivers]
+  );
+  const paceDefaults = useMemo(() => {
+    const teamDriverNames = drivers
+      .filter((driver) => driver.team === mockRaceData.loggedUserTeam)
+      .map((driver) => driver.name);
+
+    if (teamDriverNames.length >= 2) {
+      return {
+        pace: teamDriverNames[0],
+        compare: teamDriverNames[1],
+      };
+    }
+
+    if (teamDriverNames.length === 1) {
+      const fallbackDriver =
+        driverOptions.find((name) => name !== teamDriverNames[0])
+        ?? teamDriverNames[0];
+
+      return {
+        pace: teamDriverNames[0],
+        compare: fallbackDriver,
+      };
+    }
+
+    const shuffledDrivers = [...driverOptions].sort(
+      () => Math.random() - 0.5
+    );
+
+    return {
+      pace: shuffledDrivers[0] ?? 'Joninho',
+      compare: shuffledDrivers[1] ?? shuffledDrivers[0] ?? 'Nava',
+    };
+  }, [driverOptions, drivers]);
+  const [paceDriver, setPaceDriver] = useState(paceDefaults.pace);
+  const [compareDriver, setCompareDriver] = useState(paceDefaults.compare);
+  const [gapDriverA, setGapDriverA] = useState(paceDefaults.pace);
+  const [gapDriverB, setGapDriverB] = useState(paceDefaults.compare);
   const hasPitGap = true;
+
+  useEffect(() => {
+    setPaceDriver(paceDefaults.pace);
+    setCompareDriver(paceDefaults.compare);
+    setGapDriverA(paceDefaults.pace);
+    setGapDriverB(paceDefaults.compare);
+  }, [paceDefaults]);
 
   const weatherBySection = [
     { label: 'Global', rainChance: 49, wetness: 20, highlight: true },
@@ -32,6 +136,34 @@ export function RaceInsightsGrid() {
     if (percentage === 0) return '☀️';
     return '💧';
   };
+
+  if (loading) {
+    return (
+      <RaceInsightsState
+        title="Carregando visualizacao"
+        message="Buscando dados da corrida."
+        loading
+      />
+    );
+  }
+
+  if (error) {
+    return (
+      <RaceInsightsState
+        title="Erro ao carregar visualizacao"
+        message={error}
+      />
+    );
+  }
+
+  if (driverOptions.length === 0) {
+    return (
+      <RaceInsightsState
+        title="Sem dados"
+        message="Nenhum piloto disponivel para montar a visualizacao."
+      />
+    );
+  }
 
   return (
     <section className="mt-8">
@@ -74,7 +206,7 @@ export function RaceInsightsGrid() {
             }}
             className="p-4 text-center"
           >
-            <div className="text-2xl font-bold uppercase">Previsao do tempo</div>
+            <div className="text-2xl font-bold uppercase">Previsão do tempo</div>
             <div className="mt-3 text-xl">Chuva deve parar em 2 minutos</div>
           </div>
 

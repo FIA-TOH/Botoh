@@ -70,7 +70,11 @@ export default function PitWallPage() {
           />
         </div>
 
-        <RaceInsightsGrid />
+        <RaceInsightsGrid
+          drivers={mockRaceData.drivers}
+          loading={false}
+          error={null}
+        />
       </div>
     </main>
   );

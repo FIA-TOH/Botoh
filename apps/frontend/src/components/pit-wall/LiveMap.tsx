@@ -6,6 +6,45 @@ interface Props {
   players: PlayerData[];
 }
 
+interface ViewBoxData {
+  minX: number;
+  minY: number;
+  width: number;
+  height: number;
+}
+
+const DEFAULT_VIEW_BOX: ViewBoxData = {
+  minX: -5000,
+  minY: -5000,
+  width: 10000,
+  height: 10000,
+};
+
+function parseSvgViewBox(svgText: string): ViewBoxData | null {
+  const viewBoxMatch = svgText.match(/viewBox=["']([^"']+)["']/i);
+  const viewBox = viewBoxMatch?.[1]
+    ?.trim()
+    .split(/[\s,]+/)
+    .map(Number);
+
+  if (
+    !viewBox
+    || viewBox.length !== 4
+    || viewBox.some((value) => !Number.isFinite(value))
+    || viewBox[2] <= 0
+    || viewBox[3] <= 0
+  ) {
+    return null;
+  }
+
+  return {
+    minX: viewBox[0],
+    minY: viewBox[1],
+    width: viewBox[2],
+    height: viewBox[3],
+  };
+}
+
 export function LiveMap({
   players,
 }: Props) {
@@ -20,6 +59,7 @@ export function LiveMap({
     height: 0,
     scale: 1,
   });
+  const [svgViewBox, setSvgViewBox] = React.useState<ViewBoxData | null>(null);
   const [smoothedPositions, setSmoothedPositions] = React.useState<
     Record<number, { x: number; y: number }>
   >({});
@@ -29,53 +69,48 @@ export function LiveMap({
   const lastFrameRef = React.useRef<number | null>(null);
 
   // =========================================
-  // SVG METADATA
+  // SVG VIEWBOX
   // =========================================
 
-  const getViewBoxData = () => {
-
-    if (fallbackType === 'svg' && backgroundUrl) {
-
-      const svgMetadata: Record<
-        string,
-        {
-          minX: number;
-          minY: number;
-          width: number;
-          height: number;
-        }
-      > = {
-
-        imola: {
-          minX: -3603.6,
-          minY: -2328.3,
-          width: 7531.2,
-          height: 4623.6,
-        },
-
-      };
-
-      const mapName = backgroundUrl
-        .replace('/maps/', '')
-        .replace('.svg', '');
-
-      return (
-        svgMetadata[mapName] || {
-          minX: -5000,
-          minY: -5000,
-          width: 10000,
-          height: 10000,
-        }
-      );
+  const getViewBoxData = React.useCallback((): ViewBoxData => {
+    if (fallbackType === 'svg' && svgViewBox) {
+      return svgViewBox;
     }
 
-    return {
-      minX: -5000,
-      minY: -5000,
-      width: 10000,
-      height: 10000,
+    return DEFAULT_VIEW_BOX;
+  }, [fallbackType, svgViewBox]);
+
+  React.useEffect(() => {
+    let isCancelled = false;
+
+    const loadSvgViewBox = async () => {
+      setSvgViewBox(null);
+
+      if (fallbackType !== 'svg' || !backgroundUrl) return;
+
+      try {
+        const response = await fetch(backgroundUrl);
+        if (!response.ok) return;
+
+        const svgText = await response.text();
+        const viewBox = parseSvgViewBox(svgText);
+
+        if (!isCancelled) {
+          setSvgViewBox(viewBox);
+        }
+      } catch (error) {
+        if (!isCancelled) {
+          setSvgViewBox(null);
+        }
+      }
     };
-  };
+
+    loadSvgViewBox();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [backgroundUrl, fallbackType]);
 
   // =========================================
   // RESPONSIVE MAP SIZE
@@ -133,13 +168,13 @@ export function LiveMap({
       );
     };
 
-  }, [backgroundUrl, fallbackType]);
+  }, [getViewBoxData]);
 
   // =========================================
   // HAXBALL -> SVG
   // =========================================
 
-  const convertHaxballToSvg = (
+  const convertHaxballToSvg = React.useCallback((
     x: number,
     y: number,
   ) => {
@@ -156,7 +191,7 @@ export function LiveMap({
       x: svgX,
       y: svgY,
     };
-  };
+  }, [getViewBoxData]);
 
   React.useEffect(() => {
     const activeIds = new Set<number>();
@@ -178,7 +213,7 @@ export function LiveMap({
         delete targetsRef.current[id];
       }
     });
-  }, [players, backgroundUrl, fallbackType]);
+  }, [players, convertHaxballToSvg]);
 
   React.useEffect(() => {
     const SNAP_DISTANCE_PERCENT = 10;

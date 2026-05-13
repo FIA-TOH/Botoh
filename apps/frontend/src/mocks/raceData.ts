@@ -4,13 +4,14 @@ export type TireType = 'SOFT' | 'MEDIUM' | 'HARD' | 'WET' | 'INTERMEDIATE';
 
 export type SessionType = 'RACE' | 'QUALY' | 'TRAINING';
 
-export type FlagType = 'GREEN' | 'YELLOW' | 'RED' | 'SAFETY' | 'VIRTUAL_SAFETY';
+export type FlagType = 'NONE' | 'GREEN' | 'YELLOW' | 'RED' | 'SAFETY' | 'VIRTUAL_SAFETY';
 
 export interface Driver {
-  position: number;
+  position: number | null;
   driverNumber: number;
   name: string;
   shortName: string;
+  team: string;
   tire: TireType;
   tireWear: number; // 0-100%
   pitCount: number;
@@ -22,14 +23,17 @@ export interface Driver {
   gapToLeader: string; // "+1.234" or "LAP"
   inPit: boolean;
   isOut: boolean;
-  qualyTime: string; // "1:23.456"
-  bestLapTime: string; // Best lap time for qualy/training
-  gapToLeaderMs: number; // Gap in milliseconds for precise calculations
+  qualyTime: string | null; // "1:23.456" or null
+  bestLapTime: string | null; // Best lap time for qualy/training
+  gapToLeaderMs: number | null; // Gap in milliseconds for precise calculations
   teamColor: string; // Team color hex code (e.g., "#1E41FF" for Red Bull)
 }
 
 export interface RaceSession {
   sessionType: SessionType;
+  loggedUserTeam: string;
+  currentTimePassed: string;
+  totalTime: string;
   currentLap: number;
   totalLaps: number;
   flag: FlagType;
@@ -37,16 +41,20 @@ export interface RaceSession {
 }
 
 export const mockRaceData: RaceSession = {
-  sessionType: 'RACE',
+  sessionType: 'QUALY',
+  loggedUserTeam: 'Ferrari',
+  currentTimePassed: '14:30',
+  totalTime: '20:00',
   currentLap: 23,
   totalLaps: 52,
-  flag: 'GREEN',
+  flag: 'NONE',
   drivers: [
     {
       position: 1,
       driverNumber: 1,
       name: "Max Verstappen",
       shortName: "VER",
+      team: "Red Bull",
       tire: "MEDIUM",
       tireWear: 45.2,
       pitCount: 1,
@@ -68,6 +76,7 @@ export const mockRaceData: RaceSession = {
       driverNumber: 11,
       name: "Sergio Perez",
       shortName: "PER",
+      team: "Red Bull",
       tire: "MEDIUM",
       tireWear: 48.7,
       pitCount: 1,
@@ -89,6 +98,7 @@ export const mockRaceData: RaceSession = {
       driverNumber: 44,
       name: "Lewis Hamilton",
       shortName: "HAM",
+      team: "Mercedes",
       tire: "SOFT",
       tireWear: 67.3,
       pitCount: 2,
@@ -110,6 +120,7 @@ export const mockRaceData: RaceSession = {
       driverNumber: 63,
       name: "George Russell",
       shortName: "RUS",
+      team: "Mercedes",
       tire: "SOFT",
       tireWear: 71.8,
       pitCount: 2,
@@ -131,6 +142,7 @@ export const mockRaceData: RaceSession = {
       driverNumber: 16,
       name: "Charles Leclerc",
       shortName: "LEC",
+      team: "Ferrari",
       tire: "HARD",
       tireWear: 32.1,
       pitCount: 1,
@@ -152,6 +164,7 @@ export const mockRaceData: RaceSession = {
       driverNumber: 55,
       name: "Carlos Sainz",
       shortName: "SAI",
+      team: "Ferrari",
       tire: "MEDIUM",
       tireWear: 50,
       pitCount: 1,
@@ -173,6 +186,7 @@ export const mockRaceData: RaceSession = {
       driverNumber: 4,
       name: "Lando Norris",
       shortName: "NOR",
+      team: "Mclaren",
       tire: "MEDIUM",
       tireWear: 52.3,
       pitCount: 2,
@@ -194,6 +208,7 @@ export const mockRaceData: RaceSession = {
       driverNumber: 81,
       name: "Oscar Piastri",
       shortName: "PIA",
+      team: "McLaren",
       tire: "HARD",
       tireWear: 58.9,
       pitCount: 1,
@@ -215,6 +230,7 @@ export const mockRaceData: RaceSession = {
       driverNumber: 10,
       name: "Pierre Gasly",
       shortName: "GAS",
+      team: "Alpine",
       tire: "HARD",
       tireWear: 61.2,
       pitCount: 2,
@@ -236,6 +252,7 @@ export const mockRaceData: RaceSession = {
       driverNumber: 31,
       name: "Esteban Ocon",
       shortName: "OCO",
+      team: "Alpine",
       tire: "HARD",
       tireWear: 64.5,
       pitCount: 2,
@@ -257,6 +274,7 @@ export const mockRaceData: RaceSession = {
       driverNumber: 77,
       name: "Valtteri Bottas",
       shortName: "BOT",
+      team: "Kick Sauber",
       tire: "MEDIUM",
       tireWear: 69.8,
       pitCount: 2,
@@ -278,6 +296,7 @@ export const mockRaceData: RaceSession = {
       driverNumber: 24,
       name: "Zhou Guanyu",
       shortName: "ZHO",
+      team: "Kick Sauber",
       tire: "SOFT",
       tireWear: 73.4,
       pitCount: 1,
@@ -299,6 +318,7 @@ export const mockRaceData: RaceSession = {
       driverNumber: 27,
       name: "Nico Hulkenberg",
       shortName: "HUL",
+      team: "Haas",
       tire: "MEDIUM",
       tireWear: 66.7,
       pitCount: 1,
@@ -320,6 +340,7 @@ export const mockRaceData: RaceSession = {
       driverNumber: 20,
       name: "Kevin Magnussen",
       shortName: "MAG",
+      team: "Haas",
       tire: "HARD",
       tireWear: 68.9,
       pitCount: 1,
@@ -341,6 +362,7 @@ export const mockRaceData: RaceSession = {
       driverNumber: 22,
       name: "Yuki Tsunoda",
       shortName: "TSU",
+      team: "RB",
       tire: "SOFT",
       tireWear: 85.3,
       pitCount: 2,
@@ -362,6 +384,7 @@ export const mockRaceData: RaceSession = {
       driverNumber: 3,
       name: "Daniel Ricciardo",
       shortName: "RIC",
+      team: "RB",
       tire: "SOFT",
       tireWear: 88.7,
       pitCount: 2,
@@ -383,6 +406,7 @@ export const mockRaceData: RaceSession = {
       driverNumber: 23,
       name: "Alex Albon",
       shortName: "ALB",
+      team: "Williams",
       tire: "SOFT",
       tireWear: 76.1,
       pitCount: 1,
@@ -400,10 +424,11 @@ export const mockRaceData: RaceSession = {
       teamColor: "#2B4562"
     },
     {
-      position: 18,
+      position: null,
       driverNumber: 14,
-      name: "Lance Stroll",
-      shortName: "STR",
+      name: "Lance Strll",
+      shortName: "STO",
+      team: "Aston Martin",
       tire: "MEDIUM",
       tireWear: 72.8,
       pitCount: 2,
@@ -416,8 +441,8 @@ export const mockRaceData: RaceSession = {
       gapToLeaderMs: 58123,
       inPit: false,
       isOut: false,
-      qualyTime: "1:26.345",
-      bestLapTime: "1:26.456",
+      qualyTime: null,
+      bestLapTime: null,
       teamColor: "#2B4562"
     },
     {
@@ -425,6 +450,7 @@ export const mockRaceData: RaceSession = {
       driverNumber: 18,
       name: "Lance Stroll",
       shortName: "STR",
+      team: "Aston Martin",
       tire: "MEDIUM",
       tireWear: 78.2,
       pitCount: 2,
@@ -435,7 +461,7 @@ export const mockRaceData: RaceSession = {
       carDamage: 32,
       gapToLeader: "+61.678",
       gapToLeaderMs: 61678,
-      inPit: false,
+      inPit: true,
       isOut: false,
       qualyTime: "1:26.345",
       bestLapTime: "1:26.456",
@@ -446,6 +472,7 @@ export const mockRaceData: RaceSession = {
       driverNumber: 2,
       name: "Logan Sargeant",
       shortName: "SAR",
+      team: "Williams",
       tire: "HARD",
       tireWear: 74.5,
       pitCount: 1,
@@ -457,7 +484,7 @@ export const mockRaceData: RaceSession = {
       gapToLeader: "+67.890",
       gapToLeaderMs: 67890,
       inPit: false,
-      isOut: false,
+      isOut: true,
       qualyTime: "1:27.123",
       bestLapTime: "1:27.456",
       teamColor: "#2B4562"
