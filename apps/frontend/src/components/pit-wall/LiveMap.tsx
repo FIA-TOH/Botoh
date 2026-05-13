@@ -1,6 +1,6 @@
 import React from 'react';
 import { PlayerData } from '@/hooks/usePlayerList';
-import { useMapBackground } from '@/hooks/useCurrentMap';
+import { useMapBackground, usePitWallGameState } from '@/hooks/useCurrentMap';
 
 interface Props {
   players: PlayerData[];
@@ -11,6 +11,7 @@ export function LiveMap({
 }: Props) {
 
   const { backgroundUrl, fallbackType } = useMapBackground();
+  const gameState = usePitWallGameState();
 
   const containerRef = React.useRef<HTMLDivElement>(null);
 
@@ -19,6 +20,13 @@ export function LiveMap({
     height: 0,
     scale: 1,
   });
+  const [smoothedPositions, setSmoothedPositions] = React.useState<
+    Record<number, { x: number; y: number }>
+  >({});
+  const targetsRef = React.useRef<Record<number, { x: number; y: number }>>({});
+  const smoothedRef = React.useRef<Record<number, { x: number; y: number }>>({});
+  const rafRef = React.useRef<number | null>(null);
+  const lastFrameRef = React.useRef<number | null>(null);
 
   // =========================================
   // SVG METADATA
@@ -150,6 +158,86 @@ export function LiveMap({
     };
   };
 
+  React.useEffect(() => {
+    const activeIds = new Set<number>();
+
+    players.forEach((player) => {
+      activeIds.add(player.id);
+      const target = convertHaxballToSvg(player.position.x, player.position.y);
+      targetsRef.current[player.id] = target;
+
+      if (!smoothedRef.current[player.id]) {
+        smoothedRef.current[player.id] = target;
+      }
+    });
+
+    Object.keys(smoothedRef.current).forEach((idStr) => {
+      const id = Number(idStr);
+      if (!activeIds.has(id)) {
+        delete smoothedRef.current[id];
+        delete targetsRef.current[id];
+      }
+    });
+  }, [players, backgroundUrl, fallbackType]);
+
+  React.useEffect(() => {
+    const SNAP_DISTANCE_PERCENT = 10;
+    const TAU_MS = 140;
+
+    const animate = (now: number) => {
+      const last = lastFrameRef.current ?? now;
+      const dt = Math.max(0, now - last);
+      lastFrameRef.current = now;
+
+      const alpha = 1 - Math.exp(-dt / TAU_MS);
+      let changed = false;
+      const next: Record<number, { x: number; y: number }> = { ...smoothedRef.current };
+
+      Object.keys(targetsRef.current).forEach((idStr) => {
+        const id = Number(idStr);
+        const target = targetsRef.current[id];
+        const current = next[id];
+
+        if (!target || !current) return;
+
+        const dx = target.x - current.x;
+        const dy = target.y - current.y;
+        const distance = Math.hypot(dx, dy);
+
+        if (distance > SNAP_DISTANCE_PERCENT) {
+          next[id] = { x: target.x, y: target.y };
+          changed = true;
+          return;
+        }
+
+        const nx = current.x + dx * alpha;
+        const ny = current.y + dy * alpha;
+
+        if (Math.abs(nx - current.x) > 0.01 || Math.abs(ny - current.y) > 0.01) {
+          next[id] = { x: nx, y: ny };
+          changed = true;
+        }
+      });
+
+      if (changed) {
+        smoothedRef.current = next;
+        setSmoothedPositions(next);
+      }
+
+      rafRef.current = window.requestAnimationFrame(animate);
+    };
+
+    rafRef.current = window.requestAnimationFrame(animate);
+
+    return () => {
+      if (rafRef.current !== null) {
+        window.cancelAnimationFrame(rafRef.current);
+      }
+      rafRef.current = null;
+      lastFrameRef.current = null;
+    };
+  }, []);
+
   // =========================================
   // RENDER
   // =========================================
@@ -161,9 +249,36 @@ export function LiveMap({
         gridArea: 'map',
         backgroundColor: '#555555',
         outline: '8px solid #FF232B',
+        position: 'relative',
       }}
-      className="p-4"
+      className=""
     >
+      {gameState !== 'running' && (
+        <div
+          className="
+            absolute
+            inset-0
+            flex
+            items-center
+            justify-center
+            text-lg
+            font-semibold
+            text-white
+            pointer-events-none
+          "
+          style={{
+            backgroundColor:
+              gameState === 'paused'
+                ? 'rgba(0, 0, 0, 0.6)'
+                : 'rgba(17, 24, 39, 0.78)',
+            zIndex: 30,
+          }}
+        >
+          {gameState === 'paused'
+            ? 'Game Paused'
+            : 'Nenhuma ação na pista no momento'}
+        </div>
+      )}
 
       <div
         ref={containerRef}
@@ -175,7 +290,7 @@ export function LiveMap({
           items-center
           justify-center
         "
-       style={{
+        style={{
           width: '100%',
           height: '400px',
           position: 'relative',
@@ -185,7 +300,6 @@ export function LiveMap({
             : '#374151',
         }}
       >
-
         {/* MAP */}
 
         <div
@@ -208,30 +322,24 @@ export function LiveMap({
 
           {/* GRID */}
 
-          {fallbackType === 'grid' && (
+          {fallbackType === 'missing' && (
             <div
               className="
                 absolute
                 inset-0
-                pointer-events-none
+                flex
+                items-center
+                justify-center
+                text-sm
+                font-semibold
+                text-white
               "
               style={{
-                backgroundImage:
-                  `
-                  linear-gradient(
-                    to right,
-                    rgba(255,255,255,0.1) 1px,
-                    transparent 1px
-                  ),
-                  linear-gradient(
-                    to bottom,
-                    rgba(255,255,255,0.1) 1px,
-                    transparent 1px
-                  )
-                  `,
-                backgroundSize: '20px 20px',
+                backgroundColor: '#1f2937',
               }}
-            />
+            >
+              Sem mapa para esse circuito
+            </div>
           )}
 
           {/* CENTER VERTICAL */}
@@ -344,13 +452,12 @@ export function LiveMap({
 
           {players.map((player) => {
 
-            const {
-              x: mapX,
-              y: mapY,
-            } = convertHaxballToSvg(
-              player.position.x,
-              player.position.y,
-            );
+            const smoothPosition = smoothedPositions[player.id]
+              || targetsRef.current[player.id]
+              || convertHaxballToSvg(player.position.x, player.position.y);
+
+            const mapX = smoothPosition.x;
+            const mapY = smoothPosition.y;
 
             return (
 
@@ -372,8 +479,7 @@ export function LiveMap({
                 style={{
                   left: `${mapX}%`,
                   top: `${mapY}%`,
-                  transform:
-                    'translate(-50%, -50%)',
+                  transform: 'translate(-50%, -50%)',
 
                   boxShadow: player.admin
                     ? '0 0 5px rgba(147, 51, 234, 0.8)'

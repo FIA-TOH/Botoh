@@ -117,13 +117,14 @@ class RoomService {
    */
   async refreshRoomState(): Promise<void> {
     try {
-      // Tentar obter do bot via WebSocket ou API interna
-      const currentMap = this.getBotCurrentMap();
+      // Socket events from the bot are the freshest source. Fallbacks are only
+      // used before the bot has pushed a map into this service.
+      const currentMap = this.roomState?.currentMap || this.currentMap || this.getBotCurrentMap();
       
       this.updateRoomState({
         currentMap,
         playerCount: this.roomState?.playerCount || 0,
-        gameState: this.roomState?.gameState || 'waiting',
+        gameState: this.roomState?.gameState ?? null,
         lastUpdate: new Date()
       });
     } catch (error) {
@@ -143,13 +144,13 @@ class RoomService {
    */
   getRoomStats(): {
     playerCount: number;
-    gameState: string;
+    gameState: string | null;
     currentMap: string | null;
     uptime: number | null;
   } {
     return {
       playerCount: this.roomState?.playerCount || 0,
-      gameState: this.roomState?.gameState || 'unknown',
+      gameState: this.roomState?.gameState ?? null,
       currentMap: this.getCurrentMap(),
       uptime: this.roomState?.startTime 
         ? Date.now() - this.roomState.startTime.getTime()

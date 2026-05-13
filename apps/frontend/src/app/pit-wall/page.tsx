@@ -12,6 +12,7 @@ import { LogsPanel } from '../../components/pit-wall/LogsPanel';
 import { LiveMap } from '../../components/pit-wall/LiveMap';
 import { PlayersPanel } from '../../components/pit-wall/PlayersPanel';
 import { TeamInfoPanel } from '../../components/pit-wall/TeamInfoPanel';
+import { RaceInsightsGrid } from '../../components/pit-wall/RaceInsightsGrid';
 import { mockLogs, mockMessages } from '@/mocks/pitwall';
 
 export default function PitWallPage() {
@@ -68,6 +69,8 @@ export default function PitWallPage() {
             players={playerList?.players || []}
           />
         </div>
+
+        <RaceInsightsGrid />
       </div>
     </main>
   );

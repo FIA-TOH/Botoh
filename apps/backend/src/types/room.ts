@@ -5,7 +5,7 @@
 export interface RoomState {
   currentMap: string | null;
   playerCount: number;
-  gameState: 'waiting' | 'playing' | 'paused' | 'ended';
+  gameState: 'running' | 'paused' | null;
   startTime: Date | null;
   lastUpdate: Date;
   roomName?: string;
