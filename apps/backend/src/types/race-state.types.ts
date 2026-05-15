@@ -1,5 +1,15 @@
 // 🏁 Race State - Modelo de Memória (Runtime)
 
+export enum Tires {
+  SOFT = "SOFT",
+  MEDIUM = "MEDIUM",
+  HARD = "HARD",
+  INTER = "INTER",
+  WET = "WET",
+  FLAT = "FLAT",
+  TRAIN = "TRAIN",
+}
+
 // 🆔 Identificação da Sessão
 export interface RaceState {
   sessionId: string;
@@ -69,13 +79,13 @@ export interface PlayerState {
   // 🏎️ Carro e Componentes
   car: {
     model: string;
-    tire: TireType;
+    tires: Tires;
     tireWear: {
       front: number;    // 0-100%
       rear: number;     // 0-100%
     };
     fuel: number;       // 0-100%
-    ers: number;        // 0-100%
+    kers: number;        // 0-100%
     drs: boolean;
     drsAvailable: boolean;
   };
@@ -102,11 +112,9 @@ export interface PlayerState {
   inPitLane: boolean;
 }
 
-// 🏎️ Tipos e Enums
-export type TireType = 'soft' | 'medium' | 'hard' | 'wet' | 'intermediate';
 
 export interface TireData {
-  type: TireType;
+  type: Tires;
   grip: number;        // 0-100
   wearRate: number;    // 0-100
   optimalTemp: number; // °C
@@ -152,7 +160,7 @@ export interface PitStopState {
   entryTime: number;   // timestamp
   exitTime?: number;   // timestamp
   duration?: number;   // em segundos
-  tireChange: TireType;
+  tireChange: Tires;
   fuelAdded: number;
   repairs: number;
 }
@@ -214,7 +222,7 @@ export interface WeatherUpdate {
 export interface PitStopUpdate {
   playerId: number;
   action: 'entering' | 'exiting' | 'completed';
-  tireChange?: TireType;
+  tireChange?: Tires;
   fuelAdded?: number;
 }
 

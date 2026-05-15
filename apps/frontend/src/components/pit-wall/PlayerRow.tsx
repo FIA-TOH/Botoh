@@ -1,10 +1,12 @@
+import { Driver } from '@/mocks/raceData';
 import {
   getTireAbbr,
   getTireColor,
 } from '../../app/utils/race';
+import { Teams } from '../../../../../Botoh/src/features/changeGameState/teams';
 
 interface Props {
-  driver: any;
+  driver: Driver;
   gapText: string;
 }
 
@@ -12,7 +14,7 @@ export function PlayerRow({
   driver,
   gapText,
 }: Props) {
-  const textOpacity = driver.isOut
+  const textOpacity = !driver.isInTheRoom || driver.team !== Teams.RUNNERS 
     ? 0.5
     : 1;
 
@@ -37,7 +39,8 @@ export function PlayerRow({
           style={{
             width: '5px',
             alignSelf: 'stretch',
-            backgroundColor: driver.teamColor,
+            //Todo botar logica de time e cor
+            backgroundColor: '#ffffff',
           }}
         />
 
@@ -65,13 +68,13 @@ export function PlayerRow({
 
           {/* TIRE */}
           <span className="text-center">
-            {!driver.isOut && (
+            {!(!driver.isInTheRoom || driver.team !== Teams.RUNNERS) && (
               <span
                 style={{
-                  color: getTireColor(driver.tire),
+                  color: getTireColor(driver.tires),
                 }}
               >
-                {getTireAbbr(driver.tire)}
+                {getTireAbbr(driver.tires)}
               </span>
             )}
           </span>

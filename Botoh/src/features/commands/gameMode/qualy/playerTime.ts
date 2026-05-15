@@ -1,9 +1,17 @@
+import { updatePlayerListPosition } from "../../../changePlayerState/playerList";
+
 let arrayPlayers: {
   name: string;
   time: number;
   id: number;
   team: string | null;
 }[] = [];
+
+export function syncQualiPositions() {
+  getPlayersOrderedByQualiTime().forEach((player, index) => {
+    updatePlayerListPosition(player.id, index + 1);
+  });
+}
 
 export function getPlayersOrderedByQualiTime() {
   return arrayPlayers.slice().sort((a, b) => a.time - b.time);
@@ -21,11 +29,18 @@ export function updatePlayerTime(
 
   if (existingPlayer) {
     existingPlayer.time = time;
+    existingPlayer.id = id;
+    existingPlayer.team = team;
   } else {
     arrayPlayers.push({ name, time, id, team });
   }
+
+  syncQualiPositions();
 }
 
 export function clearPlayers() {
+  arrayPlayers.forEach((player) => {
+    updatePlayerListPosition(player.id, null);
+  });
   arrayPlayers = [];
 }

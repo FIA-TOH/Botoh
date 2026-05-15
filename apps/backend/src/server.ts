@@ -11,9 +11,11 @@ import healthRoutes from './routes/health';
 import authRoutes from './routes/auth';
 import garageRoutes from './routes/garage';
 import roomRoutes from './routes/room';
+import adminRoutes from './routes/admin';
 import { securityHeaders, rateLimiter, validateRequest, errorHandler, requestLogger } from './middleware/security';
 import { initializeDatabase, healthCheck, closeDatabase } from './config/database';
 import seedService from './config/seed';
+import migrationService from './config/migrations';
 
 const app = express();
 const server = createServer(app);
@@ -78,6 +80,7 @@ console.log('✅ Auth routes montadas em /api/auth');
 app.use('/api/garage', garageRoutes);
 console.log('✅ Garage routes montadas em /api/garage');
 app.use('/api/room', roomRoutes);
+app.use('/api/admin', adminRoutes);
 console.log('✅ Room routes montadas em /api/room');
 console.log('🔍 Todas as rotas montadas com /api prefix');
 
@@ -117,6 +120,8 @@ async function startServer() {
     
     // Run database seeds (create admin user, basic upgrades, etc.)
     if (dbHealth.connected) {
+      console.log(' Running database migrations...');
+      await migrationService.ensureAdminSchema();
       console.log(' Running database seeds...');
       await seedService.runSeeds();
     } else {

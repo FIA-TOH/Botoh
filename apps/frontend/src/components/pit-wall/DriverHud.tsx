@@ -1,5 +1,5 @@
 // DriverHud.tsx
-
+import { Teams } from '../../../../../Botoh/src/features/changeGameState/teams';
 import { FtohButton } from '@/components/FtohButton';
 
 import {
@@ -9,9 +9,10 @@ import {
 
 import { DriverCircle } from './DriverCircle';
 import { TelemetryBar } from './TelemetryBar';
+import { Driver } from '@/mocks/raceData';
 
 interface Props {
-  driver: any;
+  driver?: Driver;
   align: 'left' | 'right';
 }
 
@@ -19,13 +20,16 @@ export function DriverHud({
   driver,
   align,
 }: Props) {
-  const isEmptySlot = driver.isEmptySlot;
-  const isOut = driver.isOut;
-  const showTelemetry = !isEmptySlot && !isOut;
-  const pitDisabled = isEmptySlot || isOut || driver.inPit;
+  const isOut = !driver || !driver.isInTheRoom || driver.team !== Teams.RUNNERS;
+  const showTelemetry = !!driver && !isOut;
+  const pitDisabled = !driver || isOut || driver.inPitLane;
   const driverVisualOpacity = isOut
     ? 0.5
     : 1;
+  const driverName = driver?.name ?? 'Sem piloto';
+  const driverNumber = driver?.driverNumber ?? '??';
+  const driverPosition = driver?.position ?? '-';
+  const gapToLeader = driver?.gapToLeader ?? '';
 
   const info = (
     <div
@@ -49,19 +53,19 @@ export function DriverHud({
         `}
       >
         <span>
-          {driver.name}
+          {driverName}
         </span>
 
-        {!isEmptySlot && (
+        {driver && (
           <span
             style={{
               color: getTireColor(
-                driver.tire
+                driver.tires
               ),
             }}
           >
             {getTireAbbr(
-              driver.tire
+              driver.tires
             )}
           </span>
         )}
@@ -80,20 +84,20 @@ export function DriverHud({
       >
        {align === 'left' ? (
           <>
-            <strong>{driver.position ?? '-'}º</strong>{' '}
-            {driver.gapToLeader}
+            <strong>{driverPosition}º</strong>{' '}
+            {gapToLeader}
           </>
         ) : (
           <>
-            {driver.gapToLeader}{' '}
-            <strong>{driver.position ?? '-'}º</strong>
+            {gapToLeader}{' '}
+            <strong>{driverPosition}º</strong>
           </>
         )}
       </div>
     </div>
   );
 
-  const telemetryBars = [
+  const telemetryBars = driver ? [
 
     // CAR
     <TelemetryBar
@@ -106,8 +110,8 @@ export function DriverHud({
 
     // ERS
     <TelemetryBar
-      key="ers"
-      value={driver.ers}
+      key="kers"
+      value={driver.kers}
       color="#3BA7FF"
       icon="🔋"
       align={align}
@@ -117,22 +121,22 @@ export function DriverHud({
     <TelemetryBar
       key="tyre"
       value={
-        100 - driver.tireWear
+        100 - driver.wear
       }
       icon="🛞"
       warning={
-        driver.tireWarning
+        driver.tireBlowWarning
       }
       burst={
-        driver.tireBurst
+        driver.isTyreBlowed
       }
       managingTyres={
-        driver.managingTires
+        driver.isManagingTires
       }
       dynamicTyre={true}
       align={align}
     />,
-  ];
+  ] : [];
 
   const telemetry = (
     <div className="flex items-end gap-2">
@@ -150,9 +154,10 @@ export function DriverHud({
     >
       <DriverCircle
         number={
-          driver.driverNumber
+          driverNumber
         }
-        color={driver.teamColor}
+        //to-do botar cor de time com logica de time
+        color={'#ffffff'}
       />
     </div>
   );

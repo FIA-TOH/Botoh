@@ -27,6 +27,24 @@ const createUserValidation = [
   body('password')
     .isLength({ min: 6 })
     .withMessage('Password must be at least 6 characters long'),
+  body('shortUsername')
+    .isLength({ min: 1, max: 3 })
+    .withMessage('Short username must be between 1 and 3 characters')
+    .matches(/^[A-Z0-9]+$/)
+    .withMessage('Short username can only contain uppercase letters and numbers'),
+  body('roles')
+    .custom((roles) => {
+      if (!roles || typeof roles !== 'object') return false;
+      return Boolean(roles.teamPrincipal || roles.teamAssistant || roles.driver);
+    })
+    .withMessage('At least one user function must be selected'),
+  body('teamId')
+    .isString()
+    .notEmpty()
+    .withMessage('Team is required'),
+  body('driverNumber')
+    .isInt({ min: 0, max: 999 })
+    .withMessage('Driver number must be between 0 and 999'),
 ];
 
 // POST /auth/login - User login
@@ -133,7 +151,21 @@ router.post('/create-user', authMiddleware, createUserValidation, async (req: Au
     }
 
     // Only admin can create users (simplified check - in production you'd check user.role)
-    const { username, password } = req.body;
+    const {
+      username,
+      password,
+      shortUsername,
+      roles,
+      teamId,
+      driverNumber,
+    } = req.body;
+
+    // TODO: persist shortUsername, roles, teamId and driverNumber once user/team
+    // metadata exists in the backend database model.
+    void shortUsername;
+    void roles;
+    void teamId;
+    void driverNumber;
 
     // Create user using authService
     const result = await authService.createUser({

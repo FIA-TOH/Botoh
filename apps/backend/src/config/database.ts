@@ -1,4 +1,4 @@
-import { Pool, PoolConfig, QueryResult } from 'pg';
+import { Pool, PoolConfig, QueryResult, QueryResultRow } from 'pg';
 import config from './environment';
 
 // Clean Supabase PostgreSQL connection configuration
@@ -75,7 +75,7 @@ export const testConnection = async (): Promise<boolean> => {
 };
 
 // Main query function with proper error handling
-export const query = async <T = any>(
+export const query = async <T extends QueryResultRow = any>(
   sql: string, 
   params?: any[]
 ): Promise<QueryResult<T>> => {
@@ -118,7 +118,7 @@ export const transaction = async <T = any>(
 };
 
 // Query helpers
-export const queryOne = async <T = any>(
+export const queryOne = async <T extends QueryResultRow = any>(
   sql: string, 
   params?: any[]
 ): Promise<T | null> => {
@@ -126,7 +126,7 @@ export const queryOne = async <T = any>(
   return result.rows[0] || null;
 };
 
-export const queryMany = async <T = any>(
+export const queryMany = async <T extends QueryResultRow = any>(
   sql: string, 
   params?: any[]
 ): Promise<T[]> => {
@@ -135,7 +135,7 @@ export const queryMany = async <T = any>(
 };
 
 // CRUD helpers
-export const insert = async <T = any>(
+export const insert = async <T extends QueryResultRow = any>(
   table: string, 
   data: Record<string, any>
 ): Promise<T> => {
@@ -148,7 +148,7 @@ export const insert = async <T = any>(
   return result.rows[0];
 };
 
-export const update = async <T = any>(
+export const update = async <T extends QueryResultRow = any>(
   table: string, 
   id: string | number, 
   data: Record<string, any>

@@ -4,6 +4,7 @@ import {
 } from "../../../changeGameState/changeGameModes";
 import { COLORS, sendErrorMessage, sendSmallChatMessage } from "../../../chat/chat";
 import { MESSAGES } from "../../../chat/messages";
+import { updatePlayerListPosition } from "../../../changePlayerState/playerList";
 import { getPlayersOrderedByQualiTime } from "./playerTime";
 
 export function getNumberPositionQualy(room: RoomObject, playerId: number) {
@@ -15,6 +16,7 @@ export function getNumberPositionQualy(room: RoomObject, playerId: number) {
   }
 
   const position = playerIndex + 1;
+  updatePlayerListPosition(playerId, position);
 
   return position;
 }

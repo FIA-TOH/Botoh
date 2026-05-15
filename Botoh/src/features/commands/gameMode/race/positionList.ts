@@ -1,7 +1,12 @@
-import { PitsInfo, playerList } from "../../../changePlayerState/playerList";
+import {
+  PitsInfo,
+  playerList,
+  updatePlayerListRaceGaps,
+  updatePlayerListPosition,
+} from "../../../changePlayerState/playerList";
 import { checkSandbagLeader } from "../battleRoyale.ts/handleSandbag";
 
-export const positionList: {
+type RacePosition = {
   id: number;
   name: string;
   pitsInfo: PitsInfo;
@@ -12,7 +17,38 @@ export const positionList: {
   active: boolean;
   currentSector: number;
   team: string | null;
-}[] = [];
+};
+
+export const positionList: RacePosition[] = [];
+
+function formatGap(reference: RacePosition, player: RacePosition) {
+  if (reference.id === player.id) return "0.000";
+
+  const lapGap = reference.lap - player.lap;
+  if (lapGap > 0) {
+    return `+${lapGap} Lap${lapGap === 1 ? "" : "s"}`;
+  }
+
+  const timeGap = Math.abs(player.totalTime - reference.totalTime);
+  if (!Number.isFinite(timeGap)) return null;
+
+  return `+${timeGap.toFixed(3)}`;
+}
+
+export function syncRacePositions() {
+  const leader = positionList[0];
+
+  positionList.forEach((entry, index) => {
+    updatePlayerListPosition(entry.id, index + 1);
+
+    const playerAhead = positionList[index - 1];
+    updatePlayerListRaceGaps(
+      entry.id,
+      leader ? formatGap(leader, entry) : null,
+      playerAhead ? formatGap(playerAhead, entry) : null,
+    );
+  });
+}
 
 export function updatePositionList(
   players: { p: PlayerObject; disc: DiscPropertiesObject }[],
@@ -63,6 +99,8 @@ export function updatePositionList(
     }
     return b.lap - a.lap;
   });
+
+  syncRacePositions();
 
   checkSandbagLeader(room);
 }

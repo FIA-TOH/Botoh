@@ -83,7 +83,7 @@ export interface PlayerInfo {
   blowAtWear: number;
   warningAtWear?: number | null;
   warningIsFalse?: boolean;
-  warningShown?: boolean;
+  tireBlowWarning?: boolean;
 
   speedEnabled: boolean;
   drs: boolean;
@@ -137,6 +137,16 @@ export interface PlayerInfo {
   blowoutTickCounter: number;
   
   pubAvatar: string;
+
+  driverNumber: number;
+
+  carDamage: number;
+
+  position: number | null;
+
+  gapToLeader: string | null;
+  gapToNext: string | null;
+  shortName: string;
 }
 
 type PlayerList = {
@@ -157,3 +167,30 @@ export const playerList = new Proxy(actualPlayerList, {
     return true;
   },
 });
+
+export function updatePlayerListPosition(
+  playerId: number,
+  position: number | null,
+) {
+  const player = playerList[playerId];
+  if (!player || player.position === position) return;
+
+  player.position = position;
+}
+
+export function updatePlayerListRaceGaps(
+  playerId: number,
+  gapToLeader: string | null,
+  gapToNext: string | null,
+) {
+  const player = playerList[playerId];
+  if (!player) return;
+
+  if (player.gapToLeader !== gapToLeader) {
+    player.gapToLeader = gapToLeader;
+  }
+
+  if (player.gapToNext !== gapToNext) {
+    player.gapToNext = gapToNext;
+  }
+}

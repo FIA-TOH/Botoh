@@ -149,7 +149,7 @@ export function ChatPanel({
                 );
 
               const teamColor =
-                driver?.teamColor || '#FFFFFF';
+                '#FFFFFF';
 
               return (
                 <div

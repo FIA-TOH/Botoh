@@ -10,10 +10,11 @@ import {
   lapTimeToMs,
 } from '../../app/utils/race';
 
-import { mockRaceData } from '@/mocks/raceData';
+import { Driver, mockRaceData } from '@/mocks/raceData';
+import { Teams } from '../../../../../Botoh/src/features/changeGameState/teams';
 
 interface Props {
-  drivers?: any[];
+  drivers?: Driver[];
 
   loading?: boolean;
 
@@ -94,13 +95,13 @@ export function PlayersPanel({
     setHoveredDriverPosition,
   ] = useState<number | null>(null);
 
-  const getGapText = (driver: any) => {
+  const getGapText = (driver: Driver) => {
 
-    if (driver.isOut) {
+    if (!driver.isInTheRoom || driver.team !== Teams.RUNNERS) {
       return 'OUT';
     }
 
-    if (driver.inPit) {
+    if (driver.inPitLane) {
       return 'PIT';
     }
 
@@ -116,8 +117,7 @@ export function PlayersPanel({
       mockRaceData.sessionType === 'QUALY'
     ) {
       const driverLapTime =
-        driver.bestLapTime
-        ?? driver.qualyTime;
+        driver.bestTime
 
       if (driver.position === 1) {
         return driverLapTime ?? 'No Time';
@@ -132,8 +132,7 @@ export function PlayersPanel({
       );
 
       const leaderLapTime =
-        leader?.bestLapTime
-        ?? leader?.qualyTime;
+        leader?.bestTime
 
       if (
         leaderLapTime
@@ -170,7 +169,7 @@ export function PlayersPanel({
     }
 
     const tirePercent = Math.round(
-      100 - driver.tireWear
+      100 - driver.wear
     );
 
     const pitText =
@@ -179,7 +178,7 @@ export function PlayersPanel({
         : `${driver.pitCount}Pit`;
 
     const emoji =
-      driver.managingTires
+      driver.isManagingTires
         ? '🧊'
         : '🔥';
 
@@ -207,11 +206,13 @@ export function PlayersPanel({
   );
 
   const sortedDrivers = [...drivers].sort((a, b) => {
-    const aHasPosition = typeof a.position === 'number';
-    const bHasPosition = typeof b.position === 'number';
+    const aPosition = a.position;
+    const bPosition = b.position;
+    const aHasPosition = typeof aPosition === 'number';
+    const bHasPosition = typeof bPosition === 'number';
 
     if (aHasPosition && bHasPosition) {
-      return a.position - b.position;
+      return aPosition - bPosition;
     }
 
     if (aHasPosition) return -1;

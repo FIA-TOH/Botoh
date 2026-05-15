@@ -75,13 +75,13 @@ interface PlayerState {
   // 🏎️ Carro e Componentes
   car: {
     model: string;
-    tire: TireType;
+    tires: TireType;
     tireWear: {
       front: number;    // 0-100%
       rear: number;     // 0-100%
     };
     fuel: number;       // 0-100%
-    ers: number;        // 0-100%
+    kers: number;        // 0-100%
     drs: boolean;
     drsAvailable: boolean;
   };

@@ -1,350 +1,593 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
-import config from '@/config/environment';
 
-interface CreateUserFormData {
+type UserRoleKey = 'teamPrincipal' | 'teamAssistant' | 'driver';
+
+interface AdminUser {
+  id: string;
+  username: string;
+  role: string;
+  shortUsername: string | null;
+  teamPrincipal: boolean;
+  teamAssistant: boolean;
+  driver: boolean;
+  teamId: string | null;
+  teamName: string | null;
+  driverNumber: number | null;
+}
+
+interface Scuderia {
+  id: string;
+  name: string;
+  tag: string;
+  color: string;
+}
+
+interface UserFormData {
   username: string;
   password: string;
+  shortUsername: string;
+  roles: Record<UserRoleKey, boolean>;
+  teamId: string;
+  driverNumber: string;
 }
 
-interface SnackbarProps {
-  message: string;
-  type: 'success' | 'error';
-  isOpen: boolean;
-  onClose: () => void;
+interface ScuderiaFormData {
+  name: string;
+  tag: string;
+  color: string;
 }
 
-function Snackbar({ message, type, isOpen, onClose }: SnackbarProps) {
-  React.useEffect(() => {
-    if (isOpen) {
-      const timer = setTimeout(onClose, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [isOpen, onClose]);
-
-  if (!isOpen) return null;
-
-  return React.createElement('div', { 
-    className: `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 ${
-      type === 'success' 
-        ? 'bg-green-600 text-white' 
-        : 'bg-red-600 text-white'
-    }` 
+const EMPTY_USER_FORM: UserFormData = {
+  username: '',
+  password: '',
+  shortUsername: '',
+  roles: {
+    teamPrincipal: false,
+    teamAssistant: false,
+    driver: false,
   },
-    React.createElement('div', { className: "flex items-center" },
-      React.createElement('div', { 
-        className: `w-6 h-6 rounded-full mr-3 flex items-center justify-center ${
-          type === 'success' ? 'bg-green-700' : 'bg-red-700'
-        }` 
-      },
-        type === 'success' ? (
-          React.createElement('svg', {
-            className: "w-4 h-4 text-white",
-            fill: "none",
-            stroke: "currentColor",
-            viewBox: "0 0 24 24"
-          },
-            React.createElement('path', {
-              strokeLinecap: "round",
-              strokeLinejoin: "round",
-              strokeWidth: "2",
-              d: "M5 13l4 4L19 7"
-            })
-          )
-        ) : (
-          React.createElement('svg', {
-            className: "w-4 h-4 text-white",
-            fill: "none",
-            stroke: "currentColor",
-            viewBox: "0 0 24 24"
-          },
-            React.createElement('path', {
-              strokeLinecap: "round",
-              strokeLinejoin: "round",
-              strokeWidth: "2",
-              d: "M6 18L18 6M6 6l12 12"
-            })
-          )
-        )
-      ),
-      React.createElement('span', { className: "font-medium" }, message)
-    )
-  );
-}
+  teamId: '',
+  driverNumber: '',
+};
 
-function ProtectedAdmin() {
-  const { user, logout } = useAuth();
-  const router = useRouter();
-  
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [createUserForm, setCreateUserForm] = useState<CreateUserFormData>({
-    username: '',
-    password: ''
-  });
-  const [isCreatingUser, setIsCreatingUser] = useState(false);
-  const [snackbar, setSnackbar] = useState<{
-    message: string;
-    type: 'success' | 'error';
-    isOpen: boolean;
-  }>({
-    message: '',
-    type: 'success',
-    isOpen: false
-  });
+const EMPTY_SCUDERIA_FORM: ScuderiaFormData = {
+  name: '',
+  tag: '',
+  color: '#FFFFFF',
+};
 
-  const handleCreateUser = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsCreatingUser(true);
+const USER_ROLE_OPTIONS: { key: UserRoleKey; label: string }[] = [
+  { key: 'teamPrincipal', label: 'Team Principal' },
+  { key: 'teamAssistant', label: 'Team Assistant' },
+  { key: 'driver', label: 'Driver' },
+];
 
-    try {
-      const token = localStorage.getItem('auth_token');
-      const response = await fetch('/api/auth/create-user', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(createUserForm),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setSnackbar({
-          message: `User "${createUserForm.username}" created successfully!`,
-          type: 'success',
-          isOpen: true
-        });
-        
-        // Reset form and close modal
-        setCreateUserForm({ username: '', password: '' });
-        setIsModalOpen(false);
-      } else {
-        setSnackbar({
-          message: data.message || 'Failed to create user',
-          type: 'error',
-          isOpen: true
-        });
-      }
-    } catch (error) {
-      console.error('Create user error:', error);
-      setSnackbar({
-        message: 'Connection error. Please try again.',
-        type: 'error',
-        isOpen: true
-      });
-    } finally {
-      setIsCreatingUser(false);
-    }
+function getAuthHeaders() {
+  const token = localStorage.getItem('auth_token');
+  return {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
   };
-
-  const closeSnackbar = () => {
-    setSnackbar((prev: any) => ({ ...prev, isOpen: false }));
-  };
-
-  const handleCreateUserFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setCreateUserForm((prev: any) => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleBackToHome = () => {
-    router.push('/');
-  };
-
-  const handleLogout = () => {
-    logout();
-  };
-
-  return React.createElement('main', { className: "min-h-screen bg-gray-900 text-white p-8" },
-    React.createElement('div', { className: "max-w-4xl mx-auto" },
-      // Header with navigation
-      React.createElement('div', { className: "flex justify-between items-center mb-8" },
-        React.createElement('div', { className: "flex items-center gap-4" },
-          React.createElement('button', {
-            onClick: handleBackToHome,
-            className: "px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg transition-colors flex items-center gap-2"
-          },
-            React.createElement('svg', {
-              className: "w-5 h-5",
-              fill: "none",
-              stroke: "currentColor",
-              viewBox: "0 0 24 24"
-            },
-              React.createElement('path', {
-                strokeLinecap: "round",
-                strokeLinejoin: "round",
-                strokeWidth: "2",
-                d: "M10 19l-7-7m0 0l7-7m-7 7h18"
-              })
-            ),
-            'Voltar'
-          ),
-          React.createElement('div', null,
-            React.createElement('h1', { className: "text-3xl font-bold" }, 'Administração'),
-            React.createElement('p', { className: "text-gray-300" }, 'Painel Administrativo')
-          )
-        ),
-        React.createElement('div', { className: "flex items-center gap-4" },
-          React.createElement('div', { className: "text-right" },
-            React.createElement('p', { className: "text-sm text-gray-400" }, 'Logged in as'),
-            React.createElement('p', { className: "font-semibold" }, user?.username)
-          ),
-          React.createElement('button', {
-            onClick: handleLogout,
-            className: "px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
-          }, 'Logout')
-        )
-      ),
-      
-      // Admin content
-      React.createElement('div', { className: "bg-gray-800 rounded-lg p-8" },
-        React.createElement('h2', { className: "text-2xl font-semibold mb-6" }, 'Gerenciamento de Usuários'),
-        
-        React.createElement('div', { className: "space-y-4" },
-          React.createElement('p', { className: "text-gray-300" }, 'Aqui você pode gerenciar os usuários do sistema.'),
-          
-          React.createElement('button', {
-            onClick: () => setIsModalOpen(true),
-            className: "px-6 py-3 bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors flex items-center gap-2"
-          },
-            React.createElement('svg', {
-              className: "w-5 h-5",
-              fill: "none",
-              stroke: "currentColor",
-              viewBox: "0 0 24 24"
-            },
-              React.createElement('path', {
-                strokeLinecap: "round",
-                strokeLinejoin: "round",
-                strokeWidth: "2",
-                d: "M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
-              })
-            ),
-            'Criar Novo Usuário'
-          )
-        )
-      ),
-
-      // Create User Modal
-      isModalOpen && React.createElement('div', { className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" },
-        React.createElement('div', { className: "bg-gray-800 rounded-lg p-6 w-full max-w-md" },
-          React.createElement('h2', { className: "text-2xl font-bold mb-4" }, 'Create New User'),
-          
-          React.createElement('form', { onSubmit: handleCreateUser },
-            React.createElement('div', { className: "mb-4" },
-              React.createElement('label', { className: "block text-sm font-medium mb-2" }, 'Username'),
-              React.createElement('input', {
-                type: "text",
-                name: "username",
-                value: createUserForm.username,
-                onChange: handleCreateUserFormChange,
-                required: true,
-                minLength: 3,
-                maxLength: 50,
-                pattern: "[a-zA-Z0-9_]+",
-                className: "w-full bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500",
-                placeholder: "Enter username (3-50 chars)",
-                disabled: isCreatingUser
-              })
-            ),
-
-            React.createElement('div', { className: "mb-6" },
-              React.createElement('label', { className: "block text-sm font-medium mb-2" }, 'Password'),
-              React.createElement('input', {
-                type: "password",
-                name: "password",
-                value: createUserForm.password,
-                onChange: handleCreateUserFormChange,
-                required: true,
-                minLength: 6,
-                className: "w-full bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500",
-                placeholder: "Enter password (min 6 chars)",
-                disabled: isCreatingUser
-              })
-            ),
-
-            React.createElement('div', { className: "flex gap-3" },
-              React.createElement('button', {
-                type: "submit",
-                disabled: isCreatingUser,
-                className: "flex-1 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-500 text-white py-2 rounded-lg transition-colors flex items-center justify-center"
-              },
-                isCreatingUser ? [
-                  React.createElement('div', { 
-                    key: 'spinner',
-                    className: "animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" 
-                  }),
-                  'Creating...'
-                ] : 'Create User'
-              ),
-              
-              React.createElement('button', {
-                type: "button",
-                onClick: () => setIsModalOpen(false),
-                disabled: isCreatingUser,
-                className: "flex-1 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-500 text-white py-2 rounded-lg transition-colors"
-              }, 'Cancel')
-            )
-          )
-        )
-      ),
-
-      // Snackbar
-      React.createElement(Snackbar, {
-        message: snackbar.message,
-        type: snackbar.type,
-        isOpen: snackbar.isOpen,
-        onClose: closeSnackbar
-      })
-    )
-  );
 }
 
 export default function AdminPage() {
-  const { isLoading, isAuthenticated, user } = useAuth();
+  const { isLoading, isAuthenticated, user, logout } = useAuth();
+  const router = useRouter();
+
+  const [users, setUsers] = useState<AdminUser[]>([]);
+  const [scuderias, setScuderias] = useState<Scuderia[]>([]);
+  const [loadingData, setLoadingData] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const [userModalOpen, setUserModalOpen] = useState(false);
+  const [editingUserId, setEditingUserId] = useState<string | null>(null);
+  const [userForm, setUserForm] = useState<UserFormData>(EMPTY_USER_FORM);
+  const [savingUser, setSavingUser] = useState(false);
+
+  const [scuderiaModalOpen, setScuderiaModalOpen] = useState(false);
+  const [editingScuderiaId, setEditingScuderiaId] = useState<string | null>(null);
+  const [scuderiaForm, setScuderiaForm] = useState<ScuderiaFormData>(EMPTY_SCUDERIA_FORM);
+  const [savingScuderia, setSavingScuderia] = useState(false);
+
+  const sortedScuderias = useMemo(
+    () => [...scuderias].sort((a, b) => a.name.localeCompare(b.name)),
+    [scuderias],
+  );
+
+  async function loadAdminData() {
+    setLoadingData(true);
+    setError(null);
+
+    try {
+      const [usersResponse, scuderiasResponse] = await Promise.all([
+        fetch('/api/admin/users', { headers: getAuthHeaders() }),
+        fetch('/api/admin/scuderias', { headers: getAuthHeaders() }),
+      ]);
+
+      const usersData = await usersResponse.json();
+      const scuderiasData = await scuderiasResponse.json();
+
+      if (!usersData.success) throw new Error(usersData.message || 'Failed to load users');
+      if (!scuderiasData.success) throw new Error(scuderiasData.message || 'Failed to load scuderias');
+
+      setUsers(usersData.users);
+      setScuderias(scuderiasData.scuderias);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load admin data');
+    } finally {
+      setLoadingData(false);
+    }
+  }
+
+  useEffect(() => {
+    if (isAuthenticated && user?.role === 'admin') {
+      loadAdminData();
+    }
+  }, [isAuthenticated, user?.role]);
+
+  function openCreateUser() {
+    setEditingUserId(null);
+    setUserForm(EMPTY_USER_FORM);
+    setUserModalOpen(true);
+  }
+
+  function openEditUser(adminUser: AdminUser) {
+    setEditingUserId(adminUser.id);
+    setUserForm({
+      username: adminUser.username,
+      password: '',
+      shortUsername: adminUser.shortUsername ?? '',
+      roles: {
+        teamPrincipal: adminUser.teamPrincipal,
+        teamAssistant: adminUser.teamAssistant,
+        driver: adminUser.driver,
+      },
+      teamId: adminUser.teamId ?? '',
+      driverNumber: adminUser.driverNumber?.toString() ?? '',
+    });
+    setUserModalOpen(true);
+  }
+
+  function openCreateScuderia() {
+    setEditingScuderiaId(null);
+    setScuderiaForm(EMPTY_SCUDERIA_FORM);
+    setScuderiaModalOpen(true);
+  }
+
+  function openEditScuderia(scuderia: Scuderia) {
+    setEditingScuderiaId(scuderia.id);
+    setScuderiaForm({ name: scuderia.name, tag: scuderia.tag, color: scuderia.color });
+    setScuderiaModalOpen(true);
+  }
+
+  async function saveUser(event: React.FormEvent) {
+    event.preventDefault();
+
+    if (!Object.values(userForm.roles).some(Boolean)) {
+      setError('Selecione pelo menos uma função.');
+      return;
+    }
+
+    setSavingUser(true);
+    setError(null);
+    setMessage(null);
+
+    try {
+      const response = await fetch(
+        editingUserId ? `/api/admin/users/${editingUserId}` : '/api/admin/users',
+        {
+          method: editingUserId ? 'PUT' : 'POST',
+          headers: getAuthHeaders(),
+          body: JSON.stringify({
+            ...userForm,
+            driverNumber: Number(userForm.driverNumber),
+          }),
+        },
+      );
+
+      const data = await response.json();
+      if (!data.success) throw new Error(data.message || 'Failed to save user');
+
+      setMessage(editingUserId ? 'Usuário atualizado.' : 'Usuário criado.');
+      setUserModalOpen(false);
+      await loadAdminData();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save user');
+    } finally {
+      setSavingUser(false);
+    }
+  }
+
+  async function deleteUser(userId: string) {
+    if (!window.confirm('Excluir este usuário?')) return;
+
+    try {
+      const response = await fetch(`/api/admin/users/${userId}`, {
+        method: 'DELETE',
+        headers: getAuthHeaders(),
+      });
+      const data = await response.json();
+      if (!data.success) throw new Error(data.message || 'Failed to delete user');
+
+      setMessage('Usuário excluído.');
+      await loadAdminData();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete user');
+    }
+  }
+
+  async function saveScuderia(event: React.FormEvent) {
+    event.preventDefault();
+    setSavingScuderia(true);
+    setError(null);
+    setMessage(null);
+
+    try {
+      const response = await fetch(
+        editingScuderiaId ? `/api/admin/scuderias/${editingScuderiaId}` : '/api/admin/scuderias',
+        {
+          method: editingScuderiaId ? 'PUT' : 'POST',
+          headers: getAuthHeaders(),
+          body: JSON.stringify(scuderiaForm),
+        },
+      );
+
+      const data = await response.json();
+      if (!data.success) throw new Error(data.message || 'Failed to save scuderia');
+
+      setMessage(editingScuderiaId ? 'Scuderia atualizada.' : 'Scuderia criada.');
+      setScuderiaModalOpen(false);
+      await loadAdminData();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save scuderia');
+    } finally {
+      setSavingScuderia(false);
+    }
+  }
+
+  async function deleteScuderia(scuderiaId: string) {
+    if (!window.confirm('Excluir esta scuderia? Usuários dela ficarão sem time.')) return;
+
+    try {
+      const response = await fetch(`/api/admin/scuderias/${scuderiaId}`, {
+        method: 'DELETE',
+        headers: getAuthHeaders(),
+      });
+      const data = await response.json();
+      if (!data.success) throw new Error(data.message || 'Failed to delete scuderia');
+
+      setMessage('Scuderia excluída.');
+      await loadAdminData();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete scuderia');
+    }
+  }
 
   if (isLoading) {
-    return React.createElement('div', { 
-      className: "min-h-screen bg-gray-900 flex items-center justify-center" 
-    }, 
-      React.createElement('div', { className: "text-center" }, [
-        React.createElement('div', { 
-          key: 'spinner',
-          className: "animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4" 
-        }),
-        React.createElement('p', { 
-          key: 'text',
-          className: "text-gray-300" 
-        }, 'Loading...')
-      ])
+    return (
+      <main className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
+        Loading...
+      </main>
     );
   }
 
-  if (!isAuthenticated) {
-    return null;
-  }
+  if (!isAuthenticated) return null;
 
-  // Check if user is admin
   if (user?.role !== 'admin') {
-    return React.createElement('div', { 
-      className: "min-h-screen bg-gray-900 flex items-center justify-center" 
-    }, 
-      React.createElement('div', { className: "text-center text-white" },
-        React.createElement('h1', { className: "text-2xl font-bold mb-4" }, 'Acesso Negado'),
-        React.createElement('p', { className: "text-gray-300 mb-6" }, 'Você não tem permissão para acessar esta página.'),
-        React.createElement('button', {
-          onClick: () => window.location.href = '/',
-          className: "px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
-        }, 'Voltar para Home')
-      )
+    return (
+      <main className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Acesso Negado</h1>
+          <button className="px-4 py-2 bg-blue-600 rounded-lg" onClick={() => router.push('/')}>
+            Voltar para Home
+          </button>
+        </div>
+      </main>
     );
   }
 
-  return React.createElement(ProtectedAdmin);
+  return (
+    <main className="min-h-screen bg-gray-900 text-white p-8">
+      <div className="max-w-6xl mx-auto">
+        <header className="flex justify-between items-center mb-8">
+          <div>
+            <button className="px-4 py-2 bg-gray-700 rounded-lg mb-4" onClick={() => router.push('/')}>
+              Voltar
+            </button>
+            <h1 className="text-3xl font-bold">Administração</h1>
+            <p className="text-gray-300">Usuários e scuderias conectados ao banco de dados.</p>
+          </div>
+
+          <div className="text-right">
+            <p className="text-sm text-gray-400">Logged in as</p>
+            <p className="font-semibold mb-3">{user?.username}</p>
+            <button className="px-4 py-2 bg-red-600 rounded-lg" onClick={logout}>
+              Logout
+            </button>
+          </div>
+        </header>
+
+        {message && <div className="mb-4 rounded-lg bg-green-700 px-4 py-3">{message}</div>}
+        {error && <div className="mb-4 rounded-lg bg-red-700 px-4 py-3">{error}</div>}
+
+        <section className="bg-gray-800 rounded-lg p-6 mb-6">
+          <div className="flex items-center justify-between gap-4 mb-4">
+            <h2 className="text-2xl font-semibold">Usuários</h2>
+            <button className="px-4 py-2 bg-purple-600 rounded-lg" onClick={openCreateUser}>
+              Criar Novo Usuário
+            </button>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left">
+              <thead className="text-gray-300">
+                <tr>
+                  <th className="py-2">Username</th>
+                  <th className="py-2">Short</th>
+                  <th className="py-2">Funções</th>
+                  <th className="py-2">Scuderia</th>
+                  <th className="py-2">Número</th>
+                  <th className="py-2 text-right">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((adminUser) => (
+                  <tr key={adminUser.id} className="border-t border-gray-700">
+                    <td className="py-3">{adminUser.username}</td>
+                    <td className="py-3">{adminUser.shortUsername ?? '-'}</td>
+                    <td className="py-3">
+                      {[
+                        adminUser.teamPrincipal && 'Principal',
+                        adminUser.teamAssistant && 'Assistant',
+                        adminUser.driver && 'Driver',
+                      ].filter(Boolean).join(', ') || '-'}
+                    </td>
+                    <td className="py-3">{adminUser.teamName ?? '-'}</td>
+                    <td className="py-3">{adminUser.driverNumber ?? '-'}</td>
+                    <td className="py-3 text-right">
+                      <button className="px-3 py-1 bg-gray-600 rounded mr-2" onClick={() => openEditUser(adminUser)}>
+                        Editar
+                      </button>
+                      <button className="px-3 py-1 bg-red-700 rounded" onClick={() => deleteUser(adminUser.id)}>
+                        Excluir
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+                {!loadingData && users.length === 0 && (
+                  <tr>
+                    <td className="py-4 text-gray-400" colSpan={6}>Nenhum usuário encontrado.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section className="bg-gray-800 rounded-lg p-6">
+          <div className="flex items-center justify-between gap-4 mb-4">
+            <h2 className="text-2xl font-semibold">Scuderias</h2>
+            <button className="px-4 py-2 bg-red-600 rounded-lg" onClick={openCreateScuderia}>
+              Criar Nova Scuderia
+            </button>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left">
+              <thead className="text-gray-300">
+                <tr>
+                  <th className="py-2">Nome</th>
+                  <th className="py-2">Abreviação</th>
+                  <th className="py-2">Cor</th>
+                  <th className="py-2 text-right">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sortedScuderias.map((scuderia) => (
+                  <tr key={scuderia.id} className="border-t border-gray-700">
+                    <td className="py-3">{scuderia.name}</td>
+                    <td className="py-3">{scuderia.tag}</td>
+                    <td className="py-3">
+                      <span className="inline-flex items-center gap-2">
+                        <span
+                          className="inline-block h-5 w-5 rounded border border-white/30"
+                          style={{ backgroundColor: scuderia.color }}
+                        />
+                        {scuderia.color}
+                      </span>
+                    </td>
+                    <td className="py-3 text-right">
+                      <button className="px-3 py-1 bg-gray-600 rounded mr-2" onClick={() => openEditScuderia(scuderia)}>
+                        Editar
+                      </button>
+                      <button className="px-3 py-1 bg-red-700 rounded" onClick={() => deleteScuderia(scuderia.id)}>
+                        Excluir
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+                {!loadingData && sortedScuderias.length === 0 && (
+                  <tr>
+                    <td className="py-4 text-gray-400" colSpan={4}>Nenhuma scuderia encontrada.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      {userModalOpen && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+          <form onSubmit={saveUser} className="bg-gray-800 rounded-lg p-6 w-full max-w-2xl">
+            <h2 className="text-2xl font-bold mb-4">{editingUserId ? 'Editar Usuário' : 'Criar Novo Usuário'}</h2>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <label className="block">
+                <span className="block text-sm mb-2">Username</span>
+                <input
+                  className="w-full bg-gray-700 rounded-lg px-4 py-2"
+                  name="username"
+                  value={userForm.username}
+                  onChange={(event) => setUserForm((prev) => ({ ...prev, username: event.target.value }))}
+                  minLength={3}
+                  maxLength={50}
+                  required
+                />
+              </label>
+
+              <label className="block">
+                <span className="block text-sm mb-2">Password</span>
+                <input
+                  className="w-full bg-gray-700 rounded-lg px-4 py-2"
+                  type="password"
+                  value={userForm.password}
+                  onChange={(event) => setUserForm((prev) => ({ ...prev, password: event.target.value }))}
+                  minLength={6}
+                  required={!editingUserId}
+                  placeholder={editingUserId ? 'Leave blank to keep current' : ''}
+                />
+              </label>
+
+              <label className="block">
+                <span className="block text-sm mb-2">Short username</span>
+                <input
+                  className="w-full bg-gray-700 rounded-lg px-4 py-2"
+                  value={userForm.shortUsername}
+                  onChange={(event) => setUserForm((prev) => ({ ...prev, shortUsername: event.target.value.toUpperCase() }))}
+                  minLength={1}
+                  maxLength={3}
+                  pattern="[A-Z0-9]+"
+                  required
+                />
+              </label>
+
+              <label className="block">
+                <span className="block text-sm mb-2">Driver number</span>
+                <input
+                  className="w-full bg-gray-700 rounded-lg px-4 py-2"
+                  type="number"
+                  value={userForm.driverNumber}
+                  onChange={(event) => setUserForm((prev) => ({ ...prev, driverNumber: event.target.value }))}
+                  min={0}
+                  max={999}
+                  required
+                />
+              </label>
+            </div>
+
+            <label className="block mt-4">
+              <span className="block text-sm mb-2">Scuderia</span>
+              <select
+                className="w-full bg-gray-700 rounded-lg px-4 py-2"
+                value={userForm.teamId}
+                onChange={(event) => setUserForm((prev) => ({ ...prev, teamId: event.target.value }))}
+                required
+              >
+                <option value="">Selecione</option>
+                {sortedScuderias.map((scuderia) => (
+                  <option key={scuderia.id} value={scuderia.id}>{scuderia.name}</option>
+                ))}
+              </select>
+            </label>
+
+            <div className="mt-4">
+              <span className="block text-sm mb-2">Funções</span>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {USER_ROLE_OPTIONS.map((option) => (
+                  <label key={option.key} className="flex items-center gap-2 bg-gray-700 rounded-lg px-3 py-2">
+                    <input
+                      type="checkbox"
+                      checked={userForm.roles[option.key]}
+                      onChange={() => setUserForm((prev) => ({
+                        ...prev,
+                        roles: { ...prev.roles, [option.key]: !prev.roles[option.key] },
+                      }))}
+                    />
+                    {option.label}
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex gap-3 mt-6">
+              <button className="flex-1 bg-purple-600 rounded-lg py-2 disabled:bg-purple-500" disabled={savingUser}>
+                {savingUser ? 'Salvando...' : 'Salvar'}
+              </button>
+              <button type="button" className="flex-1 bg-gray-600 rounded-lg py-2" onClick={() => setUserModalOpen(false)}>
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {scuderiaModalOpen && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+          <form onSubmit={saveScuderia} className="bg-gray-800 rounded-lg p-6 w-full max-w-md">
+            <h2 className="text-2xl font-bold mb-4">{editingScuderiaId ? 'Editar Scuderia' : 'Criar Nova Scuderia'}</h2>
+
+            <label className="block mb-4">
+              <span className="block text-sm mb-2">Nome</span>
+              <input
+                className="w-full bg-gray-700 rounded-lg px-4 py-2"
+                value={scuderiaForm.name}
+                onChange={(event) => setScuderiaForm((prev) => ({ ...prev, name: event.target.value }))}
+                minLength={2}
+                maxLength={100}
+                required
+              />
+            </label>
+
+            <label className="block mb-6">
+              <span className="block text-sm mb-2">Abreviação</span>
+              <input
+                className="w-full bg-gray-700 rounded-lg px-4 py-2"
+                value={scuderiaForm.tag}
+                onChange={(event) => setScuderiaForm((prev) => ({ ...prev, tag: event.target.value.toUpperCase() }))}
+                minLength={3}
+                maxLength={3}
+                pattern="[A-Z0-9]{3}"
+                required
+              />
+            </label>
+
+            <label className="block mb-6">
+              <span className="block text-sm mb-2">Cor</span>
+              <div className="flex gap-3">
+                <input
+                  className="h-10 w-16 rounded bg-gray-700"
+                  type="color"
+                  value={scuderiaForm.color}
+                  onChange={(event) => setScuderiaForm((prev) => ({ ...prev, color: event.target.value.toUpperCase() }))}
+                  required
+                />
+                <input
+                  className="flex-1 bg-gray-700 rounded-lg px-4 py-2"
+                  value={scuderiaForm.color}
+                  onChange={(event) => setScuderiaForm((prev) => ({ ...prev, color: event.target.value.toUpperCase() }))}
+                  pattern="#[0-9A-Fa-f]{6}"
+                  required
+                />
+              </div>
+            </label>
+
+            <div className="flex gap-3">
+              <button className="flex-1 bg-red-600 rounded-lg py-2 disabled:bg-red-500" disabled={savingScuderia}>
+                {savingScuderia ? 'Salvando...' : 'Salvar'}
+              </button>
+              <button type="button" className="flex-1 bg-gray-600 rounded-lg py-2" onClick={() => setScuderiaModalOpen(false)}>
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+    </main>
+  );
 }

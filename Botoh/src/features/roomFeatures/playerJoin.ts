@@ -34,6 +34,10 @@ import { rejoinManager } from "../changePlayerState/rejoinManager";
 
 const HARD_QUALY_PASSWORD = "hardqualy";
 
+function getPlayerShortName(name: string) {
+  return name.slice(0, 3).toUpperCase();
+}
+
 function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
   const players = room.getPlayerList();
 
@@ -143,6 +147,7 @@ export function PlayerJoin(room: RoomObject) {
       playerList[player.id] = createPlayerInfo(ip, player.id);
       playerList[player.id].pubAvatar = getRandomCarEmoji();
     }
+    playerList[player.id].shortName = getPlayerShortName(player.name);
 
     if (gameMode === GameMode.HARD_QUALY) {
       if (players.length >= 0) {

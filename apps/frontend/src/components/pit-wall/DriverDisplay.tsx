@@ -1,7 +1,8 @@
+import { Driver } from '@/mocks/raceData';
 import { getTireAbbr, getTireColor } from '../../app/utils/race';
 
 interface Props {
-  driver: any;
+  driver: Driver;
   align: 'left' | 'right';
 }
 
@@ -20,10 +21,10 @@ export function DriverDisplay({ driver, align }: Props) {
         style={{
           marginLeft: 8,
           fontWeight: 'normal',
-          color: getTireColor(driver?.tire),
+          color: getTireColor(driver?.tires),
         }}
       >
-        {getTireAbbr(driver?.tire)}
+        {getTireAbbr(driver?.tires)}
       </span>
     </div>
   );

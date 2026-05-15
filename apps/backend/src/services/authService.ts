@@ -77,6 +77,7 @@ class AuthService {
           id, 
           username, 
           password_hash, 
+          role,
           money, 
           created_at
         FROM users 

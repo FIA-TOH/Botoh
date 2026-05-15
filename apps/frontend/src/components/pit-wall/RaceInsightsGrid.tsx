@@ -76,7 +76,7 @@ export function RaceInsightsGrid({
   );
   const paceDefaults = useMemo(() => {
     const teamDriverNames = drivers
-      .filter((driver) => driver.team === mockRaceData.loggedUserTeam)
+      .filter((driver) => driver.leagueScuderia === mockRaceData.loggedUserTeam)
       .map((driver) => driver.name);
 
     if (teamDriverNames.length >= 2) {
