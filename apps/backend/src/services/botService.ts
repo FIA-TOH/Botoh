@@ -6,6 +6,17 @@ export interface BotMessage {
     player: string;
     message: string;
     timestamp: number;
+    color: number | null;
+    source: 'player' | 'system' | 'frontend';
+  };
+}
+
+export interface BotLogMessage {
+  type: 'log:message';
+  data: {
+    message: string;
+    timestamp: number;
+    color: number | null;
   };
 }
 
@@ -28,6 +39,10 @@ export class BotService {
 
     socket.on('chat:message', (data: BotMessage) => {
       this.broadcastToClients('chat:message', data);
+    });
+
+    socket.on('log:message', (data: BotLogMessage) => {
+      this.broadcastToClients('log:message', data);
     });
   }
 

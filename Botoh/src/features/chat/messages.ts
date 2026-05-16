@@ -1625,6 +1625,27 @@ export const MESSAGES = {
     tr: tr_messages.LOGIN_SUCCESS,
     pt: pt_messages.LOGIN_SUCCESS,
   }),
+  CHAT_CHANNEL_ALL: (): LocalizedMessageFunction => ({
+    en: en_messages.CHAT_CHANNEL_ALL,
+    es: es_messages.CHAT_CHANNEL_ALL,
+    fr: fr_messages.CHAT_CHANNEL_ALL,
+    tr: tr_messages.CHAT_CHANNEL_ALL,
+    pt: pt_messages.CHAT_CHANNEL_ALL,
+  }),
+  CHAT_CHANNEL_TEAM: (): LocalizedMessageFunction => ({
+    en: en_messages.CHAT_CHANNEL_TEAM,
+    es: es_messages.CHAT_CHANNEL_TEAM,
+    fr: fr_messages.CHAT_CHANNEL_TEAM,
+    tr: tr_messages.CHAT_CHANNEL_TEAM,
+    pt: pt_messages.CHAT_CHANNEL_TEAM,
+  }),
+  CHAT_CHANNEL_PRIVATE: (): LocalizedMessageFunction => ({
+    en: en_messages.CHAT_CHANNEL_PRIVATE,
+    es: es_messages.CHAT_CHANNEL_PRIVATE,
+    fr: fr_messages.CHAT_CHANNEL_PRIVATE,
+    tr: tr_messages.CHAT_CHANNEL_PRIVATE,
+    pt: pt_messages.CHAT_CHANNEL_PRIVATE,
+  }),
   STARTING_LAP: (): LocalizedMessageFunction => ({
     en: en_messages.STARTING_LAP,
     es: es_messages.STARTING_LAP,

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface FtohSelectButtonProps {
   label: string;
@@ -19,6 +19,12 @@ export function FtohSelectButton({
 }: FtohSelectButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(options[0] || initialLabel);
+
+  useEffect(() => {
+    if (!options.includes(selectedOption)) {
+      setSelectedOption(options[0] || initialLabel);
+    }
+  }, [initialLabel, options, selectedOption]);
 
   const handleToggle = () => {
     if (!disabled) {

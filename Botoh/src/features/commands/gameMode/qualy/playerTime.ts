@@ -1,11 +1,13 @@
 import { updatePlayerListPosition } from "../../../changePlayerState/playerList";
 
-let arrayPlayers: {
+export type QualiPlayerTime = {
   name: string;
   time: number;
   id: number;
   team: string | null;
-}[] = [];
+};
+
+let arrayPlayers: QualiPlayerTime[] = [];
 
 export function syncQualiPositions() {
   getPlayersOrderedByQualiTime().forEach((player, index) => {
@@ -15,6 +17,10 @@ export function syncQualiPositions() {
 
 export function getPlayersOrderedByQualiTime() {
   return arrayPlayers.slice().sort((a, b) => a.time - b.time);
+}
+
+export function getQualiPlayerTimes() {
+  return arrayPlayers.slice();
 }
 
 export function updatePlayerTime(

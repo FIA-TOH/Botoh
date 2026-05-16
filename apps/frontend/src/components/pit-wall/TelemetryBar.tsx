@@ -41,11 +41,34 @@ export function TelemetryBar({
       Math.min(100, value)
     );
 
+    const newTyreBlue = {
+      r: 96,
+      g: 196,
+      b: 255,
+    };
+
     /*
-      100 = verde
-      30 = vermelho
-      0 = preto
+      100 = azul claro
+       90 = verde
+       30 = vermelho
+        0 = preto
     */
+
+    if (v >= 90) {
+      const ratio = (v - 90) / 10;
+
+      const r = Math.round(
+        0 + (newTyreBlue.r - 0) * ratio
+      );
+      const g = Math.round(
+        255 + (newTyreBlue.g - 255) * ratio
+      );
+      const b = Math.round(
+        0 + (newTyreBlue.b - 0) * ratio
+      );
+
+      return `rgb(${r},${g},${b})`;
+    }
 
     if (v <= 30) {
 
@@ -59,7 +82,7 @@ export function TelemetryBar({
     }
 
     const ratio =
-      (v - 30) / 70;
+      (v - 30) / 60;
 
     const r = Math.round(
       255 * (1 - ratio)

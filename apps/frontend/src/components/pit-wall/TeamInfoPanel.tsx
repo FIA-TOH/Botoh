@@ -1,27 +1,34 @@
-import { mockRaceData } from '@/mocks/raceData';
+import { Driver } from '@/mocks/raceData';
 
 import { DriverHud } from './DriverHud';
 
 interface Props {
+  drivers?: Driver[];
+  loggedUserTeam?: string | null;
+  onPitCall?: (driver: Driver) => void;
   loading?: boolean;
 
   error?: string | null;
 }
 
 export function TeamInfoPanel({
+  drivers = [],
+  loggedUserTeam = null,
+  onPitCall,
   loading = false,
   error = null,
 }: Props) {
 
-  const teamDrivers = mockRaceData.drivers
+  const teamDrivers = drivers
     .filter(
       (driver) =>
-        driver.leagueScuderia === mockRaceData.loggedUserTeam
+        loggedUserTeam !== null
+        && driver.leagueScuderia === loggedUserTeam
     )
     .slice(0, 2);
 
-  const driver1 = teamDrivers[0];
-  const driver2 = teamDrivers[1];
+  const driver1 = teamDrivers.find((driver) => driver.isFirstDriver);
+  const driver2 = teamDrivers.find((driver) => !driver.isFirstDriver);
 
   return (
     <div
@@ -109,11 +116,13 @@ export function TeamInfoPanel({
             <DriverHud
               driver={driver1}
               align="left"
+              onPitCall={onPitCall}
             />
 
             <DriverHud
               driver={driver2}
               align="right"
+              onPitCall={onPitCall}
             />
           </div>
         )}

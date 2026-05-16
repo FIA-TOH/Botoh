@@ -1,20 +1,27 @@
-// Mock data for race simulation
-
 import { Teams } from "../../../../Botoh/src/features/changeGameState/teams";
 import { Tires } from "../../../../Botoh/src/features/tires&pits/tires";
 
-export type SessionType = 'RACE' | 'QUALY' | 'TRAINING';
+export type SessionType =
+  | 'race'
+  | 'qualy'
+  | 'training'
+  | 'indy'
+  | 'waiting'
+  | 'hard_qualy'
+  | 'battle_royale';
 
-export type FlagType = 'NONE' | 'GREEN' | 'YELLOW' | 'RED' | 'SAFETY' | 'VIRTUAL_SAFETY';
+export type FlagType =
+  | 'GREEN'
+  | 'YELLOW'
+  | 'RED'
+  | 'BLUE'
+  | 'BLACK'
+  | 'SAFETY'
+  | 'VIRTUAL_SAFETY';
 
 export interface Driver {
-  //Player Object
   name: string;
-  //TROCAR TEAM POR SCUDERIA
   team: Teams;
-
-
-  //PlayerList
   ip: string;
   isInTheRoom: boolean;
   leagueScuderia: string | null;
@@ -41,456 +48,45 @@ export interface Driver {
   gapToNext: string;
   shortName: string;
   driverNumber: number;
+  isFirstDriver?: boolean;
+  scuderiaColor?: number | null;
+  isOut?: boolean;
 }
-
-
 
 export interface RaceSession {
   sessionType: SessionType;
-  loggedUserTeam: string;
-  currentTimePassed: string;
-  totalTime: string;
+  currentTimePassed: number;
+  totalTime: number | null;
   currentLap: number;
   totalLaps: number;
   flag: FlagType;
-  drivers: Driver[];
+  weather: WeatherSession;
 }
 
-const defaultDriverFields: Pick<
-  Driver,
-  | 'team'
-  | 'ip'
-  | 'totalTime'
-  | 'currentLap'
-  | 'lapTime'
-  | 'bestSectorTimes'
-  | 'lapsOnCurrentTire'
-  | 'inPitStop'
-  | 'drs'
-  | 'gas'
-  | 'gapToNext'
-> = {
-  team: Teams.RUNNERS,
-  ip: '127.0.0.1',
-  totalTime: 0,
-  currentLap: 0,
-  lapTime: 0,
-  bestSectorTimes: [null, null, null],
-  lapsOnCurrentTire: 0,
-  inPitStop: false,
-  drs: false,
-  gas: 100,
-  gapToNext: '',
-};
+export interface WeatherSnapshot {
+  rain: number;
+  wet: number;
+}
 
-export const mockRaceData: RaceSession = {
-  sessionType: 'RACE',
-  loggedUserTeam: 'Ferrari',
-  currentTimePassed: '14:30',
-  totalTime: '20:00',
-  currentLap: 23,
-  totalLaps: 52,
-  flag: 'NONE',
-  drivers: [
-    {
-      ...defaultDriverFields,
-      position: 1,
-      driverNumber: 1,
-      name: "Max Verstappen",
-      shortName: "VER",
-      leagueScuderia: "Red Bull",
-      tires: Tires.MEDIUM,
-      wear: 45.2,
-      pitCount: 1,
-      isManagingTires: false,
-      kers: 85,
-      tireBlowWarning: false,
-      isTyreBlowed: false,
-      carDamage: 15,
-      gapToLeader: "Out Lap",
-      inPitLane: false,
-      isInTheRoom: true,
-      bestTime: "1:23.456",
-    },
-    {
-      ...defaultDriverFields,
-      position: 2,
-      driverNumber: 11,
-      name: "Sergio Perez",
-      shortName: "PER",
-      leagueScuderia: "Red Bull",
-      tires: Tires.MEDIUM,
-      wear: 48.7,
-      pitCount: 1,
-      isManagingTires: true,
-      kers: 92,
-      tireBlowWarning: true,
-      isTyreBlowed: false,
-      carDamage: 25,
-      gapToLeader: "+2.345",
-      inPitLane: false,
-      isInTheRoom: true,
-      bestTime: "1:23.567",
-    },
-    {
-      ...defaultDriverFields,
-      position: 3,
-      driverNumber: 44,
-      name: "Lewis Hamilton",
-      shortName: "HAM",
-      leagueScuderia: "Mercedes",
-      tires: Tires.SOFT,
-      wear: 67.3,
-      pitCount: 2,
-      isManagingTires: true,
-      kers: 78,
-      tireBlowWarning: true,
-      isTyreBlowed: false,
-      carDamage: 35,
-      gapToLeader: "+5.678",
-      inPitLane: false,
-      isInTheRoom: true,
-      bestTime: "1:24.123",
-    },
-    {
-      ...defaultDriverFields,
-      position: 4,
-      driverNumber: 63,
-      name: "George Russell",
-      shortName: "RUS",
-      leagueScuderia: "Mercedes",
-      tires: Tires.SOFT,
-      wear: 71.8,
-      pitCount: 2,
-      isManagingTires: true,
-      kers: 88,
-      tireBlowWarning: false,
-      isTyreBlowed: false,
-      carDamage: 42,
-      gapToLeader: "+8.901",
-      inPitLane: false,
-      isInTheRoom: true,
-      bestTime: "1:23.789",
-    },
-    {
-      ...defaultDriverFields,
-      position: 5,
-      driverNumber: 16,
-      name: "Charles Leclerc",
-      shortName: "LEC",
-      leagueScuderia: "Ferrari",
-      tires: Tires.HARD,
-      wear: 32.1,
-      pitCount: 1,
-      isManagingTires: false,
-      kers: 65,
-      tireBlowWarning: false,
-      isTyreBlowed: false,
-      carDamage: 28,
-      gapToLeader: "+12.345",
-      inPitLane: false,
-      isInTheRoom: true,
-      bestTime: "1:23.890",
-    },
-    {
-      ...defaultDriverFields,
-      position: 6,
-      driverNumber: 55,
-      name: "Carlos Sainz",
-      shortName: "SAI",
-      leagueScuderia: "Ferrari",
-      tires: Tires.MEDIUM,
-      wear: 50,
-      pitCount: 1,
-      isManagingTires: false,
-      kers: 72,
-      tireBlowWarning: true,
-      isTyreBlowed: true,
-      carDamage: 50,
-      gapToLeader: "+15.678",
-      inPitLane: false,
-      isInTheRoom: true,
-      bestTime: "1:25.234",
-    },
-    {
-      ...defaultDriverFields,
-      position: 7,
-      driverNumber: 4,
-      name: "Lando Norris",
-      shortName: "NOR",
-      leagueScuderia: "Mclaren",
-      tires: Tires.MEDIUM,
-      wear: 52.3,
-      pitCount: 2,
-      isManagingTires: true,
-      kers: 70,
-      tireBlowWarning: false,
-      isTyreBlowed: false,
-      carDamage: 25,
-      gapToLeader: "+18.901",
-      inPitLane: false,
-      isInTheRoom: true,
-      bestTime: "1:26.234",
-    },
-    {
-      ...defaultDriverFields,
-      position: 8,
-      driverNumber: 81,
-      name: "Oscar Piastri",
-      shortName: "PIA",
-      leagueScuderia: "McLaren",
-      tires: Tires.HARD,
-      wear: 58.9,
-      pitCount: 1,
-      isManagingTires: true,
-      kers: 75,
-      tireBlowWarning: false,
-      isTyreBlowed: false,
-      carDamage: 18,
-      gapToLeader: "+22.456",
-      inPitLane: false,
-      isInTheRoom: true,
-      bestTime: "1:26.345",
-    },
-    {
-      ...defaultDriverFields,
-      position: 9,
-      driverNumber: 10,
-      name: "Pierre Gasly",
-      shortName: "GAS",
-      leagueScuderia: "Alpine",
-      tires: Tires.HARD,
-      wear: 61.2,
-      pitCount: 2,
-      isManagingTires: true,
-      kers: 82,
-      tireBlowWarning: false,
-      isTyreBlowed: false,
-      carDamage: 33,
-      gapToLeader: "+25.678",
-      inPitLane: false,
-      isInTheRoom: true,
-      bestTime: "1:27.123",
-    },
-    {
-      ...defaultDriverFields,
-      position: 10,
-      driverNumber: 31,
-      name: "Esteban Ocon",
-      shortName: "OCO",
-      leagueScuderia: "Alpine",
-      tires: Tires.HARD,
-      wear: 64.5,
-      pitCount: 2,
-      isManagingTires: false,
-      kers: 68,
-      tireBlowWarning: false,
-      isTyreBlowed: false,
-      carDamage: 29,
-      gapToLeader: "+28.901",
-      inPitLane: false,
-      isInTheRoom: true,
-      bestTime: "1:27.890",
-    },
-    {
-      ...defaultDriverFields,
-      position: 11,
-      driverNumber: 77,
-      name: "Valtteri Bottas",
-      shortName: "BOT",
-      leagueScuderia: "Kick Sauber",
-      tires: Tires.MEDIUM,
-      wear: 69.8,
-      pitCount: 2,
-      isManagingTires: false,
-      kers: 71,
-      tireBlowWarning: false,
-      isTyreBlowed: false,
-      carDamage: 26,
-      gapToLeader: "+32.123",
-      inPitLane: false,
-      isInTheRoom: true,
-      bestTime: "1:28.234",
-    },
-    {
-      ...defaultDriverFields,
-      position: 12,
-      driverNumber: 24,
-      name: "Zhou Guanyu",
-      shortName: "ZHO",
-      leagueScuderia: "Kick Sauber",
-      tires: Tires.SOFT,
-      wear: 73.4,
-      pitCount: 1,
-      isManagingTires: true,
-      kers: 80,
-      tireBlowWarning: true,
-      isTyreBlowed: false,
-      carDamage: 37,
-      gapToLeader: "+35.678",
-      inPitLane: false,
-      isInTheRoom: true,
-      bestTime: "1:28.890",
-    },
-    {
-      ...defaultDriverFields,
-      position: 13,
-      driverNumber: 27,
-      name: "Nico Hulkenberg",
-      shortName: "HUL",
-      leagueScuderia: "Haas",
-      tires: Tires.MEDIUM,
-      wear: 66.7,
-      pitCount: 1,
-      isManagingTires: true,
-      kers: 76,
-      tireBlowWarning: false,
-      isTyreBlowed: false,
-      carDamage: 31,
-      gapToLeader: "+38.901",
-      inPitLane: false,
-      isInTheRoom: true,
-      bestTime: "1:29.123",
-    },
-    {
-      ...defaultDriverFields,
-      position: 14,
-      driverNumber: 20,
-      name: "Kevin Magnussen",
-      shortName: "MAG",
-      leagueScuderia: "Haas",
-      tires: Tires.HARD,
-      wear: 68.9,
-      pitCount: 1,
-      isManagingTires: false,
-      kers: 73,
-      tireBlowWarning: false,
-      isTyreBlowed: false,
-      carDamage: 34,
-      gapToLeader: "+41.234",
-      inPitLane: false,
-      isInTheRoom: true,
-      bestTime: "1:29.890",
-    },
-    {
-      ...defaultDriverFields,
-      position: 15,
-      driverNumber: 22,
-      name: "Yuki Tsunoda",
-      shortName: "TSU",
-      leagueScuderia: "RB",
-      tires: Tires.SOFT,
-      wear: 85.3,
-      pitCount: 2,
-      isManagingTires: true,
-      kers: 85,
-      tireBlowWarning: false,
-      isTyreBlowed: false,
-      carDamage: 22,
-      gapToLeader: "+51.123",
-      inPitLane: false,
-      isInTheRoom: true,
-      bestTime: "1:26.345",
-    },
-    {
-      ...defaultDriverFields,
-      position: 16,
-      driverNumber: 3,
-      name: "Daniel Ricciardo",
-      shortName: "RIC",
-      leagueScuderia: "RB",
-      tires: Tires.SOFT,
-      wear: 88.7,
-      pitCount: 2,
-      isManagingTires: true,
-      kers: 90,
-      tireBlowWarning: true,
-      isTyreBlowed: false,
-      carDamage: 38,
-      gapToLeader: "+54.567",
-      inPitLane: false,
-      isInTheRoom: true,
-      bestTime: "1:27.123",
-    },
-    {
-      ...defaultDriverFields,
-      position: 17,
-      driverNumber: 23,
-      name: "Alex Albon",
-      shortName: "ALB",
-      leagueScuderia: "Williams",
-      tires: Tires.SOFT,
-      wear: 76.1,
-      pitCount: 1,
-      isManagingTires: true,
-      kers: 83,
-      tireBlowWarning: false,
-      isTyreBlowed: false,
-      carDamage: 24,
-      gapToLeader: "+47.890",
-      inPitLane: false,
-      isInTheRoom: true,
-      bestTime: "1:26.234",
-    },
-    {
-      ...defaultDriverFields,
-      position: null,
-      driverNumber: 14,
-      name: "Lance Strll",
-      shortName: "STO",
-      leagueScuderia: "Aston Martin",
-      tires: Tires.MEDIUM,
-      wear: 72.8,
-      pitCount: 2,
-      isManagingTires: true,
-      kers: 78,
-      tireBlowWarning: false,
-      isTyreBlowed: false,
-      carDamage: 27,
-      gapToLeader: "+58.123",
-      inPitLane: false,
-      isInTheRoom: true,
-      bestTime: null,
-    },
-    {
-      ...defaultDriverFields,
-      position: 19,
-      driverNumber: 18,
-      name: "Lance Stroll",
-      shortName: "STR",
-      leagueScuderia: "Aston Martin",
-      tires: Tires.MEDIUM,
-      wear: 78.2,
-      pitCount: 2,
-      isManagingTires: true,
-      kers: 79,
-      tireBlowWarning: true,
-      isTyreBlowed: false,
-      carDamage: 32,
-      gapToLeader: "+61.678",
-      inPitLane: true,
-      isInTheRoom: true,
-      bestTime: "1:26.345",
-    },
-    {
-      ...defaultDriverFields,
-      position: 20,
-      driverNumber: 2,
-      name: "Logan Sargeant",
-      shortName: "SAR",
-      leagueScuderia: "Williams",
-      tires: Tires.HARD,
-      wear: 74.5,
-      pitCount: 1,
-      isManagingTires: true,
-      kers: 77,
-      tireBlowWarning: false,
-      isTyreBlowed: false,
-      carDamage: 19,
-      gapToLeader: "+67.890",
-      inPitLane: false,
-      isInTheRoom: true,
-      bestTime: "1:27.123",
-    }
-  ]
-};
+export interface WeatherAnnouncement {
+  id: string;
+  message: {
+    en: string;
+    es: string;
+    fr: string;
+    tr: string;
+    pt: string;
+  };
+  announcedAtGameTime: number;
+  announcedAtTimestamp: number;
+}
+
+export interface WeatherSession {
+  global: WeatherSnapshot;
+  sectors: {
+    sector1: WeatherSnapshot;
+    sector2: WeatherSnapshot;
+    sector3: WeatherSnapshot;
+  };
+  lastAnnouncement: WeatherAnnouncement | null;
+}

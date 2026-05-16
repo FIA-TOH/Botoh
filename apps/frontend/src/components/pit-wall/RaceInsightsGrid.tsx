@@ -1,11 +1,13 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { mockRaceData } from '@/mocks/raceData';
 import { DriverCircle } from './DriverCircle';
+import { RaceSession } from '@/mocks/raceData';
 
 interface Props {
   drivers?: any[];
+  loggedUserTeam?: string | null;
+  raceSession?: RaceSession | null;
   loading?: boolean;
   error?: string | null;
 }
@@ -65,8 +67,22 @@ function RaceInsightsState({
   );
 }
 
+function UnavailableRaceInsight({
+  message,
+}: {
+  message: string;
+}) {
+  return (
+    <div className="flex min-h-[180px] items-center justify-center text-center text-xl text-gray-300">
+      {message}
+    </div>
+  );
+}
+
 export function RaceInsightsGrid({
-  drivers = mockRaceData.drivers,
+  drivers = [],
+  loggedUserTeam = null,
+  raceSession = null,
   loading = false,
   error = null,
 }: Props) {
@@ -76,7 +92,7 @@ export function RaceInsightsGrid({
   );
   const paceDefaults = useMemo(() => {
     const teamDriverNames = drivers
-      .filter((driver) => driver.leagueScuderia === mockRaceData.loggedUserTeam)
+      .filter((driver) => loggedUserTeam !== null && driver.leagueScuderia === loggedUserTeam)
       .map((driver) => driver.name);
 
     if (teamDriverNames.length >= 2) {
@@ -105,12 +121,18 @@ export function RaceInsightsGrid({
       pace: shuffledDrivers[0] ?? 'Joninho',
       compare: shuffledDrivers[1] ?? shuffledDrivers[0] ?? 'Nava',
     };
-  }, [driverOptions, drivers]);
+  }, [driverOptions, drivers, loggedUserTeam]);
   const [paceDriver, setPaceDriver] = useState(paceDefaults.pace);
   const [compareDriver, setCompareDriver] = useState(paceDefaults.compare);
   const [gapDriverA, setGapDriverA] = useState(paceDefaults.pace);
   const [gapDriverB, setGapDriverB] = useState(paceDefaults.compare);
+  const [now, setNow] = useState(() => Date.now());
   const hasPitGap = true;
+  const hideRaceOnlyInsights =
+    raceSession?.sessionType === 'training'
+    || raceSession?.sessionType === 'qualy'
+    || raceSession?.sessionType === 'hard_qualy';
+  const unavailableRaceInsightMessage = 'Disponível apenas durante a corrida';
 
   useEffect(() => {
     setPaceDriver(paceDefaults.pace);
@@ -119,11 +141,36 @@ export function RaceInsightsGrid({
     setGapDriverB(paceDefaults.compare);
   }, [paceDefaults]);
 
+  useEffect(() => {
+    const interval = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   const weatherBySection = [
-    { label: 'Global', rainChance: 49, wetness: 20, highlight: true },
-    { label: 'Sector 1', rainChance: 51, wetness: 80, highlight: false },
-    { label: 'Sector 2', rainChance: 1, wetness: 10, highlight: false },
-    { label: 'Sector 3', rainChance: 1, wetness: 0, highlight: false },
+    {
+      label: 'Global',
+      rainChance: raceSession?.weather?.global.rain ?? 0,
+      wetness: raceSession?.weather?.global.wet ?? 0,
+      highlight: true,
+    },
+    {
+      label: 'Sector 1',
+      rainChance: raceSession?.weather?.sectors.sector1.rain ?? 0,
+      wetness: raceSession?.weather?.sectors.sector1.wet ?? 0,
+      highlight: false,
+    },
+    {
+      label: 'Sector 2',
+      rainChance: raceSession?.weather?.sectors.sector2.rain ?? 0,
+      wetness: raceSession?.weather?.sectors.sector2.wet ?? 0,
+      highlight: false,
+    },
+    {
+      label: 'Sector 3',
+      rainChance: raceSession?.weather?.sectors.sector3.rain ?? 0,
+      wetness: raceSession?.weather?.sectors.sector3.wet ?? 0,
+      highlight: false,
+    },
   ];
 
   const getRainEmoji = (percentage: number) => {
@@ -135,6 +182,17 @@ export function RaceInsightsGrid({
   const getWetnessEmoji = (percentage: number) => {
     if (percentage === 0) return '☀️';
     return '💧';
+  };
+
+  const formatWeatherValue = (value: number) => Math.round(value);
+  const lastWeatherAnnouncement = raceSession?.weather?.lastAnnouncement ?? null;
+  const weatherAnnouncementAge = lastWeatherAnnouncement
+    ? Math.max(0, Math.floor((now - lastWeatherAnnouncement.announcedAtTimestamp) / 1000))
+    : null;
+  const formatAnnouncementAge = (totalSeconds: number) => {
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `há ${minutes} minutos e ${seconds.toString().padStart(2, '0')} segundos`;
   };
 
   if (loading) {
@@ -187,12 +245,12 @@ export function RaceInsightsGrid({
                     {section.label}
                   </div>
 
-                  <div className={`mt-2 ${section.highlight ? 'text-2xl font-bold' : 'text-base'}`}>
-                    {getRainEmoji(section.rainChance)} {section.rainChance}%
+                  <div className={`mt-2 ${section.highlight ? 'text-lg font-bold' : 'text-base'}`}>
+                    {getRainEmoji(section.rainChance)} {formatWeatherValue(section.rainChance)}%
                   </div>
 
-                  <div className={`mt-2 ${section.highlight ? 'text-xl font-bold' : 'text-base'}`}>
-                    {getWetnessEmoji(section.wetness)} {section.wetness}%
+                  <div className={`mt-2 ${section.highlight ? 'text-lg font-bold' : 'text-base'}`}>
+                    {getWetnessEmoji(section.wetness)} {formatWeatherValue(section.wetness)}%
                   </div>
                 </div>
               ))}
@@ -207,7 +265,14 @@ export function RaceInsightsGrid({
             className="p-4 text-center"
           >
             <div className="text-2xl font-bold uppercase">Previsão do tempo</div>
-            <div className="mt-3 text-xl">Chuva deve parar em 2 minutos</div>
+            <div className="mt-3 text-xl">
+              {lastWeatherAnnouncement?.message.pt ?? 'Nenhum anúncio meteorológico ainda'}
+            </div>
+            {weatherAnnouncementAge !== null && (
+              <div className="mt-2 text-base text-gray-300">
+                {formatAnnouncementAge(weatherAnnouncementAge)}
+              </div>
+            )}
           </div>
 
           <div
@@ -217,7 +282,11 @@ export function RaceInsightsGrid({
             }}
             className="p-4"
           >
-            <div className="flex items-center gap-2 text-2xl font-bold uppercase">
+            {hideRaceOnlyInsights ? (
+              <UnavailableRaceInsight message={unavailableRaceInsightMessage} />
+            ) : (
+              <>
+                <div className="flex items-center gap-2 text-2xl font-bold uppercase">
               <span>Pace:</span>
               <div className="relative">
                 <select
@@ -276,6 +345,8 @@ export function RaceInsightsGrid({
                 Media: <span className="text-green-400">+01.345</span>
               </div>
             </div>
+              </>
+            )}
           </div>
         </div>
 
@@ -288,7 +359,11 @@ export function RaceInsightsGrid({
             }}
             className="p-4"
           >
-            <div className="text-center text-3xl font-bold uppercase">Gap</div>
+            {hideRaceOnlyInsights ? (
+              <UnavailableRaceInsight message={unavailableRaceInsightMessage} />
+            ) : (
+              <>
+                <div className="text-center text-3xl font-bold uppercase">Gap</div>
             <div className="mt-2 flex items-center justify-center gap-2 text-xl font-bold uppercase">
               <div className="relative">
                 <select
@@ -344,6 +419,8 @@ export function RaceInsightsGrid({
                 <DriverCircle number={52} color="#617BE0" />
               </div>
             </div>
+              </>
+            )}
           </div>
 
           <div
@@ -354,16 +431,25 @@ export function RaceInsightsGrid({
             }}
             className="p-4"
           >
-            <div className="text-center text-3xl font-bold uppercase">Pit-Stops</div>
+            {hideRaceOnlyInsights ? (
+              <UnavailableRaceInsight message={unavailableRaceInsightMessage} />
+            ) : (
+              <>
+                <div className="text-center text-3xl font-bold uppercase">Pit-Stops</div>
 
-            <div className="mt-3 space-y-1 text-center text-xl">
-              <div>Se NAVA parar agora sai 10.456s atras de XIMB, em 2</div>
-              <div className="font-bold">Se JONINHO parar agora saira em primeiro</div>
-              <div>Se XIMB parar agora sai 03.549 atras de JONINHO, em 3</div>
-            </div>
+                <div className="mt-3 space-y-1 text-center text-xl">
+                  <div>Se NAVA parar agora sai 10.456s atras de XIMB, em 2</div>
+                  <div className="font-bold">Se JONINHO parar agora saira em primeiro</div>
+                  <div>Se XIMB parar agora sai 03.549 atras de JONINHO, em 3</div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
     </section>
   );
 }
+
+
+

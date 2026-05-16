@@ -171,5 +171,8 @@
   "LAPPED_REMAINING_LAPS": "{{name}} grid'e katılmak için {{laps}} daha tur(lar) var",
   "LOGIN_USAGE": "Kullanım: !login <şifre>",
   "LOGIN_ERROR": "Geçersiz kullanıcı adı veya şifre.",
-  "LOGIN_SUCCESS": "Giriş başarılı."
+  "LOGIN_SUCCESS": "Giriş başarılı.",
+  "CHAT_CHANNEL_ALL": "Herkes",
+  "CHAT_CHANNEL_TEAM": "Tak?m",
+  "CHAT_CHANNEL_PRIVATE": "?zel"
 }

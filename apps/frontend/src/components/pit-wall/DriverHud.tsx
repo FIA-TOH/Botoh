@@ -3,6 +3,7 @@ import { Teams } from '../../../../../Botoh/src/features/changeGameState/teams';
 import { FtohButton } from '@/components/FtohButton';
 
 import {
+  colorNumberToHex,
   getTireAbbr,
   getTireColor,
 } from '../../app/utils/race';
@@ -14,11 +15,13 @@ import { Driver } from '@/mocks/raceData';
 interface Props {
   driver?: Driver;
   align: 'left' | 'right';
+  onPitCall?: (driver: Driver) => void;
 }
 
 export function DriverHud({
   driver,
   align,
+  onPitCall,
 }: Props) {
   const isOut = !driver || !driver.isInTheRoom || driver.team !== Teams.RUNNERS;
   const showTelemetry = !!driver && !isOut;
@@ -30,6 +33,7 @@ export function DriverHud({
   const driverNumber = driver?.driverNumber ?? '??';
   const driverPosition = driver?.position ?? '-';
   const gapToLeader = driver?.gapToLeader ?? '';
+  const teamColor = colorNumberToHex(driver?.scuderiaColor);
 
   const info = (
     <div
@@ -156,8 +160,7 @@ export function DriverHud({
         number={
           driverNumber
         }
-        //to-do botar cor de time com logica de time
-        color={'#ffffff'}
+        color={teamColor}
       />
     </div>
   );
@@ -165,6 +168,11 @@ export function DriverHud({
   const pit = (
     <FtohButton
       disabled={pitDisabled}
+      onClick={() => {
+        if (driver) {
+          onPitCall?.(driver);
+        }
+      }}
       className="
         mt-4
         text-[24px]

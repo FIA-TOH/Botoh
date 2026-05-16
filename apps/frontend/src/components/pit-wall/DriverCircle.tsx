@@ -1,3 +1,5 @@
+import { isLightColor } from '@/app/utils/race';
+
 interface Props {
   number: number | string;
   color: string;
@@ -7,6 +9,10 @@ export function DriverCircle({
   number,
   color,
 }: Props) {
+  const numberColor = isLightColor(color)
+    ? '#000000'
+    : '#FFFFFF';
+
   return (
     <div
       className="
@@ -26,6 +32,7 @@ export function DriverCircle({
       "
       style={{
         backgroundColor: color,
+        color: numberColor,
       }}
     >
       {number}

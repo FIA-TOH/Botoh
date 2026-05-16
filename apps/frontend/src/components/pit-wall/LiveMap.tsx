@@ -1,9 +1,12 @@
 import React from 'react';
-import { PlayerData } from '@/hooks/usePlayerList';
+import { PlayerData, PlayerPositionData } from '@/hooks/usePlayerList';
 import { useMapBackground, usePitWallGameState } from '@/hooks/useCurrentMap';
+import { colorNumberToHex, isDarkColor } from '@/app/utils/race';
+import { Teams } from '../../../../../Botoh/src/features/changeGameState/teams';
 
 interface Props {
-  players: PlayerData[];
+  players: PlayerPositionData[];
+  playerDetails: PlayerData[];
 }
 
 interface ViewBoxData {
@@ -47,6 +50,7 @@ function parseSvgViewBox(svgText: string): ViewBoxData | null {
 
 export function LiveMap({
   players,
+  playerDetails,
 }: Props) {
 
   const { backgroundUrl, fallbackType } = useMapBackground();
@@ -67,6 +71,17 @@ export function LiveMap({
   const smoothedRef = React.useRef<Record<number, { x: number; y: number }>>({});
   const rafRef = React.useRef<number | null>(null);
   const lastFrameRef = React.useRef<number | null>(null);
+  const playerDetailsById = React.useMemo(
+    () =>
+      new Map(
+        playerDetails.map((player) => [player.id, player]),
+      ),
+    [playerDetails],
+  );
+  const runningPlayers = React.useMemo(
+    () => players.filter((player) => player.team === Teams.RUNNERS),
+    [players],
+  );
 
   // =========================================
   // SVG VIEWBOX
@@ -196,7 +211,7 @@ export function LiveMap({
   React.useEffect(() => {
     const activeIds = new Set<number>();
 
-    players.forEach((player) => {
+    runningPlayers.forEach((player) => {
       activeIds.add(player.id);
       const target = convertHaxballToSvg(player.position.x, player.position.y);
       targetsRef.current[player.id] = target;
@@ -213,7 +228,7 @@ export function LiveMap({
         delete targetsRef.current[id];
       }
     });
-  }, [players, convertHaxballToSvg]);
+  }, [runningPlayers, convertHaxballToSvg]);
 
   React.useEffect(() => {
     const SNAP_DISTANCE_PERCENT = 10;
@@ -485,7 +500,14 @@ export function LiveMap({
 
           {/* PLAYERS */}
 
-          {players.map((player) => {
+          {runningPlayers.map((player) => {
+            const playerDetail = playerDetailsById.get(player.id);
+            const carColor = colorNumberToHex(playerDetail?.scuderiaColor);
+            const isSecondDriverOfScuderia =
+              playerDetail?.isFirstDriver === false;
+            const borderColor = isDarkColor(carColor)
+              ? '#FFFFFF'
+              : '#000000';
 
             const smoothPosition = smoothedPositions[player.id]
               || targetsRef.current[player.id]
@@ -502,19 +524,14 @@ export function LiveMap({
                   absolute
                   w-2
                   h-2
-                  rounded-full
-                  ${
-                    player.team === 0
-                      ? 'bg-red-500'
-                      : player.team === 1
-                      ? 'bg-blue-500'
-                      : 'bg-gray-500'
-                  }
+                  ${isSecondDriverOfScuderia ? '' : 'rounded-full'}
                 `}
                 style={{
                   left: `${mapX}%`,
                   top: `${mapY}%`,
                   transform: 'translate(-50%, -50%)',
+                  backgroundColor: carColor,
+                  border: `1px solid ${borderColor}`,
 
                   boxShadow: player.admin
                     ? '0 0 5px rgba(147, 51, 234, 0.8)'

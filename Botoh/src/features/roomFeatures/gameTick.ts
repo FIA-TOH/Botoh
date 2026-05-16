@@ -33,6 +33,7 @@ import { handleManageTyreXKeyDetection } from "../utils/handleXKeyDetection";
 const detectCutThrottledByPlayer: Map<number, ReturnType<typeof throttlePerSecond>> = new Map();
 
 export let gameStarted = false;
+export let currentTime = 0;
 export function setGameStarted(value: boolean) {
   gameStarted = value;
 }
@@ -62,7 +63,7 @@ export function GameTick(room: RoomObject) {
     }
 
     const scores = room.getScores();
-    const currentTime = scores?.time || 0;
+    currentTime = scores?.time || 0;
 
     players.forEach((pad) => {
       const p = pad.p;

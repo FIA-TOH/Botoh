@@ -1,11 +1,13 @@
 import { FtohButton } from '@/components/FtohButton';
 import { FtohInput } from '@/components/FtohInput';
 import { FtohSelectButton } from '@/components/FtohSelectButton';
+import { colorNumberToHex } from '@/app/utils/race';
+import { ChatMessage } from '@/hooks/useChat';
+import { useEffect, useRef } from 'react';
 
-import { mockRaceData } from '@/mocks/raceData';
 
 interface Props {
-  messages?: any[];
+  messages?: ChatMessage[];
 
   message: string;
 
@@ -16,6 +18,8 @@ interface Props {
   ) => void;
 
   isConnected: boolean;
+  recipientOptions: string[];
+  onSelectRecipient: (option: string) => void;
 
   loading?: boolean;
 
@@ -28,9 +32,20 @@ export function ChatPanel({
   setMessage,
   handleSendMessage,
   isConnected,
+  recipientOptions,
+  onSelectRecipient,
   loading = false,
   error = null,
 }: Props) {
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = messagesContainerRef.current;
+    if (!container) return;
+
+    container.scrollTop = container.scrollHeight;
+  }, [messages.length]);
+
   return (
     <div
       style={{
@@ -44,6 +59,7 @@ export function ChatPanel({
 
         {/* Messages area */}
         <div
+          ref={messagesContainerRef}
           className="
             py-4
             flex-1
@@ -143,13 +159,8 @@ export function ChatPanel({
             messages.length > 0 &&
             messages.map((msg, index) => {
 
-              const driver =
-                mockRaceData.drivers.find(
-                  (d) => d.name === msg.player
-                );
-
               const teamColor =
-                '#FFFFFF';
+                colorNumberToHex(msg.color);
 
               return (
                 <div
@@ -204,6 +215,7 @@ export function ChatPanel({
             disabled={
               !isConnected ||
               !message.trim() ||
+              message.trim().startsWith('!') ||
               loading ||
               !!error
             }
@@ -234,19 +246,9 @@ export function ChatPanel({
 
         {/* SELECT */}
         <FtohSelectButton
-          label="Selecionar opção"
-          options={[
-            'Todos',
-            'Equipe',
-            'Piloto 1',
-            'Piloto 2',
-          ]}
-          onSelect={(option) =>
-            console.log(
-              'Selecionado:',
-              option
-            )
-          }
+          label="Todos"
+          options={recipientOptions}
+          onSelect={onSelectRecipient}
         />
       </div>
     </div>

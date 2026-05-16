@@ -52,21 +52,35 @@ export async function handleLoginCommand(
       return;
     }
 
+    const loggedUser = data.user;
     const player = playerList[byPlayer.id];
+    const hasLoggedTeammate = loggedUser.teamId
+      ? room.getPlayerList().some((roomPlayer) => {
+          if (roomPlayer.id === byPlayer.id) return false;
+
+          const roomPlayerState = playerList[roomPlayer.id];
+          return (
+            roomPlayerState?.isLogged === true &&
+            roomPlayerState.leagueScuderia === loggedUser.teamId
+          );
+        })
+      : false;
+
     player.isLogged = true;
-    player.shortName = data.user.shortUsername ?? player.shortName;
-    player.driverNumber = data.user.driverNumber ?? player.driverNumber;
-    player.leagueScuderia = data.user.teamId;
+    player.shortName = loggedUser.shortUsername ?? player.shortName;
+    player.driverNumber = loggedUser.driverNumber ?? player.driverNumber;
+    player.leagueScuderia = loggedUser.teamId;
+    player.isFirstDriver = Boolean(loggedUser.teamId) && !hasLoggedTeammate;
 
     if (
-      data.user.teamId &&
-      data.user.teamName &&
-      data.user.teamTag
+      loggedUser.teamId &&
+      loggedUser.teamName &&
+      loggedUser.teamTag
     ) {
-      registerLeagueScuderia(data.user.teamId, {
-        name: data.user.teamName,
-        tag: data.user.teamTag,
-        color: parseTeamColor(data.user.teamColor),
+      registerLeagueScuderia(loggedUser.teamId, {
+        name: loggedUser.teamName,
+        tag: loggedUser.teamTag,
+        color: parseTeamColor(loggedUser.teamColor),
       });
     }
 

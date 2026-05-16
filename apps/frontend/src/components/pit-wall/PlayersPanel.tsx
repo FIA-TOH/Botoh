@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { PlayerRow } from './PlayerRow';
 import { HoverTooltip } from './HoverTooltip';
@@ -10,11 +10,12 @@ import {
   lapTimeToMs,
 } from '../../app/utils/race';
 
-import { Driver, mockRaceData } from '@/mocks/raceData';
+import { Driver, RaceSession } from '@/mocks/raceData';
 import { Teams } from '../../../../../Botoh/src/features/changeGameState/teams';
 
 interface Props {
   drivers?: Driver[];
+  raceSession?: RaceSession | null;
 
   loading?: boolean;
 
@@ -40,6 +41,18 @@ const FLAG_HEADER_CONFIG = {
     color: '#FF0000',
     backgroundColor: '#1E1E1E',
   },
+  BLUE: {
+    title: 'BLUE',
+    subtitle: 'FLAG',
+    color: '#3B82F6',
+    backgroundColor: '#1E1E1E',
+  },
+  BLACK: {
+    title: 'BLACK',
+    subtitle: 'FLAG',
+    color: '#FFFFFF',
+    backgroundColor: '#000000',
+  },
   SAFETY: {
     title: 'SAFETY',
     subtitle: 'CAR',
@@ -54,20 +67,7 @@ const FLAG_HEADER_CONFIG = {
   },
 };
 
-function timeToSeconds(time: string): number {
-  const parts = time
-    .split(':')
-    .map(Number);
-
-  if (
-    parts.length !== 2
-    || parts.some((part) => !Number.isFinite(part))
-  ) {
-    return 0;
-  }
-
-  return parts[0] * 60 + parts[1];
-}
+const GREEN_FLAG_VISIBLE_DURATION_MS = 5000;
 
 function formatSessionTime(seconds: number): string {
   const safeSeconds = Math.max(
@@ -84,6 +84,7 @@ function formatSessionTime(seconds: number): string {
 
 export function PlayersPanel({
   drivers = [],
+  raceSession = null,
   loading = false,
   error = null,
 }: Props) {
@@ -94,32 +95,113 @@ export function PlayersPanel({
     hoveredDriverPosition,
     setHoveredDriverPosition,
   ] = useState<number | null>(null);
+  const [visibleFlag, setVisibleFlag] = useState<RaceSession['flag'] | null>(null);
+  const previousFlag = useRef<RaceSession['flag'] | null>(null);
+
+  useEffect(() => {
+    const nextFlag = raceSession?.flag ?? null;
+    const previousRaceFlag = previousFlag.current;
+
+    if (!nextFlag) {
+      setVisibleFlag(null);
+      previousFlag.current = nextFlag;
+      return;
+    }
+
+    if (nextFlag === 'GREEN') {
+      if (previousRaceFlag && previousRaceFlag !== 'GREEN') {
+        setVisibleFlag('GREEN');
+
+        const timeout = setTimeout(() => {
+          setVisibleFlag(null);
+        }, GREEN_FLAG_VISIBLE_DURATION_MS);
+
+        previousFlag.current = nextFlag;
+        return () => clearTimeout(timeout);
+      }
+
+      if (!previousRaceFlag) {
+        setVisibleFlag(null);
+      }
+
+      previousFlag.current = nextFlag;
+      return;
+    }
+
+    setVisibleFlag(nextFlag);
+    previousFlag.current = nextFlag;
+  }, [raceSession?.flag]);
+
+  const isQualifyingSession =
+    raceSession?.sessionType === 'qualy'
+    || raceSession?.sessionType === 'hard_qualy';
+
+  const sortedDrivers = [...drivers].sort((a, b) => {
+    if (isQualifyingSession) {
+      const aTime = a.bestTime ? lapTimeToMs(a.bestTime) : Number.POSITIVE_INFINITY;
+      const bTime = b.bestTime ? lapTimeToMs(b.bestTime) : Number.POSITIVE_INFINITY;
+
+      if (aTime !== bTime) {
+        return aTime - bTime;
+      }
+    } else {
+      const aPosition = a.position;
+      const bPosition = b.position;
+      const aHasPosition = typeof aPosition === 'number';
+      const bHasPosition = typeof bPosition === 'number';
+
+      if (aHasPosition && bHasPosition) {
+        return aPosition - bPosition;
+      }
+
+      if (aHasPosition) return -1;
+      if (bHasPosition) return 1;
+    }
+
+    return String(a.name ?? a.shortName ?? '')
+      .localeCompare(
+        String(b.name ?? b.shortName ?? ''),
+        undefined,
+        { sensitivity: 'base' }
+      );
+  });
+
+  const displayedDrivers = isQualifyingSession
+    ? sortedDrivers.map((driver, index) => ({
+        ...driver,
+        position: driver.bestTime ? index + 1 : null,
+      }))
+    : sortedDrivers;
+
+  const qualifyingLeader = isQualifyingSession
+    ? displayedDrivers.find((driver) => !!driver.bestTime)
+    : undefined;
 
   const getGapText = (driver: Driver) => {
 
-    if (!driver.isInTheRoom || driver.team !== Teams.RUNNERS) {
+    if (raceSession?.sessionType === 'race' && driver.isOut) {
       return 'OUT';
     }
 
-    if (driver.inPitLane) {
-      return 'PIT';
-    }
-
     if (
-      mockRaceData.sessionType === 'RACE'
+      raceSession?.sessionType === 'race'
     ) {
+      if (driver.inPitLane) {
+        return 'PIT';
+      }
+
       return driver.position === 1
         ? 'Out Lap'
         : driver.gapToLeader;
     }
 
     if (
-      mockRaceData.sessionType === 'QUALY'
+      isQualifyingSession
     ) {
       const driverLapTime =
         driver.bestTime
 
-      if (driver.position === 1) {
+      if (qualifyingLeader?.name === driver.name) {
         return driverLapTime ?? 'No Time';
       }
 
@@ -127,12 +209,8 @@ export function PlayersPanel({
         return 'No Time';
       }
 
-      const leader = drivers.find(
-        (d) => d.position === 1
-      );
-
       const leaderLapTime =
-        leader?.bestTime
+        qualifyingLeader?.bestTime
 
       if (
         leaderLapTime
@@ -147,12 +225,14 @@ export function PlayersPanel({
           driverLapTime
         );
 
-        return formatGap(
-          driverMs - leaderMs
-        );
+        return formatGap(Math.max(0, driverMs - leaderMs));
       }
 
       return 'No Time';
+    }
+
+    if (raceSession?.sessionType === 'training') {
+      return driver.bestTime ?? 'No Time';
     }
 
     return driver.gapToLeader;
@@ -190,41 +270,25 @@ export function PlayersPanel({
   })();
 
   const flagHeader =
-    mockRaceData.sessionType === 'RACE'
+    raceSession?.sessionType === 'race'
       ? FLAG_HEADER_CONFIG[
-          mockRaceData.flag as keyof typeof FLAG_HEADER_CONFIG
+          visibleFlag as keyof typeof FLAG_HEADER_CONFIG
         ]
       : null;
 
   const isTimedSession =
-    mockRaceData.sessionType === 'QUALY'
-    || mockRaceData.sessionType === 'TRAINING';
+    raceSession?.sessionType === 'qualy'
+    || raceSession?.sessionType === 'hard_qualy';
 
   const sessionTimeLeft = formatSessionTime(
-    timeToSeconds(mockRaceData.totalTime)
-    - timeToSeconds(mockRaceData.currentTimePassed)
+    (raceSession?.totalTime ?? 0)
+    - (raceSession?.currentTimePassed ?? 0)
   );
-
-  const sortedDrivers = [...drivers].sort((a, b) => {
-    const aPosition = a.position;
-    const bPosition = b.position;
-    const aHasPosition = typeof aPosition === 'number';
-    const bHasPosition = typeof bPosition === 'number';
-
-    if (aHasPosition && bHasPosition) {
-      return aPosition - bPosition;
-    }
-
-    if (aHasPosition) return -1;
-    if (bHasPosition) return 1;
-
-    return String(a.name ?? a.shortName ?? '')
-      .localeCompare(
-        String(b.name ?? b.shortName ?? ''),
-        undefined,
-        { sensitivity: 'base' }
-      );
-  });
+  const isQualyOvertime =
+    isTimedSession
+    && raceSession?.totalTime !== null
+    && raceSession !== null
+    && raceSession.currentTimePassed >= raceSession.totalTime;
 
   return (
     <div
@@ -250,22 +314,27 @@ export function PlayersPanel({
       >
         <div className="text-4xl font-bold leading-none">
           {flagHeader?.title
-            ?? mockRaceData.sessionType}
+            ?? raceSession?.sessionType?.toUpperCase()
+            ?? 'RACE'}
         </div>
 
         <div className="text-xl font-bold leading-tight">
           {flagHeader ? (
             flagHeader.subtitle
+          ) : isQualyOvertime ? (
+            <span className="text-red-500">
+              OVERTIME
+            </span>
           ) : isTimedSession ? (
             sessionTimeLeft
           ) : (
             <>
               LAP{' '}
               <strong>
-                {mockRaceData.currentLap}
+                {raceSession?.currentLap ?? 0}
               </strong>
               /
-              {mockRaceData.totalLaps}
+              {raceSession?.totalLaps ?? 0}
             </>
           )}
         </div>
@@ -372,9 +441,9 @@ export function PlayersPanel({
           !error &&
           drivers.length > 0 && (
             <>
-              {sortedDrivers.map((driver) => (
+              {displayedDrivers.map((driver) => (
                 <div
-                  key={driver.driverNumber ?? driver.name}
+                  key={`${driver.driverNumber}-${driver.name}`}
                   onMouseEnter={(e) => {
 
                     setHoveredDriver(
@@ -410,6 +479,7 @@ export function PlayersPanel({
 
                   <PlayerRow
                     driver={driver}
+                    isOut={raceSession?.sessionType === 'race' && driver.isOut}
                     gapText={getGapText(
                       driver
                     )}

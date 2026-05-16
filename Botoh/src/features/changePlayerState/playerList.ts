@@ -140,6 +140,7 @@ export interface PlayerInfo {
   pubAvatar: string;
 
   driverNumber: number;
+  isFirstDriver: boolean;
 
   carDamage: number;
 

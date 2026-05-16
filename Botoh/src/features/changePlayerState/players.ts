@@ -147,6 +147,7 @@ export function createPlayerInfo(ip?: string, playerId?: number) {
     gapToNext: null,
     shortName: "N/A",
     isLogged: false,
+    isFirstDriver: false,
   };
 }
 
@@ -288,7 +289,6 @@ export function resetPlayer(
   playerList[id].directionChangerForce = undefined;
   playerList[id].currentDirection = undefined;
   playerList[id].currentDirectionEmoji = undefined;
-  playerList[id].driverNumber = 0;
   playerList[id].carDamage = 0;
   playerList[id].position = null;
   playerList[id].gapToLeader = null;

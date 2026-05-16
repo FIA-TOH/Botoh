@@ -20,7 +20,13 @@ interface LoginResponse {
     username: string;
     role: string;
     money: number;
-    level: number;
+    level?: number;
+    shortUsername?: string | null;
+    driverNumber?: number | null;
+    teamId?: string | null;
+    teamName?: string | null;
+    teamTag?: string | null;
+    teamColor?: string | null;
   };
   message?: string;
 }

@@ -9,8 +9,11 @@ export function setupSocketHandlers(io: SocketIOServer) {
     console.log(`Client connected: ${socket.id}`);
     
     socket.on('chat:send', (data) => {
-      console.log(`Chat message received from ${socket.id}:`, data);
       botService.sendToBot('chat:send', data);
+    });
+
+    socket.on('pit:call', (data) => {
+      botService.sendToBot('pit:call', data);
     });
 
     socket.on('disconnect', () => {

@@ -6,8 +6,12 @@ import {
 } from "../../../changePlayerState/playerList";
 import { LeagueScuderiaId } from "../../../scuderias/scuderias";
 import { checkSandbagLeader } from "../battleRoyale.ts/handleSandbag";
+import {
+  generalGameMode,
+  GeneralGameMode,
+} from "../../../changeGameState/changeGameModes";
 
-type RacePosition = {
+export type RacePosition = {
   id: number;
   name: string;
   pitsInfo: PitsInfo;
@@ -22,7 +26,10 @@ type RacePosition = {
 
 export const positionList: RacePosition[] = [];
 
-function formatGap(reference: RacePosition, player: RacePosition) {
+function formatGapAtSharedCheckpoint(
+  reference: RacePosition,
+  player: RacePosition,
+) {
   if (reference.id === player.id) return "0.000";
 
   const lapGap = reference.lap - player.lap;
@@ -30,8 +37,18 @@ function formatGap(reference: RacePosition, player: RacePosition) {
     return `+${lapGap} Lap${lapGap === 1 ? "" : "s"}`;
   }
 
-  const timeGap = Math.abs(player.totalTime - reference.totalTime);
-  if (!Number.isFinite(timeGap)) return null;
+  // Time gaps are only meaningful once both cars have crossed the same
+  // checkpoint. If the reference has already crossed a later sector and the
+  // player has not, the previous measured gap remains the correct information.
+  if (
+    lapGap !== 0 ||
+    reference.currentSector !== player.currentSector
+  ) {
+    return null;
+  }
+
+  const timeGap = player.totalTime - reference.totalTime;
+  if (!Number.isFinite(timeGap) || timeGap < 0) return null;
 
   return `+${timeGap.toFixed(3)}`;
 }
@@ -43,10 +60,18 @@ export function syncRacePositions() {
     updatePlayerListPosition(entry.id, index + 1);
 
     const playerAhead = positionList[index - 1];
+    const currentPlayerState = playerList[entry.id];
+    const measuredGapToLeader = leader
+      ? formatGapAtSharedCheckpoint(leader, entry)
+      : null;
+    const measuredGapToNext = playerAhead
+      ? formatGapAtSharedCheckpoint(playerAhead, entry)
+      : null;
+
     updatePlayerListRaceGaps(
       entry.id,
-      leader ? formatGap(leader, entry) : null,
-      playerAhead ? formatGap(playerAhead, entry) : null,
+      measuredGapToLeader ?? currentPlayerState?.gapToLeader ?? null,
+      measuredGapToNext ?? currentPlayerState?.gapToNext ?? null,
     );
   });
 }
@@ -55,6 +80,13 @@ export function updatePositionList(
   players: { p: PlayerObject; disc: DiscPropertiesObject }[],
   room: RoomObject,
 ) {
+  // Race ranking is authoritative only in race-like modes.
+  // Qualifying/training rankings are based on best lap time and must never be
+  // overwritten by live track order from sector crossings.
+  if (generalGameMode !== GeneralGameMode.GENERAL_RACE) {
+    return;
+  }
+
   const activePlayers = new Set(players.map((player) => player.p.name));
 
   players.forEach((player) => {

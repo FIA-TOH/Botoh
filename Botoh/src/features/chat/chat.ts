@@ -1,5 +1,6 @@
 
 import { log } from "../discord/logger";
+import { sendLogToWebsite } from "../website/sendToWebsite";
 import { DEFAULT_LANGUAGE } from "./language";
 import { getPlayerLanguage, LocalizedMessageFunction } from "./messages";
 
@@ -61,6 +62,11 @@ export function sendMessage(
     });
 
     log(message[defaultLang] as string);
+    sendLogToWebsite({
+      message: message[defaultLang] as string,
+      timestamp: Date.now(),
+      color: color ?? null,
+    });
   }
 }
 
@@ -75,6 +81,11 @@ export function sendCyanMessage(
   });
 
   log(message[defaultLang] as string);
+  sendLogToWebsite({
+    message: message[defaultLang] as string,
+    timestamp: Date.now(),
+    color: COLORS.CYAN,
+  });
 }
 
 export function sendOrangeMessage(
@@ -88,6 +99,11 @@ export function sendOrangeMessage(
   });
 
   log(message[defaultLang] as string);
+  sendLogToWebsite({
+    message: message[defaultLang] as string,
+    timestamp: Date.now(),
+    color: COLORS.ORANGE,
+  });
 }
 
 export function sendLimeMessage(
@@ -101,6 +117,11 @@ export function sendLimeMessage(
   });
 
   log(message[defaultLang] as string);
+  sendLogToWebsite({
+    message: message[defaultLang] as string,
+    timestamp: Date.now(),
+    color: COLORS.LIME,
+  });
 }
 
 export function sendNonLocalizedSmallChatMessage(
@@ -111,6 +132,11 @@ export function sendNonLocalizedSmallChatMessage(
 ) {
   if (!toPlayerID) {
     log(message);
+    sendLogToWebsite({
+      message,
+      timestamp: Date.now(),
+      color: colour,
+    });
   }
   room.sendAnnouncement(
     message,

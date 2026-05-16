@@ -18,6 +18,19 @@ interface WeatherReportData {
   weatherId: string;
 }
 
+export interface LastWeatherAnnouncement {
+  id: string;
+  message: {
+    en: string;
+    es: string;
+    fr: string;
+    tr: string;
+    pt: string;
+  };
+  announcedAtGameTime: number;
+  announcedAtTimestamp: number;
+}
+
 let weatherReportData: WeatherReportData = {
   reports: [],
   lastReportIndex: 0,
@@ -25,6 +38,7 @@ let weatherReportData: WeatherReportData = {
 };
 
 let initialAnnouncementShown = false;
+let lastWeatherAnnouncement: LastWeatherAnnouncement | null = null;
 
 function getWeatherMessage(id: string, meta?: { rain?: number; wet?: number }) {
   const weatherMessages: { [key: string]: { en: string; es: string; fr: string; tr: string; pt: string } } = {
@@ -105,6 +119,12 @@ export function sendInitialWeatherAnnouncement(weatherId: string, room: any): vo
   const report = weatherReportData.reports.find(r => r.time === "00:00");
   if (report) {
     const message = getWeatherMessage(report.id, report.meta);
+    lastWeatherAnnouncement = {
+      id: report.id,
+      message,
+      announcedAtGameTime: 0,
+      announcedAtTimestamp: Date.now(),
+    };
     sendCyanMessage(room, message);
     console.log(`[Weather] Initial announcement: ${message.pt || message.en}`);
   }
@@ -128,6 +148,12 @@ export function checkWeatherReportAnnouncements(currentTime: number, weatherId: 
     
     if (report.time === currentTimeStr) {
       const message = getWeatherMessage(report.id, report.meta);
+      lastWeatherAnnouncement = {
+        id: report.id,
+        message,
+        announcedAtGameTime: currentTime,
+        announcedAtTimestamp: Date.now(),
+      };
       
       sendCyanMessage(room, message);
       console.log(`[Weather] ${currentTimeStr}: ${message.pt || message.en}`);
@@ -149,4 +175,9 @@ export function resetWeatherReportAnnouncements(): void {
     weatherId: ''
   };
   initialAnnouncementShown = false;
+  lastWeatherAnnouncement = null;
+}
+
+export function getLastWeatherAnnouncement(): LastWeatherAnnouncement | null {
+  return lastWeatherAnnouncement;
 }

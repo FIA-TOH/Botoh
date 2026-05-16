@@ -12,8 +12,9 @@ export function lapTimeToMs(timeStr: string): number {
 }
 
 export function formatGap(gapMs: number) {
-  const seconds = Math.floor(gapMs / 1000);
-  const ms = gapMs % 1000;
+  const safeGapMs = Math.max(0, gapMs);
+  const seconds = Math.floor(safeGapMs / 1000);
+  const ms = safeGapMs % 1000;
 
   return `+${seconds}.${ms.toString().padStart(3, '0')}`;
 }
@@ -72,4 +73,48 @@ export function getTireAbbr(tires: Tires) {
     default:
       return 'B';
   }
+}
+
+export function colorNumberToHex(color: number | null | undefined): string {
+  if (typeof color !== 'number' || !Number.isFinite(color)) {
+    return '#FFFFFF';
+  }
+
+  return `#${Math.max(0, color)
+    .toString(16)
+    .padStart(6, '0')
+    .slice(-6)
+    .toUpperCase()}`;
+}
+
+export function isLightColor(color: string): boolean {
+  const normalizedColor = color.replace('#', '');
+
+  if (!/^[0-9a-fA-F]{6}$/.test(normalizedColor)) {
+    return false;
+  }
+
+  const red = parseInt(normalizedColor.slice(0, 2), 16);
+  const green = parseInt(normalizedColor.slice(2, 4), 16);
+  const blue = parseInt(normalizedColor.slice(4, 6), 16);
+  const luminance =
+    (0.2126 * red + 0.7152 * green + 0.0722 * blue) / 255;
+
+  return luminance >= 0.72;
+}
+
+export function isDarkColor(color: string): boolean {
+  const normalizedColor = color.replace('#', '');
+
+  if (!/^[0-9a-fA-F]{6}$/.test(normalizedColor)) {
+    return false;
+  }
+
+  const red = parseInt(normalizedColor.slice(0, 2), 16);
+  const green = parseInt(normalizedColor.slice(2, 4), 16);
+  const blue = parseInt(normalizedColor.slice(4, 6), 16);
+  const luminance =
+    (0.2126 * red + 0.7152 * green + 0.0722 * blue) / 255;
+
+  return luminance <= 0.18;
 }

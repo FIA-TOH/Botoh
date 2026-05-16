@@ -6,9 +6,14 @@ export let vscExtended = false;
 export let vscTriggeredByPlayer: number | undefined;
 import { isPlayerMovingAtSpeed } from "../afk/afk";
 import { Teams } from "../changeGameState/teams";
+import {
+  RaceControlState,
+  setNeutralizationState,
+} from "../commands/flagsAndVSC/raceControl";
 
 export function changeVSC() {
   vsc = !vsc;
+  setNeutralizationState(vsc ? RaceControlState.VirtualSafetyCar : null);
 }
 
 export function deployVSCAutomatically(room: any, playerId?: number) {
@@ -71,6 +76,7 @@ export function extendVSCDuration() {
 
 export function resetVSCState() {
   vsc = false;
+  setNeutralizationState(null);
   vscAutoDeployed = false;
   vscStartTime = undefined;
   vscDuration = undefined;

@@ -171,5 +171,8 @@
   "BR_WINNER": "👑🏆 {{name}} won!, {{eliminated}} eliminated. 👑🏆",
   "LOGIN_USAGE": "Usage: !login <password>",
   "LOGIN_ERROR": "Invalid username or password.",
-  "LOGIN_SUCCESS": "Login successful."
+  "LOGIN_SUCCESS": "Login successful.",
+  "CHAT_CHANNEL_ALL": "All",
+  "CHAT_CHANNEL_TEAM": "Team",
+  "CHAT_CHANNEL_PRIVATE": "Private"
 }

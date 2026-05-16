@@ -1,8 +1,9 @@
+import { colorNumberToHex } from '@/app/utils/race';
+import { LogMessage } from '@/hooks/useLogs';
+import { useEffect, useRef } from 'react';
+
 interface Props {
-  logs?: {
-    message: string;
-    timestamp: number;
-  }[];
+  logs?: LogMessage[];
 
   loading?: boolean;
 
@@ -14,6 +15,15 @@ export function LogsPanel({
   loading = false,
   error = null,
 }: Props) {
+  const logsContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = logsContainerRef.current;
+    if (!container) return;
+
+    container.scrollTop = container.scrollHeight;
+  }, [logs.length]);
+
   return (
     <div
       className="p-4"
@@ -24,6 +34,7 @@ export function LogsPanel({
       }}
     >
       <div
+        ref={logsContainerRef}
         className="
           py-4
           overflow-y-auto
@@ -135,7 +146,12 @@ export function LogsPanel({
                 {'>'}
               </span>
 
-              <span className="text-gray-200 ml-1">
+              <span
+                className="ml-1"
+                style={{
+                  color: colorNumberToHex(log.color),
+                }}
+              >
                 {log.message}
               </span>
             </div>
