@@ -9,6 +9,12 @@ export interface User {
   password_hash: string;
   role: string;
   money: number;
+  shortUsername: string | null;
+  driverNumber: number | null;
+  teamId: string | null;
+  teamName: string | null;
+  teamTag: string | null;
+  teamColor: string | null;
   created_at: string;
 }
 
@@ -73,15 +79,24 @@ class AuthService {
   async findUserByUsername(username: string): Promise<User | null> {
     try {
       const user = await queryOne<User>(
-        `SELECT 
-          id, 
-          username, 
-          password_hash, 
-          role,
-          money, 
-          created_at
-        FROM users 
-        WHERE username = $1`,
+        `SELECT
+          u.id,
+          u.username,
+          u.password_hash,
+          u.role,
+          u.money,
+          u.short_username AS "shortUsername",
+          u.driver_number AS "driverNumber",
+          u.team_id AS "teamId",
+          t.name AS "teamName",
+          t.tag AS "teamTag",
+          t.color AS "teamColor",
+          u.created_at
+        FROM users u
+        LEFT JOIN teams t ON u.team_id = t.id
+        WHERE LOWER(u.username) = LOWER($1)
+        ORDER BY CASE WHEN u.username = $1 THEN 0 ELSE 1 END, u.created_at DESC
+        LIMIT 1`,
         [username]
       );
 
@@ -96,15 +111,22 @@ class AuthService {
   async findUserById(userId: string): Promise<Omit<User, 'password_hash'> | null> {
     try {
       const user = await queryOne<User>(
-        `SELECT 
-          id, 
-          username, 
-          password_hash, 
-          role,
-          money, 
-          created_at
-        FROM users 
-        WHERE id = $1`,
+        `SELECT
+          u.id,
+          u.username,
+          u.password_hash,
+          u.role,
+          u.money,
+          u.short_username AS "shortUsername",
+          u.driver_number AS "driverNumber",
+          u.team_id AS "teamId",
+          t.name AS "teamName",
+          t.tag AS "teamTag",
+          t.color AS "teamColor",
+          u.created_at
+        FROM users u
+        LEFT JOIN teams t ON u.team_id = t.id
+        WHERE u.id = $1`,
         [userId]
       );
 

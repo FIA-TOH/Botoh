@@ -95,7 +95,6 @@
   "FINISH_QUALI": "¡Has completado tu clasificación!",
   "CURRENT_LAP": "Vuelta {{currentLap}}/{{laps}}",
   "POSITION_AND_DISTANCE_AHEAD": "Actualmente estás en P{{position}}. La distancia adelante es: {{distance}} {{units}}",
- 
   "TYRE_WEAR_LAP": "Tus neumáticos están al {{number}}%.",
   "IN_MUTE_MODE": "El modo silencioso está activado. Solo los administradores pueden chatear.",
   "AFK_MESSAGE": "⛔ ¡Si no te mueves en los próximos segundos, serás expulsado! ⛔",
@@ -110,7 +109,6 @@
   "CANCELED_CHANGE_TYRES": "❌🚨❌Pit-stop cancelado, se detectó movimiento.❌🚨❌",
   "CHANGED_TIRES": "{{name}} cambió los neumáticos a {{tires}} con una parada en boxes de {{seconds}}s",
   "FASTEST_PIT": "👨‍🔧 ¡Parada en boxes más rápida de la carrera! {{name}} - {{seconds}}s",
-  
   "EXPLAIN_SERVER": "¡Bienvenido a FTOH! Este es un servidor de carreras de Fórmula 1 en Haxball. Primero, está la clasificación (qualy), donde debes hacer el mejor tiempo posible. Luego viene la carrera, compuesta por 7 vueltas. ¡Presta atención a los neumáticos — marcan toda la diferencia!",
   "EXPLAIN_ERS": "Al mantener presionado el botón de disparo, aparecerá un número en tu avatar, este es el Turbo, úsalo con sabiduría.",
   "GREEN_FLAG": "🟩🚨🟩 ¡Bandera VERDE! 🟩🚨🟩",
@@ -170,5 +168,8 @@
   "TWO_LAPS": "☠️🛡️ Vuelta {{currentLap}}, eliminación PRÓXIMA VUELTA 🛡️☠️",
   "BR_ELIMINATED": "☠️🔥 {{name}} eliminado 🔥☠️",
   "BR_REMAINING": "☠️👥 {{remaining}} restantes. 👥☠️",
-  "BR_WINNER": "👑🏆 {{name}} ganó, {{eliminated}} eliminados. 👑🏆"
+  "BR_WINNER": "👑🏆 {{name}} ganó, {{eliminated}} eliminados. 👑🏆",
+  "LOGIN_USAGE": "Uso: !login <contraseña>",
+  "LOGIN_ERROR": "Usuario o contraseña inválidos.",
+  "LOGIN_SUCCESS": "Inicio de sesión correcto."
 }

@@ -185,6 +185,7 @@ export default function AdminPage() {
           headers: getAuthHeaders(),
           body: JSON.stringify({
             ...userForm,
+            teamId: userForm.teamId || null,
             driverNumber: Number(userForm.driverNumber),
           }),
         },
@@ -487,9 +488,8 @@ export default function AdminPage() {
                 className="w-full bg-gray-700 rounded-lg px-4 py-2"
                 value={userForm.teamId}
                 onChange={(event) => setUserForm((prev) => ({ ...prev, teamId: event.target.value }))}
-                required
               >
-                <option value="">Selecione</option>
+                <option value="">Sem scuderia</option>
                 {sortedScuderias.map((scuderia) => (
                   <option key={scuderia.id} value={scuderia.id}>{scuderia.name}</option>
                 ))}

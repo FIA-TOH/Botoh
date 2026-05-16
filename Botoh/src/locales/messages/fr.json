@@ -51,7 +51,7 @@
   "HELP_PART_ONE": "   Comment jouer  | !explain_server",
   "HELP_PART_TWO": "     Pneus        | !explain_tyres",
   "HELP_PART_THREE": "     Turbo         | !explain_ers",
- "HELP_PART_FOUR": "     Pluie         | !explain_rain",
+  "HELP_PART_FOUR": "     Pluie         | !explain_rain",
   "HELP_PART_FIVE": "Commandes      | !commands",
   "HELP_PART_SIX": " D'autres questions ? | !discord",
   "CLEARED_BANS": "Les bans ont été réinitialisé",
@@ -95,7 +95,6 @@
   "FINISH_QUALI": "Vous avez terminé votre quali !",
   "CURRENT_LAP": "Tour {{currentLap}}/{{laps}}",
   "POSITION_AND_DISTANCE_AHEAD": "Vous êtes actuellement en P{{position}}. La distance à parcourir est : {{distance}} {{units}}",
-  
   "TYRE_WEAR_LAP": "Vos pneus sont à {{number}} %.",
   "IN_MUTE_MODE": "Le mode silencieux est activé. Seuls les administrateurs peuvent discuter",
   "AFK_MESSAGE": "⛔ Si vous ne bougez pas dans les prochaines secondes, vous serez expulsé ! ⛔",
@@ -110,7 +109,6 @@
   "CANCELED_CHANGE_TYRES": "❌🚨❌Arrêt au stand annulé, mouvement détecté.❌🚨❌",
   "CHANGED_TIRES": "{{name}} a changé ses pneus pour {{tires}} avec un arrêt au stand de {{seconds}}s",
   "FASTEST_PIT": "👨‍🔧 Arrêt au stand le plus rapide de la course ! {{name}} - {{seconds}}s",
-  
   "EXPLAIN_SERVER": "Bienvenue sur FTOH ! C'est un serveur de course de Formule 1 sur Haxball. D'abord, il y a la qualification (qualy), où vous devez réaliser le meilleur temps possible. Ensuite, c'est la course, composée de 7 tours. Faites attention aux pneus — ils font toute la différence !",
   "EXPLAIN_ERS": "En maintenant le bouton de tir enfoncé, un numéro apparaîtra sur votre avatar, c'est le Turbo, utilisez-le judicieusement.",
   "GREEN_FLAG": "🟩🚨🟩 Drapeau VERT! 🟩🚨🟩",
@@ -170,5 +168,8 @@
   "TWO_LAPS": "☠️🛡️ Tour {{currentLap}}, élimination PROCHAIN TOUR 🛡️☠️",
   "BR_ELIMINATED": "☠️🔥 {{name}} éliminé 🔥☠️",
   "BR_REMAINING": "☠️👥 {{remaining}} restants. 👥☠️",
-  "BR_WINNER": "👑🏆 {{name}} a gagné, {{eliminated}} éliminés. 👑🏆"
+  "BR_WINNER": "👑🏆 {{name}} a gagné, {{eliminated}} éliminés. 👑🏆",
+  "LOGIN_USAGE": "Utilisation : !login <mot_de_passe>",
+  "LOGIN_ERROR": "Nom d'utilisateur ou mot de passe invalide.",
+  "LOGIN_SUCCESS": "Connexion réussie."
 }

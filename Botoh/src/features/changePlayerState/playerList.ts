@@ -4,6 +4,7 @@ import { PitStep } from "../tires&pits/pitMessaging";
 import { PitResult } from "../tires&pits/pitStopFunctions";
 
 import { Tires } from "../tires&pits/tires";
+import { LeagueScuderiaId } from "../scuderias/scuderias";
 
 export interface PitsInfo {
   pitsNumber: number;
@@ -43,7 +44,7 @@ export interface PlayerInfo {
   isInTheRoom: boolean;
   afk: boolean;
   afkAlert: boolean;
-  leagueScuderia: string | null;
+  leagueScuderia: LeagueScuderiaId | null;
   didHardQualy: boolean;
 
   sandbagPenalty: number;
@@ -147,6 +148,8 @@ export interface PlayerInfo {
   gapToLeader: string | null;
   gapToNext: string | null;
   shortName: string;
+
+  isLogged: boolean;
 }
 
 type PlayerList = {

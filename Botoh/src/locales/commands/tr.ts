@@ -345,6 +345,11 @@ export default function tr_commands(
     args: string[],
     room: RoomObject,
   ) => void,
+  handleLoginCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void | Promise<void>,
 ): Commands {
   return {
     "!admin": handleAdminCommand,
@@ -422,5 +427,6 @@ export default function tr_commands(
     "!config": handleConfigCommand,
     "!manage_tyres": handleManageTyresCommand,
     "!pit": handlePitCommand,
+    "!login": handleLoginCommand,
   };
 }

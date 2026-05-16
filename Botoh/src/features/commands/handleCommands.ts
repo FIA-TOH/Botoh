@@ -75,6 +75,7 @@ import { handleSetNewWeatherId } from "./weather/handleSetNewWeatherId";
 import { handleConfigCommand } from "./adminThings/handleConfigCommand";
 import { handleManageTyresCommand } from "./adminThings/handleManageTyresCommand";
 import { handlePitCommand } from "./adminThings/handlePitCommand";
+import { handleLoginCommand } from "./login/handleLoginCommand";
 
 export type CommandFunction = (
   handleAdminCommand: (
@@ -424,6 +425,11 @@ export type CommandFunction = (
     args: string[],
     room: RoomObject,
   ) => void,
+  handleLoginCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void | Promise<void>,
 ) => Commands;
 
 function importCommandsByLanguage(commandFunctions: {
@@ -506,6 +512,7 @@ function importCommandsByLanguage(commandFunctions: {
         handleConfigCommand,
         handleManageTyresCommand,
         handlePitCommand,
+        handleLoginCommand,
       ),
     }),
     {},
@@ -589,6 +596,7 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
         handleConfigCommand,
         handleManageTyresCommand,
         handlePitCommand,
+        handleLoginCommand,
       ),
     }),
     {},

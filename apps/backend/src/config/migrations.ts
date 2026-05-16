@@ -38,6 +38,7 @@ class MigrationService {
     await query('ALTER TABLE users ADD COLUMN IF NOT EXISTS is_driver BOOLEAN DEFAULT false');
     await query('ALTER TABLE users ADD COLUMN IF NOT EXISTS driver_number INTEGER');
     await query('ALTER TABLE users ADD COLUMN IF NOT EXISTS team_id UUID REFERENCES teams(id) ON DELETE SET NULL');
+    await query('ALTER TABLE users ALTER COLUMN team_id DROP NOT NULL');
   }
 }
 

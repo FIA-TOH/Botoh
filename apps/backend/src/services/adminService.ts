@@ -10,7 +10,7 @@ export interface AdminUserInput {
     teamAssistant?: boolean;
     driver?: boolean;
   };
-  teamId: string;
+  teamId: string | null;
   driverNumber: number;
 }
 
@@ -21,6 +21,10 @@ export interface ScuderiaInput {
 }
 
 class AdminService {
+  private normalizeTeamId(teamId: string | null | undefined) {
+    return teamId || null;
+  }
+
   async listUsers() {
     const result = await query(`
       SELECT
@@ -75,7 +79,7 @@ class AdminService {
         Boolean(input.roles.teamPrincipal),
         Boolean(input.roles.teamAssistant),
         Boolean(input.roles.driver),
-        input.teamId,
+        this.normalizeTeamId(input.teamId),
         input.driverNumber,
       ],
     );
@@ -90,7 +94,7 @@ class AdminService {
       Boolean(input.roles.teamPrincipal),
       Boolean(input.roles.teamAssistant),
       Boolean(input.roles.driver),
-      input.teamId,
+      this.normalizeTeamId(input.teamId),
       input.driverNumber,
       userId,
     ];

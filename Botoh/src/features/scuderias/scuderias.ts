@@ -9,10 +9,13 @@ import { Penshiryu } from "./scuderia/penshiryu";
 import { ScuderiaColors } from "./scuderiaColours";
 import { Suspension } from "./tyres";
 
-export interface leagueScuderia {
+export type LeagueScuderiaId = string;
+
+export interface Scuderia {
   name: string;
   tag: string;
   color: number;
+  fromBD?: boolean;
   engine?: Engine;
   chassis?: Chassis;
   batery?: Batery;
@@ -20,7 +23,9 @@ export interface leagueScuderia {
   pitCrew?: PitCrew;
 }
 
-export const leagueScuderia: { [key: string]: leagueScuderia } = {
+export type ScuderiaRegistry = Record<LeagueScuderiaId, Scuderia>;
+
+const hardcodedLeagueScuderias = {
   Penshiryu,
   AstonMaia,
   McLarper,
@@ -107,4 +112,33 @@ export const leagueScuderia: { [key: string]: leagueScuderia } = {
     tag: "PH",
     color: ScuderiaColors.PHM,
   },
+} satisfies ScuderiaRegistry;
+
+export const leagueScuderia: ScuderiaRegistry = {
+  ...hardcodedLeagueScuderias,
 };
+
+export function hasLeagueScuderia(id: string): boolean {
+  return Object.prototype.hasOwnProperty.call(leagueScuderia, id);
+}
+
+export function getLeagueScuderia(
+  id: LeagueScuderiaId | null | undefined,
+): Scuderia | null {
+  if (!id || !hasLeagueScuderia(id)) return null;
+  return leagueScuderia[id];
+}
+
+export function registerLeagueScuderia(
+  id: LeagueScuderiaId,
+  scuderia: Scuderia,
+) {
+  leagueScuderia[id] = {
+    ...scuderia,
+    fromBD: scuderia.fromBD ?? true,
+  };
+}
+
+export function registerLeagueScuderias(scuderias: ScuderiaRegistry) {
+  Object.assign(leagueScuderia, scuderias);
+}

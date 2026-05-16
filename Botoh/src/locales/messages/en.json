@@ -95,7 +95,6 @@
   "FINISH_QUALI": "You have completed your quali!",
   "CURRENT_LAP": "Lap {{currentLap}}/{{laps}}",
   "POSITION_AND_DISTANCE_AHEAD": "You are currently in P{{position}}. Distance ahead is: {{distance}} {{units}}",
- 
   "TYRE_WEAR_LAP": "Your tyres are at {{number}}%.",
   "IN_MUTE_MODE": "Mute mode is on. Only admins can chat",
   "AFK_MESSAGE": "⛔ If you don't move on the next seconds, you will be kicked! ⛔",
@@ -110,7 +109,6 @@
   "CANCELED_CHANGE_TYRES": "❌🚨❌Pit stop canceled, movement detected.❌🚨❌",
   "CHANGED_TIRES": "{{name}} changed tyres to {{tires}} with a {{seconds}}s pitstop",
   "FASTEST_PIT": "👨‍🔧 Fastest pit stop of the race! {{name}} - {{seconds}}s",
-  
   "EXPLAIN_SERVER": "Welcome to FTOH! This is a Formula 1 racing server in Haxball. First is qualifying, where you must set the best possible time. Then comes the race, consisting of 7 laps. Pay attention to your tyres — they make all the difference!",
   "EXPLAIN_ERS": "By holding the shoot button, a number will appear on your avatar, this is the Turbo, use it wisely.",
   "GREEN_FLAG": "🟩🚨🟩 GREEN FLAG! 🟩🚨🟩",
@@ -170,5 +168,8 @@
   "TWO_LAPS": "☠️🛡️ Lap {{currentLap}}, elimination NEXT LAP 🛡️☠️",
   "BR_ELIMINATED": "☠️🔥 {{name}} eliminated 🔥☠️",
   "BR_REMAINING": "☠️👥 {{remaining}} remaining. 👥☠️",
-  "BR_WINNER": "👑🏆 {{name}} won!, {{eliminated}} eliminated. 👑🏆"
+  "BR_WINNER": "👑🏆 {{name}} won!, {{eliminated}} eliminated. 👑🏆",
+  "LOGIN_USAGE": "Usage: !login <password>",
+  "LOGIN_ERROR": "Invalid username or password.",
+  "LOGIN_SUCCESS": "Login successful."
 }

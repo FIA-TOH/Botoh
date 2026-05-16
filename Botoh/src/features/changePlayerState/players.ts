@@ -146,6 +146,7 @@ export function createPlayerInfo(ip?: string, playerId?: number) {
     gapToLeader: null,
     gapToNext: null,
     shortName: "N/A",
+    isLogged: false,
   };
 }
 
@@ -292,5 +293,4 @@ export function resetPlayer(
   playerList[id].position = null;
   playerList[id].gapToLeader = null;
   playerList[id].gapToNext = null;
-  playerList[id].shortName = "N/A";
 }

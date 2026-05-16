@@ -3,17 +3,14 @@ import { sendErrorMessage } from "../chat/chat";
 import { COMMANDS } from "../commands/handleCommands";
 import { MESSAGES } from "../chat/messages";
 import { PlayerInfo, playerList } from "../changePlayerState/playerList";
-import { leagueScuderia } from "../scuderias/scuderias";
+import { getLeagueScuderia } from "../scuderias/scuderias";
 import { log } from "../discord/logger";
 import { mute_mode } from "../chat/toggleMuteMode";
 import { updatePlayerActivity } from "../afk/afk";
 import { sendToWebsite } from "../website/sendToWebsite";
 
 function getPlayerScuderia(playerInfo: PlayerInfo) {
-  if (!playerInfo.leagueScuderia) return null;
-  const scuderiaKey = playerInfo.leagueScuderia as keyof typeof leagueScuderia;
-  if (!leagueScuderia.hasOwnProperty(scuderiaKey)) return null;
-  return leagueScuderia[scuderiaKey];
+  return getLeagueScuderia(playerInfo.leagueScuderia);
 }
 
 export function PlayerChat(room: RoomObject) {
@@ -25,8 +22,8 @@ export function PlayerChat(room: RoomObject) {
 
     sendToWebsite(player, message);
 
-    const command = message.toLowerCase().split(" ")[0];
-    const args = message.toLowerCase().split(" ").slice(1);
+    const [rawCommand, ...args] = message.split(" ");
+    const command = rawCommand.toLowerCase();
 
     if (command[0] !== "!") {
       if (mute_mode && !player.admin) {

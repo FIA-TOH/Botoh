@@ -18,7 +18,6 @@
   "PIT_MISSING_ARGUMENT": "Uso: !pit <old|new>",
   "PIT_INVALID_ARGUMENT": "Argumento inválido. Use: old ou new",
   "PIT_SUCCESS": "Configuração pit '{{pitType}}' aplicada com sucesso",
-
   "LAPS_ON_CURRENT_TIRE": "Você completou {{currentLaps}} voltas com os pneus atuais.",
   "FLAT_TYRE": "❗ Seus pneus estão furados, faça o pitstop! (Digite !tyres dentro do BOX) ❗",
   "FIVE_PERCENTAGE_TYRES": "❗ Seus pneus estão quase furados! Apenas 5% restantes! ❗",
@@ -94,7 +93,6 @@
   "FINISH_QUALI": "Você completou sua qualificação!",
   "CURRENT_LAP": "Volta {{currentLap}}/{{laps}}",
   "POSITION_AND_DISTANCE_AHEAD": "Você está atualmente em P{{position}}. Distância à frente: {{distance}} {{units}}",
-  
   "TYRE_WEAR_LAP": "Seus pneus estão em {{number}}%.",
   "IN_MUTE_MODE": "Modo mudo ativado. Apenas administradores podem conversar",
   "AFK_MESSAGE": "⛔ Se você não se mover nos proximos segundos, você será kickado! ⛔",
@@ -102,7 +100,6 @@
   "REMOVED_FROM_AFK": "Vocë não está mais AFK. Espere a corrida terminar para voltar ao jogo.",
   "ENABLED_TYRES": "Agora as açoes dos pneus são {{boolean}}",
   "TIPS": "Aumente seu extrapolation para 100 | diminua o zoom com cltr - | Copie o que os melhores estão fazendo",
-
   "EXPLAIN_TYRES": "Os seus pneus desgastam com o tempo, quando estiver quase acabando, digite !pneus (s|m|h) dentro dos boxes e espere a mensagem de confirmação para se mover.",
   "TYRE_STEP_CHANGING": "🛞{{fltstatus}}🛞{{frtstatus}}🛞{{bltstatus}}🛞{{brtstatus}} |🟨 trocando...",
   "TYRE_STEP_ERROR": "🛞{{fltstatus}}🛞{{frtstatus}}🛞{{bltstatus}}🛞{{brtstatus}} |❌ houve um problema, estamos corrigindo!",
@@ -110,7 +107,6 @@
   "CANCELED_CHANGE_TYRES": "❌🚨❌Pit-stop cancelado, movimento detectado.❌🚨❌",
   "CHANGED_TIRES": "{{name}} trocou os pneus para {{tires}} com um pitstop de {{seconds}}s",
   "FASTEST_PIT": "👨‍🔧 Pit Stop mais rapido da corrida! {{name}} - {{seconds}}s",
-  
   "EXPLAIN_ERS": "Ao segurar o botão de chute, aparecerá um número no seu Avatar, este é o Turbo, use com sabedoria.",
   "EXPLAIN_SERVER": "Bem-vindo à FTOH!, Este é um servidor de corrida de Fórmula 1 no Haxball. Primeiro, acontece a qualificação (qualy), onde você deve fazer o melhor tempo possível. Depois, vem a corrida, composta por 7 voltas. Fique atento aos pneus — eles fazem toda a diferença!",
   "GREEN_FLAG": "🟩🚨🟩 Bandeira VERDE! 🟩🚨🟩",
@@ -172,5 +168,8 @@
   "TWO_LAPS": "☠️🛡️ Volta {{currentLap}}, eliminação PRÓXIMA VOLTA 🛡️☠️",
   "BR_ELIMINATED": "☠️🔥 {{name}} eliminado 🔥☠️",
   "BR_REMAINING": "☠️👥 {{remaining}} restantes. 👥☠️",
-  "BR_WINNER": "👑🏆 {{name}} venceu, {{eliminated}} eliminados. 👑🏆"
+  "BR_WINNER": "👑🏆 {{name}} venceu, {{eliminated}} eliminados. 👑🏆",
+  "LOGIN_USAGE": "Uso: !login <senha>",
+  "LOGIN_ERROR": "Usuário ou senha inválidos.",
+  "LOGIN_SUCCESS": "Login realizado com sucesso."
 }

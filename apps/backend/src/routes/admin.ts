@@ -24,7 +24,10 @@ const userValidation = [
     .matches(/^[A-Z0-9]+$/)
     .withMessage('Short username can only contain uppercase letters and numbers'),
   rolesValidation,
-  body('teamId').isUUID().withMessage('Team is required'),
+  body('teamId')
+    .optional({ nullable: true })
+    .isUUID()
+    .withMessage('Team must be a valid UUID when provided'),
   body('driverNumber')
     .isInt({ min: 0, max: 999 })
     .withMessage('Driver number must be between 0 and 999'),

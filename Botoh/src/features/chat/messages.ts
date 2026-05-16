@@ -1604,6 +1604,27 @@ export const MESSAGES = {
     tr: replaceTemplateString(tr_messages.SCUDERIA_ERROR, { tag: tag }),
     pt: replaceTemplateString(pt_messages.SCUDERIA_ERROR, { tag: tag }),
   }),
+  LOGIN_USAGE: (): LocalizedMessageFunction => ({
+    en: en_messages.LOGIN_USAGE,
+    es: es_messages.LOGIN_USAGE,
+    fr: fr_messages.LOGIN_USAGE,
+    tr: tr_messages.LOGIN_USAGE,
+    pt: pt_messages.LOGIN_USAGE,
+  }),
+  LOGIN_ERROR: (): LocalizedMessageFunction => ({
+    en: en_messages.LOGIN_ERROR,
+    es: es_messages.LOGIN_ERROR,
+    fr: fr_messages.LOGIN_ERROR,
+    tr: tr_messages.LOGIN_ERROR,
+    pt: pt_messages.LOGIN_ERROR,
+  }),
+  LOGIN_SUCCESS: (): LocalizedMessageFunction => ({
+    en: en_messages.LOGIN_SUCCESS,
+    es: es_messages.LOGIN_SUCCESS,
+    fr: fr_messages.LOGIN_SUCCESS,
+    tr: tr_messages.LOGIN_SUCCESS,
+    pt: pt_messages.LOGIN_SUCCESS,
+  }),
   STARTING_LAP: (): LocalizedMessageFunction => ({
     en: en_messages.STARTING_LAP,
     es: es_messages.STARTING_LAP,

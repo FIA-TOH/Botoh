@@ -95,7 +95,6 @@
   "FINISH_QUALI": "Sıralamanızı tamamladınız!",
   "CURRENT_LAP": "Tur {{currentLap}}/{{laps}}",
   "POSITION_AND_DISTANCE_AHEAD": "Şu anda P{{position}}'desiniz. İlerideki mesafe: {{distance}} {{units}}",
- 
   "TYRE_WEAR_LAP": "Lastikleriniz %{{number}} durumda.",
   "IN_MUTE_MODE": "Sessiz mod aktif. Sadece adminler sohbet edebilir.",
   "AFK_MESSAGE": "⛔ Önümüzdeki birkaç saniye içinde hareket etmezseniz, atılacaksınız! ⛔",
@@ -110,7 +109,6 @@
   "CANCELED_CHANGE_TYRES": "❌🚨❌Pit-stop iptal edildi, hareket algılandı.❌🚨❌",
   "CHANGED_TIRES": "{{name}}, {{seconds}}s pit-stop ile lastiklerini {{tires}} olarak değiştirdi",
   "FASTEST_PIT": "👨‍🔧 Yarışın en hızlı pit stopu! {{name}} - {{seconds}}s",
- 
   "EXPLAIN_SERVER": "FTOH'a hoş geldiniz! Bu, Haxball'da bir Formula 1 yarış sunucusudur. Önce en iyi zamanı yapmanız gereken sıralama turları (qualy) var. Sonra 7 turdan oluşan yarış başlar. Lastiklere dikkat edin — farkı onlar yaratır!",
   "EXPLAIN_ERS": "Vuruş düğmesine basılı tutarken, avatarınızda bir sayı belirecek, bu Turbo'dur, dikkatli kullanın.",
   "GREEN_FLAG": "🟩🚨🟩 YEŞİL BAYRAK! 🟩🚨🟩",
@@ -170,5 +168,8 @@
   "BR_REMAINING": "☠️👥 {{remaining}} kaldı. 👥☠️",
   "BR_WINNER": "👑🏆 {{name}} kazandı, {{eliminated}} elendi. 👑🏆",
   "LAPPED_NORMALIZED_LAPS": "{{name}} turlarını normalleştirdi ve şimdi grid ile birlikte",
-  "LAPPED_REMAINING_LAPS": "{{name}} grid'e katılmak için {{laps}} daha tur(lar) var"
+  "LAPPED_REMAINING_LAPS": "{{name}} grid'e katılmak için {{laps}} daha tur(lar) var",
+  "LOGIN_USAGE": "Kullanım: !login <şifre>",
+  "LOGIN_ERROR": "Geçersiz kullanıcı adı veya şifre.",
+  "LOGIN_SUCCESS": "Giriş başarılı."
 }

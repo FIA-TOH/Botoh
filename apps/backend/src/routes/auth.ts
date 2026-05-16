@@ -39,9 +39,9 @@ const createUserValidation = [
     })
     .withMessage('At least one user function must be selected'),
   body('teamId')
-    .isString()
-    .notEmpty()
-    .withMessage('Team is required'),
+    .optional({ nullable: true })
+    .isUUID()
+    .withMessage('Team must be a valid UUID when provided'),
   body('driverNumber')
     .isInt({ min: 0, max: 999 })
     .withMessage('Driver number must be between 0 and 999'),

@@ -4,6 +4,7 @@ import {
   updatePlayerListRaceGaps,
   updatePlayerListPosition,
 } from "../../../changePlayerState/playerList";
+import { LeagueScuderiaId } from "../../../scuderias/scuderias";
 import { checkSandbagLeader } from "../battleRoyale.ts/handleSandbag";
 
 type RacePosition = {
@@ -16,7 +17,7 @@ type RacePosition = {
   lap: number;
   active: boolean;
   currentSector: number;
-  team: string | null;
+  team: LeagueScuderiaId | null;
 };
 
 export const positionList: RacePosition[] = [];
