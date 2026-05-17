@@ -2,6 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Oxanium } from 'next/font/google'
 import { AuthProvider } from '@/hooks/useAuth';
+import { AuthGate } from '@/components/AuthGate';
 
 const oxanium = Oxanium({ 
   subsets: ['latin'],
@@ -23,7 +24,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${oxanium.className} ${oxanium.variable}`}>
         <AuthProvider>
-          {children}
+          <AuthGate>
+            {children}
+          </AuthGate>
         </AuthProvider>
       </body>
     </html>

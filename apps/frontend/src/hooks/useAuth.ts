@@ -132,6 +132,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     clearAuthData();
+    fetch('/api/auth/logout', {
+      method: 'POST',
+    }).catch(() => {
+      // Local logout already completed; cookie cleanup can fail silently.
+    });
     router.push('/login');
   };
 
