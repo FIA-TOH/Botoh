@@ -3,14 +3,17 @@ import helmet from 'helmet';
 import compression from 'compression';
 import { Request, Response, NextFunction } from 'express';
 import config from '../config/environment';
+import { getRequestLanguage, translateMessage } from '../i18n';
 
 // Rate limiting configuration
 export const rateLimiter = rateLimit({
   windowMs: config.rateLimitWindowMs,
   max: config.rateLimitMaxRequests,
-  message: {
-    error: 'Too many requests from this IP, please try again later.',
-    retryAfter: Math.ceil(config.rateLimitWindowMs / 1000)
+  handler: (req, res) => {
+    res.status(429).json({
+      error: translateMessage('Too many requests from this IP, please try again later.', getRequestLanguage(req)),
+      retryAfter: Math.ceil(config.rateLimitWindowMs / 1000),
+    });
   },
   standardHeaders: true,
   legacyHeaders: false,
@@ -45,7 +48,7 @@ export const validateRequest = (req: Request, res: Response, next: NextFunction)
   // Validate Content-Type for POST/PUT requests
   if (['POST', 'PUT', 'PATCH'].includes(req.method) && !req.is('application/json')) {
     return res.status(400).json({
-      error: 'Invalid Content-Type. Expected application/json'
+      error: translateMessage('Invalid Content-Type. Expected application/json', getRequestLanguage(req))
     });
   }
 
@@ -61,7 +64,7 @@ export const errorHandler = (err: Error, req: Request, res: Response, next: Next
 
   // Don't leak error details in production
   const message = config.nodeEnv === 'production' 
-    ? 'Internal Server Error' 
+    ? translateMessage('Internal Server Error', getRequestLanguage(req))
     : err.message;
 
   res.status(500).json({

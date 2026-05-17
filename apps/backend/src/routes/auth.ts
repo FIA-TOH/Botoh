@@ -2,6 +2,7 @@
 import { body, validationResult } from 'express-validator';
 import authService from '../services/authService';
 import { authMiddleware, AuthRequest } from '../middleware/auth';
+import { getRequestLanguage, translateMessage, translateValidationErrors } from '../i18n';
 
 const router = Router();
 
@@ -45,6 +46,10 @@ const createUserValidation = [
   body('driverNumber')
     .isInt({ min: 0, max: 999 })
     .withMessage('Driver number must be between 0 and 999'),
+  body('language')
+    .optional()
+    .isIn(['pt', 'en', 'es'])
+    .withMessage('Language must be pt, en, or es'),
 ];
 
 // POST /auth/login - User login
@@ -55,8 +60,8 @@ router.post('/login', loginValidation, async (req: Request, res: Response) => {
     if (!errors.isEmpty()) {
       return res.status(400).json({
         success: false,
-        message: 'Validation failed',
-        errors: errors.array(),
+        message: translateMessage('Validation failed', getRequestLanguage(req)),
+        errors: translateValidationErrors(errors.array(), getRequestLanguage(req)),
       });
     }
 
@@ -76,21 +81,21 @@ router.post('/login', loginValidation, async (req: Request, res: Response) => {
 
       return res.json({
         success: true,
-        message: 'Login successful',
+        message: translateMessage('Login successful', getRequestLanguage(req)),
         token: result.token,
         user: result.user,
       });
     } else {
       return res.status(401).json({
         success: false,
-        message: result.message,
+        message: translateMessage(result.message, getRequestLanguage(req)),
       });
     }
   } catch (error) {
     console.error('Login route error:', error);
     return res.status(500).json({
       success: false,
-      message: 'Internal server error',
+      message: translateMessage('Internal server error', getRequestLanguage(req)),
     });
   }
 });
@@ -101,7 +106,7 @@ router.get('/me', authMiddleware, async (req: AuthRequest, res: Response) => {
     if (!req.user) {
       return res.status(401).json({
         success: false,
-        message: 'User not authenticated',
+        message: translateMessage('User not authenticated', getRequestLanguage(req)),
       });
     }
 
@@ -111,7 +116,7 @@ router.get('/me', authMiddleware, async (req: AuthRequest, res: Response) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: 'User not found',
+        message: translateMessage('User not found', getRequestLanguage(req)),
       });
     }
 
@@ -123,7 +128,7 @@ router.get('/me', authMiddleware, async (req: AuthRequest, res: Response) => {
     console.error('Get user info error:', error);
     return res.status(500).json({
       success: false,
-      message: 'Internal server error',
+      message: translateMessage('Internal server error', getRequestLanguage(req)),
     });
   }
 });
@@ -133,7 +138,7 @@ router.post('/logout', (req: Request, res: Response) => {
   res.clearCookie('token');
   return res.json({
     success: true,
-    message: 'Logout successful',
+    message: translateMessage('Logout successful', getRequestLanguage(req)),
   });
 });
 
@@ -145,8 +150,8 @@ router.post('/create-user', authMiddleware, createUserValidation, async (req: Au
     if (!errors.isEmpty()) {
       return res.status(400).json({
         success: false,
-        message: 'Validation failed',
-        errors: errors.array(),
+        message: translateMessage('Validation failed', getRequestLanguage(req)),
+        errors: translateValidationErrors(errors.array(), getRequestLanguage(req)),
       });
     }
 
@@ -158,6 +163,7 @@ router.post('/create-user', authMiddleware, createUserValidation, async (req: Au
       roles,
       teamId,
       driverNumber,
+      language,
     } = req.body;
 
     // TODO: persist shortUsername, roles, teamId and driverNumber once user/team
@@ -172,26 +178,28 @@ router.post('/create-user', authMiddleware, createUserValidation, async (req: Au
       username,
       password,
       role: 'user' // Default role for new users
+      ,
+      language: language ?? 'pt',
     });
 
     if (result.success) {
       console.log(` New user created: ${username} by admin`);
       return res.status(201).json({
         success: true,
-        message: 'User created successfully',
+        message: translateMessage('User created successfully', getRequestLanguage(req)),
         user: result.user
       });
     } else {
       return res.status(400).json({
         success: false,
-        message: result.message || 'Failed to create user'
+        message: translateMessage(result.message || 'Failed to create user', getRequestLanguage(req))
       });
     }
   } catch (error) {
     console.error('Create user error:', error);
     return res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: translateMessage('Internal server error', getRequestLanguage(req))
     });
   }
 });
@@ -200,7 +208,7 @@ router.post('/create-user', authMiddleware, createUserValidation, async (req: Au
 router.get('/verify', authMiddleware, (req: AuthRequest, res: Response) => {
   return res.json({
     success: true,
-    message: 'Token is valid',
+    message: translateMessage('Token is valid', getRequestLanguage(req)),
     user: req.user,
   });
 });

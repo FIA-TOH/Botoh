@@ -1,5 +1,4 @@
-import { Teams } from "../../../../Botoh/src/features/changeGameState/teams";
-import { Tires } from "../../../../Botoh/src/features/tires&pits/tires";
+import { Teams, Tires } from '@/types/game';
 
 export type SessionType =
   | 'race'

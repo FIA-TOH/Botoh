@@ -116,6 +116,7 @@ export default function LoginPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'x-language': 'en',
         },
         body: JSON.stringify(formData),
       });
@@ -190,7 +191,7 @@ export default function LoginPage() {
               value={formData.username}
               onChange={handleInputChange}
               required
-              placeholder="Nome de usuário"
+              placeholder="Username"
               disabled={isLoading}
             />
 
@@ -202,7 +203,7 @@ export default function LoginPage() {
               value={formData.password}
               onChange={handleInputChange}
               required
-              placeholder="Senha"
+              placeholder="Password"
               disabled={isLoading}
             />
 
@@ -210,9 +211,9 @@ export default function LoginPage() {
             <FtohButton
               type="submit"
               loading={isLoading}
-              loadingText="Entrando..."
+              loadingText="Signing in..."
             >
-              ENTRAR
+              SIGN IN
             </FtohButton>
           </form>
         </FtohCard>
@@ -228,3 +229,4 @@ export default function LoginPage() {
     </main>
   );
 }
+

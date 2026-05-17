@@ -1,5 +1,5 @@
 // DriverHud.tsx
-import { Teams } from '../../../../../Botoh/src/features/changeGameState/teams';
+import { Teams } from '@/types/game';
 import { FtohButton } from '@/components/FtohButton';
 
 import {
@@ -11,6 +11,7 @@ import {
 import { DriverCircle } from './DriverCircle';
 import { TelemetryBar } from './TelemetryBar';
 import { Driver } from '@/mocks/raceData';
+import { useTranslations } from '@/i18n';
 
 interface Props {
   driver?: Driver;
@@ -23,13 +24,14 @@ export function DriverHud({
   align,
   onPitCall,
 }: Props) {
+  const { t } = useTranslations();
   const isOut = !driver || !driver.isInTheRoom || driver.team !== Teams.RUNNERS;
   const showTelemetry = !!driver && !isOut;
   const pitDisabled = !driver || isOut || driver.inPitLane;
   const driverVisualOpacity = isOut
     ? 0.5
     : 1;
-  const driverName = driver?.name ?? 'Sem piloto';
+  const driverName = driver?.name ?? t.common.noDriver;
   const driverNumber = driver?.driverNumber ?? '??';
   const driverPosition = driver?.position ?? '-';
   const gapToLeader = driver?.gapToLeader ?? '';
@@ -227,3 +229,4 @@ export function DriverHud({
     </div>
   );
 }
+

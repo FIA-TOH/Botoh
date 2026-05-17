@@ -1,5 +1,6 @@
 import { Driver } from '@/mocks/raceData';
 import { getTireAbbr, getTireColor } from '../../app/utils/race';
+import { useTranslations } from '@/i18n';
 
 interface Props {
   driver: Driver;
@@ -7,6 +8,7 @@ interface Props {
 }
 
 export function DriverDisplay({ driver, align }: Props) {
+  const { t } = useTranslations();
   return (
     <div
       style={{
@@ -15,7 +17,7 @@ export function DriverDisplay({ driver, align }: Props) {
         textAlign: align,
       }}
     >
-      {driver?.name || 'Piloto'}
+      {driver?.name || t.common.defaultDriver}
 
       <span
         style={{

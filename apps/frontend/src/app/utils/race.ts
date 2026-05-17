@@ -1,4 +1,4 @@
-import { Tires } from "../../../../../Botoh/src/features/tires&pits/tires";
+import { Tires } from '@/types/game';
 
 export function lapTimeToMs(timeStr: string): number {
   const [minutesPart, secondsPart] = timeStr.split(':');

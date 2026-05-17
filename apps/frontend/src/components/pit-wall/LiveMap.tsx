@@ -2,7 +2,8 @@ import React from 'react';
 import { PlayerData, PlayerPositionData } from '@/hooks/usePlayerList';
 import { useMapBackground, usePitWallGameState } from '@/hooks/useCurrentMap';
 import { colorNumberToHex, isDarkColor } from '@/app/utils/race';
-import { Teams } from '../../../../../Botoh/src/features/changeGameState/teams';
+import { Teams } from '@/types/game';
+import { useTranslations } from '@/i18n';
 
 interface Props {
   players: PlayerPositionData[];
@@ -52,7 +53,7 @@ export function LiveMap({
   players,
   playerDetails,
 }: Props) {
-
+  const { t } = useTranslations();
   const { backgroundUrl, fallbackType } = useMapBackground();
   const gameState = usePitWallGameState();
 
@@ -325,8 +326,8 @@ export function LiveMap({
           }}
         >
           {gameState === 'paused'
-            ? 'Game Paused'
-            : 'Nenhuma ação na pista no momento'}
+            ? t.liveMap.paused
+            : t.liveMap.idle}
         </div>
       )}
 
@@ -388,7 +389,7 @@ export function LiveMap({
                 backgroundColor: '#1f2937',
               }}
             >
-              Sem mapa para esse circuito
+              {t.liveMap.missingMap}
             </div>
           )}
 

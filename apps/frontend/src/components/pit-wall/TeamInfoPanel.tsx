@@ -1,6 +1,7 @@
 import { Driver } from '@/mocks/raceData';
 
 import { DriverHud } from './DriverHud';
+import { useTranslations } from '@/i18n';
 
 interface Props {
   drivers?: Driver[];
@@ -18,6 +19,7 @@ export function TeamInfoPanel({
   loading = false,
   error = null,
 }: Props) {
+  const { t } = useTranslations();
 
   const teamDrivers = drivers
     .filter(
@@ -71,7 +73,7 @@ export function TeamInfoPanel({
               font-bold
             "
           >
-            Carregando pilotos...
+            {t.team.loading}
           </span>
         </div>
       )}
@@ -101,7 +103,7 @@ export function TeamInfoPanel({
               mb-2
             "
           >
-            Erro ao carregar HUD
+            {t.team.loadError}
           </div>
 
           <div className="text-gray-400">
@@ -129,3 +131,4 @@ export function TeamInfoPanel({
     </div>
   );
 }
+

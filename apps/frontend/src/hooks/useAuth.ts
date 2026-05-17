@@ -16,6 +16,7 @@ interface User {
   teamName?: string | null;
   teamTag?: string | null;
   teamColor?: string | null;
+  language?: 'pt' | 'en' | 'es';
 }
 
 interface AuthContextType {
@@ -103,6 +104,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'x-language': user?.language ?? 'pt',
         },
         body: JSON.stringify({ username, password }),
       });
@@ -162,7 +164,7 @@ export function useAuth(): AuthContextType {
 // Higher-order component for protected routes
 export function withAuth<P extends object>(Component: React.ComponentType<P>) {
   return function AuthenticatedComponent(props: P) {
-    const { isAuthenticated, isLoading } = useAuth();
+    const { isAuthenticated, isLoading, user } = useAuth();
     const router = useRouter();
 
     useEffect(() => {
@@ -183,7 +185,7 @@ export function withAuth<P extends object>(Component: React.ComponentType<P>) {
           React.createElement('p', { 
             key: 'text',
             className: "text-gray-300" 
-          }, 'Loading...')
+          }, user?.language === 'en' ? 'Loading...' : user?.language === 'es' ? 'Cargando...' : 'Carregando...')
         ])
       );
     }

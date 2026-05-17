@@ -14,7 +14,13 @@ export interface BotMessage {
 export interface BotLogMessage {
   type: 'log:message';
   data: {
-    message: string;
+    message: string | {
+      pt: string;
+      en: string;
+      es: string;
+      fr?: string;
+      tr?: string;
+    };
     timestamp: number;
     color: number | null;
   };

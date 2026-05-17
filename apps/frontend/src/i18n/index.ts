@@ -1,0 +1,262 @@
+'use client';
+
+import { useMemo } from 'react';
+import { useAuth } from '@/hooks/useAuth';
+
+export type Language = 'pt' | 'en' | 'es';
+
+export const DEFAULT_LANGUAGE: Language = 'pt';
+export const SUPPORTED_LANGUAGES: Language[] = ['pt', 'en', 'es'];
+
+const dictionaries = {
+  pt: {
+    common: {
+      loading: 'Carregando...',
+      logout: 'Sair',
+      admin: 'Administração',
+      loggedAs: 'Logado como:',
+      back: 'Voltar',
+      garage: 'GARAGEM',
+      pitWall: 'PIT WALL',
+      noDriver: 'Sem piloto',
+      defaultDriver: 'Piloto',
+    },
+    chat: {
+      loading: 'Carregando mensagens...',
+      loadError: 'Erro ao carregar chat',
+      empty: 'Sem mensagens ainda...',
+      placeholder: 'Digite sua mensagem...',
+      everyone: 'Todos',
+      team: 'Equipe',
+    },
+    players: {
+      loading: 'Carregando...',
+      loadError: 'Erro ao carregar pilotos',
+      empty: 'Nenhum tempo ainda.',
+      noTime: 'Sem tempo',
+      outLap: 'Volta de saída',
+      lap: 'VOLTA',
+      overtime: 'TEMPO EXTRA',
+    },
+    logs: {
+      loading: 'Carregando logs...',
+      loadError: 'Erro ao carregar logs',
+      empty: 'Nenhum log disponível',
+    },
+    team: {
+      loading: 'Carregando pilotos...',
+      loadError: 'Erro ao carregar HUD',
+    },
+    insights: {
+      loadingTitle: 'Carregando visualização',
+      loadingMessage: 'Buscando dados da corrida.',
+      errorTitle: 'Erro ao carregar visualização',
+      emptyTitle: 'Sem dados',
+      emptyMessage: 'Nenhum piloto disponível para montar a visualização.',
+      raceOnly: 'Disponível apenas durante a corrida',
+      forecast: 'Previsão do tempo',
+      noWeather: 'Nenhum anúncio meteorológico ainda',
+      pace: 'Ritmo',
+      compare: 'Comparar',
+      gap: 'Gap',
+      pitStops: 'Pit-stops',
+      noTeamDrivers: 'Nenhum piloto da equipe disponível',
+      if: 'Se',
+      stopNow: 'parar agora',
+      first: 'sairá em primeiro',
+      exits: 'sairá em',
+      noData: 'sem dados suficientes',
+      carsBetween: 'carros entre os pilotos',
+      pitGap: 'Pit Gap',
+      yes: 'SIM',
+      no: 'NAO',
+      fastestLap: 'Volta mais rapida',
+      lastFiveLaps: 'Ultimas 5 voltas',
+      lastLap: 'Ultima volta',
+      lastLapVsAverage: 'Ultima volta comparada a media',
+      exitsBehind: (gap: string, driver: string, position: string) => `sai ${gap}s atras de ${driver}, em ${position}`,
+      projectionFirst: (driver: string) => `Se ${driver} parar agora saira em primeiro`,
+      projectionPosition: (driver: string, position: string) => `Se ${driver} parar agora saira em ${position}`,
+      projectionBehind: (driver: string, gap: string, ahead: string, position: string) => `Se ${driver} parar agora sai ${gap}s atras de ${ahead}, em ${position}`,
+      sectors: ['Global', 'Setor 1', 'Setor 2', 'Setor 3'],
+      minutesAgo: (minutes: number, seconds: string) => `há ${minutes} minutos e ${seconds} segundos`,
+    },
+    liveMap: {
+      paused: 'Jogo pausado',
+      idle: 'Nenhuma acao na pista no momento',
+      missingMap: 'Sem mapa para esse circuito',
+    },
+  },
+  en: {
+    common: {
+      loading: 'Loading...',
+      logout: 'Logout',
+      admin: 'Administration',
+      loggedAs: 'Logged in as:',
+      back: 'Back',
+      garage: 'GARAGE',
+      pitWall: 'PIT WALL',
+      noDriver: 'No driver',
+      defaultDriver: 'Driver',
+    },
+    chat: {
+      loading: 'Loading messages...',
+      loadError: 'Failed to load chat',
+      empty: 'No messages yet...',
+      placeholder: 'Type your message...',
+      everyone: 'Everyone',
+      team: 'Team',
+    },
+    players: {
+      loading: 'Loading...',
+      loadError: 'Failed to load drivers',
+      empty: 'No times yet.',
+      noTime: 'No time',
+      outLap: 'Out lap',
+      lap: 'LAP',
+      overtime: 'OVERTIME',
+    },
+    logs: {
+      loading: 'Loading logs...',
+      loadError: 'Failed to load logs',
+      empty: 'No logs available',
+    },
+    team: {
+      loading: 'Loading drivers...',
+      loadError: 'Failed to load HUD',
+    },
+    insights: {
+      loadingTitle: 'Loading visualization',
+      loadingMessage: 'Fetching race data.',
+      errorTitle: 'Failed to load visualization',
+      emptyTitle: 'No data',
+      emptyMessage: 'No drivers available to build the visualization.',
+      raceOnly: 'Available only during the race',
+      forecast: 'Weather forecast',
+      noWeather: 'No weather announcement yet',
+      pace: 'Pace',
+      compare: 'Compare',
+      gap: 'Gap',
+      pitStops: 'Pit-stops',
+      noTeamDrivers: 'No team drivers available',
+      if: 'If',
+      stopNow: 'stops now',
+      first: 'will rejoin first',
+      exits: 'will rejoin in',
+      noData: 'insufficient data',
+      carsBetween: 'cars between the drivers',
+      pitGap: 'Pit Gap',
+      yes: 'YES',
+      no: 'NO',
+      fastestLap: 'Fastest lap',
+      lastFiveLaps: 'Last 5 laps',
+      lastLap: 'Last lap',
+      lastLapVsAverage: 'Last lap compared to average',
+      exitsBehind: (gap: string, driver: string, position: string) =>
+        `rejoins ${gap}s behind ${driver}, in ${position}`,
+      projectionFirst: (driver: string) => `If ${driver} stops now, they will rejoin first`,
+      projectionPosition: (driver: string, position: string) => `If ${driver} stops now, they will rejoin in ${position}`,
+      projectionBehind: (driver: string, gap: string, ahead: string, position: string) =>
+        `If ${driver} stops now, they rejoin ${gap}s behind ${ahead}, in ${position}`,
+      sectors: ['Global', 'Sector 1', 'Sector 2', 'Sector 3'],
+      minutesAgo: (minutes: number, seconds: string) => `${minutes} minutes and ${seconds} seconds ago`,
+    },
+    liveMap: {
+      paused: 'Game paused',
+      idle: 'No track action at the moment',
+      missingMap: 'No map available for this circuit',
+    },
+  },
+  es: {
+    common: {
+      loading: 'Cargando...',
+      logout: 'Salir',
+      admin: 'Administración',
+      loggedAs: 'Conectado como:',
+      back: 'Volver',
+      garage: 'GARAJE',
+      pitWall: 'PIT WALL',
+      noDriver: 'Sin piloto',
+      defaultDriver: 'Piloto',
+    },
+    chat: {
+      loading: 'Cargando mensajes...',
+      loadError: 'Error al cargar el chat',
+      empty: 'Aún no hay mensajes...',
+      placeholder: 'Escribe tu mensaje...',
+      everyone: 'Todos',
+      team: 'Equipo',
+    },
+    players: {
+      loading: 'Cargando...',
+      loadError: 'Error al cargar pilotos',
+      empty: 'Aún no hay tiempos.',
+      noTime: 'Sin tiempo',
+      outLap: 'Vuelta de salida',
+      lap: 'VUELTA',
+      overtime: 'TIEMPO EXTRA',
+    },
+    logs: {
+      loading: 'Cargando logs...',
+      loadError: 'Error al cargar logs',
+      empty: 'No hay logs disponibles',
+    },
+    team: {
+      loading: 'Cargando pilotos...',
+      loadError: 'Error al cargar HUD',
+    },
+    insights: {
+      loadingTitle: 'Cargando visualización',
+      loadingMessage: 'Buscando datos de la carrera.',
+      errorTitle: 'Error al cargar visualización',
+      emptyTitle: 'Sin datos',
+      emptyMessage: 'No hay pilotos disponibles para montar la visualización.',
+      raceOnly: 'Disponible solo durante la carrera',
+      forecast: 'Pronóstico del tiempo',
+      noWeather: 'Aún no hay anuncio meteorológico',
+      pace: 'Ritmo',
+      compare: 'Comparar',
+      gap: 'Gap',
+      pitStops: 'Pit-stops',
+      noTeamDrivers: 'No hay pilotos del equipo disponibles',
+      if: 'Si',
+      stopNow: 'para ahora',
+      first: 'saldrá primero',
+      exits: 'saldrá en',
+      noData: 'datos insuficientes',
+      carsBetween: 'autos entre los pilotos',
+      pitGap: 'Pit Gap',
+      yes: 'SÍ',
+      no: 'NO',
+      fastestLap: 'Vuelta más rápida',
+      lastFiveLaps: 'Últimas 5 vueltas',
+      lastLap: 'Última vuelta',
+      lastLapVsAverage: 'Última vuelta comparada con la media',
+      exitsBehind: (gap: string, driver: string, position: string) =>
+        `sale ${gap}s detrás de ${driver}, en ${position}`,
+      projectionFirst: (driver: string) => `Si ${driver} para ahora, saldrá primero`,
+      projectionPosition: (driver: string, position: string) => `Si ${driver} para ahora, saldrá en ${position}`,
+      projectionBehind: (driver: string, gap: string, ahead: string, position: string) =>
+        `Si ${driver} para ahora, sale ${gap}s detrás de ${ahead}, en ${position}`,
+      sectors: ['Global', 'Sector 1', 'Sector 2', 'Sector 3'],
+      minutesAgo: (minutes: number, seconds: string) => `hace ${minutes} minutos y ${seconds} segundos`,
+    },
+    liveMap: {
+      paused: 'Juego pausado',
+      idle: 'No hay accion en pista en este momento',
+      missingMap: 'No hay mapa para este circuito',
+    },
+  },
+} as const;
+
+export function normalizeLanguage(language?: string | null): Language {
+  return SUPPORTED_LANGUAGES.includes(language as Language)
+    ? (language as Language)
+    : DEFAULT_LANGUAGE;
+}
+
+export function useTranslations(forcedLanguage?: Language) {
+  const { user } = useAuth();
+  const language = normalizeLanguage(forcedLanguage ?? user?.language);
+  return useMemo(() => ({ language, t: dictionaries[language] }), [language]);
+}

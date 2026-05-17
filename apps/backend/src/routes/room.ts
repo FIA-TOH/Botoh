@@ -1,5 +1,6 @@
 import { Router, Response } from 'express';
 import roomService from '../services/roomService';
+import { getRequestLanguage, translateMessage } from '../i18n';
 
 console.log('🗺️ Room routes module loaded');
 const router = Router();
@@ -24,7 +25,7 @@ router.get('/current-map', async (req, res: Response) => {
     if (!currentMap) {
       return res.status(404).json({
         success: false,
-        message: 'No current map found',
+        message: translateMessage('No current map found', getRequestLanguage(req)),
         mapName: null
       });
     }
@@ -38,7 +39,7 @@ router.get('/current-map', async (req, res: Response) => {
     console.error('Get current map error:', error);
     return res.status(500).json({
       success: false,
-      message: 'Internal server error',
+      message: translateMessage('Internal server error', getRequestLanguage(req)),
       mapName: null
     });
   }
@@ -53,7 +54,7 @@ router.get('/state', async (req, res: Response) => {
     if (!roomState) {
       return res.status(404).json({
         success: false,
-        message: 'Room state not available'
+        message: translateMessage('Room state not available', getRequestLanguage(req))
       });
     }
 
@@ -66,7 +67,7 @@ router.get('/state', async (req, res: Response) => {
     console.error('Get room state error:', error);
     return res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: translateMessage('Internal server error', getRequestLanguage(req))
     });
   }
 });
@@ -88,7 +89,7 @@ router.get('/stats', async (req, res: Response) => {
     console.error('Get room stats error:', error);
     return res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: translateMessage('Internal server error', getRequestLanguage(req))
     });
   }
 });
@@ -101,7 +102,7 @@ router.post('/map', async (req, res: Response) => {
     if (!mapName || typeof mapName !== 'string') {
       return res.status(400).json({
         success: false,
-        message: 'Map name is required'
+        message: translateMessage('Map name is required', getRequestLanguage(req))
       });
     }
 
@@ -112,7 +113,7 @@ router.post('/map', async (req, res: Response) => {
 
     return res.json({
       success: true,
-      message: 'Map updated successfully',
+      message: translateMessage('Map updated successfully', getRequestLanguage(req)),
       mapName,
       timestamp: new Date().toISOString()
     });
@@ -120,7 +121,7 @@ router.post('/map', async (req, res: Response) => {
     console.error('Set map error:', error);
     return res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: translateMessage('Internal server error', getRequestLanguage(req))
     });
   }
 });

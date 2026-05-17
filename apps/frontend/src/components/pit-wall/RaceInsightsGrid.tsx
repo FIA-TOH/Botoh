@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { DriverCircle } from './DriverCircle';
 import { RaceSession } from '@/mocks/raceData';
 import { colorNumberToHex } from '@/app/utils/race';
+import { useTranslations } from '@/i18n';
 
 interface Props {
   drivers?: any[];
@@ -87,6 +88,7 @@ export function RaceInsightsGrid({
   loading = false,
   error = null,
 }: Props) {
+  const { language, t } = useTranslations();
   const driverOptions = useMemo(
     () => drivers.map((driver) => driver.name),
     [drivers]
@@ -133,7 +135,7 @@ export function RaceInsightsGrid({
     raceSession?.sessionType === 'training'
     || raceSession?.sessionType === 'qualy'
     || raceSession?.sessionType === 'hard_qualy';
-  const unavailableRaceInsightMessage = 'Disponível apenas durante a corrida';
+  const unavailableRaceInsightMessage = t.insights.raceOnly;
 
   useEffect(() => {
     setPaceDriver((current: string) =>
@@ -160,25 +162,25 @@ export function RaceInsightsGrid({
 
   const weatherBySection = [
     {
-      label: 'Global',
+      label: t.insights.sectors[0],
       rainChance: raceSession?.weather?.global.rain ?? 0,
       wetness: raceSession?.weather?.global.wet ?? 0,
       highlight: true,
     },
     {
-      label: 'Sector 1',
+      label: t.insights.sectors[1],
       rainChance: raceSession?.weather?.sectors.sector1.rain ?? 0,
       wetness: raceSession?.weather?.sectors.sector1.wet ?? 0,
       highlight: false,
     },
     {
-      label: 'Sector 2',
+      label: t.insights.sectors[2],
       rainChance: raceSession?.weather?.sectors.sector2.rain ?? 0,
       wetness: raceSession?.weather?.sectors.sector2.wet ?? 0,
       highlight: false,
     },
     {
-      label: 'Sector 3',
+      label: t.insights.sectors[3],
       rainChance: raceSession?.weather?.sectors.sector3.rain ?? 0,
       wetness: raceSession?.weather?.sectors.sector3.wet ?? 0,
       highlight: false,
@@ -204,7 +206,7 @@ export function RaceInsightsGrid({
   const formatAnnouncementAge = (totalSeconds: number) => {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
-    return `há ${minutes} minutos e ${seconds.toString().padStart(2, '0')} segundos`;
+    return t.insights.minutesAgo(minutes, seconds.toString().padStart(2, '0'));
   };
 
   const selectedGapDriverA = drivers.find((driver) => driver.name === gapDriverA);
@@ -276,7 +278,7 @@ export function RaceInsightsGrid({
   const pitGapLabel =
     hasPitGap === null
       ? '—'
-      : `${isPitGapEstimated ? '~' : ''}${hasPitGap ? 'SIM' : 'NÃO'}`;
+      : `${isPitGapEstimated ? '~' : ''}${hasPitGap ? t.insights.yes : t.insights.no}`;
 
   const getLatestCommonCheckpointGap = (driverA: any, driverB: any) => {
     const commonCheckpointKeys = Object.keys(driverB.checkpointTimes ?? {})
@@ -368,17 +370,25 @@ export function RaceInsightsGrid({
     if (!projection) return null;
 
     if (projection.projectedPosition === 1) {
-      return `Se ${projection.driver.name} parar agora sairá em primeiro`;
+      return t.insights.projectionFirst(projection.driver.name);
     }
 
     if (
       !projection.projectedAheadDriver
       || projection.projectedGapToAhead === null
     ) {
-      return `Se ${projection.driver.name} parar agora sairá em ${formatOrdinal(projection.projectedPosition)}`;
+      return t.insights.projectionPosition(
+        projection.driver.name,
+        formatOrdinal(projection.projectedPosition),
+      );
     }
 
-    return `Se ${projection.driver.name} parar agora sai ${projection.projectedGapToAhead.toFixed(3)}s atrás de ${projection.projectedAheadDriver.name}, em ${formatOrdinal(projection.projectedPosition)}`;
+    return t.insights.projectionBehind(
+      projection.driver.name,
+      projection.projectedGapToAhead.toFixed(3),
+      projection.projectedAheadDriver.name,
+      formatOrdinal(projection.projectedPosition),
+    );
   };
 
   const selectedPaceDriver = drivers.find((driver) => driver.name === paceDriver);
@@ -402,22 +412,22 @@ export function RaceInsightsGrid({
   };
   const paceComparisonRows = [
     {
-      label: 'Fastest Lap',
+      label: t.insights.fastestLap,
       primary: selectedPaceDriver?.paceStats.fastestLap,
       comparison: selectedCompareDriver?.paceStats.fastestLap,
     },
     {
-      label: 'Últimas 5 voltas',
+      label: t.insights.lastFiveLaps,
       primary: selectedPaceDriver?.paceStats.lastFiveAverage,
       comparison: selectedCompareDriver?.paceStats.lastFiveAverage,
     },
     {
-      label: 'Última volta',
+      label: t.insights.lastLap,
       primary: selectedPaceDriver?.paceStats.lastLap,
       comparison: selectedCompareDriver?.paceStats.lastLap,
     },
     {
-      label: 'Última volta comparada à média',
+      label: t.insights.lastLapVsAverage,
       primary: selectedPaceDriver?.paceStats.lastLapComparedToAverage,
       comparison: selectedCompareDriver?.paceStats.lastLapComparedToAverage,
     },
@@ -426,8 +436,8 @@ export function RaceInsightsGrid({
   if (loading) {
     return (
       <RaceInsightsState
-        title="Carregando visualizacao"
-        message="Buscando dados da corrida."
+        title={t.insights.loadingTitle}
+        message={t.insights.loadingMessage}
         loading
       />
     );
@@ -436,7 +446,7 @@ export function RaceInsightsGrid({
   if (error) {
     return (
       <RaceInsightsState
-        title="Erro ao carregar visualizacao"
+        title={t.insights.errorTitle}
         message={error}
       />
     );
@@ -445,8 +455,8 @@ export function RaceInsightsGrid({
   if (driverOptions.length === 0) {
     return (
       <RaceInsightsState
-        title="Sem dados"
-        message="Nenhum piloto disponivel para montar a visualizacao."
+        title={t.insights.emptyTitle}
+        message={t.insights.emptyMessage}
       />
     );
   }
@@ -492,9 +502,9 @@ export function RaceInsightsGrid({
             }}
             className="p-4 text-center"
           >
-            <div className="text-2xl font-bold uppercase">Previsão do tempo</div>
+            <div className="text-2xl font-bold uppercase">{t.insights.forecast}</div>
             <div className="mt-3 text-xl">
-              {lastWeatherAnnouncement?.message.pt ?? 'Nenhum anúncio meteorológico ainda'}
+              {lastWeatherAnnouncement?.message[language] ?? t.insights.noWeather}
             </div>
             {weatherAnnouncementAge !== null && (
               <div className="mt-2 text-base text-gray-300">
@@ -515,7 +525,7 @@ export function RaceInsightsGrid({
             ) : (
               <>
                 <div className="flex items-center gap-2 text-2xl font-bold uppercase">
-              <span>Pace:</span>
+              <span>{t.insights.pace}:</span>
               <div className="relative">
                 <select
                   value={paceDriver}
@@ -542,7 +552,7 @@ export function RaceInsightsGrid({
             </div>
 
             <div className="mt-5 flex items-center gap-2 text-2xl font-bold uppercase">
-              <span>Comparar:</span>
+              <span>{t.insights.compare}:</span>
               <div className="relative">
                 <select
                   value={compareDriver}
@@ -593,7 +603,7 @@ export function RaceInsightsGrid({
               <UnavailableRaceInsight message={unavailableRaceInsightMessage} />
             ) : (
               <>
-                <div className="text-center text-3xl font-bold uppercase">Gap</div>
+                <div className="text-center text-3xl font-bold uppercase">{t.insights.gap}</div>
             <div className="mt-2 flex items-center justify-center gap-2 text-xl font-bold uppercase">
               <div className="relative">
                 <select
@@ -652,10 +662,10 @@ export function RaceInsightsGrid({
                 </div>
                 <div className="mt-1 text-xl">
                   {gapContext?.carsBetween !== null && gapContext?.carsBetween !== undefined
-                    ? `${gapContext.carsBetween} carros entre os pilotos`
-                    : '— carros entre os pilotos'}
+                    ? `${gapContext.carsBetween} ${t.insights.carsBetween}`
+                    : '— ${t.insights.carsBetween}'}
                 </div>
-                <div className="mt-1 text-xl">Pit Gap: {pitGapLabel}</div>
+                <div className="mt-1 text-xl">{t.insights.pitGap}: {pitGapLabel}</div>
               </div>
 
               <div className="flex items-center justify-start pt-1">
@@ -683,11 +693,11 @@ export function RaceInsightsGrid({
               <UnavailableRaceInsight message={unavailableRaceInsightMessage} />
             ) : (
               <>
-                <div className="text-center text-3xl font-bold uppercase">Pit-Stops</div>
+                <div className="text-center text-3xl font-bold uppercase">{t.insights.pitStops}</div>
 
                 <div className="mt-3 space-y-1 text-center text-xl">
                   {teamPitStopDrivers.length === 0 ? (
-                    <div>Nenhum piloto da equipe disponível</div>
+                    <div>{t.insights.noTeamDrivers}</div>
                   ) : (
                     teamPitStopDrivers.map((driver) => (
                       <div key={`team-pit-${driver.name}`}>
@@ -697,7 +707,7 @@ export function RaceInsightsGrid({
                   )}
 
                   <div className="pt-3 font-bold">
-                    <span>Se </span>
+                    <span>{t.insights.if} </span>
                     <select
                       value={pitStopDriver}
                       onChange={(event) => setPitStopDriver(event.target.value)}
@@ -711,20 +721,22 @@ export function RaceInsightsGrid({
                           </option>
                         ))}
                     </select>
-                    <span> parar agora </span>
+                    <span> {t.insights.stopNow} </span>
                     {customPitStopProjection?.projectedPosition === 1 ? (
-                      <span>sairá em primeiro</span>
+                      <span>{t.insights.first}</span>
                     ) : customPitStopProjection?.projectedAheadDriver
                       && customPitStopProjection.projectedGapToAhead !== null ? (
                         <span>
-                          sai {customPitStopProjection.projectedGapToAhead.toFixed(3)}s atrás de{' '}
-                          {customPitStopProjection.projectedAheadDriver.name}, em{' '}
-                          {formatOrdinal(customPitStopProjection.projectedPosition)}
+                          {t.insights.exitsBehind(
+                            customPitStopProjection.projectedGapToAhead.toFixed(3),
+                            customPitStopProjection.projectedAheadDriver.name,
+                            formatOrdinal(customPitStopProjection.projectedPosition),
+                          )}
                         </span>
                       ) : customPitStopProjection ? (
-                        <span>sairá em {formatOrdinal(customPitStopProjection.projectedPosition)}</span>
+                        <span>{t.insights.exits} {formatOrdinal(customPitStopProjection.projectedPosition)}</span>
                       ) : (
-                        <span>sem dados suficientes</span>
+                        <span>{t.insights.noData}</span>
                       )}
                   </div>
                 </div>
@@ -736,6 +748,8 @@ export function RaceInsightsGrid({
     </section>
   );
 }
+
+
 
 
 

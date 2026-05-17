@@ -2,6 +2,7 @@ import { Router, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import garageService from '../services/garageService';
 import { authMiddleware, AuthRequest } from '../middleware/auth';
+import { getRequestLanguage, translateMessage, translateValidationErrors } from '../i18n';
 
 const router = Router();
 
@@ -11,7 +12,7 @@ router.get('/', authMiddleware, async (req: AuthRequest, res: Response) => {
     if (!req.user) {
       return res.status(401).json({
         success: false,
-        message: 'User not authenticated',
+        message: translateMessage('User not authenticated', getRequestLanguage(req)),
       });
     }
 
@@ -20,7 +21,7 @@ router.get('/', authMiddleware, async (req: AuthRequest, res: Response) => {
     if (!garage) {
       return res.status(404).json({
         success: false,
-        message: 'User not found',
+        message: translateMessage('User not found', getRequestLanguage(req)),
       });
     }
 
@@ -32,7 +33,7 @@ router.get('/', authMiddleware, async (req: AuthRequest, res: Response) => {
     console.error('Get garage error:', error);
     return res.status(500).json({
       success: false,
-      message: 'Internal server error',
+      message: translateMessage('Internal server error', getRequestLanguage(req)),
     });
   }
 });
@@ -43,7 +44,7 @@ router.get('/upgrades', authMiddleware, async (req: AuthRequest, res: Response) 
     if (!req.user) {
       return res.status(401).json({
         success: false,
-        message: 'User not authenticated',
+        message: translateMessage('User not authenticated', getRequestLanguage(req)),
       });
     }
 
@@ -58,7 +59,7 @@ router.get('/upgrades', authMiddleware, async (req: AuthRequest, res: Response) 
     console.error('Get upgrades error:', error);
     return res.status(500).json({
       success: false,
-      message: 'Internal server error',
+      message: translateMessage('Internal server error', getRequestLanguage(req)),
     });
   }
 });
@@ -73,7 +74,7 @@ router.post('/upgrade', authMiddleware, [
     if (!req.user) {
       return res.status(401).json({
         success: false,
-        message: 'User not authenticated',
+        message: translateMessage('User not authenticated', getRequestLanguage(req)),
       });
     }
 
@@ -82,8 +83,8 @@ router.post('/upgrade', authMiddleware, [
     if (!errors.isEmpty()) {
       return res.status(400).json({
         success: false,
-        message: 'Validation failed',
-        errors: errors.array(),
+        message: translateMessage('Validation failed', getRequestLanguage(req)),
+        errors: translateValidationErrors(errors.array(), getRequestLanguage(req)),
       });
     }
 
@@ -93,20 +94,20 @@ router.post('/upgrade', authMiddleware, [
     if (result.success) {
       return res.json({
         success: true,
-        message: result.message,
+        message: translateMessage(result.message, getRequestLanguage(req)),
         garage: result.userGarage,
       });
     } else {
       return res.status(400).json({
         success: false,
-        message: result.message,
+        message: translateMessage(result.message, getRequestLanguage(req)),
       });
     }
   } catch (error) {
     console.error('Purchase upgrade error:', error);
     return res.status(500).json({
       success: false,
-      message: 'Internal server error',
+      message: translateMessage('Internal server error', getRequestLanguage(req)),
     });
   }
 });
@@ -117,7 +118,7 @@ router.put('/equip/:upgradeId', authMiddleware, async (req: AuthRequest, res: Re
     if (!req.user) {
       return res.status(401).json({
         success: false,
-        message: 'User not authenticated',
+        message: translateMessage('User not authenticated', getRequestLanguage(req)),
       });
     }
 
@@ -127,20 +128,20 @@ router.put('/equip/:upgradeId', authMiddleware, async (req: AuthRequest, res: Re
     if (result.success) {
       return res.json({
         success: true,
-        message: result.message,
+        message: translateMessage(result.message, getRequestLanguage(req)),
         garage: result.userGarage,
       });
     } else {
       return res.status(400).json({
         success: false,
-        message: result.message,
+        message: translateMessage(result.message, getRequestLanguage(req)),
       });
     }
   } catch (error) {
     console.error('Equip upgrade error:', error);
     return res.status(500).json({
       success: false,
-      message: 'Internal server error',
+      message: translateMessage('Internal server error', getRequestLanguage(req)),
     });
   }
 });
@@ -151,7 +152,7 @@ router.delete('/upgrade/:upgradeId', authMiddleware, async (req: AuthRequest, re
     if (!req.user) {
       return res.status(401).json({
         success: false,
-        message: 'User not authenticated',
+        message: translateMessage('User not authenticated', getRequestLanguage(req)),
       });
     }
 
@@ -161,20 +162,20 @@ router.delete('/upgrade/:upgradeId', authMiddleware, async (req: AuthRequest, re
     if (result.success) {
       return res.json({
         success: true,
-        message: result.message,
+        message: translateMessage(result.message, getRequestLanguage(req)),
         garage: result.userGarage,
       });
     } else {
       return res.status(400).json({
         success: false,
-        message: result.message,
+        message: translateMessage(result.message, getRequestLanguage(req)),
       });
     }
   } catch (error) {
     console.error('Remove upgrade error:', error);
     return res.status(500).json({
       success: false,
-      message: 'Internal server error',
+      message: translateMessage('Internal server error', getRequestLanguage(req)),
     });
   }
 });
@@ -185,7 +186,7 @@ router.get('/stats', authMiddleware, async (req: AuthRequest, res: Response) => 
     if (!req.user) {
       return res.status(401).json({
         success: false,
-        message: 'User not authenticated',
+        message: translateMessage('User not authenticated', getRequestLanguage(req)),
       });
     }
 
@@ -199,7 +200,7 @@ router.get('/stats', authMiddleware, async (req: AuthRequest, res: Response) => 
     console.error('Get stats error:', error);
     return res.status(500).json({
       success: false,
-      message: 'Internal server error',
+      message: translateMessage('Internal server error', getRequestLanguage(req)),
     });
   }
 });

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import authService from '../services/authService';
 import { JwtPayload } from '../services/authService';
+import { getRequestLanguage, translateMessage } from '../i18n';
 
 // Extend Request interface to include user
 declare global {
@@ -10,6 +11,7 @@ declare global {
         id: string;
         username: string;
         role: string;
+        language: 'pt' | 'en' | 'es';
       };
     }
   }
@@ -20,6 +22,7 @@ export interface AuthRequest extends Request {
     id: string;
     username: string;
     role: string;
+    language: 'pt' | 'en' | 'es';
   };
 }
 
@@ -36,7 +39,7 @@ export const authMiddleware = async (
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       res.status(401).json({
         success: false,
-        message: 'Access token required'
+        message: translateMessage('Access token required', getRequestLanguage(req))
       });
       return;
     }
@@ -50,7 +53,7 @@ export const authMiddleware = async (
     if (!payload) {
       res.status(401).json({
         success: false,
-        message: 'Invalid or expired token'
+        message: translateMessage('Invalid or expired token', getRequestLanguage(req))
       });
       return;
     }
@@ -60,6 +63,7 @@ export const authMiddleware = async (
       id: payload.userId,
       username: payload.username,
       role: payload.role,
+      language: payload.language ?? 'pt',
     };
 
     next();
@@ -67,7 +71,7 @@ export const authMiddleware = async (
     console.error('Auth middleware error:', error);
     res.status(401).json({
       success: false,
-      message: 'Authentication failed'
+      message: translateMessage('Authentication failed', getRequestLanguage(req))
     });
   }
 };
@@ -78,7 +82,7 @@ export const requireRole = (roles: string[]) => {
     if (!req.user) {
       res.status(401).json({
         success: false,
-        message: 'Authentication required'
+        message: translateMessage('Authentication required', getRequestLanguage(req))
       });
       return;
     }
@@ -86,7 +90,7 @@ export const requireRole = (roles: string[]) => {
     if (!roles.includes(req.user.role)) {
       res.status(403).json({
         success: false,
-        message: 'Insufficient permissions'
+        message: translateMessage('Insufficient permissions', getRequestLanguage(req))
       });
       return;
     }
@@ -118,7 +122,8 @@ export const optionalAuth = async (
         req.user = {
           id: payload.userId,
           username: payload.username,
-          role: payload.role,
+        role: payload.role,
+        language: payload.language ?? 'pt',
         };
       }
     }

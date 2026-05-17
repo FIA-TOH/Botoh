@@ -11,7 +11,8 @@ import {
 } from '../../app/utils/race';
 
 import { Driver, RaceSession } from '@/mocks/raceData';
-import { Teams } from '../../../../../Botoh/src/features/changeGameState/teams';
+import { Teams } from '@/types/game';
+import { useTranslations } from '@/i18n';
 
 interface Props {
   drivers?: Driver[];
@@ -88,6 +89,7 @@ export function PlayersPanel({
   loading = false,
   error = null,
 }: Props) {
+  const { t } = useTranslations();
   const [hoveredDriver, setHoveredDriver] =
     useState<string | null>(null);
 
@@ -191,7 +193,7 @@ export function PlayersPanel({
       }
 
       return driver.position === 1
-        ? 'Out Lap'
+        ? t.players.outLap
         : driver.gapToLeader;
     }
 
@@ -202,11 +204,11 @@ export function PlayersPanel({
         driver.bestTime
 
       if (qualifyingLeader?.name === driver.name) {
-        return driverLapTime ?? 'No Time';
+        return driverLapTime ?? t.players.noTime;
       }
 
       if (!driverLapTime) {
-        return 'No Time';
+        return t.players.noTime;
       }
 
       const leaderLapTime =
@@ -228,11 +230,11 @@ export function PlayersPanel({
         return formatGap(Math.max(0, driverMs - leaderMs));
       }
 
-      return 'No Time';
+      return t.players.noTime;
     }
 
     if (raceSession?.sessionType === 'training') {
-      return driver.bestTime ?? 'No Time';
+      return driver.bestTime ?? t.players.noTime;
     }
 
     return driver.gapToLeader;
@@ -323,13 +325,13 @@ export function PlayersPanel({
             flagHeader.subtitle
           ) : isQualyOvertime ? (
             <span className="text-red-500">
-              OVERTIME
+              {t.players.overtime}
             </span>
           ) : isTimedSession ? (
             sessionTimeLeft
           ) : (
             <>
-              LAP{' '}
+              {t.players.lap}{' '}
               <strong>
                 {raceSession?.currentLap ?? 0}
               </strong>
@@ -377,7 +379,7 @@ export function PlayersPanel({
                 font-bold
               "
             >
-              Carregando...
+              {t.players.loading}
             </span>
           </div>
         )}
@@ -408,7 +410,7 @@ export function PlayersPanel({
                   mb-2
                 "
               >
-                Erro ao carregar pilotos
+                {t.players.loadError}
               </div>
 
               <div className="text-gray-400">
@@ -432,7 +434,7 @@ export function PlayersPanel({
                 text-lg
               "
             >
-              Nenhum tempo ainda.
+              {t.players.empty}
             </div>
           )}
 
@@ -504,3 +506,4 @@ export function PlayersPanel({
     </div>
   );
 }
+

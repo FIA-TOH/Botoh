@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { FtohButton } from './FtohButton';
+import { useTranslations } from '@/i18n';
 
 interface FtohBackProps {
   onClick?: () => void;
@@ -10,6 +11,7 @@ interface FtohBackProps {
 }
 
 export function FtohBack({ onClick, className = '', children }: FtohBackProps) {
+  const { t } = useTranslations();
   return (
     <FtohButton 
       onClick={onClick}
@@ -29,7 +31,7 @@ export function FtohBack({ onClick, className = '', children }: FtohBackProps) {
             d="M10 19l-7-7m0 0l7-7m-7 7h18" 
           />
         </svg>
-        {children || 'Voltar'}
+        {children || t.common.back}
       </div>
     </FtohButton>
   );

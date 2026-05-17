@@ -15,6 +15,7 @@ export interface User {
   teamName: string | null;
   teamTag: string | null;
   teamColor: string | null;
+  language: 'pt' | 'en' | 'es';
   created_at: string;
 }
 
@@ -34,6 +35,7 @@ export interface JwtPayload {
   userId: string;
   username: string;
   role: string;
+  language?: 'pt' | 'en' | 'es';
   iat?: number;
   exp?: number;
 }
@@ -56,6 +58,7 @@ class AuthService {
       userId: user.id,
       username: user.username,
       role: user.role || 'user', // Use role from database
+      language: user.language || 'pt',
     };
 
     return jwt.sign(payload, config.jwtSecret, {
@@ -91,6 +94,7 @@ class AuthService {
           t.name AS "teamName",
           t.tag AS "teamTag",
           t.color AS "teamColor",
+          u.language,
           u.created_at
         FROM users u
         LEFT JOIN teams t ON u.team_id = t.id
@@ -123,6 +127,7 @@ class AuthService {
           t.name AS "teamName",
           t.tag AS "teamTag",
           t.color AS "teamColor",
+          u.language,
           u.created_at
         FROM users u
         LEFT JOIN teams t ON u.team_id = t.id
@@ -191,7 +196,8 @@ class AuthService {
   async createUser(userData: {
     username: string;
     password: string;
-    role?: string;
+      role?: string;
+      language?: 'pt' | 'en' | 'es';
   }): Promise<AuthResponse> {
     try {
       // Check if user already exists
@@ -208,14 +214,15 @@ class AuthService {
 
       // Insert new user
       const result = await query(
-        `INSERT INTO users (username, password_hash, role, money, created_at) 
-         VALUES ($1, $2, $3, $4, NOW()) 
-         RETURNING id, username, role, money, created_at`,
+        `INSERT INTO users (username, password_hash, role, money, language, created_at) 
+         VALUES ($1, $2, $3, $4, $5, NOW()) 
+         RETURNING id, username, role, money, language, created_at`,
         [
           userData.username,
           passwordHash,
           userData.role || 'user', // Use provided role or default to 'user'
           50000, // Starting money
+          userData.language || 'pt',
         ]
       );
 

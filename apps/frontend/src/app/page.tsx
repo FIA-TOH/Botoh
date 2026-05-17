@@ -6,9 +6,11 @@ import { useAuth } from '@/hooks/useAuth';
 import { FtohButton } from '@/components/FtohButton';
 import { FtohCard } from '@/components/FtohCard';
 import { FtohHeader } from '@/components/FtohHeader';
+import { useTranslations } from '@/i18n';
 
 function ProtectedHome() {
   const { user, logout } = useAuth();
+  const { t } = useTranslations();
   const router = useRouter();
   const [loadingButton, setLoadingButton] = useState<string | null>(null);
 
@@ -77,28 +79,28 @@ function ProtectedHome() {
         <div className="flex-1 flex justify-center items-center gap-8 flex-wrap px-8">
           {/* Garagem Card */}
           <FtohCard
-            title="GARAGEM"
+            title={t.common.garage}
             onClick={handleGarageClick}
             hoverImage
             clickSound="/sounds/garagein.mp3"
           >
             <img
               src="/img/img/garage.png"
-              alt="Garagem"
+              alt={t.common.garage}
               className="w-full h-auto object-contain"
             />
           </FtohCard>
 
           {/* Pit Wall Card */}
           <FtohCard
-            title="PIT WALL"
+            title={t.common.pitWall}
             onClick={handlePitWallClick}
             hoverImage
             clickSound="/sounds/pitwallin.mp3"
           >
             <img
               src="/img/img/pitwall.png"
-              alt="Pit Wall"
+              alt={t.common.pitWall}
               className="w-full h-auto object-contain"
             />
           </FtohCard>
@@ -110,6 +112,7 @@ function ProtectedHome() {
 
 export default function Home() {
   const { isLoading, isAuthenticated } = useAuth();
+  const { t } = useTranslations();
 
   const [loadingEndTime, setLoadingEndTime] = React.useState<number | null>(
     null
@@ -169,7 +172,7 @@ export default function Home() {
         <div className="text-center relative z-10">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4" />
 
-          <p className="text-gray-300">Loading...</p>
+          <p className="text-gray-300">{t.common.loading}</p>
         </div>
       </div>
     );

@@ -1,7 +1,8 @@
-﻿import { Router, Response } from 'express';
+import { Router, Response } from 'express';
 import { body, param, validationResult } from 'express-validator';
 import adminService from '../services/adminService';
 import { authMiddleware, requireAdmin, AuthRequest } from '../middleware/auth';
+import { getRequestLanguage, translateMessage, translateValidationErrors } from '../i18n';
 
 const router = Router();
 
@@ -31,6 +32,9 @@ const userValidation = [
   body('driverNumber')
     .isInt({ min: 0, max: 999 })
     .withMessage('Driver number must be between 0 and 999'),
+  body('language')
+    .isIn(['pt', 'en', 'es'])
+    .withMessage('Language must be pt, en, or es'),
 ];
 
 const createUserValidation = [
@@ -68,21 +72,21 @@ function handleValidation(req: AuthRequest, res: Response) {
 
   res.status(400).json({
     success: false,
-    message: 'Validation failed',
-    errors: errors.array(),
+    message: translateMessage('Validation failed', getRequestLanguage(req)),
+    errors: translateValidationErrors(errors.array(), getRequestLanguage(req)),
   });
   return true;
 }
 
 router.use(authMiddleware, requireAdmin);
 
-router.get('/users', async (_req: AuthRequest, res: Response) => {
+router.get('/users', async (req: AuthRequest, res: Response) => {
   try {
     const users = await adminService.listUsers();
     return res.json({ success: true, users });
   } catch (error) {
     console.error('Admin list users error:', error);
-    return res.status(500).json({ success: false, message: 'Failed to list users' });
+    return res.status(500).json({ success: false, message: translateMessage('Failed to list users', getRequestLanguage(req)) });
   }
 });
 
@@ -91,10 +95,13 @@ router.post('/users', createUserValidation, async (req: AuthRequest, res: Respon
     if (handleValidation(req, res)) return;
 
     const result = await adminService.createUser(req.body);
-    return res.status(result.success ? 201 : 400).json(result);
+    return res.status(result.success ? 201 : 400).json({
+      ...result,
+      message: translateMessage(result.message, getRequestLanguage(req)),
+    });
   } catch (error) {
     console.error('Admin create user error:', error);
-    return res.status(500).json({ success: false, message: 'Failed to create user' });
+    return res.status(500).json({ success: false, message: translateMessage('Failed to create user', getRequestLanguage(req)) });
   }
 });
 
@@ -107,10 +114,13 @@ router.put(
       if (handleValidation(req, res)) return;
 
       const result = await adminService.updateUser(req.params.id, req.body);
-      return res.status(result.success ? 200 : 404).json(result);
+      return res.status(result.success ? 200 : 404).json({
+        ...result,
+        message: translateMessage(result.message, getRequestLanguage(req)),
+      });
     } catch (error) {
       console.error('Admin update user error:', error);
-      return res.status(500).json({ success: false, message: 'Failed to update user' });
+      return res.status(500).json({ success: false, message: translateMessage('Failed to update user', getRequestLanguage(req)) });
     }
   },
 );
@@ -123,25 +133,28 @@ router.delete(
       if (handleValidation(req, res)) return;
 
       if (req.user?.id === req.params.id) {
-        return res.status(400).json({ success: false, message: 'You cannot delete your own user' });
+        return res.status(400).json({ success: false, message: translateMessage('You cannot delete your own user', getRequestLanguage(req)) });
       }
 
       const result = await adminService.deleteUser(req.params.id);
-      return res.status(result.success ? 200 : 404).json(result);
+      return res.status(result.success ? 200 : 404).json({
+        ...result,
+        message: translateMessage(result.message, getRequestLanguage(req)),
+      });
     } catch (error) {
       console.error('Admin delete user error:', error);
-      return res.status(500).json({ success: false, message: 'Failed to delete user' });
+      return res.status(500).json({ success: false, message: translateMessage('Failed to delete user', getRequestLanguage(req)) });
     }
   },
 );
 
-router.get('/scuderias', async (_req: AuthRequest, res: Response) => {
+router.get('/scuderias', async (req: AuthRequest, res: Response) => {
   try {
     const scuderias = await adminService.listScuderias();
     return res.json({ success: true, scuderias });
   } catch (error) {
     console.error('Admin list scuderias error:', error);
-    return res.status(500).json({ success: false, message: 'Failed to list scuderias' });
+    return res.status(500).json({ success: false, message: translateMessage('Failed to list scuderias', getRequestLanguage(req)) });
   }
 });
 
@@ -150,10 +163,13 @@ router.post('/scuderias', scuderiaValidation, async (req: AuthRequest, res: Resp
     if (handleValidation(req, res)) return;
 
     const result = await adminService.createScuderia(req.body);
-    return res.status(result.success ? 201 : 400).json(result);
+    return res.status(result.success ? 201 : 400).json({
+      ...result,
+      message: translateMessage(result.message, getRequestLanguage(req)),
+    });
   } catch (error) {
     console.error('Admin create scuderia error:', error);
-    return res.status(500).json({ success: false, message: 'Failed to create scuderia' });
+    return res.status(500).json({ success: false, message: translateMessage('Failed to create scuderia', getRequestLanguage(req)) });
   }
 });
 
@@ -166,10 +182,13 @@ router.put(
       if (handleValidation(req, res)) return;
 
       const result = await adminService.updateScuderia(req.params.id, req.body);
-      return res.status(result.success ? 200 : 404).json(result);
+      return res.status(result.success ? 200 : 404).json({
+        ...result,
+        message: translateMessage(result.message, getRequestLanguage(req)),
+      });
     } catch (error) {
       console.error('Admin update scuderia error:', error);
-      return res.status(500).json({ success: false, message: 'Failed to update scuderia' });
+      return res.status(500).json({ success: false, message: translateMessage('Failed to update scuderia', getRequestLanguage(req)) });
     }
   },
 );
@@ -182,13 +201,17 @@ router.delete(
       if (handleValidation(req, res)) return;
 
       const result = await adminService.deleteScuderia(req.params.id);
-      return res.status(result.success ? 200 : 404).json(result);
+      return res.status(result.success ? 200 : 404).json({
+        ...result,
+        message: translateMessage(result.message, getRequestLanguage(req)),
+      });
     } catch (error) {
       console.error('Admin delete scuderia error:', error);
-      return res.status(500).json({ success: false, message: 'Failed to delete scuderia' });
+      return res.status(500).json({ success: false, message: translateMessage('Failed to delete scuderia', getRequestLanguage(req)) });
     }
   },
 );
 
 export default router;
+
 

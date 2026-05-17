@@ -17,6 +17,7 @@ interface AdminUser {
   teamId: string | null;
   teamName: string | null;
   driverNumber: number | null;
+  language: 'pt' | 'en' | 'es';
 }
 
 interface Scuderia {
@@ -33,6 +34,7 @@ interface UserFormData {
   roles: Record<UserRoleKey, boolean>;
   teamId: string;
   driverNumber: string;
+  language: 'pt' | 'en' | 'es';
 }
 
 interface ScuderiaFormData {
@@ -52,6 +54,7 @@ const EMPTY_USER_FORM: UserFormData = {
   },
   teamId: '',
   driverNumber: '',
+  language: 'pt',
 };
 
 const EMPTY_SCUDERIA_FORM: ScuderiaFormData = {
@@ -61,9 +64,9 @@ const EMPTY_SCUDERIA_FORM: ScuderiaFormData = {
 };
 
 const USER_ROLE_OPTIONS: { key: UserRoleKey; label: string }[] = [
-  { key: 'teamPrincipal', label: 'Team Principal' },
-  { key: 'teamAssistant', label: 'Team Assistant' },
-  { key: 'driver', label: 'Driver' },
+  { key: 'teamPrincipal', label: 'Chefe de equipe' },
+  { key: 'teamAssistant', label: 'Assistente de equipe' },
+  { key: 'driver', label: 'Piloto' },
 ];
 
 function getAuthHeaders() {
@@ -112,13 +115,13 @@ export default function AdminPage() {
       const usersData = await usersResponse.json();
       const scuderiasData = await scuderiasResponse.json();
 
-      if (!usersData.success) throw new Error(usersData.message || 'Failed to load users');
-      if (!scuderiasData.success) throw new Error(scuderiasData.message || 'Failed to load scuderias');
+      if (!usersData.success) throw new Error(usersData.message || 'Falha ao carregar usuarios');
+      if (!scuderiasData.success) throw new Error(scuderiasData.message || 'Falha ao carregar scuderias');
 
       setUsers(usersData.users);
       setScuderias(scuderiasData.scuderias);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load admin data');
+      setError(err instanceof Error ? err.message : 'Falha ao carregar dados administrativos');
     } finally {
       setLoadingData(false);
     }
@@ -149,6 +152,7 @@ export default function AdminPage() {
       },
       teamId: adminUser.teamId ?? '',
       driverNumber: adminUser.driverNumber?.toString() ?? '',
+      language: adminUser.language ?? 'pt',
     });
     setUserModalOpen(true);
   }
@@ -192,13 +196,13 @@ export default function AdminPage() {
       );
 
       const data = await response.json();
-      if (!data.success) throw new Error(data.message || 'Failed to save user');
+      if (!data.success) throw new Error(data.message || 'Falha ao salvar usuario');
 
       setMessage(editingUserId ? 'Usuário atualizado.' : 'Usuário criado.');
       setUserModalOpen(false);
       await loadAdminData();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save user');
+      setError(err instanceof Error ? err.message : 'Falha ao salvar usuario');
     } finally {
       setSavingUser(false);
     }
@@ -213,12 +217,12 @@ export default function AdminPage() {
         headers: getAuthHeaders(),
       });
       const data = await response.json();
-      if (!data.success) throw new Error(data.message || 'Failed to delete user');
+      if (!data.success) throw new Error(data.message || 'Falha ao excluir usuario');
 
       setMessage('Usuário excluído.');
       await loadAdminData();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete user');
+      setError(err instanceof Error ? err.message : 'Falha ao excluir usuario');
     }
   }
 
@@ -239,13 +243,13 @@ export default function AdminPage() {
       );
 
       const data = await response.json();
-      if (!data.success) throw new Error(data.message || 'Failed to save scuderia');
+      if (!data.success) throw new Error(data.message || 'Falha ao salvar scuderia');
 
       setMessage(editingScuderiaId ? 'Scuderia atualizada.' : 'Scuderia criada.');
       setScuderiaModalOpen(false);
       await loadAdminData();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save scuderia');
+      setError(err instanceof Error ? err.message : 'Falha ao salvar scuderia');
     } finally {
       setSavingScuderia(false);
     }
@@ -260,19 +264,19 @@ export default function AdminPage() {
         headers: getAuthHeaders(),
       });
       const data = await response.json();
-      if (!data.success) throw new Error(data.message || 'Failed to delete scuderia');
+      if (!data.success) throw new Error(data.message || 'Falha ao excluir scuderia');
 
       setMessage('Scuderia excluída.');
       await loadAdminData();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete scuderia');
+      setError(err instanceof Error ? err.message : 'Falha ao excluir scuderia');
     }
   }
 
   if (isLoading) {
     return (
       <main className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
-        Loading...
+        Carregando...
       </main>
     );
   }
@@ -305,10 +309,10 @@ export default function AdminPage() {
           </div>
 
           <div className="text-right">
-            <p className="text-sm text-gray-400">Logged in as</p>
+            <p className="text-sm text-gray-400">Logado como</p>
             <p className="font-semibold mb-3">{user?.username}</p>
             <button className="px-4 py-2 bg-red-600 rounded-lg" onClick={logout}>
-              Logout
+              Sair
             </button>
           </div>
         </header>
@@ -328,8 +332,8 @@ export default function AdminPage() {
             <table className="w-full text-left">
               <thead className="text-gray-300">
                 <tr>
-                  <th className="py-2">Username</th>
-                  <th className="py-2">Short</th>
+                  <th className="py-2">Usuario</th>
+                  <th className="py-2">Curto</th>
                   <th className="py-2">Funções</th>
                   <th className="py-2">Scuderia</th>
                   <th className="py-2">Número</th>
@@ -345,7 +349,7 @@ export default function AdminPage() {
                       {[
                         adminUser.teamPrincipal && 'Principal',
                         adminUser.teamAssistant && 'Assistant',
-                        adminUser.driver && 'Driver',
+                        adminUser.driver && 'Piloto',
                       ].filter(Boolean).join(', ') || '-'}
                     </td>
                     <td className="py-3">{adminUser.teamName ?? '-'}</td>
@@ -430,7 +434,7 @@ export default function AdminPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <label className="block">
-                <span className="block text-sm mb-2">Username</span>
+                <span className="block text-sm mb-2">Usuario</span>
                 <input
                   className="w-full bg-gray-700 rounded-lg px-4 py-2"
                   name="username"
@@ -443,7 +447,7 @@ export default function AdminPage() {
               </label>
 
               <label className="block">
-                <span className="block text-sm mb-2">Password</span>
+                <span className="block text-sm mb-2">Senha</span>
                 <input
                   className="w-full bg-gray-700 rounded-lg px-4 py-2"
                   type="password"
@@ -451,12 +455,12 @@ export default function AdminPage() {
                   onChange={(event) => setUserForm((prev) => ({ ...prev, password: event.target.value }))}
                   minLength={6}
                   required={!editingUserId}
-                  placeholder={editingUserId ? 'Leave blank to keep current' : ''}
+                  placeholder={editingUserId ? 'Deixe em branco para manter a atual' : ''}
                 />
               </label>
 
               <label className="block">
-                <span className="block text-sm mb-2">Short username</span>
+                <span className="block text-sm mb-2">Usuario curto</span>
                 <input
                   className="w-full bg-gray-700 rounded-lg px-4 py-2"
                   value={userForm.shortUsername}
@@ -469,7 +473,7 @@ export default function AdminPage() {
               </label>
 
               <label className="block">
-                <span className="block text-sm mb-2">Driver number</span>
+                <span className="block text-sm mb-2">Numero do piloto</span>
                 <input
                   className="w-full bg-gray-700 rounded-lg px-4 py-2"
                   type="number"
@@ -479,6 +483,19 @@ export default function AdminPage() {
                   max={999}
                   required
                 />
+              </label>
+
+              <label className="block">
+                <span className="block text-sm mb-2">Idioma</span>
+                <select
+                  className="w-full bg-gray-700 rounded-lg px-4 py-2"
+                  value={userForm.language}
+                  onChange={(event) => setUserForm((prev) => ({ ...prev, language: event.target.value as 'pt' | 'en' | 'es' }))}
+                >
+                  <option value="pt">Portugues</option>
+                  <option value="en">Ingles</option>
+                  <option value="es">Espanhol</option>
+                </select>
               </label>
             </div>
 
@@ -591,3 +608,4 @@ export default function AdminPage() {
     </main>
   );
 }
+

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useTranslations } from '@/i18n';
 
 interface FtohButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   loading?: boolean;
@@ -10,11 +11,13 @@ interface FtohButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> 
 export function FtohButton({ 
   children, 
   loading = false, 
-  loadingText = 'Carregando...', 
+  loadingText, 
   className = '', 
   disabled,
   ...props 
 }: FtohButtonProps) {
+  const { t } = useTranslations();
+  const resolvedLoadingText = loadingText ?? t.common.loading;
   return (
     <button
       disabled={disabled || loading}
@@ -25,7 +28,7 @@ export function FtohButton({
       {loading ? (
         <>
           <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>
-          <span>{loadingText}</span>
+          <span>{resolvedLoadingText}</span>
         </>
       ) : (
         children

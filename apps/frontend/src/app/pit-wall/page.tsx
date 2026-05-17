@@ -15,9 +15,11 @@ import { LiveMap } from '../../components/pit-wall/LiveMap';
 import { PlayersPanel } from '../../components/pit-wall/PlayersPanel';
 import { TeamInfoPanel } from '../../components/pit-wall/TeamInfoPanel';
 import { RaceInsightsGrid } from '../../components/pit-wall/RaceInsightsGrid';
+import { useTranslations } from '@/i18n';
 
 export default function PitWallPage() {
   const { isAuthenticated, user } = useAuth();
+  const { t } = useTranslations();
 
   const { playerList, playerPositions } = usePlayerList();
   const {
@@ -53,19 +55,19 @@ export default function PitWallPage() {
   );
   const recipientOptions = useMemo(
     () => [
-      'Todos',
-      ...(loggedUserTeam ? ['Equipe'] : []),
+      t.chat.everyone,
+      ...(loggedUserTeam ? [t.chat.team] : []),
       ...teamDrivers.map((driver) => driver.name),
     ],
     [loggedUserTeam, teamDrivers],
   );
 
   const [message, setMessage] = useState('');
-  const [selectedRecipient, setSelectedRecipient] = useState('Todos');
+  const [selectedRecipient, setSelectedRecipient] = useState<string>(t.chat.everyone);
 
   useEffect(() => {
     if (!recipientOptions.includes(selectedRecipient)) {
-      setSelectedRecipient('Todos');
+      setSelectedRecipient(t.chat.everyone);
     }
   }, [recipientOptions, selectedRecipient]);
 
@@ -107,9 +109,9 @@ export default function PitWallPage() {
             handleSendMessage={(event) => {
               event.preventDefault();
               const target: ChatTarget =
-                selectedRecipient === 'Todos'
+                selectedRecipient === t.chat.everyone
                   ? { type: 'all' }
-                  : selectedRecipient === 'Equipe' && loggedUserTeam
+                  : selectedRecipient === t.chat.team && loggedUserTeam
                     ? { type: 'team', teamName: loggedUserTeam }
                     : { type: 'player', playerName: selectedRecipient };
 

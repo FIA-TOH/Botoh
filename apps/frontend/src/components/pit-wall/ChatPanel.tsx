@@ -4,6 +4,7 @@ import { FtohSelectButton } from '@/components/FtohSelectButton';
 import { colorNumberToHex } from '@/app/utils/race';
 import { ChatMessage } from '@/hooks/useChat';
 import { useEffect, useRef } from 'react';
+import { useTranslations } from '@/i18n';
 
 
 interface Props {
@@ -39,6 +40,7 @@ export function ChatPanel({
   loading = false,
   error = null,
 }: Props) {
+  const { t } = useTranslations();
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -107,7 +109,7 @@ export function ChatPanel({
                   font-bold
                 "
               >
-                Carregando mensagens...
+                {t.chat.loading}
               </span>
             </div>
           )}
@@ -137,7 +139,7 @@ export function ChatPanel({
                   mb-2
                 "
               >
-                Erro ao carregar chat
+                {t.chat.loadError}
               </div>
 
               <div className="text-gray-400">
@@ -151,7 +153,7 @@ export function ChatPanel({
             !error &&
             messages.length === 0 && (
               <p className="text-gray-400 text-center">
-                Sem mensagens ainda...
+                {t.chat.empty}
               </p>
             )}
 
@@ -202,7 +204,7 @@ export function ChatPanel({
             onChange={(e) =>
               setMessage(e.target.value)
             }
-            placeholder="Digite sua mensagem..."
+            placeholder={t.chat.placeholder}
             className="flex-1"
             variant="white"
             disabled={
@@ -250,7 +252,7 @@ export function ChatPanel({
 
         {/* SELECT */}
         <FtohSelectButton
-          label="Todos"
+          label={t.chat.everyone}
           options={recipientOptions}
           onSelect={onSelectRecipient}
         />
@@ -258,3 +260,5 @@ export function ChatPanel({
     </div>
   );
 }
+
+

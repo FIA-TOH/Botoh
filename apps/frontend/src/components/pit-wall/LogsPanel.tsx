@@ -1,6 +1,7 @@
 import { colorNumberToHex } from '@/app/utils/race';
 import { LogMessage } from '@/hooks/useLogs';
 import { useEffect, useRef } from 'react';
+import { useTranslations } from '@/i18n';
 
 interface Props {
   logs?: LogMessage[];
@@ -15,6 +16,7 @@ export function LogsPanel({
   loading = false,
   error = null,
 }: Props) {
+  const { language, t } = useTranslations();
   const logsContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -77,7 +79,7 @@ export function LogsPanel({
                 font-bold
               "
             >
-              Carregando logs...
+              {t.logs.loading}
             </span>
           </div>
         )}
@@ -107,7 +109,7 @@ export function LogsPanel({
                 mb-2
               "
             >
-              Erro ao carregar logs
+              {t.logs.loadError}
             </div>
 
             <div className="text-gray-400">
@@ -129,7 +131,7 @@ export function LogsPanel({
                 text-gray-400
               "
             >
-              Nenhum log disponível
+              {t.logs.empty}
             </div>
           )}
 
@@ -152,7 +154,9 @@ export function LogsPanel({
                   color: colorNumberToHex(log.color),
                 }}
               >
-                {log.message}
+                {typeof log.message === 'string'
+                  ? log.message
+                  : log.message[language] ?? log.message.pt}
               </span>
             </div>
           ))}
@@ -160,3 +164,5 @@ export function LogsPanel({
     </div>
   );
 }
+
+

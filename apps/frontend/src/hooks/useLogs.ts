@@ -4,9 +4,17 @@ import { useEffect, useState } from 'react';
 import { useSocket } from './useSocket';
 
 export interface LogMessage {
-  message: string;
+  message: string | LocalizedLogMessage;
   timestamp: number;
   color: number | null;
+}
+
+export interface LocalizedLogMessage {
+  pt: string;
+  en: string;
+  es: string;
+  fr?: string;
+  tr?: string;
 }
 
 interface LogMessageEnvelope {

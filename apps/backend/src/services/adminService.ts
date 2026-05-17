@@ -12,6 +12,7 @@ export interface AdminUserInput {
   };
   teamId: string | null;
   driverNumber: number;
+  language: 'pt' | 'en' | 'es';
 }
 
 export interface ScuderiaInput {
@@ -39,6 +40,7 @@ class AdminService {
         u.team_id AS "teamId",
         t.name AS "teamName",
         u.driver_number AS "driverNumber",
+        u.language,
         u.created_at AS "createdAt"
       FROM users u
       LEFT JOIN teams t ON u.team_id = t.id
@@ -68,9 +70,10 @@ class AdminService {
         is_driver,
         team_id,
         driver_number,
+        language,
         is_active,
         created_at
-      ) VALUES ($1, $2, 'user', 50000, $3, $4, $5, $6, $7, $8, true, NOW())
+      ) VALUES ($1, $2, 'user', 50000, $3, $4, $5, $6, $7, $8, $9, true, NOW())
       RETURNING id`,
       [
         input.username,
@@ -81,6 +84,7 @@ class AdminService {
         Boolean(input.roles.driver),
         this.normalizeTeamId(input.teamId),
         input.driverNumber,
+        input.language,
       ],
     );
 
@@ -101,14 +105,15 @@ class AdminService {
       Boolean(input.roles.driver),
       this.normalizeTeamId(input.teamId),
       input.driverNumber,
+      input.language,
       userId,
     ];
 
     let passwordSql = '';
     if (input.password) {
-      values.splice(7, 0, await authService.hashPassword(input.password));
-      passwordSql = ', password_hash = $8';
-      values[8] = userId;
+      values.splice(8, 0, await authService.hashPassword(input.password));
+      passwordSql = ', password_hash = $9';
+      values[9] = userId;
     }
 
     const result = await query(
@@ -120,9 +125,10 @@ class AdminService {
         is_team_assistant = $4,
         is_driver = $5,
         team_id = $6,
-        driver_number = $7
+        driver_number = $7,
+        language = $8
         ${passwordSql}
-       WHERE id = $${input.password ? 9 : 8}
+       WHERE id = $${input.password ? 10 : 9}
        RETURNING id`,
       values,
     );
