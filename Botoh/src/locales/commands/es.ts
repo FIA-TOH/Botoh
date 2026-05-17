@@ -1,4 +1,4 @@
-import { Commands } from "../../features/commands/commands";
+﻿import { Commands } from "../../features/commands/commands";
 
 export default function es_commands(
   handleAdminCommand: (
@@ -346,6 +346,11 @@ export default function es_commands(
     args: string[],
     room: RoomObject,
   ) => void,
+  handleSeeLoginCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
   handleLoginCommand: (
     byPlayer: PlayerObject,
     args: string[],
@@ -430,6 +435,10 @@ export default function es_commands(
     "!config": handleConfigCommand,
     "!manage_tyres": handleManageTyresCommand,
     "!pit": handlePitCommand,
+    "!see_login": handleSeeLoginCommand,
     "!login": handleLoginCommand,
   };
 }
+
+
+

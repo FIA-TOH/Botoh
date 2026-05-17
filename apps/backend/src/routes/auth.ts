@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express';
+﻿import { Router, Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import authService from '../services/authService';
 import { authMiddleware, AuthRequest } from '../middleware/auth';
@@ -10,8 +10,8 @@ const loginValidation = [
   body('username')
     .isLength({ min: 3, max: 50 })
     .withMessage('Username must be between 3 and 50 characters')
-    .matches(/^[a-zA-Z0-9_]+$/)
-    .withMessage('Username can only contain letters, numbers, and underscores'),
+    .matches(/^[\p{L}\p{N}_]+(?: [\p{L}\p{N}_]+)*$/u)
+    .withMessage('Username can only contain letters, numbers, underscores, and internal spaces'),
   body('password')
     .isLength({ min: 6 })
     .withMessage('Password must be at least 6 characters long'),
@@ -22,8 +22,8 @@ const createUserValidation = [
   body('username')
     .isLength({ min: 3, max: 50 })
     .withMessage('Username must be between 3 and 50 characters')
-    .matches(/^[a-zA-Z0-9_]+$/)
-    .withMessage('Username can only contain letters, numbers, and underscores'),
+    .matches(/^[\p{L}\p{N}_]+(?: [\p{L}\p{N}_]+)*$/u)
+    .withMessage('Username can only contain letters, numbers, underscores, and internal spaces'),
   body('password')
     .isLength({ min: 6 })
     .withMessage('Password must be at least 6 characters long'),
@@ -206,3 +206,4 @@ router.get('/verify', authMiddleware, (req: AuthRequest, res: Response) => {
 });
 
 export default router;
+

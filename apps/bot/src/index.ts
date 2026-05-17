@@ -35,6 +35,11 @@ async function setupBackendCommunication() {
         const { playerList } = await import('../../../Botoh/src/features/changePlayerState/playerList');
         const { getLeagueScuderia } = await import('../../../Botoh/src/features/scuderias/scuderias');
         const { MESSAGES, getPlayerLanguage } = await import('../../../Botoh/src/features/chat/messages');
+        const { mute_mode } = await import('../../../Botoh/src/features/chat/toggleMuteMode');
+
+        if (mute_mode) {
+          return;
+        }
 
         const recipients = room.getPlayerList().filter((roomPlayer: PlayerObject) => {
           if (target.type === 'all') {
@@ -65,14 +70,16 @@ async function setupBackendCommunication() {
           room.sendAnnouncement(formattedMessage, recipient.id, 0xFFFFFF);
         });
 
-        const { sendChatMessageToWebsite } = await import('../../../Botoh/src/features/website/sendToWebsite');
-        sendChatMessageToWebsite({
-          player,
-          message,
-          timestamp: Date.now(),
-          color: null,
-          source: 'frontend',
-        });
+        if (target.type === 'all') {
+          const { sendChatMessageToWebsite } = await import('../../../Botoh/src/features/website/sendToWebsite');
+          sendChatMessageToWebsite({
+            player,
+            message,
+            timestamp: Date.now(),
+            color: null,
+            source: 'frontend',
+          });
+        }
       } else {
         console.log('âŒ No room or message:', { 
           room: !!room, 

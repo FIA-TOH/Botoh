@@ -19,6 +19,7 @@ import { positionList } from "../commands/gameMode/race/positionList";
 import { initBattleRoyale } from "../commands/gameMode/battleRoyale.ts/handleBattleRoyaleLaps";
 import { playerList } from "../changePlayerState/playerList";
 import { initializeLeagueStartAFKDetection } from "../afk/leagueStartAFKDetection";
+import { resetLapHistory } from "../zones/laps/lapHistory";
 
 export function GameStart(room: RoomObject) {
   room.onGameStart = function (byPlayer) {
@@ -54,6 +55,7 @@ export function GameStart(room: RoomObject) {
     }
     
     resetBestLap();
+    resetLapHistory();
     resetBestPit();
     clearRRPosition();
     resetSafetyCarActivationForRace();

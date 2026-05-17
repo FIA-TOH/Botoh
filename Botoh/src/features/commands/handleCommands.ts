@@ -1,4 +1,4 @@
-import en_commands from "../../locales/commands/en";
+﻿import en_commands from "../../locales/commands/en";
 import fr_commands from "../../locales/commands/fr";
 import es_commands from "../../locales/commands/es";
 import tr_commands from "../../locales/commands/tr";
@@ -76,6 +76,7 @@ import { handleConfigCommand } from "./adminThings/handleConfigCommand";
 import { handleManageTyresCommand } from "./adminThings/handleManageTyresCommand";
 import { handlePitCommand } from "./adminThings/handlePitCommand";
 import { handleLoginCommand } from "./login/handleLoginCommand";
+import { handleSeeLoginCommand } from "./adminThings/handleSeeLoginCommand";
 
 export type CommandFunction = (
   handleAdminCommand: (
@@ -425,6 +426,11 @@ export type CommandFunction = (
     args: string[],
     room: RoomObject,
   ) => void,
+  handleSeeLoginCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
   handleLoginCommand: (
     byPlayer: PlayerObject,
     args: string[],
@@ -512,6 +518,7 @@ function importCommandsByLanguage(commandFunctions: {
         handleConfigCommand,
         handleManageTyresCommand,
         handlePitCommand,
+        handleSeeLoginCommand,
         handleLoginCommand,
       ),
     }),
@@ -596,6 +603,7 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
         handleConfigCommand,
         handleManageTyresCommand,
         handlePitCommand,
+        handleSeeLoginCommand,
         handleLoginCommand,
       ),
     }),
@@ -618,3 +626,8 @@ export const COMMANDS: Commands = importCommands(
   tr_commands,
   pt_commands,
 );
+
+
+
+
+

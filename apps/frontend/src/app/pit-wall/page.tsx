@@ -117,6 +117,7 @@ export default function PitWallPage() {
               setMessage('');
             }}
             isConnected={isChatConnected}
+            isMuted={playerList?.raceSession.isChatMuted ?? false}
             recipientOptions={recipientOptions}
             onSelectRecipient={setSelectedRecipient}
             loading={false}

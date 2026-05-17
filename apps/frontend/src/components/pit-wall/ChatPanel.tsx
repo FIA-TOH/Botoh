@@ -18,6 +18,7 @@ interface Props {
   ) => void;
 
   isConnected: boolean;
+  isMuted?: boolean;
   recipientOptions: string[];
   onSelectRecipient: (option: string) => void;
 
@@ -32,6 +33,7 @@ export function ChatPanel({
   setMessage,
   handleSendMessage,
   isConnected,
+  isMuted = false,
   recipientOptions,
   onSelectRecipient,
   loading = false,
@@ -206,7 +208,8 @@ export function ChatPanel({
             disabled={
               loading ||
               !!error ||
-              !isConnected
+              !isConnected ||
+              isMuted
             }
           />
 
@@ -217,7 +220,8 @@ export function ChatPanel({
               !message.trim() ||
               message.trim().startsWith('!') ||
               loading ||
-              !!error
+              !!error ||
+              isMuted
             }
             className="px-3 py-2 !w-auto"
           >

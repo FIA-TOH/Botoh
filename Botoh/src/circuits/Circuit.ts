@@ -72,6 +72,7 @@ export interface CircuitInfo {
   physicsType?: CircuitPhysics;
   DirectionChangerDetector?: DirectionChangerDetector[],
   new_safetycar?: boolean,
+  pitGap?: number,
 }
 
 export interface Circuit {

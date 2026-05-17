@@ -13,11 +13,18 @@ import {
   getRaceControlState,
   RaceControlState,
 } from '../../../../Botoh/src/features/commands/flagsAndVSC/raceControl';
+import { CIRCUITS, currentMapIndex } from '../../../../Botoh/src/features/zones/maps';
 import { currentWeather } from '../../../../Botoh/src/features/weather/currentWeather';
 import {
   getLastWeatherAnnouncement,
   LastWeatherAnnouncement,
 } from '../../../../Botoh/src/features/weather/rain/weatherReportAnnouncer';
+import {
+  getLapHistory,
+  getPaceStats,
+  PaceStats,
+} from '../../../../Botoh/src/features/zones/laps/lapHistory';
+import { mute_mode } from '../../../../Botoh/src/features/chat/toggleMuteMode';
 
 export interface PlayerPositionData {
   id: number;
@@ -55,6 +62,9 @@ export interface PlayerData extends PlayerPositionData {
   isTyreBlowed: boolean;
   carDamage: number;
   racePosition: number | null;
+  currentSector: number;
+  checkpointTimes: Record<string, number>;
+  paceStats: PaceStats;
   gapToLeader: string;
   gapToNext: string;
   shortName: string;
@@ -95,6 +105,11 @@ export interface RaceSessionData {
   currentLap: number;
   totalLaps: number;
   flag: RaceFlag;
+  isChatMuted: boolean;
+  pitGap: {
+    value: number;
+    isEstimated: boolean;
+  };
   weather: WeatherSessionData;
 }
 
@@ -150,6 +165,8 @@ function getRaceFlag(): RaceFlag {
 }
 
 function getRaceSessionData(): RaceSessionData {
+  const circuitPitGap = CIRCUITS[currentMapIndex]?.info?.pitGap;
+
   return {
     sessionType: gameMode,
     currentTimePassed: currentTime,
@@ -160,6 +177,11 @@ function getRaceSessionData(): RaceSessionData {
     currentLap: currentSessionLap,
     totalLaps: laps,
     flag: getRaceFlag(),
+    isChatMuted: mute_mode,
+    pitGap: {
+      value: circuitPitGap ?? 40,
+      isEstimated: circuitPitGap === undefined,
+    },
     weather: {
       global: {
         rain: currentWeather.rainGlobal,
@@ -184,6 +206,47 @@ function getRaceSessionData(): RaceSessionData {
   };
 }
 
+function buildPaceStatsFromLaps(laps: number[]): PaceStats {
+  const lastFive = laps.slice(-5);
+  const lastFiveAverage =
+    lastFive.length > 0
+      ? lastFive.reduce((sum, lap) => sum + lap, 0) / lastFive.length
+      : null;
+  const lastLap = laps.length > 0 ? laps[laps.length - 1] : null;
+
+  return {
+    fastestLap: laps.length > 0 ? Math.min(...laps) : null,
+    lastFiveAverage,
+    lastLap,
+    lastLapComparedToAverage:
+      lastLap !== null && lastFiveAverage !== null
+        ? lastLap - lastFiveAverage
+        : null,
+    completedLaps: laps.length,
+  };
+}
+
+function getPitWallPaceStats(playerId: number): PaceStats {
+  const state = botPlayerState[playerId];
+  const recordedLaps = getLapHistory(playerId);
+  const openingLapTime = state?.checkpointTimes?.['1:1'];
+
+  // The bot uses the first finish-line crossing to open lap 1. For drivers who
+  // start after the finish line, that crossing is actually a full first lap and
+  // never enters processCompletedLap. Keep this correction local to pit-wall
+  // analytics instead of changing race-state semantics globally.
+  const shouldInferOpeningLap =
+    typeof openingLapTime === 'number'
+    && openingLapTime >= 10
+    && !recordedLaps.some((lap) => Math.abs(lap - openingLapTime) < 0.001);
+
+  if (!shouldInferOpeningLap) {
+    return getPaceStats(playerId);
+  }
+
+  return buildPaceStatsFromLaps([openingLapTime, ...recordedLaps]);
+}
+
 export class PlayerListService {
   private botService: BotService;
   private positionsInterval: NodeJS.Timeout | null = null;
@@ -198,12 +261,12 @@ export class PlayerListService {
     if (this.isBroadcasting) return;
 
     this.isBroadcasting = true;
-    console.log('Starting player position broadcasting (3 times/sec)');
+    console.log('Starting player position broadcasting (4 times/sec)');
     console.log('Starting full player state broadcasting (1 time/sec)');
 
     this.positionsInterval = setInterval(() => {
       this.broadcastPlayerPositions();
-    }, 1000 / 3);
+    }, 1000 / 4);
 
     this.fullStateInterval = setInterval(() => {
       this.broadcastPlayerList();
@@ -295,6 +358,9 @@ export class PlayerListService {
       isTyreBlowed: state?.isTyreBlowed ?? false,
       carDamage: state?.carDamage ?? 0,
       racePosition: state?.position ?? null,
+      currentSector: state?.currentSector ?? 0,
+      checkpointTimes: state?.checkpointTimes ?? {},
+      paceStats: getPitWallPaceStats(player.id),
       gapToLeader: state?.gapToLeader ?? '',
       gapToNext: state?.gapToNext ?? '',
       shortName: state?.shortName ?? player.name ?? 'N/A',
@@ -350,6 +416,9 @@ export class PlayerListService {
       isTyreBlowed: state?.isTyreBlowed ?? false,
       carDamage: state?.carDamage ?? 0,
       racePosition: state?.position ?? null,
+      currentSector: state?.currentSector ?? 0,
+      checkpointTimes: state?.checkpointTimes ?? {},
+      paceStats: getPitWallPaceStats(id),
       gapToLeader: state?.gapToLeader ?? '',
       gapToNext: state?.gapToNext ?? '',
       shortName: state?.shortName ?? name,

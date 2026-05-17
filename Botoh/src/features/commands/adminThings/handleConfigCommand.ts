@@ -17,6 +17,7 @@ import { handleRModeCommand } from "../gameMode/race/handleRModeCommand";
 import { handlePitCommand } from "./handlePitCommand";
 import { setManageTyresEnabled } from "./handleManageTyresCommand";
 import { handlePresentationLapCommand } from "../gameState/handlePresentationLapCommand";
+import { handleRREnabledCommand } from "./handleRREnabledCommand";
 
 
 export function handleConfigCommand(
@@ -80,6 +81,7 @@ function applyFTOHConfig(room: RoomObject, byPlayer: PlayerObject) {
   enableSoftCutPenalty(false, room);
   handlePitCommand(byPlayer, ["new"], room);
   setManageTyresEnabled(true);
+  handleRREnabledCommand(byPlayer, ["off"], room);
 }
 
 
@@ -100,6 +102,7 @@ export function applyFTOHPublicConfig(room: RoomObject, byPlayer: PlayerObject) 
   enableSoftCutPenalty(false, room);
   handlePitCommand(byPlayer, ["old"], room);
   setManageTyresEnabled(false);
+  handleRREnabledCommand(byPlayer, ["on"], room);
 }
 
 function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {
@@ -119,6 +122,7 @@ function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {
   enableSoftCutPenalty(false, room);
   handlePitCommand(byPlayer, ["old"], room);
   setManageTyresEnabled(false);
+  handleRREnabledCommand(byPlayer, ["on"], room);
 }
 
 function applyHaxbulaConfig(room: RoomObject, byPlayer: PlayerObject) {
@@ -138,4 +142,5 @@ function applyHaxbulaConfig(room: RoomObject, byPlayer: PlayerObject) {
   enableSoftCutPenalty(false, room);
   handlePitCommand(byPlayer, ["old"], room);
   setManageTyresEnabled(false);
+  handleRREnabledCommand(byPlayer, ["on"], room);
 }

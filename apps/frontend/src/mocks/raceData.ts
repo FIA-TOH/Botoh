@@ -44,6 +44,9 @@ export interface Driver {
   isTyreBlowed: boolean;
   carDamage: number;
   position: number | null;
+  currentSector: number;
+  checkpointTimes: Record<string, number>;
+  paceStats: PaceStats;
   gapToLeader: string;
   gapToNext: string;
   shortName: string;
@@ -60,6 +63,11 @@ export interface RaceSession {
   currentLap: number;
   totalLaps: number;
   flag: FlagType;
+  isChatMuted: boolean;
+  pitGap: {
+    value: number;
+    isEstimated: boolean;
+  };
   weather: WeatherSession;
 }
 
@@ -89,4 +97,12 @@ export interface WeatherSession {
     sector3: WeatherSnapshot;
   };
   lastAnnouncement: WeatherAnnouncement | null;
+}
+
+export interface PaceStats {
+  fastestLap: number | null;
+  lastFiveAverage: number | null;
+  lastLap: number | null;
+  lastLapComparedToAverage: number | null;
+  completedLaps: number;
 }

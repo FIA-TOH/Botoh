@@ -88,6 +88,11 @@ class AdminService {
   }
 
   async updateUser(userId: string, input: AdminUserInput) {
+    const usernameOwner = await authService.findUserByUsername(input.username);
+    if (usernameOwner && usernameOwner.id !== userId) {
+      return { success: false, message: 'Username already exists' };
+    }
+
     const values: any[] = [
       input.username,
       input.shortUsername,

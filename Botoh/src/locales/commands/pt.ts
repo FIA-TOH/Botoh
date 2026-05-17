@@ -1,4 +1,4 @@
-import { Commands } from "../../features/commands/commands";
+﻿import { Commands } from "../../features/commands/commands";
 
 export default function pt_commands(
   handleAdminCommand: (
@@ -352,6 +352,11 @@ export default function pt_commands(
     args: string[],
     room: RoomObject,
   ) => void,
+  handleSeeLoginCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
   handleLoginCommand: (
     byPlayer: PlayerObject,
     args: string[],
@@ -437,6 +442,10 @@ export default function pt_commands(
     "!config": handleConfigCommand,
     "!manage_tyres": handleManageTyresCommand,
     "!pit": handlePitCommand,
+    "!see_login": handleSeeLoginCommand,
     "!login": handleLoginCommand,
   };
 }
+
+
+

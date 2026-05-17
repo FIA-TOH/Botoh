@@ -58,6 +58,7 @@ export interface PlayerInfo {
   lapsBehindLeaderWhenLeft: number | null;
 
   currentSector: number;
+  checkpointTimes: Record<string, number>;
   sectorChanged: boolean;
   sectorTime: number[];
   sectorTimeCounter: number;

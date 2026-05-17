@@ -25,6 +25,7 @@ export function createPlayerInfo(ip?: string, playerId?: number) {
     lapsBehindLeaderWhenLeft: null,
 
     currentSector: 3,
+    checkpointTimes: {},
     sectorChanged: false,
     sectorTime: [],
     sectorTimeCounter: 0,
@@ -191,6 +192,7 @@ export function resetPlayer(
   playerList[id].lapsBehindLeaderWhenLeft = null;
 
   playerList[id].currentSector = 3;
+  playerList[id].checkpointTimes = {};
   playerList[id].sectorChanged = false;
   playerList[id].sectorTime = [];
   playerList[id].sectorTimeCounter = 0;
