@@ -15,6 +15,13 @@ export interface User {
   teamName: string | null;
   teamTag: string | null;
   teamColor: string | null;
+  teamMemberships: {
+    teamId: string;
+    teamName: string;
+    teamTag: string;
+    teamColor: string;
+    roles: ('team_principal' | 'team_assistant' | 'driver')[];
+  }[];
   language: 'pt' | 'en' | 'es';
   created_at: string;
 }
@@ -90,14 +97,42 @@ class AuthService {
           u.money,
           u.short_username AS "shortUsername",
           u.driver_number AS "driverNumber",
-          u.team_id AS "teamId",
-          t.name AS "teamName",
-          t.tag AS "teamTag",
-          t.color AS "teamColor",
+          COALESCE(primary_team.id, legacy_team.id) AS "teamId",
+          COALESCE(primary_team.name, legacy_team.name) AS "teamName",
+          COALESCE(primary_team.tag, legacy_team.tag) AS "teamTag",
+          COALESCE(primary_team.color, legacy_team.color) AS "teamColor",
+          COALESCE(memberships.items, '[]'::json) AS "teamMemberships",
           u.language,
           u.created_at
         FROM users u
-        LEFT JOIN teams t ON u.team_id = t.id
+        LEFT JOIN teams legacy_team ON u.team_id = legacy_team.id
+        LEFT JOIN LATERAL (
+          SELECT t.id, t.name, t.tag, t.color
+          FROM user_team_memberships utm
+          JOIN teams t ON t.id = utm.team_id
+          WHERE utm.user_id = u.id
+          ORDER BY t.name
+          LIMIT 1
+        ) primary_team ON true
+        LEFT JOIN LATERAL (
+          SELECT json_agg(
+            json_build_object(
+              'teamId', t.id,
+              'teamName', t.name,
+              'teamTag', t.tag,
+              'teamColor', t.color,
+              'roles', ARRAY_REMOVE(ARRAY[
+                CASE WHEN utm.is_team_principal THEN 'team_principal' END,
+                CASE WHEN utm.is_team_assistant THEN 'team_assistant' END,
+                CASE WHEN utm.is_driver THEN 'driver' END
+              ], NULL)
+            )
+            ORDER BY t.name
+          ) AS items
+          FROM user_team_memberships utm
+          JOIN teams t ON t.id = utm.team_id
+          WHERE utm.user_id = u.id
+        ) memberships ON true
         WHERE LOWER(u.username) = LOWER($1)
         ORDER BY CASE WHEN u.username = $1 THEN 0 ELSE 1 END, u.created_at DESC
         LIMIT 1`,
@@ -123,14 +158,42 @@ class AuthService {
           u.money,
           u.short_username AS "shortUsername",
           u.driver_number AS "driverNumber",
-          u.team_id AS "teamId",
-          t.name AS "teamName",
-          t.tag AS "teamTag",
-          t.color AS "teamColor",
+          COALESCE(primary_team.id, legacy_team.id) AS "teamId",
+          COALESCE(primary_team.name, legacy_team.name) AS "teamName",
+          COALESCE(primary_team.tag, legacy_team.tag) AS "teamTag",
+          COALESCE(primary_team.color, legacy_team.color) AS "teamColor",
+          COALESCE(memberships.items, '[]'::json) AS "teamMemberships",
           u.language,
           u.created_at
         FROM users u
-        LEFT JOIN teams t ON u.team_id = t.id
+        LEFT JOIN teams legacy_team ON u.team_id = legacy_team.id
+        LEFT JOIN LATERAL (
+          SELECT t.id, t.name, t.tag, t.color
+          FROM user_team_memberships utm
+          JOIN teams t ON t.id = utm.team_id
+          WHERE utm.user_id = u.id
+          ORDER BY t.name
+          LIMIT 1
+        ) primary_team ON true
+        LEFT JOIN LATERAL (
+          SELECT json_agg(
+            json_build_object(
+              'teamId', t.id,
+              'teamName', t.name,
+              'teamTag', t.tag,
+              'teamColor', t.color,
+              'roles', ARRAY_REMOVE(ARRAY[
+                CASE WHEN utm.is_team_principal THEN 'team_principal' END,
+                CASE WHEN utm.is_team_assistant THEN 'team_assistant' END,
+                CASE WHEN utm.is_driver THEN 'driver' END
+              ], NULL)
+            )
+            ORDER BY t.name
+          ) AS items
+          FROM user_team_memberships utm
+          JOIN teams t ON t.id = utm.team_id
+          WHERE utm.user_id = u.id
+        ) memberships ON true
         WHERE u.id = $1`,
         [userId]
       );

@@ -1,16 +1,18 @@
 import authService from './authService';
-import { query, queryOne } from '../config/database';
+import { query, queryOne, transaction } from '../config/database';
+
+export type TeamMembershipRole = 'team_principal' | 'team_assistant' | 'driver';
+
+export interface TeamMembershipInput {
+  teamId: string;
+  roles: TeamMembershipRole[];
+}
 
 export interface AdminUserInput {
   username: string;
   password?: string;
   shortUsername: string;
-  roles: {
-    teamPrincipal?: boolean;
-    teamAssistant?: boolean;
-    driver?: boolean;
-  };
-  teamId: string | null;
+  teamMemberships: TeamMembershipInput[];
   driverNumber: number;
   language: 'pt' | 'en' | 'es';
 }
@@ -22,10 +24,6 @@ export interface ScuderiaInput {
 }
 
 class AdminService {
-  private normalizeTeamId(teamId: string | null | undefined) {
-    return teamId || null;
-  }
-
   async listUsers() {
     const result = await query(`
       SELECT
@@ -34,17 +32,34 @@ class AdminService {
         u.role,
         u.money,
         u.short_username AS "shortUsername",
-        u.is_team_principal AS "teamPrincipal",
-        u.is_team_assistant AS "teamAssistant",
-        u.is_driver AS "driver",
-        u.team_id AS "teamId",
-        t.name AS "teamName",
+        BOOL_OR(COALESCE(utm.is_team_principal, false)) AS "teamPrincipal",
+        BOOL_OR(COALESCE(utm.is_team_assistant, false)) AS "teamAssistant",
+        BOOL_OR(COALESCE(utm.is_driver, false)) AS "driver",
+        COALESCE(
+          json_agg(
+            json_build_object(
+              'teamId', t.id,
+              'teamName', t.name,
+              'teamTag', t.tag,
+              'teamColor', t.color,
+              'roles', ARRAY_REMOVE(ARRAY[
+                CASE WHEN utm.is_team_principal THEN 'team_principal' END,
+                CASE WHEN utm.is_team_assistant THEN 'team_assistant' END,
+                CASE WHEN utm.is_driver THEN 'driver' END
+              ], NULL)
+            )
+            ORDER BY t.name
+          ) FILTER (WHERE utm.team_id IS NOT NULL),
+          '[]'::json
+        ) AS "teamMemberships",
         u.driver_number AS "driverNumber",
         u.language,
         u.created_at AS "createdAt"
       FROM users u
-      LEFT JOIN teams t ON u.team_id = t.id
+      LEFT JOIN user_team_memberships utm ON utm.user_id = u.id
+      LEFT JOIN teams t ON utm.team_id = t.id
       WHERE COALESCE(u.is_active, true) = true
+      GROUP BY u.id
       ORDER BY u.username ASC
     `);
 
@@ -58,37 +73,43 @@ class AdminService {
     }
 
     const passwordHash = await authService.hashPassword(input.password);
-    const result = await query(
-      `INSERT INTO users (
-        username,
-        password_hash,
-        role,
-        money,
-        short_username,
-        is_team_principal,
-        is_team_assistant,
-        is_driver,
-        team_id,
-        driver_number,
-        language,
-        is_active,
-        created_at
-      ) VALUES ($1, $2, 'user', 50000, $3, $4, $5, $6, $7, $8, $9, true, NOW())
-      RETURNING id`,
-      [
-        input.username,
-        passwordHash,
-        input.shortUsername,
-        Boolean(input.roles.teamPrincipal),
-        Boolean(input.roles.teamAssistant),
-        Boolean(input.roles.driver),
-        this.normalizeTeamId(input.teamId),
-        input.driverNumber,
-        input.language,
-      ],
-    );
+    const user = await transaction(async (client) => {
+      const result = await client.query(
+        `INSERT INTO users (
+          username,
+          password_hash,
+          role,
+          money,
+          short_username,
+          is_team_principal,
+          is_team_assistant,
+          is_driver,
+          team_id,
+          driver_number,
+          language,
+          is_active,
+          created_at
+        ) VALUES ($1, $2, 'user', 50000, $3, $4, $5, $6, $7, $8, $9, true, NOW())
+        RETURNING id`,
+        [
+          input.username,
+          passwordHash,
+          input.shortUsername,
+          this.hasAnyRole(input.teamMemberships, 'team_principal'),
+          this.hasAnyRole(input.teamMemberships, 'team_assistant'),
+          this.hasAnyRole(input.teamMemberships, 'driver'),
+          input.teamMemberships[0]?.teamId ?? null,
+          input.driverNumber,
+          input.language,
+        ],
+      );
 
-    return { success: true, user: result.rows[0] };
+      const createdUser = result.rows[0];
+      await this.replaceMemberships(client, createdUser.id, input.teamMemberships);
+      return createdUser;
+    });
+
+    return { success: true, user };
   }
 
   async updateUser(userId: string, input: AdminUserInput) {
@@ -100,10 +121,10 @@ class AdminService {
     const values: any[] = [
       input.username,
       input.shortUsername,
-      Boolean(input.roles.teamPrincipal),
-      Boolean(input.roles.teamAssistant),
-      Boolean(input.roles.driver),
-      this.normalizeTeamId(input.teamId),
+      this.hasAnyRole(input.teamMemberships, 'team_principal'),
+      this.hasAnyRole(input.teamMemberships, 'team_assistant'),
+      this.hasAnyRole(input.teamMemberships, 'driver'),
+      input.teamMemberships[0]?.teamId ?? null,
       input.driverNumber,
       input.language,
       userId,
@@ -116,22 +137,30 @@ class AdminService {
       values[9] = userId;
     }
 
-    const result = await query(
-      `UPDATE users
-       SET
-        username = $1,
-        short_username = $2,
-        is_team_principal = $3,
-        is_team_assistant = $4,
-        is_driver = $5,
-        team_id = $6,
-        driver_number = $7,
-        language = $8
-        ${passwordSql}
-       WHERE id = $${input.password ? 10 : 9}
-       RETURNING id`,
-      values,
-    );
+    const result = await transaction(async (client) => {
+      const updated = await client.query(
+        `UPDATE users
+         SET
+          username = $1,
+          short_username = $2,
+          is_team_principal = $3,
+          is_team_assistant = $4,
+          is_driver = $5,
+          team_id = $6,
+          driver_number = $7,
+          language = $8
+          ${passwordSql}
+         WHERE id = $${input.password ? 10 : 9}
+         RETURNING id`,
+        values,
+      );
+
+      if (updated.rows[0]) {
+        await this.replaceMemberships(client, userId, input.teamMemberships);
+      }
+
+      return updated;
+    });
 
     if (!result.rows[0]) {
       return { success: false, message: 'User not found' };
@@ -151,6 +180,41 @@ class AdminService {
     }
 
     return { success: true };
+  }
+
+  private async replaceMemberships(
+    client: { query: (sql: string, params?: any[]) => Promise<any> },
+    userId: string,
+    memberships: TeamMembershipInput[],
+  ) {
+    await client.query('DELETE FROM user_team_memberships WHERE user_id = $1', [userId]);
+
+    for (const membership of memberships) {
+      const primaryRole = membership.roles[0] ?? 'driver';
+      await client.query(
+        `INSERT INTO user_team_memberships (
+          user_id,
+          team_id,
+          role,
+          is_team_principal,
+          is_team_assistant,
+          is_driver
+        )
+         VALUES ($1, $2, $3, $4, $5, $6)`,
+        [
+          userId,
+          membership.teamId,
+          primaryRole,
+          membership.roles.includes('team_principal'),
+          membership.roles.includes('team_assistant'),
+          membership.roles.includes('driver'),
+        ],
+      );
+    }
+  }
+
+  private hasAnyRole(memberships: TeamMembershipInput[], role: TeamMembershipRole) {
+    return memberships.some((membership) => membership.roles.includes(role));
   }
 
   async listScuderias() {

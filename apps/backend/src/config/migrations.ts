@@ -40,6 +40,57 @@ class MigrationService {
     await query("ALTER TABLE users ADD COLUMN IF NOT EXISTS language VARCHAR(2) NOT NULL DEFAULT 'pt'");
     await query('ALTER TABLE users ADD COLUMN IF NOT EXISTS team_id UUID REFERENCES teams(id) ON DELETE SET NULL');
     await query('ALTER TABLE users ALTER COLUMN team_id DROP NOT NULL');
+
+    await query(`
+      CREATE TABLE IF NOT EXISTS user_team_memberships (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        team_id UUID NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
+        role VARCHAR(30) NOT NULL CHECK (role IN ('team_principal', 'team_assistant', 'driver')),
+        is_team_principal BOOLEAN NOT NULL DEFAULT false,
+        is_team_assistant BOOLEAN NOT NULL DEFAULT false,
+        is_driver BOOLEAN NOT NULL DEFAULT false,
+        created_at TIMESTAMP DEFAULT NOW(),
+        UNIQUE(user_id, team_id)
+      )
+    `);
+
+    await query('ALTER TABLE user_team_memberships ADD COLUMN IF NOT EXISTS is_team_principal BOOLEAN NOT NULL DEFAULT false');
+    await query('ALTER TABLE user_team_memberships ADD COLUMN IF NOT EXISTS is_team_assistant BOOLEAN NOT NULL DEFAULT false');
+    await query('ALTER TABLE user_team_memberships ADD COLUMN IF NOT EXISTS is_driver BOOLEAN NOT NULL DEFAULT false');
+
+    await query(`
+      INSERT INTO user_team_memberships (
+        user_id,
+        team_id,
+        role,
+        is_team_principal,
+        is_team_assistant,
+        is_driver
+      )
+      SELECT
+        u.id,
+        u.team_id,
+        CASE
+          WHEN COALESCE(u.is_team_principal, false) THEN 'team_principal'
+          WHEN COALESCE(u.is_team_assistant, false) THEN 'team_assistant'
+          ELSE 'driver'
+        END,
+        COALESCE(u.is_team_principal, false),
+        COALESCE(u.is_team_assistant, false),
+        COALESCE(u.is_driver, false)
+      FROM users u
+      WHERE u.team_id IS NOT NULL
+      ON CONFLICT (user_id, team_id) DO NOTHING
+    `);
+
+    await query(`
+      UPDATE user_team_memberships
+      SET
+        is_team_principal = CASE WHEN role = 'team_principal' THEN true ELSE is_team_principal END,
+        is_team_assistant = CASE WHEN role = 'team_assistant' THEN true ELSE is_team_assistant END,
+        is_driver = CASE WHEN role = 'driver' THEN true ELSE is_driver END
+    `);
   }
 }
 

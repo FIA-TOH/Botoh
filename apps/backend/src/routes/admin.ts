@@ -6,13 +6,6 @@ import { getRequestLanguage, translateMessage, translateValidationErrors } from 
 
 const router = Router();
 
-const rolesValidation = body('roles')
-  .custom((roles) => {
-    if (!roles || typeof roles !== 'object') return false;
-    return Boolean(roles.teamPrincipal || roles.teamAssistant || roles.driver);
-  })
-  .withMessage('At least one user function must be selected');
-
 const userValidation = [
   body('username')
     .isLength({ min: 3, max: 50 })
@@ -24,11 +17,25 @@ const userValidation = [
     .withMessage('Short username must be between 1 and 3 characters')
     .matches(/^[A-Z0-9]+$/)
     .withMessage('Short username can only contain uppercase letters and numbers'),
-  rolesValidation,
-  body('teamId')
-    .optional({ nullable: true })
+  body('teamMemberships')
+    .isArray()
+    .withMessage('Team memberships must be an array'),
+  body('teamMemberships.*.teamId')
     .isUUID()
     .withMessage('Team must be a valid UUID when provided'),
+  body('teamMemberships.*.roles')
+    .isArray({ min: 1 })
+    .withMessage('At least one user function must be selected'),
+  body('teamMemberships.*.roles.*')
+    .isIn(['team_principal', 'team_assistant', 'driver'])
+    .withMessage('Team membership role is invalid'),
+  body('teamMemberships')
+    .custom((memberships) => {
+      if (!Array.isArray(memberships)) return false;
+      const teamIds = memberships.map((membership) => membership.teamId);
+      return new Set(teamIds).size === teamIds.length;
+    })
+    .withMessage('A user cannot have duplicate scuderias'),
   body('driverNumber')
     .isInt({ min: 0, max: 999 })
     .withMessage('Driver number must be between 0 and 999'),

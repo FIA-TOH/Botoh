@@ -4,8 +4,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 
-type UserRoleKey = 'teamPrincipal' | 'teamAssistant' | 'driver';
-
 interface AdminUser {
   id: string;
   username: string;
@@ -14,8 +12,7 @@ interface AdminUser {
   teamPrincipal: boolean;
   teamAssistant: boolean;
   driver: boolean;
-  teamId: string | null;
-  teamName: string | null;
+  teamMemberships: TeamMembership[];
   driverNumber: number | null;
   language: 'pt' | 'en' | 'es';
 }
@@ -27,12 +24,21 @@ interface Scuderia {
   color: string;
 }
 
+type TeamMembershipRole = 'team_principal' | 'team_assistant' | 'driver';
+
+interface TeamMembership {
+  teamId: string;
+  teamName?: string;
+  teamTag?: string;
+  teamColor?: string;
+  roles: TeamMembershipRole[];
+}
+
 interface UserFormData {
   username: string;
   password: string;
   shortUsername: string;
-  roles: Record<UserRoleKey, boolean>;
-  teamId: string;
+  teamMemberships: { teamId: string; roles: TeamMembershipRole[] }[];
   driverNumber: string;
   language: 'pt' | 'en' | 'es';
 }
@@ -47,12 +53,7 @@ const EMPTY_USER_FORM: UserFormData = {
   username: '',
   password: '',
   shortUsername: '',
-  roles: {
-    teamPrincipal: false,
-    teamAssistant: false,
-    driver: false,
-  },
-  teamId: '',
+  teamMemberships: [],
   driverNumber: '',
   language: 'pt',
 };
@@ -63,10 +64,10 @@ const EMPTY_SCUDERIA_FORM: ScuderiaFormData = {
   color: '#FFFFFF',
 };
 
-const USER_ROLE_OPTIONS: { key: UserRoleKey; label: string }[] = [
-  { key: 'teamPrincipal', label: 'Chefe de equipe' },
-  { key: 'teamAssistant', label: 'Assistente de equipe' },
-  { key: 'driver', label: 'Piloto' },
+const MEMBERSHIP_ROLE_OPTIONS: { value: TeamMembershipRole; label: string }[] = [
+  { value: 'team_principal', label: 'Chefe de equipe' },
+  { value: 'team_assistant', label: 'Assistente de equipe' },
+  { value: 'driver', label: 'Piloto' },
 ];
 
 function getAuthHeaders() {
@@ -75,6 +76,19 @@ function getAuthHeaders() {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${token}`,
   };
+}
+
+function getReadableTextColor(backgroundColor?: string) {
+  if (!backgroundColor || !/^#[0-9A-Fa-f]{6}$/.test(backgroundColor)) {
+    return '#FFFFFF';
+  }
+
+  const red = parseInt(backgroundColor.slice(1, 3), 16);
+  const green = parseInt(backgroundColor.slice(3, 5), 16);
+  const blue = parseInt(backgroundColor.slice(5, 7), 16);
+  const luminance = (0.299 * red + 0.587 * green + 0.114 * blue) / 255;
+
+  return luminance > 0.62 ? '#111827' : '#FFFFFF';
 }
 
 export default function AdminPage() {
@@ -100,6 +114,14 @@ export default function AdminPage() {
   const sortedScuderias = useMemo(
     () => [...scuderias].sort((a, b) => a.name.localeCompare(b.name)),
     [scuderias],
+  );
+  const availableScuderias = useMemo(
+    () =>
+      sortedScuderias.filter(
+        (scuderia) =>
+          !userForm.teamMemberships.some((membership) => membership.teamId === scuderia.id),
+      ),
+    [sortedScuderias, userForm.teamMemberships],
   );
 
   async function loadAdminData() {
@@ -145,12 +167,10 @@ export default function AdminPage() {
       username: adminUser.username,
       password: '',
       shortUsername: adminUser.shortUsername ?? '',
-      roles: {
-        teamPrincipal: adminUser.teamPrincipal,
-        teamAssistant: adminUser.teamAssistant,
-        driver: adminUser.driver,
-      },
-      teamId: adminUser.teamId ?? '',
+      teamMemberships: adminUser.teamMemberships.map((membership) => ({
+        teamId: membership.teamId,
+        roles: membership.roles,
+      })),
       driverNumber: adminUser.driverNumber?.toString() ?? '',
       language: adminUser.language ?? 'pt',
     });
@@ -172,8 +192,8 @@ export default function AdminPage() {
   async function saveUser(event: React.FormEvent) {
     event.preventDefault();
 
-    if (!Object.values(userForm.roles).some(Boolean)) {
-      setError('Selecione pelo menos uma função.');
+    if (userForm.teamMemberships.some((membership) => membership.roles.length === 0)) {
+      setError('Selecione pelo menos uma função para cada scuderia.');
       return;
     }
 
@@ -189,7 +209,6 @@ export default function AdminPage() {
           headers: getAuthHeaders(),
           body: JSON.stringify({
             ...userForm,
-            teamId: userForm.teamId || null,
             driverNumber: Number(userForm.driverNumber),
           }),
         },
@@ -334,8 +353,7 @@ export default function AdminPage() {
                 <tr>
                   <th className="py-2">Usuario</th>
                   <th className="py-2">Curto</th>
-                  <th className="py-2">Funções</th>
-                  <th className="py-2">Scuderia</th>
+                  <th className="py-2">Scuderias</th>
                   <th className="py-2">Número</th>
                   <th className="py-2 text-right">Ações</th>
                 </tr>
@@ -346,13 +364,33 @@ export default function AdminPage() {
                     <td className="py-3">{adminUser.username}</td>
                     <td className="py-3">{adminUser.shortUsername ?? '-'}</td>
                     <td className="py-3">
-                      {[
-                        adminUser.teamPrincipal && 'Principal',
-                        adminUser.teamAssistant && 'Assistant',
-                        adminUser.driver && 'Piloto',
-                      ].filter(Boolean).join(', ') || '-'}
+                      {adminUser.teamMemberships.length
+                        ? (
+                          <div className="flex flex-wrap gap-2">
+                            {adminUser.teamMemberships.map((membership) => {
+                              const roleLabels = membership.roles
+                                .map((role) => MEMBERSHIP_ROLE_OPTIONS.find((option) => option.value === role)?.label ?? role)
+                                .join(', ');
+                              const backgroundColor = membership.teamColor ?? '#374151';
+
+                              return (
+                                <span
+                                  key={`${adminUser.id}-${membership.teamId}`}
+                                  title={roleLabels}
+                                  className="inline-flex rounded-full px-3 py-1 text-sm font-semibold shadow-sm"
+                                  style={{
+                                    backgroundColor,
+                                    color: getReadableTextColor(backgroundColor),
+                                  }}
+                                >
+                                  {membership.teamName}
+                                </span>
+                              );
+                            })}
+                          </div>
+                        )
+                        : '-'}
                     </td>
-                    <td className="py-3">{adminUser.teamName ?? '-'}</td>
                     <td className="py-3">{adminUser.driverNumber ?? '-'}</td>
                     <td className="py-3 text-right">
                       <button className="px-3 py-1 bg-gray-600 rounded mr-2" onClick={() => openEditUser(adminUser)}>
@@ -366,7 +404,7 @@ export default function AdminPage() {
                 ))}
                 {!loadingData && users.length === 0 && (
                   <tr>
-                    <td className="py-4 text-gray-400" colSpan={6}>Nenhum usuário encontrado.</td>
+                    <td className="py-4 text-gray-400" colSpan={5}>Nenhum usuário encontrado.</td>
                   </tr>
                 )}
               </tbody>
@@ -428,8 +466,11 @@ export default function AdminPage() {
       </div>
 
       {userModalOpen && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-          <form onSubmit={saveUser} className="bg-gray-800 rounded-lg p-6 w-full max-w-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <form
+            onSubmit={saveUser}
+            className="max-h-[calc(100vh-2rem)] w-full max-w-2xl overflow-y-auto rounded-lg bg-gray-800 p-6"
+          >
             <h2 className="text-2xl font-bold mb-4">{editingUserId ? 'Editar Usuário' : 'Criar Novo Usuário'}</h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -499,37 +540,104 @@ export default function AdminPage() {
               </label>
             </div>
 
-            <label className="block mt-4">
-              <span className="block text-sm mb-2">Scuderia</span>
-              <select
-                className="w-full bg-gray-700 rounded-lg px-4 py-2"
-                value={userForm.teamId}
-                onChange={(event) => setUserForm((prev) => ({ ...prev, teamId: event.target.value }))}
-              >
-                <option value="">Sem scuderia</option>
-                {sortedScuderias.map((scuderia) => (
-                  <option key={scuderia.id} value={scuderia.id}>{scuderia.name}</option>
-                ))}
-              </select>
-            </label>
-
             <div className="mt-4">
-              <span className="block text-sm mb-2">Funções</span>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {USER_ROLE_OPTIONS.map((option) => (
-                  <label key={option.key} className="flex items-center gap-2 bg-gray-700 rounded-lg px-3 py-2">
-                    <input
-                      type="checkbox"
-                      checked={userForm.roles[option.key]}
-                      onChange={() => setUserForm((prev) => ({
-                        ...prev,
-                        roles: { ...prev.roles, [option.key]: !prev.roles[option.key] },
-                      }))}
-                    />
-                    {option.label}
-                  </label>
+              <span className="mb-3 block text-sm">Scuderias relacionadas</span>
+
+              <div className="space-y-3">
+                {userForm.teamMemberships.map((membership, index) => (
+                  <div key={`${membership.teamId}-${index}`} className="grid grid-cols-1 gap-3 rounded-lg bg-gray-900/40 p-3 sm:grid-cols-[1fr_auto]">
+                    <select
+                      className="w-full bg-gray-700 rounded-lg px-4 py-2"
+                      value={membership.teamId}
+                      onChange={(event) =>
+                        setUserForm((prev) => ({
+                          ...prev,
+                          teamMemberships: prev.teamMemberships.map((current, currentIndex) =>
+                            currentIndex === index ? { ...current, teamId: event.target.value } : current,
+                          ),
+                        }))
+                      }
+                      required
+                    >
+                      <option value="">Selecione a scuderia</option>
+                      {sortedScuderias.map((scuderia) => (
+                        <option
+                          key={scuderia.id}
+                          value={scuderia.id}
+                          disabled={
+                            scuderia.id !== membership.teamId
+                            && userForm.teamMemberships.some((current) => current.teamId === scuderia.id)
+                          }
+                        >
+                          {scuderia.name}
+                        </option>
+                      ))}
+                    </select>
+
+                    <button
+                      type="button"
+                      className="rounded-lg bg-red-700 px-4 py-2"
+                      onClick={() =>
+                        setUserForm((prev) => ({
+                          ...prev,
+                          teamMemberships: prev.teamMemberships.filter((_, currentIndex) => currentIndex !== index),
+                        }))
+                      }
+                    >
+                      Remover
+                    </button>
+
+                    <div className="grid grid-cols-1 gap-2 sm:col-span-2 sm:grid-cols-3">
+                      {MEMBERSHIP_ROLE_OPTIONS.map((option) => (
+                        <label key={option.value} className="flex items-center gap-2 rounded-lg bg-gray-700 px-3 py-2">
+                          <input
+                            type="checkbox"
+                            checked={membership.roles.includes(option.value)}
+                            onChange={() =>
+                              setUserForm((prev) => ({
+                                ...prev,
+                                teamMemberships: prev.teamMemberships.map((current, currentIndex) => {
+                                  if (currentIndex !== index) return current;
+
+                                  return {
+                                    ...current,
+                                    roles: current.roles.includes(option.value)
+                                      ? current.roles.filter((role) => role !== option.value)
+                                      : [...current.roles, option.value],
+                                  };
+                                }),
+                              }))
+                            }
+                          />
+                          {option.label}
+                        </label>
+                      ))}
+                    </div>
+                  </div>
                 ))}
               </div>
+
+              <button
+                type="button"
+                className="mt-3 rounded-lg bg-gray-700 px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-50"
+                disabled={availableScuderias.length === 0}
+                onClick={() =>
+                  setUserForm((prev) => ({
+                    ...prev,
+                    teamMemberships: [
+                      ...prev.teamMemberships,
+                      {
+                        teamId: sortedScuderias.find(
+                          (scuderia) => !prev.teamMemberships.some((membership) => membership.teamId === scuderia.id),
+                        )?.id ?? '',
+                        roles: ['team_principal'],
+                      },
+                    ],
+                  }))
+                }
+              >
+                Adicionar mais uma scuderia
+              </button>
             </div>
 
             <div className="flex gap-3 mt-6">

@@ -16,7 +16,16 @@ interface User {
   teamName?: string | null;
   teamTag?: string | null;
   teamColor?: string | null;
+  teamMemberships?: TeamMembership[];
   language?: 'pt' | 'en' | 'es';
+}
+
+export interface TeamMembership {
+  teamId: string;
+  teamName: string;
+  teamTag: string;
+  teamColor: string;
+  roles: ('team_principal' | 'team_assistant' | 'driver')[];
 }
 
 interface AuthContextType {

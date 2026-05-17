@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import { useAuth } from '@/hooks/useAuth';
 import { ChatTarget, useChat } from '@/hooks/useChat';
@@ -20,6 +21,8 @@ import { useTranslations } from '@/i18n';
 export default function PitWallPage() {
   const { isAuthenticated, user } = useAuth();
   const { t } = useTranslations();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const { playerList, playerPositions } = usePlayerList();
   const {
@@ -29,7 +32,20 @@ export default function PitWallPage() {
   } = useChat();
   const { logs } = useLogs();
   const { sendPitCall } = usePitCall();
-  const loggedUserTeam = user?.teamName ?? null;
+  const eligibleMemberships = useMemo(
+    () =>
+      (user?.teamMemberships ?? []).filter(
+        (membership) =>
+          membership.roles.includes('team_principal')
+          || membership.roles.includes('team_assistant'),
+      ),
+    [user?.teamMemberships],
+  );
+  const selectedTeamId = searchParams.get('teamId');
+  const selectedMembership =
+    eligibleMemberships.find((membership) => membership.teamId === selectedTeamId)
+    ?? null;
+  const loggedUserTeam = selectedMembership?.teamName ?? null;
   const drivers = useMemo(
     () =>
       (playerList?.players ?? []).map((player) => ({
@@ -75,9 +91,63 @@ export default function PitWallPage() {
     return null;
   }
 
+  if (!selectedMembership) {
+    return (
+      <main
+        className="relative min-h-screen bg-cover bg-center bg-no-repeat bg-fixed text-white"
+        style={{ backgroundImage: 'url(/img/bg/pitwallwpp.png)' }}
+      >
+        <div className="absolute inset-0 bg-black/60" />
+
+        <button
+          type="button"
+          aria-label={t.common.back}
+          onClick={() => {
+            if (window.history.length > 1) {
+              router.back();
+              return;
+            }
+
+            router.push('/');
+          }}
+          className="absolute left-6 top-6 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-[#FF232B] text-white shadow-lg transition-transform hover:scale-105"
+        >
+          <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+
+        <div className="relative z-10 flex min-h-screen items-center justify-center px-6">
+          <div className="w-full max-w-xl text-center">
+            <h1 className="mb-6 text-3xl font-bold uppercase">Escolha a scuderia</h1>
+
+            <div className="grid gap-4">
+              {eligibleMemberships.map((membership) => (
+                <button
+                  key={membership.teamId}
+                  type="button"
+                  onClick={() => router.push(`/pit-wall?teamId=${membership.teamId}`)}
+                  className="rounded-lg border border-white/20 bg-black/70 px-6 py-5 text-xl font-semibold transition hover:border-[#FF232B] hover:bg-black/85"
+                >
+                  {membership.teamName}
+                </button>
+              ))}
+            </div>
+
+            {eligibleMemberships.length === 0 && (
+              <p className="rounded-lg bg-black/70 px-6 py-5 text-lg">
+                Nenhuma scuderia disponível para o pit wall.
+              </p>
+            )}
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main
-      className="min-h-screen p-8 text-white bg-cover  bg-center
+      className="relative min-h-screen p-8 text-white bg-cover  bg-center
   bg-no-repeat
   bg-fixed"
       style={{
@@ -85,6 +155,34 @@ export default function PitWallPage() {
           'url(/img/bg/pitwallwpp.png)',
       }}
     >
+      <button
+        type="button"
+        aria-label={t.common.back}
+        onClick={() => {
+          if (window.history.length > 1) {
+            router.back();
+            return;
+          }
+
+          router.push('/');
+        }}
+        className="absolute left-6 top-6 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-[#FF232B] text-white shadow-lg transition-transform hover:scale-105"
+      >
+        <svg
+          className="h-7 w-7"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2.5"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+      </button>
+
     <div className="max-w-[1440px] mx-auto">
         <div className="pit-wall-main-grid grid gap-8">
           <PlayersPanel
@@ -131,7 +229,7 @@ export default function PitWallPage() {
           />
         </div>
 
-        <RaceInsightsGrid
+          <RaceInsightsGrid
           drivers={standings}
           loggedUserTeam={loggedUserTeam}
           raceSession={playerList?.raceSession}
