@@ -80,6 +80,8 @@ export default function PitWallPage() {
 
   const [message, setMessage] = useState('');
   const [selectedRecipient, setSelectedRecipient] = useState<string>(t.chat.everyone);
+  const [missingTeamLogos, setMissingTeamLogos] = useState<Record<string, boolean>>({});
+  const [loadedTeamLogos, setLoadedTeamLogos] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     if (!recipientOptions.includes(selectedRecipient)) {
@@ -119,24 +121,65 @@ export default function PitWallPage() {
 
         <div className="relative z-10 flex min-h-screen items-center justify-center px-6">
           <div className="w-full max-w-xl text-center">
-            <h1 className="mb-6 text-3xl font-bold uppercase">Escolha a scuderia</h1>
+            <h1 className="mb-6 text-3xl font-bold uppercase">{t.pitWall.chooseScuderia}</h1>
 
-            <div className="grid gap-4">
-              {eligibleMemberships.map((membership) => (
-                <button
-                  key={membership.teamId}
-                  type="button"
-                  onClick={() => router.push(`/pit-wall?teamId=${membership.teamId}`)}
-                  className="rounded-lg border border-white/20 bg-black/70 px-6 py-5 text-xl font-semibold transition hover:border-[#FF232B] hover:bg-black/85"
-                >
-                  {membership.teamName}
-                </button>
-              ))}
+            <div className="flex flex-wrap justify-center gap-4">
+              {eligibleMemberships.map((membership) => {
+                const logoSrc = `/img/scuderia/logos/${encodeURIComponent(
+                  membership.teamName.trim().toLowerCase(),
+                )}.png`;
+                const hasMissingLogo = missingTeamLogos[membership.teamId];
+                const hasLoadedLogo = loadedTeamLogos[membership.teamId];
+
+                return (
+                  <button
+                    key={membership.teamId}
+                    type="button"
+                    onClick={() => router.push(`/pit-wall?teamId=${membership.teamId}`)}
+                    className="flex min-h-28 min-w-56 items-center justify-center border-8 border-[#FF0000] bg-[#1E1E1E] px-6 py-5 text-xl font-semibold transition-colors hover:border-white"
+                  >
+                    {!hasLoadedLogo && (
+                      <span
+                        aria-label={t.common.loading}
+                        className="h-8 w-8 animate-spin rounded-full border-4 border-white/30 border-t-white"
+                      />
+                    )}
+
+                    {hasMissingLogo ? (
+                      membership.teamName
+                    ) : (
+                      <img
+                        src={logoSrc}
+                        alt={membership.teamName}
+                        className={`h-20 max-w-52 object-contain ${hasLoadedLogo ? '' : 'absolute invisible'}`}
+                        onLoad={() =>
+                          setLoadedTeamLogos((current) => ({
+                            ...current,
+                            [membership.teamId]: true,
+                          }))
+                        }
+                        onError={() =>
+                          {
+                            setMissingTeamLogos((current) => ({
+                              ...current,
+                              [membership.teamId]: true,
+                            }));
+                            setLoadedTeamLogos((current) => ({
+                              ...current,
+                              [membership.teamId]: true,
+                            }));
+                          }
+                        }
+                      />
+                    )}
+                  </button>
+                );
+              })}
             </div>
 
             {eligibleMemberships.length === 0 && (
               <p className="rounded-lg bg-black/70 px-6 py-5 text-lg">
-                Nenhuma scuderia disponível para o pit wall.
+                {t.pitWall.noScuderiaAvailable}
               </p>
             )}
           </div>

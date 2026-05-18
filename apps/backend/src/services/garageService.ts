@@ -50,7 +50,251 @@ export interface Team {
   championship_points: number;
 }
 
+export interface TeamGarage {
+  id: string;
+  name: string;
+  tag: string;
+  color: string;
+  cashTotal: number;
+  climateCostPerRace: number;
+  pitCrewCostPerRace: number;
+  salaryCostPerRace: number;
+  sponsorIncomePerRace: number;
+  climateMonitoringLevel: number;
+  pitCrewLevel: number;
+  carName: string;
+  drivers: Array<{
+    id: string;
+    userId: string | null;
+    displayName: string;
+    driverNumber: number | null;
+    contractEndsAfterRaces: number;
+    salaryPerRace: number;
+    slotNumber: number;
+  }>;
+  sponsors: Array<{
+    id: string;
+    sponsorId: string;
+    name: string;
+    logoUrl: string | null;
+    category: string;
+    slotNumber: number;
+    contractRacesRemaining: number;
+    initialReward: number;
+    rewardPerRace: number;
+    seasonMissions: Array<{ id: string; title: string; reward: number; racesToComplete: number }>;
+    raceMissions: Array<{ id: string; title: string; reward: number }>;
+  }>;
+  financialHistory: Array<{
+    id: string;
+    amount: number;
+    entryType: 'income' | 'expense';
+    reason: string;
+    source: string;
+    occurredAt: string;
+  }>;
+}
+
 class GarageService {
+  async userCanAccessTeam(userId: string, teamId: string): Promise<boolean> {
+    const membership = await queryOne(
+      `SELECT 1
+       FROM user_team_memberships
+       WHERE user_id = $1
+         AND team_id = $2
+         AND (is_team_principal = true OR is_team_assistant = true)`,
+      [userId, teamId],
+    );
+
+    return Boolean(membership);
+  }
+
+  async getTeamGarage(teamId: string): Promise<TeamGarage | null> {
+    const team = await queryOne(
+      `SELECT
+        id,
+        name,
+        tag,
+        color,
+        cash_total AS "cashTotal",
+        climate_cost_per_race AS "climateCostPerRace",
+        pit_crew_cost_per_race AS "pitCrewCostPerRace",
+        salary_cost_per_race AS "salaryCostPerRace",
+        sponsor_income_per_race AS "sponsorIncomePerRace",
+        climate_monitoring_level AS "climateMonitoringLevel",
+        pit_crew_level AS "pitCrewLevel",
+        car_name AS "carName"
+       FROM teams
+       WHERE id = $1`,
+      [teamId],
+    );
+
+    if (!team) return null;
+
+    const [drivers, sponsors, financialHistory] = await Promise.all([
+      query(
+        `SELECT
+          id,
+          user_id AS "userId",
+          display_name AS "displayName",
+          driver_number AS "driverNumber",
+          contract_ends_after_races AS "contractEndsAfterRaces",
+          salary_per_race AS "salaryPerRace",
+          slot_number AS "slotNumber"
+         FROM team_drivers
+         WHERE team_id = $1
+         ORDER BY slot_number ASC`,
+        [teamId],
+      ),
+      query(
+        `SELECT
+          ts.id,
+          ts.sponsor_id AS "sponsorId",
+          s.name,
+          s.logo_url AS "logoUrl",
+          ts.category,
+          ts.slot_number AS "slotNumber",
+          ts.contract_races_remaining AS "contractRacesRemaining",
+          ts.initial_reward AS "initialReward",
+          ts.reward_per_race AS "rewardPerRace",
+          COALESCE(
+            (
+              SELECT json_agg(
+                json_build_object(
+                  'id', sm.id,
+                  'title', sm.title,
+                  'reward', sm.reward,
+                  'racesToComplete', sm.races_to_complete
+                )
+                ORDER BY sm.created_at ASC
+              )
+              FROM team_sponsor_season_missions sm
+              WHERE sm.team_sponsor_id = ts.id
+            ),
+            '[]'::json
+          ) AS "seasonMissions",
+          COALESCE(
+            (
+              SELECT json_agg(
+                json_build_object(
+                  'id', rm.id,
+                  'title', rm.title,
+                  'reward', rm.reward
+                )
+                ORDER BY rm.created_at ASC
+              )
+              FROM team_sponsor_race_missions rm
+              WHERE rm.team_sponsor_id = ts.id
+            ),
+            '[]'::json
+          ) AS "raceMissions"
+         FROM team_sponsors ts
+         JOIN sponsors s ON s.id = ts.sponsor_id
+         WHERE ts.team_id = $1
+         ORDER BY ts.category ASC, ts.slot_number ASC`,
+        [teamId],
+      ),
+      query(
+        `SELECT
+          id,
+          amount,
+          entry_type AS "entryType",
+          reason,
+          source,
+          occurred_at AS "occurredAt"
+         FROM team_financial_history
+         WHERE team_id = $1
+         ORDER BY occurred_at DESC, created_at DESC`,
+        [teamId],
+      ),
+    ]);
+
+    return {
+      ...team,
+      drivers: drivers.rows,
+      sponsors: sponsors.rows,
+      financialHistory: financialHistory.rows,
+    };
+  }
+
+  async recordStandardRaceFinancialEntries(teamId: string, raceId?: string): Promise<void> {
+    const team = await queryOne(
+      `SELECT
+        climate_cost_per_race,
+        pit_crew_cost_per_race,
+        salary_cost_per_race,
+        sponsor_income_per_race
+       FROM teams
+       WHERE id = $1`,
+      [teamId],
+    );
+
+    if (!team) return;
+
+    const entries = [
+      {
+        amount: Number(team.climate_cost_per_race),
+        entryType: 'expense',
+        reason: 'Standard climate monitoring cost',
+        source: 'standard_race',
+      },
+      {
+        amount: Number(team.pit_crew_cost_per_race),
+        entryType: 'expense',
+        reason: 'Standard pit crew cost',
+        source: 'standard_race',
+      },
+      {
+        amount: Number(team.salary_cost_per_race),
+        entryType: 'expense',
+        reason: 'Standard salary cost',
+        source: 'standard_race',
+      },
+      {
+        amount: Number(team.sponsor_income_per_race),
+        entryType: 'income',
+        reason: 'Standard sponsor income',
+        source: 'standard_race',
+      },
+    ].filter((entry) => entry.amount > 0);
+
+    if (entries.length === 0) return;
+
+    await query('BEGIN');
+    try {
+      for (const entry of entries) {
+        await query(
+          `INSERT INTO team_financial_history (
+            team_id,
+            amount,
+            entry_type,
+            reason,
+            source,
+            race_id
+          ) VALUES ($1, $2, $3, $4, $5, $6)`,
+          [teamId, entry.amount, entry.entryType, entry.reason, entry.source, raceId ?? null],
+        );
+      }
+
+      const delta = entries.reduce(
+        (sum, entry) => sum + (entry.entryType === 'income' ? entry.amount : -entry.amount),
+        0,
+      );
+
+      await query(
+        `UPDATE teams
+         SET cash_total = cash_total + $1,
+             updated_at = NOW()
+         WHERE id = $2`,
+        [delta, teamId],
+      );
+
+      await query('COMMIT');
+    } catch (error) {
+      await query('ROLLBACK');
+      throw error;
+    }
+  }
   // Get user's garage with team and upgrades
   async getUserGarage(userId: string): Promise<UserGarage | null> {
     try {

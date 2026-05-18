@@ -1,5 +1,6 @@
 import authService from './authService';
 import { query, queryOne, transaction } from '../config/database';
+import garageService from './garageService';
 
 export type TeamMembershipRole = 'team_principal' | 'team_assistant' | 'driver';
 
@@ -21,6 +22,32 @@ export interface ScuderiaInput {
   name: string;
   tag: string;
   color: string;
+}
+
+export interface TeamFinanceEntryInput {
+  amount: number;
+  entryType: 'income' | 'expense';
+  reason: string;
+  occurredAt?: string;
+}
+
+export interface TeamSponsorInput {
+  sponsorId: string;
+  category: 'title_sponsor' | 'main_partner' | 'official_partner' | 'minor_sponsor' | 'personal_sponsor';
+  contractRacesRemaining: number;
+  initialReward: number;
+  rewardPerRace: number;
+}
+
+export interface SponsorMissionInput {
+  title: string;
+  reward: number;
+  racesToComplete?: number;
+}
+
+export interface SponsorInput {
+  name: string;
+  logoUrl: string;
 }
 
 class AdminService {
@@ -273,6 +300,313 @@ class AdminService {
     }
 
     return { success: true };
+  }
+
+  async addTeamFinanceEntry(scuderiaId: string, input: TeamFinanceEntryInput) {
+    const team = await queryOne('SELECT id FROM teams WHERE id = $1', [scuderiaId]);
+    if (!team) {
+      return { success: false, message: 'Scuderia not found' };
+    }
+
+    const signedAmount = input.entryType === 'income'
+      ? Math.abs(input.amount)
+      : -Math.abs(input.amount);
+
+    const result = await transaction(async (client) => {
+      const history = await client.query(
+        `INSERT INTO team_financial_history (
+          team_id,
+          amount,
+          entry_type,
+          reason,
+          source,
+          occurred_at
+        ) VALUES ($1, $2, $3, $4, 'manual', COALESCE($5::timestamp, NOW()))
+        RETURNING id`,
+        [
+          scuderiaId,
+          Math.abs(input.amount),
+          input.entryType,
+          input.reason,
+          input.occurredAt ?? null,
+        ],
+      );
+
+      await client.query(
+        `UPDATE teams
+         SET cash_total = cash_total + $1,
+             updated_at = NOW()
+         WHERE id = $2`,
+        [signedAmount, scuderiaId],
+      );
+
+      return history.rows[0];
+    });
+
+    return { success: true, entry: result };
+  }
+
+  async getScuderiaManagement(scuderiaId: string) {
+    return garageService.getTeamGarage(scuderiaId);
+  }
+
+  async updateScuderiaCarName(scuderiaId: string, carName: string | null) {
+    const result = await query(
+      `UPDATE teams
+       SET car_name = COALESCE(NULLIF($1, ''), 'Unnamed car'),
+           updated_at = NOW()
+       WHERE id = $2
+       RETURNING id`,
+      [carName, scuderiaId],
+    );
+    return result.rows[0]
+      ? { success: true }
+      : { success: false, message: 'Scuderia not found' };
+  }
+
+  async listSponsors() {
+    const result = await query(
+      `SELECT id, name, logo_url AS "logoUrl"
+       FROM sponsors
+       ORDER BY name ASC`,
+    );
+    return result.rows;
+  }
+
+  async createSponsor(input: SponsorInput) {
+    const result = await query(
+      `INSERT INTO sponsors (name, logo_url, created_at, updated_at)
+       VALUES ($1, $2, NOW(), NOW())
+       RETURNING id`,
+      [input.name, input.logoUrl],
+    );
+    return { success: true, sponsor: result.rows[0] };
+  }
+
+  async updateSponsor(sponsorId: string, input: SponsorInput) {
+    const result = await query(
+      `UPDATE sponsors
+       SET name = $1,
+           logo_url = $2,
+           updated_at = NOW()
+       WHERE id = $3
+       RETURNING id`,
+      [input.name, input.logoUrl, sponsorId],
+    );
+    return result.rows[0]
+      ? { success: true }
+      : { success: false, message: 'Sponsor not found' };
+  }
+
+  async deleteSponsor(sponsorId: string) {
+    const result = await query('DELETE FROM sponsors WHERE id = $1 RETURNING id', [sponsorId]);
+    return result.rows[0]
+      ? { success: true }
+      : { success: false, message: 'Sponsor not found' };
+  }
+
+  async addTeamSponsor(scuderiaId: string, input: TeamSponsorInput) {
+    const existing = await queryOne(
+      'SELECT id FROM team_sponsors WHERE team_id = $1 AND sponsor_id = $2',
+      [scuderiaId, input.sponsorId],
+    );
+    if (existing) {
+      return { success: false, message: 'Sponsor already assigned to scuderia' };
+    }
+
+    const limits = {
+      title_sponsor: 1,
+      main_partner: 2,
+      official_partner: 4,
+      minor_sponsor: 8,
+      personal_sponsor: 4,
+    };
+    const occupiedSlots = await query(
+      `SELECT slot_number
+       FROM team_sponsors
+       WHERE team_id = $1 AND category = $2
+       ORDER BY slot_number ASC`,
+      [scuderiaId, input.category],
+    );
+    if (occupiedSlots.rows.length >= limits[input.category]) {
+      return { success: false, message: 'Sponsor category is full' };
+    }
+    const usedSlots = new Set(occupiedSlots.rows.map((row) => Number(row.slot_number)));
+    const slotNumber = Array.from({ length: limits[input.category] }, (_, index) => index + 1)
+      .find((slot) => !usedSlots.has(slot));
+
+    const result = await query(
+      `INSERT INTO team_sponsors (
+        team_id, sponsor_id, category, slot_number,
+        contract_races_remaining, initial_reward, reward_per_race
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+      RETURNING id`,
+      [
+        scuderiaId,
+        input.sponsorId,
+        input.category,
+        slotNumber,
+        input.contractRacesRemaining,
+        input.initialReward,
+        input.rewardPerRace,
+      ],
+    );
+    return { success: true, teamSponsor: result.rows[0] };
+  }
+
+  async updateTeamSponsor(teamSponsorId: string, input: Omit<TeamSponsorInput, 'sponsorId'>) {
+    const existing = await queryOne(
+      'SELECT team_id FROM team_sponsors WHERE id = $1',
+      [teamSponsorId],
+    );
+    if (!existing) {
+      return { success: false, message: 'Team sponsor not found' };
+    }
+    const limits = {
+      title_sponsor: 1,
+      main_partner: 2,
+      official_partner: 4,
+      minor_sponsor: 8,
+      personal_sponsor: 4,
+    };
+    const occupiedSlots = await query(
+      `SELECT slot_number
+       FROM team_sponsors
+       WHERE team_id = $1 AND category = $2 AND id <> $3
+       ORDER BY slot_number ASC`,
+      [existing.team_id, input.category, teamSponsorId],
+    );
+    if (occupiedSlots.rows.length >= limits[input.category]) {
+      return { success: false, message: 'Sponsor category is full' };
+    }
+    const usedSlots = new Set(occupiedSlots.rows.map((row) => Number(row.slot_number)));
+    const slotNumber = Array.from({ length: limits[input.category] }, (_, index) => index + 1)
+      .find((slot) => !usedSlots.has(slot));
+
+    const result = await query(
+      `UPDATE team_sponsors
+       SET category = $1,
+           slot_number = $2,
+           contract_races_remaining = $3,
+           initial_reward = $4,
+           reward_per_race = $5,
+           updated_at = NOW()
+       WHERE id = $6
+       RETURNING id`,
+      [
+        input.category,
+        slotNumber,
+        input.contractRacesRemaining,
+        input.initialReward,
+        input.rewardPerRace,
+        teamSponsorId,
+      ],
+    );
+    return result.rows[0]
+      ? { success: true }
+      : { success: false, message: 'Team sponsor not found' };
+  }
+
+  async removeTeamSponsor(teamSponsorId: string) {
+    const result = await query('DELETE FROM team_sponsors WHERE id = $1 RETURNING id', [teamSponsorId]);
+    return result.rows[0]
+      ? { success: true }
+      : { success: false, message: 'Team sponsor not found' };
+  }
+
+  async addSponsorMission(teamSponsorId: string, type: 'race' | 'season', input: SponsorMissionInput) {
+    const result = type === 'race'
+      ? await query(
+        `INSERT INTO team_sponsor_race_missions (team_sponsor_id, title, reward)
+         VALUES ($1, $2, $3)
+         RETURNING id`,
+        [teamSponsorId, input.title, input.reward],
+      )
+      : await query(
+        `INSERT INTO team_sponsor_season_missions (team_sponsor_id, title, reward, races_to_complete)
+         VALUES ($1, $2, $3, $4)
+         RETURNING id`,
+        [teamSponsorId, input.title, input.reward, input.racesToComplete],
+      );
+    return { success: true, mission: result.rows[0] };
+  }
+
+  async updateSponsorMission(missionId: string, type: 'race' | 'season', input: SponsorMissionInput) {
+    const result = type === 'race'
+      ? await query(
+        `UPDATE team_sponsor_race_missions
+         SET title = $1, reward = $2
+         WHERE id = $3
+         RETURNING id`,
+        [input.title, input.reward, missionId],
+      )
+      : await query(
+        `UPDATE team_sponsor_season_missions
+         SET title = $1, reward = $2, races_to_complete = $3
+         WHERE id = $4
+         RETURNING id`,
+        [input.title, input.reward, input.racesToComplete, missionId],
+      );
+    return result.rows[0]
+      ? { success: true }
+      : { success: false, message: 'Sponsor mission not found' };
+  }
+
+  async removeSponsorMission(missionId: string, type: 'race' | 'season') {
+    const table = type === 'race'
+      ? 'team_sponsor_race_missions'
+      : 'team_sponsor_season_missions';
+    const result = await query(`DELETE FROM ${table} WHERE id = $1 RETURNING id`, [missionId]);
+    return result.rows[0]
+      ? { success: true }
+      : { success: false, message: 'Sponsor mission not found' };
+  }
+
+  async resolveSponsorMission(missionId: string, type: 'race' | 'season', outcome: 'success' | 'failure') {
+    return transaction(async (client) => {
+      const table = type === 'race'
+        ? 'team_sponsor_race_missions'
+        : 'team_sponsor_season_missions';
+      const mission = await client.query(
+        `SELECT
+          m.id,
+          m.title,
+          m.reward,
+          ts.team_id
+         FROM ${table} m
+         JOIN team_sponsors ts ON ts.id = m.team_sponsor_id
+         WHERE m.id = $1`,
+        [missionId],
+      );
+      const row = mission.rows[0];
+      if (!row) return { success: false, message: 'Sponsor mission not found' };
+
+      if (outcome === 'success') {
+        await client.query(
+          `UPDATE teams
+           SET cash_total = cash_total + $1,
+               updated_at = NOW()
+           WHERE id = $2`,
+          [row.reward, row.team_id],
+        );
+        await client.query(
+          `INSERT INTO team_financial_history (
+            team_id, amount, entry_type, reason, source
+          ) VALUES ($1, $2, 'income', $3, 'sponsor')`,
+          [row.team_id, row.reward, row.title],
+        );
+      } else {
+        await client.query(
+          `INSERT INTO team_financial_history (
+            team_id, amount, entry_type, reason, source
+          ) VALUES ($1, 0, 'expense', $2, 'sponsor')`,
+          [row.team_id, `Failed mission ${row.title}`],
+        );
+      }
+
+      await client.query(`DELETE FROM ${table} WHERE id = $1`, [missionId]);
+      return { success: true };
+    });
   }
 }
 

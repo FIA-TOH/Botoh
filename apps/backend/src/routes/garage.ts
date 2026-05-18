@@ -38,6 +38,41 @@ router.get('/', authMiddleware, async (req: AuthRequest, res: Response) => {
   }
 });
 
+router.get('/teams/:teamId', authMiddleware, async (req: AuthRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: translateMessage('User not authenticated', getRequestLanguage(req)),
+      });
+    }
+
+    const canAccess = await garageService.userCanAccessTeam(req.user.id, req.params.teamId);
+    if (!canAccess) {
+      return res.status(403).json({
+        success: false,
+        message: translateMessage('Insufficient permissions', getRequestLanguage(req)),
+      });
+    }
+
+    const garage = await garageService.getTeamGarage(req.params.teamId);
+    if (!garage) {
+      return res.status(404).json({
+        success: false,
+        message: translateMessage('Scuderia not found', getRequestLanguage(req)),
+      });
+    }
+
+    return res.json({ success: true, garage });
+  } catch (error) {
+    console.error('Get team garage error:', error);
+    return res.status(500).json({
+      success: false,
+      message: translateMessage('Internal server error', getRequestLanguage(req)),
+    });
+  }
+});
+
 // GET /garage/upgrades - Get available upgrades for user
 router.get('/upgrades', authMiddleware, async (req: AuthRequest, res: Response) => {
   try {

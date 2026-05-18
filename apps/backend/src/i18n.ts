@@ -66,6 +66,16 @@ const exactMessages = {
     'Scuderia abbreviation must be exactly 3 characters': 'A abreviação da scuderia deve ter exatamente 3 caracteres',
     'Scuderia abbreviation can only contain uppercase letters and numbers': 'A abreviação da scuderia só pode conter letras maiúsculas e números',
     'Scuderia color must be a valid hex color': 'A cor da scuderia deve ser um hexadecimal válido',
+    'Finance amount must be greater than zero': 'O valor financeiro deve ser maior que zero',
+    'Finance entry type is invalid': 'O tipo de lançamento financeiro é inválido',
+    'Finance reason must be between 2 and 255 characters': 'O motivo financeiro deve ter entre 2 e 255 caracteres',
+    'Finance date must be a valid ISO date': 'A data financeira deve ser uma data ISO válida',
+    'Finance entry created successfully': 'Lançamento financeiro criado com sucesso',
+    'Failed to create finance entry': 'Falha ao criar lançamento financeiro',
+    'Sponsor logo URL must point to a PNG image': 'A URL da logo do sponsor deve apontar para uma imagem PNG',
+    'Sponsor not found': 'Sponsor não encontrado',
+    'Sponsor already assigned to scuderia': 'Sponsor já atribuído à scuderia',
+    'Sponsor category is full': 'A categoria de sponsor já está cheia',
   },
   en: {},
   es: {
@@ -130,6 +140,16 @@ const exactMessages = {
     'Scuderia abbreviation must be exactly 3 characters': 'La abreviación de la scuderia debe tener exactamente 3 caracteres',
     'Scuderia abbreviation can only contain uppercase letters and numbers': 'La abreviación de la scuderia solo puede contener letras mayúsculas y números',
     'Scuderia color must be a valid hex color': 'El color de la scuderia debe ser un hexadecimal válido',
+    'Finance amount must be greater than zero': 'El valor financiero debe ser mayor que cero',
+    'Finance entry type is invalid': 'El tipo de movimiento financiero no es válido',
+    'Finance reason must be between 2 and 255 characters': 'El motivo financiero debe tener entre 2 y 255 caracteres',
+    'Finance date must be a valid ISO date': 'La fecha financiera debe ser una fecha ISO válida',
+    'Finance entry created successfully': 'Movimiento financiero creado correctamente',
+    'Failed to create finance entry': 'No se pudo crear el movimiento financiero',
+    'Sponsor logo URL must point to a PNG image': 'La URL del logo del sponsor debe apuntar a una imagen PNG',
+    'Sponsor not found': 'Sponsor no encontrado',
+    'Sponsor already assigned to scuderia': 'El sponsor ya está asignado a la scuderia',
+    'Sponsor category is full': 'La categoría de sponsor ya está llena',
   },
 } as const;
 
@@ -166,6 +186,12 @@ export function translateMessage(message: string | undefined, language: Language
   if (removedMatch) {
     if (language === 'pt') return `${removedMatch[1]} removida. Reembolso: $${removedMatch[2]}`;
     if (language === 'es') return `${removedMatch[1]} eliminada. Reembolso: $${removedMatch[2]}`;
+  }
+
+  const failedMissionMatch = message.match(/^Failed mission (.+)$/);
+  if (failedMissionMatch) {
+    if (language === 'pt') return `Falhou na missão ${failedMissionMatch[1]}`;
+    if (language === 'es') return `Falló en la misión ${failedMissionMatch[1]}`;
   }
 
   return message;

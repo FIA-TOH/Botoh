@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
+import { useTranslations } from '@/i18n';
 
 interface AdminUser {
   id: string;
@@ -23,6 +24,21 @@ interface Scuderia {
   tag: string;
   color: string;
 }
+interface TeamGarageManage {
+  id: string; name: string; carName: string; cashTotal: number; climateCostPerRace: number;
+  pitCrewCostPerRace: number; salaryCostPerRace: number; sponsorIncomePerRace: number;
+  climateMonitoringLevel: number; pitCrewLevel: number;
+  financialHistory: { id: string; amount: number; entryType: string; reason: string; occurredAt: string }[];
+  drivers: { id: string; displayName: string; contractEndsAfterRaces: number; salaryPerRace: number }[];
+  sponsors: TeamSponsor[];
+}
+interface TeamSponsor {
+  id: string; sponsorId?: string; name: string; category: string; slotNumber: number;
+  contractRacesRemaining?: number; initialReward?: number; rewardPerRace?: number;
+  seasonMissions: Mission[]; raceMissions: Mission[];
+}
+interface Mission { id: string; title: string; reward: number; racesToComplete?: number }
+interface SponsorCatalogItem { id: string; name: string; logoUrl?: string | null }
 
 type TeamMembershipRole = 'team_principal' | 'team_assistant' | 'driver';
 
@@ -93,10 +109,12 @@ function getReadableTextColor(backgroundColor?: string) {
 
 export default function AdminPage() {
   const { isLoading, isAuthenticated, user, logout } = useAuth();
+  const { t } = useTranslations();
   const router = useRouter();
 
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [scuderias, setScuderias] = useState<Scuderia[]>([]);
+  const [sponsorCatalog, setSponsorCatalog] = useState<SponsorCatalogItem[]>([]);
   const [loadingData, setLoadingData] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -110,6 +128,36 @@ export default function AdminPage() {
   const [editingScuderiaId, setEditingScuderiaId] = useState<string | null>(null);
   const [scuderiaForm, setScuderiaForm] = useState<ScuderiaFormData>(EMPTY_SCUDERIA_FORM);
   const [savingScuderia, setSavingScuderia] = useState(false);
+  const [managingScuderia, setManagingScuderia] = useState<Scuderia | null>(null);
+  const [managedGarage, setManagedGarage] = useState<TeamGarageManage | null>(null);
+  const [financeForm, setFinanceForm] = useState({ amount: '', reason: '' });
+  const [carNameDraft, setCarNameDraft] = useState('');
+  const [newSponsorForm, setNewSponsorForm] = useState({ name: '', logoUrl: '' });
+  const [editingSponsorId, setEditingSponsorId] = useState<string | null>(null);
+  const [teamSponsorForm, setTeamSponsorForm] = useState({
+    sponsorId: '', category: 'title_sponsor',
+    contractRacesRemaining: '', initialReward: '', rewardPerRace: '',
+  });
+  const [editingTeamSponsorId, setEditingTeamSponsorId] = useState<string | null>(null);
+  const financialHistoryRef = React.useRef<HTMLDivElement | null>(null);
+  const [missionModal, setMissionModal] = useState<{
+    sponsor: TeamSponsor;
+    type: 'race' | 'season';
+    mission?: Mission;
+  } | null>(null);
+  const [missionForm, setMissionForm] = useState({ title: '', reward: '', racesToComplete: '' });
+  const sponsorCategoryLimits = {
+    title_sponsor: 1,
+    main_partner: 2,
+    official_partner: 4,
+    minor_sponsor: 8,
+    personal_sponsor: 4,
+  } as const;
+  const [openSections, setOpenSections] = useState({
+    users: false,
+    scuderias: false,
+    sponsors: false,
+  });
 
   const sortedScuderias = useMemo(
     () => [...scuderias].sort((a, b) => a.name.localeCompare(b.name)),
@@ -129,19 +177,22 @@ export default function AdminPage() {
     setError(null);
 
     try {
-      const [usersResponse, scuderiasResponse] = await Promise.all([
+      const [usersResponse, scuderiasResponse, sponsorsResponse] = await Promise.all([
         fetch('/api/admin/users', { headers: getAuthHeaders() }),
         fetch('/api/admin/scuderias', { headers: getAuthHeaders() }),
+        fetch('/api/admin/sponsors', { headers: getAuthHeaders() }),
       ]);
 
       const usersData = await usersResponse.json();
       const scuderiasData = await scuderiasResponse.json();
+      const sponsorsData = await sponsorsResponse.json();
 
       if (!usersData.success) throw new Error(usersData.message || 'Falha ao carregar usuarios');
       if (!scuderiasData.success) throw new Error(scuderiasData.message || 'Falha ao carregar scuderias');
 
       setUsers(usersData.users);
       setScuderias(scuderiasData.scuderias);
+      if (sponsorsData.success) setSponsorCatalog(sponsorsData.sponsors);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Falha ao carregar dados administrativos');
     } finally {
@@ -291,6 +342,176 @@ export default function AdminPage() {
       setError(err instanceof Error ? err.message : 'Falha ao excluir scuderia');
     }
   }
+  async function openManageScuderia(scuderia: Scuderia) {
+    setManagingScuderia(scuderia);
+    const response = await fetch(`/api/admin/scuderias/${scuderia.id}/manage`, { headers: getAuthHeaders() });
+    const data = await response.json();
+    if (data.success) {
+      setManagedGarage(data.garage);
+      setCarNameDraft(data.garage.carName);
+    }
+  }
+  async function refreshManagedGarage() {
+    if (!managingScuderia) return;
+    await openManageScuderia(managingScuderia);
+  }
+  async function submitFinance(event: React.FormEvent) {
+    event.preventDefault();
+    if (!managingScuderia) return;
+    const amount = Number(financeForm.amount.replace(',', '.'));
+    await fetch(`/api/admin/scuderias/${managingScuderia.id}/finance-entries`, {
+      method: 'POST', headers: getAuthHeaders(),
+      body: JSON.stringify({ amount: Math.abs(amount), entryType: amount >= 0 ? 'income' : 'expense', reason: financeForm.reason }),
+    });
+    setFinanceForm({ amount: '', reason: '' });
+    await refreshManagedGarage();
+  }
+  const normalizedFinanceAmount = financeForm.amount.replace(',', '.');
+  const financeAmountIsValid = /^-?\d+(?:[.,]\d+)?$/.test(financeForm.amount)
+    && Number.isFinite(Number(normalizedFinanceAmount));
+  const assignedSponsorIds = new Set(managedGarage?.sponsors.map((sponsor) => sponsor.sponsorId) ?? []);
+  const availableSponsorCatalog = sponsorCatalog.filter(
+    (sponsor) => editingTeamSponsorId || !assignedSponsorIds.has(sponsor.id),
+  );
+  const availableSponsorCategories = Object.entries(sponsorCategoryLimits)
+    .filter(([category, limit]) => {
+      if (editingTeamSponsorId) return true;
+      const currentCount = managedGarage?.sponsors.filter((sponsor) => sponsor.category === category).length ?? 0;
+      return currentCount < limit;
+    })
+    .map(([category]) => category);
+  function formatFinancialReason(reason: string) {
+    if (reason.startsWith('Failed mission ')) {
+      return `${t.admin.failedMission} ${reason.replace('Failed mission ', '')}`;
+    }
+    return reason;
+  }
+  function formatFinancialDate(date: string) {
+    const adjustedDate = new Date(date);
+    adjustedDate.setHours(adjustedDate.getHours() - 3);
+    return adjustedDate.toLocaleString('pt-BR');
+  }
+  useEffect(() => {
+    if (!editingTeamSponsorId && availableSponsorCategories.length > 0 && !availableSponsorCategories.includes(teamSponsorForm.category)) {
+      setTeamSponsorForm((current) => ({ ...current, category: availableSponsorCategories[0] }));
+    }
+  }, [availableSponsorCategories, editingTeamSponsorId, teamSponsorForm.category]);
+  useEffect(() => {
+    if (financialHistoryRef.current) {
+      financialHistoryRef.current.scrollTop = financialHistoryRef.current.scrollHeight;
+    }
+  }, [managedGarage?.financialHistory]);
+  async function saveCarName() {
+    if (!managingScuderia) return;
+    await fetch(`/api/admin/scuderias/${managingScuderia.id}/car-name`, {
+      method: 'PUT', headers: getAuthHeaders(), body: JSON.stringify({ carName: carNameDraft }),
+    });
+    await refreshManagedGarage();
+  }
+  function openMissionModal(sponsor: TeamSponsor, type: 'race' | 'season', mission?: Mission) {
+    setMissionModal({ sponsor, type, mission });
+    setMissionForm({
+      title: mission?.title ?? '',
+      reward: String(mission?.reward ?? ''),
+      racesToComplete: String(mission?.racesToComplete ?? ''),
+    });
+  }
+  async function saveMission(event: React.FormEvent) {
+    event.preventDefault();
+    if (!missionModal) return;
+    const payload = {
+      title: missionForm.title,
+      reward: Number(missionForm.reward.replace(',', '.')),
+      racesToComplete: missionModal.type === 'season' ? Number(missionForm.racesToComplete) : undefined,
+    };
+    await fetch(
+      missionModal.mission
+        ? `/api/admin/sponsor-missions/${missionModal.type}/${missionModal.mission.id}`
+        : `/api/admin/team-sponsors/${missionModal.sponsor.id}/${missionModal.type}-missions`,
+      {
+        method: missionModal.mission ? 'PUT' : 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(payload),
+      },
+    );
+    setMissionModal(null);
+    await refreshManagedGarage();
+  }
+  async function removeMission(missionId: string, type: 'race' | 'season') {
+    await fetch(`/api/admin/sponsor-missions/${type}/${missionId}`, { method: 'DELETE', headers: getAuthHeaders() });
+    await refreshManagedGarage();
+  }
+  async function resolveMission(missionId: string, type: 'race' | 'season', outcome: 'success' | 'failure') {
+    await fetch(`/api/admin/sponsor-missions/${type}/${missionId}/resolve`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ outcome }),
+    });
+    await refreshManagedGarage();
+  }
+  async function removeTeamSponsor(id: string) {
+    await fetch(`/api/admin/team-sponsors/${id}`, { method: 'DELETE', headers: getAuthHeaders() });
+    await refreshManagedGarage();
+  }
+  async function saveCatalogSponsor(event: React.FormEvent) {
+    event.preventDefault();
+    const response = await fetch(editingSponsorId ? `/api/admin/sponsors/${editingSponsorId}` : '/api/admin/sponsors', {
+      method: editingSponsorId ? 'PUT' : 'POST', headers: getAuthHeaders(), body: JSON.stringify(newSponsorForm),
+    });
+    const data = await response.json();
+    if (data.success) {
+      setNewSponsorForm({ name: '', logoUrl: '' });
+      setEditingSponsorId(null);
+      await loadAdminData();
+    }
+  }
+  function startEditSponsor(sponsor: SponsorCatalogItem) {
+    setEditingSponsorId(sponsor.id);
+    setNewSponsorForm({ name: sponsor.name, logoUrl: sponsor.logoUrl ?? '' });
+  }
+  async function deleteCatalogSponsor(sponsorId: string) {
+    await fetch(`/api/admin/sponsors/${sponsorId}`, { method: 'DELETE', headers: getAuthHeaders() });
+    await loadAdminData();
+  }
+  async function saveTeamSponsor(event: React.FormEvent) {
+    event.preventDefault();
+    if (!managingScuderia) return;
+    const payload = {
+      sponsorId: teamSponsorForm.sponsorId,
+      category: teamSponsorForm.category,
+      contractRacesRemaining: Number(teamSponsorForm.contractRacesRemaining),
+      initialReward: Number(teamSponsorForm.initialReward),
+      rewardPerRace: Number(teamSponsorForm.rewardPerRace),
+    };
+    await fetch(
+      editingTeamSponsorId
+        ? `/api/admin/team-sponsors/${editingTeamSponsorId}`
+        : `/api/admin/scuderias/${managingScuderia.id}/sponsors`,
+      {
+        method: editingTeamSponsorId ? 'PUT' : 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(editingTeamSponsorId ? {
+          category: payload.category,
+          contractRacesRemaining: payload.contractRacesRemaining,
+          initialReward: payload.initialReward,
+          rewardPerRace: payload.rewardPerRace,
+        } : payload),
+      },
+    );
+    setEditingTeamSponsorId(null);
+    setTeamSponsorForm({ sponsorId: '', category: 'title_sponsor', contractRacesRemaining: '', initialReward: '', rewardPerRace: '' });
+    await refreshManagedGarage();
+  }
+  function startEditTeamSponsor(sponsor: TeamSponsor) {
+    setEditingTeamSponsorId(sponsor.id);
+    setTeamSponsorForm({
+      sponsorId: sponsor.sponsorId ?? '',
+      category: sponsor.category,
+      contractRacesRemaining: String(sponsor.contractRacesRemaining ?? ''),
+      initialReward: String(sponsor.initialReward ?? ''),
+      rewardPerRace: String(sponsor.rewardPerRace ?? ''),
+    });
+  }
 
   if (isLoading) {
     return (
@@ -339,15 +560,24 @@ export default function AdminPage() {
         {message && <div className="mb-4 rounded-lg bg-green-700 px-4 py-3">{message}</div>}
         {error && <div className="mb-4 rounded-lg bg-red-700 px-4 py-3">{error}</div>}
 
-        <section className="bg-gray-800 rounded-lg p-6 mb-6">
-          <div className="flex items-center justify-between gap-4 mb-4">
-            <h2 className="text-2xl font-semibold">Usuários</h2>
-            <button className="px-4 py-2 bg-purple-600 rounded-lg" onClick={openCreateUser}>
-              Criar Novo Usuário
+        <section className="mb-6 rounded-lg bg-gray-800 p-6">
+          <div className="flex items-center justify-between gap-4">
+            <button
+              type="button"
+              className="flex items-center gap-3 text-left"
+              onClick={() => setOpenSections((current) => ({ ...current, users: !current.users }))}
+            >
+              <span className={`text-xl transition-transform ${openSections.users ? 'rotate-90' : ''}`}>›</span>
+              <h2 className="text-2xl font-semibold">Usuários</h2>
             </button>
+            {openSections.users && (
+              <button className="rounded-lg bg-purple-600 px-4 py-2" onClick={openCreateUser}>
+                Criar Novo Usuário
+              </button>
+            )}
           </div>
 
-          <div className="overflow-x-auto">
+          {openSections.users && <div className="mt-4 overflow-x-auto">
             <table className="w-full text-left">
               <thead className="text-gray-300">
                 <tr>
@@ -409,18 +639,27 @@ export default function AdminPage() {
                 )}
               </tbody>
             </table>
-          </div>
+          </div>}
         </section>
 
-        <section className="bg-gray-800 rounded-lg p-6">
-          <div className="flex items-center justify-between gap-4 mb-4">
-            <h2 className="text-2xl font-semibold">Scuderias</h2>
-            <button className="px-4 py-2 bg-red-600 rounded-lg" onClick={openCreateScuderia}>
-              Criar Nova Scuderia
+        <section className="mb-6 rounded-lg bg-gray-800 p-6">
+          <div className="flex items-center justify-between gap-4">
+            <button
+              type="button"
+              className="flex items-center gap-3 text-left"
+              onClick={() => setOpenSections((current) => ({ ...current, scuderias: !current.scuderias }))}
+            >
+              <span className={`text-xl transition-transform ${openSections.scuderias ? 'rotate-90' : ''}`}>›</span>
+              <h2 className="text-2xl font-semibold">Scuderias</h2>
             </button>
+            {openSections.scuderias && (
+              <button className="rounded-lg bg-red-600 px-4 py-2" onClick={openCreateScuderia}>
+                Criar Nova Scuderia
+              </button>
+            )}
           </div>
 
-          <div className="overflow-x-auto">
+          {openSections.scuderias && <div className="mt-4 overflow-x-auto">
             <table className="w-full text-left">
               <thead className="text-gray-300">
                 <tr>
@@ -448,6 +687,9 @@ export default function AdminPage() {
                       <button className="px-3 py-1 bg-gray-600 rounded mr-2" onClick={() => openEditScuderia(scuderia)}>
                         Editar
                       </button>
+                      <button className="px-3 py-1 bg-blue-700 rounded mr-2" onClick={() => openManageScuderia(scuderia)}>
+                        {t.admin.manage}
+                      </button>
                       <button className="px-3 py-1 bg-red-700 rounded" onClick={() => deleteScuderia(scuderia.id)}>
                         Excluir
                       </button>
@@ -461,7 +703,51 @@ export default function AdminPage() {
                 )}
               </tbody>
             </table>
-          </div>
+          </div>}
+        </section>
+
+        <section className="rounded-lg bg-gray-800 p-6">
+          <button
+            type="button"
+            className="flex items-center gap-3 text-left"
+            onClick={() => setOpenSections((current) => ({ ...current, sponsors: !current.sponsors }))}
+          >
+            <span className={`text-xl transition-transform ${openSections.sponsors ? 'rotate-90' : ''}`}>›</span>
+            <h2 className="text-2xl font-semibold">{t.admin.sponsors}</h2>
+          </button>
+          {openSections.sponsors && (
+            <div className="mt-4">
+              <form onSubmit={saveCatalogSponsor} className="mb-4 flex flex-wrap gap-2">
+                <input required className="rounded bg-gray-700 p-2" placeholder={t.admin.sponsorName} value={newSponsorForm.name} onChange={(e) => setNewSponsorForm((v) => ({ ...v, name: e.target.value }))} />
+                <input required type="url" className="min-w-72 flex-1 rounded bg-gray-700 p-2" placeholder={t.admin.logoUrl} value={newSponsorForm.logoUrl} onChange={(e) => setNewSponsorForm((v) => ({ ...v, logoUrl: e.target.value }))} />
+                <button className="rounded bg-purple-600 px-4">{editingSponsorId ? t.admin.save : t.admin.addSponsor}</button>
+              </form>
+              {sponsorCatalog.length === 0 ? (
+                <div className="text-gray-400">{t.admin.sponsorsEmpty}</div>
+              ) : (
+                <div className="space-y-2">
+                  {sponsorCatalog.map((sponsor) => (
+                    <div key={sponsor.id} className="flex items-center justify-between rounded bg-gray-700 p-3">
+                      <div className="flex items-center gap-3">
+                        {sponsor.logoUrl && (
+                          <img src={sponsor.logoUrl} alt="" className="h-10 w-10 object-contain" />
+                        )}
+                        <span>{sponsor.name}</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <button className="rounded bg-gray-600 px-3 py-1" onClick={() => startEditSponsor(sponsor)}>
+                          {t.admin.edit}
+                        </button>
+                        <button className="rounded bg-red-700 px-3 py-1" onClick={() => deleteCatalogSponsor(sponsor.id)}>
+                          {t.admin.remove}
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </section>
       </div>
 
@@ -647,6 +933,139 @@ export default function AdminPage() {
               <button type="button" className="flex-1 bg-gray-600 rounded-lg py-2" onClick={() => setUserModalOpen(false)}>
                 Cancelar
               </button>
+            </div>
+          </form>
+        </div>
+      )}
+      {managingScuderia && managedGarage && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/70 p-4">
+          <div className="mx-auto max-w-5xl rounded-lg bg-gray-800 p-6">
+            <div className="mb-6 flex justify-between">
+              <h2 className="text-2xl font-bold">{t.admin.manage}: {managingScuderia.name}</h2>
+              <button onClick={() => { setManagingScuderia(null); setManagedGarage(null); }}>×</button>
+            </div>
+            <div className="grid gap-6 md:grid-cols-2">
+              <section>
+                <h3 className="mb-2 font-bold">{t.admin.finances}</h3>
+                <p>{t.garage.cash}: {managedGarage.cashTotal}</p>
+                <p>{t.garage.weatherCenter}: {managedGarage.climateCostPerRace}</p>
+                <p>{t.garage.pitCrew}: {managedGarage.pitCrewCostPerRace}</p>
+                <p>{t.garage.salaries}: {managedGarage.salaryCostPerRace}</p>
+                <p>{t.garage.sponsors}: {managedGarage.sponsorIncomePerRace}</p>
+                <p>{t.garage.weatherMonitoring}: {managedGarage.climateMonitoringLevel}</p>
+                <p>{t.garage.pitCrew}: {managedGarage.pitCrewLevel}</p>
+                <form onSubmit={submitFinance} className="mt-3 flex gap-2">
+                  <input
+                    inputMode="decimal"
+                    className="w-32 rounded bg-gray-700 p-2"
+                    value={financeForm.amount}
+                    onChange={(e) => setFinanceForm((v) => ({ ...v, amount: e.target.value }))}
+                    placeholder={t.admin.amount}
+                  />
+                  <input className="flex-1 rounded bg-gray-700 p-2" value={financeForm.reason} onChange={(e) => setFinanceForm((v) => ({ ...v, reason: e.target.value }))} placeholder={t.admin.reason} />
+                  <button disabled={!financeAmountIsValid || !financeForm.reason.trim()} className="rounded bg-purple-600 px-3 disabled:cursor-not-allowed disabled:bg-gray-600">{t.admin.add}</button>
+                </form>
+              </section>
+              <section>
+                <h3 className="mb-2 font-bold">{t.admin.car}</h3>
+                <div className="flex gap-2">
+                  <input className="flex-1 rounded bg-gray-700 p-2" value={carNameDraft} onChange={(e) => setCarNameDraft(e.target.value)} />
+                  <button className="rounded bg-purple-600 px-3" onClick={saveCarName}>{t.admin.save}</button>
+                </div>
+                <h3 className="mb-2 mt-4 font-bold">{t.garage.drivers}</h3>
+                {managedGarage.drivers.map((driver) => <p key={driver.id}>{driver.displayName} — {driver.contractEndsAfterRaces} / {driver.salaryPerRace}</p>)}
+              </section>
+            </div>
+            <section className="mt-6">
+              <h3 className="mb-2 font-bold">{t.admin.financialHistory}</h3>
+              <div ref={financialHistoryRef} className="max-h-40 overflow-y-auto rounded border border-white/30 bg-gray-900 p-3">
+                {[...managedGarage.financialHistory].reverse().map((entry) => (
+                  <p
+                    key={entry.id}
+                    className={entry.entryType === 'income' ? 'text-green-400' : 'text-red-400'}
+                  >
+                    {entry.entryType === 'income' ? '+' : '-'} {entry.amount} — {formatFinancialDate(entry.occurredAt)} — {formatFinancialReason(entry.reason)}
+                  </p>
+                ))}
+              </div>
+            </section>
+            <section className="mt-6">
+              <h3 className="mb-3 font-bold">{t.garage.sponsors}</h3>
+              <form onSubmit={saveTeamSponsor} className="mb-4 grid gap-2 md:grid-cols-3">
+                <select required className="rounded bg-gray-700 p-2" value={teamSponsorForm.sponsorId} onChange={(e) => setTeamSponsorForm((v) => ({ ...v, sponsorId: e.target.value }))} disabled={Boolean(editingTeamSponsorId)}>
+                  <option value="">{t.admin.sponsorName}</option>
+                  {availableSponsorCatalog.map((sponsor) => <option key={sponsor.id} value={sponsor.id}>{sponsor.name}</option>)}
+                </select>
+                <select required className="rounded bg-gray-700 p-2" value={teamSponsorForm.category} onChange={(e) => setTeamSponsorForm((v) => ({ ...v, category: e.target.value }))}>
+                  {availableSponsorCategories.map((category) => <option key={category} value={category}>{category}</option>)}
+                </select>
+                <input required type="number" min="0" className="rounded bg-gray-700 p-2" placeholder={t.admin.contractDuration} value={teamSponsorForm.contractRacesRemaining} onChange={(e) => setTeamSponsorForm((v) => ({ ...v, contractRacesRemaining: e.target.value }))} />
+                <input required type="number" min="0" className="rounded bg-gray-700 p-2" placeholder={t.admin.initialReward} value={teamSponsorForm.initialReward} onChange={(e) => setTeamSponsorForm((v) => ({ ...v, initialReward: e.target.value }))} />
+                <input required type="number" min="0" className="rounded bg-gray-700 p-2" placeholder={t.admin.rewardPerRace} value={teamSponsorForm.rewardPerRace} onChange={(e) => setTeamSponsorForm((v) => ({ ...v, rewardPerRace: e.target.value }))} />
+                <button className="rounded bg-purple-600 px-3 py-2">{editingTeamSponsorId ? t.admin.save : t.admin.add}</button>
+              </form>
+              {managedGarage.sponsors.map((sponsor) => (
+                <div key={sponsor.id} className="mb-4 rounded bg-gray-700 p-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <strong>{sponsor.name} — {sponsor.category}</strong>
+                    <span className="flex gap-2">
+                      <button
+                        className="rounded bg-slate-500 px-3 py-1 font-semibold hover:bg-slate-400"
+                        onClick={() => startEditTeamSponsor(sponsor)}
+                      >
+                        {t.admin.edit}
+                      </button>
+                      <button
+                        className="rounded bg-rose-700 px-3 py-1 font-semibold hover:bg-rose-600"
+                        onClick={() => removeTeamSponsor(sponsor.id)}
+                      >
+                        {t.admin.remove}
+                      </button>
+                    </span>
+                  </div>
+                  <p className="mt-2 font-semibold">{t.admin.raceMissions}</p>
+                  {sponsor.raceMissions.map((m) => (
+                    <div key={m.id} className="mt-2 flex flex-wrap items-center gap-2">
+                      <span className="mr-auto">{m.title} ({m.reward})</span>
+                      <button className="rounded bg-slate-500 px-3 py-1 font-semibold hover:bg-slate-400" onClick={() => openMissionModal(sponsor, 'race', m)}>{t.admin.edit}</button>
+                      <button className="rounded bg-emerald-600 px-3 py-1 font-bold hover:bg-emerald-500" onClick={() => resolveMission(m.id, 'race', 'success')}>✓</button>
+                      <button className="rounded bg-rose-700 px-3 py-1 font-bold hover:bg-rose-600" onClick={() => resolveMission(m.id, 'race', 'failure')}>✕</button>
+                    </div>
+                  ))}
+                  <button className="mt-2 rounded bg-purple-600 px-3 py-2 font-semibold hover:bg-purple-500" onClick={() => openMissionModal(sponsor, 'race')}>{t.admin.add}</button>
+                  <p className="mt-2 font-semibold">{t.admin.seasonMissions}</p>
+                  {sponsor.seasonMissions.map((m) => (
+                    <div key={m.id} className="mt-2 flex flex-wrap items-center gap-2">
+                      <span className="mr-auto">{m.title} ({m.reward}) {m.racesToComplete} {t.garage.races}</span>
+                      <button className="rounded bg-slate-500 px-3 py-1 font-semibold hover:bg-slate-400" onClick={() => openMissionModal(sponsor, 'season', m)}>{t.admin.edit}</button>
+                      <button className="rounded bg-emerald-600 px-3 py-1 font-bold hover:bg-emerald-500" onClick={() => resolveMission(m.id, 'season', 'success')}>✓</button>
+                      <button className="rounded bg-rose-700 px-3 py-1 font-bold hover:bg-rose-600" onClick={() => resolveMission(m.id, 'season', 'failure')}>✕</button>
+                    </div>
+                  ))}
+                  <button className="mt-2 rounded bg-purple-600 px-3 py-2 font-semibold hover:bg-purple-500" onClick={() => openMissionModal(sponsor, 'season')}>{t.admin.add}</button>
+                </div>
+              ))}
+            </section>
+          </div>
+        </div>
+      )}
+      {missionModal && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 p-4">
+          <form onSubmit={saveMission} className="w-full max-w-md rounded-lg bg-gray-800 p-6">
+            <div className="mb-4 flex justify-between">
+              <h2 className="text-xl font-bold">{missionModal.mission ? t.admin.edit : t.admin.add} {missionModal.type === 'race' ? t.admin.raceMissions : t.admin.seasonMissions}</h2>
+              <button type="button" onClick={() => setMissionModal(null)}>×</button>
+            </div>
+            <div className="space-y-3">
+              <input required className="w-full rounded bg-gray-700 p-2" placeholder={t.admin.missionTitle} value={missionForm.title} onChange={(e) => setMissionForm((v) => ({ ...v, title: e.target.value }))} />
+              <input required inputMode="decimal" className="w-full rounded bg-gray-700 p-2" placeholder={t.admin.missionReward} value={missionForm.reward} onChange={(e) => setMissionForm((v) => ({ ...v, reward: e.target.value }))} />
+              {missionModal.type === 'season' && (
+                <input required type="number" min="1" className="w-full rounded bg-gray-700 p-2" placeholder={t.admin.racesToComplete} value={missionForm.racesToComplete} onChange={(e) => setMissionForm((v) => ({ ...v, racesToComplete: e.target.value }))} />
+              )}
+            </div>
+            <div className="mt-4 flex justify-end gap-2">
+              <button type="button" className="rounded bg-gray-600 px-4 py-2" onClick={() => setMissionModal(null)}>{t.admin.remove}</button>
+              <button className="rounded bg-purple-600 px-4 py-2">{t.admin.save}</button>
             </div>
           </form>
         </div>

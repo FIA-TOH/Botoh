@@ -21,11 +21,7 @@ function ProtectedHome() {
 
   const handleGarageClick = () => {
     setLoadingButton('garage');
-
-    setTimeout(() => {
-      setLoadingButton(null);
-      console.log('Garagem clicked - no action');
-    }, 1000);
+    router.push('/garage');
   };
 
   const handlePitWallClick = () => {

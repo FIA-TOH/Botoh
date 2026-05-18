@@ -73,6 +73,48 @@ const scuderiaValidation = [
     .withMessage('Scuderia color must be a valid hex color'),
 ];
 
+const financeEntryValidation = [
+  body('amount')
+    .isFloat({ gt: 0 })
+    .withMessage('Finance amount must be greater than zero'),
+  body('entryType')
+    .isIn(['income', 'expense'])
+    .withMessage('Finance entry type is invalid'),
+  body('reason')
+    .isLength({ min: 2, max: 255 })
+    .withMessage('Finance reason must be between 2 and 255 characters'),
+  body('occurredAt')
+    .optional()
+    .isISO8601()
+    .withMessage('Finance date must be a valid ISO date'),
+];
+const carNameValidation = [body('carName').optional({ nullable: true }).isString().isLength({ max: 100 })];
+const teamSponsorValidation = [
+  body('sponsorId').isUUID(),
+  body('category').isIn(['title_sponsor', 'main_partner', 'official_partner', 'minor_sponsor', 'personal_sponsor']),
+  body('contractRacesRemaining').isInt({ min: 0 }),
+  body('initialReward').isFloat({ min: 0 }),
+  body('rewardPerRace').isFloat({ min: 0 }),
+];
+const updateTeamSponsorValidation = [
+  body('category').isIn(['title_sponsor', 'main_partner', 'official_partner', 'minor_sponsor', 'personal_sponsor']),
+  body('contractRacesRemaining').isInt({ min: 0 }),
+  body('initialReward').isFloat({ min: 0 }),
+  body('rewardPerRace').isFloat({ min: 0 }),
+];
+const sponsorValidation = [
+  body('name').isString().isLength({ min: 1, max: 120 }),
+  body('logoUrl')
+    .isURL()
+    .matches(/\.png(?:\?.*)?$/i)
+    .withMessage('Sponsor logo URL must point to a PNG image'),
+];
+const missionValidation = [
+  body('title').isString().isLength({ min: 1, max: 255 }),
+  body('reward').isFloat({ min: 0 }),
+  body('racesToComplete').optional().isInt({ min: 1 }),
+];
+
 function handleValidation(req: AuthRequest, res: Response) {
   const errors = validationResult(req);
   if (errors.isEmpty()) return false;
@@ -152,6 +194,117 @@ router.delete(
       console.error('Admin delete user error:', error);
       return res.status(500).json({ success: false, message: translateMessage('Failed to delete user', getRequestLanguage(req)) });
     }
+  },
+);
+
+router.post(
+  '/scuderias/:id/finance-entries',
+  param('id').isUUID().withMessage('Invalid scuderia id'),
+  financeEntryValidation,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      if (handleValidation(req, res)) return;
+
+      const result = await adminService.addTeamFinanceEntry(req.params.id, req.body);
+      return res.status(result.success ? 201 : 404).json({
+        ...result,
+        message: translateMessage(
+          result.success ? 'Finance entry created successfully' : result.message,
+          getRequestLanguage(req),
+        ),
+      });
+    } catch (error) {
+      console.error('Admin create finance entry error:', error);
+      return res.status(500).json({
+        success: false,
+        message: translateMessage('Failed to create finance entry', getRequestLanguage(req)),
+      });
+    }
+  },
+);
+
+router.get('/scuderias/:id/manage', param('id').isUUID(), async (req: AuthRequest, res: Response) => {
+  const garage = await adminService.getScuderiaManagement(req.params.id);
+  return garage
+    ? res.json({ success: true, garage })
+    : res.status(404).json({ success: false, message: translateMessage('Scuderia not found', getRequestLanguage(req)) });
+});
+
+router.put('/scuderias/:id/car-name', param('id').isUUID(), carNameValidation, async (req: AuthRequest, res: Response) => {
+  if (handleValidation(req, res)) return;
+  const result = await adminService.updateScuderiaCarName(req.params.id, req.body.carName ?? null);
+  return res.status(result.success ? 200 : 404).json(result);
+});
+
+router.get('/sponsors', async (_req: AuthRequest, res: Response) => {
+  const sponsors = await adminService.listSponsors();
+  return res.json({ success: true, sponsors });
+});
+
+router.post('/sponsors', sponsorValidation, async (req: AuthRequest, res: Response) => {
+  if (handleValidation(req, res)) return;
+  const result = await adminService.createSponsor(req.body);
+  return res.status(201).json(result);
+});
+
+router.put('/sponsors/:id', param('id').isUUID(), sponsorValidation, async (req: AuthRequest, res: Response) => {
+  if (handleValidation(req, res)) return;
+  const result = await adminService.updateSponsor(req.params.id, req.body);
+  return res.status(result.success ? 200 : 404).json(result);
+});
+
+router.delete('/sponsors/:id', param('id').isUUID(), async (req: AuthRequest, res: Response) => {
+  const result = await adminService.deleteSponsor(req.params.id);
+  return res.status(result.success ? 200 : 404).json(result);
+});
+
+router.post('/scuderias/:id/sponsors', param('id').isUUID(), teamSponsorValidation, async (req: AuthRequest, res: Response) => {
+  if (handleValidation(req, res)) return;
+  const result = await adminService.addTeamSponsor(req.params.id, req.body);
+  return res.status(201).json(result);
+});
+
+router.put('/team-sponsors/:id', param('id').isUUID(), updateTeamSponsorValidation, async (req: AuthRequest, res: Response) => {
+  if (handleValidation(req, res)) return;
+  const result = await adminService.updateTeamSponsor(req.params.id, req.body);
+  return res.status(result.success ? 200 : 404).json(result);
+});
+
+router.delete('/team-sponsors/:id', param('id').isUUID(), async (req: AuthRequest, res: Response) => {
+  const result = await adminService.removeTeamSponsor(req.params.id);
+  return res.status(result.success ? 200 : 404).json(result);
+});
+
+router.post('/team-sponsors/:id/:type-missions', param('id').isUUID(), param('type').isIn(['race', 'season']), missionValidation, async (req: AuthRequest, res: Response) => {
+  if (handleValidation(req, res)) return;
+  const result = await adminService.addSponsorMission(req.params.id, req.params.type as 'race' | 'season', req.body);
+  return res.status(201).json(result);
+});
+
+router.put('/sponsor-missions/:type/:id', param('id').isUUID(), param('type').isIn(['race', 'season']), missionValidation, async (req: AuthRequest, res: Response) => {
+  if (handleValidation(req, res)) return;
+  const result = await adminService.updateSponsorMission(req.params.id, req.params.type as 'race' | 'season', req.body);
+  return res.status(result.success ? 200 : 404).json(result);
+});
+
+router.delete('/sponsor-missions/:type/:id', param('id').isUUID(), param('type').isIn(['race', 'season']), async (req: AuthRequest, res: Response) => {
+  const result = await adminService.removeSponsorMission(req.params.id, req.params.type as 'race' | 'season');
+  return res.status(result.success ? 200 : 404).json(result);
+});
+
+router.post(
+  '/sponsor-missions/:type/:id/resolve',
+  param('id').isUUID(),
+  param('type').isIn(['race', 'season']),
+  body('outcome').isIn(['success', 'failure']),
+  async (req: AuthRequest, res: Response) => {
+    if (handleValidation(req, res)) return;
+    const result = await adminService.resolveSponsorMission(
+      req.params.id,
+      req.params.type as 'race' | 'season',
+      req.body.outcome,
+    );
+    return res.status(result.success ? 200 : 404).json(result);
   },
 );
 
