@@ -177,5 +177,15 @@
   "LOGIN_SUCCESS": "Connexion réussie.",
   "CHAT_CHANNEL_ALL": "Tous",
   "CHAT_CHANNEL_TEAM": "?quipe",
-  "CHAT_CHANNEL_PRIVATE": "Priv?"
+  "CHAT_CHANNEL_PRIVATE": "Priv?",
+  "CRASH_WALL_DETECTED": "{{playerName}} a touche le mur {{index}} a {{speed}} de vitesse.",
+  "CAR_DAMAGE_TAKEN": "💥{{damageTaken}} de DEGATS! • 🏎️ {{newDamage}}/100",
+  "DAMAGE_ENABLED": "Degats actives.",
+  "DAMAGE_DISABLED": "Degats desactives.",
+  "REPAIR_NO_DAMAGE": "Votre voiture n'a aucun degat a reparer.",
+  "REPAIR_ALREADY_ACTIVE": "La reparation est deja en cours.",
+  "REPAIR_IN_PIT_STOP": "Vous ne pouvez pas reparer pendant le pit stop.",
+  "REPAIR_TYRES_BLOCKED": "Vous ne pouvez pas changer les pneus pendant la reparation.",
+  "REPAIR_STARTED": "🛠️🏎️ Réparation de la voiture... Estimation : {{seconds}}s ⏳",
+  "REPAIR_FINISHED": "✅🏎️ Réparation terminée!"
 }

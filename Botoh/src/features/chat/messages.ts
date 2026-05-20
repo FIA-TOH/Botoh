@@ -2054,4 +2054,116 @@ export const MESSAGES = {
       enabled: enabled.toString(),
     }),
   }),
+  CRASH_WALL_DETECTED: (
+    playerName: string,
+    index: string,
+    speed: string,
+  ): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.CRASH_WALL_DETECTED, {
+      playerName,
+      index,
+      speed,
+    }),
+    es: replaceTemplateString(es_messages.CRASH_WALL_DETECTED, {
+      playerName,
+      index,
+      speed,
+    }),
+    fr: replaceTemplateString(fr_messages.CRASH_WALL_DETECTED, {
+      playerName,
+      index,
+      speed,
+    }),
+    tr: replaceTemplateString(tr_messages.CRASH_WALL_DETECTED, {
+      playerName,
+      index,
+      speed,
+    }),
+    pt: replaceTemplateString(pt_messages.CRASH_WALL_DETECTED, {
+      playerName,
+      index,
+      speed,
+    }),
+  }),
+  CAR_DAMAGE_TAKEN: (
+    damageTaken: string,
+    newDamage: string,
+  ): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.CAR_DAMAGE_TAKEN, {
+      damageTaken,
+      newDamage,
+    }),
+    es: replaceTemplateString(es_messages.CAR_DAMAGE_TAKEN, {
+      damageTaken,
+      newDamage,
+    }),
+    fr: replaceTemplateString(fr_messages.CAR_DAMAGE_TAKEN, {
+      damageTaken,
+      newDamage,
+    }),
+    tr: replaceTemplateString(tr_messages.CAR_DAMAGE_TAKEN, {
+      damageTaken,
+      newDamage,
+    }),
+    pt: replaceTemplateString(pt_messages.CAR_DAMAGE_TAKEN, {
+      damageTaken,
+      newDamage,
+    }),
+  }),
+  DAMAGE_ENABLED: (): LocalizedMessageFunction => ({
+    en: en_messages.DAMAGE_ENABLED,
+    es: es_messages.DAMAGE_ENABLED,
+    fr: fr_messages.DAMAGE_ENABLED,
+    tr: tr_messages.DAMAGE_ENABLED,
+    pt: pt_messages.DAMAGE_ENABLED,
+  }),
+  DAMAGE_DISABLED: (): LocalizedMessageFunction => ({
+    en: en_messages.DAMAGE_DISABLED,
+    es: es_messages.DAMAGE_DISABLED,
+    fr: fr_messages.DAMAGE_DISABLED,
+    tr: tr_messages.DAMAGE_DISABLED,
+    pt: pt_messages.DAMAGE_DISABLED,
+  }),
+  REPAIR_NO_DAMAGE: (): LocalizedMessageFunction => ({
+    en: en_messages.REPAIR_NO_DAMAGE,
+    es: es_messages.REPAIR_NO_DAMAGE,
+    fr: fr_messages.REPAIR_NO_DAMAGE,
+    tr: tr_messages.REPAIR_NO_DAMAGE,
+    pt: pt_messages.REPAIR_NO_DAMAGE,
+  }),
+  REPAIR_ALREADY_ACTIVE: (): LocalizedMessageFunction => ({
+    en: en_messages.REPAIR_ALREADY_ACTIVE,
+    es: es_messages.REPAIR_ALREADY_ACTIVE,
+    fr: fr_messages.REPAIR_ALREADY_ACTIVE,
+    tr: tr_messages.REPAIR_ALREADY_ACTIVE,
+    pt: pt_messages.REPAIR_ALREADY_ACTIVE,
+  }),
+  REPAIR_IN_PIT_STOP: (): LocalizedMessageFunction => ({
+    en: en_messages.REPAIR_IN_PIT_STOP,
+    es: es_messages.REPAIR_IN_PIT_STOP,
+    fr: fr_messages.REPAIR_IN_PIT_STOP,
+    tr: tr_messages.REPAIR_IN_PIT_STOP,
+    pt: pt_messages.REPAIR_IN_PIT_STOP,
+  }),
+  REPAIR_TYRES_BLOCKED: (): LocalizedMessageFunction => ({
+    en: en_messages.REPAIR_TYRES_BLOCKED,
+    es: es_messages.REPAIR_TYRES_BLOCKED,
+    fr: fr_messages.REPAIR_TYRES_BLOCKED,
+    tr: tr_messages.REPAIR_TYRES_BLOCKED,
+    pt: pt_messages.REPAIR_TYRES_BLOCKED,
+  }),
+  REPAIR_STARTED: (seconds: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.REPAIR_STARTED, { seconds }),
+    es: replaceTemplateString(es_messages.REPAIR_STARTED, { seconds }),
+    fr: replaceTemplateString(fr_messages.REPAIR_STARTED, { seconds }),
+    tr: replaceTemplateString(tr_messages.REPAIR_STARTED, { seconds }),
+    pt: replaceTemplateString(pt_messages.REPAIR_STARTED, { seconds }),
+  }),
+  REPAIR_FINISHED: (): LocalizedMessageFunction => ({
+    en: en_messages.REPAIR_FINISHED,
+    es: es_messages.REPAIR_FINISHED,
+    fr: fr_messages.REPAIR_FINISHED,
+    tr: tr_messages.REPAIR_FINISHED,
+    pt: pt_messages.REPAIR_FINISHED,
+  }),
 };

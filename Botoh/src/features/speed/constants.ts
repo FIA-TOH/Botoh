@@ -43,6 +43,7 @@ export const constants = {
   TYRES_BLOWED: 0.0007, // Grip reduction when tire is blown (increased for testing)
   // ===============================
   SANDBAG_PENALTY: 0.002,
+  TOTAL_DAMAGE_PENALTY: 0.002, // Penalty for 100 damage
 };
 
 export function changeConstant(key: keyof typeof constants, value: number) {

@@ -7,6 +7,7 @@ import {
   enableSoftCutPenalty,
 } from "../../detectCut/enableCutPenalty";
 import { log } from "../../discord/logger";
+import { enableDamage } from "../../speed/crashWallDetector";
 import { enableErs, enableErsPenalty } from "../../speed/fuel&Ers/ers";
 import { enableGas, enableSlipstream } from "../../speed/handleSlipstream";
 import { setBlowoutTyresActivated } from "../../tires&pits/tireBlowManager";
@@ -24,6 +25,7 @@ export enum ToggleableSystems {
   ERS_PENALTY = "ers_penalty",
   CUT_PENALTY = "cut_penalty",
   DEBRIS = "debris",
+  DAMAGE = "damage",
   SOFT_CUT_PENALTY = "soft_cut_penalty",
 }
 
@@ -37,7 +39,7 @@ export function handleToggleSystems(
     return;
   }
   const system = args[0]?.toLowerCase();
-  const boolean = args[1]?.toLowerCase();
+  let boolean = args[1]?.toLowerCase();
 
   if (
     system !== ToggleableSystems.SLIPSTREAM &&
@@ -50,11 +52,12 @@ export function handleToggleSystems(
     system !== ToggleableSystems.ERS_PENALTY &&
     system !== ToggleableSystems.CUT_PENALTY &&
     system !== ToggleableSystems.DEBRIS &&
+    system !== ToggleableSystems.DAMAGE &&
     system !== ToggleableSystems.SOFT_CUT_PENALTY
   ) {
     room.sendAnnouncement(`System "${args[0]}" does not exist.`, byPlayer.id, COLORS.RED);
     room.sendAnnouncement(
-      `Try "slipstream", "tyres", "gas", "ghost", "rr", "tyres_blowout", "ers", "cut_penalty", "debris", "soft_cut_penalty" or "ers_penalty".`,
+      `Try "slipstream", "tyres", "gas", "ghost", "rr", "tyres_blowout", "ers", "cut_penalty", "debris", "damage", "soft_cut_penalty" or "ers_penalty".`,
       byPlayer.id, COLORS.YELLOW
     );
     return;
@@ -162,6 +165,16 @@ export function handleToggleSystems(
       log(`Debris mode enabled by ${byPlayer.name}`);
       room.sendAnnouncement("Debris enabled!", byPlayer.id, COLORS.GREEN);
       enableDebris(true);
+    }
+  } else if (system === ToggleableSystems.DAMAGE) {
+    if (boolean === "off") {
+      log(`Damage mode disabled by ${byPlayer.name}`);
+      enableDamage(false);
+      sendBlueMessage(room, MESSAGES.DAMAGE_DISABLED(), byPlayer.id);
+    } else {
+      log(`Damage mode enabled by ${byPlayer.name}`);
+      enableDamage(true);
+      sendBlueMessage(room, MESSAGES.DAMAGE_ENABLED(), byPlayer.id);
     }
   } else if (system === ToggleableSystems.SOFT_CUT_PENALTY) {
     if (boolean === "off") {

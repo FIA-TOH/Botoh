@@ -92,6 +92,11 @@ export default function pt_commands(
     args: string[],
     room: RoomObject,
   ) => void,
+  handleFixCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
   handleHelpCommand: (
     byPlayer: PlayerObject,
     args: string[],
@@ -389,6 +394,7 @@ export default function pt_commands(
     "!pneus": handleTiresCommand,
     "!tyres": handleTiresCommand,
     "!tires": handleTiresCommand,
+    "!fix": handleFixCommand,
     "!ajuda": handleHelpCommand,
     "!clear_bans": handleClearBansCommand,
     "!laps": handleLapsCommand,

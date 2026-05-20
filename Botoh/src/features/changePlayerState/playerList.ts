@@ -32,6 +32,17 @@ export interface NewPitState {
   reactionTimeout?: number;
 }
 
+export interface RepairState {
+  isWaitingForRepair: boolean;
+  isRepairing: boolean;
+  repairStartTime?: number;
+  repairReadyTime?: number;
+  repairEmojiShowTime?: number;
+  reactionTime?: number;
+  repairEndTime?: number;
+  damageToRepair?: number;
+}
+
 export interface XKeyState {
   isPressed: boolean;
   pressTimes: number[];
@@ -129,6 +140,7 @@ export interface PlayerInfo {
   canRejoin: boolean;
 
   newPitState?: NewPitState;
+  repairState?: RepairState;
   
   xKeyState?: XKeyState;
   

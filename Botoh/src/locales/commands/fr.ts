@@ -91,6 +91,11 @@ export default function fr_commands(
     args: string[],
     room: RoomObject,
   ) => void,
+  handleFixCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
   handleHelpCommand: (
     byPlayer: PlayerObject,
     args: string[],
@@ -383,6 +388,7 @@ export default function fr_commands(
     "!tyres": handleTiresCommand,
     "!tires": handleTiresCommand,
     "!pneus": handleTiresCommand,
+    "!fix": handleFixCommand,
     "!aide": handleHelpCommand,
     "!clear_bans": handleClearBansCommand,
     "!tours": handleLapsCommand,

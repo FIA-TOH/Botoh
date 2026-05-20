@@ -20,6 +20,8 @@ export enum Situacions {
   SafetyCar = "SafetyCar",
   LappedCar = "LappedCar",
   PitReady = "PitReady",
+  RepairReady = "RepairReady",
+  Repairing = "Repairing",
   None = "None",
   ManagingTyresOn = "ManagingTyresOn",
   ManagingTyresOff = "ManagingTyresOff",
@@ -42,7 +44,7 @@ const SITUATION_PRIORITY: Record<Situacions, number> = {
   [Situacions.Flag]: 7,
   [Situacions.CanLeavePit]: 7,
   [Situacions.Wrong]: 6,
-  [Situacions.Correct]: 6,
+  [Situacions.Correct]: 11,
   [Situacions.BlowoutWarning]: 5,
   [Situacions.NeedPit]: 5,
   [Situacions.Ers]: 4,
@@ -53,6 +55,8 @@ const SITUATION_PRIORITY: Record<Situacions, number> = {
   [Situacions.LappedCar]: 6,
   [Situacions.Null]: 0,
   [Situacions.PitReady]: 10,
+  [Situacions.RepairReady]: 10,
+  [Situacions.Repairing]: 10,
   [Situacions.None]: 0,
   [Situacions.ManagingTyresOn]: 7,
   [Situacions.ManagingTyresOff]: 7,
@@ -63,7 +67,7 @@ const playerTimers: Record<
   { timeout?: NodeJS.Timeout; interval?: NodeJS.Timeout }
 > = {};
 
-const SANDBAG_PENALTY_AVATAR = "ðŸ¢";
+const SANDBAG_PENALTY_AVATAR = "🐢";
 
 export function getPlayerDefaultAvatar(playerId: number): string | null {
   const player = playerList[playerId];
@@ -275,6 +279,14 @@ const situationHandlers: Record<
 
   [Situacions.PitReady]: (player, room) => {
     room.setPlayerAvatar(player.id, "⚡");
+  },
+
+  [Situacions.RepairReady]: (player, room) => {
+    room.setPlayerAvatar(player.id, "⚡");
+  },
+
+  [Situacions.Repairing]: (player, room) => {
+    room.setPlayerAvatar(player.id, "🔧");
   },
 
   [Situacions.None]: (player, room) => {

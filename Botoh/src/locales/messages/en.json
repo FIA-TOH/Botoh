@@ -177,5 +177,15 @@
   "LOGIN_SUCCESS": "Login successful.",
   "CHAT_CHANNEL_ALL": "All",
   "CHAT_CHANNEL_TEAM": "Team",
-  "CHAT_CHANNEL_PRIVATE": "Private"
+  "CHAT_CHANNEL_PRIVATE": "Private",
+  "CRASH_WALL_DETECTED": "{{playerName}} touched wall {{index}} at {{speed}} speed.",
+  "CAR_DAMAGE_TAKEN": "💥{{damageTaken}} DAMAGE! • 🏎️ {{newDamage}}/100",
+  "DAMAGE_ENABLED": "Damage enabled.",
+  "DAMAGE_DISABLED": "Damage disabled.",
+  "REPAIR_NO_DAMAGE": "Your car has no damage to repair.",
+  "REPAIR_ALREADY_ACTIVE": "Repair is already in progress.",
+  "REPAIR_IN_PIT_STOP": "You cannot repair while the pit stop is being done.",
+  "REPAIR_TYRES_BLOCKED": "You cannot change tyres while the car is being repaired.",
+  "REPAIR_STARTED": "🛠️🏎️ Repairing the car... Estimate: {{seconds}}s ⏳",
+  "REPAIR_FINISHED": "✅🏎️ Repair completed!"
 }

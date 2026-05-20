@@ -81,7 +81,7 @@ async function setupBackendCommunication() {
           });
         }
       } else {
-        console.log('âŒ No room or message:', { 
+        console.log('No room or message:', { 
           room: !!room, 
           message: message
         });
@@ -124,22 +124,22 @@ async function setupBackendCommunication() {
 setupBackendCommunication();
 
 process.on("beforeExit", (code) => {
-  console.error("âš ï¸ beforeExit with code:", code);
+  console.error("beforeExit with code:", code);
 });
 
 process.on("SIGINT", () => {
-  console.error("â›” Received SIGINT (Ctrl+C)");
+  console.error("Received SIGINT (Ctrl+C)");
   process.exit(0);
 });
 
 process.on("SIGTERM", () => {
-  console.error("â›” Received SIGTERM");
+  console.error("Received SIGTERM");
   process.exit(0);
 });
 
 // Import and run the full Botoh bot
 async function main() {
-  console.log(`ðŸš€ Starting complete Botoh bot with backend integration`);
+  console.log(`🔧 Starting complete Botoh bot with backend integration`);
   
   // Import the original Botoh entry point
   const { roomPromise } = await import('../../../Botoh/src/room');
@@ -166,7 +166,7 @@ async function main() {
     playerListService.startBroadcasting();
   }
   
-  console.log(`âœ… Complete Botoh bot started with backend communication`);
+  console.log(`✅ Complete Botoh bot started with backend communication`);
 }
 
 main().catch((err) => {

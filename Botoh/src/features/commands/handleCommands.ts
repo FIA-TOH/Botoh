@@ -32,6 +32,7 @@ import { handleRModeCommand } from "./gameMode/race/handleRModeCommand";
 import { handleWaitTimeCommand } from "./gameMode/race/handleWaitTimeCommand";
 import { handleLapsCommand } from "./laps/handleLapsCommand";
 import { handleTiresCommand } from "./tyres/handleTiresCommand";
+import { handleFixCommand } from "../damage/repairSystem";
 import { handleClearTimeCommand } from "./adminThings/handleClearTimeCommand";
 import { handleAfkCommand } from "./afk/handleAfkCommand";
 import { handleAvatarCommand } from "./avatar/handleAvatarCommand";
@@ -166,6 +167,11 @@ export type CommandFunction = (
     room: RoomObject,
   ) => void,
   handleTiresCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
+  handleFixCommand: (
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject,
@@ -469,6 +475,7 @@ function importCommandsByLanguage(commandFunctions: {
         handleBRTwoLapsCommand,
         handleBBCommand,
         handleTiresCommand,
+        handleFixCommand,
         handleHelpCommand,
         handleClearBansCommand,
         handleLapsCommand,
@@ -556,6 +563,7 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
         handleBRTwoLapsCommand,
         handleBBCommand,
         handleTiresCommand,
+        handleFixCommand,
         handleHelpCommand,
         handleClearBansCommand,
         handleLapsCommand,

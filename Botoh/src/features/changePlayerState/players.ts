@@ -122,6 +122,17 @@ export function createPlayerInfo(ip?: string, playerId?: number) {
       reactionTimeout: undefined,
     },
 
+    repairState: {
+      isWaitingForRepair: false,
+      isRepairing: false,
+      repairStartTime: undefined,
+      repairReadyTime: undefined,
+      repairEmojiShowTime: undefined,
+      reactionTime: undefined,
+      repairEndTime: undefined,
+      damageToRepair: undefined,
+    },
+
     xKeyState: {
       isPressed: false,
       pressTimes: [],
@@ -271,6 +282,17 @@ export function resetPlayer(
     selectedTires: undefined,
     emojiDelayTime: undefined,
     reactionTimeout: undefined,
+  };
+
+  playerList[id].repairState = {
+    isWaitingForRepair: false,
+    isRepairing: false,
+    repairStartTime: undefined,
+    repairReadyTime: undefined,
+    repairEmojiShowTime: undefined,
+    reactionTime: undefined,
+    repairEndTime: undefined,
+    damageToRepair: undefined,
   };
   
   playerList[id].xKeyState = {

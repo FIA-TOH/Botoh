@@ -193,7 +193,7 @@ export function PlayersPanel({
       }
 
       return driver.position === 1
-        ? t.players.outLap
+        ? t.players.gap
         : driver.gapToLeader;
     }
 
@@ -264,9 +264,15 @@ export function PlayersPanel({
         ? '🧊'
         : '🔥';
 
+    const damagePercent = Math.round(
+      100 - Math.max(0, Math.min(100, driver.carDamage ?? 0))
+    );
+
     return `
-      ${tirePercent}% 
-      ${pitText} 
+      ${tirePercent}%🛞 |
+      ${driver.kers}%🔋 |
+      ${damagePercent}%🏎️ |
+      ${pitText}🧑‍🔧 |
       ${emoji}
     `;
   })();

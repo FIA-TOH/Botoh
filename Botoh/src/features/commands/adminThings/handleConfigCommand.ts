@@ -8,6 +8,7 @@ import {
   enableSoftCutPenalty,
 } from "../../detectCut/enableCutPenalty";
 import { log } from "../../discord/logger";
+import { enableDamage } from "../../speed/crashWallDetector";
 import { enableErs, enableErsPenalty } from "../../speed/fuel&Ers/ers";
 import { enableGas, enableSlipstream } from "../../speed/handleSlipstream";
 import { setBlowoutTyresActivated } from "../../tires&pits/tireBlowManager";
@@ -81,6 +82,7 @@ function applyFTOHConfig(room: RoomObject, byPlayer: PlayerObject) {
   enableErsPenalty(true);
   enableCutPenalty(true);
   enableDebris(true);
+  enableDamage(true);
   enableSoftCutPenalty(false, room);
   handlePitCommand(byPlayer, ["new"], room);
   setManageTyresEnabled(true);
@@ -104,6 +106,7 @@ export function applyFTOHPublicConfig(room: RoomObject, byPlayer: PlayerObject) 
   enableErsPenalty(true);
   enableCutPenalty(true);
   enableDebris(false);
+  enableDamage(false);
   enableSoftCutPenalty(false, room);
   handlePitCommand(byPlayer, ["old"], room);
   setManageTyresEnabled(false);
@@ -126,6 +129,7 @@ function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {
   enableErsPenalty(true);
   enableCutPenalty(true);
   enableDebris(false);
+  enableDamage(false);
   enableSoftCutPenalty(false, room);
   handlePitCommand(byPlayer, ["old"], room);
   setManageTyresEnabled(false);
@@ -148,6 +152,7 @@ function applyHaxbulaConfig(room: RoomObject, byPlayer: PlayerObject) {
   enableErsPenalty(false);
   enableCutPenalty(false);
   enableDebris(false);
+  enableDamage(false);
   enableSoftCutPenalty(false, room);
   handlePitCommand(byPlayer, ["old"], room);
   setManageTyresEnabled(false);

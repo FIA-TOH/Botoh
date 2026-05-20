@@ -91,6 +91,11 @@ export default function es_commands(
     args: string[],
     room: RoomObject,
   ) => void,
+  handleFixCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
   handleHelpCommand: (
     byPlayer: PlayerObject,
     args: string[],
@@ -383,6 +388,7 @@ export default function es_commands(
     "!neumaticos": handleTiresCommand,
     "!tyres": handleTiresCommand,
     "!tires": handleTiresCommand,
+    "!fix": handleFixCommand,
     "!ayuda": handleHelpCommand,
     "!help": handleHelpCommand,
     "!clear_bans": handleClearBansCommand,
