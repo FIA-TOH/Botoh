@@ -42,7 +42,7 @@ export interface PlayerListUpdate {
 export function usePlayerList() {
   const [playerList, setPlayerList] = useState<PlayerListUpdate | null>(null);
   const [playerPositions, setPlayerPositions] = useState<PlayerPositionsUpdate | null>(null);
-  const { socket, isConnected } = useSocket();
+  const { socket, isConnected, error } = useSocket();
 
   useEffect(() => {
     if (!socket || !isConnected) return;
@@ -64,5 +64,5 @@ export function usePlayerList() {
     };
   }, [socket, isConnected]);
 
-  return { playerList, playerPositions, isConnected };
+  return { playerList, playerPositions, isConnected, error };
 }

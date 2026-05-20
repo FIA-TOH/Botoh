@@ -15,6 +15,7 @@ type LoginUser = {
 type LoginResponse = {
   success: boolean;
   user?: LoginUser;
+  message?: string;
 };
 
 function parseTeamColor(color: string | null) {
@@ -27,8 +28,10 @@ export async function handleLoginCommand(
   args: string[],
   room: RoomObject,
 ) {
-  const password = args.join(" ");
-  if (!password) {
+  const [password, rawTeamTag, ...extraArgs] = args;
+  const teamTag = rawTeamTag?.trim().toUpperCase();
+
+  if (!password || extraArgs.length > 0) {
     sendErrorMessage(room, MESSAGES.LOGIN_USAGE(), byPlayer.id);
     return;
   }
@@ -42,6 +45,7 @@ export async function handleLoginCommand(
         body: JSON.stringify({
           username: byPlayer.name,
           password,
+          ...(teamTag ? { teamTag } : {}),
         }),
       },
     );

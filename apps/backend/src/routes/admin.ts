@@ -29,6 +29,18 @@ const userValidation = [
   body('teamMemberships.*.roles.*')
     .isIn(['team_principal', 'team_assistant', 'driver'])
     .withMessage('Team membership role is invalid'),
+  body('teamMemberships.*.driverCategory')
+    .optional({ nullable: true })
+    .isIn(['starter', 'reserve'])
+    .withMessage('Driver category is invalid'),
+  body('teamMemberships.*.contractRaces')
+    .optional({ nullable: true })
+    .isInt({ min: 1, max: 200 })
+    .withMessage('Contract duration is invalid'),
+  body('teamMemberships.*.salaryPerRace')
+    .optional({ nullable: true })
+    .isFloat({ min: 0 })
+    .withMessage('Driver salary is invalid'),
   body('teamMemberships')
     .custom((memberships) => {
       if (!Array.isArray(memberships)) return false;
@@ -114,6 +126,38 @@ const missionValidation = [
   body('reward').isFloat({ min: 0 }),
   body('racesToComplete').optional().isInt({ min: 1 }),
 ];
+const adminDriverValidation = [
+  body('username')
+    .isString()
+    .trim()
+    .isLength({ min: 3, max: 50 })
+    .withMessage('Username must be between 3 and 50 characters'),
+  body('category')
+    .isIn(['starter', 'reserve'])
+    .withMessage('Driver category is invalid'),
+  body('contractRaces')
+    .isInt({ min: 1, max: 200 })
+    .withMessage('Contract duration is invalid'),
+  body('salaryPerRace')
+    .isFloat({ min: 0 })
+    .withMessage('Driver salary is invalid'),
+];
+const updateAdminDriverValidation = [
+  body('category')
+    .isIn(['starter', 'reserve'])
+    .withMessage('Driver category is invalid'),
+  body('contractRaces')
+    .isInt({ min: 1, max: 200 })
+    .withMessage('Contract duration is invalid'),
+  body('salaryPerRace')
+    .isFloat({ min: 0 })
+    .withMessage('Driver salary is invalid'),
+];
+const raceProgressValidation = [
+  body('direction')
+    .isIn(['advance', 'rollback'])
+    .withMessage('Race progress direction is invalid'),
+];
 
 function handleValidation(req: AuthRequest, res: Response) {
   const errors = validationResult(req);
@@ -165,7 +209,7 @@ router.put(
       const result = await adminService.updateUser(req.params.id, req.body);
       return res.status(result.success ? 200 : 404).json({
         ...result,
-        message: translateMessage(result.message, getRequestLanguage(req)),
+        message: translateMessage((result as { message?: string }).message, getRequestLanguage(req)),
       });
     } catch (error) {
       console.error('Admin update user error:', error);
@@ -230,10 +274,56 @@ router.get('/scuderias/:id/manage', param('id').isUUID(), async (req: AuthReques
     : res.status(404).json({ success: false, message: translateMessage('Scuderia not found', getRequestLanguage(req)) });
 });
 
+router.get('/race-progress/alerts', async (_req: AuthRequest, res: Response) => {
+  const alerts = await adminService.listRaceProgressAlerts();
+  return res.json({ success: true, alerts });
+});
+
+router.delete('/race-progress/alerts', async (_req: AuthRequest, res: Response) => {
+  const result = await adminService.clearRaceProgressAlerts();
+  return res.json(result);
+});
+
+router.post('/race-progress', raceProgressValidation, async (req: AuthRequest, res: Response) => {
+  if (handleValidation(req, res)) return;
+  const result = await adminService.progressRace(req.body.direction);
+  return res.status(result.success ? 200 : 400).json({
+    ...result,
+    message: translateMessage((result as { message?: string }).message, getRequestLanguage(req)),
+  });
+});
+
 router.put('/scuderias/:id/car-name', param('id').isUUID(), carNameValidation, async (req: AuthRequest, res: Response) => {
   if (handleValidation(req, res)) return;
   const result = await adminService.updateScuderiaCarName(req.params.id, req.body.carName ?? null);
   return res.status(result.success ? 200 : 404).json(result);
+});
+
+router.post('/scuderias/:id/drivers', param('id').isUUID(), adminDriverValidation, async (req: AuthRequest, res: Response) => {
+  if (handleValidation(req, res)) return;
+  const result = await adminService.addScuderiaDriver(req.params.id, req.body);
+  return res.status(result.success ? 201 : 400).json({
+    ...result,
+    message: translateMessage((result as { message?: string }).message, getRequestLanguage(req)),
+  });
+});
+
+router.put('/scuderias/:id/drivers/:driverId', param('id').isUUID(), param('driverId').isUUID(), updateAdminDriverValidation, async (req: AuthRequest, res: Response) => {
+  if (handleValidation(req, res)) return;
+  const result = await adminService.updateScuderiaDriver(req.params.id, req.params.driverId, req.body);
+  return res.status(result.success ? 200 : 400).json({
+    ...result,
+    message: translateMessage((result as { message?: string }).message, getRequestLanguage(req)),
+  });
+});
+
+router.delete('/scuderias/:id/drivers/:driverId', param('id').isUUID(), param('driverId').isUUID(), async (req: AuthRequest, res: Response) => {
+  if (handleValidation(req, res)) return;
+  const result = await adminService.removeScuderiaDriver(req.params.id, req.params.driverId);
+  return res.status(result.success ? 200 : 400).json({
+    ...result,
+    message: translateMessage((result as { message?: string }).message, getRequestLanguage(req)),
+  });
 });
 
 router.get('/sponsors', async (_req: AuthRequest, res: Response) => {
@@ -261,7 +351,7 @@ router.delete('/sponsors/:id', param('id').isUUID(), async (req: AuthRequest, re
 router.post('/scuderias/:id/sponsors', param('id').isUUID(), teamSponsorValidation, async (req: AuthRequest, res: Response) => {
   if (handleValidation(req, res)) return;
   const result = await adminService.addTeamSponsor(req.params.id, req.body);
-  return res.status(201).json(result);
+  return res.status(result.success ? 201 : 400).json(result);
 });
 
 router.put('/team-sponsors/:id', param('id').isUUID(), updateTeamSponsorValidation, async (req: AuthRequest, res: Response) => {

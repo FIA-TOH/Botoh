@@ -16,6 +16,12 @@ const loginValidation = [
   body('password')
     .isLength({ min: 6 })
     .withMessage('Password must be at least 6 characters long'),
+  body('teamTag')
+    .optional({ nullable: true })
+    .isLength({ min: 3, max: 3 })
+    .withMessage('Scuderia abbreviation must be exactly 3 characters')
+    .matches(/^[A-Za-z0-9]+$/)
+    .withMessage('Scuderia abbreviation can only contain letters and numbers'),
 ];
 
 // Validation rules for user creation
@@ -65,10 +71,10 @@ router.post('/login', loginValidation, async (req: Request, res: Response) => {
       });
     }
 
-    const { username, password } = req.body;
+    const { username, password, teamTag } = req.body;
 
     // Attempt login
-    const result = await authService.login({ username, password });
+    const result = await authService.login({ username, password, teamTag });
 
     if (result.success) {
       // Set HTTP-only cookie with token (optional, for web clients)

@@ -12,6 +12,7 @@ import authRoutes from './routes/auth';
 import garageRoutes from './routes/garage';
 import roomRoutes from './routes/room';
 import adminRoutes from './routes/admin';
+import notificationRoutes from './routes/notifications';
 import { securityHeaders, rateLimiter, validateRequest, errorHandler, requestLogger } from './middleware/security';
 import { initializeDatabase, healthCheck, closeDatabase } from './config/database';
 import seedService from './config/seed';
@@ -81,6 +82,7 @@ app.use('/api/garage', garageRoutes);
 console.log('✅ Garage routes montadas em /api/garage');
 app.use('/api/room', roomRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/notifications', notificationRoutes);
 console.log('✅ Room routes montadas em /api/room');
 console.log('🔍 Todas as rotas montadas com /api prefix');
 

@@ -8,6 +8,7 @@ import { ChatTarget, useChat } from '@/hooks/useChat';
 import { useLogs } from '@/hooks/useLogs';
 import { usePitCall } from '@/hooks/usePitCall';
 import { usePlayerList } from '@/hooks/usePlayerList';
+import { AppSnackbar, useAppSnackbar } from '@/components/AppSnackbar';
 
 
 import { ChatPanel } from '../../components/pit-wall/ChatPanel';
@@ -21,10 +22,11 @@ import { useTranslations } from '@/i18n';
 export default function PitWallPage() {
   const { isAuthenticated, user } = useAuth();
   const { t } = useTranslations();
+  const { snackbar, showSnackbar, closeSnackbar } = useAppSnackbar();
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const { playerList, playerPositions } = usePlayerList();
+  const { playerList, playerPositions, error: playerListError } = usePlayerList();
   const {
     messages,
     sendMessage,
@@ -88,6 +90,12 @@ export default function PitWallPage() {
       setSelectedRecipient(t.chat.everyone);
     }
   }, [recipientOptions, selectedRecipient]);
+
+  useEffect(() => {
+    if (playerListError) {
+      showSnackbar(t.pitWall.connectionError, 'error');
+    }
+  }, [playerListError, showSnackbar, t.pitWall.connectionError]);
 
   if (!isAuthenticated) {
     return null;
@@ -198,6 +206,12 @@ export default function PitWallPage() {
           'url(/img/bg/pitwallwpp.png)',
       }}
     >
+      <AppSnackbar
+        message={snackbar.message}
+        type={snackbar.type}
+        isOpen={snackbar.isOpen}
+        onClose={closeSnackbar}
+      />
       <button
         type="button"
         aria-label={t.common.back}

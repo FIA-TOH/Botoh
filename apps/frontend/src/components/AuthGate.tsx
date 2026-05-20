@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useLayoutEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -14,7 +14,7 @@ export function AuthGate({ children }: Props) {
   const { isAuthenticated, isLoading } = useAuth();
   const isLoginPage = pathname === '/login';
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isLoading) return;
 
     if (!isAuthenticated && !isLoginPage) {

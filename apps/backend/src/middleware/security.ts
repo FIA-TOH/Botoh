@@ -5,10 +5,17 @@ import { Request, Response, NextFunction } from 'express';
 import config from '../config/environment';
 import { getRequestLanguage, translateMessage } from '../i18n';
 
+const isLocalRuntime =
+  config.backendUrl.includes('localhost')
+  || config.backendUrl.includes('127.0.0.1')
+  || config.frontendUrl.includes('localhost')
+  || config.frontendUrl.includes('127.0.0.1');
+
 // Rate limiting configuration
 export const rateLimiter = rateLimit({
   windowMs: config.rateLimitWindowMs,
   max: config.rateLimitMaxRequests,
+  skip: () => isLocalRuntime,
   handler: (req, res) => {
     res.status(429).json({
       error: translateMessage('Too many requests from this IP, please try again later.', getRequestLanguage(req)),

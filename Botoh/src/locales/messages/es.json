@@ -169,7 +169,7 @@
   "BR_ELIMINATED": "☠️🔥 {{name}} eliminado 🔥☠️",
   "BR_REMAINING": "☠️👥 {{remaining}} restantes. 👥☠️",
   "BR_WINNER": "👑🏆 {{name}} ganó, {{eliminated}} eliminados. 👑🏆",
-  "LOGIN_USAGE": "Uso: !login <contraseña>",
+  "LOGIN_USAGE": "Uso: !login <contraseña> [abreviación de equipo]",
   "LOGIN_ERROR": "Usuario o contraseña inválidos.",
   "LOGIN_SUCCESS": "Inicio de sesión correcto.",
   "CHAT_CHANNEL_ALL": "Todos",

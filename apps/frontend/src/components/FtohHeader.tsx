@@ -4,6 +4,7 @@ import React from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useTranslations } from '@/i18n';
 import { FtohButton } from './FtohButton';
+import { NotificationBell } from './NotificationBell';
 
 interface FtohHeaderProps {
   onLogout?: () => void;
@@ -38,6 +39,8 @@ export function FtohHeader({
         <p className="text-sm text-gray-400">{t.common.loggedAs}</p>
         <p className="font-semibold">{user?.username}</p>
       </div>
+
+      <NotificationBell />
 
       {onLogout && (
         <FtohButton onClick={onLogout} className="w-auto px-6">

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { AppSnackbar, useAppSnackbar } from '@/components/AppSnackbar';
 import { useAuth } from '@/hooks/useAuth';
 import { useTranslations } from '@/i18n';
 
@@ -29,7 +30,15 @@ interface TeamGarageManage {
   pitCrewCostPerRace: number; salaryCostPerRace: number; sponsorIncomePerRace: number;
   climateMonitoringLevel: number; pitCrewLevel: number;
   financialHistory: { id: string; amount: number; entryType: string; reason: string; occurredAt: string }[];
-  drivers: { id: string; displayName: string; contractEndsAfterRaces: number; salaryPerRace: number }[];
+  drivers: {
+    id: string;
+    userId: string | null;
+    displayName: string;
+    driverNumber: number | null;
+    category: 'starter' | 'reserve';
+    contractEndsAfterRaces: number;
+    salaryPerRace: number;
+  }[];
   sponsors: TeamSponsor[];
 }
 interface TeamSponsor {
@@ -39,6 +48,14 @@ interface TeamSponsor {
 }
 interface Mission { id: string; title: string; reward: number; racesToComplete?: number }
 interface SponsorCatalogItem { id: string; name: string; logoUrl?: string | null }
+interface RaceProgressAlert {
+  id: string;
+  entityType: 'driver_contract' | 'sponsor_contract' | 'season_mission';
+  teamName: string;
+  entityName: string;
+  detail: string;
+  createdAt: string;
+}
 
 type TeamMembershipRole = 'team_principal' | 'team_assistant' | 'driver';
 
@@ -48,13 +65,22 @@ interface TeamMembership {
   teamTag?: string;
   teamColor?: string;
   roles: TeamMembershipRole[];
+  driverCategory?: 'starter' | 'reserve' | null;
+  contractRaces?: number | null;
+  salaryPerRace?: number | null;
 }
 
 interface UserFormData {
   username: string;
   password: string;
   shortUsername: string;
-  teamMemberships: { teamId: string; roles: TeamMembershipRole[] }[];
+  teamMemberships: {
+    teamId: string;
+    roles: TeamMembershipRole[];
+    driverCategory: 'starter' | 'reserve';
+    contractRaces: string;
+    salaryPerRace: string;
+  }[];
   driverNumber: string;
   language: 'pt' | 'en' | 'es';
 }
@@ -111,13 +137,14 @@ export default function AdminPage() {
   const { isLoading, isAuthenticated, user, logout } = useAuth();
   const { t } = useTranslations();
   const router = useRouter();
+  const { snackbar, showSnackbar, closeSnackbar } = useAppSnackbar();
 
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [scuderias, setScuderias] = useState<Scuderia[]>([]);
   const [sponsorCatalog, setSponsorCatalog] = useState<SponsorCatalogItem[]>([]);
+  const [raceProgressAlerts, setRaceProgressAlerts] = useState<RaceProgressAlert[]>([]);
+  const [raceProgressLoading, setRaceProgressLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
   const [userModalOpen, setUserModalOpen] = useState(false);
   const [editingUserId, setEditingUserId] = useState<string | null>(null);
@@ -132,6 +159,13 @@ export default function AdminPage() {
   const [managedGarage, setManagedGarage] = useState<TeamGarageManage | null>(null);
   const [financeForm, setFinanceForm] = useState({ amount: '', reason: '' });
   const [carNameDraft, setCarNameDraft] = useState('');
+  const [driverForm, setDriverForm] = useState({
+    username: '',
+    category: 'reserve' as 'starter' | 'reserve',
+    contractRaces: '8',
+    salaryPerRace: '4500000',
+  });
+  const [editingDriverId, setEditingDriverId] = useState<string | null>(null);
   const [newSponsorForm, setNewSponsorForm] = useState({ name: '', logoUrl: '' });
   const [editingSponsorId, setEditingSponsorId] = useState<string | null>(null);
   const [teamSponsorForm, setTeamSponsorForm] = useState({
@@ -157,6 +191,7 @@ export default function AdminPage() {
     users: false,
     scuderias: false,
     sponsors: false,
+    raceLogs: false,
   });
 
   const sortedScuderias = useMemo(
@@ -174,27 +209,29 @@ export default function AdminPage() {
 
   async function loadAdminData() {
     setLoadingData(true);
-    setError(null);
 
     try {
-      const [usersResponse, scuderiasResponse, sponsorsResponse] = await Promise.all([
+      const [usersResponse, scuderiasResponse, sponsorsResponse, raceAlertsResponse] = await Promise.all([
         fetch('/api/admin/users', { headers: getAuthHeaders() }),
         fetch('/api/admin/scuderias', { headers: getAuthHeaders() }),
         fetch('/api/admin/sponsors', { headers: getAuthHeaders() }),
+        fetch('/api/admin/race-progress/alerts', { headers: getAuthHeaders(), cache: 'no-store' }),
       ]);
 
       const usersData = await usersResponse.json();
       const scuderiasData = await scuderiasResponse.json();
       const sponsorsData = await sponsorsResponse.json();
+      const raceAlertsData = await raceAlertsResponse.json();
 
-      if (!usersData.success) throw new Error(usersData.message || 'Falha ao carregar usuarios');
-      if (!scuderiasData.success) throw new Error(scuderiasData.message || 'Falha ao carregar scuderias');
+      if (!usersData.success) throw new Error(usersData.message || t.admin.loadUsersFailed);
+      if (!scuderiasData.success) throw new Error(scuderiasData.message || t.admin.loadScuderiasFailed);
 
       setUsers(usersData.users);
       setScuderias(scuderiasData.scuderias);
       if (sponsorsData.success) setSponsorCatalog(sponsorsData.sponsors);
+      if (raceAlertsData.success) setRaceProgressAlerts(raceAlertsData.alerts);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Falha ao carregar dados administrativos');
+      showSnackbar(err instanceof Error ? err.message : t.admin.loadDataFailed, 'error');
     } finally {
       setLoadingData(false);
     }
@@ -221,6 +258,9 @@ export default function AdminPage() {
       teamMemberships: adminUser.teamMemberships.map((membership) => ({
         teamId: membership.teamId,
         roles: membership.roles,
+        driverCategory: membership.driverCategory ?? 'reserve',
+        contractRaces: String(membership.contractRaces ?? 8),
+        salaryPerRace: String(membership.salaryPerRace ?? 0),
       })),
       driverNumber: adminUser.driverNumber?.toString() ?? '',
       language: adminUser.language ?? 'pt',
@@ -244,13 +284,11 @@ export default function AdminPage() {
     event.preventDefault();
 
     if (userForm.teamMemberships.some((membership) => membership.roles.length === 0)) {
-      setError('Selecione pelo menos uma função para cada scuderia.');
+      showSnackbar(t.admin.membershipRoleRequired, 'error');
       return;
     }
 
     setSavingUser(true);
-    setError(null);
-    setMessage(null);
 
     try {
       const response = await fetch(
@@ -261,18 +299,30 @@ export default function AdminPage() {
           body: JSON.stringify({
             ...userForm,
             driverNumber: Number(userForm.driverNumber),
+            teamMemberships: userForm.teamMemberships.map((membership) => ({
+              ...membership,
+              contractRaces: membership.roles.includes('driver')
+                ? Number(membership.contractRaces)
+                : null,
+              salaryPerRace: membership.roles.includes('driver')
+                ? Number(membership.salaryPerRace)
+                : null,
+              driverCategory: membership.roles.includes('driver')
+                ? membership.driverCategory
+                : null,
+            })),
           }),
         },
       );
 
       const data = await response.json();
-      if (!data.success) throw new Error(data.message || 'Falha ao salvar usuario');
+      if (!data.success) throw new Error(data.message || t.admin.saveUserFailed);
 
-      setMessage(editingUserId ? 'Usuário atualizado.' : 'Usuário criado.');
+      showSnackbar(editingUserId ? t.admin.userUpdated : t.admin.userCreated, 'success');
       setUserModalOpen(false);
-      await loadAdminData();
+      await refreshAdminViews();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Falha ao salvar usuario');
+      showSnackbar(err instanceof Error ? err.message : t.admin.saveUserFailed, 'error');
     } finally {
       setSavingUser(false);
     }
@@ -287,20 +337,18 @@ export default function AdminPage() {
         headers: getAuthHeaders(),
       });
       const data = await response.json();
-      if (!data.success) throw new Error(data.message || 'Falha ao excluir usuario');
+      if (!data.success) throw new Error(data.message || t.admin.deleteUserFailed);
 
-      setMessage('Usuário excluído.');
-      await loadAdminData();
+      showSnackbar(t.admin.userDeleted, 'success');
+      await refreshAdminViews();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Falha ao excluir usuario');
+      showSnackbar(err instanceof Error ? err.message : t.admin.deleteUserFailed, 'error');
     }
   }
 
   async function saveScuderia(event: React.FormEvent) {
     event.preventDefault();
     setSavingScuderia(true);
-    setError(null);
-    setMessage(null);
 
     try {
       const response = await fetch(
@@ -313,13 +361,13 @@ export default function AdminPage() {
       );
 
       const data = await response.json();
-      if (!data.success) throw new Error(data.message || 'Falha ao salvar scuderia');
+      if (!data.success) throw new Error(data.message || t.admin.saveScuderiaFailed);
 
-      setMessage(editingScuderiaId ? 'Scuderia atualizada.' : 'Scuderia criada.');
+      showSnackbar(editingScuderiaId ? t.admin.scuderiaUpdated : t.admin.scuderiaCreated, 'success');
       setScuderiaModalOpen(false);
-      await loadAdminData();
+      await refreshAdminViews();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Falha ao salvar scuderia');
+      showSnackbar(err instanceof Error ? err.message : t.admin.saveScuderiaFailed, 'error');
     } finally {
       setSavingScuderia(false);
     }
@@ -334,17 +382,17 @@ export default function AdminPage() {
         headers: getAuthHeaders(),
       });
       const data = await response.json();
-      if (!data.success) throw new Error(data.message || 'Falha ao excluir scuderia');
+      if (!data.success) throw new Error(data.message || t.admin.deleteScuderiaFailed);
 
-      setMessage('Scuderia excluída.');
-      await loadAdminData();
+      showSnackbar(t.admin.scuderiaDeleted, 'success');
+      await refreshAdminViews();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Falha ao excluir scuderia');
+      showSnackbar(err instanceof Error ? err.message : t.admin.deleteScuderiaFailed, 'error');
     }
   }
   async function openManageScuderia(scuderia: Scuderia) {
     setManagingScuderia(scuderia);
-    const response = await fetch(`/api/admin/scuderias/${scuderia.id}/manage`, { headers: getAuthHeaders() });
+    const response = await fetch(`/api/admin/scuderias/${scuderia.id}/manage`, { headers: getAuthHeaders(), cache: 'no-store' });
     const data = await response.json();
     if (data.success) {
       setManagedGarage(data.garage);
@@ -355,16 +403,62 @@ export default function AdminPage() {
     if (!managingScuderia) return;
     await openManageScuderia(managingScuderia);
   }
+  async function refreshAdminViews() {
+    await Promise.all([
+      loadAdminData(),
+      managingScuderia ? refreshManagedGarage() : Promise.resolve(),
+    ]);
+  }
+  async function progressRace(direction: 'advance' | 'rollback') {
+    setRaceProgressLoading(true);
+
+    try {
+      const response = await fetch('/api/admin/race-progress', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ direction }),
+      });
+      const data = await response.json();
+      if (!data.success) throw new Error(data.message || t.admin.actionFailed);
+
+      showSnackbar(direction === 'advance' ? t.admin.raceAdvanced : t.admin.raceRolledBack, 'success');
+      await refreshAdminViews();
+    } catch (err) {
+      showSnackbar(err instanceof Error ? err.message : t.admin.actionFailed, 'error');
+    } finally {
+      setRaceProgressLoading(false);
+    }
+  }
+  async function clearRaceProgressAlerts() {
+    const response = await fetch('/api/admin/race-progress/alerts', {
+      method: 'DELETE',
+      headers: getAuthHeaders(),
+    });
+    const data = await response.json();
+    if (!data.success) {
+      showSnackbar(data.message || t.admin.actionFailed, 'error');
+      return;
+    }
+    setRaceProgressAlerts([]);
+    showSnackbar(t.admin.actionCompleted, 'success');
+    await refreshAdminViews();
+  }
   async function submitFinance(event: React.FormEvent) {
     event.preventDefault();
     if (!managingScuderia) return;
     const amount = Number(financeForm.amount.replace(',', '.'));
-    await fetch(`/api/admin/scuderias/${managingScuderia.id}/finance-entries`, {
+    const response = await fetch(`/api/admin/scuderias/${managingScuderia.id}/finance-entries`, {
       method: 'POST', headers: getAuthHeaders(),
       body: JSON.stringify({ amount: Math.abs(amount), entryType: amount >= 0 ? 'income' : 'expense', reason: financeForm.reason }),
     });
+    const data = await response.json();
+    if (!data.success) {
+      showSnackbar(data.message || t.admin.actionFailed, 'error');
+      return;
+    }
     setFinanceForm({ amount: '', reason: '' });
-    await refreshManagedGarage();
+    showSnackbar(t.admin.actionCompleted, 'success');
+    await refreshAdminViews();
   }
   const normalizedFinanceAmount = financeForm.amount.replace(',', '.');
   const financeAmountIsValid = /^-?\d+(?:[.,]\d+)?$/.test(financeForm.amount)
@@ -397,16 +491,87 @@ export default function AdminPage() {
     }
   }, [availableSponsorCategories, editingTeamSponsorId, teamSponsorForm.category]);
   useEffect(() => {
-    if (financialHistoryRef.current) {
-      financialHistoryRef.current.scrollTop = financialHistoryRef.current.scrollHeight;
-    }
+    const historyElement = financialHistoryRef.current;
+    if (!historyElement) return;
+
+    requestAnimationFrame(() => {
+      historyElement.scrollTop = historyElement.scrollHeight;
+    });
   }, [managedGarage?.financialHistory]);
   async function saveCarName() {
     if (!managingScuderia) return;
-    await fetch(`/api/admin/scuderias/${managingScuderia.id}/car-name`, {
+    const response = await fetch(`/api/admin/scuderias/${managingScuderia.id}/car-name`, {
       method: 'PUT', headers: getAuthHeaders(), body: JSON.stringify({ carName: carNameDraft }),
     });
-    await refreshManagedGarage();
+    const data = await response.json();
+    if (!data.success) {
+      showSnackbar(data.message || t.admin.actionFailed, 'error');
+      return;
+    }
+    showSnackbar(t.admin.actionCompleted, 'success');
+    await refreshAdminViews();
+  }
+  async function saveManagedDriver(event: React.FormEvent) {
+    event.preventDefault();
+    if (!managingScuderia) return;
+
+    const payload = {
+      username: driverForm.username,
+      category: driverForm.category,
+      contractRaces: Number(driverForm.contractRaces),
+      salaryPerRace: Number(driverForm.salaryPerRace),
+    };
+    const response = await fetch(
+      editingDriverId
+        ? `/api/admin/scuderias/${managingScuderia.id}/drivers/${editingDriverId}`
+        : `/api/admin/scuderias/${managingScuderia.id}/drivers`,
+      {
+        method: editingDriverId ? 'PUT' : 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(editingDriverId ? {
+          category: payload.category,
+          contractRaces: payload.contractRaces,
+          salaryPerRace: payload.salaryPerRace,
+        } : payload),
+      },
+    );
+    const data = await response.json();
+    if (!data.success) {
+      showSnackbar(data.message || t.garage.driverActionFailed, 'error');
+      return;
+    }
+
+    setEditingDriverId(null);
+    setDriverForm({ username: '', category: 'reserve', contractRaces: '8', salaryPerRace: '4500000' });
+    showSnackbar(t.admin.actionCompleted, 'success');
+    await refreshAdminViews();
+  }
+  function startEditManagedDriver(driver: TeamGarageManage['drivers'][number]) {
+    setEditingDriverId(driver.id);
+    setDriverForm({
+      username: driver.displayName,
+      category: driver.category,
+      contractRaces: String(driver.contractEndsAfterRaces),
+      salaryPerRace: String(driver.salaryPerRace),
+    });
+  }
+  async function removeManagedDriver(driverId: string) {
+    if (!managingScuderia) return;
+    const response = await fetch(`/api/admin/scuderias/${managingScuderia.id}/drivers/${driverId}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders(),
+    });
+    const data = await response.json();
+    if (!data.success) {
+      showSnackbar(data.message || t.garage.driverActionFailed, 'error');
+      return;
+    }
+    if (editingDriverId === driverId) {
+      setEditingDriverId(null);
+      setDriverForm({ username: '', category: 'reserve', contractRaces: '8', salaryPerRace: '4500000' });
+    }
+    showSnackbar(t.admin.actionCompleted, 'success');
+    await refreshAdminViews();
   }
   function openMissionModal(sponsor: TeamSponsor, type: 'race' | 'season', mission?: Mission) {
     setMissionModal({ sponsor, type, mission });
@@ -424,7 +589,7 @@ export default function AdminPage() {
       reward: Number(missionForm.reward.replace(',', '.')),
       racesToComplete: missionModal.type === 'season' ? Number(missionForm.racesToComplete) : undefined,
     };
-    await fetch(
+    const response = await fetch(
       missionModal.mission
         ? `/api/admin/sponsor-missions/${missionModal.type}/${missionModal.mission.id}`
         : `/api/admin/team-sponsors/${missionModal.sponsor.id}/${missionModal.type}-missions`,
@@ -434,24 +599,48 @@ export default function AdminPage() {
         body: JSON.stringify(payload),
       },
     );
+    const data = await response.json();
+    if (!data.success) {
+      showSnackbar(data.message || t.admin.actionFailed, 'error');
+      return;
+    }
     setMissionModal(null);
-    await refreshManagedGarage();
+    showSnackbar(t.admin.actionCompleted, 'success');
+    await refreshAdminViews();
   }
   async function removeMission(missionId: string, type: 'race' | 'season') {
-    await fetch(`/api/admin/sponsor-missions/${type}/${missionId}`, { method: 'DELETE', headers: getAuthHeaders() });
-    await refreshManagedGarage();
+    const response = await fetch(`/api/admin/sponsor-missions/${type}/${missionId}`, { method: 'DELETE', headers: getAuthHeaders() });
+    const data = await response.json();
+    if (!data.success) {
+      showSnackbar(data.message || t.admin.actionFailed, 'error');
+      return;
+    }
+    showSnackbar(t.admin.actionCompleted, 'success');
+    await refreshAdminViews();
   }
   async function resolveMission(missionId: string, type: 'race' | 'season', outcome: 'success' | 'failure') {
-    await fetch(`/api/admin/sponsor-missions/${type}/${missionId}/resolve`, {
+    const response = await fetch(`/api/admin/sponsor-missions/${type}/${missionId}/resolve`, {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify({ outcome }),
     });
-    await refreshManagedGarage();
+    const data = await response.json();
+    if (!data.success) {
+      showSnackbar(data.message || t.admin.actionFailed, 'error');
+      return;
+    }
+    showSnackbar(t.admin.actionCompleted, 'success');
+    await refreshAdminViews();
   }
   async function removeTeamSponsor(id: string) {
-    await fetch(`/api/admin/team-sponsors/${id}`, { method: 'DELETE', headers: getAuthHeaders() });
-    await refreshManagedGarage();
+    const response = await fetch(`/api/admin/team-sponsors/${id}`, { method: 'DELETE', headers: getAuthHeaders() });
+    const data = await response.json();
+    if (!data.success) {
+      showSnackbar(data.message || t.admin.actionFailed, 'error');
+      return;
+    }
+    showSnackbar(t.admin.actionCompleted, 'success');
+    await refreshAdminViews();
   }
   async function saveCatalogSponsor(event: React.FormEvent) {
     event.preventDefault();
@@ -462,7 +651,10 @@ export default function AdminPage() {
     if (data.success) {
       setNewSponsorForm({ name: '', logoUrl: '' });
       setEditingSponsorId(null);
-      await loadAdminData();
+      showSnackbar(t.admin.actionCompleted, 'success');
+      await refreshAdminViews();
+    } else {
+      showSnackbar(data.message || t.admin.actionFailed, 'error');
     }
   }
   function startEditSponsor(sponsor: SponsorCatalogItem) {
@@ -470,8 +662,14 @@ export default function AdminPage() {
     setNewSponsorForm({ name: sponsor.name, logoUrl: sponsor.logoUrl ?? '' });
   }
   async function deleteCatalogSponsor(sponsorId: string) {
-    await fetch(`/api/admin/sponsors/${sponsorId}`, { method: 'DELETE', headers: getAuthHeaders() });
-    await loadAdminData();
+    const response = await fetch(`/api/admin/sponsors/${sponsorId}`, { method: 'DELETE', headers: getAuthHeaders() });
+    const data = await response.json();
+    if (!data.success) {
+      showSnackbar(data.message || t.admin.actionFailed, 'error');
+      return;
+    }
+    showSnackbar(t.admin.actionCompleted, 'success');
+    await refreshAdminViews();
   }
   async function saveTeamSponsor(event: React.FormEvent) {
     event.preventDefault();
@@ -483,7 +681,7 @@ export default function AdminPage() {
       initialReward: Number(teamSponsorForm.initialReward),
       rewardPerRace: Number(teamSponsorForm.rewardPerRace),
     };
-    await fetch(
+    const response = await fetch(
       editingTeamSponsorId
         ? `/api/admin/team-sponsors/${editingTeamSponsorId}`
         : `/api/admin/scuderias/${managingScuderia.id}/sponsors`,
@@ -498,9 +696,15 @@ export default function AdminPage() {
         } : payload),
       },
     );
+    const data = await response.json();
+    if (!data.success) {
+      showSnackbar(data.message || t.admin.actionFailed, 'error');
+      return;
+    }
     setEditingTeamSponsorId(null);
     setTeamSponsorForm({ sponsorId: '', category: 'title_sponsor', contractRacesRemaining: '', initialReward: '', rewardPerRace: '' });
-    await refreshManagedGarage();
+    showSnackbar(t.admin.actionCompleted, 'success');
+    await refreshAdminViews();
   }
   function startEditTeamSponsor(sponsor: TeamSponsor) {
     setEditingTeamSponsorId(sponsor.id);
@@ -511,6 +715,11 @@ export default function AdminPage() {
       initialReward: String(sponsor.initialReward ?? ''),
       rewardPerRace: String(sponsor.rewardPerRace ?? ''),
     });
+  }
+  function raceAlertTypeLabel(type: RaceProgressAlert['entityType']) {
+    if (type === 'driver_contract') return t.admin.driverContractExpired;
+    if (type === 'sponsor_contract') return t.admin.sponsorContractExpired;
+    return t.admin.seasonMissionExpired;
   }
 
   if (isLoading) {
@@ -546,6 +755,24 @@ export default function AdminPage() {
             </button>
             <h1 className="text-3xl font-bold">Administração</h1>
             <p className="text-gray-300">Usuários e scuderias conectados ao banco de dados.</p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              <button
+                type="button"
+                disabled={raceProgressLoading}
+                onClick={() => progressRace('advance')}
+                className="rounded-lg bg-emerald-700 px-4 py-2 font-semibold disabled:cursor-not-allowed disabled:bg-gray-600"
+              >
+                {t.admin.advanceRace}
+              </button>
+              <button
+                type="button"
+                disabled={raceProgressLoading}
+                onClick={() => progressRace('rollback')}
+                className="rounded-lg bg-amber-700 px-4 py-2 font-semibold disabled:cursor-not-allowed disabled:bg-gray-600"
+              >
+                {t.admin.rollbackRace}
+              </button>
+            </div>
           </div>
 
           <div className="text-right">
@@ -557,8 +784,12 @@ export default function AdminPage() {
           </div>
         </header>
 
-        {message && <div className="mb-4 rounded-lg bg-green-700 px-4 py-3">{message}</div>}
-        {error && <div className="mb-4 rounded-lg bg-red-700 px-4 py-3">{error}</div>}
+        <AppSnackbar
+          message={snackbar.message}
+          type={snackbar.type}
+          isOpen={snackbar.isOpen}
+          onClose={closeSnackbar}
+        />
 
         <section className="mb-6 rounded-lg bg-gray-800 p-6">
           <div className="flex items-center justify-between gap-4">
@@ -567,7 +798,7 @@ export default function AdminPage() {
               className="flex items-center gap-3 text-left"
               onClick={() => setOpenSections((current) => ({ ...current, users: !current.users }))}
             >
-              <span className={`text-xl transition-transform ${openSections.users ? 'rotate-90' : ''}`}>›</span>
+              <span className={`text-xl transition-transform ${openSections.users ? 'rotate-90' : ''}`}>&rsaquo;</span>
               <h2 className="text-2xl font-semibold">Usuários</h2>
             </button>
             {openSections.users && (
@@ -649,7 +880,7 @@ export default function AdminPage() {
               className="flex items-center gap-3 text-left"
               onClick={() => setOpenSections((current) => ({ ...current, scuderias: !current.scuderias }))}
             >
-              <span className={`text-xl transition-transform ${openSections.scuderias ? 'rotate-90' : ''}`}>›</span>
+              <span className={`text-xl transition-transform ${openSections.scuderias ? 'rotate-90' : ''}`}>&rsaquo;</span>
               <h2 className="text-2xl font-semibold">Scuderias</h2>
             </button>
             {openSections.scuderias && (
@@ -706,13 +937,13 @@ export default function AdminPage() {
           </div>}
         </section>
 
-        <section className="rounded-lg bg-gray-800 p-6">
+        <section className="mb-6 rounded-lg bg-gray-800 p-6">
           <button
             type="button"
-            className="flex items-center gap-3 text-left"
+            className="inline-flex items-center gap-3 text-left"
             onClick={() => setOpenSections((current) => ({ ...current, sponsors: !current.sponsors }))}
           >
-            <span className={`text-xl transition-transform ${openSections.sponsors ? 'rotate-90' : ''}`}>›</span>
+            <span className={`text-xl transition-transform ${openSections.sponsors ? 'rotate-90' : ''}`}>&rsaquo;</span>
             <h2 className="text-2xl font-semibold">{t.admin.sponsors}</h2>
           </button>
           {openSections.sponsors && (
@@ -742,6 +973,49 @@ export default function AdminPage() {
                           {t.admin.remove}
                         </button>
                       </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </section>
+
+        <section className="rounded-lg bg-gray-800 p-6">
+          <div className="flex items-center justify-between gap-4">
+            <button
+              type="button"
+              className="flex items-center gap-3 text-left"
+              onClick={() => setOpenSections((current) => ({ ...current, raceLogs: !current.raceLogs }))}
+            >
+              <span className={`text-xl transition-transform ${openSections.raceLogs ? 'rotate-90' : ''}`}>&rsaquo;</span>
+              <h2 className="text-2xl font-semibold">{t.admin.raceProgressLogs}</h2>
+            </button>
+            {openSections.raceLogs && raceProgressAlerts.length > 0 && (
+              <button
+                type="button"
+                onClick={clearRaceProgressAlerts}
+                className="rounded bg-red-700 px-3 py-1 font-semibold hover:bg-red-600"
+              >
+                {t.admin.clear}
+              </button>
+            )}
+          </div>
+          {openSections.raceLogs && (
+            <div className="mt-4 max-h-80 overflow-y-auto">
+              {raceProgressAlerts.length === 0 ? (
+                <div className="text-gray-400">{t.admin.raceProgressLogsEmpty}</div>
+              ) : (
+                <div className="space-y-2">
+                  {raceProgressAlerts.map((alert) => (
+                    <div key={alert.id} className="rounded bg-gray-700 p-3">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <p className="font-semibold">{raceAlertTypeLabel(alert.entityType)}</p>
+                        <p className="text-sm text-gray-300">{formatFinancialDate(alert.createdAt)}</p>
+                      </div>
+                      <p className="text-sm text-gray-200">
+                        {alert.teamName} - {alert.detail || alert.entityName}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -899,6 +1173,73 @@ export default function AdminPage() {
                         </label>
                       ))}
                     </div>
+
+                    {membership.roles.includes('driver') && (
+                      <div className="grid grid-cols-1 gap-3 rounded-lg bg-gray-800 p-3 sm:col-span-2 sm:grid-cols-3">
+                        <label className="block">
+                          <span className="mb-2 block text-sm">{t.garage.driverCategory}</span>
+                          <select
+                            className="w-full rounded-lg bg-gray-700 px-4 py-2"
+                            value={membership.driverCategory}
+                            onChange={(event) =>
+                              setUserForm((prev) => ({
+                                ...prev,
+                                teamMemberships: prev.teamMemberships.map((current, currentIndex) =>
+                                  currentIndex === index
+                                    ? { ...current, driverCategory: event.target.value as 'starter' | 'reserve' }
+                                    : current,
+                                ),
+                              }))
+                            }
+                          >
+                            <option value="starter">{t.garage.starter}</option>
+                            <option value="reserve">{t.garage.reserve}</option>
+                          </select>
+                        </label>
+
+                        <label className="block">
+                          <span className="mb-2 block text-sm">{t.garage.contractDuration}</span>
+                          <input
+                            required
+                            min={1}
+                            type="number"
+                            className="w-full rounded-lg bg-gray-700 px-4 py-2"
+                            value={membership.contractRaces}
+                            onChange={(event) =>
+                              setUserForm((prev) => ({
+                                ...prev,
+                                teamMemberships: prev.teamMemberships.map((current, currentIndex) =>
+                                  currentIndex === index
+                                    ? { ...current, contractRaces: event.target.value }
+                                    : current,
+                                ),
+                              }))
+                            }
+                          />
+                        </label>
+
+                        <label className="block">
+                          <span className="mb-2 block text-sm">{t.garage.salaryPerRace}</span>
+                          <input
+                            required
+                            min={0}
+                            type="number"
+                            className="w-full rounded-lg bg-gray-700 px-4 py-2"
+                            value={membership.salaryPerRace}
+                            onChange={(event) =>
+                              setUserForm((prev) => ({
+                                ...prev,
+                                teamMemberships: prev.teamMemberships.map((current, currentIndex) =>
+                                  currentIndex === index
+                                    ? { ...current, salaryPerRace: event.target.value }
+                                    : current,
+                                ),
+                              }))
+                            }
+                          />
+                        </label>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -917,6 +1258,9 @@ export default function AdminPage() {
                           (scuderia) => !prev.teamMemberships.some((membership) => membership.teamId === scuderia.id),
                         )?.id ?? '',
                         roles: ['team_principal'],
+                        driverCategory: 'reserve',
+                        contractRaces: '8',
+                        salaryPerRace: '4500000',
                       },
                     ],
                   }))
@@ -948,12 +1292,14 @@ export default function AdminPage() {
               <section>
                 <h3 className="mb-2 font-bold">{t.admin.finances}</h3>
                 <p>{t.garage.cash}: {managedGarage.cashTotal}</p>
-                <p>{t.garage.weatherCenter}: {managedGarage.climateCostPerRace}</p>
-                <p>{t.garage.pitCrew}: {managedGarage.pitCrewCostPerRace}</p>
+                <p>{t.admin.climateCostPerRace}: {managedGarage.climateCostPerRace}</p>
+                <p>{t.admin.pitCrewCostPerRace}: {managedGarage.pitCrewCostPerRace}</p>
                 <p>{t.garage.salaries}: {managedGarage.salaryCostPerRace}</p>
                 <p>{t.garage.sponsors}: {managedGarage.sponsorIncomePerRace}</p>
-                <p>{t.garage.weatherMonitoring}: {managedGarage.climateMonitoringLevel}</p>
-                <p>{t.garage.pitCrew}: {managedGarage.pitCrewLevel}</p>
+                <div className="mt-3 rounded bg-gray-700/70 p-3">
+                  <p>{t.admin.climateMonitoringLevel}: {managedGarage.climateMonitoringLevel}</p>
+                  <p>{t.admin.pitCrewLevel}: {managedGarage.pitCrewLevel}</p>
+                </div>
                 <form onSubmit={submitFinance} className="mt-3 flex gap-2">
                   <input
                     inputMode="decimal"
@@ -973,18 +1319,105 @@ export default function AdminPage() {
                   <button className="rounded bg-purple-600 px-3" onClick={saveCarName}>{t.admin.save}</button>
                 </div>
                 <h3 className="mb-2 mt-4 font-bold">{t.garage.drivers}</h3>
-                {managedGarage.drivers.map((driver) => <p key={driver.id}>{driver.displayName} — {driver.contractEndsAfterRaces} / {driver.salaryPerRace}</p>)}
+                <form onSubmit={saveManagedDriver} className="grid gap-2 rounded bg-gray-900/40 p-3">
+                  <input
+                    required={!editingDriverId}
+                    disabled={Boolean(editingDriverId)}
+                    className="rounded bg-gray-700 p-2 disabled:opacity-60"
+                    placeholder={t.garage.driverUsername}
+                    value={driverForm.username}
+                    onChange={(e) => setDriverForm((v) => ({ ...v, username: e.target.value }))}
+                  />
+                  <div className="grid gap-2 sm:grid-cols-3">
+                    <select
+                      required
+                      className="rounded bg-gray-700 p-2"
+                      value={driverForm.category}
+                      onChange={(e) => setDriverForm((v) => ({ ...v, category: e.target.value as 'starter' | 'reserve' }))}
+                    >
+                      <option value="starter">{t.garage.starter}</option>
+                      <option value="reserve">{t.garage.reserve}</option>
+                    </select>
+                    <input
+                      required
+                      min="1"
+                      type="number"
+                      className="rounded bg-gray-700 p-2"
+                      placeholder={t.garage.contractDuration}
+                      value={driverForm.contractRaces}
+                      onChange={(e) => setDriverForm((v) => ({ ...v, contractRaces: e.target.value }))}
+                    />
+                    <input
+                      required
+                      min="0"
+                      type="number"
+                      className="rounded bg-gray-700 p-2"
+                      placeholder={t.garage.salaryPerRace}
+                      value={driverForm.salaryPerRace}
+                      onChange={(e) => setDriverForm((v) => ({ ...v, salaryPerRace: e.target.value }))}
+                    />
+                  </div>
+                  <div className="flex gap-2">
+                    <button className="rounded bg-purple-600 px-3 py-2 font-semibold">
+                      {editingDriverId ? t.admin.save : t.admin.add}
+                    </button>
+                    {editingDriverId && (
+                      <button
+                        type="button"
+                        className="rounded bg-gray-600 px-3 py-2"
+                        onClick={() => {
+                          setEditingDriverId(null);
+                          setDriverForm({ username: '', category: 'reserve', contractRaces: '8', salaryPerRace: '4500000' });
+                        }}
+                      >
+                        {t.garage.cancel}
+                      </button>
+                    )}
+                  </div>
+                </form>
+                <div className="mt-3 space-y-2">
+                  {managedGarage.drivers.map((driver) => (
+                    <div key={driver.id} className="rounded bg-gray-700 p-3">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                          <p className="font-semibold">{driver.displayName}</p>
+                          <p className="text-sm text-gray-300">
+                            {driver.category === 'starter' ? t.garage.starter : t.garage.reserve}
+                            {' Â· '}
+                            {t.garage.contractEndsIn}: {driver.contractEndsAfterRaces} {t.garage.races}
+                            {' Â· '}
+                            {t.garage.salary}: {driver.salaryPerRace}
+                          </p>
+                        </div>
+                        <span className="flex gap-2">
+                          <button
+                            className="rounded bg-slate-500 px-3 py-1 font-semibold hover:bg-slate-400"
+                            onClick={() => startEditManagedDriver(driver)}
+                          >
+                            {t.admin.edit}
+                          </button>
+                          <button
+                            className="rounded bg-rose-700 px-3 py-1 font-semibold hover:bg-rose-600"
+                            onClick={() => removeManagedDriver(driver.id)}
+                          >
+                            {t.admin.remove}
+                          </button>
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </section>
             </div>
             <section className="mt-6">
               <h3 className="mb-2 font-bold">{t.admin.financialHistory}</h3>
-              <div ref={financialHistoryRef} className="max-h-40 overflow-y-auto rounded border border-white/30 bg-gray-900 p-3">
+              <div ref={financialHistoryRef} className="h-40 overflow-y-auto rounded border border-white/30 bg-gray-900 p-3">
                 {[...managedGarage.financialHistory].reverse().map((entry) => (
                   <p
                     key={entry.id}
                     className={entry.entryType === 'income' ? 'text-green-400' : 'text-red-400'}
                   >
-                    {entry.entryType === 'income' ? '+' : '-'} {entry.amount} — {formatFinancialDate(entry.occurredAt)} — {formatFinancialReason(entry.reason)}
+                    {entry.entryType === 'income' ? '+' : '-'} {entry.amount} - {formatFinancialDate(entry.occurredAt)} - {formatFinancialReason(entry.reason)}
                   </p>
                 ))}
               </div>
@@ -1007,7 +1440,16 @@ export default function AdminPage() {
               {managedGarage.sponsors.map((sponsor) => (
                 <div key={sponsor.id} className="mb-4 rounded bg-gray-700 p-3">
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <strong>{sponsor.name} — {sponsor.category}</strong>
+                    <div>
+                      <strong>{sponsor.name} - {sponsor.category}</strong>
+                      <div className="mt-1 text-sm text-gray-300">
+                        {t.admin.contractDuration}: {sponsor.contractRacesRemaining ?? 0} {t.garage.races}
+                        {' Â· '}
+                        {t.admin.initialReward}: {sponsor.initialReward ?? 0}
+                        {' Â· '}
+                        {t.admin.rewardPerRace}: {sponsor.rewardPerRace ?? 0}
+                      </div>
+                    </div>
                     <span className="flex gap-2">
                       <button
                         className="rounded bg-slate-500 px-3 py-1 font-semibold hover:bg-slate-400"
@@ -1028,8 +1470,8 @@ export default function AdminPage() {
                     <div key={m.id} className="mt-2 flex flex-wrap items-center gap-2">
                       <span className="mr-auto">{m.title} ({m.reward})</span>
                       <button className="rounded bg-slate-500 px-3 py-1 font-semibold hover:bg-slate-400" onClick={() => openMissionModal(sponsor, 'race', m)}>{t.admin.edit}</button>
-                      <button className="rounded bg-emerald-600 px-3 py-1 font-bold hover:bg-emerald-500" onClick={() => resolveMission(m.id, 'race', 'success')}>✓</button>
-                      <button className="rounded bg-rose-700 px-3 py-1 font-bold hover:bg-rose-600" onClick={() => resolveMission(m.id, 'race', 'failure')}>✕</button>
+                      <button className="rounded bg-emerald-600 px-3 py-1 font-bold hover:bg-emerald-500" onClick={() => resolveMission(m.id, 'race', 'success')}>OK</button>
+                      <button className="rounded bg-rose-700 px-3 py-1 font-bold hover:bg-rose-600" onClick={() => resolveMission(m.id, 'race', 'failure')}>X</button>
                     </div>
                   ))}
                   <button className="mt-2 rounded bg-purple-600 px-3 py-2 font-semibold hover:bg-purple-500" onClick={() => openMissionModal(sponsor, 'race')}>{t.admin.add}</button>
@@ -1038,8 +1480,8 @@ export default function AdminPage() {
                     <div key={m.id} className="mt-2 flex flex-wrap items-center gap-2">
                       <span className="mr-auto">{m.title} ({m.reward}) {m.racesToComplete} {t.garage.races}</span>
                       <button className="rounded bg-slate-500 px-3 py-1 font-semibold hover:bg-slate-400" onClick={() => openMissionModal(sponsor, 'season', m)}>{t.admin.edit}</button>
-                      <button className="rounded bg-emerald-600 px-3 py-1 font-bold hover:bg-emerald-500" onClick={() => resolveMission(m.id, 'season', 'success')}>✓</button>
-                      <button className="rounded bg-rose-700 px-3 py-1 font-bold hover:bg-rose-600" onClick={() => resolveMission(m.id, 'season', 'failure')}>✕</button>
+                      <button className="rounded bg-emerald-600 px-3 py-1 font-bold hover:bg-emerald-500" onClick={() => resolveMission(m.id, 'season', 'success')}>OK</button>
+                      <button className="rounded bg-rose-700 px-3 py-1 font-bold hover:bg-rose-600" onClick={() => resolveMission(m.id, 'season', 'failure')}>X</button>
                     </div>
                   ))}
                   <button className="mt-2 rounded bg-purple-600 px-3 py-2 font-semibold hover:bg-purple-500" onClick={() => openMissionModal(sponsor, 'season')}>{t.admin.add}</button>
@@ -1135,4 +1577,3 @@ export default function AdminPage() {
     </main>
   );
 }
-

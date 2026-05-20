@@ -169,7 +169,7 @@
   "BR_WINNER": "👑🏆 {{name}} kazandı, {{eliminated}} elendi. 👑🏆",
   "LAPPED_NORMALIZED_LAPS": "{{name}} turlarını normalleştirdi ve şimdi grid ile birlikte",
   "LAPPED_REMAINING_LAPS": "{{name}} grid'e katılmak için {{laps}} daha tur(lar) var",
-  "LOGIN_USAGE": "Kullanım: !login <şifre>",
+  "LOGIN_USAGE": "Kullanım: !login <şifre> [takım kısaltması]",
   "LOGIN_ERROR": "Geçersiz kullanıcı adı veya şifre.",
   "LOGIN_SUCCESS": "Giriş başarılı.",
   "CHAT_CHANNEL_ALL": "Herkes",

@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import config from '@/config/environment';
+import { useState } from 'react';
+import { AppSnackbar, useAppSnackbar } from '@/components/AppSnackbar';
 import { FtohInput } from '@/components/FtohInput';
 import { FtohButton } from '@/components/FtohButton';
 import { FtohCard } from '@/components/FtohCard';
+import { useTranslations } from '@/i18n';
 
 interface LoginFormData {
   username: string;
@@ -31,66 +31,14 @@ interface LoginResponse {
   message?: string;
 }
 
-interface SnackbarProps {
-  message: string;
-  type: 'success' | 'error';
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-function Snackbar({ message, type, isOpen, onClose }: SnackbarProps) {
-  useEffect(() => {
-    if (isOpen) {
-      const timer = setTimeout(onClose, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [isOpen, onClose]);
-
-  if (!isOpen) return null;
-
-  return (
-    <div className={`fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 ${
-      type === 'success' 
-        ? 'bg-green-600 text-white' 
-        : 'bg-red-600 text-white'
-    }`}>
-    <div className="flex items-center">
-      <div className={`w-6 h-6 rounded-full mr-3 flex items-center justify-center ${
-        type === 'success' ? 'bg-green-700' : 'bg-red-700'
-      }`}>
-        {type === 'success' ? (
-          <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-          </svg>
-        ) : (
-          <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-        )}
-      </div>
-      <span className="font-medium">{message}</span>
-    </div>
-  </div>
-  );
-}
-
 export default function LoginPage() {
-  const router = useRouter();
+  const { language, t } = useTranslations();
+  const { snackbar, showSnackbar, closeSnackbar } = useAppSnackbar();
   const [formData, setFormData] = useState<LoginFormData>({
     username: '',
     password: ''
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [snackbar, setSnackbar] = useState<{
-    message: string;
-    type: 'success' | 'error';
-    isOpen: boolean;
-  }>({
-    message: '',
-    type: 'success',
-    isOpen: false
-  });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -98,25 +46,18 @@ export default function LoginPage() {
       ...prev,
       [name]: value
     }));
-    // Clear error when user starts typing
-    if (error) setError('');
-  };
-
-  const closeSnackbar = () => {
-    setSnackbar(prev => ({ ...prev, isOpen: false }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError('');
 
     try {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-language': 'en',
+          'x-language': language,
         },
         body: JSON.stringify(formData),
       });
@@ -128,36 +69,17 @@ export default function LoginPage() {
         localStorage.setItem('auth_token', data.token);
         localStorage.setItem('user_info', JSON.stringify(data.user));
         
-        // Show success snackbar
-        setSnackbar({
-          message: 'Login successful! Redirecting...',
-          type: 'success',
-          isOpen: true
-        });
+        showSnackbar(t.auth.loginSuccess, 'success');
         
         // Force redirect after a short delay to show snackbar
         setTimeout(() => {
           window.location.href = '/';
         }, 1500);
       } else {
-        // Show error snackbar
-        setSnackbar({
-          message: data.message || 'Login failed',
-          type: 'error',
-          isOpen: true
-        });
-        
-        setError(data.message || 'Login failed');
+        showSnackbar(data.message || t.auth.loginFailed, 'error');
       }
     } catch (error) {
-      // Show error snackbar
-      setSnackbar({
-        message: 'Connection error. Please try again.',
-        type: 'error',
-        isOpen: true
-      });
-      
-      setError('Connection error. Please try again.');
+      showSnackbar(t.auth.connectionError, 'error');
     } finally {
       setIsLoading(false);
     }
@@ -174,13 +96,6 @@ export default function LoginPage() {
       {/* Login container - no opacity inheritance */}
       <div className="absolute top-0 right-0 w-1/2 h-full flex items-center justify-center pointer-events-none">
         <FtohCard title="LOGIN">
-          {/* Error Message */}
-          {error && (
-            <div className="bg-red-900/30 border border-red-700/50 rounded-lg p-3">
-              <p className="text-red-300 text-sm text-center">{error}</p>
-            </div>
-          )}
-
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Username Field */}
@@ -219,8 +134,7 @@ export default function LoginPage() {
         </FtohCard>
       </div>
       
-      {/* Snackbar */}
-      <Snackbar
+      <AppSnackbar
         message={snackbar.message}
         type={snackbar.type}
         isOpen={snackbar.isOpen}

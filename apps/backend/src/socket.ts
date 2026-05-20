@@ -1,12 +1,28 @@
 import { Server as SocketIOServer } from 'socket.io';
 import { BotService } from './services/botService';
 import roomService from './services/roomService';
+import authService from './services/authService';
+import notificationService from './services/notificationService';
 
 export function setupSocketHandlers(io: SocketIOServer) {
   const botService = new BotService(io);
+  notificationService.setSocketServer(io);
 
   io.on('connection', (socket) => {
     console.log(`Client connected: ${socket.id}`);
+
+    socket.on('notifications:join', async (data: { token?: string }) => {
+      const token = data?.token;
+      if (!token) return;
+
+      const payload = authService.verifyToken(token);
+      if (!payload?.userId) return;
+
+      await socket.join(notificationService.getUserRoom(payload.userId));
+      notificationService.emitUnreadCount(payload.userId).catch((error) => {
+        console.error('Failed to emit unread notification count:', error);
+      });
+    });
     
     socket.on('chat:send', (data) => {
       botService.sendToBot('chat:send', data);

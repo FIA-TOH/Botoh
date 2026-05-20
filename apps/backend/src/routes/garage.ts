@@ -73,6 +73,211 @@ router.get('/teams/:teamId', authMiddleware, async (req: AuthRequest, res: Respo
   }
 });
 
+router.post('/teams/:teamId/facility', authMiddleware, [
+  body('facility').isIn(['climate', 'pitCrew']),
+  body('action').isIn(['upgrade', 'sell']),
+], async (req: AuthRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: translateMessage('User not authenticated', getRequestLanguage(req)),
+      });
+    }
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        message: translateMessage('Validation failed', getRequestLanguage(req)),
+        errors: translateValidationErrors(errors.array(), getRequestLanguage(req)),
+      });
+    }
+
+    const canAccess = await garageService.userCanAccessTeam(req.user.id, req.params.teamId);
+    if (!canAccess) {
+      return res.status(403).json({
+        success: false,
+        message: translateMessage('Insufficient permissions', getRequestLanguage(req)),
+      });
+    }
+
+    const result = await garageService.updateFacility(
+      req.params.teamId,
+      req.body.facility,
+      req.body.action,
+    );
+    return res.status(result.success ? 200 : 400).json(result);
+  } catch (error) {
+    console.error('Update facility error:', error);
+    return res.status(500).json({
+      success: false,
+      message: translateMessage('Internal server error', getRequestLanguage(req)),
+    });
+  }
+});
+
+router.post('/teams/:teamId/driver-proposals', authMiddleware, [
+  body('username')
+    .isString()
+    .trim()
+    .isLength({ min: 3, max: 50 })
+    .withMessage('Username must be between 3 and 50 characters'),
+  body('contractRaces')
+    .isInt({ min: 1, max: 200 })
+    .withMessage('Contract duration is invalid'),
+  body('salaryPerRace')
+    .isFloat({ min: 0 })
+    .withMessage('Driver salary is invalid'),
+  body('category')
+    .isIn(['starter', 'reserve'])
+    .withMessage('Driver category is invalid'),
+], async (req: AuthRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: translateMessage('User not authenticated', getRequestLanguage(req)),
+      });
+    }
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        message: translateMessage('Validation failed', getRequestLanguage(req)),
+        errors: translateValidationErrors(errors.array(), getRequestLanguage(req)),
+      });
+    }
+
+    const canAccess = await garageService.userCanAccessTeam(req.user.id, req.params.teamId);
+    if (!canAccess) {
+      return res.status(403).json({
+        success: false,
+        message: translateMessage('Insufficient permissions', getRequestLanguage(req)),
+      });
+    }
+
+    const result = await garageService.createDriverProposal(
+      req.params.teamId,
+      req.user.id,
+      req.body,
+    );
+    return res.status(result.success ? 201 : 400).json({
+      ...result,
+      message: translateMessage(result.message, getRequestLanguage(req)),
+    });
+  } catch (error) {
+    console.error('Create driver proposal error:', error);
+    return res.status(500).json({
+      success: false,
+      message: translateMessage('Failed to send driver proposal', getRequestLanguage(req)),
+    });
+  }
+});
+
+router.post('/driver-proposals/:proposalId/respond', authMiddleware, [
+  body('decision')
+    .isIn(['accept', 'decline'])
+    .withMessage('Driver proposal response is invalid'),
+], async (req: AuthRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: translateMessage('User not authenticated', getRequestLanguage(req)),
+      });
+    }
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        message: translateMessage('Validation failed', getRequestLanguage(req)),
+        errors: translateValidationErrors(errors.array(), getRequestLanguage(req)),
+      });
+    }
+
+    const result = await garageService.respondToDriverProposal(
+      req.user.id,
+      req.params.proposalId,
+      req.body.decision,
+    );
+    return res.status(result.success ? 200 : 400).json({
+      ...result,
+      message: translateMessage(result.message, getRequestLanguage(req)),
+    });
+  } catch (error) {
+    console.error('Respond driver proposal error:', error);
+    return res.status(500).json({
+      success: false,
+      message: translateMessage('Failed to update driver proposal', getRequestLanguage(req)),
+    });
+  }
+});
+
+router.delete('/teams/:teamId/drivers/:driverId', authMiddleware, async (req: AuthRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: translateMessage('User not authenticated', getRequestLanguage(req)),
+      });
+    }
+
+    const canAccess = await garageService.userCanAccessTeam(req.user.id, req.params.teamId);
+    if (!canAccess) {
+      return res.status(403).json({
+        success: false,
+        message: translateMessage('Insufficient permissions', getRequestLanguage(req)),
+      });
+    }
+
+    const result = await garageService.releaseDriver(req.params.teamId, req.params.driverId);
+    return res.status(result.success ? 200 : 400).json({
+      ...result,
+      message: translateMessage(result.message, getRequestLanguage(req)),
+    });
+  } catch (error) {
+    console.error('Release driver error:', error);
+    return res.status(500).json({
+      success: false,
+      message: translateMessage('Failed to release driver', getRequestLanguage(req)),
+    });
+  }
+});
+
+router.delete('/teams/:teamId/sponsors/:teamSponsorId', authMiddleware, async (req: AuthRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: translateMessage('User not authenticated', getRequestLanguage(req)),
+      });
+    }
+
+    const canAccess = await garageService.userCanAccessTeam(req.user.id, req.params.teamId);
+    if (!canAccess) {
+      return res.status(403).json({
+        success: false,
+        message: translateMessage('Insufficient permissions', getRequestLanguage(req)),
+      });
+    }
+
+    const result = await garageService.releaseSponsor(req.params.teamId, req.params.teamSponsorId);
+    return res.status(result.success ? 200 : 400).json({
+      ...result,
+      message: translateMessage(result.message, getRequestLanguage(req)),
+    });
+  } catch (error) {
+    console.error('Release sponsor error:', error);
+    return res.status(500).json({
+      success: false,
+      message: translateMessage('Failed to release sponsor', getRequestLanguage(req)),
+    });
+  }
+});
+
 // GET /garage/upgrades - Get available upgrades for user
 router.get('/upgrades', authMiddleware, async (req: AuthRequest, res: Response) => {
   try {

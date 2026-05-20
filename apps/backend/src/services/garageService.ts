@@ -1,5 +1,17 @@
-import { query, queryOne, insert, update } from '../config/database';
+import { query, queryOne, insert, transaction } from '../config/database';
 import { AuthRequest } from '../middleware/auth';
+import notificationService from './notificationService';
+import {
+  translateDriverProposalNotification,
+  translateDriverReleaseNotification,
+} from '../i18n';
+import {
+  GARAGE_FACILITY_ECONOMY,
+  GarageFacility,
+  getFacilityCostPerRace,
+  getFacilitySellValue,
+  getFacilityUpgradeCost,
+} from '../config/facilityEconomy';
 
 export interface UserGarage {
   id: string;
@@ -71,6 +83,7 @@ export interface TeamGarage {
     contractEndsAfterRaces: number;
     salaryPerRace: number;
     slotNumber: number;
+    category: 'starter' | 'reserve';
   }>;
   sponsors: Array<{
     id: string;
@@ -93,9 +106,15 @@ export interface TeamGarage {
     source: string;
     occurredAt: string;
   }>;
+  facilityEconomy: typeof GARAGE_FACILITY_ECONOMY;
 }
 
 class GarageService {
+  private readonly driverLimits = {
+    starter: 2,
+    reserve: 2,
+  } as const;
+
   async userCanAccessTeam(userId: string, teamId: string): Promise<boolean> {
     const membership = await queryOne(
       `SELECT 1
@@ -120,7 +139,14 @@ class GarageService {
         climate_cost_per_race AS "climateCostPerRace",
         pit_crew_cost_per_race AS "pitCrewCostPerRace",
         salary_cost_per_race AS "salaryCostPerRace",
-        sponsor_income_per_race AS "sponsorIncomePerRace",
+        COALESCE(
+          (
+            SELECT SUM(ts.reward_per_race)
+            FROM team_sponsors ts
+            WHERE ts.team_id = teams.id
+          ),
+          0
+        ) AS "sponsorIncomePerRace",
         climate_monitoring_level AS "climateMonitoringLevel",
         pit_crew_level AS "pitCrewLevel",
         car_name AS "carName"
@@ -140,10 +166,12 @@ class GarageService {
           driver_number AS "driverNumber",
           contract_ends_after_races AS "contractEndsAfterRaces",
           salary_per_race AS "salaryPerRace",
-          slot_number AS "slotNumber"
+          slot_number AS "slotNumber",
+          category
          FROM team_drivers
          WHERE team_id = $1
-         ORDER BY slot_number ASC`,
+           AND status = 'active'
+         ORDER BY CASE WHEN category = 'starter' THEN 0 ELSE 1 END, slot_number ASC`,
         [teamId],
       ),
       query(
@@ -214,7 +242,597 @@ class GarageService {
       drivers: drivers.rows,
       sponsors: sponsors.rows,
       financialHistory: financialHistory.rows,
+      facilityEconomy: GARAGE_FACILITY_ECONOMY,
     };
+  }
+
+  async updateFacility(
+    teamId: string,
+    facility: GarageFacility,
+    action: 'upgrade' | 'sell',
+  ) {
+    const levelColumn = facility === 'climate' ? 'climate_monitoring_level' : 'pit_crew_level';
+    const costColumn = facility === 'climate' ? 'climate_cost_per_race' : 'pit_crew_cost_per_race';
+    const label = facility === 'climate' ? 'Climate monitoring' : 'Pit crew';
+    const team = await queryOne(
+      `SELECT id, cash_total, ${levelColumn} AS level
+       FROM teams
+       WHERE id = $1`,
+      [teamId],
+    );
+
+    if (!team) return { success: false, message: 'Scuderia not found' };
+
+    const currentLevel = Number(team.level);
+    if (action === 'upgrade') {
+      if (currentLevel >= GARAGE_FACILITY_ECONOMY.maxLevel) {
+        return { success: false, message: 'Facility already at max level' };
+      }
+
+      const upgradeCost = getFacilityUpgradeCost(facility, currentLevel);
+      if (Number(team.cash_total) < upgradeCost) {
+        return { success: false, message: 'Insufficient funds' };
+      }
+
+      const nextLevel = currentLevel + 1;
+      const nextCost = getFacilityCostPerRace(facility, nextLevel);
+      await query(
+        `UPDATE teams
+         SET cash_total = cash_total - $1,
+             ${levelColumn} = $2,
+             ${costColumn} = $3,
+             updated_at = NOW()
+         WHERE id = $4`,
+        [upgradeCost, nextLevel, nextCost, teamId],
+      );
+      await query(
+        `INSERT INTO team_financial_history (team_id, amount, entry_type, reason, source)
+         VALUES ($1, $2, 'expense', $3, 'facility')`,
+        [teamId, upgradeCost, `${label} upgrade`],
+      );
+      return { success: true };
+    }
+
+    if (currentLevel <= 0) {
+      return { success: false, message: 'Facility already at minimum level' };
+    }
+
+    const nextLevel = currentLevel - 1;
+    const sellValue = getFacilitySellValue(facility, currentLevel);
+    const nextCost = getFacilityCostPerRace(facility, nextLevel);
+    await query(
+      `UPDATE teams
+       SET cash_total = cash_total + $1,
+           ${levelColumn} = $2,
+           ${costColumn} = $3,
+           updated_at = NOW()
+       WHERE id = $4`,
+      [sellValue, nextLevel, nextCost, teamId],
+    );
+    await query(
+      `INSERT INTO team_financial_history (team_id, amount, entry_type, reason, source)
+       VALUES ($1, $2, 'income', $3, 'facility')`,
+      [teamId, sellValue, `${label} sale`],
+    );
+    return { success: true };
+  }
+
+  async createDriverProposal(
+    teamId: string,
+    proposedByUserId: string,
+    input: {
+      username: string;
+      contractRaces: number;
+      salaryPerRace: number;
+      category: 'starter' | 'reserve';
+    },
+  ) {
+    const team = await queryOne<{ id: string; name: string }>(
+      'SELECT id, name FROM teams WHERE id = $1',
+      [teamId],
+    );
+    if (!team) return { success: false, message: 'Scuderia not found' };
+
+    const user = await queryOne<{ id: string; username: string; driver_number: number | null; language: 'pt' | 'en' | 'es' }>(
+      `SELECT id, username, driver_number, language
+       FROM users
+       WHERE LOWER(username) = LOWER($1)
+         AND COALESCE(is_active, true) = true
+       LIMIT 1`,
+      [input.username],
+    );
+    if (!user) return { success: false, message: 'Driver user not found' };
+
+    const validation = await this.validateDriverContractAvailability(teamId, user.id, input.category);
+    if (!validation.success) return validation;
+
+    const pending = await queryOne(
+      `SELECT id
+       FROM driver_contract_proposals
+       WHERE team_id = $1
+         AND user_id = $2
+         AND status = 'pending'`,
+      [teamId, user.id],
+    );
+    if (pending) return { success: false, message: 'Driver already has a pending proposal from this scuderia' };
+
+    const proposal = await queryOne<{ id: string }>(
+      `INSERT INTO driver_contract_proposals (
+        team_id,
+        user_id,
+        proposed_by_user_id,
+        category,
+        contract_races,
+        salary_per_race
+      ) VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING id`,
+      [
+        teamId,
+        user.id,
+        proposedByUserId,
+        input.category,
+        input.contractRaces,
+        input.salaryPerRace,
+      ],
+    );
+    if (!proposal) return { success: false, message: 'Failed to send driver proposal' };
+
+    const notificationText = translateDriverProposalNotification(
+      user.language,
+      team.name,
+      input.category,
+      input.contractRaces,
+      input.salaryPerRace,
+    );
+    const notification = await notificationService.create({
+      userId: user.id,
+      senderUserId: proposedByUserId,
+      title: notificationText.title,
+      message: notificationText.message,
+      type: 'info',
+      metadata: {
+        action: 'driver_contract_proposal',
+        proposalId: proposal.id,
+        teamId,
+        teamName: team.name,
+        category: input.category,
+        contractRaces: input.contractRaces,
+        salaryPerRace: input.salaryPerRace,
+      },
+    });
+
+    await query(
+      'UPDATE driver_contract_proposals SET notification_id = $1 WHERE id = $2',
+      [notification.id, proposal.id],
+    );
+
+    return { success: true, proposalId: proposal.id };
+  }
+
+  async respondToDriverProposal(
+    userId: string,
+    proposalId: string,
+    decision: 'accept' | 'decline',
+  ) {
+    return transaction(async (client) => {
+      const proposalResult = await client.query(
+        `SELECT
+          p.id,
+          p.team_id,
+          p.user_id,
+          p.proposed_by_user_id,
+          p.category,
+          p.contract_races,
+          p.salary_per_race,
+          p.status,
+          p.notification_id,
+          t.name AS team_name,
+          u.username,
+          u.driver_number
+         FROM driver_contract_proposals p
+         JOIN teams t ON t.id = p.team_id
+         JOIN users u ON u.id = p.user_id
+         WHERE p.id = $1
+           AND p.user_id = $2
+         FOR UPDATE`,
+        [proposalId, userId],
+      );
+      const proposal = proposalResult.rows[0];
+      if (!proposal) return { success: false, message: 'Driver proposal not found' };
+      if (proposal.status !== 'pending') return { success: false, message: 'Driver proposal already answered' };
+
+      if (decision === 'decline') {
+        await client.query(
+          `UPDATE driver_contract_proposals
+           SET status = 'declined', responded_at = NOW()
+           WHERE id = $1`,
+          [proposalId],
+        );
+        await this.markProposalNotificationAnswered(client, proposal.notification_id, 'declined');
+        return { success: true };
+      }
+
+      const activeForTeam = await client.query(
+        `SELECT id
+         FROM team_drivers
+         WHERE team_id = $1
+           AND user_id = $2
+           AND status = 'active'`,
+        [proposal.team_id, userId],
+      );
+      if (activeForTeam.rows[0]) {
+        return { success: false, message: 'Driver already belongs to this scuderia' };
+      }
+
+      const categoryCount = await client.query(
+        `SELECT COUNT(*)::int AS count
+         FROM team_drivers
+         WHERE team_id = $1
+           AND category = $2
+           AND status = 'active'`,
+        [proposal.team_id, proposal.category],
+      );
+      if (Number(categoryCount.rows[0]?.count ?? 0) >= this.driverLimits[proposal.category as 'starter' | 'reserve']) {
+        return { success: false, message: 'Driver category is full' };
+      }
+
+      if (proposal.category === 'starter') {
+        const starterContract = await client.query(
+          `SELECT id
+           FROM team_drivers
+           WHERE user_id = $1
+             AND category = 'starter'
+             AND status = 'active'`,
+          [userId],
+        );
+        if (starterContract.rows[0]) {
+          return { success: false, message: 'Driver already has a starter contract' };
+        }
+      }
+
+      const slotNumber = await this.findAvailableDriverSlot(client, proposal.team_id, proposal.category);
+      await client.query(
+        `INSERT INTO team_drivers (
+          team_id,
+          user_id,
+          display_name,
+          driver_number,
+          contract_ends_after_races,
+          salary_per_race,
+          slot_number,
+          category,
+          status,
+          accepted_at
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'active', NOW())`,
+        [
+          proposal.team_id,
+          userId,
+          proposal.username,
+          proposal.driver_number,
+          proposal.contract_races,
+          proposal.salary_per_race,
+          slotNumber,
+          proposal.category,
+        ],
+      );
+
+      await this.upsertDriverMembership(client, userId, proposal.team_id, proposal.category);
+      await this.recalculateTeamSalaryCost(client, proposal.team_id);
+      await client.query(
+        `UPDATE driver_contract_proposals
+         SET status = 'accepted', responded_at = NOW()
+         WHERE id = $1`,
+        [proposalId],
+      );
+      await this.markProposalNotificationAnswered(client, proposal.notification_id, 'accepted');
+
+      return { success: true };
+    });
+  }
+
+  async releaseDriver(teamId: string, driverId: string) {
+    const result = await transaction(async (client) => {
+      const driverResult = await client.query(
+        `SELECT
+          td.id,
+          td.team_id,
+          td.user_id,
+          td.display_name,
+          td.contract_ends_after_races,
+          td.salary_per_race,
+          t.name AS team_name,
+          u.language
+         FROM team_drivers td
+         JOIN teams t ON t.id = td.team_id
+         LEFT JOIN users u ON u.id = td.user_id
+         WHERE td.id = $1
+           AND td.team_id = $2
+           AND td.status = 'active'
+         FOR UPDATE OF td, t`,
+        [driverId, teamId],
+      );
+      const driver = driverResult.rows[0];
+      if (!driver) return { success: false, message: 'Driver contract not found' };
+
+      const penalty = Number(driver.salary_per_race) * Number(driver.contract_ends_after_races) * 2;
+      await client.query(
+        `UPDATE team_drivers
+         SET status = 'released'
+         WHERE id = $1`,
+        [driverId],
+      );
+      await client.query(
+        `UPDATE teams
+         SET cash_total = cash_total - $1,
+             updated_at = NOW()
+         WHERE id = $2`,
+        [penalty, teamId],
+      );
+      await client.query(
+        `INSERT INTO team_financial_history (team_id, amount, entry_type, reason, source)
+         VALUES ($1, $2, 'expense', $3, 'driver')`,
+        [teamId, penalty, `Driver release ${driver.display_name}`],
+      );
+
+      if (driver.user_id) {
+        await this.removeDriverMembershipIfNeeded(client, driver.user_id, teamId);
+      }
+      await this.recalculateTeamSalaryCost(client, teamId);
+
+      return {
+        success: true,
+        releasedUserId: driver.user_id as string | null,
+        teamName: driver.team_name as string,
+        language: (driver.language as 'pt' | 'en' | 'es' | null) ?? 'pt',
+        penalty,
+      };
+    });
+
+    if (result.success && result.releasedUserId) {
+      const notificationText = translateDriverReleaseNotification(
+        result.language,
+        result.teamName,
+        result.penalty,
+      );
+      await notificationService.create({
+        userId: result.releasedUserId,
+        title: notificationText.title,
+        message: notificationText.message,
+        type: 'warning',
+        metadata: {
+          action: 'driver_contract_released',
+          teamId,
+          teamName: result.teamName,
+          penalty: result.penalty,
+        },
+      });
+    }
+
+    return result;
+  }
+
+  async releaseSponsor(teamId: string, teamSponsorId: string) {
+    return transaction(async (client) => {
+      const sponsorResult = await client.query(
+        `SELECT
+          ts.id,
+          ts.team_id,
+          ts.initial_reward,
+          s.name AS sponsor_name,
+          t.name AS team_name
+         FROM team_sponsors ts
+         JOIN sponsors s ON s.id = ts.sponsor_id
+         JOIN teams t ON t.id = ts.team_id
+         WHERE ts.id = $1
+           AND ts.team_id = $2
+         FOR UPDATE OF ts, t`,
+        [teamSponsorId, teamId],
+      );
+      const sponsor = sponsorResult.rows[0];
+      if (!sponsor) return { success: false, message: 'Team sponsor not found' };
+
+      const penalty = Number(sponsor.initial_reward) * GARAGE_FACILITY_ECONOMY.sponsorTerminationPenaltyMultiplier;
+
+      await client.query('DELETE FROM team_sponsors WHERE id = $1', [teamSponsorId]);
+      await client.query(
+        `UPDATE teams
+         SET cash_total = cash_total - $1,
+             sponsor_income_per_race = COALESCE(
+               (
+                 SELECT SUM(reward_per_race)
+                 FROM team_sponsors
+                 WHERE team_id = $2
+               ),
+               0
+             ),
+             updated_at = NOW()
+         WHERE id = $2`,
+        [penalty, teamId],
+      );
+      await client.query(
+        `INSERT INTO team_financial_history (team_id, amount, entry_type, reason, source)
+         VALUES ($1, $2, 'expense', $3, 'sponsor')`,
+        [teamId, penalty, sponsor.sponsor_name],
+      );
+
+      return { success: true, penalty };
+    });
+  }
+
+  private async markProposalNotificationAnswered(
+    client: { query: (sql: string, params?: any[]) => Promise<any> },
+    notificationId: string | null,
+    status: 'accepted' | 'declined',
+  ) {
+    if (!notificationId) return;
+
+    await client.query(
+      `UPDATE notifications
+       SET is_read = true,
+           read_at = COALESCE(read_at, NOW()),
+           metadata = metadata || jsonb_build_object(
+             'proposalStatus', $1::text,
+             'action', 'driver_contract_proposal_answered'
+           )
+       WHERE id = $2`,
+      [status, notificationId],
+    );
+  }
+
+  private async validateDriverContractAvailability(
+    teamId: string,
+    userId: string,
+    category: 'starter' | 'reserve',
+  ) {
+    const activeForTeam = await queryOne(
+      `SELECT id
+       FROM team_drivers
+       WHERE team_id = $1
+         AND user_id = $2
+         AND status = 'active'`,
+      [teamId, userId],
+    );
+    if (activeForTeam) return { success: false, message: 'Driver already belongs to this scuderia' };
+
+    const categoryCount = await queryOne<{ count: number }>(
+      `SELECT COUNT(*)::int AS count
+       FROM team_drivers
+       WHERE team_id = $1
+         AND category = $2
+         AND status = 'active'`,
+      [teamId, category],
+    );
+    if (Number(categoryCount?.count ?? 0) >= this.driverLimits[category]) {
+      return { success: false, message: 'Driver category is full' };
+    }
+
+    if (category === 'starter') {
+      const starterContract = await queryOne(
+        `SELECT id
+         FROM team_drivers
+         WHERE user_id = $1
+           AND category = 'starter'
+           AND status = 'active'`,
+        [userId],
+      );
+      if (starterContract) return { success: false, message: 'Driver already has a starter contract' };
+    }
+
+    return { success: true };
+  }
+
+  private async findAvailableDriverSlot(
+    client: { query: (sql: string, params?: any[]) => Promise<any> },
+    teamId: string,
+    category: 'starter' | 'reserve',
+  ) {
+    const baseSlot = category === 'starter' ? 1 : 3;
+    const occupied = await client.query(
+      `SELECT slot_number
+       FROM team_drivers
+       WHERE team_id = $1
+         AND category = $2
+         AND status = 'active'`,
+      [teamId, category],
+    );
+    const used = new Set(occupied.rows.map((row: any) => Number(row.slot_number)));
+    const slot = [baseSlot, baseSlot + 1].find((candidate) => !used.has(candidate));
+    if (!slot) throw new Error('Driver category is full');
+    return slot;
+  }
+
+  private async upsertDriverMembership(
+    client: { query: (sql: string, params?: any[]) => Promise<any> },
+    userId: string,
+    teamId: string,
+    category: 'starter' | 'reserve',
+  ) {
+    await client.query(
+      `INSERT INTO user_team_memberships (
+        user_id,
+        team_id,
+        role,
+        is_team_principal,
+        is_team_assistant,
+        is_driver,
+        driver_category
+      ) VALUES ($1, $2, 'driver', false, false, true, $3)
+      ON CONFLICT (user_id, team_id)
+      DO UPDATE SET
+        is_driver = true,
+        driver_category = EXCLUDED.driver_category,
+        role = CASE
+          WHEN user_team_memberships.is_team_principal THEN user_team_memberships.role
+          WHEN user_team_memberships.is_team_assistant THEN user_team_memberships.role
+          ELSE 'driver'
+        END`,
+      [userId, teamId, category],
+    );
+  }
+
+  private async removeDriverMembershipIfNeeded(
+    client: { query: (sql: string, params?: any[]) => Promise<any> },
+    userId: string,
+    teamId: string,
+  ) {
+    const remaining = await client.query(
+      `SELECT id
+       FROM team_drivers
+       WHERE user_id = $1
+         AND team_id = $2
+         AND status = 'active'`,
+      [userId, teamId],
+    );
+    if (remaining.rows[0]) return;
+
+    const membership = await client.query(
+      `SELECT is_team_principal, is_team_assistant
+       FROM user_team_memberships
+       WHERE user_id = $1
+         AND team_id = $2`,
+      [userId, teamId],
+    );
+    const row = membership.rows[0];
+    if (!row) return;
+
+    if (!row.is_team_principal && !row.is_team_assistant) {
+      await client.query(
+        'DELETE FROM user_team_memberships WHERE user_id = $1 AND team_id = $2',
+        [userId, teamId],
+      );
+      return;
+    }
+
+    await client.query(
+      `UPDATE user_team_memberships
+       SET is_driver = false,
+           driver_category = null,
+           role = CASE WHEN is_team_principal THEN 'team_principal' ELSE 'team_assistant' END
+       WHERE user_id = $1
+         AND team_id = $2`,
+      [userId, teamId],
+    );
+  }
+
+  private async recalculateTeamSalaryCost(
+    client: { query: (sql: string, params?: any[]) => Promise<any> },
+    teamId: string,
+  ) {
+    await client.query(
+      `UPDATE teams
+       SET salary_cost_per_race = COALESCE(
+         (
+          SELECT SUM(salary_per_race)
+          FROM team_drivers
+          WHERE team_id = $1
+            AND status = 'active'
+         ),
+         0
+       ),
+       updated_at = NOW()
+       WHERE id = $1`,
+      [teamId],
+    );
   }
 
   async recordStandardRaceFinancialEntries(teamId: string, raceId?: string): Promise<void> {

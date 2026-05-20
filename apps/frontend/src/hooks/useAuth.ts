@@ -26,6 +26,7 @@ export interface TeamMembership {
   teamTag: string;
   teamColor: string;
   roles: ('team_principal' | 'team_assistant' | 'driver')[];
+  driverCategory?: 'starter' | 'reserve' | null;
 }
 
 interface AuthContextType {
@@ -40,10 +41,35 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+function getStoredAuthData(): { user: User | null; token: string | null } {
+  if (typeof window === 'undefined') {
+    return { user: null, token: null };
+  }
+
+  const storedToken = localStorage.getItem('auth_token');
+  const storedUser = localStorage.getItem('user_info');
+
+  if (!storedToken || !storedUser) {
+    return { user: null, token: null };
+  }
+
+  try {
+    return {
+      user: JSON.parse(storedUser),
+      token: storedToken,
+    };
+  } catch (error) {
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('user_info');
+    return { user: null, token: null };
+  }
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [initialAuth] = useState(getStoredAuthData);
+  const [user, setUser] = useState<User | null>(initialAuth.user);
+  const [token, setToken] = useState<string | null>(initialAuth.token);
+  const [isLoading, setIsLoading] = useState(() => Boolean(initialAuth.token));
   const router = useRouter();
 
   // Check authentication status on mount
@@ -52,6 +78,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         const storedToken = localStorage.getItem('auth_token');
         const storedUser = localStorage.getItem('user_info');
+
+        if (!storedToken || !storedUser) {
+          clearAuthData();
+          setIsLoading(false);
+          return;
+        }
 
         if (storedToken && storedUser) {
           // Parse stored user data first

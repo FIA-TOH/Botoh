@@ -18,9 +18,10 @@ export interface User {
   teamMemberships: {
     teamId: string;
     teamName: string;
-    teamTag: string;
-    teamColor: string;
+    teamTag: string | null;
+    teamColor: string | null;
     roles: ('team_principal' | 'team_assistant' | 'driver')[];
+    driverCategory: 'starter' | 'reserve' | null;
   }[];
   language: 'pt' | 'en' | 'es';
   created_at: string;
@@ -29,6 +30,7 @@ export interface User {
 export interface LoginRequest {
   username: string;
   password: string;
+  teamTag?: string | null;
 }
 
 export interface AuthResponse {
@@ -48,6 +50,50 @@ export interface JwtPayload {
 }
 
 class AuthService {
+  private selectTeamForLogin(
+    user: User,
+    teamTag?: string | null,
+  ): Pick<User, 'teamId' | 'teamName' | 'teamTag' | 'teamColor'> | null {
+    const memberships = Array.isArray(user.teamMemberships) ? user.teamMemberships : [];
+    const normalizedTeamTag = teamTag?.trim().toUpperCase();
+
+    if (normalizedTeamTag) {
+      const selectedMembership = memberships.find(
+        (membership) => membership.teamTag?.toUpperCase() === normalizedTeamTag,
+      );
+
+      if (!selectedMembership) return null;
+
+      return {
+        teamId: selectedMembership.teamId,
+        teamName: selectedMembership.teamName,
+        teamTag: selectedMembership.teamTag,
+        teamColor: selectedMembership.teamColor,
+      };
+    }
+
+    const starterMembership = memberships.find(
+      (membership) => membership.roles.includes('driver') && membership.driverCategory === 'starter',
+    );
+    const fallbackMembership = starterMembership ?? memberships[0];
+
+    if (fallbackMembership) {
+      return {
+        teamId: fallbackMembership.teamId,
+        teamName: fallbackMembership.teamName,
+        teamTag: fallbackMembership.teamTag,
+        teamColor: fallbackMembership.teamColor,
+      };
+    }
+
+    return {
+      teamId: user.teamId,
+      teamName: user.teamName,
+      teamTag: user.teamTag,
+      teamColor: user.teamColor,
+    };
+  }
+
   // Hash password
   async hashPassword(password: string): Promise<string> {
     const saltRounds = 12;
@@ -110,8 +156,14 @@ class AuthService {
           SELECT t.id, t.name, t.tag, t.color
           FROM user_team_memberships utm
           JOIN teams t ON t.id = utm.team_id
+          LEFT JOIN team_drivers td
+            ON td.user_id = utm.user_id
+           AND td.team_id = utm.team_id
+           AND td.status = 'active'
           WHERE utm.user_id = u.id
-          ORDER BY t.name
+          ORDER BY
+            CASE WHEN td.category = 'starter' THEN 0 ELSE 1 END,
+            t.name
           LIMIT 1
         ) primary_team ON true
         LEFT JOIN LATERAL (
@@ -125,12 +177,17 @@ class AuthService {
                 CASE WHEN utm.is_team_principal THEN 'team_principal' END,
                 CASE WHEN utm.is_team_assistant THEN 'team_assistant' END,
                 CASE WHEN utm.is_driver THEN 'driver' END
-              ], NULL)
+              ], NULL),
+              'driverCategory', COALESCE(td.category, utm.driver_category)
             )
             ORDER BY t.name
           ) AS items
           FROM user_team_memberships utm
           JOIN teams t ON t.id = utm.team_id
+          LEFT JOIN team_drivers td
+            ON td.user_id = utm.user_id
+           AND td.team_id = utm.team_id
+           AND td.status = 'active'
           WHERE utm.user_id = u.id
         ) memberships ON true
         WHERE LOWER(u.username) = LOWER($1)
@@ -171,8 +228,14 @@ class AuthService {
           SELECT t.id, t.name, t.tag, t.color
           FROM user_team_memberships utm
           JOIN teams t ON t.id = utm.team_id
+          LEFT JOIN team_drivers td
+            ON td.user_id = utm.user_id
+           AND td.team_id = utm.team_id
+           AND td.status = 'active'
           WHERE utm.user_id = u.id
-          ORDER BY t.name
+          ORDER BY
+            CASE WHEN td.category = 'starter' THEN 0 ELSE 1 END,
+            t.name
           LIMIT 1
         ) primary_team ON true
         LEFT JOIN LATERAL (
@@ -186,12 +249,17 @@ class AuthService {
                 CASE WHEN utm.is_team_principal THEN 'team_principal' END,
                 CASE WHEN utm.is_team_assistant THEN 'team_assistant' END,
                 CASE WHEN utm.is_driver THEN 'driver' END
-              ], NULL)
+              ], NULL),
+              'driverCategory', COALESCE(td.category, utm.driver_category)
             )
             ORDER BY t.name
           ) AS items
           FROM user_team_memberships utm
           JOIN teams t ON t.id = utm.team_id
+          LEFT JOIN team_drivers td
+            ON td.user_id = utm.user_id
+           AND td.team_id = utm.team_id
+           AND td.status = 'active'
           WHERE utm.user_id = u.id
         ) memberships ON true
         WHERE u.id = $1`,
@@ -235,16 +303,28 @@ class AuthService {
         };
       }
 
+      const selectedTeam = this.selectTeamForLogin(user, loginData.teamTag);
+      if (loginData.teamTag && !selectedTeam) {
+        return {
+          success: false,
+          message: 'User does not belong to this scuderia',
+        };
+      }
+
       // Remove password hash from user object
       const { password_hash, ...userWithoutPassword } = user;
+      const userWithSelectedTeam = {
+        ...userWithoutPassword,
+        ...(selectedTeam ?? {}),
+      };
 
       // Generate JWT token
-      const token = this.generateToken(userWithoutPassword);
+      const token = this.generateToken(userWithSelectedTeam);
 
       return {
         success: true,
         token,
-        user: userWithoutPassword,
+        user: userWithSelectedTeam,
       };
     } catch (error) {
       console.error('Login error:', error);
