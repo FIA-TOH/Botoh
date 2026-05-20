@@ -9,6 +9,7 @@ class MigrationService {
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         name VARCHAR(100) NOT NULL UNIQUE,
         tag VARCHAR(3) NOT NULL UNIQUE,
+        emoji VARCHAR(8) NOT NULL DEFAULT '',
         color VARCHAR(7) NOT NULL DEFAULT '#FFFFFF',
         budget NUMERIC DEFAULT 0,
         total_wins INTEGER DEFAULT 0,
@@ -20,6 +21,7 @@ class MigrationService {
     `);
 
     await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS tag VARCHAR(3)');
+    await query("ALTER TABLE teams ADD COLUMN IF NOT EXISTS emoji VARCHAR(8) NOT NULL DEFAULT ''");
     await query("ALTER TABLE teams ADD COLUMN IF NOT EXISTS color VARCHAR(7) NOT NULL DEFAULT '#FFFFFF'");
     await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS budget NUMERIC DEFAULT 0');
     await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS total_wins INTEGER DEFAULT 0');

@@ -14,7 +14,10 @@ export type LeagueScuderiaId = string;
 export interface Scuderia {
   name: string;
   tag: string;
+  emoji?: string;
   color: number;
+  pitLevel?: number;
+  weatherLevel?: number;
   fromBD?: boolean;
   engine?: Engine;
   chassis?: Chassis;

@@ -14,12 +14,18 @@ export interface User {
   teamId: string | null;
   teamName: string | null;
   teamTag: string | null;
+  teamEmoji: string | null;
   teamColor: string | null;
+  pitLevel: number | null;
+  weatherLevel: number | null;
   teamMemberships: {
     teamId: string;
     teamName: string;
     teamTag: string | null;
+    teamEmoji: string | null;
     teamColor: string | null;
+    pitLevel: number | null;
+    weatherLevel: number | null;
     roles: ('team_principal' | 'team_assistant' | 'driver')[];
     driverCategory: 'starter' | 'reserve' | null;
   }[];
@@ -53,7 +59,7 @@ class AuthService {
   private selectTeamForLogin(
     user: User,
     teamTag?: string | null,
-  ): Pick<User, 'teamId' | 'teamName' | 'teamTag' | 'teamColor'> | null {
+  ): Pick<User, 'teamId' | 'teamName' | 'teamTag' | 'teamEmoji' | 'teamColor' | 'pitLevel' | 'weatherLevel'> | null {
     const memberships = Array.isArray(user.teamMemberships) ? user.teamMemberships : [];
     const normalizedTeamTag = teamTag?.trim().toUpperCase();
 
@@ -68,7 +74,10 @@ class AuthService {
         teamId: selectedMembership.teamId,
         teamName: selectedMembership.teamName,
         teamTag: selectedMembership.teamTag,
+        teamEmoji: selectedMembership.teamEmoji,
         teamColor: selectedMembership.teamColor,
+        pitLevel: selectedMembership.pitLevel,
+        weatherLevel: selectedMembership.weatherLevel,
       };
     }
 
@@ -82,7 +91,10 @@ class AuthService {
         teamId: fallbackMembership.teamId,
         teamName: fallbackMembership.teamName,
         teamTag: fallbackMembership.teamTag,
+        teamEmoji: fallbackMembership.teamEmoji,
         teamColor: fallbackMembership.teamColor,
+        pitLevel: fallbackMembership.pitLevel,
+        weatherLevel: fallbackMembership.weatherLevel,
       };
     }
 
@@ -90,7 +102,10 @@ class AuthService {
       teamId: user.teamId,
       teamName: user.teamName,
       teamTag: user.teamTag,
+      teamEmoji: user.teamEmoji,
       teamColor: user.teamColor,
+      pitLevel: user.pitLevel,
+      weatherLevel: user.weatherLevel,
     };
   }
 
@@ -146,14 +161,17 @@ class AuthService {
           COALESCE(primary_team.id, legacy_team.id) AS "teamId",
           COALESCE(primary_team.name, legacy_team.name) AS "teamName",
           COALESCE(primary_team.tag, legacy_team.tag) AS "teamTag",
+          COALESCE(primary_team.emoji, legacy_team.emoji) AS "teamEmoji",
           COALESCE(primary_team.color, legacy_team.color) AS "teamColor",
+          COALESCE(LEAST(5, GREATEST(0, COALESCE(primary_team.pit_crew_level, legacy_team.pit_crew_level))), 0) AS "pitLevel",
+          COALESCE(LEAST(5, GREATEST(0, COALESCE(primary_team.climate_monitoring_level, legacy_team.climate_monitoring_level))), 0) AS "weatherLevel",
           COALESCE(memberships.items, '[]'::json) AS "teamMemberships",
           u.language,
           u.created_at
         FROM users u
         LEFT JOIN teams legacy_team ON u.team_id = legacy_team.id
         LEFT JOIN LATERAL (
-          SELECT t.id, t.name, t.tag, t.color
+          SELECT t.id, t.name, t.tag, t.emoji, t.color, t.pit_crew_level, t.climate_monitoring_level
           FROM user_team_memberships utm
           JOIN teams t ON t.id = utm.team_id
           LEFT JOIN team_drivers td
@@ -172,7 +190,10 @@ class AuthService {
               'teamId', t.id,
               'teamName', t.name,
               'teamTag', t.tag,
+              'teamEmoji', t.emoji,
               'teamColor', t.color,
+              'pitLevel', COALESCE(LEAST(5, GREATEST(0, t.pit_crew_level)), 0),
+              'weatherLevel', COALESCE(LEAST(5, GREATEST(0, t.climate_monitoring_level)), 0),
               'roles', ARRAY_REMOVE(ARRAY[
                 CASE WHEN utm.is_team_principal THEN 'team_principal' END,
                 CASE WHEN utm.is_team_assistant THEN 'team_assistant' END,
@@ -218,14 +239,17 @@ class AuthService {
           COALESCE(primary_team.id, legacy_team.id) AS "teamId",
           COALESCE(primary_team.name, legacy_team.name) AS "teamName",
           COALESCE(primary_team.tag, legacy_team.tag) AS "teamTag",
+          COALESCE(primary_team.emoji, legacy_team.emoji) AS "teamEmoji",
           COALESCE(primary_team.color, legacy_team.color) AS "teamColor",
+          COALESCE(LEAST(5, GREATEST(0, COALESCE(primary_team.pit_crew_level, legacy_team.pit_crew_level))), 0) AS "pitLevel",
+          COALESCE(LEAST(5, GREATEST(0, COALESCE(primary_team.climate_monitoring_level, legacy_team.climate_monitoring_level))), 0) AS "weatherLevel",
           COALESCE(memberships.items, '[]'::json) AS "teamMemberships",
           u.language,
           u.created_at
         FROM users u
         LEFT JOIN teams legacy_team ON u.team_id = legacy_team.id
         LEFT JOIN LATERAL (
-          SELECT t.id, t.name, t.tag, t.color
+          SELECT t.id, t.name, t.tag, t.emoji, t.color, t.pit_crew_level, t.climate_monitoring_level
           FROM user_team_memberships utm
           JOIN teams t ON t.id = utm.team_id
           LEFT JOIN team_drivers td
@@ -244,7 +268,10 @@ class AuthService {
               'teamId', t.id,
               'teamName', t.name,
               'teamTag', t.tag,
+              'teamEmoji', t.emoji,
               'teamColor', t.color,
+              'pitLevel', COALESCE(LEAST(5, GREATEST(0, t.pit_crew_level)), 0),
+              'weatherLevel', COALESCE(LEAST(5, GREATEST(0, t.climate_monitoring_level)), 0),
               'roles', ARRAY_REMOVE(ARRAY[
                 CASE WHEN utm.is_team_principal THEN 'team_principal' END,
                 CASE WHEN utm.is_team_assistant THEN 'team_assistant' END,

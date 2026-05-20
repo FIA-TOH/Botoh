@@ -3,6 +3,7 @@ import { join } from "path";
 import { currentWeather } from "./currentWeather";
 import { checkWeatherReportAnnouncements, sendInitialWeatherAnnouncement, resetWeatherReportAnnouncements } from "./rain/weatherReportAnnouncer";
 import { COLORS } from "../chat/chat";
+import { isRealisticRainAnnouncerEnabled } from "./rain/realisticRainAnnouncer";
 
 let lastRainGlobal: number = 0;
 let lastRainS1: number = 0;
@@ -150,6 +151,7 @@ function updateCurrentWeather(room: RoomObject) {
 
 function checkAndAnnounceRainChanges(room: RoomObject) {
   if (!room) return;
+  if (isRealisticRainAnnouncerEnabled()) return;
 
   const currentRain = currentWeather.rainGlobal;
   let shouldAnnounce = false;

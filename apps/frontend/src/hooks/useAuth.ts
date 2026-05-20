@@ -15,6 +15,7 @@ interface User {
   teamId?: string | null;
   teamName?: string | null;
   teamTag?: string | null;
+  teamEmoji?: string | null;
   teamColor?: string | null;
   teamMemberships?: TeamMembership[];
   language?: 'pt' | 'en' | 'es';
@@ -24,7 +25,10 @@ export interface TeamMembership {
   teamId: string;
   teamName: string;
   teamTag: string;
+  teamEmoji?: string | null;
   teamColor: string;
+  pitLevel?: number | null;
+  weatherLevel?: number | null;
   roles: ('team_principal' | 'team_assistant' | 'driver')[];
   driverCategory?: 'starter' | 'reserve' | null;
 }

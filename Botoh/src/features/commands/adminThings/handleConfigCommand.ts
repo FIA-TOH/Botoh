@@ -18,6 +18,8 @@ import { handlePitCommand } from "./handlePitCommand";
 import { setManageTyresEnabled } from "./handleManageTyresCommand";
 import { handlePresentationLapCommand } from "../gameState/handlePresentationLapCommand";
 import { handleRREnabledCommand } from "./handleRREnabledCommand";
+import { setRealisticRainAnnouncerEnabled } from "../../weather/rain/realisticRainAnnouncer";
+import { setScuderiaAvatar } from "../../scuderias/scuderiaAvatar";
 
 
 export function handleConfigCommand(
@@ -66,6 +68,7 @@ export function handleConfigCommand(
 
 function applyFTOHConfig(room: RoomObject, byPlayer: PlayerObject) {
   log(`FTOH configuration applied by ${byPlayer.name}`);
+  setRealisticRainAnnouncerEnabled(true);
   handleSafetyCommand(byPlayer, ["on"], room);
   handleRModeCommand(byPlayer, [], room);
   enableSlipstream(true);
@@ -82,11 +85,13 @@ function applyFTOHConfig(room: RoomObject, byPlayer: PlayerObject) {
   handlePitCommand(byPlayer, ["new"], room);
   setManageTyresEnabled(true);
   handleRREnabledCommand(byPlayer, ["off"], room);
+  setScuderiaAvatar(true);
 }
 
 
 export function applyFTOHPublicConfig(room: RoomObject, byPlayer: PlayerObject) {
   log(`FTOH Public configuration applied by ${byPlayer.name}`);
+  setRealisticRainAnnouncerEnabled(false);
   handleSafetyCommand(byPlayer, ["off"], room);
   handleRModeCommand(byPlayer, [], room);
   enableSlipstream(true);
@@ -103,10 +108,12 @@ export function applyFTOHPublicConfig(room: RoomObject, byPlayer: PlayerObject) 
   handlePitCommand(byPlayer, ["old"], room);
   setManageTyresEnabled(false);
   handleRREnabledCommand(byPlayer, ["on"], room);
+   setScuderiaAvatar(false);
 }
 
 function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {
   log(`FH configuration applied by ${byPlayer.name}`);
+  setRealisticRainAnnouncerEnabled(false);
   handleSafetyCommand(byPlayer, ["off"], room);
   handleRModeCommand(byPlayer, [], room);
   enableSlipstream(true);
@@ -123,10 +130,12 @@ function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {
   handlePitCommand(byPlayer, ["old"], room);
   setManageTyresEnabled(false);
   handleRREnabledCommand(byPlayer, ["on"], room);
+   setScuderiaAvatar(false);
 }
 
 function applyHaxbulaConfig(room: RoomObject, byPlayer: PlayerObject) {
   log(`Haxbula configuration applied by ${byPlayer.name}`);
+  setRealisticRainAnnouncerEnabled(false);
   handleSafetyCommand(byPlayer, ["off"], room);
   handleRModeCommand(byPlayer, [], room);
   enableSlipstream(false);
@@ -143,4 +152,5 @@ function applyHaxbulaConfig(room: RoomObject, byPlayer: PlayerObject) {
   handlePitCommand(byPlayer, ["old"], room);
   setManageTyresEnabled(false);
   handleRREnabledCommand(byPlayer, ["on"], room);
+   setScuderiaAvatar(false);
 }

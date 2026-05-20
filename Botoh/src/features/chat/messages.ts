@@ -198,6 +198,37 @@ export const MESSAGES = {
       pitType: pitType,
     }),
   }),
+  SCUDERIA_AVATAR_MISSING_ARGUMENT: (): LocalizedMessageFunction => ({
+    en: en_messages.SCUDERIA_AVATAR_MISSING_ARGUMENT,
+    es: es_messages.SCUDERIA_AVATAR_MISSING_ARGUMENT,
+    fr: fr_messages.SCUDERIA_AVATAR_MISSING_ARGUMENT,
+    tr: tr_messages.SCUDERIA_AVATAR_MISSING_ARGUMENT,
+    pt: pt_messages.SCUDERIA_AVATAR_MISSING_ARGUMENT,
+  }),
+  SCUDERIA_AVATAR_INVALID_ARGUMENT: (): LocalizedMessageFunction => ({
+    en: en_messages.SCUDERIA_AVATAR_INVALID_ARGUMENT,
+    es: es_messages.SCUDERIA_AVATAR_INVALID_ARGUMENT,
+    fr: fr_messages.SCUDERIA_AVATAR_INVALID_ARGUMENT,
+    tr: tr_messages.SCUDERIA_AVATAR_INVALID_ARGUMENT,
+    pt: pt_messages.SCUDERIA_AVATAR_INVALID_ARGUMENT,
+  }),
+  SCUDERIA_AVATAR_SUCCESS: (enabled: boolean): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.SCUDERIA_AVATAR_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+    es: replaceTemplateString(es_messages.SCUDERIA_AVATAR_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+    fr: replaceTemplateString(fr_messages.SCUDERIA_AVATAR_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+    tr: replaceTemplateString(tr_messages.SCUDERIA_AVATAR_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+    pt: replaceTemplateString(pt_messages.SCUDERIA_AVATAR_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+  }),
   AVAILABLE_COMMANDS: (): LocalizedMessageFunction => ({
     en: en_messages.AVAILABLE_COMMANDS,
     es: es_messages.AVAILABLE_COMMANDS,

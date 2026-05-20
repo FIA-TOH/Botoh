@@ -1,4 +1,6 @@
 import { log } from "../discord/logger";
+import { getLeagueScuderia } from "../scuderias/scuderias";
+import { isScuderiaAvatarEnabled } from "../scuderias/scuderiaAvatar";
 import { Tires, tyresActivated } from "../tires&pits/tires";
 import { playerList } from "./playerList";
 
@@ -61,6 +63,51 @@ const playerTimers: Record<
   { timeout?: NodeJS.Timeout; interval?: NodeJS.Timeout }
 > = {};
 
+const SANDBAG_PENALTY_AVATAR = "ðŸ¢";
+
+export function getPlayerDefaultAvatar(playerId: number): string | null {
+  const player = playerList[playerId];
+  if (!player) return null;
+
+  if (isScuderiaAvatarEnabled()) {
+    const scuderia = getLeagueScuderia(player.leagueScuderia);
+    return scuderia?.emoji || "??";
+  }
+
+  return player.pubAvatar ?? null;
+}
+
+function shouldShowTireAvatar(playerId: number): boolean {
+  const player = playerList[playerId];
+  if (!player) return false;
+
+  return Boolean(
+    player.tires &&
+    TIRE_AVATAR[player.tires] &&
+    player.showTires &&
+    tyresActivated,
+  );
+}
+
+function getPlayerRestoredAvatar(playerId: number): string | null {
+  const player = playerList[playerId];
+  if (!player) return null;
+
+  if (player.sandbagPenalty && player.sandbagPenalty > 0) {
+    return SANDBAG_PENALTY_AVATAR;
+  }
+
+  if (isScuderiaAvatarEnabled()) {
+    return getPlayerDefaultAvatar(playerId);
+  }
+
+  if (shouldShowTireAvatar(playerId)) {
+    return TIRE_AVATAR[player.tires];
+  }
+
+  return getPlayerDefaultAvatar(playerId);
+}
+
 function clearPlayerTimers(playerId: number) {
   if (playerTimers[playerId]?.timeout) {
     clearTimeout(playerTimers[playerId].timeout!);
@@ -71,22 +118,12 @@ function clearPlayerTimers(playerId: number) {
   playerTimers[playerId] = {};
 }
 
+export function restorePlayerPersistentAvatar(playerId: number, room: RoomObject) {
+  room.setPlayerAvatar(playerId, getPlayerRestoredAvatar(playerId));
+}
+
 export function restoreTyreOrCar(playerId: number, room: RoomObject) {
-  const p = playerList[playerId];
-  if (!p) return;
-
-  if (p.sandbagPenalty && p.sandbagPenalty > 0) {
-    room.setPlayerAvatar(playerId, "🐢");
-    return;
-  }
-
-  const tireType = p.tires;
-
-  if (tireType && TIRE_AVATAR[tireType] && p.showTires && tyresActivated) {
-    room.setPlayerAvatar(playerId, TIRE_AVATAR[tireType]);
-  } else {
-    room.setPlayerAvatar(playerId, p.pubAvatar);
-  }
+  restorePlayerPersistentAvatar(playerId, room);
 }
 const situationHandlers: Record<
   Situacions,

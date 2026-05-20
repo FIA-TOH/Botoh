@@ -75,6 +75,7 @@ import { handleSetNewWeatherId } from "./weather/handleSetNewWeatherId";
 import { handleConfigCommand } from "./adminThings/handleConfigCommand";
 import { handleManageTyresCommand } from "./adminThings/handleManageTyresCommand";
 import { handlePitCommand } from "./adminThings/handlePitCommand";
+import { handleScuderiaAvatarCommand } from "./adminThings/handleScuderiaAvatarCommand";
 import { handleLoginCommand } from "./login/handleLoginCommand";
 import { handleSeeLoginCommand } from "./adminThings/handleSeeLoginCommand";
 
@@ -426,6 +427,11 @@ export type CommandFunction = (
     args: string[],
     room: RoomObject,
   ) => void,
+  handleScuderiaAvatarCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
   handleSeeLoginCommand: (
     byPlayer: PlayerObject,
     args: string[],
@@ -518,6 +524,7 @@ function importCommandsByLanguage(commandFunctions: {
         handleConfigCommand,
         handleManageTyresCommand,
         handlePitCommand,
+        handleScuderiaAvatarCommand,
         handleSeeLoginCommand,
         handleLoginCommand,
       ),
@@ -603,6 +610,7 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
         handleConfigCommand,
         handleManageTyresCommand,
         handlePitCommand,
+        handleScuderiaAvatarCommand,
         handleSeeLoginCommand,
         handleLoginCommand,
       ),

@@ -9,7 +9,10 @@ type LoginUser = {
   teamId: string | null;
   teamName: string | null;
   teamTag: string | null;
+  teamEmoji: string | null;
   teamColor: string | null;
+  pitLevel?: number | null;
+  weatherLevel?: number | null;
 };
 
 type LoginResponse = {
@@ -21,6 +24,12 @@ type LoginResponse = {
 function parseTeamColor(color: string | null) {
   if (!color) return 0xb3b3b3;
   return Number.parseInt(color.replace("#", ""), 16);
+}
+
+function parseFacilityLevel(level?: number | null) {
+  const value = level ?? 0;
+  if (!Number.isFinite(value)) return 0;
+  return Math.min(5, Math.max(0, Math.trunc(value)));
 }
 
 export async function handleLoginCommand(
@@ -84,7 +93,10 @@ export async function handleLoginCommand(
       registerLeagueScuderia(loggedUser.teamId, {
         name: loggedUser.teamName,
         tag: loggedUser.teamTag,
+        emoji: loggedUser.teamEmoji ?? undefined,
         color: parseTeamColor(loggedUser.teamColor),
+        pitLevel: parseFacilityLevel(loggedUser.pitLevel),
+        weatherLevel: parseFacilityLevel(loggedUser.weatherLevel),
       });
     }
 

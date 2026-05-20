@@ -23,6 +23,7 @@ interface Scuderia {
   id: string;
   name: string;
   tag: string;
+  emoji: string;
   color: string;
 }
 interface TeamGarageManage {
@@ -88,6 +89,7 @@ interface UserFormData {
 interface ScuderiaFormData {
   name: string;
   tag: string;
+  emoji: string;
   color: string;
 }
 
@@ -103,6 +105,7 @@ const EMPTY_USER_FORM: UserFormData = {
 const EMPTY_SCUDERIA_FORM: ScuderiaFormData = {
   name: '',
   tag: '',
+  emoji: '',
   color: '#FFFFFF',
 };
 
@@ -118,6 +121,10 @@ function getAuthHeaders() {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${token}`,
   };
+}
+
+function limitScuderiaEmoji(value: string) {
+  return Array.from(value).slice(0, 2).join('');
 }
 
 function getReadableTextColor(backgroundColor?: string) {
@@ -276,7 +283,12 @@ export default function AdminPage() {
 
   function openEditScuderia(scuderia: Scuderia) {
     setEditingScuderiaId(scuderia.id);
-    setScuderiaForm({ name: scuderia.name, tag: scuderia.tag, color: scuderia.color });
+    setScuderiaForm({
+      name: scuderia.name,
+      tag: scuderia.tag,
+      emoji: scuderia.emoji ?? '',
+      color: scuderia.color,
+    });
     setScuderiaModalOpen(true);
   }
 
@@ -348,6 +360,12 @@ export default function AdminPage() {
 
   async function saveScuderia(event: React.FormEvent) {
     event.preventDefault();
+
+    if (Array.from(scuderiaForm.emoji.trim()).length > 2) {
+      showSnackbar(t.admin.scuderiaEmojiInvalid, 'error');
+      return;
+    }
+
     setSavingScuderia(true);
 
     try {
@@ -356,7 +374,10 @@ export default function AdminPage() {
         {
           method: editingScuderiaId ? 'PUT' : 'POST',
           headers: getAuthHeaders(),
-          body: JSON.stringify(scuderiaForm),
+          body: JSON.stringify({
+            ...scuderiaForm,
+            emoji: scuderiaForm.emoji.trim(),
+          }),
         },
       );
 
@@ -895,6 +916,7 @@ export default function AdminPage() {
               <thead className="text-gray-300">
                 <tr>
                   <th className="py-2">Nome</th>
+                  <th className="py-2">{t.admin.emoji}</th>
                   <th className="py-2">Abreviação</th>
                   <th className="py-2">Cor</th>
                   <th className="py-2 text-right">Ações</th>
@@ -904,6 +926,7 @@ export default function AdminPage() {
                 {sortedScuderias.map((scuderia) => (
                   <tr key={scuderia.id} className="border-t border-gray-700">
                     <td className="py-3">{scuderia.name}</td>
+                    <td className="py-3 text-2xl">{scuderia.emoji || '---'}</td>
                     <td className="py-3">{scuderia.tag}</td>
                     <td className="py-3">
                       <span className="inline-flex items-center gap-2">
@@ -929,7 +952,7 @@ export default function AdminPage() {
                 ))}
                 {!loadingData && sortedScuderias.length === 0 && (
                   <tr>
-                    <td className="py-4 text-gray-400" colSpan={4}>Nenhuma scuderia encontrada.</td>
+                    <td className="py-4 text-gray-400" colSpan={5}>Nenhuma scuderia encontrada.</td>
                   </tr>
                 )}
               </tbody>
@@ -1540,6 +1563,19 @@ export default function AdminPage() {
                 maxLength={3}
                 pattern="[A-Z0-9]{3}"
                 required
+              />
+            </label>
+
+            <label className="block mb-6">
+              <span className="block text-sm mb-2">{t.admin.emoji}</span>
+              <input
+                className="w-full bg-gray-700 rounded-lg px-4 py-2"
+                value={scuderiaForm.emoji}
+                onChange={(event) => setScuderiaForm((prev) => ({
+                  ...prev,
+                  emoji: limitScuderiaEmoji(event.target.value),
+                }))}
+                placeholder={t.admin.scuderiaEmojiPlaceholder}
               />
             </label>
 

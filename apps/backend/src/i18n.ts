@@ -67,6 +67,7 @@ const exactMessages = {
     'Scuderia abbreviation must be exactly 3 characters': 'A abreviação da scuderia deve ter exatamente 3 caracteres',
     'Scuderia abbreviation can only contain uppercase letters and numbers': 'A abreviação da scuderia só pode conter letras maiúsculas e números',
     'Scuderia abbreviation can only contain letters and numbers': 'A abreviação da scuderia só pode conter letras e números',
+    'Scuderia emoji must have at most 2 characters': 'O emoji da scuderia deve ter no máximo 2 caracteres',
     'Scuderia color must be a valid hex color': 'A cor da scuderia deve ser um hexadecimal válido',
     'Finance amount must be greater than zero': 'O valor financeiro deve ser maior que zero',
     'Finance entry type is invalid': 'O tipo de lançamento financeiro é inválido',
@@ -112,6 +113,7 @@ const exactMessages = {
   en: {
     'User does not belong to this scuderia': 'User does not belong to this scuderia',
     'Scuderia abbreviation can only contain letters and numbers': 'Scuderia abbreviation can only contain letters and numbers',
+    'Scuderia emoji must have at most 2 characters': 'Scuderia emoji must have at most 2 characters',
     'Team sponsor not found': 'Team sponsor not found',
     'Failed to release sponsor': 'Failed to release sponsor',
     'Race progress direction is invalid': 'Race progress direction is invalid',
@@ -179,6 +181,7 @@ const exactMessages = {
     'Scuderia abbreviation must be exactly 3 characters': 'La abreviación de la scuderia debe tener exactamente 3 caracteres',
     'Scuderia abbreviation can only contain uppercase letters and numbers': 'La abreviación de la scuderia solo puede contener letras mayúsculas y números',
     'Scuderia abbreviation can only contain letters and numbers': 'La abreviación de la scuderia solo puede contener letras y números',
+    'Scuderia emoji must have at most 2 characters': 'El emoji de la scuderia debe tener como máximo 2 caracteres',
     'Scuderia color must be a valid hex color': 'El color de la scuderia debe ser un hexadecimal válido',
     'Finance amount must be greater than zero': 'El valor financiero debe ser mayor que cero',
     'Finance entry type is invalid': 'El tipo de movimiento financiero no es válido',

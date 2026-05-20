@@ -346,6 +346,11 @@ export default function fr_commands(
     args: string[],
     room: RoomObject,
   ) => void,
+  handleScuderiaAvatarCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
   handleSeeLoginCommand: (
     byPlayer: PlayerObject,
     args: string[],
@@ -433,6 +438,7 @@ export default function fr_commands(
     "!config": handleConfigCommand,
     "!manage_tyres": handleManageTyresCommand,
     "!pit": handlePitCommand,
+    "!scuderia_avatar": handleScuderiaAvatarCommand,
     "!see_login": handleSeeLoginCommand,
     "!login": handleLoginCommand,
   };

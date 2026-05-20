@@ -48,6 +48,7 @@ export default function PitWallPage() {
     eligibleMemberships.find((membership) => membership.teamId === selectedTeamId)
     ?? null;
   const loggedUserTeam = selectedMembership?.teamName ?? null;
+  const loggedUserWeatherLevel = selectedMembership?.weatherLevel ?? 0;
   const drivers = useMemo(
     () =>
       (playerList?.players ?? []).map((player) => ({
@@ -289,6 +290,7 @@ export default function PitWallPage() {
           <RaceInsightsGrid
           drivers={standings}
           loggedUserTeam={loggedUserTeam}
+          loggedUserWeatherLevel={loggedUserWeatherLevel}
           raceSession={playerList?.raceSession}
           loading={!playerList}
           error={null}

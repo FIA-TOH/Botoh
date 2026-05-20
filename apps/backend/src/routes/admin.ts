@@ -80,6 +80,11 @@ const scuderiaValidation = [
     .withMessage('Scuderia abbreviation must be exactly 3 characters')
     .matches(/^[A-Z0-9]{3}$/)
     .withMessage('Scuderia abbreviation can only contain uppercase letters and numbers'),
+  body('emoji')
+    .optional({ nullable: true })
+    .isString()
+    .custom((value) => Array.from(String(value).trim()).length <= 2)
+    .withMessage('Scuderia emoji must have at most 2 characters'),
   body('color')
     .matches(/^#[0-9A-Fa-f]{6}$/)
     .withMessage('Scuderia color must be a valid hex color'),

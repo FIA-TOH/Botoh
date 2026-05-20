@@ -1,5 +1,9 @@
 import { playerList } from "../changePlayerState/playerList";
 import { randomInRange } from "../utils";
+import {
+  getPitErrorTimeThresholds,
+  getPitReactionTimeMultiplier,
+} from "./newPitSystem/pitReactionMultiplier";
 
 type PitTimeEntry = {
   time: number;
@@ -12,6 +16,36 @@ export type PitResult = {
   tyres: number[];
   perTyreTimes: number[];
 };
+
+function getPitErrorType(totalTime: number, playerId: number): PitResult["errorType"] {
+  const thresholds = getPitErrorTimeThresholds(playerId);
+
+  if (totalTime >= thresholds.heavy) return "heavy";
+  if (totalTime >= thresholds.light) return "light";
+  return "none";
+}
+
+function buildPitErrorTyres(errorType: PitResult["errorType"]): number[] {
+  const tyres: number[] = [];
+
+  if (errorType === "light") {
+    tyres.push(Math.floor(Math.random() * 4));
+    return tyres;
+  }
+
+  if (errorType === "heavy") {
+    const tyre1 = Math.floor(Math.random() * 4);
+    tyres.push(tyre1);
+    if (Math.random() < 0.5) {
+      let tyre2 = tyre1;
+      while (tyre2 === tyre1) tyre2 = Math.floor(Math.random() * 4);
+      tyres.push(tyre2);
+    }
+  }
+
+  return tyres;
+}
+
 const PIT_TABLE: PitTimeEntry[] = [
   { time: 1.6, prob: 0.5 },
   { time: 1.8, prob: 2 },
@@ -33,7 +67,8 @@ export function generatePitCountdown(playerId?: number): number {
   if (playerId && playerList[playerId]?.newPitState?.isPitNewEnabled && playerList[playerId].newPitState.reactionTime) {
     const reactionTime = playerList[playerId].newPitState.reactionTime;
     const emojiDelayTime = playerList[playerId]?.newPitState?.emojiDelayTime || 0;
-    const pitTime = reactionTime * 5 + 2 - emojiDelayTime;
+    const reactionTimeMultiplier = getPitReactionTimeMultiplier(playerId);
+    const pitTime = reactionTime * reactionTimeMultiplier + 2 - emojiDelayTime;
     return Math.max(2.0, Math.min(15.0, Math.round(pitTime * 100) / 100));
   }
 
@@ -64,22 +99,8 @@ export function generatePitResult(player: PlayerObject): PitResult {
   const totalTime = generatePitCountdown(player.id);
   playerList[player.id].pitCountdown = totalTime;
 
-  let errorType: PitResult["errorType"] = "none";
-  const tyres: number[] = [];
-
-  if (totalTime >= 3 && totalTime <= 6.0) {
-    errorType = "light";
-    tyres.push(Math.floor(Math.random() * 4));
-  } else if (totalTime >= 6.1) {
-    errorType = "heavy";
-    const tyre1 = Math.floor(Math.random() * 4);
-    tyres.push(tyre1);
-    if (Math.random() < 0.5) {
-      let tyre2 = tyre1;
-      while (tyre2 === tyre1) tyre2 = Math.floor(Math.random() * 4);
-      tyres.push(tyre2);
-    }
-  }
+  const errorType = getPitErrorType(totalTime, player.id);
+  const tyres = buildPitErrorTyres(errorType);
 
   const perTyreTimes = Array(4).fill(0);
   if (errorType === "none") {
@@ -134,25 +155,12 @@ export function generatePitResultFromReaction(playerId: number): PitResult {
   }
 
   const emojiDelayTime = playerList[playerId]?.newPitState?.emojiDelayTime || 0;
-  const totalTime = Math.max(2.0, Math.min(15.0, Math.round((reactionTime * 5 + 2 - emojiDelayTime) * 100) / 100));
+  const reactionTimeMultiplier = getPitReactionTimeMultiplier(playerId);
+  const totalTime = Math.max(2.0, Math.min(15.0, Math.round((reactionTime * reactionTimeMultiplier + 2 - emojiDelayTime) * 100) / 100));
   playerList[playerId].pitCountdown = totalTime;
 
-  let errorType: PitResult["errorType"] = "none";
-  const tyres: number[] = [];
-
-  if (totalTime >= 3 && totalTime <= 6.0) {
-    errorType = "light";
-    tyres.push(Math.floor(Math.random() * 4));
-  } else if (totalTime >= 6.1) {
-    errorType = "heavy";
-    const tyre1 = Math.floor(Math.random() * 4);
-    tyres.push(tyre1);
-    if (Math.random() < 0.5) {
-      let tyre2 = tyre1;
-      while (tyre2 === tyre1) tyre2 = Math.floor(Math.random() * 4);
-      tyres.push(tyre2);
-    }
-  }
+  const errorType = getPitErrorType(totalTime, playerId);
+  const tyres = buildPitErrorTyres(errorType);
 
   const perTyreTimes = Array(4).fill(0);
   if (errorType === "none") {

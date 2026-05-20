@@ -24,6 +24,7 @@ export interface AdminUserInput {
 export interface ScuderiaInput {
   name: string;
   tag: string;
+  emoji?: string | null;
   color: string;
 }
 
@@ -590,7 +591,7 @@ class AdminService {
 
   async listScuderias() {
     const result = await query(`
-      SELECT id, name, tag, color, created_at AS "createdAt"
+      SELECT id, name, tag, emoji, color, created_at AS "createdAt"
       FROM teams
       ORDER BY name ASC
     `);
@@ -599,6 +600,7 @@ class AdminService {
   }
 
   async createScuderia(input: ScuderiaInput) {
+    const emoji = input.emoji?.trim() ?? '';
     const existing = await queryOne(
       'SELECT id FROM teams WHERE LOWER(name) = LOWER($1) OR UPPER(tag) = UPPER($2)',
       [input.name, input.tag],
@@ -612,6 +614,7 @@ class AdminService {
       `INSERT INTO teams (
         name,
         tag,
+        emoji,
         color,
         climate_monitoring_level,
         pit_crew_level,
@@ -620,21 +623,22 @@ class AdminService {
         created_at,
         updated_at
       )
-       VALUES ($1, $2, $3, 0, 0, 0, 0, NOW(), NOW())
+       VALUES ($1, $2, $3, $4, 0, 0, 0, 0, NOW(), NOW())
        RETURNING id`,
-      [input.name, input.tag.toUpperCase(), input.color],
+      [input.name, input.tag.toUpperCase(), emoji, input.color],
     );
 
     return { success: true, scuderia: result.rows[0] };
   }
 
   async updateScuderia(scuderiaId: string, input: ScuderiaInput) {
+    const emoji = input.emoji?.trim() ?? '';
     const result = await query(
       `UPDATE teams
-       SET name = $1, tag = $2, color = $3, updated_at = NOW()
-       WHERE id = $4
+       SET name = $1, tag = $2, emoji = $3, color = $4, updated_at = NOW()
+       WHERE id = $5
        RETURNING id`,
-      [input.name, input.tag.toUpperCase(), input.color, scuderiaId],
+      [input.name, input.tag.toUpperCase(), emoji, input.color, scuderiaId],
     );
 
     if (!result.rows[0]) {

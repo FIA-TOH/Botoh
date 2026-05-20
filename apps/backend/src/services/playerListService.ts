@@ -17,8 +17,11 @@ import { CIRCUITS, currentMapIndex } from '../../../../Botoh/src/features/zones/
 import { currentWeather } from '../../../../Botoh/src/features/weather/currentWeather';
 import {
   getLastWeatherAnnouncement,
+  getRealisticWeatherAnnouncement,
   LastWeatherAnnouncement,
+  RealisticWeatherAnnouncement,
 } from '../../../../Botoh/src/features/weather/rain/weatherReportAnnouncer';
+import { isRealisticRainAnnouncerEnabled } from '../../../../Botoh/src/features/weather/rain/realisticRainAnnouncer';
 import {
   getLapHistory,
   getPaceStats,
@@ -126,6 +129,8 @@ export interface WeatherSessionData {
     sector3: WeatherSnapshot;
   };
   lastAnnouncement: LastWeatherAnnouncement | null;
+  realisticRainAnnouncer: boolean;
+  realisticAnnouncementsByLevel: Record<number, RealisticWeatherAnnouncement | null>;
 }
 
 function formatLapTime(time: number | undefined): string | null {
@@ -202,6 +207,15 @@ function getRaceSessionData(): RaceSessionData {
         },
       },
       lastAnnouncement: getLastWeatherAnnouncement(),
+      realisticRainAnnouncer: isRealisticRainAnnouncerEnabled(),
+      realisticAnnouncementsByLevel: {
+        0: getRealisticWeatherAnnouncement(0, currentTime),
+        1: getRealisticWeatherAnnouncement(1, currentTime),
+        2: getRealisticWeatherAnnouncement(2, currentTime),
+        3: getRealisticWeatherAnnouncement(3, currentTime),
+        4: getRealisticWeatherAnnouncement(4, currentTime),
+        5: getRealisticWeatherAnnouncement(5, currentTime),
+      },
     },
   };
 }

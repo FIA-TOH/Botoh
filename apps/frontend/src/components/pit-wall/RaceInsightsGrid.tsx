@@ -9,6 +9,7 @@ import { useTranslations } from '@/i18n';
 interface Props {
   drivers?: any[];
   loggedUserTeam?: string | null;
+  loggedUserWeatherLevel?: number;
   raceSession?: RaceSession | null;
   loading?: boolean;
   error?: string | null;
@@ -84,6 +85,7 @@ function UnavailableRaceInsight({
 export function RaceInsightsGrid({
   drivers = [],
   loggedUserTeam = null,
+  loggedUserWeatherLevel = 0,
   raceSession = null,
   loading = false,
   error = null,
@@ -200,14 +202,39 @@ export function RaceInsightsGrid({
 
   const formatWeatherValue = (value: number) => Math.round(value);
   const lastWeatherAnnouncement = raceSession?.weather?.lastAnnouncement ?? null;
-  const weatherAnnouncementAge = lastWeatherAnnouncement
-    ? Math.max(0, Math.floor((now - lastWeatherAnnouncement.announcedAtTimestamp) / 1000))
+  const realisticWeatherLevel = Math.max(0, Math.min(5, Math.floor(loggedUserWeatherLevel ?? 0)));
+  const realisticWeatherAnnouncement =
+    raceSession?.weather?.realisticAnnouncementsByLevel?.[realisticWeatherLevel]
+    ?? null;
+  const displayedWeatherAnnouncement = raceSession?.weather?.realisticRainAnnouncer
+    ? realisticWeatherAnnouncement
+    : lastWeatherAnnouncement;
+  const weatherAnnouncementAge = displayedWeatherAnnouncement && !raceSession?.weather?.realisticRainAnnouncer
+    ? Math.max(0, Math.floor((now - displayedWeatherAnnouncement.announcedAtTimestamp) / 1000))
     : null;
   const formatAnnouncementAge = (totalSeconds: number) => {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
     return t.insights.minutesAgo(minutes, seconds.toString().padStart(2, '0'));
   };
+  const formatGameTime = (totalSeconds: number) => {
+    const safeSeconds = Math.max(0, Math.floor(totalSeconds));
+    const minutes = Math.floor(safeSeconds / 60);
+    const seconds = safeSeconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  };
+  const weatherForecastTime =
+    realisticWeatherAnnouncement && raceSession?.weather?.realisticRainAnnouncer
+      ? realisticWeatherAnnouncement.isEstimated
+        ? t.insights.estimatedForecastTime(formatGameTime(realisticWeatherAnnouncement.displayedEventGameTime))
+        : t.insights.forecastTime(formatGameTime(realisticWeatherAnnouncement.displayedEventGameTime))
+      : null;
+  const weatherForecastIntensity =
+    realisticWeatherAnnouncement?.intensity
+      ? realisticWeatherAnnouncement.intensity.type === 'max'
+        ? t.insights.maxRainIntensity(Math.round(realisticWeatherAnnouncement.intensity.value).toString())
+        : t.insights.minRainIntensity(Math.round(realisticWeatherAnnouncement.intensity.value).toString())
+      : null;
 
   const selectedGapDriverA = drivers.find((driver) => driver.name === gapDriverA);
   const selectedGapDriverB = drivers.find((driver) => driver.name === gapDriverB);
@@ -504,8 +531,20 @@ export function RaceInsightsGrid({
           >
             <div className="text-2xl font-bold uppercase">{t.insights.forecast}</div>
             <div className="mt-3 text-xl">
-              {lastWeatherAnnouncement?.message[language] ?? t.insights.noWeather}
+              {raceSession?.weather?.realisticRainAnnouncer && realisticWeatherLevel <= 0
+                ? t.insights.noWeatherAccess
+                : displayedWeatherAnnouncement?.message[language] ?? t.insights.noWeather}
             </div>
+            {weatherForecastTime && (
+              <div className="mt-2 text-base text-gray-300">
+                {weatherForecastTime}
+              </div>
+            )}
+            {weatherForecastIntensity && (
+              <div className="mt-1 text-base text-gray-300">
+                {weatherForecastIntensity}
+              </div>
+            )}
             {weatherAnnouncementAge !== null && (
               <div className="mt-2 text-base text-gray-300">
                 {formatAnnouncementAge(weatherAnnouncementAge)}
