@@ -46,11 +46,11 @@ const config: EnvironmentConfig = {
   rateLimitMaxRequests: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '100'),
   logLevel: process.env.LOG_LEVEL || 'info',
   sentryDsn: process.env.SENTRY_DSN || undefined,
-  databaseUrl: process.env.DATABASE_URL || 'postgresql://postgres:senha@db.vcvthfjiyypyzhvbzkkz.supabase.co:5432/postgres',
+  databaseUrl: process.env.DATABASE_URL || '',
 };
 
 // Validate required environment variables
-const requiredEnvVars = ['JWT_SECRET'];
+const requiredEnvVars = ['JWT_SECRET', 'DATABASE_URL'];
 const missingEnvVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
 
 if (missingEnvVars.length > 0 && config.nodeEnv === 'production') {

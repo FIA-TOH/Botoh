@@ -443,17 +443,17 @@ BACKEND_URL=https://your-domain.com
 FRONTEND_URL=https://your-frontend.com
 
 # Database Configuration
-DATABASE_URL=postgresql://user:pass@host:5432/dbname
-DB_HOST=db.vcvthfjiyypyzhvbzkkz.supabase.co
+DATABASE_URL=postgresql://user:pass@your-db-host:5432/dbname
+DB_HOST=your-db-host.supabase.co
 DB_PORT=5432
 DB_NAME=postgres
 DB_USER=postgres
 DB_PASSWORD=your-password
 
 # Supabase Configuration
-SUPABASE_PROJECT_ID=vcvthfjiyypyzhvbzkkz
-SUPABASE_API_URL=https://vcvthfjiyypyzhvbzkkz.supabase.co
-SUPABASE_REST_URL=https://vcvthfjiyypyzhvbzkkz.supabase.co/rest/v1/
+SUPABASE_PROJECT_ID=your-project-id
+SUPABASE_API_URL=https://your-project-id.supabase.co
+SUPABASE_REST_URL=https://your-project-id.supabase.co/rest/v1/
 SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
 SUPABASE_SECRET_KEY=sb_secret_...
 SUPABASE_JWT_SECRET=your-jwt-secret
