@@ -4,7 +4,7 @@ import { Chassis } from '../chassis';
 import { Engine } from '../engine';
 import { PitCrew } from '../pitstop';
 import { ScuderiaColors } from '../scuderiaColours';
-import { leagueScuderia } from '../scuderias';
+import { Scuderia } from '../scuderias';
 import { Suspension } from '../tyres';
 
 export const McLarperEngine: Engine = {
@@ -49,7 +49,7 @@ export const McLarperPitCrew: PitCrew = {
   normalPitSpeedTimeBoost: 0,
 };
 
-export const McLarper: leagueScuderia = {
+export const McLarper: Scuderia = {
   name: 'McLarper',
   tag: 'MC',
   color: ScuderiaColors.MCLARPER,

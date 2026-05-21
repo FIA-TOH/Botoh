@@ -198,6 +198,37 @@ export const MESSAGES = {
       pitType: pitType,
     }),
   }),
+  SCUDERIA_AVATAR_MISSING_ARGUMENT: (): LocalizedMessageFunction => ({
+    en: en_messages.SCUDERIA_AVATAR_MISSING_ARGUMENT,
+    es: es_messages.SCUDERIA_AVATAR_MISSING_ARGUMENT,
+    fr: fr_messages.SCUDERIA_AVATAR_MISSING_ARGUMENT,
+    tr: tr_messages.SCUDERIA_AVATAR_MISSING_ARGUMENT,
+    pt: pt_messages.SCUDERIA_AVATAR_MISSING_ARGUMENT,
+  }),
+  SCUDERIA_AVATAR_INVALID_ARGUMENT: (): LocalizedMessageFunction => ({
+    en: en_messages.SCUDERIA_AVATAR_INVALID_ARGUMENT,
+    es: es_messages.SCUDERIA_AVATAR_INVALID_ARGUMENT,
+    fr: fr_messages.SCUDERIA_AVATAR_INVALID_ARGUMENT,
+    tr: tr_messages.SCUDERIA_AVATAR_INVALID_ARGUMENT,
+    pt: pt_messages.SCUDERIA_AVATAR_INVALID_ARGUMENT,
+  }),
+  SCUDERIA_AVATAR_SUCCESS: (enabled: boolean): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.SCUDERIA_AVATAR_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+    es: replaceTemplateString(es_messages.SCUDERIA_AVATAR_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+    fr: replaceTemplateString(fr_messages.SCUDERIA_AVATAR_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+    tr: replaceTemplateString(tr_messages.SCUDERIA_AVATAR_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+    pt: replaceTemplateString(pt_messages.SCUDERIA_AVATAR_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+  }),
   AVAILABLE_COMMANDS: (): LocalizedMessageFunction => ({
     en: en_messages.AVAILABLE_COMMANDS,
     es: es_messages.AVAILABLE_COMMANDS,
@@ -1604,6 +1635,48 @@ export const MESSAGES = {
     tr: replaceTemplateString(tr_messages.SCUDERIA_ERROR, { tag: tag }),
     pt: replaceTemplateString(pt_messages.SCUDERIA_ERROR, { tag: tag }),
   }),
+  LOGIN_USAGE: (): LocalizedMessageFunction => ({
+    en: en_messages.LOGIN_USAGE,
+    es: es_messages.LOGIN_USAGE,
+    fr: fr_messages.LOGIN_USAGE,
+    tr: tr_messages.LOGIN_USAGE,
+    pt: pt_messages.LOGIN_USAGE,
+  }),
+  LOGIN_ERROR: (): LocalizedMessageFunction => ({
+    en: en_messages.LOGIN_ERROR,
+    es: es_messages.LOGIN_ERROR,
+    fr: fr_messages.LOGIN_ERROR,
+    tr: tr_messages.LOGIN_ERROR,
+    pt: pt_messages.LOGIN_ERROR,
+  }),
+  LOGIN_SUCCESS: (): LocalizedMessageFunction => ({
+    en: en_messages.LOGIN_SUCCESS,
+    es: es_messages.LOGIN_SUCCESS,
+    fr: fr_messages.LOGIN_SUCCESS,
+    tr: tr_messages.LOGIN_SUCCESS,
+    pt: pt_messages.LOGIN_SUCCESS,
+  }),
+  CHAT_CHANNEL_ALL: (): LocalizedMessageFunction => ({
+    en: en_messages.CHAT_CHANNEL_ALL,
+    es: es_messages.CHAT_CHANNEL_ALL,
+    fr: fr_messages.CHAT_CHANNEL_ALL,
+    tr: tr_messages.CHAT_CHANNEL_ALL,
+    pt: pt_messages.CHAT_CHANNEL_ALL,
+  }),
+  CHAT_CHANNEL_TEAM: (): LocalizedMessageFunction => ({
+    en: en_messages.CHAT_CHANNEL_TEAM,
+    es: es_messages.CHAT_CHANNEL_TEAM,
+    fr: fr_messages.CHAT_CHANNEL_TEAM,
+    tr: tr_messages.CHAT_CHANNEL_TEAM,
+    pt: pt_messages.CHAT_CHANNEL_TEAM,
+  }),
+  CHAT_CHANNEL_PRIVATE: (): LocalizedMessageFunction => ({
+    en: en_messages.CHAT_CHANNEL_PRIVATE,
+    es: es_messages.CHAT_CHANNEL_PRIVATE,
+    fr: fr_messages.CHAT_CHANNEL_PRIVATE,
+    tr: tr_messages.CHAT_CHANNEL_PRIVATE,
+    pt: pt_messages.CHAT_CHANNEL_PRIVATE,
+  }),
   STARTING_LAP: (): LocalizedMessageFunction => ({
     en: en_messages.STARTING_LAP,
     es: es_messages.STARTING_LAP,
@@ -1980,5 +2053,117 @@ export const MESSAGES = {
     pt: replaceTemplateString(pt_messages.MANAGE_TYRES_SUCCESS, {
       enabled: enabled.toString(),
     }),
+  }),
+  CRASH_WALL_DETECTED: (
+    playerName: string,
+    index: string,
+    speed: string,
+  ): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.CRASH_WALL_DETECTED, {
+      playerName,
+      index,
+      speed,
+    }),
+    es: replaceTemplateString(es_messages.CRASH_WALL_DETECTED, {
+      playerName,
+      index,
+      speed,
+    }),
+    fr: replaceTemplateString(fr_messages.CRASH_WALL_DETECTED, {
+      playerName,
+      index,
+      speed,
+    }),
+    tr: replaceTemplateString(tr_messages.CRASH_WALL_DETECTED, {
+      playerName,
+      index,
+      speed,
+    }),
+    pt: replaceTemplateString(pt_messages.CRASH_WALL_DETECTED, {
+      playerName,
+      index,
+      speed,
+    }),
+  }),
+  CAR_DAMAGE_TAKEN: (
+    damageTaken: string,
+    newDamage: string,
+  ): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.CAR_DAMAGE_TAKEN, {
+      damageTaken,
+      newDamage,
+    }),
+    es: replaceTemplateString(es_messages.CAR_DAMAGE_TAKEN, {
+      damageTaken,
+      newDamage,
+    }),
+    fr: replaceTemplateString(fr_messages.CAR_DAMAGE_TAKEN, {
+      damageTaken,
+      newDamage,
+    }),
+    tr: replaceTemplateString(tr_messages.CAR_DAMAGE_TAKEN, {
+      damageTaken,
+      newDamage,
+    }),
+    pt: replaceTemplateString(pt_messages.CAR_DAMAGE_TAKEN, {
+      damageTaken,
+      newDamage,
+    }),
+  }),
+  DAMAGE_ENABLED: (): LocalizedMessageFunction => ({
+    en: en_messages.DAMAGE_ENABLED,
+    es: es_messages.DAMAGE_ENABLED,
+    fr: fr_messages.DAMAGE_ENABLED,
+    tr: tr_messages.DAMAGE_ENABLED,
+    pt: pt_messages.DAMAGE_ENABLED,
+  }),
+  DAMAGE_DISABLED: (): LocalizedMessageFunction => ({
+    en: en_messages.DAMAGE_DISABLED,
+    es: es_messages.DAMAGE_DISABLED,
+    fr: fr_messages.DAMAGE_DISABLED,
+    tr: tr_messages.DAMAGE_DISABLED,
+    pt: pt_messages.DAMAGE_DISABLED,
+  }),
+  REPAIR_NO_DAMAGE: (): LocalizedMessageFunction => ({
+    en: en_messages.REPAIR_NO_DAMAGE,
+    es: es_messages.REPAIR_NO_DAMAGE,
+    fr: fr_messages.REPAIR_NO_DAMAGE,
+    tr: tr_messages.REPAIR_NO_DAMAGE,
+    pt: pt_messages.REPAIR_NO_DAMAGE,
+  }),
+  REPAIR_ALREADY_ACTIVE: (): LocalizedMessageFunction => ({
+    en: en_messages.REPAIR_ALREADY_ACTIVE,
+    es: es_messages.REPAIR_ALREADY_ACTIVE,
+    fr: fr_messages.REPAIR_ALREADY_ACTIVE,
+    tr: tr_messages.REPAIR_ALREADY_ACTIVE,
+    pt: pt_messages.REPAIR_ALREADY_ACTIVE,
+  }),
+  REPAIR_IN_PIT_STOP: (): LocalizedMessageFunction => ({
+    en: en_messages.REPAIR_IN_PIT_STOP,
+    es: es_messages.REPAIR_IN_PIT_STOP,
+    fr: fr_messages.REPAIR_IN_PIT_STOP,
+    tr: tr_messages.REPAIR_IN_PIT_STOP,
+    pt: pt_messages.REPAIR_IN_PIT_STOP,
+  }),
+  REPAIR_TYRES_BLOCKED: (): LocalizedMessageFunction => ({
+    en: en_messages.REPAIR_TYRES_BLOCKED,
+    es: es_messages.REPAIR_TYRES_BLOCKED,
+    fr: fr_messages.REPAIR_TYRES_BLOCKED,
+    tr: tr_messages.REPAIR_TYRES_BLOCKED,
+    pt: pt_messages.REPAIR_TYRES_BLOCKED,
+  }),
+  REPAIR_STARTED: (seconds: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.REPAIR_STARTED, { seconds }),
+    es: replaceTemplateString(es_messages.REPAIR_STARTED, { seconds }),
+    fr: replaceTemplateString(fr_messages.REPAIR_STARTED, { seconds }),
+    tr: replaceTemplateString(tr_messages.REPAIR_STARTED, { seconds }),
+    pt: replaceTemplateString(pt_messages.REPAIR_STARTED, { seconds }),
+  }),
+  REPAIR_FINISHED: (): LocalizedMessageFunction => ({
+    en: en_messages.REPAIR_FINISHED,
+    es: es_messages.REPAIR_FINISHED,
+    fr: fr_messages.REPAIR_FINISHED,
+    tr: tr_messages.REPAIR_FINISHED,
+    pt: pt_messages.REPAIR_FINISHED,
   }),
 };

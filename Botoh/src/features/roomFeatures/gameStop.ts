@@ -49,9 +49,11 @@ import { clearPlayers } from "../commands/gameMode/qualy/playerTime";
 import { printAllTimes } from "../commands/gameMode/qualy/printAllTimes";
 import { printAllPositions } from "../commands/gameMode/race/printAllPositions";
 import { resetSessionBestSectors } from "../zones/laps/trackBestSector";
+import { resetCurrentSessionLap } from "../zones/laps";
 import { resetSandbag } from "../commands/gameMode/battleRoyale.ts/handleSandbag";
 import { writeFileSync } from "fs";
 import { join } from "path";
+import { resetLapHistory } from "../zones/laps/lapHistory";
 
 let replayData: Uint8Array | null = null;
 
@@ -137,7 +139,9 @@ export function GameStop(room: RoomObject) {
     clearCutTrackStorage();
     resetDebrisUsedList();
     resetSessionBestSectors();
+    resetCurrentSessionLap();
     resetSandbag(room);
+    resetLapHistory();
     
     if (generalGameMode === GeneralGameMode.GENERAL_RACE) {
       rejoinManager.clearAllData();

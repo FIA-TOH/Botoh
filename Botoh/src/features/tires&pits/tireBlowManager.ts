@@ -81,7 +81,7 @@ export function decideBlowoutPoint(player: PlayerObject) {
       p.warningIsFalse = false;
     }
 
-    p.warningShown = false;
+    p.tireBlowWarning = false;
     p.isTyreBlowed = false;
   } else {
     const willBlow = Math.random() <= 0.1;
@@ -111,12 +111,12 @@ export function decideBlowoutPoint(player: PlayerObject) {
         p.warningIsFalse = false;
       }
       
-      p.warningShown = false;
+      p.tireBlowWarning = false;
     } else {
       p.blowAtWear = 9999;
       p.warningAtWear = null;
       p.warningIsFalse = false;
-      p.warningShown = false;
+      p.tireBlowWarning = false;
     }
     
     p.isTyreBlowed = false;
@@ -130,7 +130,7 @@ export function resetBlowoutChance(playerId: number) {
   p.blowAtWear = 9999;
   p.warningAtWear = null;
   p.warningIsFalse = false;
-  p.warningShown = false;
+  p.tireBlowWarning = false;
   p.blowoutTickCounter = 0;
 }
 
@@ -145,10 +145,10 @@ export function checkTireStatus(player: PlayerObject, room: RoomObject) {
     return;
 
   if (!isManageTyresEnabled()) {
-    if (p.warningAtWear && p.wear >= p.warningAtWear && !p.warningShown) {
+    if (p.warningAtWear && p.wear >= p.warningAtWear && !p.tireBlowWarning) {
       handleAvatar(Situacions.BlowoutWarning, player, room);
       sendAlertMessage(room, MESSAGES.TYRES_ABOUT_TO_BLOWN(), player.id);
-      p.warningShown = true;
+      p.tireBlowWarning = true;
     }
 
     if (p.wear >= p.blowAtWear && !p.isTyreBlowed) {
@@ -158,10 +158,10 @@ export function checkTireStatus(player: PlayerObject, room: RoomObject) {
     }
   } else {
     if (p.blowAtWear === -1 && !p.isTyreBlowed) {
-      if (p.warningAtWear && p.wear >= p.warningAtWear && !p.warningShown) {
+      if (p.warningAtWear && p.wear >= p.warningAtWear && !p.tireBlowWarning) {
         handleAvatar(Situacions.BlowoutWarning, player, room);
         sendAlertMessage(room, MESSAGES.TYRES_ABOUT_TO_BLOWN(), player.id);
-        p.warningShown = true;
+        p.tireBlowWarning = true;
       }
 
       if (!p.isManagingTyres) {

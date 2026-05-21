@@ -14,7 +14,7 @@ import {
 import { MESSAGES } from "../../../chat/messages";
 import { getBestPit } from "../../../tires&pits/trackBestPit";
 import { getBestLap } from "../../../zones/laps/trackBestLap";
-import { positionList } from "./positionList";
+import { positionList, syncRacePositions } from "./positionList";
 
 const HAXBALL_MSG_LIMIT = 124;
 
@@ -30,6 +30,8 @@ export function printAllPositions(
     sendErrorMessage(room, MESSAGES.POSITIONS_IN_QUALI(), toPlayerID);
     return false;
   }
+
+  syncRacePositions();
 
   const headerSpaces = (MAX_PLAYER_NAME - 4) / 2.0;
   const headerLeftSpaces = " ".repeat(Math.ceil(headerSpaces));

@@ -4,11 +4,16 @@ export let vscDuration: number | undefined;
 export let vscAutoDeployed = false;
 export let vscExtended = false;
 export let vscTriggeredByPlayer: number | undefined;
-import { isPlayerMovingAtSpeed } from "../afk/afk";
+import { isPlayerMovingAtComeBackSpeed } from "../afk/afk";
 import { Teams } from "../changeGameState/teams";
+import {
+  RaceControlState,
+  setNeutralizationState,
+} from "../commands/flagsAndVSC/raceControl";
 
 export function changeVSC() {
   vsc = !vsc;
+  setNeutralizationState(vsc ? RaceControlState.VirtualSafetyCar : null);
 }
 
 export function deployVSCAutomatically(room: any, playerId?: number) {
@@ -42,7 +47,7 @@ export function checkVSCDuration(room: any) {
   
   if (elapsedTime >= vscDuration) {
     if (vscTriggeredByPlayer !== undefined) {
-      if (!isPlayerMovingAtSpeed(vscTriggeredByPlayer, room)) {
+      if (!isPlayerMovingAtComeBackSpeed(vscTriggeredByPlayer, room)) {
         room.setPlayerTeam(vscTriggeredByPlayer, Teams.SPECTATORS);
       }
     }
@@ -71,6 +76,7 @@ export function extendVSCDuration() {
 
 export function resetVSCState() {
   vsc = false;
+  setNeutralizationState(null);
   vscAutoDeployed = false;
   vscStartTime = undefined;
   vscDuration = undefined;

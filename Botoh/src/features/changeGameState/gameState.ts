@@ -1,11 +1,12 @@
 import { updatePlayerActivity } from "../afk/afk";
 import { playerList } from "../changePlayerState/playerList";
+import { emitPitWallGameStateChange, PitWallGameState } from "../integrations/pitWallSync";
 
-export let gameState: string | null;
+export let gameState: PitWallGameState;
 export let isGamePaused: boolean = false;
 
 export function handleGameStateChange(
-  newGameState: string | null,
+  newGameState: PitWallGameState,
   room: RoomObject
 ) {
   const players = room.getPlayerList();
@@ -27,6 +28,7 @@ export function handleGameStateChange(
   }
   
   gameState = newGameState;
+  emitPitWallGameStateChange(newGameState);
 }
 
 export function getGameState() {

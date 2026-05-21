@@ -3,7 +3,7 @@ import { Chassis } from '../chassis';
 import { Engine } from '../engine';
 import { PitCrew } from '../pitstop';
 import { ScuderiaColors } from '../scuderiaColours';
-import { leagueScuderia } from '../scuderias';
+import { Scuderia } from '../scuderias';
 import { Suspension } from '../tyres';
 
 export const AstonMaiaEngine: Engine = {
@@ -48,7 +48,7 @@ export const AstonMaiaPitCrew: PitCrew = {
   normalPitSpeedTimeBoost: 0,
 };
 
-export const AstonMaia: leagueScuderia = {
+export const AstonMaia: Scuderia = {
   name: 'Aston Maia',
   tag: 'AM',
   color: ScuderiaColors.ASTONMAIA,

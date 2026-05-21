@@ -11,7 +11,7 @@ import {
   COLORS,
 } from "../../../chat/chat";
 import { MESSAGES } from "../../../chat/messages";
-import { getPlayersOrderedByQualiTime } from "./playerTime";
+import { getPlayersOrderedByQualiTime, syncQualiPositions } from "./playerTime";
 
 const HAXBALL_MSG_LIMIT = 124;
 
@@ -22,6 +22,7 @@ export function printAllTimes(room: RoomObject, toPlayerID?: number) {
   }
 
   const orderedList = getPlayersOrderedByQualiTime();
+  syncQualiPositions();
 
   if (orderedList.length === 0) {
     sendChatMessage(room, MESSAGES.NO_TIMES(), toPlayerID);

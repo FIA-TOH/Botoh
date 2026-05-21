@@ -32,6 +32,7 @@ import { handleRModeCommand } from "./gameMode/race/handleRModeCommand";
 import { handleWaitTimeCommand } from "./gameMode/race/handleWaitTimeCommand";
 import { handleLapsCommand } from "./laps/handleLapsCommand";
 import { handleTiresCommand } from "./tyres/handleTiresCommand";
+import { handleFixCommand } from "../damage/repairSystem";
 import { handleClearTimeCommand } from "./adminThings/handleClearTimeCommand";
 import { handleAfkCommand } from "./afk/handleAfkCommand";
 import { handleAvatarCommand } from "./avatar/handleAvatarCommand";
@@ -75,6 +76,9 @@ import { handleSetNewWeatherId } from "./weather/handleSetNewWeatherId";
 import { handleConfigCommand } from "./adminThings/handleConfigCommand";
 import { handleManageTyresCommand } from "./adminThings/handleManageTyresCommand";
 import { handlePitCommand } from "./adminThings/handlePitCommand";
+import { handleScuderiaAvatarCommand } from "./adminThings/handleScuderiaAvatarCommand";
+import { handleLoginCommand } from "./login/handleLoginCommand";
+import { handleSeeLoginCommand } from "./adminThings/handleSeeLoginCommand";
 
 export type CommandFunction = (
   handleAdminCommand: (
@@ -163,6 +167,11 @@ export type CommandFunction = (
     room: RoomObject,
   ) => void,
   handleTiresCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
+  handleFixCommand: (
     byPlayer: PlayerObject,
     args: string[],
     room: RoomObject,
@@ -424,6 +433,21 @@ export type CommandFunction = (
     args: string[],
     room: RoomObject,
   ) => void,
+  handleScuderiaAvatarCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
+  handleSeeLoginCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
+  handleLoginCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void | Promise<void>,
 ) => Commands;
 
 function importCommandsByLanguage(commandFunctions: {
@@ -451,6 +475,7 @@ function importCommandsByLanguage(commandFunctions: {
         handleBRTwoLapsCommand,
         handleBBCommand,
         handleTiresCommand,
+        handleFixCommand,
         handleHelpCommand,
         handleClearBansCommand,
         handleLapsCommand,
@@ -506,6 +531,9 @@ function importCommandsByLanguage(commandFunctions: {
         handleConfigCommand,
         handleManageTyresCommand,
         handlePitCommand,
+        handleScuderiaAvatarCommand,
+        handleSeeLoginCommand,
+        handleLoginCommand,
       ),
     }),
     {},
@@ -535,6 +563,7 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
         handleBRTwoLapsCommand,
         handleBBCommand,
         handleTiresCommand,
+        handleFixCommand,
         handleHelpCommand,
         handleClearBansCommand,
         handleLapsCommand,
@@ -589,6 +618,9 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
         handleConfigCommand,
         handleManageTyresCommand,
         handlePitCommand,
+        handleScuderiaAvatarCommand,
+        handleSeeLoginCommand,
+        handleLoginCommand,
       ),
     }),
     {},
@@ -610,3 +642,8 @@ export const COMMANDS: Commands = importCommands(
   tr_commands,
   pt_commands,
 );
+
+
+
+
+

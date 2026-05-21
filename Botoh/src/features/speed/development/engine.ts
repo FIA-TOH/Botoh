@@ -1,5 +1,5 @@
 import { PlayerInfo, playerList } from "../../changePlayerState/playerList";
-import { leagueScuderia } from "../../scuderias/scuderias";
+import { getLeagueScuderia } from "../../scuderias/scuderias";
 import { vectorSpeed } from "../../utils";
 import { maxSpeedFromGrip } from "../getMaxSpeed";
 const smoothedBoostMap: Record<number, number> = {};
@@ -91,7 +91,7 @@ export function engineGripCalc(
 ) {
   if (!p.leagueScuderia) return grip;
 
-  const scud = leagueScuderia[p.leagueScuderia];
+  const scud = getLeagueScuderia(p.leagueScuderia);
   if (!scud || !scud.engine) return grip;
 
   const engine = scud.engine;

@@ -1,0 +1,10 @@
+{
+  "currentMap": "imola",
+  "playerCount": 12,
+  "gameState": "running",
+  "startTime": "2026-05-11T20:00:00.000Z",
+  "lastUpdate": "2026-05-11T22:30:00.000Z",
+  "roomName": "FTOH - Imola Race",
+  "maxPlayers": 16,
+  "public": true
+}

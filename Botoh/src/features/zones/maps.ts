@@ -74,6 +74,7 @@ import { WAITROOM } from "../../circuits/waitRoom/waitRoom";
 
 import { WAITROOMQUALY } from "../../circuits/waitRoom/waitRoomQualy";
 import { gameMode, GameMode } from "../changeGameState/changeGameModes";
+import { emitPitWallMapChange } from "../integrations/pitWallSync";
 import { LAS_VEGAS } from "../../circuits/las_vegas/las_vegas";
 import { LAS_VEGASPUBLIC } from "../../circuits/las_vegas/las_vegasPublic";
 import { ZANDVOORT } from "../../circuits/zandvoort/zandvoort";
@@ -191,6 +192,76 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
       // BARCELONA,
       // CANOPUBLIC,
 
+export const CIRCUIT_FILE_NAMES: string[] = LEAGUE_MODE
+  ? [
+      "imola.hbs",
+      "suzuka.hbs",
+      "melbourne.hbs",
+      "baku.hbs",
+      "spa.hbs",
+      "nurburgring.hbs",
+      "shanghai.hbs",
+      "austin.hbs",
+      "monza.hbs",
+      "canada.hbs",
+      "sepang.hbs",
+      "bahrain.hbs",
+      "valencia.hbs",
+      "silverstone.hbs",
+      "monaco.hbs",
+      "sochi.hbs",
+      "paul_ricard.hbs",
+      "istanbul.hbs",
+      "interlagos.hbs",
+      "argentina.hbs",
+      "marina_bay.hbs",
+      "jeddah.hbs",
+      "abu_dhabi.hbs",
+      "hocken.hbs",
+      "fuji.hbs",
+      "hungary.hbs",
+      "austria.hbs",
+      "laguna_seca.hbs",
+      "balaton.hbs",
+      "mexico.hbs",
+      "miami.hbs",
+      "nurburgringNano.hbs",
+      "hungaryNano.hbs",
+      "las_vegas.hbs",
+      "interlagos.hbs",
+      "zandvoort.hbs",
+      "barcelona.hbs",
+      "cano.hbs",
+      "virginia.hbs",
+      "tandil.hbs",
+      "colorado.hbs",
+      "austin_crespo.hbs",
+      "yas_marina_nano.hbs",
+      "rivadavia.hbs",
+      "sexcano.hbs",
+      "meersburg.hbs",
+      "indianapolis.hbs",
+      "podium.hbs",
+      "waitRoom.hbs",
+    ]
+  : [
+      "suzuka.hbs",
+      "melbourne.hbs",
+      "baku.hbs",
+      "spa.hbs",
+      "imola.hbs",
+      "nurburgring.hbs",
+      "shanghai.hbs",
+      "austin.hbs",
+      "monza.hbs",
+      "canada.hbs",
+      "sepang.hbs",
+      "valencia.hbs",
+      "monaco.hbs",
+      "waitRoom.hbs",
+      "waitRoomQualy.hbs",
+    ];
+
 export let currentMapIndex = 0;
 function handleMapError(room: RoomObject) {
   const admins = room.getPlayerList().filter((p) => p.admin);
@@ -213,6 +284,7 @@ export function handleChangeMap(index: number, room: RoomObject) {
     currentMapIndex = index;
 
     room.setCustomStadium(CIRCUITS[currentMapIndex].map);
+    emitPitWallMapChange(CIRCUIT_FILE_NAMES[currentMapIndex] || "unknown.hbs");
 
     if (gameMode !== GameMode.WAITING) {
       sendSuccessMessage(

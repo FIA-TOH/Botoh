@@ -413,6 +413,7 @@ Botoh is a sophisticated Haxball F1 racing bot that emerged from the Simple bot 
 #### Weather System Commands
 - `!rain [on/off/CHANCE]` - Start rain, stop rain, or set rain probability
 - `!set_weather_id [ID]` - Set specific weather type to be used
+- ex: !set_weather_id rain_1779330499083_1n05hujdx
 
 #### Team & Scuderia Commands
 - `!team [NAME]` - Set a team for yourself

@@ -4,6 +4,7 @@ import { PitStep } from "../tires&pits/pitMessaging";
 import { PitResult } from "../tires&pits/pitStopFunctions";
 
 import { Tires } from "../tires&pits/tires";
+import { LeagueScuderiaId } from "../scuderias/scuderias";
 
 export interface PitsInfo {
   pitsNumber: number;
@@ -31,6 +32,17 @@ export interface NewPitState {
   reactionTimeout?: number;
 }
 
+export interface RepairState {
+  isWaitingForRepair: boolean;
+  isRepairing: boolean;
+  repairStartTime?: number;
+  repairReadyTime?: number;
+  repairEmojiShowTime?: number;
+  reactionTime?: number;
+  repairEndTime?: number;
+  damageToRepair?: number;
+}
+
 export interface XKeyState {
   isPressed: boolean;
   pressTimes: number[];
@@ -43,7 +55,7 @@ export interface PlayerInfo {
   isInTheRoom: boolean;
   afk: boolean;
   afkAlert: boolean;
-  leagueScuderia: string | null;
+  leagueScuderia: LeagueScuderiaId | null;
   didHardQualy: boolean;
 
   sandbagPenalty: number;
@@ -57,6 +69,7 @@ export interface PlayerInfo {
   lapsBehindLeaderWhenLeft: number | null;
 
   currentSector: number;
+  checkpointTimes: Record<string, number>;
   sectorChanged: boolean;
   sectorTime: number[];
   sectorTimeCounter: number;
@@ -83,7 +96,7 @@ export interface PlayerInfo {
   blowAtWear: number;
   warningAtWear?: number | null;
   warningIsFalse?: boolean;
-  warningShown?: boolean;
+  tireBlowWarning?: boolean;
 
   speedEnabled: boolean;
   drs: boolean;
@@ -127,6 +140,7 @@ export interface PlayerInfo {
   canRejoin: boolean;
 
   newPitState?: NewPitState;
+  repairState?: RepairState;
   
   xKeyState?: XKeyState;
   
@@ -137,6 +151,19 @@ export interface PlayerInfo {
   blowoutTickCounter: number;
   
   pubAvatar: string;
+
+  driverNumber: number;
+  isFirstDriver: boolean;
+
+  carDamage: number;
+
+  position: number | null;
+
+  gapToLeader: string | null;
+  gapToNext: string | null;
+  shortName: string;
+
+  isLogged: boolean;
 }
 
 type PlayerList = {
@@ -157,3 +184,30 @@ export const playerList = new Proxy(actualPlayerList, {
     return true;
   },
 });
+
+export function updatePlayerListPosition(
+  playerId: number,
+  position: number | null,
+) {
+  const player = playerList[playerId];
+  if (!player || player.position === position) return;
+
+  player.position = position;
+}
+
+export function updatePlayerListRaceGaps(
+  playerId: number,
+  gapToLeader: string | null,
+  gapToNext: string | null,
+) {
+  const player = playerList[playerId];
+  if (!player) return;
+
+  if (player.gapToLeader !== gapToLeader) {
+    player.gapToLeader = gapToLeader;
+  }
+
+  if (player.gapToNext !== gapToNext) {
+    player.gapToNext = gapToNext;
+  }
+}
