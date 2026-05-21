@@ -9,8 +9,13 @@ export interface RoomState {
   startTime: Date | null;
   lastUpdate: Date;
   roomName?: string;
+  roomLink?: string;
+  leagueMode?: boolean;
+  envName?: string;
   maxPlayers?: number;
   public?: boolean;
+  isOnline?: boolean;
+  openedAt?: Date;
 }
 
 export interface MapInfo {

@@ -60,26 +60,20 @@ npm run start
 
 ## Environment Configuration
 
-### Backend (.env)
+### Root (.env)
 ```env
-PORT=3000
+PORT=3001
+BACKEND_URL=http://localhost:3001
 FRONTEND_URL=http://localhost:3000
-```
-
-### Bot (.env)
-```env
-ROOM_NAME=FTOH Bot Room
-MAX_PLAYERS=12
-PUBLIC=true
-GEO_CODE=BR
-ROOM_TOKEN=your_token_here
-```
-
-### Frontend (.env.local)
-```env
+NEXT_PUBLIC_API_URL=http://localhost:3001
 NEXT_PUBLIC_WS_URL=ws://localhost:3001
-NEXT_PUBLIC_API_URL=http://localhost:3000
+DATABASE_URL=postgresql://postgres:your-password@db.your-project-id.supabase.co:5432/postgres
+JWT_SECRET=your-super-secret-jwt-key-min-32-chars
+BACKEND_WS_URL=http://localhost:3001
 ```
+
+Backend, frontend, and the bot bridge read the root `.env`. Room identity,
+capacity, and Haxball room options stay in `Botoh/roomconfig.json`.
 
 ## Technology Stack
 

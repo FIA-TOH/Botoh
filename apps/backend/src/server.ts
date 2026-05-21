@@ -13,6 +13,7 @@ import garageRoutes from './routes/garage';
 import roomRoutes from './routes/room';
 import adminRoutes from './routes/admin';
 import notificationRoutes from './routes/notifications';
+import roomService from './services/roomService';
 import { securityHeaders, rateLimiter, validateRequest, errorHandler, requestLogger } from './middleware/security';
 import { initializeDatabase, healthCheck, closeDatabase } from './config/database';
 import seedService from './config/seed';
@@ -100,12 +101,24 @@ app.use('*', (req, res) => {
 app.use(errorHandler);
 
 // Socket.IO setup
-const { botService } = setupSocketHandlers(io);
+const { botService, isAuthorizedBot } = setupSocketHandlers(io);
 
 io.on('connection', (socket: any) => {
-  socket.on('register:bot', () => {
+  socket.on('register:bot', (data?: { token?: string }) => {
+    if (!isAuthorizedBot(data, socket)) {
+      console.warn('Rejected bot registration: invalid BOT_SOCKET_TOKEN');
+      socket.disconnect(true);
+      return;
+    }
+
     console.log('Bot registration received');
     botService.registerBot(socket);
+    socket.on('disconnect', () => {
+      roomService.markRoomOffline();
+      io.emit('room:offline', {
+        timestamp: Date.now(),
+      });
+    });
   });
 });
 

@@ -24,6 +24,14 @@ const pool = new Pool(poolConfig);
 // Database connection status
 let isConnected = false;
 
+const hasDatabaseConfig = () => Boolean(config.databaseUrl || process.env.DATABASE_URL);
+
+function createDatabaseUnavailableError() {
+  const error = new Error('DATABASE_URL is not configured');
+  (error as Error & { code?: string }).code = 'DATABASE_UNAVAILABLE';
+  return error;
+}
+
 // Handle pool events with proper error handling
 pool.on('connect', () => {
   if (!isConnected) {
@@ -79,6 +87,10 @@ export const query = async <T extends QueryResultRow = any>(
   sql: string, 
   params?: any[]
 ): Promise<QueryResult<T>> => {
+  if (!hasDatabaseConfig()) {
+    throw createDatabaseUnavailableError();
+  }
+
   const start = Date.now();
   
   try {
@@ -102,6 +114,10 @@ export const query = async <T extends QueryResultRow = any>(
 export const transaction = async <T = any>(
   callback: (client: any) => Promise<T>
 ): Promise<T> => {
+  if (!hasDatabaseConfig()) {
+    throw createDatabaseUnavailableError();
+  }
+
   const client = await pool.connect();
   
   try {
@@ -176,6 +192,18 @@ export const deleteRows = async (
 export const healthCheck = async () => {
   const tables = ['users', 'teams', 'upgrades', 'user_upgrades', 'race_history', 'team_members'];
   const tableStatus: Record<string, boolean> = {};
+
+  if (!hasDatabaseConfig()) {
+    for (const table of tables) {
+      tableStatus[table] = false;
+    }
+
+    return {
+      connected: false,
+      tables: tableStatus,
+      timestamp: new Date().toISOString()
+    };
+  }
   
   for (const table of tables) {
     try {
@@ -208,6 +236,11 @@ export const closeDatabase = async (): Promise<void> => {
 
 // Initialize database connection with retry logic
 export const initializeDatabase = async (): Promise<void> => {
+  if (!hasDatabaseConfig() && config.nodeEnv !== 'production') {
+    console.warn('⚠️  DATABASE_URL not configured; starting backend without database in development mode');
+    return;
+  }
+
   const maxRetries = 3;
   const retryDelay = 2000; // 2 seconds
   

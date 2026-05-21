@@ -8,6 +8,16 @@ export function setupSocketHandlers(io: SocketIOServer) {
   const botService = new BotService(io);
   notificationService.setSocketServer(io);
 
+  function isAuthorizedBot(data?: { token?: string }, socket?: any) {
+    const expectedToken = process.env.BOT_SOCKET_TOKEN;
+
+    if (!expectedToken) {
+      return true;
+    }
+
+    return data?.token === expectedToken || socket?.handshake?.auth?.botToken === expectedToken;
+  }
+
   io.on('connection', (socket) => {
     console.log(`Client connected: ${socket.id}`);
 
@@ -38,10 +48,13 @@ export function setupSocketHandlers(io: SocketIOServer) {
 
     // Handle broadcast events from bot
     socket.on('broadcast:toFrontend', (data) => {
+      if (!isAuthorizedBot(undefined, socket)) return;
+
       io.emit(data.event, data.data);
     });
 
     socket.on('room:mapChanged', (data: { mapName?: string; timestamp?: number }) => {
+      if (!isAuthorizedBot(undefined, socket)) return;
       if (!data?.mapName) return;
 
       roomService.updateRoomState({
@@ -55,6 +68,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
     });
 
     socket.on('room:gameStateChanged', (data: { gameState?: 'running' | 'paused' | null; timestamp?: number }) => {
+      if (!isAuthorizedBot(undefined, socket)) return;
       if (data?.gameState !== 'running' && data?.gameState !== 'paused' && data?.gameState !== null) {
         return;
       }
@@ -68,7 +82,54 @@ export function setupSocketHandlers(io: SocketIOServer) {
         timestamp: data.timestamp || Date.now()
       });
     });
+
+    socket.on('room:opened', (data: {
+      roomName?: string;
+      roomLink?: string;
+      leagueMode?: boolean;
+      envName?: string;
+      maxPlayers?: number;
+      public?: boolean;
+      timestamp?: number;
+    }) => {
+      if (!isAuthorizedBot(undefined, socket)) return;
+
+      const openedState: Parameters<typeof roomService.markRoomOpened>[0] = {
+        startTime: new Date(data?.timestamp || Date.now()),
+        openedAt: new Date(data?.timestamp || Date.now()),
+      };
+
+      if (data?.roomName !== undefined) openedState.roomName = data.roomName;
+      if (data?.roomLink !== undefined) openedState.roomLink = data.roomLink;
+      if (data?.leagueMode !== undefined) openedState.leagueMode = data.leagueMode;
+      if (data?.envName !== undefined) openedState.envName = data.envName;
+      if (data?.maxPlayers !== undefined) openedState.maxPlayers = data.maxPlayers;
+      if (data?.public !== undefined) openedState.public = data.public;
+
+      roomService.markRoomOpened(openedState);
+
+      io.emit('room:opened', {
+        ...data,
+        timestamp: data?.timestamp || Date.now(),
+      });
+    });
+
+    socket.on('room:heartbeat', (data: { playerCount?: number; timestamp?: number }) => {
+      if (!isAuthorizedBot(undefined, socket)) return;
+
+      const heartbeatState: Parameters<typeof roomService.markRoomHeartbeat>[0] = {};
+      if (Number.isFinite(data?.playerCount)) {
+        heartbeatState.playerCount = data.playerCount;
+      }
+
+      roomService.markRoomHeartbeat(heartbeatState);
+
+      io.emit('room:heartbeat', {
+        playerCount: data?.playerCount,
+        timestamp: data?.timestamp || Date.now(),
+      });
+    });
   });
 
-  return { botService };
+  return { botService, isAuthorizedBot };
 }
