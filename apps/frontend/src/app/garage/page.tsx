@@ -9,6 +9,7 @@ import { AppSnackbar, useAppSnackbar } from '@/components/AppSnackbar';
 import { DriverCircle } from '@/components/pit-wall/DriverCircle';
 
 interface TeamGarageData {
+  id: string;
   cashTotal: number;
   climateCostPerRace: number;
   pitCrewCostPerRace: number;
@@ -53,7 +54,7 @@ interface TeamGarageData {
 }
 
 export default function GaragePage() {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, isLoading: authLoading, user } = useAuth();
   const { t } = useTranslations();
   const { snackbar, showSnackbar, closeSnackbar } = useAppSnackbar();
   const router = useRouter();
@@ -62,6 +63,7 @@ export default function GaragePage() {
   const [loadedTeamLogos, setLoadedTeamLogos] = useState<Record<string, boolean>>({});
   const [teamGarage, setTeamGarage] = useState<TeamGarageData | null>(null);
   const [garageLoading, setGarageLoading] = useState(false);
+  const [garageLoadFailed, setGarageLoadFailed] = useState(false);
   const [hireModalCategory, setHireModalCategory] = useState<'starter' | 'reserve' | null>(null);
   const [hireForm, setHireForm] = useState({
     username: '',
@@ -131,8 +133,13 @@ export default function GaragePage() {
     reserve: (teamGarage?.drivers ?? []).filter((driver) => driver.category === 'reserve'),
   }), [teamGarage?.drivers]);
 
-  async function loadTeamGarage(teamId: string) {
+  async function loadTeamGarage(teamId: string, options: { reset?: boolean } = {}) {
+    if (options.reset) {
+      setTeamGarage(null);
+    }
+
     setGarageLoading(true);
+    setGarageLoadFailed(false);
     try {
       const token = localStorage.getItem('auth_token');
       const response = await fetch(`/api/garage/teams/${teamId}`, {
@@ -143,9 +150,11 @@ export default function GaragePage() {
       if (data.success) {
         setTeamGarage(data.garage);
       } else {
+        setGarageLoadFailed(true);
         showSnackbar(data.message ?? t.garage.loadFailed, 'error');
       }
     } catch (error) {
+      setGarageLoadFailed(true);
       showSnackbar(t.garage.loadFailed, 'error');
     } finally {
       setGarageLoading(false);
@@ -154,7 +163,11 @@ export default function GaragePage() {
 
   useEffect(() => {
     if (selectedMembership) {
-      loadTeamGarage(selectedMembership.teamId);
+      setGarageLoadFailed(false);
+      loadTeamGarage(selectedMembership.teamId, {
+        reset: teamGarage?.id !== selectedMembership.teamId,
+      });
+      return;
     }
   }, [selectedMembership?.teamId]);
 
@@ -394,6 +407,30 @@ export default function GaragePage() {
     router.push('/');
   };
 
+  if (authLoading) {
+    return (
+      <main
+        className="relative min-h-screen bg-cover bg-center bg-no-repeat bg-fixed text-white"
+        style={{ backgroundImage: 'url(/img/bg/garagewpp.png)' }}
+      >
+        <div className="absolute inset-0 bg-black/60" />
+        <div className="relative z-10 flex min-h-screen items-center justify-center px-6">
+          <div className="flex flex-col items-center gap-4 border-8 border-[#FF0000] bg-[#1E1E1E] px-10 py-8 text-center">
+            {!garageLoadFailed && (
+              <span
+                aria-label={t.common.loading}
+                className="h-10 w-10 animate-spin rounded-full border-4 border-white/30 border-t-white"
+              />
+            )}
+            <p className="text-xl font-bold uppercase">
+              {garageLoadFailed ? t.garage.loadFailed : t.common.loading}
+            </p>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   if (!isAuthenticated) {
     return null;
   }
@@ -486,6 +523,42 @@ export default function GaragePage() {
     );
   }
 
+  if (!teamGarage) {
+    return (
+      <main
+        className="relative min-h-screen bg-cover bg-center bg-no-repeat bg-fixed text-white"
+        style={{ backgroundImage: 'url(/img/bg/garagewpp.png)' }}
+      >
+        <div className="absolute inset-0 bg-black/60" />
+
+        <button
+          type="button"
+          aria-label={t.common.back}
+          onClick={goBack}
+          className="absolute left-6 top-6 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-[#FF232B] text-white shadow-lg transition-transform hover:scale-105"
+        >
+          <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+
+        <div className="relative z-10 flex min-h-screen items-center justify-center px-6">
+          <div className="flex flex-col items-center gap-4 border-8 border-[#FF0000] bg-[#1E1E1E] px-10 py-8 text-center">
+            {!garageLoadFailed && (
+              <span
+                aria-label={t.common.loading}
+                className="h-10 w-10 animate-spin rounded-full border-4 border-white/30 border-t-white"
+              />
+            )}
+            <p className="text-xl font-bold uppercase">
+              {garageLoadFailed ? t.garage.loadFailed : t.common.loading}
+            </p>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main
       className="relative min-h-screen bg-cover bg-center bg-no-repeat bg-fixed text-white"
@@ -537,7 +610,6 @@ export default function GaragePage() {
             </div>
 
             <div ref={financialHistoryRef} className="mt-4 h-[450px] overflow-y-auto border-4 border-white/90 p-4 text-sm">
-              {garageLoading && <p>{t.common.loading}</p>}
               {!garageLoading && (teamGarage?.financialHistory ?? []).length === 0 && <p>---</p>}
               {[...(teamGarage?.financialHistory ?? [])].reverse().map((entry) => (
                 <p key={entry.id} className={entry.entryType === 'income' ? 'mt-2 text-[#3DD56D]' : 'mt-2 text-[#FF0000]'}>

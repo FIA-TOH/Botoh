@@ -88,15 +88,16 @@ export interface WeatherAnnouncement {
   announcedAtTimestamp: number;
 }
 
-export interface RealisticWeatherAnnouncement extends WeatherAnnouncement {
-  weatherLevel: number;
-  eventGameTime: number;
-  displayedEventGameTime: number;
-  isEstimated: boolean;
-  intensity?: {
-    type: 'max' | 'min';
-    value: number;
-  };
+export interface WeatherChartPoint {
+  time: number;
+  rain: number;
+}
+
+export interface WeatherChartData {
+  weatherId: string;
+  duration: number;
+  interval: number;
+  points: WeatherChartPoint[];
 }
 
 export interface WeatherSession {
@@ -107,8 +108,7 @@ export interface WeatherSession {
     sector3: WeatherSnapshot;
   };
   lastAnnouncement: WeatherAnnouncement | null;
-  realisticRainAnnouncer?: boolean;
-  realisticAnnouncementsByLevel?: Record<number, RealisticWeatherAnnouncement | null>;
+  chart?: WeatherChartData | null;
 }
 
 export interface PaceStats {

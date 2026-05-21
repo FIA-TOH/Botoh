@@ -1,4 +1,5 @@
 import { query } from './database';
+import { GarageFacility, getFacilityCostPerRace } from './facilityEconomy';
 
 class MigrationService {
   async ensureAdminSchema(): Promise<void> {
@@ -36,15 +37,6 @@ class MigrationService {
     await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS pit_crew_level INTEGER NOT NULL DEFAULT 0');
     await query('ALTER TABLE teams ALTER COLUMN climate_monitoring_level SET DEFAULT 0');
     await query('ALTER TABLE teams ALTER COLUMN pit_crew_level SET DEFAULT 0');
-    await query(`
-      UPDATE teams
-      SET
-        climate_monitoring_level = 0,
-        pit_crew_level = 0,
-        climate_cost_per_race = 0,
-        pit_crew_cost_per_race = 0,
-        updated_at = NOW()
-    `);
     await query("ALTER TABLE teams ADD COLUMN IF NOT EXISTS car_name VARCHAR(100) NOT NULL DEFAULT 'Unnamed car'");
     await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT NOW()');
     await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT NOW()');
@@ -133,6 +125,7 @@ class MigrationService {
       ADD CONSTRAINT team_financial_history_source_check
       CHECK (source IN ('manual', 'standard_race', 'sponsor', 'driver', 'facility'))
     `);
+    await this.normalizeFacilityCosts();
 
     await query(`
       CREATE TABLE IF NOT EXISTS team_drivers (
@@ -285,6 +278,39 @@ class MigrationService {
       )
     `);
     await query('CREATE INDEX IF NOT EXISTS race_progress_alerts_created_idx ON race_progress_alerts(created_at DESC)');
+  }
+
+  private async normalizeFacilityCosts(): Promise<void> {
+    await this.normalizeFacilityCost({
+      facility: 'climate',
+      levelColumn: 'climate_monitoring_level',
+      costColumn: 'climate_cost_per_race',
+    });
+
+    await this.normalizeFacilityCost({
+      facility: 'pitCrew',
+      levelColumn: 'pit_crew_level',
+      costColumn: 'pit_crew_cost_per_race',
+    });
+  }
+
+  private async normalizeFacilityCost(args: {
+    facility: GarageFacility;
+    levelColumn: 'climate_monitoring_level' | 'pit_crew_level';
+    costColumn: 'climate_cost_per_race' | 'pit_crew_cost_per_race';
+  }): Promise<void> {
+    for (let level = 0; level <= 5; level += 1) {
+      const costPerRace = getFacilityCostPerRace(args.facility, level);
+
+      await query(
+        `UPDATE teams
+         SET ${args.costColumn} = $1,
+             updated_at = NOW()
+         WHERE COALESCE(${args.levelColumn}, 0) = $2
+           AND COALESCE(${args.costColumn}, 0) <> $1`,
+        [costPerRace, level],
+      );
+    }
   }
 }
 

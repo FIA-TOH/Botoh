@@ -5,11 +5,12 @@ import { DriverCircle } from './DriverCircle';
 import { RaceSession } from '@/mocks/raceData';
 import { colorNumberToHex } from '@/app/utils/race';
 import { useTranslations } from '@/i18n';
+import { usePitWallGameState } from '@/hooks/useCurrentMap';
 
 interface Props {
   drivers?: any[];
   loggedUserTeam?: string | null;
-  loggedUserWeatherLevel?: number;
+  weatherChartLevel?: number;
   raceSession?: RaceSession | null;
   loading?: boolean;
   error?: string | null;
@@ -82,15 +83,212 @@ function UnavailableRaceInsight({
   );
 }
 
+function WeatherRainChart({
+  chart,
+  currentTime,
+  weatherLevel,
+}: {
+  chart: NonNullable<RaceSession['weather']['chart']>;
+  currentTime: number;
+  weatherLevel: number;
+}) {
+  const width = 720;
+  const height = 260;
+  const padding = {
+    top: 18,
+    right: 18,
+    bottom: 32,
+    left: 44,
+  };
+  const plotWidth = width - padding.left - padding.right;
+  const plotHeight = height - padding.top - padding.bottom;
+  const duration = Math.max(chart.duration, chart.interval, 1);
+  const currentPieceIndex = Math.max(0, Math.floor(currentTime / chart.interval));
+  const normalizedWeatherLevel = Math.max(0, Math.min(5, Math.floor(weatherLevel)));
+  const futurePiecesByLevel: Record<number, number> = {
+    0: 0,
+    1: 0,
+    2: 1,
+    3: 1,
+    4: 2,
+    5: 3,
+  };
+  const inaccuracyByLevel: Record<number, number> = {
+    0: 35,
+    1: 35,
+    2: 25,
+    3: 10,
+    4: 5,
+    5: 0,
+  };
+  const futurePieces = futurePiecesByLevel[normalizedWeatherLevel] ?? 0;
+  const maxInaccuracy = inaccuracyByLevel[normalizedWeatherLevel] ?? 35;
+  const currentPieceEndTime = Math.min(duration, (currentPieceIndex + 1) * chart.interval);
+  const maxVisibleTime = Math.min(duration, currentPieceEndTime + futurePieces * chart.interval);
+  const visiblePoints = chart.points.filter((point) => point.time <= maxVisibleTime);
+  const rawPoints = visiblePoints.length > 0
+    ? visiblePoints
+    : chart.points.slice(0, 1);
+  const firstFuturePointIndex = rawPoints.findIndex((point) => point.time > currentPieceEndTime);
+
+  const stableHash = (value: string) => {
+    let hash = 0;
+    for (let index = 0; index < value.length; index++) {
+      hash = (hash * 31 + value.charCodeAt(index)) >>> 0;
+    }
+    return hash;
+  };
+
+  const getForecastOffset = (pointTime: number) => {
+    if (maxInaccuracy <= 0) return 0;
+
+    const hash = stableHash(`${chart.weatherId}:${normalizedWeatherLevel}:${pointTime}`);
+    const range = maxInaccuracy * 2 + 1;
+    return (hash % range) - maxInaccuracy;
+  };
+
+  const isDryPointBeforeRainStarts = (pointIndex: number) => {
+    const point = rawPoints[pointIndex];
+    const nextPoint = rawPoints[pointIndex + 1];
+    return (
+      point
+      && point.rain <= 0
+      && nextPoint
+      && nextPoint.rain > 0
+    );
+  };
+
+  const points = rawPoints.map((point, index) => {
+    if (firstFuturePointIndex === -1 || index < firstFuturePointIndex) {
+      return point;
+    }
+
+    if (point.rain <= 0 && !isDryPointBeforeRainStarts(index)) {
+      return point;
+    }
+
+    return {
+      ...point,
+      rain: Math.max(0, Math.min(100, point.rain + getForecastOffset(point.time))),
+    };
+  });
+
+  const x = (time: number) => padding.left + (Math.max(0, Math.min(duration, time)) / duration) * plotWidth;
+  const y = (rain: number) => padding.top + (1 - Math.max(0, Math.min(100, rain)) / 100) * plotHeight;
+  const currentX = x(currentTime);
+  const linePoints = points.map((point) => `${x(point.time)},${y(point.rain)}`).join(' ');
+  const areaPoints = [
+    `${x(points[0]?.time ?? 0)},${padding.top + plotHeight}`,
+    ...points.map((point) => `${x(point.time)},${y(point.rain)}`),
+    `${x(points[points.length - 1]?.time ?? 0)},${padding.top + plotHeight}`,
+  ].join(' ');
+
+  const formatTickTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const rest = Math.floor(seconds % 60);
+    return rest === 0 ? `${minutes}` : `${minutes}:${rest.toString().padStart(2, '0')}`;
+  };
+
+  const futureSegments = Array.from({ length: futurePieces }, (_, index) => {
+    const start = (currentPieceIndex + 1 + index) * chart.interval;
+    const end = Math.min(duration, (currentPieceIndex + index + 2) * chart.interval);
+    if (end <= start) return null;
+
+    return (
+      <rect
+        key={`future-${index}`}
+        x={x(start)}
+        y={padding.top}
+        width={Math.max(0, x(end) - x(start))}
+        height={plotHeight}
+        fill="#8ecae6"
+        opacity={Math.max(0.22, 0.58 - index * 0.08)}
+      />
+    );
+  });
+
+  return (
+    <div className="mt-5">
+      <svg viewBox={`0 0 ${width} ${height}`} className="h-auto w-full overflow-visible">
+        <rect
+          x={padding.left}
+          y={padding.top}
+          width={plotWidth}
+          height={plotHeight}
+          fill="transparent"
+          stroke="#f4f4ec"
+          strokeWidth="2"
+        />
+
+        {[25, 50, 75].map((tick) => (
+          <line
+            key={`grid-y-${tick}`}
+            x1={padding.left}
+            y1={y(tick)}
+            x2={padding.left + plotWidth}
+            y2={y(tick)}
+            stroke="#f4f4ec"
+            strokeWidth="1"
+            opacity="0.55"
+          />
+        ))}
+
+        {[0, 25, 50, 75, 100].map((tick) => (
+          <text
+            key={`label-y-${tick}`}
+            x={padding.left - 12}
+            y={y(tick) + 5}
+            textAnchor="end"
+            className="fill-white text-[18px]"
+          >
+            {tick}
+          </text>
+        ))}
+
+        {[0, duration / 2, duration].map((tick) => (
+          <text
+            key={`label-x-${tick}`}
+            x={x(tick)}
+            y={height - 8}
+            textAnchor={tick === 0 ? 'start' : tick === duration ? 'end' : 'middle'}
+            className="fill-white text-[18px]"
+          >
+            {formatTickTime(tick)}
+          </text>
+        ))}
+
+        {futureSegments}
+
+        {points.length > 0 && (
+          <>
+            <polygon points={areaPoints} fill="#26aef5" opacity="0.88" />
+            <polyline points={linePoints} fill="none" stroke="#26aef5" strokeWidth="3" />
+          </>
+        )}
+
+        <line
+          x1={currentX}
+          y1={padding.top}
+          x2={currentX}
+          y2={padding.top + plotHeight}
+          stroke="#ff1c1c"
+          strokeWidth="5"
+        />
+      </svg>
+    </div>
+  );
+}
+
 export function RaceInsightsGrid({
   drivers = [],
   loggedUserTeam = null,
-  loggedUserWeatherLevel = 0,
+  weatherChartLevel = 0,
   raceSession = null,
   loading = false,
   error = null,
 }: Props) {
   const { language, t } = useTranslations();
+  const gameState = usePitWallGameState();
   const driverOptions = useMemo(
     () => drivers.map((driver) => driver.name),
     [drivers]
@@ -132,7 +330,6 @@ export function RaceInsightsGrid({
   const [gapDriverA, setGapDriverA] = useState(paceDefaults.pace);
   const [gapDriverB, setGapDriverB] = useState(paceDefaults.compare);
   const [pitStopDriver, setPitStopDriver] = useState(paceDefaults.pace);
-  const [now, setNow] = useState(() => Date.now());
   const hideRaceOnlyInsights =
     raceSession?.sessionType === 'training'
     || raceSession?.sessionType === 'qualy'
@@ -156,11 +353,6 @@ export function RaceInsightsGrid({
       driverOptions.includes(current) ? current : paceDefaults.pace
     );
   }, [driverOptions, paceDefaults.compare, paceDefaults.pace]);
-
-  useEffect(() => {
-    const interval = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   const weatherBySection = [
     {
@@ -201,41 +393,43 @@ export function RaceInsightsGrid({
   };
 
   const formatWeatherValue = (value: number) => Math.round(value);
-  const lastWeatherAnnouncement = raceSession?.weather?.lastAnnouncement ?? null;
-  const realisticWeatherLevel = Math.max(0, Math.min(5, Math.floor(loggedUserWeatherLevel ?? 0)));
-  const realisticWeatherAnnouncement =
-    raceSession?.weather?.realisticAnnouncementsByLevel?.[realisticWeatherLevel]
-    ?? null;
-  const displayedWeatherAnnouncement = raceSession?.weather?.realisticRainAnnouncer
-    ? realisticWeatherAnnouncement
-    : lastWeatherAnnouncement;
-  const weatherAnnouncementAge = displayedWeatherAnnouncement && !raceSession?.weather?.realisticRainAnnouncer
-    ? Math.max(0, Math.floor((now - displayedWeatherAnnouncement.announcedAtTimestamp) / 1000))
+  const normalizedWeatherChartLevel = Math.max(0, Math.min(5, Math.floor(weatherChartLevel ?? 0)));
+  const weatherChart = raceSession?.weather?.chart ?? null;
+  const shouldShowWeatherChart = Boolean(weatherChart) && normalizedWeatherChartLevel > 0;
+  const displayedWeatherAnnouncement = raceSession?.weather?.lastAnnouncement ?? null;
+  const weatherAnnouncementAge = displayedWeatherAnnouncement
+    ? Math.max(
+        0,
+        Math.floor(
+          (raceSession?.currentTimePassed ?? 0)
+          - displayedWeatherAnnouncement.announcedAtGameTime
+        )
+      )
     : null;
   const formatAnnouncementAge = (totalSeconds: number) => {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
     return t.insights.minutesAgo(minutes, seconds.toString().padStart(2, '0'));
   };
-  const formatGameTime = (totalSeconds: number) => {
-    const safeSeconds = Math.max(0, Math.floor(totalSeconds));
-    const minutes = Math.floor(safeSeconds / 60);
-    const seconds = safeSeconds % 60;
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  };
-  const weatherForecastTime =
-    realisticWeatherAnnouncement && raceSession?.weather?.realisticRainAnnouncer
-      ? realisticWeatherAnnouncement.isEstimated
-        ? t.insights.estimatedForecastTime(formatGameTime(realisticWeatherAnnouncement.displayedEventGameTime))
-        : t.insights.forecastTime(formatGameTime(realisticWeatherAnnouncement.displayedEventGameTime))
-      : null;
-  const weatherForecastIntensity =
-    realisticWeatherAnnouncement?.intensity
-      ? realisticWeatherAnnouncement.intensity.type === 'max'
-        ? t.insights.maxRainIntensity(Math.round(realisticWeatherAnnouncement.intensity.value).toString())
-        : t.insights.minRainIntensity(Math.round(realisticWeatherAnnouncement.intensity.value).toString())
-      : null;
 
+  useEffect(() => {
+    console.log('[PitWall][WeatherChart]', {
+      weatherChartLevel,
+      normalizedWeatherChartLevel,
+      hasChart: Boolean(weatherChart),
+      chartWeatherId: weatherChart?.weatherId ?? null,
+      chartDuration: weatherChart?.duration ?? null,
+      chartPoints: weatherChart?.points.length ?? 0,
+      currentTimePassed: raceSession?.currentTimePassed ?? null,
+      shouldShowWeatherChart,
+    });
+  }, [
+    normalizedWeatherChartLevel,
+    raceSession?.currentTimePassed,
+    shouldShowWeatherChart,
+    weatherChart,
+    weatherChartLevel,
+  ]);
   const selectedGapDriverA = drivers.find((driver) => driver.name === gapDriverA);
   const selectedGapDriverB = drivers.find((driver) => driver.name === gapDriverB);
   const gapContext = useMemo(() => {
@@ -520,6 +714,18 @@ export function RaceInsightsGrid({
                 </div>
               ))}
             </div>
+            {shouldShowWeatherChart && weatherChart && (
+              <WeatherRainChart
+                chart={weatherChart}
+                currentTime={raceSession?.currentTimePassed ?? 0}
+                weatherLevel={normalizedWeatherChartLevel}
+              />
+            )}
+            {weatherChart && normalizedWeatherChartLevel <= 0 && (
+              <div className="mt-5 border border-white/30 px-3 py-4 text-center text-sm text-gray-300">
+                {t.insights.noWeatherAccess}
+              </div>
+            )}
           </div>
 
           <div
@@ -531,20 +737,8 @@ export function RaceInsightsGrid({
           >
             <div className="text-2xl font-bold uppercase">{t.insights.forecast}</div>
             <div className="mt-3 text-xl">
-              {raceSession?.weather?.realisticRainAnnouncer && realisticWeatherLevel <= 0
-                ? t.insights.noWeatherAccess
-                : displayedWeatherAnnouncement?.message[language] ?? t.insights.noWeather}
+              {displayedWeatherAnnouncement?.message[language] ?? t.insights.noWeather}
             </div>
-            {weatherForecastTime && (
-              <div className="mt-2 text-base text-gray-300">
-                {weatherForecastTime}
-              </div>
-            )}
-            {weatherForecastIntensity && (
-              <div className="mt-1 text-base text-gray-300">
-                {weatherForecastIntensity}
-              </div>
-            )}
             {weatherAnnouncementAge !== null && (
               <div className="mt-2 text-base text-gray-300">
                 {formatAnnouncementAge(weatherAnnouncementAge)}
@@ -702,7 +896,7 @@ export function RaceInsightsGrid({
                 <div className="mt-1 text-xl">
                   {gapContext?.carsBetween !== null && gapContext?.carsBetween !== undefined
                     ? `${gapContext.carsBetween} ${t.insights.carsBetween}`
-                    : '— ${t.insights.carsBetween}'}
+                    : '——'}
                 </div>
                 <div className="mt-1 text-xl">{t.insights.pitGap}: {pitGapLabel}</div>
               </div>

@@ -19,7 +19,6 @@ import { handlePitCommand } from "./handlePitCommand";
 import { setManageTyresEnabled } from "./handleManageTyresCommand";
 import { handlePresentationLapCommand } from "../gameState/handlePresentationLapCommand";
 import { handleRREnabledCommand } from "./handleRREnabledCommand";
-import { setRealisticRainAnnouncerEnabled } from "../../weather/rain/realisticRainAnnouncer";
 import { setScuderiaAvatar } from "../../scuderias/scuderiaAvatar";
 
 
@@ -69,7 +68,6 @@ export function handleConfigCommand(
 
 function applyFTOHConfig(room: RoomObject, byPlayer: PlayerObject) {
   log(`FTOH configuration applied by ${byPlayer.name}`);
-  setRealisticRainAnnouncerEnabled(true);
   handleSafetyCommand(byPlayer, ["on"], room);
   handleRModeCommand(byPlayer, [], room);
   enableSlipstream(true);
@@ -93,7 +91,6 @@ function applyFTOHConfig(room: RoomObject, byPlayer: PlayerObject) {
 
 export function applyFTOHPublicConfig(room: RoomObject, byPlayer: PlayerObject) {
   log(`FTOH Public configuration applied by ${byPlayer.name}`);
-  setRealisticRainAnnouncerEnabled(false);
   handleSafetyCommand(byPlayer, ["off"], room);
   handleRModeCommand(byPlayer, [], room);
   enableSlipstream(true);
@@ -116,7 +113,6 @@ export function applyFTOHPublicConfig(room: RoomObject, byPlayer: PlayerObject) 
 
 function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {
   log(`FH configuration applied by ${byPlayer.name}`);
-  setRealisticRainAnnouncerEnabled(false);
   handleSafetyCommand(byPlayer, ["off"], room);
   handleRModeCommand(byPlayer, [], room);
   enableSlipstream(true);
@@ -139,7 +135,6 @@ function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {
 
 function applyHaxbulaConfig(room: RoomObject, byPlayer: PlayerObject) {
   log(`Haxbula configuration applied by ${byPlayer.name}`);
-  setRealisticRainAnnouncerEnabled(false);
   handleSafetyCommand(byPlayer, ["off"], room);
   handleRModeCommand(byPlayer, [], room);
   enableSlipstream(false);

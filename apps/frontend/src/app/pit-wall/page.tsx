@@ -48,7 +48,44 @@ export default function PitWallPage() {
     eligibleMemberships.find((membership) => membership.teamId === selectedTeamId)
     ?? null;
   const loggedUserTeam = selectedMembership?.teamName ?? null;
-  const loggedUserWeatherLevel = selectedMembership?.weatherLevel ?? 0;
+  const authWeatherLevel = selectedMembership?.weatherLevel ?? 0;
+  const [liveWeatherLevel, setLiveWeatherLevel] = useState<number | null>(null);
+  const weatherChartLevel = liveWeatherLevel ?? authWeatherLevel;
+
+  useEffect(() => {
+    if (!selectedMembership || !selectedTeamId) {
+      setLiveWeatherLevel(null);
+      return;
+    }
+
+    let cancelled = false;
+
+    async function loadWeatherLevel() {
+      try {
+        const token = localStorage.getItem('auth_token');
+        const response = await fetch(`/api/garage/teams/${selectedTeamId}`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+          cache: 'no-store',
+        });
+
+        if (!response.ok) return;
+
+        const data = await response.json();
+        const level = data?.garage?.climateMonitoringLevel;
+        if (!cancelled && typeof level === 'number') {
+          setLiveWeatherLevel(level);
+        }
+      } catch {
+        if (!cancelled) setLiveWeatherLevel(null);
+      }
+    }
+
+    loadWeatherLevel();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedMembership, selectedTeamId]);
   const drivers = useMemo(
     () =>
       (playerList?.players ?? []).map((player) => ({
@@ -290,7 +327,7 @@ export default function PitWallPage() {
           <RaceInsightsGrid
           drivers={standings}
           loggedUserTeam={loggedUserTeam}
-          loggedUserWeatherLevel={loggedUserWeatherLevel}
+          weatherChartLevel={weatherChartLevel}
           raceSession={playerList?.raceSession}
           loading={!playerList}
           error={null}
