@@ -9,6 +9,7 @@ import { handlePitStop } from "../../tires&pits/handlePitStop";
 import { ifInBoxZone } from "../../tires&pits/pitLane";
 import { Tires, tyresActivated } from "../../tires&pits/tires";
 import { isPitNewSystemEnabled, startNewPitSequence } from "../../tires&pits/newPitSystem/newPitManager";
+import { isPlayerRepairing } from "../../damage/repairSystem";
 
 export function handleTiresCommand(
   byPlayer: PlayerObject,
@@ -17,6 +18,11 @@ export function handleTiresCommand(
 ) {
   if (!tyresActivated) {
     sendErrorMessage(room, MESSAGES.TYRES_DISABLED(), byPlayer.id);
+    return;
+  }
+
+  if (isPlayerRepairing(byPlayer.id)) {
+    sendErrorMessage(room, MESSAGES.REPAIR_TYRES_BLOCKED(), byPlayer.id);
     return;
   }
 

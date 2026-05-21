@@ -91,6 +91,11 @@ export default function fr_commands(
     args: string[],
     room: RoomObject,
   ) => void,
+  handleFixCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
   handleHelpCommand: (
     byPlayer: PlayerObject,
     args: string[],
@@ -346,6 +351,21 @@ export default function fr_commands(
     args: string[],
     room: RoomObject,
   ) => void,
+  handleScuderiaAvatarCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
+  handleSeeLoginCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
+  handleLoginCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void | Promise<void>,
 ): Commands {
   return {
     "!admin": handleAdminCommand,
@@ -368,6 +388,7 @@ export default function fr_commands(
     "!tyres": handleTiresCommand,
     "!tires": handleTiresCommand,
     "!pneus": handleTiresCommand,
+    "!fix": handleFixCommand,
     "!aide": handleHelpCommand,
     "!clear_bans": handleClearBansCommand,
     "!tours": handleLapsCommand,
@@ -423,5 +444,11 @@ export default function fr_commands(
     "!config": handleConfigCommand,
     "!manage_tyres": handleManageTyresCommand,
     "!pit": handlePitCommand,
+    "!scuderia_avatar": handleScuderiaAvatarCommand,
+    "!see_login": handleSeeLoginCommand,
+    "!login": handleLoginCommand,
   };
 }
+
+
+

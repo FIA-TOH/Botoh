@@ -1,6 +1,5 @@
 import { COLORS, sendErrorMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
-import { leagueScuderia } from "../../scuderias/scuderias";
 import { changeConstant, constants } from "../../speed/constants";
 
 export function handleChangePropierties(

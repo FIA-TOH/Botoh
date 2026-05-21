@@ -14,14 +14,19 @@ import { clearDebris } from "../../debris/clearDebris";
 import { getPlayerAndDiscs } from "../../playerFeatures/getPlayerAndDiscs";
 import { vsc, changeVSC } from "../../safetyCar/vsc";
 import { isSCActive } from "./handleSCCommand";
+import {
+  getRaceControlState,
+  isFlagCommandArg,
+  RaceControlState,
+  resetRaceControlState,
+  setFlagState,
+} from "./raceControl";
 
 import { getRunningPlayers } from "../../utils";
 import {
   handlePresentationLapCommand,
   presentationLap,
 } from "../gameState/handlePresentationLapCommand";
-
-let flag = "green";
 
 export function handleFlagCommand(
   byPlayer?: PlayerObject,
@@ -45,7 +50,14 @@ export function handleFlagCommand(
     return false;
   }
 
-  const flagChoosen = args[0];
+  const flagChoosen = args[0]?.toLowerCase();
+  if (!isFlagCommandArg(flagChoosen)) {
+    if (byPlayer) {
+      sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id);
+    }
+    return;
+  }
+
   const playerChoosen = args[1];
   let playerNumero: number | undefined;
 
@@ -67,10 +79,15 @@ export function handleFlagCommand(
     if (presentationLap === true) {
       handlePresentationLapCommand(undefined, ["off"], room);
     }
-    flag = "green";
+    resetRaceControlState();
   } else if (
     flagChoosen === "green" &&
-    (vsc === true || presentationLap === true || isSCActive())
+    (
+      getRaceControlState().flag !== RaceControlState.GreenFlag ||
+      vsc === true ||
+      presentationLap === true ||
+      isSCActive()
+    )
   ) {
     if (vsc === true) {
       changeVSC();
@@ -84,7 +101,7 @@ export function handleFlagCommand(
       handleSCCommand(undefined, ["off"], room);
     }
     
-    flag = "green";
+    setFlagState(RaceControlState.GreenFlag);
     sendGreenMessage(room, MESSAGES.GREEN_FLAG());
     sendGreenMessage(room, MESSAGES.GREEN_FLAG_TWO());
     clearDebris(room);
@@ -92,9 +109,8 @@ export function handleFlagCommand(
     players.forEach((player) => {
       handleAvatar(Situacions.Flag, player.p, room, undefined, ["🟩"], [5000]);
     });
-  } else if (flagChoosen === "yellow" && vsc === false && !isSCActive()) {
-    changeVSC();
-    flag = "yellow";
+  } else if (flagChoosen === "yellow" && !isSCActive()) {
+    setFlagState(RaceControlState.YellowFlag);
 
     sendYellowMessage(room, MESSAGES.YELLOW_FLAG());
     sendYellowMessage(room, MESSAGES.YELLOW_FLAG_TWO());
@@ -103,7 +119,7 @@ export function handleFlagCommand(
       handleAvatar(Situacions.Flag, player.p, room, undefined, ["🟨"], [5000]);
     });
   } else if (flagChoosen === "red") {
-    flag = "red";
+    setFlagState(RaceControlState.RedFlag);
 
     sendRedMessage(room, MESSAGES.RED_FLAG());
     sendRedMessage(room, MESSAGES.RED_FLAG_TWO());
@@ -120,7 +136,7 @@ export function handleFlagCommand(
       room.sendAnnouncement("Choose a valid player.", byPlayer.id, COLORS.RED);
       return;
     }
-    flag = "blue";
+    setFlagState(RaceControlState.BlueFlag);
 
     sendBlueMessage(room, MESSAGES.BLUE_FLAG(playerEscolhido[0].p.name));
 
@@ -147,7 +163,7 @@ export function handleFlagCommand(
       room.sendAnnouncement("Choose a valid player.", byPlayer.id, COLORS.RED);
       return;
     }
-    flag = "black";
+    setFlagState(RaceControlState.BlackFlag);
 
     sendBlackMessage(room, MESSAGES.BLACK_FLAG(playerEscolhido[0].p.name));
     sendBlackMessage(

@@ -38,6 +38,13 @@ export type DirectionChangerDetector = {
   sector: number,
 };
 
+export type CrashWallDetector = {
+  index: string | number;
+  v0: [number, number];
+  v1: [number, number];
+  curvatura: number;
+};
+
 export type CutSegment = {
   index: number;
   penalty: number;
@@ -71,7 +78,9 @@ export interface CircuitInfo {
   haveDebris?: boolean;
   physicsType?: CircuitPhysics;
   DirectionChangerDetector?: DirectionChangerDetector[],
+  CrashWallDetector?: CrashWallDetector[],
   new_safetycar?: boolean,
+  pitGap?: number,
 }
 
 export interface Circuit {

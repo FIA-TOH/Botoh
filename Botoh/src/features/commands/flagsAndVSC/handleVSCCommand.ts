@@ -1,6 +1,7 @@
 import { sendErrorMessage, sendChatMessage, sendYellowMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { changeVSC, vsc } from "../../safetyCar/vsc";
+import { RaceControlState, setNeutralizationState } from "./raceControl";
 
 export function handleVSCCommand(
   byPlayer?: PlayerObject,
@@ -18,8 +19,10 @@ export function handleVSCCommand(
   changeVSC();
   
   if (vsc) {
+    setNeutralizationState(RaceControlState.VirtualSafetyCar);
     sendYellowMessage(room, MESSAGES.VSC_DEPLOYED());
   } else {
+    setNeutralizationState(null);
     sendChatMessage(room, MESSAGES.VSC_NOT_ACTIVE());
   }
 }

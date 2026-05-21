@@ -25,6 +25,7 @@ export function createPlayerInfo(ip?: string, playerId?: number) {
     lapsBehindLeaderWhenLeft: null,
 
     currentSector: 3,
+    checkpointTimes: {},
     sectorChanged: false,
     sectorTime: [],
     sectorTimeCounter: 0,
@@ -64,7 +65,7 @@ export function createPlayerInfo(ip?: string, playerId?: number) {
     blowAtWear: 100,
     warningAtWear: null,
     warningIsFalse: false,
-    warningShown: false,
+    tireBlowWarning: false,
 
     speedEnabled: false,
     drs: false,
@@ -121,6 +122,17 @@ export function createPlayerInfo(ip?: string, playerId?: number) {
       reactionTimeout: undefined,
     },
 
+    repairState: {
+      isWaitingForRepair: false,
+      isRepairing: false,
+      repairStartTime: undefined,
+      repairReadyTime: undefined,
+      repairEmojiShowTime: undefined,
+      reactionTime: undefined,
+      repairEndTime: undefined,
+      damageToRepair: undefined,
+    },
+
     xKeyState: {
       isPressed: false,
       pressTimes: [],
@@ -140,6 +152,14 @@ export function createPlayerInfo(ip?: string, playerId?: number) {
     directionChangerForce: undefined,
     currentDirection: undefined,
     currentDirectionEmoji: undefined,
+    driverNumber: 0,
+    carDamage: 0,
+    position: null,
+    gapToLeader: null,
+    gapToNext: null,
+    shortName: "N/A",
+    isLogged: false,
+    isFirstDriver: false,
   };
 }
 
@@ -183,6 +203,7 @@ export function resetPlayer(
   playerList[id].lapsBehindLeaderWhenLeft = null;
 
   playerList[id].currentSector = 3;
+  playerList[id].checkpointTimes = {};
   playerList[id].sectorChanged = false;
   playerList[id].sectorTime = [];
   playerList[id].sectorTimeCounter = 0;
@@ -224,7 +245,7 @@ export function resetPlayer(
   playerList[id].blowAtWear = 100;
   playerList[id].warningAtWear = null;
   playerList[id].warningIsFalse = false;
-  playerList[id].warningShown = false;
+  playerList[id].tireBlowWarning = false;
 
   playerList[id].penaltyCounter = 0;
   playerList[id].lastCheckTime = 0;
@@ -262,6 +283,17 @@ export function resetPlayer(
     emojiDelayTime: undefined,
     reactionTimeout: undefined,
   };
+
+  playerList[id].repairState = {
+    isWaitingForRepair: false,
+    isRepairing: false,
+    repairStartTime: undefined,
+    repairReadyTime: undefined,
+    repairEmojiShowTime: undefined,
+    reactionTime: undefined,
+    repairEndTime: undefined,
+    damageToRepair: undefined,
+  };
   
   playerList[id].xKeyState = {
     isPressed: false,
@@ -281,4 +313,8 @@ export function resetPlayer(
   playerList[id].directionChangerForce = undefined;
   playerList[id].currentDirection = undefined;
   playerList[id].currentDirectionEmoji = undefined;
+  playerList[id].carDamage = 0;
+  playerList[id].position = null;
+  playerList[id].gapToLeader = null;
+  playerList[id].gapToNext = null;
 }

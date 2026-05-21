@@ -2,7 +2,10 @@ import { playerList } from "../../changePlayerState/playerList";
 import { COLORS, sendErrorMessage, sendSuccessMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { LEAGUE_MODE } from "../../hostLeague/leagueMode";
-import { leagueScuderia } from "../../scuderias/scuderias";
+import {
+  hasLeagueScuderia,
+  leagueScuderia,
+} from "../../scuderias/scuderias";
 
 export function handleSetScuderia(
   byPlayer: PlayerObject,
@@ -22,9 +25,9 @@ export function handleSetScuderia(
     return;
   }
 
-  if (value in leagueScuderia) {
-    const scuderiaKey = value as keyof typeof leagueScuderia;
-    player.leagueScuderia = scuderiaKey as string;
+  if (hasLeagueScuderia(value)) {
+    const scuderiaKey = value;
+    player.leagueScuderia = scuderiaKey;
 
     sendSuccessMessage(
       room,
@@ -44,7 +47,7 @@ export function handleSetScuderia(
 
   if (scuderiaEntry) {
     const [scuderiaKey, scuderia] = scuderiaEntry;
-    player.leagueScuderia = scuderiaKey as string;
+    player.leagueScuderia = scuderiaKey;
     sendSuccessMessage(
       room,
       MESSAGES.SCUDERIA_DEFINED(

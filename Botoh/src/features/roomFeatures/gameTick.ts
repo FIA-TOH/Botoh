@@ -8,6 +8,7 @@ import { getRunningPlayers } from '../utils';
 import handleTireWear from '../tires&pits/handleTireWear';
 import { playerList } from '../changePlayerState/playerList';
 import { getPlayerAndDiscs } from '../playerFeatures/getPlayerAndDiscs';
+import { damageEnabled, detectCrashWallDetectors } from '../speed/crashWallDetector';
 import { detectDirectionChangers } from '../speed/directionChanger';
 import {
   handleChangeCollisionPlayerSuzuka,
@@ -29,10 +30,12 @@ import { updateLeagueStartAFKDetection } from '../afk/leagueStartAFKDetection';
 import { checkVSCDuration } from '../safetyCar/vsc';
 import { updateNewPitSystemForPlayer } from "../tires&pits/newPitSystem/pitTickHandler";
 import { handleManageTyreXKeyDetection } from "../utils/handleXKeyDetection";
+import { updateRepairSystemForPlayer } from '../damage/repairSystem';
 
 const detectCutThrottledByPlayer: Map<number, ReturnType<typeof throttlePerSecond>> = new Map();
 
 export let gameStarted = false;
+export let currentTime = 0;
 export function setGameStarted(value: boolean) {
   gameStarted = value;
 }
@@ -52,6 +55,9 @@ export function GameTick(room: RoomObject) {
     if (gameMode !== GameMode.WAITING) {
       handlePitlane(playersAndDiscs, room);
       detectDirectionChangers(playersAndDiscs, room);
+      if (damageEnabled) {
+        detectCrashWallDetectors(playersAndDiscs, room);
+      }
       distributeSpeed(playersAndDiscs, room);
       //Avatar Updated based on direction
       // playersAndDiscs.forEach(({ p, disc }) => {
@@ -62,7 +68,7 @@ export function GameTick(room: RoomObject) {
     }
 
     const scores = room.getScores();
-    const currentTime = scores?.time || 0;
+    currentTime = scores?.time || 0;
 
     players.forEach((pad) => {
       const p = pad.p;
@@ -97,6 +103,7 @@ export function GameTick(room: RoomObject) {
       }
 
       updateNewPitSystemForPlayer(p, pad.disc, room, currentTime);
+      updateRepairSystemForPlayer(p, pad.disc, room, currentTime);
 
     });
 

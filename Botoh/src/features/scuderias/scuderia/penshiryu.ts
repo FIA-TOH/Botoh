@@ -4,7 +4,7 @@ import { Chassis } from "../chassis";
 import { Engine } from "../engine";
 import { PitCrew } from "../pitstop";
 import { ScuderiaColors } from "../scuderiaColours";
-import { leagueScuderia } from "../scuderias";
+import { Scuderia } from "../scuderias";
 import { Suspension } from "../tyres";
 
 export const PenshiryuEngine: Engine = {
@@ -49,7 +49,7 @@ export const PenshiryuPitCrew: PitCrew = {
   normalPitSpeedTimeBoost: 0,
 };
 
-export const Penshiryu: leagueScuderia = {
+export const Penshiryu: Scuderia = {
   name: "Penshiryu",
   tag: "PE",
   color: ScuderiaColors.PENSHIRYU,

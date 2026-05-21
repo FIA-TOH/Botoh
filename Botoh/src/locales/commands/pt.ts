@@ -92,6 +92,11 @@ export default function pt_commands(
     args: string[],
     room: RoomObject,
   ) => void,
+  handleFixCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
   handleHelpCommand: (
     byPlayer: PlayerObject,
     args: string[],
@@ -352,6 +357,21 @@ export default function pt_commands(
     args: string[],
     room: RoomObject,
   ) => void,
+  handleScuderiaAvatarCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
+  handleSeeLoginCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
+  handleLoginCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void | Promise<void>,
 ): Commands {
   return {
     "!admin": handleAdminCommand,
@@ -374,6 +394,7 @@ export default function pt_commands(
     "!pneus": handleTiresCommand,
     "!tyres": handleTiresCommand,
     "!tires": handleTiresCommand,
+    "!fix": handleFixCommand,
     "!ajuda": handleHelpCommand,
     "!clear_bans": handleClearBansCommand,
     "!laps": handleLapsCommand,
@@ -432,5 +453,11 @@ export default function pt_commands(
     "!config": handleConfigCommand,
     "!manage_tyres": handleManageTyresCommand,
     "!pit": handlePitCommand,
+    "!scuderia_avatar": handleScuderiaAvatarCommand,
+    "!see_login": handleSeeLoginCommand,
+    "!login": handleLoginCommand,
   };
 }
+
+
+

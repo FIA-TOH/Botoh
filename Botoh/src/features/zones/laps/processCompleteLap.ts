@@ -17,6 +17,7 @@ import { annouceTyreWear } from "./utils/annoucements/annouceTyreWear";
 import { InvalidateLap } from "../../detectCut/invalidateLap";
 import { log } from "../../discord/logger";
 import { GeneralGameMode, generalGameMode } from "../../changeGameState/changeGameModes";
+import { recordLap } from "./lapHistory";
 
 export function processCompletedLap(
   pad: { p: PlayerObject; disc: DiscPropertiesObject },
@@ -37,6 +38,7 @@ export function processCompletedLap(
     return log("No circuit abreviated track name found");
 
   InvalidateLap(playerData, room, p);
+  recordLap(p.id, lapTime, playerData.lastLapValid ?? true);
 
   const circuitBestTime = getBestTime(ACTUAL_CIRCUIT.info.name);
   if (!circuitBestTime) return log("No circuit best time found");

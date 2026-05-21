@@ -15,6 +15,9 @@
   "PIT_MISSING_ARGUMENT": "Kullanım: !pit <old|new>",
   "PIT_INVALID_ARGUMENT": "Geçersiz argüman. Kullanın: old veya new",
   "PIT_SUCCESS": "Pit yapılandırması '{{pitType}}' başarıyla uygulandı",
+  "SCUDERIA_AVATAR_MISSING_ARGUMENT": "Kullanım: !scuderia_avatar <true|false>",
+  "SCUDERIA_AVATAR_INVALID_ARGUMENT": "Geçersiz argüman. Kullanın: true veya false",
+  "SCUDERIA_AVATAR_SUCCESS": "Scuderia avatar {{enabled}} olarak ayarlandı",
   "MANAGE_TYRES_MISSING_ARGUMENT": "Kullanım: !manage_tyres <true|false>",
   "MANAGE_TYRES_INVALID_ARGUMENT": "Geçersiz argüman. Kullanın: true veya false",
   "MANAGE_TYRES_SUCCESS": "Lastik yönetimi {{enabled}} başarıyla",
@@ -95,7 +98,6 @@
   "FINISH_QUALI": "Sıralamanızı tamamladınız!",
   "CURRENT_LAP": "Tur {{currentLap}}/{{laps}}",
   "POSITION_AND_DISTANCE_AHEAD": "Şu anda P{{position}}'desiniz. İlerideki mesafe: {{distance}} {{units}}",
- 
   "TYRE_WEAR_LAP": "Lastikleriniz %{{number}} durumda.",
   "IN_MUTE_MODE": "Sessiz mod aktif. Sadece adminler sohbet edebilir.",
   "AFK_MESSAGE": "⛔ Önümüzdeki birkaç saniye içinde hareket etmezseniz, atılacaksınız! ⛔",
@@ -110,7 +112,6 @@
   "CANCELED_CHANGE_TYRES": "❌🚨❌Pit-stop iptal edildi, hareket algılandı.❌🚨❌",
   "CHANGED_TIRES": "{{name}}, {{seconds}}s pit-stop ile lastiklerini {{tires}} olarak değiştirdi",
   "FASTEST_PIT": "👨‍🔧 Yarışın en hızlı pit stopu! {{name}} - {{seconds}}s",
- 
   "EXPLAIN_SERVER": "FTOH'a hoş geldiniz! Bu, Haxball'da bir Formula 1 yarış sunucusudur. Önce en iyi zamanı yapmanız gereken sıralama turları (qualy) var. Sonra 7 turdan oluşan yarış başlar. Lastiklere dikkat edin — farkı onlar yaratır!",
   "EXPLAIN_ERS": "Vuruş düğmesine basılı tutarken, avatarınızda bir sayı belirecek, bu Turbo'dur, dikkatli kullanın.",
   "GREEN_FLAG": "🟩🚨🟩 YEŞİL BAYRAK! 🟩🚨🟩",
@@ -170,5 +171,21 @@
   "BR_REMAINING": "☠️👥 {{remaining}} kaldı. 👥☠️",
   "BR_WINNER": "👑🏆 {{name}} kazandı, {{eliminated}} elendi. 👑🏆",
   "LAPPED_NORMALIZED_LAPS": "{{name}} turlarını normalleştirdi ve şimdi grid ile birlikte",
-  "LAPPED_REMAINING_LAPS": "{{name}} grid'e katılmak için {{laps}} daha tur(lar) var"
+  "LAPPED_REMAINING_LAPS": "{{name}} grid'e katılmak için {{laps}} daha tur(lar) var",
+  "LOGIN_USAGE": "Kullanım: !login <şifre> [takım kısaltması]",
+  "LOGIN_ERROR": "Geçersiz kullanıcı adı veya şifre.",
+  "LOGIN_SUCCESS": "Giriş başarılı.",
+  "CHAT_CHANNEL_ALL": "Herkes",
+  "CHAT_CHANNEL_TEAM": "Tak?m",
+  "CHAT_CHANNEL_PRIVATE": "?zel",
+  "CRASH_WALL_DETECTED": "{{playerName}} {{index}} duvarina {{speed}} hizla dokundu.",
+  "CAR_DAMAGE_TAKEN": "💥{{damageTaken}} HASAR! • 🏎️ {{newDamage}}/100",
+  "DAMAGE_ENABLED": "Hasar aktif.",
+  "DAMAGE_DISABLED": "Hasar devre disi.",
+  "REPAIR_NO_DAMAGE": "Aracinda tamir edilecek hasar yok.",
+  "REPAIR_ALREADY_ACTIVE": "Tamir zaten devam ediyor.",
+  "REPAIR_IN_PIT_STOP": "Pit stop yapilirken tamir edemezsin.",
+  "REPAIR_TYRES_BLOCKED": "Arac tamir edilirken lastik degistiremezsin.",
+  "REPAIR_STARTED": "🛠️🏎️ Araç tamir ediliyor... Tahmini süre: {{seconds}}s ⏳",
+  "REPAIR_FINISHED": "✅🏎️ Tamir tamamlandı!"
 }

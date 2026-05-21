@@ -1,0 +1,317 @@
+import { query } from './database';
+import { GarageFacility, getFacilityCostPerRace } from './facilityEconomy';
+
+class MigrationService {
+  async ensureAdminSchema(): Promise<void> {
+    await query('CREATE EXTENSION IF NOT EXISTS pgcrypto');
+
+    await query(`
+      CREATE TABLE IF NOT EXISTS teams (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        name VARCHAR(100) NOT NULL UNIQUE,
+        tag VARCHAR(3) NOT NULL UNIQUE,
+        emoji VARCHAR(8) NOT NULL DEFAULT '',
+        color VARCHAR(7) NOT NULL DEFAULT '#FFFFFF',
+        budget NUMERIC DEFAULT 0,
+        total_wins INTEGER DEFAULT 0,
+        total_races INTEGER DEFAULT 0,
+        championship_points INTEGER DEFAULT 0,
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW()
+      )
+    `);
+
+    await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS tag VARCHAR(3)');
+    await query("ALTER TABLE teams ADD COLUMN IF NOT EXISTS emoji VARCHAR(8) NOT NULL DEFAULT ''");
+    await query("ALTER TABLE teams ADD COLUMN IF NOT EXISTS color VARCHAR(7) NOT NULL DEFAULT '#FFFFFF'");
+    await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS budget NUMERIC DEFAULT 0');
+    await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS total_wins INTEGER DEFAULT 0');
+    await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS total_races INTEGER DEFAULT 0');
+    await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS championship_points INTEGER DEFAULT 0');
+    await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS cash_total NUMERIC NOT NULL DEFAULT 0');
+    await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS climate_cost_per_race NUMERIC NOT NULL DEFAULT 0');
+    await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS pit_crew_cost_per_race NUMERIC NOT NULL DEFAULT 0');
+    await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS salary_cost_per_race NUMERIC NOT NULL DEFAULT 0');
+    await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS sponsor_income_per_race NUMERIC NOT NULL DEFAULT 0');
+    await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS climate_monitoring_level INTEGER NOT NULL DEFAULT 0');
+    await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS pit_crew_level INTEGER NOT NULL DEFAULT 0');
+    await query('ALTER TABLE teams ALTER COLUMN climate_monitoring_level SET DEFAULT 0');
+    await query('ALTER TABLE teams ALTER COLUMN pit_crew_level SET DEFAULT 0');
+    await query("ALTER TABLE teams ADD COLUMN IF NOT EXISTS car_name VARCHAR(100) NOT NULL DEFAULT 'Unnamed car'");
+    await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT NOW()');
+    await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT NOW()');
+
+    await query('ALTER TABLE users ADD COLUMN IF NOT EXISTS role VARCHAR(30) DEFAULT \'user\'');
+    await query('ALTER TABLE users ADD COLUMN IF NOT EXISTS money NUMERIC DEFAULT 50000');
+    await query('ALTER TABLE users ADD COLUMN IF NOT EXISTS level INTEGER DEFAULT 1');
+    await query('ALTER TABLE users ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true');
+    await query('ALTER TABLE users ADD COLUMN IF NOT EXISTS short_username VARCHAR(3)');
+    await query('ALTER TABLE users ADD COLUMN IF NOT EXISTS is_team_principal BOOLEAN DEFAULT false');
+    await query('ALTER TABLE users ADD COLUMN IF NOT EXISTS is_team_assistant BOOLEAN DEFAULT false');
+    await query('ALTER TABLE users ADD COLUMN IF NOT EXISTS is_driver BOOLEAN DEFAULT false');
+    await query('ALTER TABLE users ADD COLUMN IF NOT EXISTS driver_number INTEGER');
+    await query("ALTER TABLE users ADD COLUMN IF NOT EXISTS language VARCHAR(2) NOT NULL DEFAULT 'pt'");
+    await query('ALTER TABLE users ADD COLUMN IF NOT EXISTS team_id UUID REFERENCES teams(id) ON DELETE SET NULL');
+    await query('ALTER TABLE users ALTER COLUMN team_id DROP NOT NULL');
+
+    await query(`
+      CREATE TABLE IF NOT EXISTS user_team_memberships (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        team_id UUID NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
+        role VARCHAR(30) NOT NULL CHECK (role IN ('team_principal', 'team_assistant', 'driver')),
+        is_team_principal BOOLEAN NOT NULL DEFAULT false,
+        is_team_assistant BOOLEAN NOT NULL DEFAULT false,
+        is_driver BOOLEAN NOT NULL DEFAULT false,
+        created_at TIMESTAMP DEFAULT NOW(),
+        UNIQUE(user_id, team_id)
+      )
+    `);
+
+    await query('ALTER TABLE user_team_memberships ADD COLUMN IF NOT EXISTS is_team_principal BOOLEAN NOT NULL DEFAULT false');
+    await query('ALTER TABLE user_team_memberships ADD COLUMN IF NOT EXISTS is_team_assistant BOOLEAN NOT NULL DEFAULT false');
+    await query('ALTER TABLE user_team_memberships ADD COLUMN IF NOT EXISTS is_driver BOOLEAN NOT NULL DEFAULT false');
+
+    await query(`
+      INSERT INTO user_team_memberships (
+        user_id,
+        team_id,
+        role,
+        is_team_principal,
+        is_team_assistant,
+        is_driver
+      )
+      SELECT
+        u.id,
+        u.team_id,
+        CASE
+          WHEN COALESCE(u.is_team_principal, false) THEN 'team_principal'
+          WHEN COALESCE(u.is_team_assistant, false) THEN 'team_assistant'
+          ELSE 'driver'
+        END,
+        COALESCE(u.is_team_principal, false),
+        COALESCE(u.is_team_assistant, false),
+        COALESCE(u.is_driver, false)
+      FROM users u
+      WHERE u.team_id IS NOT NULL
+      ON CONFLICT (user_id, team_id) DO NOTHING
+    `);
+
+    await query(`
+      UPDATE user_team_memberships
+      SET
+        is_team_principal = CASE WHEN role = 'team_principal' THEN true ELSE is_team_principal END,
+        is_team_assistant = CASE WHEN role = 'team_assistant' THEN true ELSE is_team_assistant END,
+        is_driver = CASE WHEN role = 'driver' THEN true ELSE is_driver END
+    `);
+
+    await query(`
+      CREATE TABLE IF NOT EXISTS team_financial_history (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        team_id UUID NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
+        amount NUMERIC NOT NULL,
+        entry_type VARCHAR(20) NOT NULL CHECK (entry_type IN ('income', 'expense')),
+        reason VARCHAR(255) NOT NULL,
+        source VARCHAR(30) NOT NULL DEFAULT 'manual'
+          CHECK (source IN ('manual', 'standard_race', 'sponsor', 'driver', 'facility')),
+        race_id UUID NULL,
+        occurred_at TIMESTAMP NOT NULL DEFAULT NOW(),
+        created_at TIMESTAMP NOT NULL DEFAULT NOW()
+      )
+    `);
+    await query('ALTER TABLE team_financial_history DROP CONSTRAINT IF EXISTS team_financial_history_source_check');
+    await query(`
+      ALTER TABLE team_financial_history
+      ADD CONSTRAINT team_financial_history_source_check
+      CHECK (source IN ('manual', 'standard_race', 'sponsor', 'driver', 'facility'))
+    `);
+    await this.normalizeFacilityCosts();
+
+    await query(`
+      CREATE TABLE IF NOT EXISTS team_drivers (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        team_id UUID NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
+        user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+        display_name VARCHAR(100) NOT NULL,
+        driver_number INTEGER,
+        contract_ends_after_races INTEGER NOT NULL CHECK (contract_ends_after_races >= 0),
+        salary_per_race NUMERIC NOT NULL CHECK (salary_per_race >= 0),
+        slot_number INTEGER NOT NULL CHECK (slot_number BETWEEN 1 AND 4),
+        created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+        updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+        UNIQUE(team_id, slot_number)
+      )
+    `);
+    await query("ALTER TABLE team_drivers ADD COLUMN IF NOT EXISTS category VARCHAR(20) NOT NULL DEFAULT 'starter'");
+    await query("ALTER TABLE team_drivers ADD COLUMN IF NOT EXISTS status VARCHAR(20) NOT NULL DEFAULT 'active'");
+    await query("ALTER TABLE team_drivers ADD COLUMN IF NOT EXISTS accepted_at TIMESTAMP DEFAULT NOW()");
+    await query("ALTER TABLE team_drivers DROP CONSTRAINT IF EXISTS team_drivers_category_check");
+    await query("ALTER TABLE team_drivers ADD CONSTRAINT team_drivers_category_check CHECK (category IN ('starter', 'reserve'))");
+    await query("ALTER TABLE team_drivers DROP CONSTRAINT IF EXISTS team_drivers_status_check");
+    await query("ALTER TABLE team_drivers ADD CONSTRAINT team_drivers_status_check CHECK (status IN ('active', 'released'))");
+    await query('ALTER TABLE team_drivers DROP CONSTRAINT IF EXISTS team_drivers_team_id_slot_number_key');
+    await query('CREATE UNIQUE INDEX IF NOT EXISTS team_drivers_active_team_slot_unique ON team_drivers(team_id, slot_number) WHERE status = \'active\'');
+    await query('CREATE UNIQUE INDEX IF NOT EXISTS team_drivers_active_user_team_unique ON team_drivers(user_id, team_id) WHERE status = \'active\' AND user_id IS NOT NULL');
+    await query('CREATE UNIQUE INDEX IF NOT EXISTS team_drivers_active_starter_user_unique ON team_drivers(user_id) WHERE status = \'active\' AND category = \'starter\' AND user_id IS NOT NULL');
+
+    await query("ALTER TABLE user_team_memberships ADD COLUMN IF NOT EXISTS driver_category VARCHAR(20)");
+    await query("ALTER TABLE user_team_memberships DROP CONSTRAINT IF EXISTS user_team_memberships_driver_category_check");
+    await query("ALTER TABLE user_team_memberships ADD CONSTRAINT user_team_memberships_driver_category_check CHECK (driver_category IS NULL OR driver_category IN ('starter', 'reserve'))");
+
+    await query(`
+      CREATE TABLE IF NOT EXISTS sponsors (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        name VARCHAR(120) NOT NULL UNIQUE,
+        logo_url TEXT,
+        created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+        updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+      )
+    `);
+
+    await query(`
+      CREATE TABLE IF NOT EXISTS team_sponsors (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        team_id UUID NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
+        sponsor_id UUID NOT NULL REFERENCES sponsors(id) ON DELETE CASCADE,
+        category VARCHAR(30) NOT NULL CHECK (
+          category IN ('title_sponsor', 'main_partner', 'official_partner', 'minor_sponsor', 'personal_sponsor')
+        ),
+        slot_number INTEGER NOT NULL,
+        contract_races_remaining INTEGER NOT NULL CHECK (contract_races_remaining >= 0),
+        initial_reward NUMERIC NOT NULL DEFAULT 0 CHECK (initial_reward >= 0),
+        reward_per_race NUMERIC NOT NULL DEFAULT 0 CHECK (reward_per_race >= 0),
+        created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+        updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+        UNIQUE(team_id, category, slot_number),
+        CHECK (
+          (category = 'title_sponsor' AND slot_number BETWEEN 1 AND 1)
+          OR (category = 'main_partner' AND slot_number BETWEEN 1 AND 2)
+          OR (category = 'official_partner' AND slot_number BETWEEN 1 AND 4)
+          OR (category = 'minor_sponsor' AND slot_number BETWEEN 1 AND 8)
+          OR (category = 'personal_sponsor' AND slot_number BETWEEN 1 AND 4)
+        )
+      )
+    `);
+    await query(`
+      DELETE FROM team_sponsors duplicate
+      USING team_sponsors keeper
+      WHERE duplicate.team_id = keeper.team_id
+        AND duplicate.sponsor_id = keeper.sponsor_id
+        AND duplicate.created_at > keeper.created_at
+    `);
+    await query('CREATE UNIQUE INDEX IF NOT EXISTS team_sponsors_team_sponsor_unique ON team_sponsors(team_id, sponsor_id)');
+
+    await query(`
+      CREATE TABLE IF NOT EXISTS team_sponsor_season_missions (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        team_sponsor_id UUID NOT NULL REFERENCES team_sponsors(id) ON DELETE CASCADE,
+        title VARCHAR(255) NOT NULL,
+        reward NUMERIC NOT NULL CHECK (reward >= 0),
+        races_to_complete INTEGER NOT NULL CHECK (races_to_complete >= 0),
+        created_at TIMESTAMP NOT NULL DEFAULT NOW()
+      )
+    `);
+    await query('ALTER TABLE team_sponsor_season_missions DROP CONSTRAINT IF EXISTS team_sponsor_season_missions_races_to_complete_check');
+    await query(`
+      ALTER TABLE team_sponsor_season_missions
+      ADD CONSTRAINT team_sponsor_season_missions_races_to_complete_check
+      CHECK (races_to_complete >= 0)
+    `);
+
+    await query(`
+      CREATE TABLE IF NOT EXISTS team_sponsor_race_missions (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        team_sponsor_id UUID NOT NULL REFERENCES team_sponsors(id) ON DELETE CASCADE,
+        title VARCHAR(255) NOT NULL,
+        reward NUMERIC NOT NULL CHECK (reward >= 0),
+        created_at TIMESTAMP NOT NULL DEFAULT NOW()
+      )
+    `);
+
+    await query(`
+      CREATE TABLE IF NOT EXISTS notifications (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        sender_user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+        title VARCHAR(120) NOT NULL,
+        message VARCHAR(500) NOT NULL,
+        type VARCHAR(20) NOT NULL DEFAULT 'info' CHECK (type IN ('info', 'success', 'warning', 'error')),
+        is_read BOOLEAN NOT NULL DEFAULT false,
+        read_at TIMESTAMP NULL,
+        created_at TIMESTAMP NOT NULL DEFAULT NOW()
+      )
+    `);
+    await query("ALTER TABLE notifications ADD COLUMN IF NOT EXISTS metadata JSONB NOT NULL DEFAULT '{}'::jsonb");
+    await query('CREATE INDEX IF NOT EXISTS notifications_user_created_idx ON notifications(user_id, created_at DESC)');
+    await query('CREATE INDEX IF NOT EXISTS notifications_user_unread_idx ON notifications(user_id) WHERE is_read = false');
+
+    await query(`
+      CREATE TABLE IF NOT EXISTS driver_contract_proposals (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        team_id UUID NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
+        user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        proposed_by_user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+        category VARCHAR(20) NOT NULL CHECK (category IN ('starter', 'reserve')),
+        contract_races INTEGER NOT NULL CHECK (contract_races > 0),
+        salary_per_race NUMERIC NOT NULL CHECK (salary_per_race >= 0),
+        status VARCHAR(20) NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'accepted', 'declined', 'cancelled')),
+        notification_id UUID REFERENCES notifications(id) ON DELETE SET NULL,
+        created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+        responded_at TIMESTAMP NULL
+      )
+    `);
+    await query('CREATE INDEX IF NOT EXISTS driver_contract_proposals_user_status_idx ON driver_contract_proposals(user_id, status)');
+    await query('CREATE INDEX IF NOT EXISTS driver_contract_proposals_team_status_idx ON driver_contract_proposals(team_id, status)');
+
+    await query(`
+      CREATE TABLE IF NOT EXISTS race_progress_alerts (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        entity_type VARCHAR(40) NOT NULL CHECK (
+          entity_type IN ('driver_contract', 'sponsor_contract', 'season_mission')
+        ),
+        entity_id UUID NOT NULL,
+        team_id UUID REFERENCES teams(id) ON DELETE SET NULL,
+        team_name VARCHAR(100) NOT NULL,
+        entity_name VARCHAR(255) NOT NULL,
+        detail VARCHAR(255) NOT NULL,
+        created_at TIMESTAMP NOT NULL DEFAULT NOW()
+      )
+    `);
+    await query('CREATE INDEX IF NOT EXISTS race_progress_alerts_created_idx ON race_progress_alerts(created_at DESC)');
+  }
+
+  private async normalizeFacilityCosts(): Promise<void> {
+    await this.normalizeFacilityCost({
+      facility: 'climate',
+      levelColumn: 'climate_monitoring_level',
+      costColumn: 'climate_cost_per_race',
+    });
+
+    await this.normalizeFacilityCost({
+      facility: 'pitCrew',
+      levelColumn: 'pit_crew_level',
+      costColumn: 'pit_crew_cost_per_race',
+    });
+  }
+
+  private async normalizeFacilityCost(args: {
+    facility: GarageFacility;
+    levelColumn: 'climate_monitoring_level' | 'pit_crew_level';
+    costColumn: 'climate_cost_per_race' | 'pit_crew_cost_per_race';
+  }): Promise<void> {
+    for (let level = 0; level <= 5; level += 1) {
+      const costPerRace = getFacilityCostPerRace(args.facility, level);
+
+      await query(
+        `UPDATE teams
+         SET ${args.costColumn} = $1,
+             updated_at = NOW()
+         WHERE COALESCE(${args.levelColumn}, 0) = $2
+           AND COALESCE(${args.costColumn}, 0) <> $1`,
+        [costPerRace, level],
+      );
+    }
+  }
+}
+
+export default new MigrationService();

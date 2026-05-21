@@ -16,6 +16,18 @@ let interpolationProgress: number = 0;
 let lastUpdateTime: number = 0;
 let currentWeatherId: string = '';
 
+export interface WeatherChartPoint {
+  time: number;
+  rain: number;
+}
+
+export interface WeatherChartData {
+  weatherId: string;
+  duration: number;
+  interval: number;
+  points: WeatherChartPoint[];
+}
+
 export function startWeatherMonitoring(weatherId: string, room?: RoomObject) {
   try {
     const weatherDir = __dirname;
@@ -72,11 +84,33 @@ export function stopWeatherMonitoring() {
   }
   weatherData = null;
   lastUpdateTime = 0;
+  resetWeatherReportAnnouncements();
   
   Object.keys(currentWeather).forEach(key => {
     (currentWeather as any)[key] = 0;
   });
   console.log("Weather monitoring stopped");
+}
+
+export function getWeatherChartData(): WeatherChartData | null {
+  if (!weatherData || !Array.isArray(weatherData.time) || !Array.isArray(weatherData.rain_global)) {
+    return null;
+  }
+
+  const points = weatherData.time.map((time: number, index: number) => ({
+    time: Math.max(0, time * 60),
+    rain: Math.max(0, Math.min(100, Number(weatherData.rain_global[index] ?? 0))),
+  }));
+  const duration = points.length > 0
+    ? points[points.length - 1].time
+    : 0;
+
+  return {
+    weatherId: currentWeatherId,
+    duration,
+    interval: 30,
+    points,
+  };
 }
 
 function updateCurrentWeather(room: RoomObject) {

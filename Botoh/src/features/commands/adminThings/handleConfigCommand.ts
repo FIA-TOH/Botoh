@@ -8,6 +8,7 @@ import {
   enableSoftCutPenalty,
 } from "../../detectCut/enableCutPenalty";
 import { log } from "../../discord/logger";
+import { enableDamage } from "../../speed/crashWallDetector";
 import { enableErs, enableErsPenalty } from "../../speed/fuel&Ers/ers";
 import { enableGas, enableSlipstream } from "../../speed/handleSlipstream";
 import { setBlowoutTyresActivated } from "../../tires&pits/tireBlowManager";
@@ -17,6 +18,8 @@ import { handleRModeCommand } from "../gameMode/race/handleRModeCommand";
 import { handlePitCommand } from "./handlePitCommand";
 import { setManageTyresEnabled } from "./handleManageTyresCommand";
 import { handlePresentationLapCommand } from "../gameState/handlePresentationLapCommand";
+import { handleRREnabledCommand } from "./handleRREnabledCommand";
+import { setScuderiaAvatar } from "../../scuderias/scuderiaAvatar";
 
 
 export function handleConfigCommand(
@@ -77,9 +80,12 @@ function applyFTOHConfig(room: RoomObject, byPlayer: PlayerObject) {
   enableErsPenalty(true);
   enableCutPenalty(true);
   enableDebris(true);
+  enableDamage(true);
   enableSoftCutPenalty(false, room);
   handlePitCommand(byPlayer, ["new"], room);
   setManageTyresEnabled(true);
+  handleRREnabledCommand(byPlayer, ["off"], room);
+  setScuderiaAvatar(true);
 }
 
 
@@ -97,9 +103,12 @@ export function applyFTOHPublicConfig(room: RoomObject, byPlayer: PlayerObject) 
   enableErsPenalty(true);
   enableCutPenalty(true);
   enableDebris(false);
+  enableDamage(false);
   enableSoftCutPenalty(false, room);
   handlePitCommand(byPlayer, ["old"], room);
   setManageTyresEnabled(false);
+  handleRREnabledCommand(byPlayer, ["on"], room);
+   setScuderiaAvatar(false);
 }
 
 function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {
@@ -116,9 +125,12 @@ function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {
   enableErsPenalty(true);
   enableCutPenalty(true);
   enableDebris(false);
+  enableDamage(false);
   enableSoftCutPenalty(false, room);
   handlePitCommand(byPlayer, ["old"], room);
   setManageTyresEnabled(false);
+  handleRREnabledCommand(byPlayer, ["on"], room);
+   setScuderiaAvatar(false);
 }
 
 function applyHaxbulaConfig(room: RoomObject, byPlayer: PlayerObject) {
@@ -135,7 +147,10 @@ function applyHaxbulaConfig(room: RoomObject, byPlayer: PlayerObject) {
   enableErsPenalty(false);
   enableCutPenalty(false);
   enableDebris(false);
+  enableDamage(false);
   enableSoftCutPenalty(false, room);
   handlePitCommand(byPlayer, ["old"], room);
   setManageTyresEnabled(false);
+  handleRREnabledCommand(byPlayer, ["on"], room);
+   setScuderiaAvatar(false);
 }

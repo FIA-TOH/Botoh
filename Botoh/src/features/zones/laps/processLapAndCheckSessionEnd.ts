@@ -11,7 +11,7 @@ import { MESSAGES } from "../../chat/messages";
 import { handleHardQualyEnd } from "../../commands/gameMode/qualy/hardQualyFunctions";
 import { qualiTime } from "../../commands/gameMode/qualy/qualiMode";
 import { showPlayerQualiPosition } from "../../commands/gameMode/qualy/showPositionQualy";
-import { laps } from "../laps";
+import { laps, setCurrentSessionLap } from "../laps";
 import { handleRaceFinish } from "./handleRaceFinish";
 import { notifyCurrentLapAndPitInfo } from "./utils/annoucements/notifyCurrentLapAndPitInfo";
 import { notifyPositionOrLeaders } from "./utils/annoucements/notifyPositionsOrLeader";
@@ -65,6 +65,7 @@ function handleRaceLap(
   }
 
   if (currentLap <= laps) {
+    setCurrentSessionLap(currentLap);
     notifyCurrentLapAndPitInfo(p, room, currentLap);
     notifyPositionOrLeaders(
       p,

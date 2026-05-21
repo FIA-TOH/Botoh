@@ -4,8 +4,10 @@ import { Tires } from "./tires";
 import { emitPitMessage } from "./pitMessaging";
 import { sendAlertMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
+import { log } from "../discord/logger";
 import { handleAvatar, restoreTyreOrCar, Situacions } from "../changePlayerState/handleAvatar";
 import { resetPitState } from "./newPitSystem/newPitManager";
+import { getPlayerPitCrewLevel } from "./newPitSystem/pitReactionMultiplier";
 
 export function performPitStop(
   room: RoomObject,
@@ -20,6 +22,8 @@ export function performPitStop(
   playerState.kers = Math.min(playerState.kers + 20, 100);
 
   const pitTime = playerState.pitFailures?.totalTime ?? 0;
+  const reactionTime = playerState.newPitState?.reactionTime;
+  const pitCrewLevel = getPlayerPitCrewLevel(byPlayer.id);
   const currentLap = playerState.currentLap;
 
   const existingPitIndex = playerState.pits.pit.findIndex(
@@ -45,6 +49,17 @@ export function performPitStop(
   delete playerState.pitInitialPos;
   delete playerState.pitSteps;
   playerState.inPitStop = false;
+
+  if (typeof reactionTime === "number") {
+    const formattedReactionTime = reactionTime.toFixed(3);
+    const pitCrewLevelText =
+      typeof pitCrewLevel === "number" ? pitCrewLevel.toString() : "none";
+
+    log(
+      `[NewPitSystem] ${byPlayer.name} changed tyres. Reaction time: ${formattedReactionTime}s | Pit crew level: ${pitCrewLevelText}`,
+      { sendToDiscord: false },
+    );
+  }
   
   resetPitState(byPlayer.id);
   

@@ -120,6 +120,8 @@ export function checkPlayerSector(
     } else if (ifInSectorTwoChangeZone(pad, room)) {
       playerList[p.id].totalTime = room.getScores().time;
       playerList[p.id].currentSector = 2;
+      playerList[p.id].checkpointTimes[`${playerList[p.id].currentLap}:2`] =
+        playerList[p.id].totalTime;
 
       playerList[p.id].sectorTime[0] = serialize(
         playerList[p.id].sectorTimeCounter,
@@ -139,6 +141,8 @@ export function checkPlayerSector(
     } else if (ifInSectorThreeChangeZone(pad, room)) {
       playerList[p.id].totalTime = room.getScores().time;
       playerList[p.id].currentSector = 3;
+      playerList[p.id].checkpointTimes[`${playerList[p.id].currentLap}:3`] =
+        playerList[p.id].totalTime;
 
       playerList[p.id].sectorTime[1] = serialize(
         playerList[p.id].sectorTimeCounter,

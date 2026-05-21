@@ -45,5 +45,11 @@ export function calculateTotalGripMultiplier(
   if (playerInfo.isTyreBlowed) {
     gripMultiplier -= constants.TYRES_BLOWED;
   }
+
+  const carDamage = Math.max(0, Math.min(100, playerInfo.carDamage ?? 0));
+  if (carDamage > 0) {
+    gripMultiplier -= (carDamage / 100) * constants.TOTAL_DAMAGE_PENALTY;
+  }
+
   return gripMultiplier;
 }

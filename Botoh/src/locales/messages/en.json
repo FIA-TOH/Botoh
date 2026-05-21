@@ -18,6 +18,9 @@
   "PIT_MISSING_ARGUMENT": "Usage: !pit <old|new>",
   "PIT_INVALID_ARGUMENT": "Invalid argument. Use: old or new",
   "PIT_SUCCESS": "Pit configuration '{{pitType}}' applied successfully",
+  "SCUDERIA_AVATAR_MISSING_ARGUMENT": "Usage: !scuderia_avatar <true|false>",
+  "SCUDERIA_AVATAR_INVALID_ARGUMENT": "Invalid argument. Use: true or false",
+  "SCUDERIA_AVATAR_SUCCESS": "Scuderia avatar set to {{enabled}}",
   "AVAILABLE_COMMANDS": "Available commands:",
   "NON_ADMIN_COMMANDS": "Available commands: !lang, !tips, !help, !commands, !tyres, !wait_time, !maps, !times (only in qualy), !positions (only in races).",
   "LAPS_ON_CURRENT_TIRE": "You have done {{currentLaps}} laps in your current tires.",
@@ -95,7 +98,6 @@
   "FINISH_QUALI": "You have completed your quali!",
   "CURRENT_LAP": "Lap {{currentLap}}/{{laps}}",
   "POSITION_AND_DISTANCE_AHEAD": "You are currently in P{{position}}. Distance ahead is: {{distance}} {{units}}",
- 
   "TYRE_WEAR_LAP": "Your tyres are at {{number}}%.",
   "IN_MUTE_MODE": "Mute mode is on. Only admins can chat",
   "AFK_MESSAGE": "⛔ If you don't move on the next seconds, you will be kicked! ⛔",
@@ -110,7 +112,6 @@
   "CANCELED_CHANGE_TYRES": "❌🚨❌Pit stop canceled, movement detected.❌🚨❌",
   "CHANGED_TIRES": "{{name}} changed tyres to {{tires}} with a {{seconds}}s pitstop",
   "FASTEST_PIT": "👨‍🔧 Fastest pit stop of the race! {{name}} - {{seconds}}s",
-  
   "EXPLAIN_SERVER": "Welcome to FTOH! This is a Formula 1 racing server in Haxball. First is qualifying, where you must set the best possible time. Then comes the race, consisting of 7 laps. Pay attention to your tyres — they make all the difference!",
   "EXPLAIN_ERS": "By holding the shoot button, a number will appear on your avatar, this is the Turbo, use it wisely.",
   "GREEN_FLAG": "🟩🚨🟩 GREEN FLAG! 🟩🚨🟩",
@@ -170,5 +171,21 @@
   "TWO_LAPS": "☠️🛡️ Lap {{currentLap}}, elimination NEXT LAP 🛡️☠️",
   "BR_ELIMINATED": "☠️🔥 {{name}} eliminated 🔥☠️",
   "BR_REMAINING": "☠️👥 {{remaining}} remaining. 👥☠️",
-  "BR_WINNER": "👑🏆 {{name}} won!, {{eliminated}} eliminated. 👑🏆"
+  "BR_WINNER": "👑🏆 {{name}} won!, {{eliminated}} eliminated. 👑🏆",
+  "LOGIN_USAGE": "Usage: !login <password> [team abbreviation]",
+  "LOGIN_ERROR": "Invalid username or password.",
+  "LOGIN_SUCCESS": "Login successful.",
+  "CHAT_CHANNEL_ALL": "All",
+  "CHAT_CHANNEL_TEAM": "Team",
+  "CHAT_CHANNEL_PRIVATE": "Private",
+  "CRASH_WALL_DETECTED": "{{playerName}} touched wall {{index}} at {{speed}} speed.",
+  "CAR_DAMAGE_TAKEN": "💥{{damageTaken}} DAMAGE! • 🏎️ {{newDamage}}/100",
+  "DAMAGE_ENABLED": "Damage enabled.",
+  "DAMAGE_DISABLED": "Damage disabled.",
+  "REPAIR_NO_DAMAGE": "Your car has no damage to repair.",
+  "REPAIR_ALREADY_ACTIVE": "Repair is already in progress.",
+  "REPAIR_IN_PIT_STOP": "You cannot repair while the pit stop is being done.",
+  "REPAIR_TYRES_BLOCKED": "You cannot change tyres while the car is being repaired.",
+  "REPAIR_STARTED": "🛠️🏎️ Repairing the car... Estimate: {{seconds}}s ⏳",
+  "REPAIR_FINISHED": "✅🏎️ Repair completed!"
 }

@@ -33,6 +33,7 @@ const playerActivities: { [key: number]: PlayerActivity } = {};
 let safetyCarActivatedForAfkLeave = false;
 
 const MIN_SPEED_FOR_ACTIVITY = 20;
+const MIN_SPEED_FOR_ACTIVITY_FOR_COME_BACK = 5;
 
 function getCurrentGameTime(room: RoomObject): number {
   return room.getScores()?.time || 0;
@@ -58,7 +59,11 @@ function getWarningTimeout(): number {
   return isRealSafetyEnabled() ? 0 : afkKickTime - 5;
 }
 
-export function isPlayerMovingAtSpeed(playerId: number, room: RoomObject): boolean {
+function isPlayerMovingAtMinimumSpeed(
+  playerId: number,
+  room: RoomObject,
+  minimumSpeed: number
+): boolean {
   if (!room) return false;
   
   const playersAndDiscs = room.getPlayerList().map(player => ({
@@ -73,7 +78,19 @@ export function isPlayerMovingAtSpeed(playerId: number, room: RoomObject): boole
   if (!runningPlayer) return false;
   
   const speed = vectorSpeed(runningPlayer.disc.xspeed, runningPlayer.disc.yspeed);
-  return speed >= MIN_SPEED_FOR_ACTIVITY;
+  return speed >= minimumSpeed;
+}
+
+export function isPlayerMovingAtSpeed(playerId: number, room: RoomObject): boolean {
+  return isPlayerMovingAtMinimumSpeed(playerId, room, MIN_SPEED_FOR_ACTIVITY);
+}
+
+export function isPlayerMovingAtComeBackSpeed(playerId: number, room: RoomObject): boolean {
+  return isPlayerMovingAtMinimumSpeed(
+    playerId,
+    room,
+    MIN_SPEED_FOR_ACTIVITY_FOR_COME_BACK
+  );
 }
 
 export function updatePlayerActivity(player: PlayerObject, room?: RoomObject) {

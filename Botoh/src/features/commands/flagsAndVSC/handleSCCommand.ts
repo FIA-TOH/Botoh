@@ -8,6 +8,7 @@ import { getPlayerAndDiscs } from "../../playerFeatures/getPlayerAndDiscs";
 import { getRunningPlayers } from "../../utils";
 import { Teams } from "../../changeGameState/teams";
 import { positionList } from "../gameMode/race/positionList";
+import { RaceControlState, setFlagState, setNeutralizationState } from "./raceControl";
 
 let scActive = false;
 let scCountdownTimeout: NodeJS.Timeout | undefined;
@@ -54,6 +55,7 @@ export function handleSCCommand(
     });
 
     scActive = true;
+    setNeutralizationState(RaceControlState.SafetyCar);
 
     scCountdownTimeout = setTimeout(() => {
       sendAlertMessage(room, MESSAGES.SAFETY_CAR());
@@ -171,6 +173,8 @@ export function handleSCCommand(
     }
 
     scActive = false;
+    setFlagState(RaceControlState.GreenFlag);
+    setNeutralizationState(null);
     
     lappedCars.clear();
     const allPlayers = room.getPlayerList();

@@ -3,7 +3,7 @@ import { Chassis } from "../chassis";
 import { Engine } from "../engine";
 import { PitCrew } from "../pitstop";
 import { ScuderiaColors } from "../scuderiaColours";
-import { leagueScuderia } from "../scuderias";
+import { Scuderia } from "../scuderias";
 import { Suspension } from "../tyres";
 
 export const BracchiariEngine: Engine = {
@@ -48,7 +48,7 @@ export const BracchiariPitCrew: PitCrew = {
   normalPitSpeedTimeBoost: 0,
 };
 
-export const Bracchiari: leagueScuderia = {
+export const Bracchiari: Scuderia = {
   name: "Bracchiari",
   tag: "BR",
   color: ScuderiaColors.BRACCHIARI,

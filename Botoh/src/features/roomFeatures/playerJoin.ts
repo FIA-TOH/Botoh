@@ -34,6 +34,14 @@ import { rejoinManager } from "../changePlayerState/rejoinManager";
 
 const HARD_QUALY_PASSWORD = "hardqualy";
 
+function getPlayerShortName(name: string) {
+  return name.slice(0, 3).toUpperCase();
+}
+
+function hasInvalidLeagueNameCharacters(name: string) {
+  return !/^[A-Za-zÀ-ÖØ-öø-ÿ0-9 ._'`\-[\](){}#|]+$/.test(name);
+}
+
 function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
   const players = room.getPlayerList();
 
@@ -118,6 +126,13 @@ export function PlayerJoin(room: RoomObject) {
       return;
     }
 
+
+    if (LEAGUE_MODE && hasInvalidLeagueNameCharacters(player.name)) {
+      kickPlayer(player.id, "Invalid username, do not use symbols", room);
+      log(`INVALID LEAGUE NAME! ${player.name} (${sha256(ip)}) tried to join!`);
+      return;
+    }
+
     if (player.name.length > MAX_PLAYER_NAME) {
       kickPlayer(
         player.id,
@@ -143,6 +158,8 @@ export function PlayerJoin(room: RoomObject) {
       playerList[player.id] = createPlayerInfo(ip, player.id);
       playerList[player.id].pubAvatar = getRandomCarEmoji();
     }
+
+    playerList[player.id].shortName = getPlayerShortName(player.name);
 
     if (gameMode === GameMode.HARD_QUALY) {
       if (players.length >= 0) {
