@@ -4,7 +4,7 @@ export let vscDuration: number | undefined;
 export let vscAutoDeployed = false;
 export let vscExtended = false;
 export let vscTriggeredByPlayer: number | undefined;
-import { isPlayerMovingAtSpeed } from "../afk/afk";
+import { isPlayerMovingAtComeBackSpeed } from "../afk/afk";
 import { Teams } from "../changeGameState/teams";
 import {
   RaceControlState,
@@ -47,7 +47,7 @@ export function checkVSCDuration(room: any) {
   
   if (elapsedTime >= vscDuration) {
     if (vscTriggeredByPlayer !== undefined) {
-      if (!isPlayerMovingAtSpeed(vscTriggeredByPlayer, room)) {
+      if (!isPlayerMovingAtComeBackSpeed(vscTriggeredByPlayer, room)) {
         room.setPlayerTeam(vscTriggeredByPlayer, Teams.SPECTATORS);
       }
     }
