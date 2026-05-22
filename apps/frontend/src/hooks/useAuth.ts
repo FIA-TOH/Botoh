@@ -108,8 +108,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           // Verify token with backend (async)
           try {
             const response = await fetch(apiUrl('/api/auth/me'), {
+              cache: 'no-store',
               headers: {
                 'Authorization': `Bearer ${storedToken}`,
+                'Cache-Control': 'no-cache',
               },
             });
 

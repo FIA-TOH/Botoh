@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { AppSnackbar, useAppSnackbar } from '@/components/AppSnackbar';
 import { FtohInput } from '@/components/FtohInput';
 import { FtohButton } from '@/components/FtohButton';
 import { FtohCard } from '@/components/FtohCard';
-import { apiUrl } from '@/config/api';
-import { setAuthCookie } from '@/config/authCookie';
+import { useAuth } from '@/hooks/useAuth';
 import { useTranslations } from '@/i18n';
 
 interface LoginFormData {
@@ -14,27 +14,10 @@ interface LoginFormData {
   password: string;
 }
 
-interface LoginResponse {
-  success: boolean;
-  token?: string;
-  user?: {
-    id: string;
-    username: string;
-    role: string;
-    money: number;
-    level?: number;
-    shortUsername?: string | null;
-    driverNumber?: number | null;
-    teamId?: string | null;
-    teamName?: string | null;
-    teamTag?: string | null;
-    teamColor?: string | null;
-  };
-  message?: string;
-}
-
 export default function LoginPage() {
-  const { language, t } = useTranslations();
+  const { t } = useTranslations();
+  const { login } = useAuth();
+  const router = useRouter();
   const { snackbar, showSnackbar, closeSnackbar } = useAppSnackbar();
   const [formData, setFormData] = useState<LoginFormData>({
     username: '',
@@ -55,31 +38,16 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const response = await fetch(apiUrl('/api/auth/login'), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-language': language,
-        },
-        body: JSON.stringify(formData),
-      });
-      
-      const data: LoginResponse = await response.json();
+      const result = await login(formData.username, formData.password);
 
-      if (data.success && data.token) {
-        // Save token to localStorage
-        localStorage.setItem('auth_token', data.token);
-        localStorage.setItem('user_info', JSON.stringify(data.user));
-        setAuthCookie(data.token);
-        
+      if (result.success) {
         showSnackbar(t.auth.loginSuccess, 'success');
         
-        // Force redirect after a short delay to show snackbar
         setTimeout(() => {
-          window.location.href = '/';
-        }, 1500);
+          router.replace('/');
+        }, 500);
       } else {
-        showSnackbar(data.message || t.auth.loginFailed, 'error');
+        showSnackbar(result.message || t.auth.loginFailed, 'error');
       }
     } catch (error) {
       showSnackbar(t.auth.connectionError, 'error');
