@@ -2,18 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-  const token = request.cookies.get('token')?.value;
-
-  // Allow access to login page
-  if (pathname === '/login') {
-    return NextResponse.next();
-  }
-
-  if (!token) {
-    return NextResponse.redirect(new URL('/login', request.url));
-  }
-
+  void request;
   return NextResponse.next();
 }
 
