@@ -103,6 +103,27 @@ NEXT_PUBLIC_PITWALL_WS_URL=wss://pitwall.seudominio.com
 
 Com ngrok ou tunnel temporario tambem funciona, mas a URL pode mudar. Quando mudar, atualize `NEXT_PUBLIC_PITWALL_API_URL` e `NEXT_PUBLIC_PITWALL_WS_URL` na Vercel e faca redeploy do frontend.
 
+### Deploy na Vercel
+
+Crie dois projetos na Vercel a partir do mesmo repositorio.
+
+Projeto do frontend:
+
+```text
+Root Directory: apps/frontend
+Build Command: npm run build
+Output Directory: .next
+```
+
+Projeto da API REST:
+
+```text
+Root Directory: apps/backend
+Build Command: npm run build
+```
+
+Nao use a raiz do monorepo como projeto unico na Vercel, porque a raiz roda `npm run build --workspaces` e tenta compilar backend, bot e frontend juntos.
+
 ### For Room Hosts
 1. Clone the repository
 2. Install dependencies with `npm install`
