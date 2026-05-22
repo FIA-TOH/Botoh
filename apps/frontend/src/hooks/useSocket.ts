@@ -21,7 +21,7 @@ export const useSocket = (options: UseSocketOptions = {}) => {
 
   useEffect(() => {
     // Create socket connection
-    const socket = io(config.wsUrl, {
+    const socket = io(config.pitwallWsUrl, {
       autoConnect,
       reconnection: true,
       reconnectionAttempts: reconnectAttempts,

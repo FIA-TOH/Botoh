@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AppSnackbar, useAppSnackbar } from '@/components/AppSnackbar';
+import { apiUrl } from '@/config/api';
 import { useAuth } from '@/hooks/useAuth';
 import { useTranslations } from '@/i18n';
 
@@ -219,10 +220,10 @@ export default function AdminPage() {
 
     try {
       const [usersResponse, scuderiasResponse, sponsorsResponse, raceAlertsResponse] = await Promise.all([
-        fetch('/api/admin/users', { headers: getAuthHeaders() }),
-        fetch('/api/admin/scuderias', { headers: getAuthHeaders() }),
-        fetch('/api/admin/sponsors', { headers: getAuthHeaders() }),
-        fetch('/api/admin/race-progress/alerts', { headers: getAuthHeaders(), cache: 'no-store' }),
+        fetch(apiUrl('/api/admin/users'), { headers: getAuthHeaders() }),
+        fetch(apiUrl('/api/admin/scuderias'), { headers: getAuthHeaders() }),
+        fetch(apiUrl('/api/admin/sponsors'), { headers: getAuthHeaders() }),
+        fetch(apiUrl('/api/admin/race-progress/alerts'), { headers: getAuthHeaders(), cache: 'no-store' }),
       ]);
 
       const usersData = await usersResponse.json();
@@ -304,7 +305,7 @@ export default function AdminPage() {
 
     try {
       const response = await fetch(
-        editingUserId ? `/api/admin/users/${editingUserId}` : '/api/admin/users',
+        apiUrl(editingUserId ? `/api/admin/users/${editingUserId}` : '/api/admin/users'),
         {
           method: editingUserId ? 'PUT' : 'POST',
           headers: getAuthHeaders(),
@@ -344,7 +345,7 @@ export default function AdminPage() {
     if (!window.confirm('Excluir este usuário?')) return;
 
     try {
-      const response = await fetch(`/api/admin/users/${userId}`, {
+      const response = await fetch(apiUrl(`/api/admin/users/${userId}`), {
         method: 'DELETE',
         headers: getAuthHeaders(),
       });
@@ -370,7 +371,7 @@ export default function AdminPage() {
 
     try {
       const response = await fetch(
-        editingScuderiaId ? `/api/admin/scuderias/${editingScuderiaId}` : '/api/admin/scuderias',
+        apiUrl(editingScuderiaId ? `/api/admin/scuderias/${editingScuderiaId}` : '/api/admin/scuderias'),
         {
           method: editingScuderiaId ? 'PUT' : 'POST',
           headers: getAuthHeaders(),
@@ -398,7 +399,7 @@ export default function AdminPage() {
     if (!window.confirm('Excluir esta scuderia? Usuários dela ficarão sem time.')) return;
 
     try {
-      const response = await fetch(`/api/admin/scuderias/${scuderiaId}`, {
+      const response = await fetch(apiUrl(`/api/admin/scuderias/${scuderiaId}`), {
         method: 'DELETE',
         headers: getAuthHeaders(),
       });
@@ -413,7 +414,7 @@ export default function AdminPage() {
   }
   async function openManageScuderia(scuderia: Scuderia) {
     setManagingScuderia(scuderia);
-    const response = await fetch(`/api/admin/scuderias/${scuderia.id}/manage`, { headers: getAuthHeaders(), cache: 'no-store' });
+    const response = await fetch(apiUrl(`/api/admin/scuderias/${scuderia.id}/manage`), { headers: getAuthHeaders(), cache: 'no-store' });
     const data = await response.json();
     if (data.success) {
       setManagedGarage(data.garage);
@@ -434,7 +435,7 @@ export default function AdminPage() {
     setRaceProgressLoading(true);
 
     try {
-      const response = await fetch('/api/admin/race-progress', {
+      const response = await fetch(apiUrl('/api/admin/race-progress'), {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({ direction }),
@@ -451,7 +452,7 @@ export default function AdminPage() {
     }
   }
   async function clearRaceProgressAlerts() {
-    const response = await fetch('/api/admin/race-progress/alerts', {
+    const response = await fetch(apiUrl('/api/admin/race-progress/alerts'), {
       method: 'DELETE',
       headers: getAuthHeaders(),
     });
@@ -468,7 +469,7 @@ export default function AdminPage() {
     event.preventDefault();
     if (!managingScuderia) return;
     const amount = Number(financeForm.amount.replace(',', '.'));
-    const response = await fetch(`/api/admin/scuderias/${managingScuderia.id}/finance-entries`, {
+    const response = await fetch(apiUrl(`/api/admin/scuderias/${managingScuderia.id}/finance-entries`), {
       method: 'POST', headers: getAuthHeaders(),
       body: JSON.stringify({ amount: Math.abs(amount), entryType: amount >= 0 ? 'income' : 'expense', reason: financeForm.reason }),
     });
@@ -521,7 +522,7 @@ export default function AdminPage() {
   }, [managedGarage?.financialHistory]);
   async function saveCarName() {
     if (!managingScuderia) return;
-    const response = await fetch(`/api/admin/scuderias/${managingScuderia.id}/car-name`, {
+    const response = await fetch(apiUrl(`/api/admin/scuderias/${managingScuderia.id}/car-name`), {
       method: 'PUT', headers: getAuthHeaders(), body: JSON.stringify({ carName: carNameDraft }),
     });
     const data = await response.json();
@@ -544,8 +545,8 @@ export default function AdminPage() {
     };
     const response = await fetch(
       editingDriverId
-        ? `/api/admin/scuderias/${managingScuderia.id}/drivers/${editingDriverId}`
-        : `/api/admin/scuderias/${managingScuderia.id}/drivers`,
+        ? apiUrl(`/api/admin/scuderias/${managingScuderia.id}/drivers/${editingDriverId}`)
+        : apiUrl(`/api/admin/scuderias/${managingScuderia.id}/drivers`),
       {
         method: editingDriverId ? 'PUT' : 'POST',
         headers: getAuthHeaders(),
@@ -578,7 +579,7 @@ export default function AdminPage() {
   }
   async function removeManagedDriver(driverId: string) {
     if (!managingScuderia) return;
-    const response = await fetch(`/api/admin/scuderias/${managingScuderia.id}/drivers/${driverId}`, {
+    const response = await fetch(apiUrl(`/api/admin/scuderias/${managingScuderia.id}/drivers/${driverId}`), {
       method: 'DELETE',
       headers: getAuthHeaders(),
     });
@@ -612,8 +613,8 @@ export default function AdminPage() {
     };
     const response = await fetch(
       missionModal.mission
-        ? `/api/admin/sponsor-missions/${missionModal.type}/${missionModal.mission.id}`
-        : `/api/admin/team-sponsors/${missionModal.sponsor.id}/${missionModal.type}-missions`,
+        ? apiUrl(`/api/admin/sponsor-missions/${missionModal.type}/${missionModal.mission.id}`)
+        : apiUrl(`/api/admin/team-sponsors/${missionModal.sponsor.id}/${missionModal.type}-missions`),
       {
         method: missionModal.mission ? 'PUT' : 'POST',
         headers: getAuthHeaders(),
@@ -630,7 +631,7 @@ export default function AdminPage() {
     await refreshAdminViews();
   }
   async function removeMission(missionId: string, type: 'race' | 'season') {
-    const response = await fetch(`/api/admin/sponsor-missions/${type}/${missionId}`, { method: 'DELETE', headers: getAuthHeaders() });
+    const response = await fetch(apiUrl(`/api/admin/sponsor-missions/${type}/${missionId}`), { method: 'DELETE', headers: getAuthHeaders() });
     const data = await response.json();
     if (!data.success) {
       showSnackbar(data.message || t.admin.actionFailed, 'error');
@@ -640,7 +641,7 @@ export default function AdminPage() {
     await refreshAdminViews();
   }
   async function resolveMission(missionId: string, type: 'race' | 'season', outcome: 'success' | 'failure') {
-    const response = await fetch(`/api/admin/sponsor-missions/${type}/${missionId}/resolve`, {
+    const response = await fetch(apiUrl(`/api/admin/sponsor-missions/${type}/${missionId}/resolve`), {
       method: 'POST',
       headers: getAuthHeaders(),
       body: JSON.stringify({ outcome }),
@@ -654,7 +655,7 @@ export default function AdminPage() {
     await refreshAdminViews();
   }
   async function removeTeamSponsor(id: string) {
-    const response = await fetch(`/api/admin/team-sponsors/${id}`, { method: 'DELETE', headers: getAuthHeaders() });
+    const response = await fetch(apiUrl(`/api/admin/team-sponsors/${id}`), { method: 'DELETE', headers: getAuthHeaders() });
     const data = await response.json();
     if (!data.success) {
       showSnackbar(data.message || t.admin.actionFailed, 'error');
@@ -665,7 +666,7 @@ export default function AdminPage() {
   }
   async function saveCatalogSponsor(event: React.FormEvent) {
     event.preventDefault();
-    const response = await fetch(editingSponsorId ? `/api/admin/sponsors/${editingSponsorId}` : '/api/admin/sponsors', {
+    const response = await fetch(apiUrl(editingSponsorId ? `/api/admin/sponsors/${editingSponsorId}` : '/api/admin/sponsors'), {
       method: editingSponsorId ? 'PUT' : 'POST', headers: getAuthHeaders(), body: JSON.stringify(newSponsorForm),
     });
     const data = await response.json();
@@ -683,7 +684,7 @@ export default function AdminPage() {
     setNewSponsorForm({ name: sponsor.name, logoUrl: sponsor.logoUrl ?? '' });
   }
   async function deleteCatalogSponsor(sponsorId: string) {
-    const response = await fetch(`/api/admin/sponsors/${sponsorId}`, { method: 'DELETE', headers: getAuthHeaders() });
+    const response = await fetch(apiUrl(`/api/admin/sponsors/${sponsorId}`), { method: 'DELETE', headers: getAuthHeaders() });
     const data = await response.json();
     if (!data.success) {
       showSnackbar(data.message || t.admin.actionFailed, 'error');
@@ -704,8 +705,8 @@ export default function AdminPage() {
     };
     const response = await fetch(
       editingTeamSponsorId
-        ? `/api/admin/team-sponsors/${editingTeamSponsorId}`
-        : `/api/admin/scuderias/${managingScuderia.id}/sponsors`,
+        ? apiUrl(`/api/admin/team-sponsors/${editingTeamSponsorId}`)
+        : apiUrl(`/api/admin/scuderias/${managingScuderia.id}/sponsors`),
       {
         method: editingTeamSponsorId ? 'PUT' : 'POST',
         headers: getAuthHeaders(),

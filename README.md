@@ -38,6 +38,71 @@ Botoh is a sophisticated Haxball F1 racing bot that emerged from the Simple bot 
 
 ## Getting Started
 
+## Deploy: Vercel + Pitwall Local
+
+Arquitetura final:
+
+- Vercel: frontend Next.js e backend REST para login, garage, admin e notifications HTTP.
+- Supabase: banco de dados.
+- Sua maquina: backend pitwall Socket.IO e bot Haxball.
+- Cloudflare Tunnel ou ngrok: expoe o backend pitwall local para a internet.
+
+### Passo E: backend pitwall local
+
+O backend local continua sendo o processo Node permanente que o pitwall e o bot usam ao vivo. Ele deve rodar em `http://localhost:3001` e manter:
+
+- Socket.IO
+- BotService
+- roomService
+- PlayerListService
+- `/api/room`
+- `chat:send`
+- `pit:call`
+- `broadcast:toFrontend`
+
+Para desenvolvimento completo, com frontend local junto:
+
+```bash
+npm run room:local
+```
+
+Para dia de evento usando o frontend ja hospedado na Vercel, suba apenas pitwall local + bot:
+
+```bash
+npm run pitwall:local
+```
+
+### Passo F: expor o pitwall local
+
+Opcao recomendada: Cloudflare Tunnel com dominio fixo.
+
+Exemplo final:
+
+```text
+https://pitwall.seudominio.com -> http://localhost:3001
+wss://pitwall.seudominio.com   -> ws://localhost:3001
+```
+
+No backend local, configure:
+
+```env
+BACKEND_URL=https://pitwall.seudominio.com
+BACKEND_WS_URL=https://pitwall.seudominio.com
+CORS_ORIGIN=https://seu-front.vercel.app
+FRONTEND_URL=https://seu-front.vercel.app
+BOT_SOCKET_TOKEN=um-token-forte
+```
+
+No frontend da Vercel, configure:
+
+```env
+NEXT_PUBLIC_API_URL=https://seu-front-ou-api.vercel.app
+NEXT_PUBLIC_PITWALL_API_URL=https://pitwall.seudominio.com
+NEXT_PUBLIC_PITWALL_WS_URL=wss://pitwall.seudominio.com
+```
+
+Com ngrok ou tunnel temporario tambem funciona, mas a URL pode mudar. Quando mudar, atualize `NEXT_PUBLIC_PITWALL_API_URL` e `NEXT_PUBLIC_PITWALL_WS_URL` na Vercel e faca redeploy do frontend.
+
 ### For Room Hosts
 1. Clone the repository
 2. Install dependencies with `npm install`

@@ -52,6 +52,10 @@ export function handleNerfListCommand(
     room.sendAnnouncement("Choose a player.", byPlayer.id, COLORS.YELLOW);
     return;
   }
+  if (!playerNerfId) {
+    room.sendAnnouncement("Choose a player to nerf.", byPlayer.id, COLORS.YELLOW);
+    return;
+  }
   if (playerBuffNumero !== undefined) {
     const playerEscolhido = players.find((p) => p.p.id === playerBuffNumero);
     if (playerEscolhido) {
@@ -77,6 +81,11 @@ export function handleNerfListCommand(
     room.sendAnnouncement("Choose a valid player", byPlayer.id, COLORS.RED);
     return;
   }
-  playerBuffList.push(playerBuffEscolhido[0]?.p ?? []);
-  playerNerfList.push(playerNerfEscolhido[0]?.p ?? []);
+  if (playerNerfEscolhido.length === 0) {
+    room.sendAnnouncement("Choose a valid nerf player", byPlayer.id, COLORS.RED);
+    return;
+  }
+
+  playerBuffList.push(playerBuffEscolhido[0].p);
+  playerNerfList.push(playerNerfEscolhido[0].p);
 }

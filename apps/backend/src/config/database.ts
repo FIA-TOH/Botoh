@@ -161,7 +161,7 @@ export const insert = async <T extends QueryResultRow = any>(
   
   const sql = `INSERT INTO ${table} (${columns}) VALUES (${placeholders}) RETURNING *`;
   const result = await query<T>(sql, values);
-  return result.rows[0];
+  return result.rows[0]!;
 };
 
 export const update = async <T extends QueryResultRow = any>(

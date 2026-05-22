@@ -2,7 +2,9 @@
 export const config = {
   // API Configuration
   apiUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001',
-  wsUrl: process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:3001',
+  pitwallApiUrl: process.env.NEXT_PUBLIC_PITWALL_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001',
+  pitwallWsUrl: process.env.NEXT_PUBLIC_PITWALL_WS_URL || process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:3001',
+  wsUrl: process.env.NEXT_PUBLIC_PITWALL_WS_URL || process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:3001',
   
   // Application Configuration
   appName: 'FTOH Haxball Bot',
@@ -26,7 +28,7 @@ export const config = {
 
 // Validate configuration
 const validateConfig = () => {
-  const requiredEnvVars = ['NEXT_PUBLIC_API_URL'];
+  const requiredEnvVars = ['NEXT_PUBLIC_API_URL', 'NEXT_PUBLIC_PITWALL_API_URL', 'NEXT_PUBLIC_PITWALL_WS_URL'];
   const missingVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
   
   if (missingVars.length > 0 && process.env.NODE_ENV === 'production') {

@@ -5,6 +5,7 @@ import { AppSnackbar, useAppSnackbar } from '@/components/AppSnackbar';
 import { FtohInput } from '@/components/FtohInput';
 import { FtohButton } from '@/components/FtohButton';
 import { FtohCard } from '@/components/FtohCard';
+import { apiUrl } from '@/config/api';
 import { useTranslations } from '@/i18n';
 
 interface LoginFormData {
@@ -53,7 +54,7 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch(apiUrl('/api/auth/login'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

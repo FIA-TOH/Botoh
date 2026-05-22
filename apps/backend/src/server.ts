@@ -1,25 +1,15 @@
-import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import cors from 'cors';
-import morgan from 'morgan';
-import compression from 'compression';
 import config from './config/environment';
 
+import { createApp } from './app';
 import { setupSocketHandlers } from './socket';
-import healthRoutes from './routes/health';
-import authRoutes from './routes/auth';
-import garageRoutes from './routes/garage';
-import roomRoutes from './routes/room';
-import adminRoutes from './routes/admin';
-import notificationRoutes from './routes/notifications';
 import roomService from './services/roomService';
-import { securityHeaders, rateLimiter, validateRequest, errorHandler, requestLogger } from './middleware/security';
 import { initializeDatabase, healthCheck, closeDatabase } from './config/database';
 import seedService from './config/seed';
 import migrationService from './config/migrations';
 
-const app = express();
+const app = createApp({ includePitwallRoutes: true });
 const server = createServer(app);
 
 // Socket.IO configuration with security
@@ -35,72 +25,6 @@ const io = new Server(server, {
   pingInterval: 25000
 });
 
-// Security middleware
-app.use(securityHeaders);
-app.use(compression());
-app.use(requestLogger);
-
-// CORS configuration
-app.use(cors({
-  origin: config.corsOrigin,
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
-
-// Rate limiting
-app.use(rateLimiter);
-
-// Body parsing middleware
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-
-// Request validation
-app.use(validateRequest);
-
-// Logging (conditional based on environment)
-if (config.nodeEnv === 'development') {
-  app.use(morgan('combined'));
-} else {
-  app.use(morgan('combined', {
-    skip: (req, res) => res.statusCode < 400
-  }));
-}
-
-// Debug middleware - log all requests
-app.use((req, res, next) => {
-  console.log(`➡️ Incoming: ${req.method} ${req.originalUrl}`);
-  next();
-});
-
-// Routes
-console.log('🔧 Montando rotas com /api prefix...');
-app.use('/health', healthRoutes);
-console.log('✅ Health routes montadas');
-app.use('/api/auth', authRoutes);
-console.log('✅ Auth routes montadas em /api/auth');
-app.use('/api/garage', garageRoutes);
-console.log('✅ Garage routes montadas em /api/garage');
-app.use('/api/room', roomRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/notifications', notificationRoutes);
-console.log('✅ Room routes montadas em /api/room');
-console.log('🔍 Todas as rotas montadas com /api prefix');
-
-// 404 handler
-app.use('*', (req, res) => {
-  console.log('❌ Route not found:', req.method, req.originalUrl);
-  res.status(404).json({
-    error: 'Route not found',
-    path: req.originalUrl,
-    timestamp: new Date().toISOString()
-  });
-});
-
-// Error handling (must be last)
-app.use(errorHandler);
-
-// Socket.IO setup
 const { botService, isAuthorizedBot } = setupSocketHandlers(io);
 
 io.on('connection', (socket: any) => {

@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "npm run room:local",
     "room:local": "node scripts/run-room-local.js",
+    "pitwall:local": "node scripts/run-room-local.js --no-frontend",
     "room:remote": "npm run dev:bot:remote",
     "dev:backend": "npm run dev --workspace=apps/backend",
     "dev:bot": "npm run dev --workspace=apps/bot",

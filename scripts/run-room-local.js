@@ -43,11 +43,16 @@ const childEnv = {
   ...process.env,
 };
 
+const includeFrontend = !process.argv.includes('--no-frontend');
+
 const commands = [
   ['backend', ['run', 'dev:backend'], { PORT: childEnv.PORT || '3001' }],
-  ['frontend', ['run', 'dev:frontend'], { PORT: '3000' }],
   ['bot', ['run', 'dev:bot:local']],
 ];
+
+if (includeFrontend) {
+  commands.splice(1, 0, ['frontend', ['run', 'dev:frontend'], { PORT: '3000' }]);
+}
 
 function prefixOutput(name, stream, chunk) {
   const lines = chunk.toString().split(/\r?\n/);
