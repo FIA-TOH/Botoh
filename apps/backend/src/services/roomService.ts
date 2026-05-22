@@ -57,6 +57,31 @@ class RoomService {
     }
   }
 
+  markRoomOpened(state: Partial<RoomState>): void {
+    this.updateRoomState({
+      ...state,
+      isOnline: true,
+      openedAt: state.openedAt || this.roomState?.openedAt || new Date(),
+    });
+  }
+
+  markRoomHeartbeat(state: Partial<RoomState> = {}): void {
+    this.updateRoomState({
+      ...state,
+      isOnline: true,
+    });
+  }
+
+  markRoomOffline(): void {
+    if (!this.roomState) return;
+
+    this.updateRoomState({
+      isOnline: false,
+      gameState: null,
+      playerCount: 0,
+    });
+  }
+
   /**
    * Obtém o mapa atual do sistema do bot
    */
@@ -136,7 +161,7 @@ class RoomService {
    * Verifica se o Room está ativo
    */
   isRoomActive(): boolean {
-    return this.roomState !== null && this.roomState.lastUpdate > new Date(Date.now() - 60000);
+    return this.roomState?.isOnline === true && this.roomState.lastUpdate > new Date(Date.now() - 60000);
   }
 
   /**

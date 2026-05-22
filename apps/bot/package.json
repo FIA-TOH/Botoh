@@ -5,6 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
+    "dev:local": "tsx watch src/index.ts --local",
+    "dev:remote": "tsx watch src/index.ts --remote",
     "build": "tsc",
     "start": "node dist/index.js",
     "clean": "rimraf dist"

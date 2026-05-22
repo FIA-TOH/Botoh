@@ -7,9 +7,14 @@
     "apps/*"
   ],
   "scripts": {
-    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:bot\" \"npm run dev:frontend\"",
+    "dev": "npm run room:local",
+    "room:local": "node scripts/run-room-local.js",
+    "pitwall:local": "node scripts/run-room-local.js --no-frontend",
+    "room:remote": "npm run dev:bot:remote",
     "dev:backend": "npm run dev --workspace=apps/backend",
     "dev:bot": "npm run dev --workspace=apps/bot",
+    "dev:bot:local": "npm run dev:local --workspace=apps/bot",
+    "dev:bot:remote": "npm run dev:remote --workspace=apps/bot",
     "dev:frontend": "npm run dev --workspace=apps/frontend",
     "build": "npm run build --workspaces",
     "build:backend": "npm run build --workspace=apps/backend",

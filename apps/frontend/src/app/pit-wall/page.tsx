@@ -9,6 +9,7 @@ import { useLogs } from '@/hooks/useLogs';
 import { usePitCall } from '@/hooks/usePitCall';
 import { usePlayerList } from '@/hooks/usePlayerList';
 import { AppSnackbar, useAppSnackbar } from '@/components/AppSnackbar';
+import { apiUrl } from '@/config/api';
 
 
 import { ChatPanel } from '../../components/pit-wall/ChatPanel';
@@ -63,7 +64,7 @@ export default function PitWallPage() {
     async function loadWeatherLevel() {
       try {
         const token = localStorage.getItem('auth_token');
-        const response = await fetch(`/api/garage/teams/${selectedTeamId}`, {
+        const response = await fetch(apiUrl(`/api/garage/teams/${selectedTeamId}`), {
           headers: token ? { Authorization: `Bearer ${token}` } : undefined,
           cache: 'no-store',
         });

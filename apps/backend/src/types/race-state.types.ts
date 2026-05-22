@@ -465,7 +465,7 @@ export class RaceStateManager {
         this.state.liveRace.pitStops.push({
           playerId: data.playerId,
           entryTime: Date.now(),
-          tireChange: 'medium',
+          tireChange: Tires.MEDIUM,
           fuelAdded: 0,
           repairs: 0
         });
@@ -495,7 +495,7 @@ export interface RaceConfig {
     variability: number;    // 0-100
     changeFrequency: number; // em minutos
   };
-  tireOptions: TireType[];
+  tireOptions: Tires[];
   fuelStrategy: boolean;
   drsEnabled: boolean;
   damageEnabled: boolean;

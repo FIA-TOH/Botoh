@@ -7,6 +7,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useTranslations } from '@/i18n';
 import { AppSnackbar, useAppSnackbar } from '@/components/AppSnackbar';
 import { DriverCircle } from '@/components/pit-wall/DriverCircle';
+import { apiUrl } from '@/config/api';
 
 interface TeamGarageData {
   id: string;
@@ -142,7 +143,7 @@ export default function GaragePage() {
     setGarageLoadFailed(false);
     try {
       const token = localStorage.getItem('auth_token');
-      const response = await fetch(`/api/garage/teams/${teamId}`, {
+      const response = await fetch(apiUrl(`/api/garage/teams/${teamId}`), {
         headers: { Authorization: `Bearer ${token}` },
         cache: 'no-store',
       });
@@ -184,7 +185,7 @@ export default function GaragePage() {
     if (!selectedMembership) return;
     try {
       const token = localStorage.getItem('auth_token');
-      const response = await fetch(`/api/garage/teams/${selectedMembership.teamId}/facility`, {
+      const response = await fetch(apiUrl(`/api/garage/teams/${selectedMembership.teamId}/facility`), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -211,7 +212,7 @@ export default function GaragePage() {
 
     try {
       const token = localStorage.getItem('auth_token');
-      const response = await fetch(`/api/garage/teams/${selectedMembership.teamId}/driver-proposals`, {
+      const response = await fetch(apiUrl(`/api/garage/teams/${selectedMembership.teamId}/driver-proposals`), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -245,7 +246,7 @@ export default function GaragePage() {
 
     try {
       const token = localStorage.getItem('auth_token');
-      const response = await fetch(`/api/garage/teams/${selectedMembership.teamId}/drivers/${driverId}`, {
+      const response = await fetch(apiUrl(`/api/garage/teams/${selectedMembership.teamId}/drivers/${driverId}`), {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -269,7 +270,7 @@ export default function GaragePage() {
 
     try {
       const token = localStorage.getItem('auth_token');
-      const response = await fetch(`/api/garage/teams/${selectedMembership.teamId}/sponsors/${teamSponsorId}`, {
+      const response = await fetch(apiUrl(`/api/garage/teams/${selectedMembership.teamId}/sponsors/${teamSponsorId}`), {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });

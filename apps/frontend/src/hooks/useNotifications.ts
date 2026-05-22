@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import config from '@/config/environment';
+import { apiUrl } from '@/config/api';
 import { useAuth } from './useAuth';
 
 export type NotificationType = 'info' | 'success' | 'warning' | 'error';
@@ -39,7 +40,7 @@ export function useNotifications() {
 
     setIsLoading(true);
     try {
-      const response = await fetch('/api/notifications', {
+      const response = await fetch(apiUrl('/api/notifications'), {
         headers: authHeaders,
       });
       const data = await response.json();
@@ -76,7 +77,7 @@ export function useNotifications() {
     setUnreadCount((count) => Math.max(0, count - (wasUnread ? 1 : 0)));
 
     try {
-      await fetch(`/api/notifications/${notificationId}/read`, {
+      await fetch(apiUrl(`/api/notifications/${notificationId}/read`), {
         method: 'PUT',
         headers: authHeaders,
       });
@@ -101,7 +102,7 @@ export function useNotifications() {
     setUnreadCount(0);
 
     try {
-      await fetch('/api/notifications/read-all', {
+      await fetch(apiUrl('/api/notifications/read-all'), {
         method: 'PUT',
         headers: authHeaders,
       });
@@ -120,7 +121,7 @@ export function useNotifications() {
     if (!token) return { success: false };
 
     try {
-      const response = await fetch('/api/notifications', {
+      const response = await fetch(apiUrl('/api/notifications'), {
         method: 'POST',
         headers: {
           ...authHeaders,
@@ -143,7 +144,7 @@ export function useNotifications() {
     if (!token) return { success: false };
 
     try {
-      const response = await fetch(`/api/garage/driver-proposals/${proposalId}/respond`, {
+      const response = await fetch(apiUrl(`/api/garage/driver-proposals/${proposalId}/respond`), {
         method: 'POST',
         headers: {
           ...authHeaders,
@@ -173,7 +174,7 @@ export function useNotifications() {
   useEffect(() => {
     if (!isAuthenticated || !token) return;
 
-    const socket: Socket = io(config.wsUrl, {
+    const socket: Socket = io(config.pitwallWsUrl, {
       reconnection: true,
       transports: ['websocket', 'polling'],
     });

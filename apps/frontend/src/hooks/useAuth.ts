@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, createContext, useContext, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
-import config from '@/config/environment';
+import { apiUrl } from '@/config/api';
 
 interface User {
   id: string;
@@ -106,7 +106,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
           // Verify token with backend (async)
           try {
-            const response = await fetch('/api/auth/me', {
+            const response = await fetch(apiUrl('/api/auth/me'), {
               headers: {
                 'Authorization': `Bearer ${storedToken}`,
               },
@@ -145,7 +145,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (username: string, password: string): Promise<{ success: boolean; message?: string }> => {
     try {
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch(apiUrl('/api/auth/login'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -177,7 +177,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     clearAuthData();
-    fetch('/api/auth/logout', {
+    fetch(apiUrl('/api/auth/logout'), {
       method: 'POST',
     }).catch(() => {
       // Local logout already completed; cookie cleanup can fail silently.

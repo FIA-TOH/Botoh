@@ -4,6 +4,26 @@ function getBackendSocket() {
   return (global as any).backendSocket;
 }
 
+export interface PitWallRoomOpenedPayload {
+  roomName: string;
+  roomLink: string;
+  leagueMode: boolean;
+  envName: string;
+  maxPlayers: number;
+  public: boolean;
+}
+
+export function emitPitWallRoomOpened(payload: PitWallRoomOpenedPayload) {
+  const socket = getBackendSocket();
+
+  if (!socket?.emit) return;
+
+  socket.emit("room:opened", {
+    ...payload,
+    timestamp: Date.now(),
+  });
+}
+
 export function emitPitWallMapChange(mapName: string) {
   const socket = getBackendSocket();
 

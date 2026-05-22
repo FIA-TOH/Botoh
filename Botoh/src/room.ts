@@ -25,13 +25,24 @@ import { resetAllAfkCounters } from "./features/afk/afk";
 import { log } from "./features/discord/logger";
 import { applyFTOHPublicConfig } from "./features/commands/adminThings/handleConfigCommand";
 import { BOT_PLAYER } from "./features/utils/mockPlayer";
+import { emitPitWallRoomOpened } from "./features/integrations/pitWallSync";
+
+function getOptionalEnvValue(name: string) {
+  const value = process.env[name]?.trim();
+
+  if (!value || value.startsWith("your-")) {
+    return undefined;
+  }
+
+  return value;
+}
 
 const getRoomConfig = () => ({
   publicAdminPassword: process.env.PUBLIC_ADMIN_PASSWORD || roomConfig.publicAdminPassword,
   publicModPassword: process.env.PUBLIC_MOD_PASSWORD || roomConfig.publicModPassword,
   leagueAdminPassword: process.env.LEAGUE_ADMIN_PASSWORD || roomConfig.leagueAdminPassword,
   bans: process.env.BANNED_IPS ? JSON.parse(process.env.BANNED_IPS) : roomConfig.bans,
-  token:roomConfig.token
+  token: getOptionalEnvValue("HAXBALL_TOKEN") || roomConfig.token
 });
 
 const roomConfigSecure = getRoomConfig();
@@ -96,6 +107,14 @@ export const roomPromise: Promise<any> = HaxballJS().then((HBInit: any) => {
       if(!LEAGUE_MODE) {
       applyFTOHPublicConfig(room, BOT_PLAYER);
     }
+    emitPitWallRoomOpened({
+      roomName,
+      roomLink: link,
+      leagueMode: LEAGUE_MODE,
+      envName,
+      maxPlayers,
+      public: !LEAGUE_MODE,
+    });
     console.log("Room link:", link);
   };
 

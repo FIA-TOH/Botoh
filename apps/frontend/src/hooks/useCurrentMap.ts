@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { pitwallApiUrl } from '@/config/api';
 import { useSocket } from './useSocket';
 
 interface CurrentMapData {
@@ -89,7 +90,7 @@ export function useCurrentMap(): CurrentMapData {
 
       if (!detectedMap) {
         try {
-          const response = await fetch('/api/room/current-map');
+          const response = await fetch(pitwallApiUrl('/api/room/current-map'));
 
           if (response.ok) {
             const data = await response.json();
@@ -136,7 +137,7 @@ export function usePitWallGameState(): PitWallGameState {
   useEffect(() => {
     const fetchRoomState = async () => {
       try {
-        const response = await fetch('/api/room/state');
+        const response = await fetch(pitwallApiUrl('/api/room/state'));
 
         if (!response.ok) return;
 

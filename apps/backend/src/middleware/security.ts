@@ -24,7 +24,6 @@ export const rateLimiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
-  trustProxy: true,
 });
 
 // Security headers configuration
@@ -60,7 +59,7 @@ export const validateRequest = (req: Request, res: Response, next: NextFunction)
   }
 
   // Add request timestamp
-  req.requestTime = new Date().toISOString();
+  (req as Request & { requestTime?: string }).requestTime = new Date().toISOString();
   
   next();
 };

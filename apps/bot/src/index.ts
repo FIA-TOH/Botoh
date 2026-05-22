@@ -1,5 +1,6 @@
 ﻿// Import and run the complete Botoh bot
 import * as dotenv from 'dotenv';
+dotenv.config({ path: '../../.env' });
 dotenv.config({ path: '../../Botoh/.env' });
 
 // Add backend communication to existing Botoh bot
@@ -7,13 +8,55 @@ import { io } from 'socket.io-client';
 
 let backendSocket: any = null;
 let room: any = null;
+let roomHeartbeatInterval: NodeJS.Timeout | null = null;
+
+const LOCAL_BACKEND_WS_URL = 'http://localhost:3001';
+
+function isRemoteMode() {
+  return process.argv.includes('--remote') || process.env.BOT_BACKEND_MODE === 'remote';
+}
+
+function getBackendWsUrl() {
+  const configuredUrl = process.env.BACKEND_WS_URL || process.env.BACKEND_URL;
+
+  if (configuredUrl) {
+    return configuredUrl;
+  }
+
+  if (isRemoteMode()) {
+    throw new Error('BACKEND_WS_URL is required when running the bot in remote mode.');
+  }
+
+  return LOCAL_BACKEND_WS_URL;
+}
+
+function emitRoomHeartbeat() {
+  if (!backendSocket?.emit || !room?.getPlayerList) return;
+
+  backendSocket.emit('room:heartbeat', {
+    playerCount: room.getPlayerList().length,
+    timestamp: Date.now(),
+  });
+}
 
 async function setupBackendCommunication() {
-  const socket = io('http://localhost:3001');
+  const backendWsUrl = getBackendWsUrl();
+  const socket = io(backendWsUrl, {
+    auth: {
+      botToken: process.env.BOT_SOCKET_TOKEN || undefined,
+    },
+  });
   
   socket.on('connect', () => {
-    console.log('Botoh bot connected to backend');
-    socket.emit('register:bot');
+    console.log(`Botoh bot connected to backend: ${backendWsUrl}`);
+    socket.emit('register:bot', {
+      token: process.env.BOT_SOCKET_TOKEN || undefined,
+    });
+    emitRoomHeartbeat();
+  });
+
+  socket.on('connect_error', (error) => {
+    console.error('Botoh bot failed to connect to backend:', error.message);
   });
 
   socket.on('chat:send', async (data: any) => {  
@@ -129,11 +172,13 @@ process.on("beforeExit", (code) => {
 
 process.on("SIGINT", () => {
   console.error("Received SIGINT (Ctrl+C)");
+  if (roomHeartbeatInterval) clearInterval(roomHeartbeatInterval);
   process.exit(0);
 });
 
 process.on("SIGTERM", () => {
   console.error("Received SIGTERM");
+  if (roomHeartbeatInterval) clearInterval(roomHeartbeatInterval);
   process.exit(0);
 });
 
@@ -147,6 +192,9 @@ async function main() {
   
   // Set room globally for player list service
   (global as any).room = room;
+  emitRoomHeartbeat();
+
+  roomHeartbeatInterval = setInterval(emitRoomHeartbeat, 30000);
   
   // Start player list broadcasting after room is ready
   if (backendSocket) {

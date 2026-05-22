@@ -4,6 +4,7 @@ import path from 'path';
 // Load environment variables from project root with fallback
 const possibleEnvPaths = [
   path.resolve(process.cwd(), '.env'),
+  path.resolve(process.cwd(), '../../.env'),
   path.resolve(__dirname, '../../../../.env'),
   path.resolve(__dirname, '../../../../../.env')
 ];
