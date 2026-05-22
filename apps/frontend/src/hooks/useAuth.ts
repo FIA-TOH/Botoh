@@ -3,6 +3,7 @@
 import React, { useState, useEffect, createContext, useContext, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { apiUrl } from '@/config/api';
+import { clearAuthCookie, setAuthCookie } from '@/config/authCookie';
 
 interface User {
   id: string;
@@ -139,6 +140,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const clearAuthData = () => {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user_info');
+    clearAuthCookie();
     setUser(null);
     setToken(null);
   };
@@ -160,6 +162,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // Save to localStorage
         localStorage.setItem('auth_token', data.token);
         localStorage.setItem('user_info', JSON.stringify(data.user));
+        setAuthCookie(data.token);
         
         // Update state
         setUser(data.user);
