@@ -19,17 +19,19 @@ interface CreateAppOptions {
 export function createApp(options: CreateAppOptions = {}) {
   const { includePitwallRoutes = true } = options;
   const app = express();
+  const corsOptions = {
+    origin: config.corsOrigin,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-language', 'X-Language'],
+  };
 
   app.use(securityHeaders);
   app.use(compression());
   app.use(requestLogger);
 
-  app.use(cors({
-    origin: config.corsOrigin,
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  }));
+  app.use(cors(corsOptions));
+  app.options('*', cors(corsOptions));
 
   app.use(rateLimiter);
   app.use(express.json({ limit: '10mb' }));
