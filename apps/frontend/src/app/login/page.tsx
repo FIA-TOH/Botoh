@@ -6,6 +6,7 @@ import { FtohInput } from '@/components/FtohInput';
 import { FtohButton } from '@/components/FtohButton';
 import { FtohCard } from '@/components/FtohCard';
 import { apiUrl } from '@/config/api';
+import { setAuthCookie } from '@/config/authCookie';
 import { useTranslations } from '@/i18n';
 
 interface LoginFormData {
@@ -69,6 +70,7 @@ export default function LoginPage() {
         // Save token to localStorage
         localStorage.setItem('auth_token', data.token);
         localStorage.setItem('user_info', JSON.stringify(data.user));
+        setAuthCookie(data.token);
         
         showSnackbar(t.auth.loginSuccess, 'success');
         
