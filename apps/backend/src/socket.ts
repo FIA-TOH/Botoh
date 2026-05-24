@@ -114,18 +114,31 @@ export function setupSocketHandlers(io: SocketIOServer) {
       });
     });
 
-    socket.on('room:heartbeat', (data: { playerCount?: number; timestamp?: number }) => {
+    socket.on('room:heartbeat', (data: {
+      playerCount?: number;
+      currentMap?: string | null;
+      gameState?: 'running' | 'paused' | null;
+      timestamp?: number;
+    }) => {
       if (!isAuthorizedBot(undefined, socket)) return;
 
       const heartbeatState: Parameters<typeof roomService.markRoomHeartbeat>[0] = {};
       if (Number.isFinite(data?.playerCount)) {
         heartbeatState.playerCount = data.playerCount;
       }
+      if (typeof data?.currentMap === 'string' && data.currentMap.length > 0) {
+        heartbeatState.currentMap = data.currentMap;
+      }
+      if (data?.gameState === 'running' || data?.gameState === 'paused' || data?.gameState === null) {
+        heartbeatState.gameState = data.gameState;
+      }
 
       roomService.markRoomHeartbeat(heartbeatState);
 
       io.emit('room:heartbeat', {
         playerCount: data?.playerCount,
+        currentMap: data?.currentMap,
+        gameState: data?.gameState,
         timestamp: data?.timestamp || Date.now(),
       });
     });
