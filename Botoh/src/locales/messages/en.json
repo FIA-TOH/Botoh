@@ -187,5 +187,6 @@
   "REPAIR_IN_PIT_STOP": "You cannot repair while the pit stop is being done.",
   "REPAIR_TYRES_BLOCKED": "You cannot change tyres while the car is being repaired.",
   "REPAIR_STARTED": "🛠️🏎️ Repairing the car... Estimate: {{seconds}}s ⏳",
+  "REPAIR_CANCELED": "❌🚨❌Repair canceled, movement detected.❌🚨❌",
   "REPAIR_FINISHED": "✅🏎️ Repair completed!"
 }

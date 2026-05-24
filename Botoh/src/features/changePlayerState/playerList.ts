@@ -36,6 +36,7 @@ export interface RepairState {
   isWaitingForRepair: boolean;
   isRepairing: boolean;
   repairStartTime?: number;
+  repairInitialPos?: { x: number; y: number };
   repairReadyTime?: number;
   repairEmojiShowTime?: number;
   reactionTime?: number;
