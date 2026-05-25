@@ -268,9 +268,11 @@ export function PlayersPanel({
       100 - Math.max(0, Math.min(100, driver.carDamage ?? 0))
     );
 
+    const kers = driver.kers ?? 0;
+
     return `
       ${tirePercent}%🛞 |
-      ${driver.kers}%🔋 |
+      ${kers.toFixed(0)}}%🔋 |
       ${damagePercent}%🏎️ |
       ${pitText}🧑‍🔧 |
       ${emoji}
