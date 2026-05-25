@@ -45,6 +45,28 @@ router.get('/current-map', async (req, res: Response) => {
   }
 });
 
+// GET /room/game-state - Get current live game state
+router.get('/game-state', async (req, res: Response) => {
+  try {
+    await roomService.refreshRoomState();
+    const gameState = roomService.getRoomState()?.gameState ?? null;
+
+    res.set('Cache-Control', 'no-store');
+    return res.json({
+      success: true,
+      gameState,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Get current game state error:', error);
+    return res.status(500).json({
+      success: false,
+      message: translateMessage('Internal server error', getRequestLanguage(req)),
+      gameState: null
+    });
+  }
+});
+
 // GET /room/state - Get complete room state
 router.get('/state', async (req, res: Response) => {
   try {

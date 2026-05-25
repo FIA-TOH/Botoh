@@ -322,7 +322,6 @@ export default function PitWallPage() {
           <LiveMap
             players={playerPositions?.players || []}
             playerDetails={playerList?.players || []}
-            gameState={playerList?.raceSession.gameState ?? null}
           />
         </div>
 
