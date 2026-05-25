@@ -141,7 +141,7 @@ export function useCurrentMap(): CurrentMapData {
 
 export function usePitWallGameState(): PitWallGameState {
   const { socket, isConnected } = useSocket();
-  const [gameState, setGameState] = useState<PitWallGameState>(null);
+  const [gameState, setGameState] = useState<PitWallGameState>('running');
 
   useEffect(() => {
     let isCancelled = false;
@@ -165,7 +165,10 @@ export function usePitWallGameState(): PitWallGameState {
         if (!response.ok) return;
 
         const data = await response.json();
-        applyGameState(data?.gameState);
+
+        if (data?.isSynced === true) {
+          applyGameState(data?.gameState);
+        }
       } catch (error) {
         console.warn('Erro ao buscar estado atual da sala:', error);
       }
@@ -177,15 +180,9 @@ export function usePitWallGameState(): PitWallGameState {
       applyGameState(event?.gameState);
     };
 
-    const handleHeartbeatState = (event: { gameState?: PitWallGameState }) => {
-      if (event?.gameState === 'running' || event?.gameState === 'paused') {
-        setGameState(event.gameState);
-      }
-    };
-
     if (socket && isConnected) {
       socket.on('room:gameStateChanged', handleGameStateChange);
-      socket.on('room:heartbeat', handleHeartbeatState);
+      socket.on('room:heartbeat', handleGameStateChange);
     }
 
     return () => {
@@ -193,7 +190,7 @@ export function usePitWallGameState(): PitWallGameState {
 
       if (socket) {
         socket.off('room:gameStateChanged', handleGameStateChange);
-        socket.off('room:heartbeat', handleHeartbeatState);
+        socket.off('room:heartbeat', handleGameStateChange);
       }
     };
   }, [socket, isConnected]);
