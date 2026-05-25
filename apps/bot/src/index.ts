@@ -34,15 +34,11 @@ async function emitRoomHeartbeat() {
   if (!backendSocket?.emit || !room?.getPlayerList) return;
 
   try {
-    const [{ CIRCUIT_FILE_NAMES, currentMapIndex }, { gameState }] = await Promise.all([
-      import('../../../Botoh/src/features/zones/maps'),
-      import('../../../Botoh/src/features/changeGameState/gameState'),
-    ]);
+    const { CIRCUIT_FILE_NAMES, currentMapIndex } = await import('../../../Botoh/src/features/zones/maps');
 
     backendSocket.emit('room:heartbeat', {
       playerCount: room.getPlayerList().length,
       currentMap: CIRCUIT_FILE_NAMES[currentMapIndex] ?? null,
-      gameState: gameState ?? null,
       timestamp: Date.now(),
     });
   } catch (error) {
