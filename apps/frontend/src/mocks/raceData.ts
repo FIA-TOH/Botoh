@@ -56,7 +56,6 @@ export interface Driver {
 }
 
 export interface RaceSession {
-  gameState: 'running' | 'paused' | null;
   sessionType: SessionType;
   currentTimePassed: number;
   totalTime: number | null;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { PlayerData, PlayerPositionData } from '@/hooks/usePlayerList';
-import { useMapBackground } from '@/hooks/useCurrentMap';
+import { useMapBackground, usePitWallGameState } from '@/hooks/useCurrentMap';
 import { colorNumberToHex, isDarkColor } from '@/app/utils/race';
 import { Teams } from '@/types/game';
 import { useTranslations } from '@/i18n';
@@ -8,7 +8,6 @@ import { useTranslations } from '@/i18n';
 interface Props {
   players: PlayerPositionData[];
   playerDetails: PlayerData[];
-  gameState?: 'running' | 'paused' | null;
 }
 
 interface ViewBoxData {
@@ -53,10 +52,10 @@ function parseSvgViewBox(svgText: string): ViewBoxData | null {
 export function LiveMap({
   players,
   playerDetails,
-  gameState = null,
 }: Props) {
   const { t } = useTranslations();
   const { backgroundUrl, fallbackType } = useMapBackground();
+  const gameState = usePitWallGameState();
 
   const containerRef = React.useRef<HTMLDivElement>(null);
 

@@ -9,6 +9,8 @@ interface CurrentMapData {
   isLoading: boolean;
 }
 
+export type PitWallGameState = 'running' | 'paused' | null;
+
 const svgCache = new Map<string, boolean>();
 const PITWALL_REQUEST_HEADERS = {
   'ngrok-skip-browser-warning': 'true',
@@ -135,6 +137,62 @@ export function useCurrentMap(): CurrentMapData {
   }, [socket, isConnected]);
 
   return mapData;
+}
+
+export function usePitWallGameState(): PitWallGameState {
+  const { socket, isConnected } = useSocket();
+  const [gameState, setGameState] = useState<PitWallGameState>(null);
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    const applyGameState = (nextGameState: unknown) => {
+      if (
+        !isCancelled
+        && (nextGameState === 'running' || nextGameState === 'paused' || nextGameState === null)
+      ) {
+        setGameState(nextGameState);
+      }
+    };
+
+    const fetchCurrentGameState = async () => {
+      try {
+        const response = await fetch(pitwallApiUrl('/api/room/game-state'), {
+          headers: PITWALL_REQUEST_HEADERS,
+          cache: 'no-store',
+        });
+
+        if (!response.ok) return;
+
+        const data = await response.json();
+        applyGameState(data?.gameState);
+      } catch (error) {
+        console.warn('Erro ao buscar estado atual da sala:', error);
+      }
+    };
+
+    fetchCurrentGameState();
+
+    const handleGameStateChange = (event: { gameState?: PitWallGameState }) => {
+      applyGameState(event?.gameState);
+    };
+
+    if (socket && isConnected) {
+      socket.on('room:gameStateChanged', handleGameStateChange);
+      socket.on('room:heartbeat', handleGameStateChange);
+    }
+
+    return () => {
+      isCancelled = true;
+
+      if (socket) {
+        socket.off('room:gameStateChanged', handleGameStateChange);
+        socket.off('room:heartbeat', handleGameStateChange);
+      }
+    };
+  }, [socket, isConnected]);
+
+  return gameState;
 }
 
 export function useMapBackground(): {
