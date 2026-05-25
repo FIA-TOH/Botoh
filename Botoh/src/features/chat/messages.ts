@@ -2159,6 +2159,13 @@ export const MESSAGES = {
     tr: replaceTemplateString(tr_messages.REPAIR_STARTED, { seconds }),
     pt: replaceTemplateString(pt_messages.REPAIR_STARTED, { seconds }),
   }),
+  REPAIR_CANCELED: (): LocalizedMessageFunction => ({
+    en: en_messages.REPAIR_CANCELED,
+    es: es_messages.REPAIR_CANCELED,
+    fr: fr_messages.REPAIR_CANCELED,
+    tr: tr_messages.REPAIR_CANCELED,
+    pt: pt_messages.REPAIR_CANCELED,
+  }),
   REPAIR_FINISHED: (): LocalizedMessageFunction => ({
     en: en_messages.REPAIR_FINISHED,
     es: es_messages.REPAIR_FINISHED,

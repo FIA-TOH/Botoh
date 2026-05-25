@@ -187,5 +187,6 @@
   "REPAIR_IN_PIT_STOP": "Pit stop yapilirken tamir edemezsin.",
   "REPAIR_TYRES_BLOCKED": "Arac tamir edilirken lastik degistiremezsin.",
   "REPAIR_STARTED": "🛠️🏎️ Araç tamir ediliyor... Tahmini süre: {{seconds}}s ⏳",
+  "REPAIR_CANCELED": "❌🚨❌Tamir iptal edildi, hareket algilandi.❌🚨❌",
   "REPAIR_FINISHED": "✅🏎️ Tamir tamamlandı!"
 }

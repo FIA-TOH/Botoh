@@ -41,6 +41,7 @@ const rootEnv = parseEnvFile(path.resolve(process.cwd(), '.env'));
 const childEnv = {
   ...rootEnv,
   ...process.env,
+  NODE_ENV: 'development',
 };
 
 const includeFrontend = !process.argv.includes('--no-frontend');

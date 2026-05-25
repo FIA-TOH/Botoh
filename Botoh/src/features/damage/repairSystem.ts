@@ -1,4 +1,4 @@
-import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
+import { handleAvatar, restoreTyreOrCar, Situacions } from "../changePlayerState/handleAvatar";
 import { playerList } from "../changePlayerState/playerList";
 import { sendAlertMessage, sendErrorMessage, sendSuccessMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
@@ -11,6 +11,7 @@ const REACTION_REPAIR_TIME_FACTOR = 3;
 const BASE_REPAIR_TIME = 1;
 const EARLY_REACTION_PENALTY = 3;
 const REACTION_TIMEOUT = 3;
+const REPAIR_CANCEL_DISTANCE = 0.3;
 
 function roundSeconds(value: number) {
   return Math.round(value * 10) / 10;
@@ -37,6 +38,7 @@ function resetRepairState(playerId: number) {
     isWaitingForRepair: false,
     isRepairing: false,
     repairStartTime: undefined,
+    repairInitialPos: undefined,
     repairReadyTime: undefined,
     repairEmojiShowTime: undefined,
     reactionTime: undefined,
@@ -95,6 +97,7 @@ export function handleFixCommand(
     isWaitingForRepair: true,
     isRepairing: false,
     repairStartTime: currentTime,
+    repairInitialPos: { x: byPlayer.position.x, y: byPlayer.position.y },
     repairReadyTime: currentTime + delaySeconds,
     repairEmojiShowTime: undefined,
     reactionTime: undefined,
@@ -112,6 +115,20 @@ export function updateRepairSystemForPlayer(
   const playerInfo = playerList[p.id];
   const repairState = playerInfo?.repairState;
   if (!playerInfo || !repairState) return;
+
+  if (
+    (repairState.isWaitingForRepair || repairState.isRepairing) &&
+    repairState.repairInitialPos &&
+    Math.hypot(
+      properties.x - repairState.repairInitialPos.x,
+      properties.y - repairState.repairInitialPos.y,
+    ) > REPAIR_CANCEL_DISTANCE
+  ) {
+    resetRepairState(p.id);
+    restoreTyreOrCar(p.id, room);
+    sendAlertMessage(room, MESSAGES.REPAIR_CANCELED(), p.id);
+    return;
+  }
 
   if (repairState.isRepairing && repairState.repairEndTime && currentTime >= repairState.repairEndTime) {
     playerInfo.carDamage = 0;

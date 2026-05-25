@@ -110,19 +110,23 @@ export function useCurrentMap(): CurrentMapData {
 
     detectCurrentMap();
 
-    const handleMapChange = (event: { mapName?: string }) => {
-      if (event?.mapName) {
-        applyMapName(event.mapName);
+    const handleMapChange = (event: { mapName?: string | null; currentMap?: string | null }) => {
+      const mapName = event?.mapName ?? event?.currentMap;
+
+      if (mapName) {
+        applyMapName(mapName);
       }
     };
 
     if (socket && isConnected) {
       socket.on('room:mapChanged', handleMapChange);
+      socket.on('room:heartbeat', handleMapChange);
     }
 
     return () => {
       if (socket) {
         socket.off('room:mapChanged', handleMapChange);
+        socket.off('room:heartbeat', handleMapChange);
       }
     };
   }, [socket, isConnected]);
@@ -162,11 +166,13 @@ export function usePitWallGameState(): PitWallGameState {
 
     if (socket && isConnected) {
       socket.on('room:gameStateChanged', handleGameStateChange);
+      socket.on('room:heartbeat', handleGameStateChange);
     }
 
     return () => {
       if (socket) {
         socket.off('room:gameStateChanged', handleGameStateChange);
+        socket.off('room:heartbeat', handleGameStateChange);
       }
     };
   }, [socket, isConnected]);

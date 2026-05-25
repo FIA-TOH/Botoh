@@ -30,13 +30,24 @@ function getBackendWsUrl() {
   return LOCAL_BACKEND_WS_URL;
 }
 
-function emitRoomHeartbeat() {
+async function emitRoomHeartbeat() {
   if (!backendSocket?.emit || !room?.getPlayerList) return;
 
-  backendSocket.emit('room:heartbeat', {
-    playerCount: room.getPlayerList().length,
-    timestamp: Date.now(),
-  });
+  try {
+    const [{ CIRCUIT_FILE_NAMES, currentMapIndex }, { gameState }] = await Promise.all([
+      import('../../../Botoh/src/features/zones/maps'),
+      import('../../../Botoh/src/features/changeGameState/gameState'),
+    ]);
+
+    backendSocket.emit('room:heartbeat', {
+      playerCount: room.getPlayerList().length,
+      currentMap: CIRCUIT_FILE_NAMES[currentMapIndex] ?? null,
+      gameState: gameState ?? null,
+      timestamp: Date.now(),
+    });
+  } catch (error) {
+    console.error('Failed to emit room heartbeat snapshot:', error);
+  }
 }
 
 async function setupBackendCommunication() {
