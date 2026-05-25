@@ -36,6 +36,9 @@ export function emitPitWallMapChange(mapName: string) {
 }
 
 export function emitPitWallGameStateChange(gameState: PitWallGameState) {
+  // Preserve the authoritative room event for heartbeat resynchronization.
+  (global as any).pitWallGameState = gameState;
+
   const socket = getBackendSocket();
 
   if (!socket?.emit) return;

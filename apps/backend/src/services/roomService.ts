@@ -9,6 +9,7 @@ class RoomService {
   private currentMap: string | null = null;
   private roomState: RoomState | null = null;
   private lastUpdate: Date | null = null;
+  private isGameStateSynced = false;
 
   /**
    * Obtém o mapa atual do Room
@@ -40,6 +41,13 @@ class RoomService {
     return this.roomState;
   }
 
+  getGameStateSnapshot(): { gameState: RoomState['gameState']; isSynced: boolean } {
+    return {
+      gameState: this.roomState?.gameState ?? null,
+      isSynced: this.isGameStateSynced,
+    };
+  }
+
   /**
    * Atualiza o estado do Room
    */
@@ -57,6 +65,11 @@ class RoomService {
     }
   }
 
+  updateGameState(gameState: RoomState['gameState']): void {
+    this.isGameStateSynced = true;
+    this.updateRoomState({ gameState });
+  }
+
   markRoomOpened(state: Partial<RoomState>): void {
     this.updateRoomState({
       ...state,
@@ -66,6 +79,10 @@ class RoomService {
   }
 
   markRoomHeartbeat(state: Partial<RoomState> = {}): void {
+    if (Object.prototype.hasOwnProperty.call(state, 'gameState')) {
+      this.isGameStateSynced = true;
+    }
+
     this.updateRoomState({
       ...state,
       isOnline: true,
@@ -75,6 +92,7 @@ class RoomService {
   markRoomOffline(): void {
     if (!this.roomState) return;
 
+    this.isGameStateSynced = true;
     this.updateRoomState({
       isOnline: false,
       gameState: null,

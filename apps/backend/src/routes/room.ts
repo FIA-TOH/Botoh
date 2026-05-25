@@ -49,12 +49,13 @@ router.get('/current-map', async (req, res: Response) => {
 router.get('/game-state', async (req, res: Response) => {
   try {
     await roomService.refreshRoomState();
-    const gameState = roomService.getRoomState()?.gameState ?? null;
+    const { gameState, isSynced } = roomService.getGameStateSnapshot();
 
     res.set('Cache-Control', 'no-store');
     return res.json({
       success: true,
       gameState,
+      isSynced,
       timestamp: new Date().toISOString()
     });
   } catch (error) {
@@ -62,7 +63,8 @@ router.get('/game-state', async (req, res: Response) => {
     return res.status(500).json({
       success: false,
       message: translateMessage('Internal server error', getRequestLanguage(req)),
-      gameState: null
+      gameState: null,
+      isSynced: false
     });
   }
 });

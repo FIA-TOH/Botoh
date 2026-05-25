@@ -73,9 +73,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
         return;
       }
 
-      roomService.updateRoomState({
-        gameState: data.gameState
-      });
+      roomService.updateGameState(data.gameState);
 
       io.emit('room:gameStateChanged', {
         gameState: data.gameState,
@@ -129,9 +127,9 @@ export function setupSocketHandlers(io: SocketIOServer) {
       if (typeof data?.currentMap === 'string' && data.currentMap.length > 0) {
         heartbeatState.currentMap = data.currentMap;
       }
-      // `null` from a heartbeat is not authoritative: a delayed/empty
-      // snapshot must not erase a start/pause event already received.
-      if (data?.gameState === 'running' || data?.gameState === 'paused') {
+      // Heartbeats only include `gameState` once the bot has captured a real
+      // room state event; `null` then means the game actually stopped.
+      if (data?.gameState === 'running' || data?.gameState === 'paused' || data?.gameState === null) {
         heartbeatState.gameState = data.gameState;
       }
 
@@ -140,9 +138,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
       io.emit('room:heartbeat', {
         playerCount: data?.playerCount,
         currentMap: data?.currentMap,
-        ...(heartbeatState.gameState !== undefined
-          ? { gameState: heartbeatState.gameState }
-          : {}),
+        ...(heartbeatState.gameState !== undefined ? { gameState: heartbeatState.gameState } : {}),
         timestamp: data?.timestamp || Date.now(),
       });
     });
