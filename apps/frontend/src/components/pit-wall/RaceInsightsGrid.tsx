@@ -5,7 +5,6 @@ import { DriverCircle } from './DriverCircle';
 import { RaceSession } from '@/mocks/raceData';
 import { colorNumberToHex } from '@/app/utils/race';
 import { useTranslations } from '@/i18n';
-import { usePitWallGameState } from '@/hooks/useCurrentMap';
 
 interface Props {
   drivers?: any[];
@@ -288,7 +287,6 @@ export function RaceInsightsGrid({
   error = null,
 }: Props) {
   const { language, t } = useTranslations();
-  const gameState = usePitWallGameState();
   const driverOptions = useMemo(
     () => drivers.map((driver) => driver.name),
     [drivers]

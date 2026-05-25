@@ -110,7 +110,7 @@ const dictionaries = {
     },
     liveMap: {
       paused: 'Jogo pausado',
-      idle: 'Nenhuma acao na pista no momento',
+      idle: 'Nenhuma ação na pista no momento',
       missingMap: 'Sem mapa para esse circuito',
     },
     pitWall: {
