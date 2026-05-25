@@ -177,9 +177,15 @@ export function usePitWallGameState(): PitWallGameState {
       applyGameState(event?.gameState);
     };
 
+    const handleHeartbeatState = (event: { gameState?: PitWallGameState }) => {
+      if (event?.gameState === 'running' || event?.gameState === 'paused') {
+        setGameState(event.gameState);
+      }
+    };
+
     if (socket && isConnected) {
       socket.on('room:gameStateChanged', handleGameStateChange);
-      socket.on('room:heartbeat', handleGameStateChange);
+      socket.on('room:heartbeat', handleHeartbeatState);
     }
 
     return () => {
@@ -187,7 +193,7 @@ export function usePitWallGameState(): PitWallGameState {
 
       if (socket) {
         socket.off('room:gameStateChanged', handleGameStateChange);
-        socket.off('room:heartbeat', handleGameStateChange);
+        socket.off('room:heartbeat', handleHeartbeatState);
       }
     };
   }, [socket, isConnected]);
