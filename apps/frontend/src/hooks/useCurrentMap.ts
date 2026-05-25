@@ -12,6 +12,9 @@ interface CurrentMapData {
 export type PitWallGameState = 'running' | 'paused' | null;
 
 const svgCache = new Map<string, boolean>();
+const PITWALL_REQUEST_HEADERS = {
+  'ngrok-skip-browser-warning': 'true',
+};
 
 async function checkSvgExists(url: string): Promise<boolean> {
   if (svgCache.has(url)) {
@@ -90,7 +93,9 @@ export function useCurrentMap(): CurrentMapData {
 
       if (!detectedMap) {
         try {
-          const response = await fetch(pitwallApiUrl('/api/room/current-map'));
+          const response = await fetch(pitwallApiUrl('/api/room/current-map'), {
+            headers: PITWALL_REQUEST_HEADERS,
+          });
 
           if (response.ok) {
             const data = await response.json();
@@ -141,7 +146,9 @@ export function usePitWallGameState(): PitWallGameState {
   useEffect(() => {
     const fetchRoomState = async () => {
       try {
-        const response = await fetch(pitwallApiUrl('/api/room/state'));
+        const response = await fetch(pitwallApiUrl('/api/room/state'), {
+          headers: PITWALL_REQUEST_HEADERS,
+        });
 
         if (!response.ok) return;
 

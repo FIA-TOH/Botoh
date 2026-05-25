@@ -23,7 +23,13 @@ export function createApp(options: CreateAppOptions = {}) {
     origin: config.corsOrigin,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'x-language', 'X-Language'],
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'x-language',
+      'X-Language',
+      'ngrok-skip-browser-warning',
+    ],
   };
 
   app.use(securityHeaders);
