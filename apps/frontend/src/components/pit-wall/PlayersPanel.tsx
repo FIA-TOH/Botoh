@@ -272,7 +272,7 @@ export function PlayersPanel({
 
     return `
       ${tirePercent}%🛞 |
-      ${kers.toFixed(0)}}%🔋 |
+      ${kers.toFixed(0)}%🔋 |
       ${damagePercent}%🏎️ |
       ${pitText}🧑‍🔧 |
       ${emoji}
