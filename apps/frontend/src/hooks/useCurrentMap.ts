@@ -9,8 +9,6 @@ interface CurrentMapData {
   isLoading: boolean;
 }
 
-export type PitWallGameState = 'running' | 'paused' | null;
-
 const svgCache = new Map<string, boolean>();
 const PITWALL_REQUEST_HEADERS = {
   'ngrok-skip-browser-warning': 'true',
@@ -137,54 +135,6 @@ export function useCurrentMap(): CurrentMapData {
   }, [socket, isConnected]);
 
   return mapData;
-}
-
-export function usePitWallGameState(): PitWallGameState {
-  const { socket, isConnected } = useSocket();
-  const [gameState, setGameState] = useState<PitWallGameState>(null);
-
-  useEffect(() => {
-    const fetchRoomState = async () => {
-      try {
-        const response = await fetch(pitwallApiUrl('/api/room/state'), {
-          headers: PITWALL_REQUEST_HEADERS,
-        });
-
-        if (!response.ok) return;
-
-        const data = await response.json();
-        const nextGameState = data?.roomState?.gameState;
-
-        if (nextGameState === 'running' || nextGameState === 'paused' || nextGameState === null) {
-          setGameState(nextGameState);
-        }
-      } catch (error) {
-        console.warn('Erro ao buscar gameState atual:', error);
-      }
-    };
-
-    fetchRoomState();
-
-    const handleGameStateChange = (event: { gameState?: PitWallGameState }) => {
-      if (event?.gameState === 'running' || event?.gameState === 'paused' || event?.gameState === null) {
-        setGameState(event.gameState);
-      }
-    };
-
-    if (socket && isConnected) {
-      socket.on('room:gameStateChanged', handleGameStateChange);
-      socket.on('room:heartbeat', handleGameStateChange);
-    }
-
-    return () => {
-      if (socket) {
-        socket.off('room:gameStateChanged', handleGameStateChange);
-        socket.off('room:heartbeat', handleGameStateChange);
-      }
-    };
-  }, [socket, isConnected]);
-
-  return gameState;
 }
 
 export function useMapBackground(): {

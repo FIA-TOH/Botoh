@@ -29,6 +29,7 @@ import {
   PaceStats,
 } from '../../../../Botoh/src/features/zones/laps/lapHistory';
 import { mute_mode } from '../../../../Botoh/src/features/chat/toggleMuteMode';
+import { gameState } from '../../../../Botoh/src/features/changeGameState/gameState';
 
 export interface PlayerPositionData {
   id: number;
@@ -103,6 +104,7 @@ export type RaceFlag =
   | 'VIRTUAL_SAFETY';
 
 export interface RaceSessionData {
+  gameState: 'running' | 'paused' | null;
   sessionType: GameMode;
   currentTimePassed: number;
   totalTime: number | null;
@@ -173,6 +175,7 @@ function getRaceSessionData(): RaceSessionData {
   const circuitPitGap = CIRCUITS[currentMapIndex]?.info?.pitGap;
 
   return {
+    gameState: gameState ?? null,
     sessionType: gameMode,
     currentTimePassed: currentTime,
     totalTime:
