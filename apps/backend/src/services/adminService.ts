@@ -1,6 +1,20 @@
 import authService from './authService';
 import { query, queryOne, transaction } from '../config/database';
 import garageService from './garageService';
+import {
+  calculateCompatibility,
+  calculateContractValue,
+  drawMarketProposalCategory,
+  drawMarketProposalCount,
+  drawMarketSponsorOrigin,
+  drawSponsorRequirement,
+  MarketSponsorOrigin,
+  MarketSponsorProfile,
+  MarketTeamProfile,
+  normalizeSponsorCategory,
+  selectWeightedProposal,
+  SponsorContractCategory,
+} from '../config/sponsorMarket';
 
 export type TeamMembershipRole = 'team_principal' | 'team_assistant' | 'driver';
 
@@ -26,6 +40,14 @@ export interface ScuderiaInput {
   tag: string;
   emoji?: string | null;
   color: string;
+  logoUrl?: string | null;
+  momentoComercial?: number;
+  prestigio?: number;
+  agressividade?: number;
+  popularidade?: number;
+  tecnica?: number;
+  nacionalidades?: string[] | null;
+  setores?: string[] | null;
 }
 
 export interface TeamFinanceEntryInput {
@@ -50,8 +72,23 @@ export interface SponsorMissionInput {
 }
 
 export interface SponsorInput {
-  name: string;
+  name?: string;
+  nome?: string;
   logoUrl: string;
+  nacionalidade?: string | null;
+  tipo?: string | null;
+  setor?: string | null;
+  felicidade?: number;
+  prestigio?: number;
+  agressividade?: number;
+  focoEmMidia?: number;
+  focoTecnico?: number;
+  nacionalismo?: number;
+  fidelidade?: number;
+  orcamento?: number;
+  ambicao?: number;
+  publicoAlvo1?: string | null;
+  publicoAlvo2?: string | null;
 }
 
 type RaceProgressDirection = 'advance' | 'rollback';
@@ -591,7 +628,32 @@ class AdminService {
 
   async listScuderias() {
     const result = await query(`
-      SELECT id, name, tag, emoji, color, created_at AS "createdAt"
+      SELECT
+        id, name, tag, emoji, color, logo_url AS "logoUrl",
+        momento_comercial AS "momentoComercial",
+        prestigio,
+        agressividade,
+        popularidade,
+        tecnica,
+        nacionalidades,
+        setores,
+        COALESCE(
+          (
+            SELECT json_agg(
+              json_build_object(
+                'name', sponsor.name,
+                'category', assignment.category,
+                'slotNumber', assignment.slot_number
+              )
+              ORDER BY assignment.category, assignment.slot_number
+            )
+            FROM team_sponsors assignment
+            JOIN sponsors sponsor ON sponsor.id = assignment.sponsor_id
+            WHERE assignment.team_id = teams.id
+          ),
+          '[]'::json
+        ) AS sponsors,
+        created_at AS "createdAt"
       FROM teams
       ORDER BY name ASC
     `);
@@ -620,12 +682,26 @@ class AdminService {
         pit_crew_level,
         climate_cost_per_race,
         pit_crew_cost_per_race,
+        momento_comercial,
+        prestigio,
+        agressividade,
+        popularidade,
+        tecnica,
+        nacionalidades,
+        setores,
+        logo_url,
         created_at,
         updated_at
       )
-       VALUES ($1, $2, $3, $4, 0, 0, 0, 0, NOW(), NOW())
+       VALUES ($1, $2, $3, $4, 0, 0, 0, 0, COALESCE($5, 50), COALESCE($6, 1),
+         COALESCE($7, 1), COALESCE($8, 1), COALESCE($9, 1), $10, $11, $12, NOW(), NOW())
        RETURNING id`,
-      [input.name, input.tag.toUpperCase(), emoji, input.color],
+      [
+        input.name, input.tag.toUpperCase(), emoji, input.color,
+        input.momentoComercial ?? null, input.prestigio ?? null, input.agressividade ?? null,
+        input.popularidade ?? null, input.tecnica ?? null, input.nacionalidades ?? null,
+        input.setores ?? null, input.logoUrl ?? null,
+      ],
     );
 
     return { success: true, scuderia: result.rows[0] };
@@ -635,10 +711,27 @@ class AdminService {
     const emoji = input.emoji?.trim() ?? '';
     const result = await query(
       `UPDATE teams
-       SET name = $1, tag = $2, emoji = $3, color = $4, updated_at = NOW()
-       WHERE id = $5
+       SET name = $1,
+           tag = $2,
+           emoji = $3,
+           color = $4,
+           momento_comercial = COALESCE($5, momento_comercial),
+           prestigio = COALESCE($6, prestigio),
+           agressividade = COALESCE($7, agressividade),
+           popularidade = COALESCE($8, popularidade),
+           tecnica = COALESCE($9, tecnica),
+           nacionalidades = COALESCE($10, nacionalidades),
+           setores = COALESCE($11, setores),
+           logo_url = COALESCE($12, logo_url),
+           updated_at = NOW()
+       WHERE id = $13
        RETURNING id`,
-      [input.name, input.tag.toUpperCase(), emoji, input.color, scuderiaId],
+      [
+        input.name, input.tag.toUpperCase(), emoji, input.color,
+        input.momentoComercial ?? null, input.prestigio ?? null, input.agressividade ?? null,
+        input.popularidade ?? null, input.tecnica ?? null, input.nacionalidades ?? null,
+        input.setores ?? null, input.logoUrl ?? null, scuderiaId,
+      ],
     );
 
     if (!result.rows[0]) {
@@ -969,7 +1062,40 @@ class AdminService {
 
   async listSponsors() {
     const result = await query(
-      `SELECT id, name, logo_url AS "logoUrl"
+      `SELECT
+        id,
+        name,
+        name AS nome,
+        logo_url AS "logoUrl",
+        nacionalidade,
+        tipo,
+        setor,
+        felicidade,
+        prestigio,
+        agressividade,
+        foco_em_midia AS "focoEmMidia",
+        foco_tecnico AS "focoTecnico",
+        nacionalismo,
+        fidelidade,
+        orcamento,
+        ambicao,
+        publico_alvo_1 AS "publicoAlvo1",
+        publico_alvo_2 AS "publicoAlvo2",
+        COALESCE(
+          (
+            SELECT json_agg(
+              json_build_object('id', related_team.id, 'name', related_team.name)
+              ORDER BY related_team.name
+            )
+            FROM (
+              SELECT DISTINCT contracted_team.id, contracted_team.name
+              FROM team_sponsors related_contract
+              JOIN teams contracted_team ON contracted_team.id = related_contract.team_id
+              WHERE related_contract.sponsor_id = sponsors.id
+            ) related_team
+          ),
+          '[]'::json
+        ) AS "scuderiasRelacionadas"
        FROM sponsors
        ORDER BY name ASC`,
     );
@@ -977,24 +1103,99 @@ class AdminService {
   }
 
   async createSponsor(input: SponsorInput) {
+    const name = input.nome ?? input.name!;
     const result = await query(
-      `INSERT INTO sponsors (name, logo_url, created_at, updated_at)
-       VALUES ($1, $2, NOW(), NOW())
+      `INSERT INTO sponsors (
+        name, logo_url, nacionalidade, tipo, setor, felicidade, prestigio, agressividade,
+        foco_em_midia, foco_tecnico, nacionalismo, fidelidade, orcamento, ambicao,
+        publico_alvo_1, publico_alvo_2, created_at, updated_at
+      )
+       VALUES (
+        $1, $2, $3, $4, $5, COALESCE($6, 50), COALESCE($7, 1), COALESCE($8, 1),
+        COALESCE($9, 1), COALESCE($10, 1), COALESCE($11, 1), COALESCE($12, 1),
+        COALESCE($13, 1), COALESCE($14, 1), $15, $16, NOW(), NOW()
+       )
        RETURNING id`,
-      [input.name, input.logoUrl],
+      [
+        name, input.logoUrl, input.nacionalidade ?? null, input.tipo ?? null, input.setor ?? null,
+        input.felicidade ?? null, input.prestigio ?? null, input.agressividade ?? null,
+        input.focoEmMidia ?? null, input.focoTecnico ?? null, input.nacionalismo ?? null,
+        input.fidelidade ?? null, input.orcamento ?? null, input.ambicao ?? null,
+        input.publicoAlvo1 ?? null, input.publicoAlvo2 ?? null,
+      ],
     );
     return { success: true, sponsor: result.rows[0] };
   }
 
   async updateSponsor(sponsorId: string, input: SponsorInput) {
+    const current = await queryOne<{
+      name: string;
+      nacionalidade: string | null;
+      tipo: string | null;
+      setor: string | null;
+      felicidade: number;
+      prestigio: number;
+      agressividade: number;
+      focoEmMidia: number;
+      focoTecnico: number;
+      nacionalismo: number;
+      fidelidade: number;
+      orcamento: number;
+      ambicao: number;
+      publicoAlvo1: string | null;
+      publicoAlvo2: string | null;
+    }>(
+      `SELECT
+        name, nacionalidade, tipo, setor, felicidade, prestigio, agressividade,
+        foco_em_midia AS "focoEmMidia", foco_tecnico AS "focoTecnico",
+        nacionalismo, fidelidade, orcamento, ambicao,
+        publico_alvo_1 AS "publicoAlvo1", publico_alvo_2 AS "publicoAlvo2"
+       FROM sponsors
+       WHERE id = $1`,
+      [sponsorId],
+    );
+    if (!current) return { success: false, message: 'Sponsor not found' };
+
+    const name = input.nome ?? input.name ?? current.name;
     const result = await query(
       `UPDATE sponsors
        SET name = $1,
            logo_url = $2,
+           nacionalidade = $3,
+           tipo = $4,
+           setor = $5,
+           felicidade = COALESCE($6, felicidade),
+           prestigio = COALESCE($7, prestigio),
+           agressividade = COALESCE($8, agressividade),
+           foco_em_midia = COALESCE($9, foco_em_midia),
+           foco_tecnico = COALESCE($10, foco_tecnico),
+           nacionalismo = COALESCE($11, nacionalismo),
+           fidelidade = COALESCE($12, fidelidade),
+           orcamento = COALESCE($13, orcamento),
+           ambicao = COALESCE($14, ambicao),
+           publico_alvo_1 = $15,
+           publico_alvo_2 = $16,
            updated_at = NOW()
-       WHERE id = $3
+       WHERE id = $17
        RETURNING id`,
-      [input.name, input.logoUrl, sponsorId],
+      [
+        name, input.logoUrl,
+        input.nacionalidade === undefined ? current.nacionalidade : input.nacionalidade,
+        input.tipo === undefined ? current.tipo : input.tipo,
+        input.setor === undefined ? current.setor : input.setor,
+        input.felicidade ?? current.felicidade,
+        input.prestigio ?? current.prestigio,
+        input.agressividade ?? current.agressividade,
+        input.focoEmMidia ?? current.focoEmMidia,
+        input.focoTecnico ?? current.focoTecnico,
+        input.nacionalismo ?? current.nacionalismo,
+        input.fidelidade ?? current.fidelidade,
+        input.orcamento ?? current.orcamento,
+        input.ambicao ?? current.ambicao,
+        input.publicoAlvo1 === undefined ? current.publicoAlvo1 : input.publicoAlvo1,
+        input.publicoAlvo2 === undefined ? current.publicoAlvo2 : input.publicoAlvo2,
+        sponsorId,
+      ],
     );
     return result.rows[0]
       ? { success: true }
@@ -1006,6 +1207,117 @@ class AdminService {
     return result.rows[0]
       ? { success: true }
       : { success: false, message: 'Sponsor not found' };
+  }
+
+  async generateSponsorMarketRound(scuderiaId: string) {
+    const team = await queryOne<MarketTeamProfile>(
+      `SELECT
+        id,
+        name,
+        prestigio,
+        agressividade,
+        popularidade,
+        tecnica,
+        momento_comercial AS "momentoComercial",
+        nacionalidades
+       FROM teams
+       WHERE id = $1`,
+      [scuderiaId],
+    );
+    if (!team) return { success: false, message: 'Scuderia not found' };
+
+    const result = await query<MarketSponsorProfile & { relatedTeamNames: string[] }>(
+      `SELECT
+        s.id,
+        s.name,
+        s.logo_url AS "logoUrl",
+        s.nacionalidade,
+        s.tipo,
+        s.setor,
+        s.felicidade,
+        s.prestigio,
+        s.agressividade,
+        s.foco_em_midia AS "focoEmMidia",
+        s.foco_tecnico AS "focoTecnico",
+        s.nacionalismo,
+        s.orcamento,
+        s.ambicao,
+        s.fidelidade,
+        s.publico_alvo_1 AS "publicoAlvo1",
+        s.publico_alvo_2 AS "publicoAlvo2",
+        ARRAY(
+          SELECT related_contract.team_id
+          FROM team_sponsors related_contract
+          WHERE related_contract.sponsor_id = s.id
+        ) AS "scuderiasRelacionadas",
+        ARRAY(
+          SELECT related_team.name
+          FROM team_sponsors related_contract
+          JOIN teams related_team ON related_team.id = related_contract.team_id
+          WHERE related_contract.sponsor_id = s.id
+          ORDER BY related_team.name
+        ) AS "relatedTeamNames"
+       FROM sponsors s
+       WHERE NOT EXISTS (
+         SELECT 1 FROM team_sponsors assigned
+         WHERE assigned.team_id = $1 AND assigned.sponsor_id = s.id
+       )`,
+      [scuderiaId],
+    );
+    const proposalCount = drawMarketProposalCount(team.momentoComercial);
+    const selectedSponsorIds = new Set<string>();
+    const proposals = [];
+
+    const getOrigin = (sponsor: MarketSponsorProfile): MarketSponsorOrigin | null => {
+      if (!sponsor.scuderiasRelacionadas?.length) return 'unassigned';
+      if (sponsor.felicidade <= 10) return 'unhappy_0_10';
+      if (sponsor.felicidade <= 20) return 'unhappy_10_20';
+      if (sponsor.felicidade <= 30) return 'unhappy_20_30';
+      return null;
+    };
+
+    for (let index = 0; index < proposalCount; index += 1) {
+      const category = drawMarketProposalCategory();
+      const desiredOrigin = drawMarketSponsorOrigin();
+      const availableForCategory = result.rows.filter(
+        (sponsor) => normalizeSponsorCategory(sponsor.tipo) === category
+          && !selectedSponsorIds.has(sponsor.id)
+          && getOrigin(sponsor) !== null,
+      );
+      const candidates = availableForCategory
+        .filter((sponsor) => getOrigin(sponsor) === desiredOrigin)
+        .map((sponsor) => ({
+          sponsor,
+          ...calculateCompatibility(sponsor, team),
+        }))
+        .sort((left, right) => right.pesoFinal - left.pesoFinal);
+      const selected = selectWeightedProposal(candidates);
+      if (!selected) continue;
+
+      selectedSponsorIds.add(selected.sponsor.id);
+      proposals.push({
+        sponsor: selected.sponsor,
+        category,
+        origem: getOrigin(selected.sponsor)!,
+        origemEquipes: selected.sponsor.relatedTeamNames,
+        compatibilidade: selected.compatibilidade,
+        pesoFinal: selected.pesoFinal,
+        scores: selected.scores,
+        nationalityCompatible: selected.nationalityCompatible,
+        valorContrato: calculateContractValue(category, selected.sponsor, team),
+        exigencia: drawSponsorRequirement(category),
+        candidateCount: candidates.length,
+      });
+    }
+
+    return {
+      success: true,
+      marketResult: {
+        team: { id: team.id, name: team.name, momentoComercial: team.momentoComercial },
+        requestedProposalCount: proposalCount,
+        proposals,
+      },
+    };
   }
 
   async addTeamSponsor(scuderiaId: string, input: TeamSponsorInput) {

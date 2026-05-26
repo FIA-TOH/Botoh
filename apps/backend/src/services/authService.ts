@@ -44,6 +44,8 @@ export interface AuthResponse {
   token?: string;
   user?: Omit<User, 'password_hash'>;
   message?: string;
+  code?: 'USER_NOT_FOUND' | 'INCORRECT_PASSWORD' | 'SCUDERIA_ACCESS_DENIED' | 'DATABASE_UNAVAILABLE' | 'LOGIN_FAILED';
+  statusCode?: number;
 }
 
 export interface JwtPayload {
@@ -56,6 +58,21 @@ export interface JwtPayload {
 }
 
 class AuthService {
+  private isDatabaseUnavailableError(error: unknown): boolean {
+    const code = (error as { code?: string } | null)?.code;
+    return [
+      'DATABASE_UNAVAILABLE',
+      'ECONNREFUSED',
+      'ECONNRESET',
+      'ENETUNREACH',
+      'ENOTFOUND',
+      'ETIMEDOUT',
+      '3D000',
+      '28P01',
+      '57P01',
+    ].includes(code ?? '');
+  }
+
   private selectTeamForLogin(
     user: User,
     teamTag?: string | null,
@@ -147,7 +164,7 @@ class AuthService {
   }
 
   // Find user by username
-  async findUserByUsername(username: string): Promise<User | null> {
+  async findUserByUsername(username: string, throwOnError = false): Promise<User | null> {
     try {
       const user = await queryOne<User>(
         `SELECT
@@ -220,6 +237,9 @@ class AuthService {
       return user;
     } catch (error) {
       console.error('Error finding user:', error);
+      if (throwOnError) {
+        throw error;
+      }
       return null;
     }
   }
@@ -308,12 +328,14 @@ class AuthService {
   async login(loginData: LoginRequest): Promise<AuthResponse> {
     try {
       // Find user by username
-      const user = await this.findUserByUsername(loginData.username);
+      const user = await this.findUserByUsername(loginData.username, true);
 
       if (!user) {
         return {
           success: false,
-          message: 'Invalid username or password',
+          message: 'User not found',
+          code: 'USER_NOT_FOUND',
+          statusCode: 401,
         };
       }
 
@@ -326,7 +348,9 @@ class AuthService {
       if (!isPasswordValid) {
         return {
           success: false,
-          message: 'Invalid username or password',
+          message: 'Incorrect password',
+          code: 'INCORRECT_PASSWORD',
+          statusCode: 401,
         };
       }
 
@@ -335,6 +359,8 @@ class AuthService {
         return {
           success: false,
           message: 'User does not belong to this scuderia',
+          code: 'SCUDERIA_ACCESS_DENIED',
+          statusCode: 403,
         };
       }
 
@@ -355,9 +381,21 @@ class AuthService {
       };
     } catch (error) {
       console.error('Login error:', error);
+
+      if (this.isDatabaseUnavailableError(error)) {
+        return {
+          success: false,
+          message: 'Database is temporarily unavailable. Please try again later.',
+          code: 'DATABASE_UNAVAILABLE',
+          statusCode: 503,
+        };
+      }
+
       return {
         success: false,
         message: 'Internal server error during login',
+        code: 'LOGIN_FAILED',
+        statusCode: 500,
       };
     }
   }

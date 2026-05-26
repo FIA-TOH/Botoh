@@ -6,6 +6,18 @@ import { AppSnackbar, useAppSnackbar } from '@/components/AppSnackbar';
 import { apiUrl } from '@/config/api';
 import { useAuth } from '@/hooks/useAuth';
 import { useTranslations } from '@/i18n';
+import {
+  EconomicScuderia,
+  SponsorCatalogItem,
+  SponsorMarketResult,
+  SponsorMarketSection,
+} from '@/components/admin/SponsorMarketSection';
+import {
+  EMPTY_SPONSOR_FORM,
+  SponsorFormData,
+  SponsorFormModal,
+} from '@/components/admin/SponsorFormModal';
+import { PaginationControls, usePagination } from '@/components/admin/PaginationControls';
 
 interface AdminUser {
   id: string;
@@ -20,13 +32,7 @@ interface AdminUser {
   language: 'pt' | 'en' | 'es';
 }
 
-interface Scuderia {
-  id: string;
-  name: string;
-  tag: string;
-  emoji: string;
-  color: string;
-}
+type Scuderia = EconomicScuderia;
 interface TeamGarageManage {
   id: string; name: string; carName: string; cashTotal: number; climateCostPerRace: number;
   pitCrewCostPerRace: number; salaryCostPerRace: number; sponsorIncomePerRace: number;
@@ -49,7 +55,6 @@ interface TeamSponsor {
   seasonMissions: Mission[]; raceMissions: Mission[];
 }
 interface Mission { id: string; title: string; reward: number; racesToComplete?: number }
-interface SponsorCatalogItem { id: string; name: string; logoUrl?: string | null }
 interface RaceProgressAlert {
   id: string;
   entityType: 'driver_contract' | 'sponsor_contract' | 'season_mission';
@@ -92,6 +97,14 @@ interface ScuderiaFormData {
   tag: string;
   emoji: string;
   color: string;
+  logoUrl: string;
+  momentoComercial: number;
+  prestigio: number;
+  agressividade: number;
+  popularidade: number;
+  tecnica: number;
+  nacionalidades: string;
+  setores: string[];
 }
 
 const EMPTY_USER_FORM: UserFormData = {
@@ -108,6 +121,14 @@ const EMPTY_SCUDERIA_FORM: ScuderiaFormData = {
   tag: '',
   emoji: '',
   color: '#FFFFFF',
+  logoUrl: '',
+  momentoComercial: 50,
+  prestigio: 1,
+  agressividade: 1,
+  popularidade: 1,
+  tecnica: 1,
+  nacionalidades: '',
+  setores: [],
 };
 
 const MEMBERSHIP_ROLE_OPTIONS: { value: TeamMembershipRole; label: string }[] = [
@@ -126,6 +147,10 @@ function getAuthHeaders() {
 
 function limitScuderiaEmoji(value: string) {
   return Array.from(value).slice(0, 2).join('');
+}
+
+function getLocalScuderiaLogoPath(teamName: string) {
+  return `/img/scuderia/logos/${encodeURIComponent(teamName.trim().toLowerCase())}.png`;
 }
 
 function getReadableTextColor(backgroundColor?: string) {
@@ -174,7 +199,8 @@ export default function AdminPage() {
     salaryPerRace: '4500000',
   });
   const [editingDriverId, setEditingDriverId] = useState<string | null>(null);
-  const [newSponsorForm, setNewSponsorForm] = useState({ name: '', logoUrl: '' });
+  const [sponsorForm, setSponsorForm] = useState<SponsorFormData>(EMPTY_SPONSOR_FORM);
+  const [sponsorModalOpen, setSponsorModalOpen] = useState(false);
   const [editingSponsorId, setEditingSponsorId] = useState<string | null>(null);
   const [teamSponsorForm, setTeamSponsorForm] = useState({
     sponsorId: '', category: 'title_sponsor',
@@ -200,6 +226,7 @@ export default function AdminPage() {
     scuderias: false,
     sponsors: false,
     raceLogs: false,
+    sponsorMarket: false,
   });
 
   const sortedScuderias = useMemo(
@@ -214,6 +241,9 @@ export default function AdminPage() {
       ),
     [sortedScuderias, userForm.teamMemberships],
   );
+  const usersPagination = usePagination(users);
+  const scuderiasPagination = usePagination(sortedScuderias);
+  const sponsorsPagination = usePagination(sponsorCatalog);
 
   async function loadAdminData() {
     setLoadingData(true);
@@ -289,6 +319,14 @@ export default function AdminPage() {
       tag: scuderia.tag,
       emoji: scuderia.emoji ?? '',
       color: scuderia.color,
+      logoUrl: scuderia.logoUrl ?? '',
+      momentoComercial: scuderia.momentoComercial,
+      prestigio: scuderia.prestigio,
+      agressividade: scuderia.agressividade,
+      popularidade: scuderia.popularidade,
+      tecnica: scuderia.tecnica,
+      nacionalidades: (scuderia.nacionalidades ?? []).join(', '),
+      setores: scuderia.setores ?? [],
     });
     setScuderiaModalOpen(true);
   }
@@ -378,6 +416,8 @@ export default function AdminPage() {
           body: JSON.stringify({
             ...scuderiaForm,
             emoji: scuderiaForm.emoji.trim(),
+            logoUrl: scuderiaForm.logoUrl || null,
+            nacionalidades: scuderiaForm.nacionalidades.split(',').map((value) => value.trim()).filter(Boolean),
           }),
         },
       );
@@ -667,21 +707,45 @@ export default function AdminPage() {
   async function saveCatalogSponsor(event: React.FormEvent) {
     event.preventDefault();
     const response = await fetch(apiUrl(editingSponsorId ? `/api/admin/sponsors/${editingSponsorId}` : '/api/admin/sponsors'), {
-      method: editingSponsorId ? 'PUT' : 'POST', headers: getAuthHeaders(), body: JSON.stringify(newSponsorForm),
+      method: editingSponsorId ? 'PUT' : 'POST', headers: getAuthHeaders(), body: JSON.stringify(sponsorForm),
     });
     const data = await response.json();
     if (data.success) {
-      setNewSponsorForm({ name: '', logoUrl: '' });
+      setSponsorForm(EMPTY_SPONSOR_FORM);
       setEditingSponsorId(null);
+      setSponsorModalOpen(false);
       showSnackbar(t.admin.actionCompleted, 'success');
       await refreshAdminViews();
     } else {
       showSnackbar(data.message || t.admin.actionFailed, 'error');
     }
   }
+  function openCreateSponsor() {
+    setEditingSponsorId(null);
+    setSponsorForm(EMPTY_SPONSOR_FORM);
+    setSponsorModalOpen(true);
+  }
   function startEditSponsor(sponsor: SponsorCatalogItem) {
     setEditingSponsorId(sponsor.id);
-    setNewSponsorForm({ name: sponsor.name, logoUrl: sponsor.logoUrl ?? '' });
+    setSponsorForm({
+      name: sponsor.name,
+      logoUrl: sponsor.logoUrl ?? '',
+      nacionalidade: sponsor.nacionalidade ?? '',
+      tipo: sponsor.tipo ?? '',
+      setor: sponsor.setor,
+      felicidade: sponsor.felicidade,
+      prestigio: sponsor.prestigio,
+      agressividade: sponsor.agressividade,
+      focoEmMidia: sponsor.focoEmMidia,
+      focoTecnico: sponsor.focoTecnico,
+      nacionalismo: sponsor.nacionalismo,
+      orcamento: sponsor.orcamento,
+      ambicao: sponsor.ambicao,
+      fidelidade: sponsor.fidelidade,
+      publicoAlvo1: sponsor.publicoAlvo1,
+      publicoAlvo2: sponsor.publicoAlvo2,
+    });
+    setSponsorModalOpen(true);
   }
   async function deleteCatalogSponsor(sponsorId: string) {
     const response = await fetch(apiUrl(`/api/admin/sponsors/${sponsorId}`), { method: 'DELETE', headers: getAuthHeaders() });
@@ -692,6 +756,49 @@ export default function AdminPage() {
     }
     showSnackbar(t.admin.actionCompleted, 'success');
     await refreshAdminViews();
+  }
+  function updateSponsorDraft(sponsor: SponsorCatalogItem) {
+    setSponsorCatalog((current) => current.map((row) => row.id === sponsor.id ? sponsor : row));
+  }
+  async function saveSponsorDraft(sponsor: SponsorCatalogItem) {
+    const response = await fetch(apiUrl(`/api/admin/sponsors/${sponsor.id}`), {
+      method: 'PUT',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(sponsor),
+    });
+    const data = await response.json();
+    if (!data.success) {
+      showSnackbar(data.message || t.admin.actionFailed, 'error');
+      await loadAdminData();
+    }
+  }
+  function updateScuderiaDraft(scuderia: Scuderia) {
+    setScuderias((current) => current.map((row) => row.id === scuderia.id ? scuderia : row));
+  }
+  async function saveScuderiaDraft(scuderia: Scuderia) {
+    const response = await fetch(apiUrl(`/api/admin/scuderias/${scuderia.id}`), {
+      method: 'PUT',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ ...scuderia, logoUrl: scuderia.logoUrl || null }),
+    });
+    const data = await response.json();
+    if (!data.success) {
+      showSnackbar(data.message || t.admin.actionFailed, 'error');
+      await loadAdminData();
+    }
+  }
+  async function generateSponsorMarketRound(teamId: string) {
+    const response = await fetch(apiUrl(`/api/admin/scuderias/${teamId}/sponsor-market`), {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({}),
+    });
+    const data: { success: boolean; marketResult?: SponsorMarketResult; message?: string } = await response.json();
+    if (!data.success || !data.marketResult) {
+      showSnackbar(data.message || t.admin.actionFailed, 'error');
+      return null;
+    }
+    return data.marketResult;
   }
   async function saveTeamSponsor(event: React.FormEvent) {
     event.preventDefault();
@@ -842,7 +949,7 @@ export default function AdminPage() {
                 </tr>
               </thead>
               <tbody>
-                {users.map((adminUser) => (
+                {usersPagination.rows.map((adminUser) => (
                   <tr key={adminUser.id} className="border-t border-gray-700">
                     <td className="py-3">{adminUser.username}</td>
                     <td className="py-3">{adminUser.shortUsername ?? '-'}</td>
@@ -892,6 +999,7 @@ export default function AdminPage() {
                 )}
               </tbody>
             </table>
+            <PaginationControls labels={t.admin} {...usersPagination} />
           </div>}
         </section>
 
@@ -924,9 +1032,29 @@ export default function AdminPage() {
                 </tr>
               </thead>
               <tbody>
-                {sortedScuderias.map((scuderia) => (
+                {scuderiasPagination.rows.map((scuderia) => (
                   <tr key={scuderia.id} className="border-t border-gray-700">
-                    <td className="py-3">{scuderia.name}</td>
+                    <td className="py-3">
+                      <span className="inline-flex items-center gap-3">
+                        <img
+                          src={scuderia.logoUrl || getLocalScuderiaLogoPath(scuderia.name)}
+                          alt=""
+                          className="h-10 w-10 object-contain"
+                          onError={(event) => {
+                            const image = event.currentTarget;
+                            const fallback = getLocalScuderiaLogoPath(scuderia.name);
+
+                            if (scuderia.logoUrl && !image.src.endsWith(fallback)) {
+                              image.src = fallback;
+                              return;
+                            }
+
+                            image.style.display = 'none';
+                          }}
+                        />
+                        {scuderia.name}
+                      </span>
+                    </td>
                     <td className="py-3 text-2xl">{scuderia.emoji || '---'}</td>
                     <td className="py-3">{scuderia.tag}</td>
                     <td className="py-3">
@@ -958,6 +1086,7 @@ export default function AdminPage() {
                 )}
               </tbody>
             </table>
+            <PaginationControls labels={t.admin} {...scuderiasPagination} />
           </div>}
         </section>
 
@@ -972,16 +1101,14 @@ export default function AdminPage() {
           </button>
           {openSections.sponsors && (
             <div className="mt-4">
-              <form onSubmit={saveCatalogSponsor} className="mb-4 flex flex-wrap gap-2">
-                <input required className="rounded bg-gray-700 p-2" placeholder={t.admin.sponsorName} value={newSponsorForm.name} onChange={(e) => setNewSponsorForm((v) => ({ ...v, name: e.target.value }))} />
-                <input required type="url" className="min-w-72 flex-1 rounded bg-gray-700 p-2" placeholder={t.admin.logoUrl} value={newSponsorForm.logoUrl} onChange={(e) => setNewSponsorForm((v) => ({ ...v, logoUrl: e.target.value }))} />
-                <button className="rounded bg-purple-600 px-4">{editingSponsorId ? t.admin.save : t.admin.addSponsor}</button>
-              </form>
+              <button type="button" onClick={openCreateSponsor} className="mb-4 rounded bg-purple-600 px-4 py-2">
+                {t.admin.createSponsor}
+              </button>
               {sponsorCatalog.length === 0 ? (
                 <div className="text-gray-400">{t.admin.sponsorsEmpty}</div>
               ) : (
                 <div className="space-y-2">
-                  {sponsorCatalog.map((sponsor) => (
+                  {sponsorsPagination.rows.map((sponsor) => (
                     <div key={sponsor.id} className="flex items-center justify-between rounded bg-gray-700 p-3">
                       <div className="flex items-center gap-3">
                         {sponsor.logoUrl && (
@@ -999,6 +1126,7 @@ export default function AdminPage() {
                       </div>
                     </div>
                   ))}
+                  <PaginationControls labels={t.admin} {...sponsorsPagination} />
                 </div>
               )}
             </div>
@@ -1047,6 +1175,19 @@ export default function AdminPage() {
             </div>
           )}
         </section>
+        <SponsorMarketSection
+          labels={t.admin}
+          sponsors={sponsorCatalog}
+          scuderias={sortedScuderias}
+          isOpen={openSections.sponsorMarket}
+          onToggle={() => setOpenSections((current) => ({ ...current, sponsorMarket: !current.sponsorMarket }))}
+          onCreateSponsor={openCreateSponsor}
+          onSponsorDraftChange={updateSponsorDraft}
+          onSponsorSave={saveSponsorDraft}
+          onScuderiaDraftChange={updateScuderiaDraft}
+          onScuderiaSave={saveScuderiaDraft}
+          onGenerateMarket={generateSponsorMarketRound}
+        />
       </div>
 
       {userModalOpen && (
@@ -1537,13 +1678,24 @@ export default function AdminPage() {
         </div>
       )}
 
+      {sponsorModalOpen && (
+        <SponsorFormModal
+          labels={t.admin}
+          isEditing={Boolean(editingSponsorId)}
+          form={sponsorForm}
+          onChange={setSponsorForm}
+          onClose={() => setSponsorModalOpen(false)}
+          onSubmit={saveCatalogSponsor}
+        />
+      )}
+
       {scuderiaModalOpen && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-          <form onSubmit={saveScuderia} className="bg-gray-800 rounded-lg p-6 w-full max-w-md">
-            <h2 className="text-2xl font-bold mb-4">{editingScuderiaId ? 'Editar Scuderia' : 'Criar Nova Scuderia'}</h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <form onSubmit={saveScuderia} className="max-h-[calc(100vh-2rem)] w-full max-w-2xl overflow-y-auto rounded-lg bg-gray-800 p-6">
+            <h2 className="text-2xl font-bold mb-4">{editingScuderiaId ? t.admin.editScuderia : t.admin.createScuderia}</h2>
 
             <label className="block mb-4">
-              <span className="block text-sm mb-2">Nome</span>
+              <span className="block text-sm mb-2">{t.admin.name}</span>
               <input
                 className="w-full bg-gray-700 rounded-lg px-4 py-2"
                 value={scuderiaForm.name}
@@ -1555,7 +1707,7 @@ export default function AdminPage() {
             </label>
 
             <label className="block mb-6">
-              <span className="block text-sm mb-2">Abreviação</span>
+              <span className="block text-sm mb-2">{t.admin.abbreviation}</span>
               <input
                 className="w-full bg-gray-700 rounded-lg px-4 py-2"
                 value={scuderiaForm.tag}
@@ -1581,7 +1733,7 @@ export default function AdminPage() {
             </label>
 
             <label className="block mb-6">
-              <span className="block text-sm mb-2">Cor</span>
+              <span className="block text-sm mb-2">{t.admin.color}</span>
               <div className="flex gap-3">
                 <input
                   className="h-10 w-16 rounded bg-gray-700"
@@ -1600,12 +1752,54 @@ export default function AdminPage() {
               </div>
             </label>
 
+            <label className="mb-6 block">
+              <span className="mb-2 block text-sm">{t.admin.logoUrl}</span>
+              <input
+                type="url"
+                className="w-full rounded-lg bg-gray-700 px-4 py-2"
+                value={scuderiaForm.logoUrl}
+                onChange={(event) => setScuderiaForm((prev) => ({ ...prev, logoUrl: event.target.value }))}
+              />
+            </label>
+
+            <div className="mb-6 grid gap-4 sm:grid-cols-3">
+              {([
+                ['momentoComercial', t.admin.commercialMomentum, 0, 100],
+                ['prestigio', t.admin.prestige, 1, 5],
+                ['agressividade', t.admin.aggressiveness, 0, 3],
+                ['popularidade', t.admin.popularity, 0, 3],
+                ['tecnica', t.admin.technique, 0, 3],
+              ] as const).map(([field, label, min, max]) => (
+                <label key={field}>
+                  <span className="mb-2 block text-sm">{label}</span>
+                  <input
+                    required
+                    type="number"
+                    min={min}
+                    max={max}
+                    className="w-full rounded-lg bg-gray-700 px-4 py-2"
+                    value={scuderiaForm[field]}
+                    onChange={(event) => setScuderiaForm((prev) => ({ ...prev, [field]: Number(event.target.value) }))}
+                  />
+                </label>
+              ))}
+              <label className="sm:col-span-3">
+                <span className="mb-2 block text-sm">{t.admin.nationalities}</span>
+                <input
+                  className="w-full rounded-lg bg-gray-700 px-4 py-2"
+                  value={scuderiaForm.nacionalidades}
+                  onChange={(event) => setScuderiaForm((prev) => ({ ...prev, nacionalidades: event.target.value }))}
+                  placeholder={t.admin.commaSeparated}
+                />
+              </label>
+            </div>
+
             <div className="flex gap-3">
               <button className="flex-1 bg-red-600 rounded-lg py-2 disabled:bg-red-500" disabled={savingScuderia}>
-                {savingScuderia ? 'Salvando...' : 'Salvar'}
+                {savingScuderia ? t.admin.saving : t.admin.save}
               </button>
               <button type="button" className="flex-1 bg-gray-600 rounded-lg py-2" onClick={() => setScuderiaModalOpen(false)}>
-                Cancelar
+                {t.admin.cancel}
               </button>
             </div>
           </form>

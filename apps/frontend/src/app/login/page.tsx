@@ -47,7 +47,7 @@ export default function LoginPage() {
           router.replace('/');
         }, 500);
       } else {
-        showSnackbar(result.message || t.auth.loginFailed, 'error');
+        showSnackbar(result.code === 'CONNECTION_ERROR' ? t.auth.connectionError : result.message || t.auth.loginFailed, 'error');
       }
     } catch (error) {
       showSnackbar(t.auth.connectionError, 'error');
@@ -66,7 +66,7 @@ export default function LoginPage() {
       
       {/* Login container - no opacity inheritance */}
       <div className="absolute top-0 right-0 w-1/2 h-full flex items-center justify-center pointer-events-none">
-        <FtohCard title="LOGIN">
+        <FtohCard title={t.auth.loginTitle}>
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Username Field */}
@@ -77,7 +77,7 @@ export default function LoginPage() {
               value={formData.username}
               onChange={handleInputChange}
               required
-              placeholder="Username"
+              placeholder={t.auth.usernamePlaceholder}
               disabled={isLoading}
             />
 
@@ -89,7 +89,7 @@ export default function LoginPage() {
               value={formData.password}
               onChange={handleInputChange}
               required
-              placeholder="Password"
+              placeholder={t.auth.passwordPlaceholder}
               disabled={isLoading}
             />
 
@@ -97,9 +97,9 @@ export default function LoginPage() {
             <FtohButton
               type="submit"
               loading={isLoading}
-              loadingText="Signing in..."
+              loadingText={t.auth.signingIn}
             >
-              SIGN IN
+              {t.auth.signIn}
             </FtohButton>
           </form>
         </FtohCard>

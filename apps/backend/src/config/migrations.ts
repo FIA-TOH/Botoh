@@ -35,6 +35,24 @@ class MigrationService {
     await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS sponsor_income_per_race NUMERIC NOT NULL DEFAULT 0');
     await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS climate_monitoring_level INTEGER NOT NULL DEFAULT 0');
     await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS pit_crew_level INTEGER NOT NULL DEFAULT 0');
+    await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS momento_comercial INTEGER NOT NULL DEFAULT 50');
+    await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS prestigio INTEGER NOT NULL DEFAULT 1');
+    await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS agressividade INTEGER NOT NULL DEFAULT 1');
+    await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS popularidade INTEGER NOT NULL DEFAULT 1');
+    await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS tecnica INTEGER NOT NULL DEFAULT 1');
+    await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS nacionalidades TEXT[]');
+    await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS setores TEXT[]');
+    await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS logo_url TEXT');
+    await query('ALTER TABLE teams DROP CONSTRAINT IF EXISTS teams_momento_comercial_check');
+    await query('ALTER TABLE teams ADD CONSTRAINT teams_momento_comercial_check CHECK (momento_comercial BETWEEN 0 AND 100)');
+    await query('ALTER TABLE teams DROP CONSTRAINT IF EXISTS teams_prestigio_check');
+    await query('ALTER TABLE teams ADD CONSTRAINT teams_prestigio_check CHECK (prestigio BETWEEN 1 AND 5)');
+    await query('ALTER TABLE teams DROP CONSTRAINT IF EXISTS teams_agressividade_check');
+    await query('ALTER TABLE teams ADD CONSTRAINT teams_agressividade_check CHECK (agressividade BETWEEN 0 AND 3)');
+    await query('ALTER TABLE teams DROP CONSTRAINT IF EXISTS teams_popularidade_check');
+    await query('ALTER TABLE teams ADD CONSTRAINT teams_popularidade_check CHECK (popularidade BETWEEN 0 AND 3)');
+    await query('ALTER TABLE teams DROP CONSTRAINT IF EXISTS teams_tecnica_check');
+    await query('ALTER TABLE teams ADD CONSTRAINT teams_tecnica_check CHECK (tecnica BETWEEN 0 AND 3)');
     await query('ALTER TABLE teams ALTER COLUMN climate_monitoring_level SET DEFAULT 0');
     await query('ALTER TABLE teams ALTER COLUMN pit_crew_level SET DEFAULT 0');
     await query("ALTER TABLE teams ADD COLUMN IF NOT EXISTS car_name VARCHAR(100) NOT NULL DEFAULT 'Unnamed car'");
@@ -163,10 +181,58 @@ class MigrationService {
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         name VARCHAR(120) NOT NULL UNIQUE,
         logo_url TEXT,
+        nacionalidade VARCHAR(120),
+        tipo VARCHAR(120),
+        setor VARCHAR(120),
+        felicidade INTEGER NOT NULL DEFAULT 50 CHECK (felicidade BETWEEN 0 AND 100),
+        prestigio INTEGER NOT NULL DEFAULT 1 CHECK (prestigio BETWEEN 1 AND 5),
+        agressividade INTEGER NOT NULL DEFAULT 1 CHECK (agressividade BETWEEN 0 AND 3),
+        foco_em_midia INTEGER NOT NULL DEFAULT 1 CHECK (foco_em_midia BETWEEN 0 AND 3),
+        foco_tecnico INTEGER NOT NULL DEFAULT 1 CHECK (foco_tecnico BETWEEN 0 AND 3),
+        nacionalismo INTEGER NOT NULL DEFAULT 1 CHECK (nacionalismo BETWEEN 0 AND 3),
+        fidelidade INTEGER NOT NULL DEFAULT 1 CHECK (fidelidade BETWEEN 0 AND 3),
+        orcamento INTEGER NOT NULL DEFAULT 1 CHECK (orcamento BETWEEN 0 AND 3),
+        ambicao INTEGER NOT NULL DEFAULT 1 CHECK (ambicao BETWEEN 1 AND 5),
+        publico_alvo_1 VARCHAR(40),
+        publico_alvo_2 VARCHAR(40),
+        scuderias_relacionadas UUID[],
         created_at TIMESTAMP NOT NULL DEFAULT NOW(),
         updated_at TIMESTAMP NOT NULL DEFAULT NOW()
       )
     `);
+    await query('ALTER TABLE sponsors ADD COLUMN IF NOT EXISTS nacionalidade VARCHAR(120)');
+    await query('ALTER TABLE sponsors ADD COLUMN IF NOT EXISTS tipo VARCHAR(120)');
+    await query('ALTER TABLE sponsors ADD COLUMN IF NOT EXISTS setor VARCHAR(120)');
+    await query('ALTER TABLE sponsors ADD COLUMN IF NOT EXISTS felicidade INTEGER NOT NULL DEFAULT 50');
+    await query('ALTER TABLE sponsors ADD COLUMN IF NOT EXISTS prestigio INTEGER NOT NULL DEFAULT 1');
+    await query('ALTER TABLE sponsors ADD COLUMN IF NOT EXISTS agressividade INTEGER NOT NULL DEFAULT 1');
+    await query('ALTER TABLE sponsors ADD COLUMN IF NOT EXISTS foco_em_midia INTEGER NOT NULL DEFAULT 1');
+    await query('ALTER TABLE sponsors ADD COLUMN IF NOT EXISTS foco_tecnico INTEGER NOT NULL DEFAULT 1');
+    await query('ALTER TABLE sponsors ADD COLUMN IF NOT EXISTS nacionalismo INTEGER NOT NULL DEFAULT 1');
+    await query('ALTER TABLE sponsors ADD COLUMN IF NOT EXISTS fidelidade INTEGER NOT NULL DEFAULT 1');
+    await query('ALTER TABLE sponsors ADD COLUMN IF NOT EXISTS orcamento INTEGER NOT NULL DEFAULT 1');
+    await query('ALTER TABLE sponsors ADD COLUMN IF NOT EXISTS ambicao INTEGER NOT NULL DEFAULT 1');
+    await query('ALTER TABLE sponsors ADD COLUMN IF NOT EXISTS publico_alvo_1 VARCHAR(40)');
+    await query('ALTER TABLE sponsors ADD COLUMN IF NOT EXISTS publico_alvo_2 VARCHAR(40)');
+    await query('ALTER TABLE sponsors ADD COLUMN IF NOT EXISTS scuderias_relacionadas UUID[]');
+    await query('ALTER TABLE sponsors DROP CONSTRAINT IF EXISTS sponsors_felicidade_check');
+    await query('ALTER TABLE sponsors ADD CONSTRAINT sponsors_felicidade_check CHECK (felicidade BETWEEN 0 AND 100)');
+    await query('ALTER TABLE sponsors DROP CONSTRAINT IF EXISTS sponsors_prestigio_check');
+    await query('ALTER TABLE sponsors ADD CONSTRAINT sponsors_prestigio_check CHECK (prestigio BETWEEN 1 AND 5)');
+    await query('ALTER TABLE sponsors DROP CONSTRAINT IF EXISTS sponsors_agressividade_check');
+    await query('ALTER TABLE sponsors ADD CONSTRAINT sponsors_agressividade_check CHECK (agressividade BETWEEN 0 AND 3)');
+    await query('ALTER TABLE sponsors DROP CONSTRAINT IF EXISTS sponsors_foco_em_midia_check');
+    await query('ALTER TABLE sponsors ADD CONSTRAINT sponsors_foco_em_midia_check CHECK (foco_em_midia BETWEEN 0 AND 3)');
+    await query('ALTER TABLE sponsors DROP CONSTRAINT IF EXISTS sponsors_foco_tecnico_check');
+    await query('ALTER TABLE sponsors ADD CONSTRAINT sponsors_foco_tecnico_check CHECK (foco_tecnico BETWEEN 0 AND 3)');
+    await query('ALTER TABLE sponsors DROP CONSTRAINT IF EXISTS sponsors_nacionalismo_check');
+    await query('ALTER TABLE sponsors ADD CONSTRAINT sponsors_nacionalismo_check CHECK (nacionalismo BETWEEN 0 AND 3)');
+    await query('ALTER TABLE sponsors DROP CONSTRAINT IF EXISTS sponsors_fidelidade_check');
+    await query('ALTER TABLE sponsors ADD CONSTRAINT sponsors_fidelidade_check CHECK (fidelidade BETWEEN 0 AND 3)');
+    await query('ALTER TABLE sponsors DROP CONSTRAINT IF EXISTS sponsors_orcamento_check');
+    await query('ALTER TABLE sponsors ADD CONSTRAINT sponsors_orcamento_check CHECK (orcamento BETWEEN 0 AND 3)');
+    await query('ALTER TABLE sponsors DROP CONSTRAINT IF EXISTS sponsors_ambicao_check');
+    await query('ALTER TABLE sponsors ADD CONSTRAINT sponsors_ambicao_check CHECK (ambicao BETWEEN 1 AND 5)');
 
     await query(`
       CREATE TABLE IF NOT EXISTS team_sponsors (

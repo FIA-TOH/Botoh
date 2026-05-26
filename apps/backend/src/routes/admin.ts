@@ -3,6 +3,8 @@ import { body, param, validationResult } from 'express-validator';
 import adminService from '../services/adminService';
 import { authMiddleware, requireAdmin, AuthRequest } from '../middleware/auth';
 import { getRequestLanguage, translateMessage, translateValidationErrors } from '../i18n';
+import { SPONSOR_SECTORS, SPONSOR_TARGET_AUDIENCES } from '../config/sponsorEconomy';
+import { SPONSOR_CONTRACT_CATEGORIES } from '../config/sponsorMarket';
 
 const router = Router();
 
@@ -88,6 +90,47 @@ const scuderiaValidation = [
   body('color')
     .matches(/^#[0-9A-Fa-f]{6}$/)
     .withMessage('Scuderia color must be a valid hex color'),
+  body('logoUrl')
+    .optional({ nullable: true })
+    .isURL()
+    .withMessage('Scuderia logo URL is invalid'),
+  body('momentoComercial')
+    .optional()
+    .isInt({ min: 0, max: 100 })
+    .withMessage('Commercial momentum must be between 0 and 100'),
+  body('prestigio')
+    .optional()
+    .isInt({ min: 1, max: 5 })
+    .withMessage('Prestige must be between 1 and 5'),
+  body('agressividade')
+    .optional()
+    .isInt({ min: 0, max: 3 })
+    .withMessage('Aggressiveness must be between 0 and 3'),
+  body('popularidade')
+    .optional()
+    .isInt({ min: 0, max: 3 })
+    .withMessage('Popularity must be between 0 and 3'),
+  body('tecnica')
+    .optional()
+    .isInt({ min: 0, max: 3 })
+    .withMessage('Technique must be between 0 and 3'),
+  body('nacionalidades')
+    .optional({ nullable: true })
+    .isArray()
+    .withMessage('Nationalities must be an array'),
+  body('nacionalidades.*')
+    .optional()
+    .isString()
+    .isLength({ min: 1, max: 120 })
+    .withMessage('Nationality is invalid'),
+  body('setores')
+    .optional({ nullable: true })
+    .isArray()
+    .withMessage('Sectors must be an array'),
+  body('setores.*')
+    .optional()
+    .isIn(SPONSOR_SECTORS)
+    .withMessage('Sponsor sector is invalid'),
 ];
 
 const financeEntryValidation = [
@@ -120,11 +163,74 @@ const updateTeamSponsorValidation = [
   body('rewardPerRace').isFloat({ min: 0 }),
 ];
 const sponsorValidation = [
-  body('name').isString().isLength({ min: 1, max: 120 }),
+  body()
+    .custom((_value, { req }) => {
+      const name = req.body.nome ?? req.body.name;
+      return typeof name === 'string' && name.length >= 1 && name.length <= 120;
+    })
+    .withMessage('Sponsor name must be between 1 and 120 characters'),
   body('logoUrl')
     .isURL()
     .matches(/\.png(?:\?.*)?$/i)
     .withMessage('Sponsor logo URL must point to a PNG image'),
+  body('nacionalidade')
+    .optional({ nullable: true })
+    .isString()
+    .isLength({ max: 120 })
+    .withMessage('Nationality is invalid'),
+  body('tipo')
+    .optional({ nullable: true })
+    .isString()
+    .isLength({ max: 120 })
+    .withMessage('Sponsor type is invalid'),
+  body('setor')
+    .optional({ nullable: true })
+    .isIn(SPONSOR_SECTORS)
+    .withMessage('Sponsor sector is invalid'),
+  body('felicidade')
+    .optional()
+    .isInt({ min: 0, max: 100 })
+    .withMessage('Sponsor happiness must be between 0 and 100'),
+  body('prestigio')
+    .optional()
+    .isInt({ min: 1, max: 5 })
+    .withMessage('Prestige must be between 1 and 5'),
+  body('agressividade')
+    .optional()
+    .isInt({ min: 0, max: 3 })
+    .withMessage('Aggressiveness must be between 0 and 3'),
+  body('focoEmMidia')
+    .optional()
+    .isInt({ min: 0, max: 3 })
+    .withMessage('Media focus must be between 0 and 3'),
+  body('focoTecnico')
+    .optional()
+    .isInt({ min: 0, max: 3 })
+    .withMessage('Technical focus must be between 0 and 3'),
+  body('nacionalismo')
+    .optional()
+    .isInt({ min: 0, max: 3 })
+    .withMessage('Nationalism must be between 0 and 3'),
+  body('fidelidade')
+    .optional()
+    .isInt({ min: 0, max: 3 })
+    .withMessage('Loyalty must be between 0 and 3'),
+  body('orcamento')
+    .optional()
+    .isInt({ min: 0, max: 3 })
+    .withMessage('Budget must be between 0 and 3'),
+  body('ambicao')
+    .optional()
+    .isInt({ min: 1, max: 5 })
+    .withMessage('Ambition must be between 1 and 5'),
+  body('publicoAlvo1')
+    .optional({ nullable: true })
+    .isIn(SPONSOR_TARGET_AUDIENCES)
+    .withMessage('Target audience is invalid'),
+  body('publicoAlvo2')
+    .optional({ nullable: true })
+    .isIn(SPONSOR_TARGET_AUDIENCES)
+    .withMessage('Target audience is invalid'),
 ];
 const missionValidation = [
   body('title').isString().isLength({ min: 1, max: 255 }),
@@ -345,12 +451,27 @@ router.post('/sponsors', sponsorValidation, async (req: AuthRequest, res: Respon
 router.put('/sponsors/:id', param('id').isUUID(), sponsorValidation, async (req: AuthRequest, res: Response) => {
   if (handleValidation(req, res)) return;
   const result = await adminService.updateSponsor(req.params.id, req.body);
-  return res.status(result.success ? 200 : 404).json(result);
+  return res.status(result.success ? 200 : 404).json({
+    ...result,
+    message: translateMessage((result as { message?: string }).message, getRequestLanguage(req)),
+  });
 });
 
 router.delete('/sponsors/:id', param('id').isUUID(), async (req: AuthRequest, res: Response) => {
   const result = await adminService.deleteSponsor(req.params.id);
-  return res.status(result.success ? 200 : 404).json(result);
+  return res.status(result.success ? 200 : 404).json({
+    ...result,
+    message: translateMessage((result as { message?: string }).message, getRequestLanguage(req)),
+  });
+});
+
+router.post('/scuderias/:id/sponsor-market', param('id').isUUID(), async (req: AuthRequest, res: Response) => {
+  if (handleValidation(req, res)) return;
+  const result = await adminService.generateSponsorMarketRound(req.params.id);
+  return res.status(result.success ? 200 : 400).json({
+    ...result,
+    message: translateMessage((result as { message?: string }).message, getRequestLanguage(req)),
+  });
 });
 
 router.post('/scuderias/:id/sponsors', param('id').isUUID(), teamSponsorValidation, async (req: AuthRequest, res: Response) => {

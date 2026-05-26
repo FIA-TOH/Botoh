@@ -39,7 +39,7 @@ interface AuthContextType {
   token: string | null;
   isLoading: boolean;
   isAuthenticated: boolean;
-  login: (username: string, password: string) => Promise<{ success: boolean; message?: string }>;
+  login: (username: string, password: string) => Promise<{ success: boolean; message?: string; code?: string }>;
   logout: () => void;
   refreshToken: () => Promise<boolean>;
 }
@@ -147,7 +147,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setToken(null);
   };
 
-  const login = async (username: string, password: string): Promise<{ success: boolean; message?: string }> => {
+  const login = async (username: string, password: string): Promise<{ success: boolean; message?: string; code?: string }> => {
     try {
       const response = await fetch(apiUrl('/api/auth/login'), {
         method: 'POST',
@@ -172,11 +172,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         return { success: true };
       } else {
-        return { success: false, message: data.message || 'Login failed' };
+        return { success: false, message: data.message, code: data.code };
       }
     } catch (error) {
       console.error('Login error:', error);
-      return { success: false, message: 'Connection error' };
+      return { success: false, code: 'CONNECTION_ERROR' };
     }
   };
 
