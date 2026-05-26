@@ -22,6 +22,16 @@ CREATE TABLE teams (
     
     -- Team budget
     budget INTEGER DEFAULT 1000000,
+
+    -- Commercial profile
+    momento_comercial INTEGER NOT NULL DEFAULT 50 CHECK (momento_comercial BETWEEN 0 AND 100),
+    prestigio INTEGER NOT NULL DEFAULT 1 CHECK (prestigio BETWEEN 1 AND 5),
+    agressividade INTEGER NOT NULL DEFAULT 1 CHECK (agressividade BETWEEN 0 AND 3),
+    popularidade INTEGER NOT NULL DEFAULT 1 CHECK (popularidade BETWEEN 0 AND 3),
+    tecnica INTEGER NOT NULL DEFAULT 1 CHECK (tecnica BETWEEN 0 AND 3),
+    nacionalidades TEXT[],
+    setores TEXT[],
+    logo_url TEXT,
     
     -- Team status
     is_active BOOLEAN DEFAULT true,

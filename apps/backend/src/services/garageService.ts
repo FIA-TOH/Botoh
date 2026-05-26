@@ -75,6 +75,13 @@ export interface TeamGarage {
   climateMonitoringLevel: number;
   pitCrewLevel: number;
   carName: string;
+  momentoComercial: number;
+  prestigio: number;
+  agressividade: number;
+  popularidade: number;
+  tecnica: number;
+  nacionalidades: string[] | null;
+  setores: string[] | null;
   drivers: Array<{
     id: string;
     userId: string | null;
@@ -95,6 +102,21 @@ export interface TeamGarage {
     contractRacesRemaining: number;
     initialReward: number;
     rewardPerRace: number;
+    nacionalidade: string | null;
+    tipo: string | null;
+    setor: string | null;
+    felicidade: number;
+    prestigio: number;
+    agressividade: number;
+    focoEmMidia: number;
+    focoTecnico: number;
+    nacionalismo: number;
+    fidelidade: number;
+    orcamento: number;
+    ambicao: number;
+    publicoAlvo1: string | null;
+    publicoAlvo2: string | null;
+    scuderiasRelacionadas: string[] | null;
     seasonMissions: Array<{ id: string; title: string; reward: number; racesToComplete: number }>;
     raceMissions: Array<{ id: string; title: string; reward: number }>;
   }>;
@@ -149,7 +171,14 @@ class GarageService {
         ) AS "sponsorIncomePerRace",
         climate_monitoring_level AS "climateMonitoringLevel",
         pit_crew_level AS "pitCrewLevel",
-        car_name AS "carName"
+        car_name AS "carName",
+        momento_comercial AS "momentoComercial",
+        prestigio,
+        agressividade,
+        popularidade,
+        tecnica,
+        nacionalidades,
+        setores
        FROM teams
        WHERE id = $1`,
       [teamId],
@@ -185,6 +214,21 @@ class GarageService {
           ts.contract_races_remaining AS "contractRacesRemaining",
           ts.initial_reward AS "initialReward",
           ts.reward_per_race AS "rewardPerRace",
+          s.nacionalidade,
+          s.tipo,
+          s.setor,
+          s.felicidade,
+          s.prestigio,
+          s.agressividade,
+          s.foco_em_midia AS "focoEmMidia",
+          s.foco_tecnico AS "focoTecnico",
+          s.nacionalismo,
+          s.fidelidade,
+          s.orcamento,
+          s.ambicao,
+          s.publico_alvo_1 AS "publicoAlvo1",
+          s.publico_alvo_2 AS "publicoAlvo2",
+          s.scuderias_relacionadas AS "scuderiasRelacionadas",
           COALESCE(
             (
               SELECT json_agg(

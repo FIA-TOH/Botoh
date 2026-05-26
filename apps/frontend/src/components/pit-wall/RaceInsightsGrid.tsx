@@ -671,7 +671,7 @@ export function RaceInsightsGrid({
     );
   }
 
-  if (driverOptions.length === 0) {
+  if (driverOptions.length === 0 && !hideRaceOnlyInsights) {
     return (
       <RaceInsightsState
         title={t.insights.emptyTitle}

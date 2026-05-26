@@ -99,8 +99,9 @@ router.post('/login', loginValidation, async (req: Request, res: Response) => {
         user: result.user,
       });
     } else {
-      return res.status(401).json({
+      return res.status(result.statusCode ?? 401).json({
         success: false,
+        code: result.code,
         message: translateMessage(result.message, getRequestLanguage(req)),
       });
     }
