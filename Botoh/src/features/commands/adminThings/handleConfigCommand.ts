@@ -12,7 +12,10 @@ import { enableDamage } from "../../speed/crashWallDetector";
 import { enableErs, enableErsPenalty } from "../../speed/fuel&Ers/ers";
 import { enableGas, enableSlipstream } from "../../speed/handleSlipstream";
 import { setBlowoutTyresActivated } from "../../tires&pits/tireBlowManager";
-import { enableTyres } from "../../tires&pits/tires";
+import {
+  enableTyres,
+  setRaceTyresInQualyEnabled,
+} from "../../tires&pits/tires";
 import { handleSafetyCommand } from "../flagsAndVSC/handleSafetyCommand";
 import { handleRModeCommand } from "../gameMode/race/handleRModeCommand";
 import { handlePitCommand } from "./handlePitCommand";
@@ -72,6 +75,7 @@ function applyFTOHConfig(room: RoomObject, byPlayer: PlayerObject) {
   handleRModeCommand(byPlayer, [], room);
   enableSlipstream(true);
   enableTyres(true);
+  setRaceTyresInQualyEnabled(true);
   enableGas(false);
   setGhostMode(room, false);
   handlePresentationLapCommand(undefined, ["off"], room);
@@ -95,6 +99,7 @@ export function applyFTOHPublicConfig(room: RoomObject, byPlayer: PlayerObject) 
   handleRModeCommand(byPlayer, [], room);
   enableSlipstream(true);
   enableTyres(false);
+  setRaceTyresInQualyEnabled(false);
   enableGas(false);
   setGhostMode(room, false);
   handlePresentationLapCommand(undefined, ["off"], room);
@@ -117,6 +122,7 @@ function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {
   handleRModeCommand(byPlayer, [], room);
   enableSlipstream(true);
   enableTyres(true);
+  setRaceTyresInQualyEnabled(false);
   enableGas(false);
   setGhostMode(room, false);
   handlePresentationLapCommand(undefined, ["off"], room);
@@ -139,6 +145,7 @@ function applyHaxbulaConfig(room: RoomObject, byPlayer: PlayerObject) {
   handleRModeCommand(byPlayer, [], room);
   enableSlipstream(false);
   enableTyres(false);
+  setRaceTyresInQualyEnabled(false);
   enableGas(false);
   setGhostMode(room, true);
   handlePresentationLapCommand(undefined, ["off"], room);

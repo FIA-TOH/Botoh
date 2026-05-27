@@ -21,11 +21,16 @@ export const TIRE_STARTING_SPEED = {
 };
 
 export let tyresActivated = true;
+export let raceTyresInQualyEnabled = false;
 
 export type TireDurability = Record<Tires, number | typeof Infinity>;
 
 export function enableTyres(boolean: boolean) {
   tyresActivated = boolean;
+}
+
+export function setRaceTyresInQualyEnabled(enabled: boolean) {
+  raceTyresInQualyEnabled = enabled;
 }
 
 export const TYRE_DURABILITY = (limit: number | null): TireDurability => {

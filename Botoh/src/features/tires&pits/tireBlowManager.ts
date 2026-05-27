@@ -1,5 +1,6 @@
 import {
   gameMode,
+  GameMode,
   GeneralGameMode,
   generalGameMode,
 } from "../changeGameState/changeGameModes";
@@ -8,6 +9,7 @@ import { playerList } from "../changePlayerState/playerList";
 import { sendAlertMessage, sendChatMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { isManageTyresEnabled } from "../commands/adminThings/handleManageTyresCommand";
+import { raceTyresInQualyEnabled, tyresActivated } from "./tires";
 
 export let blowoutTyresActivated = true;
 
@@ -138,29 +140,36 @@ export function checkTireStatus(player: PlayerObject, room: RoomObject) {
   const p = playerList[player.id];
   if (!p || typeof p.blowAtWear !== "number") return;
 
+  const allowsPunctures =
+    generalGameMode === GeneralGameMode.GENERAL_RACE ||
+    (generalGameMode === GeneralGameMode.GENERAL_QUALY &&
+      gameMode === GameMode.QUALY &&
+      raceTyresInQualyEnabled);
+
   if (
     !blowoutTyresActivated ||
-    generalGameMode !== GeneralGameMode.GENERAL_RACE
+    !tyresActivated ||
+    !allowsPunctures
   )
     return;
 
   if (!isManageTyresEnabled()) {
     if (p.warningAtWear && p.wear >= p.warningAtWear && !p.tireBlowWarning) {
       handleAvatar(Situacions.BlowoutWarning, player, room);
-      sendAlertMessage(room, MESSAGES.TYRES_ABOUT_TO_BLOWN(), player.id);
+      sendAlertMessage(room, MESSAGES.TYRES_ABOUT_TO_PUNCTURE(), player.id);
       p.tireBlowWarning = true;
     }
 
     if (p.wear >= p.blowAtWear && !p.isTyreBlowed) {
-      sendAlertMessage(room, MESSAGES.BLOWN_OUT_UNLUCKY_TIRES(), player.id);
-      sendChatMessage(room, MESSAGES.TYRE_BLOW(player.name));
+      sendAlertMessage(room, MESSAGES.PUNCTURED_TYRE(), player.id);
+      sendChatMessage(room, MESSAGES.TYRE_PUNCTURE(player.name));
       p.isTyreBlowed = true;
     }
   } else {
     if (p.blowAtWear === -1 && !p.isTyreBlowed) {
       if (p.warningAtWear && p.wear >= p.warningAtWear && !p.tireBlowWarning) {
         handleAvatar(Situacions.BlowoutWarning, player, room);
-        sendAlertMessage(room, MESSAGES.TYRES_ABOUT_TO_BLOWN(), player.id);
+        sendAlertMessage(room, MESSAGES.TYRES_ABOUT_TO_PUNCTURE(), player.id);
         p.tireBlowWarning = true;
       }
 
@@ -170,8 +179,8 @@ export function checkTireStatus(player: PlayerObject, room: RoomObject) {
         const blowChance = getBlowChanceByWear(p.wear);
         
         if (Math.random() <= blowChance) {
-          sendAlertMessage(room, MESSAGES.BLOWN_OUT_UNLUCKY_TIRES(), player.id);
-          sendChatMessage(room, MESSAGES.TYRE_BLOW(player.name));
+          sendAlertMessage(room, MESSAGES.PUNCTURED_TYRE(), player.id);
+          sendChatMessage(room, MESSAGES.TYRE_PUNCTURE(player.name));
           p.isTyreBlowed = true;
           p.isManagingTyres = true;
         }

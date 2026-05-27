@@ -351,12 +351,12 @@ export const MESSAGES = {
     tr: tr_messages.BLOWN_OUT_TIRES,
     pt: pt_messages.BLOWN_OUT_TIRES,
   }),
-  BLOWN_OUT_UNLUCKY_TIRES: (): LocalizedMessageFunction => ({
-    en: en_messages.BLOWN_OUT_UNLUCKY_TIRES,
-    es: es_messages.BLOWN_OUT_UNLUCKY_TIRES,
-    fr: fr_messages.BLOWN_OUT_UNLUCKY_TIRES,
-    tr: tr_messages.BLOWN_OUT_UNLUCKY_TIRES,
-    pt: pt_messages.BLOWN_OUT_UNLUCKY_TIRES,
+  PUNCTURED_TYRE: (): LocalizedMessageFunction => ({
+    en: en_messages.PUNCTURED_TYRE,
+    es: es_messages.PUNCTURED_TYRE,
+    fr: fr_messages.PUNCTURED_TYRE,
+    tr: tr_messages.PUNCTURED_TYRE,
+    pt: pt_messages.PUNCTURED_TYRE,
   }),
   NOW_SHOWING_TIRES: (): LocalizedMessageFunction => ({
     en: en_messages.NOW_SHOWING_TIRES,
@@ -464,20 +464,20 @@ export const MESSAGES = {
       seconds: seconds.toString(),
     }),
   }),
-  TYRE_BLOW: (name: string): LocalizedMessageFunction => ({
-    en: replaceTemplateString(en_messages.TYRE_BLOW, {
+  TYRE_PUNCTURE: (name: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.TYRE_PUNCTURE, {
       name: name,
     }),
-    es: replaceTemplateString(es_messages.TYRE_BLOW, {
+    es: replaceTemplateString(es_messages.TYRE_PUNCTURE, {
       name: name,
     }),
-    fr: replaceTemplateString(fr_messages.TYRE_BLOW, {
+    fr: replaceTemplateString(fr_messages.TYRE_PUNCTURE, {
       name: name,
     }),
-    tr: replaceTemplateString(tr_messages.TYRE_BLOW, {
+    tr: replaceTemplateString(tr_messages.TYRE_PUNCTURE, {
       name: name,
     }),
-    pt: replaceTemplateString(pt_messages.TYRE_BLOW, {
+    pt: replaceTemplateString(pt_messages.TYRE_PUNCTURE, {
       name: name,
     }),
   }),
@@ -1837,12 +1837,12 @@ export const MESSAGES = {
       player: player.toString(),
     }),
   }),
-  TYRES_ABOUT_TO_BLOWN: (): LocalizedMessageFunction => ({
-    en: replaceTemplateString(en_messages.TYRES_ABOUT_TO_BLOWN, {}),
-    es: replaceTemplateString(es_messages.TYRES_ABOUT_TO_BLOWN, {}),
-    fr: replaceTemplateString(fr_messages.TYRES_ABOUT_TO_BLOWN, {}),
-    tr: replaceTemplateString(tr_messages.TYRES_ABOUT_TO_BLOWN, {}),
-    pt: replaceTemplateString(pt_messages.TYRES_ABOUT_TO_BLOWN, {}),
+  TYRES_ABOUT_TO_PUNCTURE: (): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.TYRES_ABOUT_TO_PUNCTURE, {}),
+    es: replaceTemplateString(es_messages.TYRES_ABOUT_TO_PUNCTURE, {}),
+    fr: replaceTemplateString(fr_messages.TYRES_ABOUT_TO_PUNCTURE, {}),
+    tr: replaceTemplateString(tr_messages.TYRES_ABOUT_TO_PUNCTURE, {}),
+    pt: replaceTemplateString(pt_messages.TYRES_ABOUT_TO_PUNCTURE, {}),
   }),
   INVALID_LAP_CUT: (): LocalizedMessageFunction => ({
     en: replaceTemplateString(en_messages.INVALID_LAP_CUT, {}),
@@ -2123,6 +2123,20 @@ export const MESSAGES = {
     fr: fr_messages.DAMAGE_DISABLED,
     tr: tr_messages.DAMAGE_DISABLED,
     pt: pt_messages.DAMAGE_DISABLED,
+  }),
+  TYRE_PUNCTURE_ENABLED: (): LocalizedMessageFunction => ({
+    en: en_messages.TYRE_PUNCTURE_ENABLED,
+    es: es_messages.TYRE_PUNCTURE_ENABLED,
+    fr: fr_messages.TYRE_PUNCTURE_ENABLED,
+    tr: tr_messages.TYRE_PUNCTURE_ENABLED,
+    pt: pt_messages.TYRE_PUNCTURE_ENABLED,
+  }),
+  TYRE_PUNCTURE_DISABLED: (): LocalizedMessageFunction => ({
+    en: en_messages.TYRE_PUNCTURE_DISABLED,
+    es: es_messages.TYRE_PUNCTURE_DISABLED,
+    fr: fr_messages.TYRE_PUNCTURE_DISABLED,
+    tr: tr_messages.TYRE_PUNCTURE_DISABLED,
+    pt: pt_messages.TYRE_PUNCTURE_DISABLED,
   }),
   REPAIR_NO_DAMAGE: (): LocalizedMessageFunction => ({
     en: en_messages.REPAIR_NO_DAMAGE,

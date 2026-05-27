@@ -15,7 +15,12 @@ import { isSCActive } from "../commands/flagsAndVSC/handleSCCommand";
 import { laps } from "../zones/laps";
 import { changeTires } from "./changeTires";
 import { applyTrackTireDegradation } from "./tireDegradationFunction";
-import { TYRE_DURABILITY, Tires, tyresActivated } from "./tires";
+import {
+  raceTyresInQualyEnabled,
+  TYRE_DURABILITY,
+  Tires,
+  tyresActivated,
+} from "./tires";
 import { constants } from "../speed/constants";
 
 export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
@@ -29,7 +34,8 @@ export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
   }
   if (
     !tyresActivated ||
-    generalGameMode === GeneralGameMode.GENERAL_QUALY ||
+    (generalGameMode === GeneralGameMode.GENERAL_QUALY &&
+      !raceTyresInQualyEnabled) ||
     gameMode === GameMode.WAITING
   ) {
     p.wear = 20;

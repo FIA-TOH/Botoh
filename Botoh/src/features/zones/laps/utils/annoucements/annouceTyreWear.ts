@@ -5,7 +5,11 @@ import {
 import { PlayerInfo } from "../../../../changePlayerState/playerList";
 import { sendChatMessage } from "../../../../chat/chat";
 import { MESSAGES } from "../../../../chat/messages";
-import { tyresActivated, Tires } from "../../../../tires&pits/tires";
+import {
+  raceTyresInQualyEnabled,
+  tyresActivated,
+  Tires,
+} from "../../../../tires&pits/tires";
 
 export function annouceTyreWear(
   room: RoomObject,
@@ -14,7 +18,8 @@ export function annouceTyreWear(
 ) {
   if (
     !tyresActivated ||
-    generalGameMode === GeneralGameMode.GENERAL_QUALY ||
+    (generalGameMode === GeneralGameMode.GENERAL_QUALY &&
+      !raceTyresInQualyEnabled) ||
     playerData.tires === Tires.FLAT
   ) {
     return;

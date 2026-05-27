@@ -118,12 +118,12 @@ export function handleToggleSystems(
     }
   } else if (system === ToggleableSystems.TYRES_BLOWOUT) {
     if (boolean === "off") {
-      log(`Tyres blowout mode disabled by ${byPlayer.name}`);
-      room.sendAnnouncement("Tyres blowout disabled!", byPlayer.id, COLORS.GREEN);
+      log(`Tyre puncture mode disabled by ${byPlayer.name}`);
+      sendBlueMessage(room, MESSAGES.TYRE_PUNCTURE_DISABLED(), byPlayer.id);
       setBlowoutTyresActivated(false);
     } else {
-      log(`Tyres blowout mode enabled by ${byPlayer.name}`);
-      room.sendAnnouncement("Tyres blowout enabled!", byPlayer.id, COLORS.GREEN);
+      log(`Tyre puncture mode enabled by ${byPlayer.name}`);
+      sendBlueMessage(room, MESSAGES.TYRE_PUNCTURE_ENABLED(), byPlayer.id);
       setBlowoutTyresActivated(true);
     }
   } else if (system === ToggleableSystems.ERS) {
