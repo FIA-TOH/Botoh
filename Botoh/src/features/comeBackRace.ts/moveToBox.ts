@@ -57,6 +57,11 @@ export function handleMoveToBoxCommand(
   args: string[],
   room: RoomObject
 ) {
+  if (!byPlayer.admin) {
+    sendErrorMessage(room, MESSAGES.ADMIN_ONLY(), byPlayer.id);
+    return false;
+  }
+
   if (room.getScores() === null) {
     sendErrorMessage(room, MESSAGES.NOT_STARTED(), byPlayer.id);
     return false;

@@ -6,6 +6,7 @@ import { enableDebris } from "../../debris/enableDebris";
 import {
   enableCutPenalty,
   enableSoftCutPenalty,
+  setZeroRaceCutSpeedPenaltyEnabled,
 } from "../../detectCut/enableCutPenalty";
 import { log } from "../../discord/logger";
 import { enableDamage } from "../../speed/crashWallDetector";
@@ -82,9 +83,10 @@ function applyFTOHConfig(room: RoomObject, byPlayer: PlayerObject) {
   setBlowoutTyresActivated(true);
   enableErs(true);
   enableErsPenalty(true);
-  enableCutPenalty(true);
   enableDebris(true);
   enableDamage(true);
+  enableCutPenalty(true);
+  setZeroRaceCutSpeedPenaltyEnabled(true);
   enableSoftCutPenalty(false, room);
   handlePitCommand(byPlayer, ["new"], room);
   setManageTyresEnabled(true);
@@ -107,6 +109,7 @@ export function applyFTOHPublicConfig(room: RoomObject, byPlayer: PlayerObject) 
   enableErs(true);
   enableErsPenalty(true);
   enableCutPenalty(true);
+  setZeroRaceCutSpeedPenaltyEnabled(false);
   enableDebris(false);
   enableDamage(false);
   enableSoftCutPenalty(false, room);
@@ -130,6 +133,7 @@ function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {
   enableErs(false);
   enableErsPenalty(true);
   enableCutPenalty(true);
+  setZeroRaceCutSpeedPenaltyEnabled(false);
   enableDebris(false);
   enableDamage(false);
   enableSoftCutPenalty(false, room);
@@ -153,6 +157,7 @@ function applyHaxbulaConfig(room: RoomObject, byPlayer: PlayerObject) {
   enableErs(false);
   enableErsPenalty(false);
   enableCutPenalty(false);
+  setZeroRaceCutSpeedPenaltyEnabled(false);
   enableDebris(false);
   enableDamage(false);
   enableSoftCutPenalty(false, room);

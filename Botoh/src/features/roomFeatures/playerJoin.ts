@@ -29,7 +29,6 @@ import { checkRunningPlayers } from "../changeGameState/publicGameFlow/startStop
 
 import { sendDiscordGeneralChatQualy } from "../discord/discord";
 import { PLAYER_LIMIT } from "../commands/adminThings/handleLimitPlayerQuantity";
-import { positionList } from "../commands/gameMode/race/positionList";
 import { rejoinManager } from "../changePlayerState/rejoinManager";
 
 const HARD_QUALY_PASSWORD = "hardqualy";
@@ -45,7 +44,8 @@ function hasInvalidLeagueNameCharacters(name: string) {
 function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
   const players = room.getPlayerList();
 
-  const wasRunning = positionList.some((p) => p.name === player.name);
+  const rejoinData = rejoinManager.getPlayerData(player.auth);
+  const wasRunning = Boolean(rejoinData);
 
   if (gameMode === GameMode.HARD_QUALY) {
     if (player.name !== "Admin") {
@@ -68,19 +68,12 @@ function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
       ) {
         room.setPlayerTeam(player.id, Teams.SPECTATORS);
 
-        if(wasRunning){
-            const rejoinData = rejoinManager.getPlayerData(player.auth);
-            if (rejoinData) {
-              if (playerList[player.id]) {
-                playerList[player.id].canRejoin = rejoinData.playerInfo.canRejoin;
-              }
-            }
-        
-            if (playerList[player.id]?.canRejoin) {
-              sendAlertMessage(room, MESSAGES.TYPE_REJOIN(), player.id);
-            } else {
-              sendErrorMessage(room, MESSAGES.THE_JOIN_TIME_IS_OVER(), player.id);
-            }
+        if (wasRunning) {
+          if (playerList[player.id]) {
+            playerList[player.id].canRejoin = true;
+          }
+
+          sendAlertMessage(room, MESSAGES.TYPE_REJOIN(), player.id);
         }
       } else {
         room.setPlayerTeam(player.id, Teams.RUNNERS);

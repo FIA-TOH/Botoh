@@ -15,14 +15,16 @@ import { moveToBox } from "../comeBackRace.ts/moveToBox";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { decideBlowoutPoint } from "../tires&pits/tireBlowManager";
 import { moveToRRPosition } from "../commands/playerState/handleRRCommand";
+import { rejoinManager } from "../changePlayerState/rejoinManager";
 
 export function TeamChange(room: RoomObject) {
   room.onPlayerTeamChange = function (changedPlayer: PlayerObject) {
-    const playerObj = playerList[changedPlayer.id];
+    const playerCanRejoin = rejoinManager.hasRejoinData(changedPlayer.auth);
     
-    if (!playerObj?.canRejoin) {
+    if (!playerCanRejoin) {
       resetPlayer(changedPlayer, room, changedPlayer.id);
     }
+    const playerObj = playerList[changedPlayer.id];
     updatePlayerActivity(changedPlayer);
 
     if (
@@ -39,7 +41,7 @@ export function TeamChange(room: RoomObject) {
         room.getScores().time > 0 &&
         gameMode !== GameMode.HARD_QUALY &&
         gameMode !== GameMode.WAITING &&
-        !playerObj?.canRejoin 
+        !playerCanRejoin
       ) {
         if (generalGameMode === GeneralGameMode.GENERAL_QUALY && !LEAGUE_MODE) {
           moveToRRPosition(changedPlayer, room);

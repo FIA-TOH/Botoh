@@ -2,6 +2,7 @@ import { CrashWallDetector } from "../../circuits/Circuit";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { sendAlertMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
+import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
 import { playerList } from "../changePlayerState/playerList";
 import { vectorSpeed } from "../utils";
 
@@ -200,6 +201,10 @@ export function detectCrashWallDetectors(
             ),
             pad.p.id,
           );
+
+          if (damage.damageTaken > 0) {
+            handleAvatar(Situacions.CrashDamage, pad.p, room);
+          }
         }
 
         touchedSet.add(detectorTouchKey);

@@ -32,12 +32,13 @@ export function handleRejoinCommand(
 
   const rejoinData = rejoinManager.getPlayerData(playerAuth);
   if (!rejoinData) {
-    sendErrorMessage(room, MESSAGES.YOU_WERENT_RACING_BEFORE(), byPlayer.id);
-    return;
-  }
-
-  if (!playerList[byPlayer.id]?.canRejoin) {
-    sendErrorMessage(room, MESSAGES.THE_JOIN_TIME_IS_OVER(), byPlayer.id);
+    sendErrorMessage(
+      room,
+      rejoinManager.hasExpiredRejoinData(playerAuth)
+        ? MESSAGES.THE_JOIN_TIME_IS_OVER()
+        : MESSAGES.YOU_WERENT_RACING_BEFORE(),
+      byPlayer.id,
+    );
     return;
   }
 
@@ -45,18 +46,21 @@ export function handleRejoinCommand(
 
   setTimeout(() => {
     const currentPlayerInfo = playerList[byPlayer.id];
+    if (!currentPlayerInfo) return;
+
     const savedPlayerInfo = rejoinData.playerInfo;
     const savedPosition = rejoinData.position;
     
     const currentTime = room.getScores()?.time || 0;
-    const timeOutside = currentTime - rejoinData.leftTime;
+    const timeOutside = Math.max(0, currentTime - rejoinData.leftGameTime);
     
     const preservedProps = {
       ip: currentPlayerInfo.ip,
       afk: currentPlayerInfo.afk,
       afkAlert: currentPlayerInfo.afkAlert,
       cameraFollowing: currentPlayerInfo.cameraFollowing,
-      canRejoin: false 
+      isInTheRoom: true,
+      canRejoin: false,
     };
     
     Object.assign(currentPlayerInfo, savedPlayerInfo);

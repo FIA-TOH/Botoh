@@ -11,6 +11,7 @@ import {
   generalGameMode,
   GeneralGameMode,
 } from "../changeGameState/changeGameModes";
+import { Teams } from "../changeGameState/teams";
 import { log } from "../discord/logger";
 import { updatePlayerActivity, handlePlayerLeave } from "../afk/afk";
 import { followPlayerId } from "../cameraAndBall/cameraFollow";
@@ -35,7 +36,11 @@ export function PlayerLeave(room: RoomObject) {
 
     const lapsCompleted = Math.max(0, (playerList[player.id]?.currentLap || 1) - 1);
 
-    if (generalGameMode === GeneralGameMode.GENERAL_RACE && playerObj) {
+    if (
+      generalGameMode === GeneralGameMode.GENERAL_RACE &&
+      player.team === Teams.RUNNERS &&
+      playerObj
+    ) {
       const playerAuth = idToAuth[player.id] || player.auth;
       
       let position = { x: 0, y: 0 };
@@ -47,7 +52,12 @@ export function PlayerLeave(room: RoomObject) {
       }
       
       if (playerAuth) {
-        rejoinManager.savePlayerData(playerAuth, playerObj, position);
+        rejoinManager.savePlayerData(
+          playerAuth,
+          playerObj,
+          position,
+          room.getScores()?.time ?? 0,
+        );
       }
     }
 

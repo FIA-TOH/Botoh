@@ -30,6 +30,10 @@ export function getPitReactionTimeMultiplier(playerId: number): number {
   return PIT_REACTION_TIME_MULTIPLIER_BY_LEVEL[pitLevel];
 }
 
+export function getPitReactionTimeScale(playerId: number): number {
+  return getPitReactionTimeMultiplier(playerId) / DEFAULT_REACTION_TIME_MULTIPLIER;
+}
+
 export function getPitErrorTimeThresholds(playerId: number): {
   light: number;
   heavy: number;
