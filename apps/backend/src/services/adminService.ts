@@ -1226,6 +1226,35 @@ class AdminService {
     );
     if (!team) return { success: false, message: 'Scuderia not found' };
 
+    const assignedSponsors = await query<{ tipo: string | null; setor: string | null }>(
+      `SELECT s.tipo, s.setor
+       FROM team_sponsors ts
+       JOIN sponsors s ON s.id = ts.sponsor_id
+       WHERE ts.team_id = $1`,
+      [scuderiaId],
+    );
+    const normalizeMarketText = (value: string | null | undefined) => value?.trim().toLocaleLowerCase() ?? '';
+    const assignedTypes = new Set(
+      assignedSponsors.rows
+        .map((sponsor) => normalizeMarketText(sponsor.tipo))
+        .filter(Boolean),
+    );
+    const assignedSectors = new Set(
+      assignedSponsors.rows
+        .map((sponsor) => normalizeMarketText(sponsor.setor))
+        .filter(Boolean),
+    );
+    const getCaveats = (sponsor: Pick<MarketSponsorProfile, 'tipo' | 'setor'>) => {
+      const caveats: ('setor_repetido' | 'tipo_repetido')[] = [];
+      const sector = normalizeMarketText(sponsor.setor);
+      const type = normalizeMarketText(sponsor.tipo);
+
+      if (sector && assignedSectors.has(sector)) caveats.push('setor_repetido');
+      if (type && assignedTypes.has(type)) caveats.push('tipo_repetido');
+
+      return caveats;
+    };
+
     const result = await query<MarketSponsorProfile & { relatedTeamNames: string[] }>(
       `SELECT
         s.id,
@@ -1307,6 +1336,7 @@ class AdminService {
         valorContrato: calculateContractValue(category, selected.sponsor, team),
         exigencia: drawSponsorRequirement(category),
         candidateCount: candidates.length,
+        ressalvas: getCaveats(selected.sponsor),
       });
     }
 

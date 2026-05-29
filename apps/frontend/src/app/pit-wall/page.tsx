@@ -34,7 +34,7 @@ export default function PitWallPage() {
     isConnected: isChatConnected,
   } = useChat();
   const { logs } = useLogs();
-  const { sendPitCall } = usePitCall();
+  const { sendPitCall, preparePitTyre } = usePitCall();
   const eligibleMemberships = useMemo(
     () =>
       (user?.teamMemberships ?? []).filter(
@@ -293,6 +293,7 @@ export default function PitWallPage() {
             drivers={drivers}
             loggedUserTeam={loggedUserTeam}
             onPitCall={(driver) => sendPitCall(driver.name)}
+            onPitTyrePrepare={(driver, tyre) => preparePitTyre(driver.name, tyre)}
             loading={!playerList}
           />
 

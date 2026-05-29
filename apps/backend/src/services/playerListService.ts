@@ -53,6 +53,7 @@ export interface PlayerData extends PlayerPositionData {
   bestTime: string | null;
   bestSectorTimes: [string | null, string | null, string | null];
   tires: Tires;
+  nextPitTires: Tires | null;
   wear: number;
   lapsOnCurrentTire: number;
   inPitLane: boolean;
@@ -352,6 +353,7 @@ export class PlayerListService {
         formatLapTime(state?.bestSectorTimes?.[2]),
       ] as [string | null, string | null, string | null],
       tires: state?.tires ?? Tires.SOFT,
+      nextPitTires: state?.nextPitTires ?? null,
       wear: state?.wear ?? 0,
       lapsOnCurrentTire: state?.lapsOnCurrentTire ?? 0,
       inPitLane: state?.inPitlane ?? false,
@@ -410,6 +412,7 @@ export class PlayerListService {
         formatLapTime(state?.bestSectorTimes?.[2]),
       ] as [string | null, string | null, string | null],
       tires: state?.tires ?? Tires.SOFT,
+      nextPitTires: state?.nextPitTires ?? null,
       wear: state?.wear ?? 0,
       lapsOnCurrentTire: state?.lapsOnCurrentTire ?? 0,
       inPitLane: false,

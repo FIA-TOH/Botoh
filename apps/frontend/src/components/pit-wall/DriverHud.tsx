@@ -1,5 +1,6 @@
 // DriverHud.tsx
-import { Teams } from '@/types/game';
+import { useEffect, useState } from 'react';
+import { Teams, Tires } from '@/types/game';
 import { FtohButton } from '@/components/FtohButton';
 
 import {
@@ -17,17 +18,137 @@ interface Props {
   driver?: Driver;
   align: 'left' | 'right';
   onPitCall?: (driver: Driver) => void;
+  onPitTyrePrepare?: (driver: Driver, tyre: Tires | null) => void;
+}
+
+type PitTyreOption = 'none' | 'soft' | 'medium' | 'hard' | 'inter' | 'wet' | 'train';
+type SelectablePitTyreOption = Exclude<PitTyreOption, 'none'>;
+
+const pitTyreStyles: Record<PitTyreOption, {
+  letter: string;
+  backgroundColor: string;
+  borderColor: string;
+  color: string;
+}> = {
+  none: {
+    letter: '-',
+    backgroundColor: '#9CA3AF',
+    borderColor: '#6B7280',
+    color: '#000000',
+  },
+  soft: {
+    letter: 'S',
+    backgroundColor: '#EF4444',
+    borderColor: '#7F1D1D',
+    color: '#000000',
+  },
+  medium: {
+    letter: 'M',
+    backgroundColor: '#FACC15',
+    borderColor: '#854D0E',
+    color: '#000000',
+  },
+  hard: {
+    letter: 'H',
+    backgroundColor: '#FFFFFF',
+    borderColor: '#000000',
+    color: '#000000',
+  },
+  inter: {
+    letter: 'I',
+    backgroundColor: '#22C55E',
+    borderColor: '#14532D',
+    color: '#000000',
+  },
+  wet: {
+    letter: 'W',
+    backgroundColor: '#3B82F6',
+    borderColor: '#1E3A8A',
+    color: '#000000',
+  },
+  train: {
+    letter: 'T',
+    backgroundColor: '#A855F7',
+    borderColor: '#581C87',
+    color: '#2E1065',
+  },
+};
+
+const pitTyreOptions: SelectablePitTyreOption[] = [
+  'soft',
+  'medium',
+  'hard',
+  'inter',
+  'wet',
+  'train',
+];
+
+const pitTyreToGameTyre: Record<SelectablePitTyreOption, Tires> = {
+  soft: Tires.SOFT,
+  medium: Tires.MEDIUM,
+  hard: Tires.HARD,
+  inter: Tires.INTER,
+  wet: Tires.WET,
+  train: Tires.TRAIN,
+};
+
+const gameTyreToPitTyre: Partial<Record<Tires, PitTyreOption>> = {
+  [Tires.SOFT]: 'soft',
+  [Tires.MEDIUM]: 'medium',
+  [Tires.HARD]: 'hard',
+  [Tires.INTER]: 'inter',
+  [Tires.WET]: 'wet',
+  [Tires.TRAIN]: 'train',
+};
+
+function PitTyreCircle({
+  tyre,
+  className = '',
+}: {
+  tyre: PitTyreOption;
+  className?: string;
+}) {
+  const style = pitTyreStyles[tyre];
+
+  return (
+    <span
+      className={`
+        inline-flex
+        h-[30px]
+        w-[30px]
+        items-center
+        justify-center
+        rounded-full
+        border-2
+        text-[16px]
+        font-black
+        leading-none
+        ${className}
+      `}
+      style={{
+        backgroundColor: style.backgroundColor,
+        borderColor: style.borderColor,
+        color: style.color,
+      }}
+    >
+      {style.letter}
+    </span>
+  );
 }
 
 export function DriverHud({
   driver,
   align,
   onPitCall,
+  onPitTyrePrepare,
 }: Props) {
+  const [selectedPitTyre, setSelectedPitTyre] = useState<PitTyreOption>('none');
+  const [isPitTyreModalOpen, setIsPitTyreModalOpen] = useState(false);
   const { t } = useTranslations();
   const isOut = !driver || !driver.isInTheRoom || driver.team !== Teams.RUNNERS;
   const showTelemetry = !!driver && !isOut;
   const pitDisabled = !driver || isOut || driver.inPitLane;
+  const tyreSelectorDisabled = !driver || isOut;
   const driverVisualOpacity = isOut
     ? 0.5
     : 1;
@@ -36,6 +157,14 @@ export function DriverHud({
   const driverPosition = driver?.position ?? '-';
   const gapToLeader = driver?.gapToLeader ?? '';
   const teamColor = colorNumberToHex(driver?.scuderiaColor);
+
+  useEffect(() => {
+    setSelectedPitTyre(
+      driver?.nextPitTires
+        ? gameTyreToPitTyre[driver.nextPitTires] ?? 'none'
+        : 'none',
+    );
+  }, [driver?.name, driver?.nextPitTires]);
 
   const info = (
     <div
@@ -168,27 +297,151 @@ export function DriverHud({
   );
 
   const pit = (
-    <FtohButton
-      disabled={pitDisabled}
-      onClick={() => {
-        if (driver) {
-          onPitCall?.(driver);
-        }
-      }}
-      className="
-        mt-4
-        text-[24px]
-        w-24
-        py-0
-      "
-      style={{
-        backgroundColor: pitDisabled
-          ? '#5A5A5A'
-          : '#FF232B',
-      }}
-    >
-      PIT
-    </FtohButton>
+    <>
+      <div className="mt-4 flex w-full items-center justify-center gap-2">
+        <FtohButton
+          disabled={pitDisabled}
+          onClick={() => {
+            if (driver) {
+              onPitCall?.(driver);
+            }
+          }}
+          className="
+            flex-1
+            text-[16px]
+            py-[12px]
+            leading-none
+          "
+          style={{
+            backgroundColor: pitDisabled
+              ? '#5A5A5A'
+              : '#FF232B',
+          }}
+        >
+          PIT
+        </FtohButton>
+
+        <button
+          type="button"
+          disabled={tyreSelectorDisabled}
+          aria-label={t.pitWall.selectPitTyre}
+          onClick={() => setIsPitTyreModalOpen(true)}
+          className={`
+            rounded-full
+            transition
+            ${tyreSelectorDisabled ? 'cursor-not-allowed opacity-50' : 'hover:scale-110'}
+          `}
+        >
+          <PitTyreCircle tyre={selectedPitTyre} />
+        </button>
+      </div>
+
+      {isPitTyreModalOpen && (
+        <div
+          className="
+            fixed
+            inset-0
+            z-50
+            flex
+            items-center
+            justify-center
+            bg-black/70
+            px-4
+          "
+          onClick={() => setIsPitTyreModalOpen(false)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={t.pitWall.selectPitTyre}
+            className="
+              w-full
+              max-w-sm
+              border-4
+              border-[#FF232B]
+              bg-[#1E1E1E]
+              p-5
+              text-white
+              shadow-2xl
+            "
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="mb-4 text-center text-2xl font-bold uppercase">
+              {t.pitWall.selectPitTyre}
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              {pitTyreOptions.map((tyre) => (
+                <button
+                  key={tyre}
+                  type="button"
+                  onClick={() => {
+                    setSelectedPitTyre(tyre);
+                    if (driver) {
+                      onPitTyrePrepare?.(driver, pitTyreToGameTyre[tyre]);
+                    }
+                    setIsPitTyreModalOpen(false);
+                  }}
+                  className="
+                    flex
+                    items-center
+                    gap-3
+                    border-2
+                    border-white/30
+                    bg-black/20
+                    px-3
+                    py-2
+                    text-left
+                    text-lg
+                    font-bold
+                    uppercase
+                    transition
+                    hover:border-white
+                    hover:bg-white/10
+                  "
+                >
+                  <PitTyreCircle tyre={tyre} />
+                  <span>{t.pitWall.pitTyres[tyre]}</span>
+                </button>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedPitTyre('none');
+                if (driver) {
+                  onPitTyrePrepare?.(driver, null);
+                }
+                setIsPitTyreModalOpen(false);
+              }}
+              className="
+                mt-4
+                flex
+                w-full
+                items-center
+                justify-center
+                gap-3
+                border-2
+                border-white/30
+                bg-black/20
+                px-3
+                py-2
+                text-lg
+                font-bold
+                uppercase
+                transition
+                hover:border-white
+                hover:bg-white/10
+              "
+            >
+              <PitTyreCircle tyre="none" />
+              <span>{t.pitWall.noPitTyre}</span>
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 
   return (
@@ -229,4 +482,3 @@ export function DriverHud({
     </div>
   );
 }
-

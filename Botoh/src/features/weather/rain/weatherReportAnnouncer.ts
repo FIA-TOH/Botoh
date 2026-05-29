@@ -2,6 +2,7 @@ import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import { sendCyanMessage } from '../../chat/chat';
 import { MESSAGES } from '../../chat/messages';
+import { currentWeather } from '../currentWeather';
 
 interface WeatherReport {
   time: string;
@@ -43,7 +44,11 @@ function getWeatherMessage(id: string, meta?: { rain?: number; wet?: number }) {
   const weatherMessages: { [key: string]: { en: string; es: string; fr: string; tr: string; pt: string } } = {
     'CLEAR_START': MESSAGES.CLEAR_START(),
     'RAIN_ALREADY_STARTED': MESSAGES.RAIN_ALREADY_STARTED(),
+    'RAIN_ALREADY_STARTED_SECTORS': MESSAGES.RAIN_ALREADY_STARTED_SECTORS(''),
     'TRACK_ALREADY_WET': MESSAGES.TRACK_ALREADY_WET(),
+    'TRACK_ALREADY_WET_NO_RAIN': MESSAGES.TRACK_ALREADY_WET_NO_RAIN(),
+    'TRACK_ALREADY_WET_SECTORS_NO_RAIN': MESSAGES.TRACK_ALREADY_WET_SECTORS_NO_RAIN(''),
+    'NO_RAIN_START': MESSAGES.NO_RAIN_START(),
     'RAIN_STARTED': MESSAGES.RAIN_STARTED(),
     'RAIN_STOPPED': MESSAGES.RAIN_STOPPED(),
     'TRACK_WET': MESSAGES.TRACK_WET(),
@@ -109,10 +114,77 @@ function loadWeatherReport(weatherId: string): boolean {
   }
 }
 
+function getActiveSectors(values: number[]): string[] {
+  return values
+    .map((value, index) => value > 0 ? String(index + 1) : null)
+    .filter((sector): sector is string => sector !== null);
+}
+
+function getInitialWeatherMessage() {
+  const sectorRain = [
+    currentWeather.rainS1,
+    currentWeather.rainS2,
+    currentWeather.rainS3,
+  ];
+  const sectorWet = [
+    currentWeather.wetS1,
+    currentWeather.wetS2,
+    currentWeather.wetS3,
+  ];
+
+  if (currentWeather.rainGlobal > 0) {
+    return {
+      id: 'RAIN_ALREADY_STARTED',
+      message: getWeatherMessage('RAIN_ALREADY_STARTED', { rain: currentWeather.rainGlobal }),
+    };
+  }
+
+  const rainySectors = getActiveSectors(sectorRain);
+  if (rainySectors.length > 0) {
+    return {
+      id: 'RAIN_ALREADY_STARTED_SECTORS',
+      message: MESSAGES.RAIN_ALREADY_STARTED_SECTORS(rainySectors.join(', ')),
+    };
+  }
+
+  if (currentWeather.wetAvg > 0) {
+    return {
+      id: 'TRACK_ALREADY_WET_NO_RAIN',
+      message: getWeatherMessage('TRACK_ALREADY_WET_NO_RAIN', { wet: currentWeather.wetAvg }),
+    };
+  }
+
+  const wetSectors = getActiveSectors(sectorWet);
+  if (wetSectors.length > 0) {
+    return {
+      id: 'TRACK_ALREADY_WET_SECTORS_NO_RAIN',
+      message: MESSAGES.TRACK_ALREADY_WET_SECTORS_NO_RAIN(wetSectors.join(', ')),
+    };
+  }
+
+  return {
+    id: 'NO_RAIN_START',
+    message: getWeatherMessage('NO_RAIN_START'),
+  };
+}
+
 export function sendInitialWeatherAnnouncement(weatherId: string, room: any): void {
   if (!loadWeatherReport(weatherId)) return;
   
   weatherReportData.lastReportIndex = 0;
+
+  const initialWeatherMessage = getInitialWeatherMessage();
+  if (initialWeatherMessage) {
+    lastWeatherAnnouncement = {
+      id: initialWeatherMessage.id,
+      message: initialWeatherMessage.message,
+      announcedAtGameTime: 0,
+      announcedAtTimestamp: Date.now(),
+    };
+    sendCyanMessage(room, initialWeatherMessage.message);
+    console.log(`[Weather] Initial announcement: ${initialWeatherMessage.message.pt || initialWeatherMessage.message.en}`);
+    return;
+  }
   
   const report = weatherReportData.reports.find(r => r.time === "00:00");
   if (report) {

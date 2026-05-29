@@ -34,10 +34,15 @@ const GRIP_BASE_VALUES = {
 
 const RAIN_GRIP_VALUES = {
   INTER_MAX_INCREASE_PERCENT: 10,
-  INTER_MAINTAIN_UNTIL_PERCENT: 75,
-  INTER_DECREASE_START_PERCENT: 75,
+  INTER_MAINTAIN_UNTIL_PERCENT: 65,
+  INTER_DECREASE_START_PERCENT: 65,
   
   WET_MAX_INCREASE_PERCENT: 50,
+  INTER_ZERO_WET_PENALTY_MULTIPLIER: 1.30,
+  INTER_LOW_WET_PENALTY_MULTIPLIER: 1.15,
+  INTER_HIGH_WET_PENALTY_MULTIPLIER: 1.5,
+  WET_ZERO_WET_PENALTY_MULTIPLIER: 1.35,
+  WET_LOW_WET_PENALTY_MULTIPLIER: 1.30,
   
   DRY_TYRE_LOSS_FIRST_10_PERCENT: 0.00075,
   DRY_TYRE_LOSS_10_TO_20_PERCENT: 0.0015,
@@ -54,6 +59,10 @@ function calculateDynamicGripForRain(
   if (rainPercent >= maxRainPercent) return maxGrip;
   const ratio = rainPercent / maxRainPercent;
   return baseGrip + (maxGrip - baseGrip) * ratio;
+}
+
+function increaseGripPenalty(grip: number, multiplier: number): number {
+  return 1 - (1 - grip) * multiplier;
 }
 
 function getPlayerSectorWet(playerId: number): number {
@@ -73,21 +82,55 @@ function getPlayerSectorWet(playerId: number): number {
 }
 
 function calculateInterGripForWet(wetPercent: number): number {
-  if (wetPercent <= 0) return GRIP_BASE_VALUES.INTER_BASE_DRY;
+  if (wetPercent <= 0) {
+    return increaseGripPenalty(
+      GRIP_BASE_VALUES.INTER_BASE_DRY,
+      RAIN_GRIP_VALUES.INTER_ZERO_WET_PENALTY_MULTIPLIER
+    );
+  }
   
   if (wetPercent <= RAIN_GRIP_VALUES.INTER_MAX_INCREASE_PERCENT) {
-    return calculateDynamicGripForRain(GRIP_BASE_VALUES.INTER_BASE_DRY, wetPercent, RAIN_GRIP_VALUES.INTER_MAX_INCREASE_PERCENT, 1.0);
+    return increaseGripPenalty(
+      calculateDynamicGripForRain(
+        GRIP_BASE_VALUES.INTER_BASE_DRY,
+        wetPercent,
+        RAIN_GRIP_VALUES.INTER_MAX_INCREASE_PERCENT,
+        1.0
+      ),
+      RAIN_GRIP_VALUES.INTER_LOW_WET_PENALTY_MULTIPLIER
+    );
   } else if (wetPercent <= RAIN_GRIP_VALUES.INTER_MAINTAIN_UNTIL_PERCENT) {
     return 1.0;
   } else {
-    return calculateDynamicGripForRain(1.0, wetPercent - RAIN_GRIP_VALUES.INTER_DECREASE_START_PERCENT, 25, GRIP_BASE_VALUES.INTER_BASE_DRY);
+    return increaseGripPenalty(
+      calculateDynamicGripForRain(
+        1.0,
+        wetPercent - RAIN_GRIP_VALUES.INTER_DECREASE_START_PERCENT,
+        100 - RAIN_GRIP_VALUES.INTER_DECREASE_START_PERCENT,
+        GRIP_BASE_VALUES.INTER_BASE_DRY
+      ),
+      RAIN_GRIP_VALUES.INTER_HIGH_WET_PENALTY_MULTIPLIER
+    );
   }
 }
 
 function calculateWetGripForWet(wetPercent: number): number {
-  if (wetPercent <= 0) return GRIP_BASE_VALUES.WET_BASE_DRY;
+  if (wetPercent <= 0) {
+    return increaseGripPenalty(
+      GRIP_BASE_VALUES.WET_BASE_DRY,
+      RAIN_GRIP_VALUES.WET_ZERO_WET_PENALTY_MULTIPLIER
+    );
+  }
   if (wetPercent >= RAIN_GRIP_VALUES.WET_MAX_INCREASE_PERCENT) return 1.0;
-  return calculateDynamicGripForRain(GRIP_BASE_VALUES.WET_BASE_DRY, wetPercent, RAIN_GRIP_VALUES.WET_MAX_INCREASE_PERCENT, 1.0);
+  return increaseGripPenalty(
+    calculateDynamicGripForRain(
+      GRIP_BASE_VALUES.WET_BASE_DRY,
+      wetPercent,
+      RAIN_GRIP_VALUES.WET_MAX_INCREASE_PERCENT,
+      1.0
+    ),
+    RAIN_GRIP_VALUES.WET_LOW_WET_PENALTY_MULTIPLIER
+  );
 }
 
 function calculateDryTyreGripLoss(wetPercent: number): number {

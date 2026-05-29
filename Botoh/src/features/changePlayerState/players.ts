@@ -58,6 +58,7 @@ export function createPlayerInfo(ip?: string, playerId?: number) {
     },
     pitCountdown: 0,
     pitTargetTires: Tires.SOFT,
+    nextPitTires: null,
     pitInitialPos: { x: 0, y: 0 },
     pitFailures: undefined,
     pitSteps: undefined,
@@ -161,6 +162,8 @@ export function createPlayerInfo(ip?: string, playerId?: number) {
     shortName: "N/A",
     isLogged: false,
     isFirstDriver: false,
+    driverCategory: null,
+    loggedUsername: null,
   };
 }
 
@@ -235,6 +238,7 @@ export function resetPlayer(
   };
   playerList[id].pitCountdown = 0;
   playerList[id].pitTargetTires = Tires.SOFT;
+  playerList[id].nextPitTires = null;
   playerList[id].pitInitialPos = { x: 0, y: 0 };
   playerList[id].drs = false;
   playerList[id].speedEnabled = false;

@@ -70,8 +70,13 @@ export function shouldCalculateDrift(rainAmount: number, wetness: number): boole
 }
 
 
-function getDriftCacheKey(sector: number, rainAmount: number, wetness: number): string {
-  return `${sector}_${rainAmount}_${wetness}`;
+function getDriftCacheKey(
+  tireType: TireType,
+  sector: number,
+  rainAmount: number,
+  wetness: number
+): string {
+  return `${tireType}_${sector}_${rainAmount}_${wetness}`;
 }
 
 
@@ -102,7 +107,7 @@ export function calculateTotalDrift(tireType: TireType, sector: number, currentT
     return 0;
   }
   
-  const cacheKey = getDriftCacheKey(sector, rainAmount, wetness);
+  const cacheKey = getDriftCacheKey(tireType, sector, rainAmount, wetness);
   
   if (shouldClearCache(currentTime)) {
     driftCache.clear();

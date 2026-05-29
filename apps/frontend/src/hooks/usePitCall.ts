@@ -1,6 +1,7 @@
 'use client';
 
 import { useSocket } from './useSocket';
+import { Tires } from '@/types/game';
 
 export function usePitCall() {
   const { socket, isConnected } = useSocket();
@@ -13,8 +14,18 @@ export function usePitCall() {
     });
   };
 
+  const preparePitTyre = (playerName: string, tyre: Tires | null) => {
+    if (!socket || !isConnected || !playerName) return;
+
+    socket.emit('pit:prepare-tyre', {
+      playerName,
+      tyre,
+    });
+  };
+
   return {
     sendPitCall,
+    preparePitTyre,
     isConnected,
   };
 }

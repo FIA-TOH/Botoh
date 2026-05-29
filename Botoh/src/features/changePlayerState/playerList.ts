@@ -90,6 +90,7 @@ export interface PlayerInfo {
   pits: PitsInfo;
   pitCountdown?: number;
   pitTargetTires?: Tires;
+  nextPitTires: Tires | null;
   pitInitialPos?: { x: number; y: number };
   pitFailures?: PitResult;
   pitSteps?: PitStep[] | undefined;
@@ -155,6 +156,8 @@ export interface PlayerInfo {
 
   driverNumber: number;
   isFirstDriver: boolean;
+  driverCategory: "starter" | "reserve" | null;
+  loggedUsername: string | null;
 
   carDamage: number;
 
@@ -185,6 +188,12 @@ export const playerList = new Proxy(actualPlayerList, {
     return true;
   },
 });
+
+export function clearAllPreparedPitTires() {
+  Object.values(actualPlayerList).forEach((player) => {
+    player.nextPitTires = null;
+  });
+}
 
 export function updatePlayerListPosition(
   playerId: number,

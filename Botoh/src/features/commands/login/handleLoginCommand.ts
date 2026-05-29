@@ -4,6 +4,7 @@ import { MESSAGES } from "../../chat/messages";
 import { registerLeagueScuderia } from "../../scuderias/scuderias";
 
 type LoginUser = {
+  username?: string;
   shortUsername: string | null;
   driverNumber: number | null;
   teamId: string | null;
@@ -13,6 +14,7 @@ type LoginUser = {
   teamColor: string | null;
   pitLevel?: number | null;
   weatherLevel?: number | null;
+  driverCategory?: "starter" | "reserve" | null;
 };
 
 type LoginResponse = {
@@ -30,6 +32,60 @@ function parseFacilityLevel(level?: number | null) {
   const value = level ?? 0;
   if (!Number.isFinite(value)) return 0;
   return Math.min(5, Math.max(0, Math.trunc(value)));
+}
+
+function clearLoginState(playerId: number) {
+  const player = playerList[playerId];
+  if (!player) return;
+
+  player.isLogged = false;
+  player.leagueScuderia = null;
+  player.isFirstDriver = false;
+  player.driverCategory = null;
+  player.loggedUsername = null;
+}
+
+export function clearLoginStateIfUsernameChanged(player: PlayerObject) {
+  const playerState = playerList[player.id];
+  if (!playerState?.isLogged) return;
+
+  if (
+    !playerState.loggedUsername ||
+    playerState.loggedUsername.toLowerCase() !== player.name.toLowerCase()
+  ) {
+    clearLoginState(player.id);
+  }
+}
+
+export function rebalanceFirstDriverForTeam(room: RoomObject, teamId: string | null | undefined) {
+  if (!teamId) return;
+
+  const teamPlayers = room.getPlayerList().filter((roomPlayer) => {
+    const roomPlayerState = playerList[roomPlayer.id];
+    return (
+      roomPlayerState?.isLogged === true &&
+      roomPlayerState.leagueScuderia === teamId
+    );
+  });
+
+  teamPlayers.forEach((roomPlayer) => {
+    const roomPlayerState = playerList[roomPlayer.id];
+    if (roomPlayerState) {
+      roomPlayerState.isFirstDriver = false;
+    }
+  });
+
+  const firstStarter = teamPlayers.find(
+    (roomPlayer) => playerList[roomPlayer.id]?.driverCategory === "starter",
+  );
+  const firstReserve = teamPlayers.find(
+    (roomPlayer) => playerList[roomPlayer.id]?.driverCategory === "reserve",
+  );
+  const firstDriver = firstStarter ?? firstReserve;
+
+  if (firstDriver && playerList[firstDriver.id]) {
+    playerList[firstDriver.id].isFirstDriver = true;
+  }
 }
 
 export async function handleLoginCommand(
@@ -67,23 +123,15 @@ export async function handleLoginCommand(
 
     const loggedUser = data.user;
     const player = playerList[byPlayer.id];
-    const hasLoggedTeammate = loggedUser.teamId
-      ? room.getPlayerList().some((roomPlayer) => {
-          if (roomPlayer.id === byPlayer.id) return false;
-
-          const roomPlayerState = playerList[roomPlayer.id];
-          return (
-            roomPlayerState?.isLogged === true &&
-            roomPlayerState.leagueScuderia === loggedUser.teamId
-          );
-        })
-      : false;
+    const previousTeamId = player.leagueScuderia;
 
     player.isLogged = true;
     player.shortName = loggedUser.shortUsername ?? player.shortName;
     player.driverNumber = loggedUser.driverNumber ?? player.driverNumber;
     player.leagueScuderia = loggedUser.teamId;
-    player.isFirstDriver = Boolean(loggedUser.teamId) && !hasLoggedTeammate;
+    player.driverCategory = loggedUser.driverCategory ?? null;
+    player.loggedUsername = loggedUser.username ?? byPlayer.name;
+    player.isFirstDriver = false;
 
     if (
       loggedUser.teamId &&
@@ -99,6 +147,11 @@ export async function handleLoginCommand(
         weatherLevel: parseFacilityLevel(loggedUser.weatherLevel),
       });
     }
+
+    if (previousTeamId && previousTeamId !== loggedUser.teamId) {
+      rebalanceFirstDriverForTeam(room, previousTeamId);
+    }
+    rebalanceFirstDriverForTeam(room, loggedUser.teamId);
 
     sendSuccessMessage(room, MESSAGES.LOGIN_SUCCESS(), byPlayer.id);
   } catch {

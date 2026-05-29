@@ -13,7 +13,11 @@ export interface PitWallRoomOpenedPayload {
   public: boolean;
 }
 
+let lastRoomOpenedPayload: PitWallRoomOpenedPayload | null = null;
+let lastMapName: string | null = null;
+
 export function emitPitWallRoomOpened(payload: PitWallRoomOpenedPayload) {
+  lastRoomOpenedPayload = payload;
   const socket = getBackendSocket();
 
   if (!socket?.emit) return;
@@ -25,6 +29,7 @@ export function emitPitWallRoomOpened(payload: PitWallRoomOpenedPayload) {
 }
 
 export function emitPitWallMapChange(mapName: string) {
+  lastMapName = mapName;
   const socket = getBackendSocket();
 
   if (!socket?.emit) return;
@@ -33,6 +38,26 @@ export function emitPitWallMapChange(mapName: string) {
     mapName,
     timestamp: Date.now(),
   });
+}
+
+export function flushPitWallRoomSnapshot() {
+  const socket = getBackendSocket();
+
+  if (!socket?.emit) return;
+
+  if (lastRoomOpenedPayload) {
+    socket.emit("room:opened", {
+      ...lastRoomOpenedPayload,
+      timestamp: Date.now(),
+    });
+  }
+
+  if (lastMapName) {
+    socket.emit("room:mapChanged", {
+      mapName: lastMapName,
+      timestamp: Date.now(),
+    });
+  }
 }
 
 export function emitPitWallGameStateChange(gameState: PitWallGameState) {

@@ -22,6 +22,33 @@ import {
   tyresActivated,
 } from "./tires";
 import { constants } from "../speed/constants";
+import { currentWeather } from "../weather/currentWeather";
+
+const DRY_TRACK_WET_TYRE_WEAR_MULTIPLIER = 2;
+
+function getPlayerSectorWeather(playerId: number) {
+  const sector = playerList[playerId]?.currentSector || 1;
+
+  switch (sector) {
+    case 1:
+      return { rain: currentWeather.rainS1, wet: currentWeather.wetS1 };
+    case 2:
+      return { rain: currentWeather.rainS2, wet: currentWeather.wetS2 };
+    case 3:
+      return { rain: currentWeather.rainS3, wet: currentWeather.wetS3 };
+    default:
+      return { rain: currentWeather.rainGlobal, wet: currentWeather.wetAvg };
+  }
+}
+
+function getWeatherTireWearMultiplier(playerId: number, tires: Tires) {
+  if (tires !== Tires.INTER && tires !== Tires.WET) return 1;
+
+  const weather = getPlayerSectorWeather(playerId);
+  if (weather.rain > 0 || weather.wet > 0) return 1;
+
+  return DRY_TRACK_WET_TYRE_WEAR_MULTIPLIER;
+}
 
 export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
   const p = playerList[player.id];
@@ -61,6 +88,7 @@ export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
   if (p.isManagingTyres) {
     wearReductionFactor *= constants.MANAGE_TYRES_WEAR_REDUCTION;
   }
+  wearReductionFactor *= getWeatherTireWearMultiplier(player.id, p.tires as Tires);
   
   const wearIncrementPerSecond =
     (100 / currentTireDurability) * wearReductionFactor;

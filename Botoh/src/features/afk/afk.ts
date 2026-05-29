@@ -35,6 +35,14 @@ let safetyCarActivatedForAfkLeave = false;
 const MIN_SPEED_FOR_ACTIVITY = 20;
 const MIN_SPEED_FOR_ACTIVITY_FOR_COME_BACK = 5;
 
+function isAfkSafetyLogicAllowed(): boolean {
+  return (
+    gameMode !== GameMode.WAITING &&
+    gameMode !== GameMode.TRAINING &&
+    generalGameMode !== GeneralGameMode.GENERAL_QUALY
+  );
+}
+
 function getCurrentGameTime(room: RoomObject): number {
   return room.getScores()?.time || 0;
 }
@@ -94,6 +102,11 @@ export function isPlayerMovingAtComeBackSpeed(playerId: number, room: RoomObject
 }
 
 export function updatePlayerActivity(player: PlayerObject, room?: RoomObject) {
+  if (!isAfkSafetyLogicAllowed()) {
+    delete playerActivities[player.id];
+    return;
+  }
+
   const playerId = player.id;
   const currentTime = room ? getCurrentGameTime(room) : 0;
   
@@ -156,6 +169,11 @@ export function resetAllAfkCounters(room: RoomObject) {
 
 export function handlePlayerLeave(player: PlayerObject, room: RoomObject) {
   const playerId = player.id;
+
+  if (!isAfkSafetyLogicAllowed()) {
+    delete playerActivities[playerId];
+    return;
+  }
   
   if (!isRealSafetyEnabled()) {
     delete playerActivities[playerId];
@@ -228,9 +246,7 @@ export function afkKick(room: RoomObject) {
     !room.getScores() ||
     room.getScores().time <= 0 ||
     gameState !== "running" ||
-    gameMode === GameMode.WAITING ||
-    gameMode === GameMode.TRAINING ||
-    generalGameMode === GeneralGameMode.GENERAL_QUALY
+    !isAfkSafetyLogicAllowed()
   ) {
     return;
   }

@@ -21,6 +21,7 @@ import { sendQualiResultsToDiscord } from "../discord/logResults";
 import { getPlayerByRacePosition } from "../playerFeatures/getPlayerBy";
 import { sendDiscordGeneralChatQualy } from "../discord/discord";
 import { rejoinManager } from "../changePlayerState/rejoinManager";
+import { rebalanceFirstDriverForTeam } from "../commands/login/handleLoginCommand";
 
 export function PlayerLeave(room: RoomObject) {
   room.onPlayerLeave = function (player) {
@@ -29,6 +30,7 @@ export function PlayerLeave(room: RoomObject) {
     handlePlayerLeave(player, room);
 
     const playerObj = playerList[player.id];
+    const playerTeamId = playerObj?.leagueScuderia;
     const firstPlacePlayer = getPlayerByRacePosition("first", room);
     const firstPlacePlayerLap = firstPlacePlayer
       ? playerList[firstPlacePlayer.id].currentLap
@@ -98,5 +100,7 @@ export function PlayerLeave(room: RoomObject) {
         room.stopGame();
       }
     }
+
+    rebalanceFirstDriverForTeam(room, playerTeamId);
   };
 }

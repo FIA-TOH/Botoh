@@ -30,6 +30,7 @@ export interface Driver {
   bestTime: string | null;
   bestSectorTimes: [string | null, string | null, string | null];
   tires: Tires;
+  nextPitTires: Tires | null;
   wear: number;
   lapsOnCurrentTire: number;
   inPitLane: boolean;

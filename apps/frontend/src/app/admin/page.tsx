@@ -1548,9 +1548,9 @@ export default function AdminPage() {
                           <p className="font-semibold">{driver.displayName}</p>
                           <p className="text-sm text-gray-300">
                             {driver.category === 'starter' ? t.garage.starter : t.garage.reserve}
-                            {' Â· '}
+                            {' · '}
                             {t.garage.contractEndsIn}: {driver.contractEndsAfterRaces} {t.garage.races}
-                            {' Â· '}
+                            {' · '}
                             {t.garage.salary}: {driver.salaryPerRace}
                           </p>
                         </div>

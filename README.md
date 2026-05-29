@@ -499,7 +499,7 @@ Nao use a raiz do monorepo como projeto unico na Vercel, porque a raiz roda `npm
 #### Weather System Commands
 - `!rain [on/off/CHANCE]` - Start rain, stop rain, or set rain probability
 - `!set_weather_id [ID]` - Set specific weather type to be used
-- ex: !set_weather_id rain_1779330499083_1n05hujdx
+- ex: !set_weather_id rain_1780009774120_r62meco04
 
 #### Team & Scuderia Commands
 - `!team [NAME]` - Set a team for yourself

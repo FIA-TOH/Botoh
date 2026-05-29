@@ -58,6 +58,19 @@ export function startWeatherMonitoring(weatherId: string, room?: RoomObject) {
   }
 }
 
+export function setCurrentWeatherToInitialData() {
+  if (!weatherData) return;
+
+  currentWeather.rainGlobal = weatherData.rain_global?.[0] || 0;
+  currentWeather.rainS1 = weatherData.rain_s1?.[0] || 0;
+  currentWeather.rainS2 = weatherData.rain_s2?.[0] || 0;
+  currentWeather.rainS3 = weatherData.rain_s3?.[0] || 0;
+  currentWeather.wetS1 = weatherData.wet_s1?.[0] || 0;
+  currentWeather.wetS2 = weatherData.wet_s2?.[0] || 0;
+  currentWeather.wetS3 = weatherData.wet_s3?.[0] || 0;
+  currentWeather.wetAvg = weatherData.wet_avg?.[0] || 0;
+}
+
 export function checkWeatherUpdate(room: RoomObject) {
   if (!weatherData) return;
 

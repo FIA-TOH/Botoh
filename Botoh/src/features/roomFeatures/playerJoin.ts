@@ -30,6 +30,7 @@ import { checkRunningPlayers } from "../changeGameState/publicGameFlow/startStop
 import { sendDiscordGeneralChatQualy } from "../discord/discord";
 import { PLAYER_LIMIT } from "../commands/adminThings/handleLimitPlayerQuantity";
 import { rejoinManager } from "../changePlayerState/rejoinManager";
+import { clearLoginStateIfUsernameChanged, rebalanceFirstDriverForTeam } from "../commands/login/handleLoginCommand";
 
 const HARD_QUALY_PASSWORD = "hardqualy";
 
@@ -150,6 +151,12 @@ export function PlayerJoin(room: RoomObject) {
     if (playerList[player.id] === undefined) {
       playerList[player.id] = createPlayerInfo(ip, player.id);
       playerList[player.id].pubAvatar = getRandomCarEmoji();
+    }
+
+    const existingTeamId = playerList[player.id]?.leagueScuderia;
+    clearLoginStateIfUsernameChanged(player);
+    if (existingTeamId) {
+      rebalanceFirstDriverForTeam(room, existingTeamId);
     }
 
     playerList[player.id].shortName = getPlayerShortName(player.name);

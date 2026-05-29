@@ -10,6 +10,7 @@ import { ifInBoxZone } from "../../tires&pits/pitLane";
 import { Tires, tyresActivated } from "../../tires&pits/tires";
 import { isPitNewSystemEnabled, startNewPitSequence } from "../../tires&pits/newPitSystem/newPitManager";
 import { isPlayerRepairing } from "../../damage/repairSystem";
+import { playerList } from "../../changePlayerState/playerList";
 
 export function handleTiresCommand(
   byPlayer: PlayerObject,
@@ -42,25 +43,37 @@ export function handleTiresCommand(
       sendErrorMessage(room, MESSAGES.NOT_IN_BOXES(), byPlayer.id);
       return;
     }
+    const playerInfo = playerList[byPlayer.id];
+    let tiresKey: Tires | undefined = undefined;
+
     if (args.length === 0) {
-      sendErrorMessage(room, MESSAGES.INVALID_TIRES(), byPlayer.id);
-      return;
-    }
+      tiresKey = playerInfo?.nextPitTires ?? undefined;
 
-    const tiresStr = args[0].toUpperCase();
-    if (
-      gameMode !== GameMode.TRAINING &&
-      (tiresStr === "TRAIN" || tiresStr === "T")
-    ) {
-      sendErrorMessage(room, MESSAGES.INVALID_TIRES(), byPlayer.id);
-      return;
-    }
+      if (!tiresKey) {
+        sendErrorMessage(room, MESSAGES.NO_PREPARED_PIT_TYRE(), byPlayer.id);
+        return;
+      }
+    } else {
+      const tiresStr = args[0].toUpperCase();
+      if (
+        gameMode !== GameMode.TRAINING &&
+        (tiresStr === "TRAIN" || tiresStr === "T")
+      ) {
+        sendErrorMessage(room, MESSAGES.INVALID_TIRES(), byPlayer.id);
+        return;
+      }
 
-    const tiresKey = Object.keys(Tires).find(
-      (key) => key === tiresStr || key[0] === tiresStr
-    ) as Tires | undefined;
+      tiresKey = Object.keys(Tires).find(
+        (key) => key === tiresStr || key[0] === tiresStr
+      ) as Tires | undefined;
+    }
 
     if (!tiresKey) {
+      sendErrorMessage(room, MESSAGES.INVALID_TIRES(), byPlayer.id);
+      return;
+    }
+
+    if (gameMode !== GameMode.TRAINING && tiresKey === Tires.TRAIN) {
       sendErrorMessage(room, MESSAGES.INVALID_TIRES(), byPlayer.id);
       return;
     }

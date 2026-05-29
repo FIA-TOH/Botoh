@@ -177,6 +177,32 @@ export function sendAlertMessage(
   );
 }
 
+export function sendRadioMessage(
+  room: RoomObject,
+  message: LocalizedMessageFunction | string,
+  toPlayerID?: number,
+) {
+  if (typeof message === "string") {
+    room.sendAnnouncement(
+      message,
+      toPlayerID,
+      COLORS.ORANGE,
+      FONTS.ITALIC,
+      SOUNDS.NOTIFICATION,
+    );
+    return;
+  }
+
+  sendMessage(
+    room,
+    message,
+    toPlayerID,
+    COLORS.ORANGE,
+    FONTS.ITALIC,
+    SOUNDS.NOTIFICATION,
+  );
+}
+
 export function sendSuccessMessage(
   room: RoomObject,
   message: LocalizedMessageFunction,
