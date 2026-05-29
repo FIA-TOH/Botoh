@@ -63,10 +63,7 @@ function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
 
   if (players.length > 1) {
     if (room.getScores()) {
-      if (
-        gameState === "running" &&
-        generalGameMode === GeneralGameMode.GENERAL_RACE
-      ) {
+      if (generalGameMode === GeneralGameMode.GENERAL_RACE) {
         room.setPlayerTeam(player.id, Teams.SPECTATORS);
 
         if (wasRunning) {

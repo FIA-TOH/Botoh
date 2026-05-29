@@ -159,6 +159,7 @@
   "DSQ_MINIMUM_PITS": "❌ Desclassificado! Você não cumpriu o número mínimo de pitstops.",
   "YOU_CAN_LEAVE_THE_BOX": "✅ Agora você pode sair do box!",
   "YOU_WERENT_RACING_BEFORE": "❌ Você não estava correndo antes de sair.",
+  "ALREADY_RACING": "❌ Você já está correndo.",
   "THE_JOIN_TIME_IS_OVER": "❌ O tempo para rejoin expirou.",
   "CAME_BACK_RACE_ONE": "🏁 Você voltou para a corrida!",
   "TYPE_REJOIN": "⚠️ Você saiu durante a corrida. Digite !rejoin para voltar a correr.",

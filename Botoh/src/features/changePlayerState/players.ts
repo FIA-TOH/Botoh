@@ -145,6 +145,10 @@ export function createPlayerInfo(ip?: string, playerId?: number) {
     isManagingTyres: false,
     isTyreBlowed: false,
     blowoutTickCounter: 0,
+    blowoutRisk: 0,
+    blowoutRiskLimit: 1,
+    blowoutWarningRiskRatio: 0.65,
+    lastBlowoutRiskTime: 0,
     pubAvatar: "🏎️",
 
     curveResistanceTicks: undefined,
@@ -311,6 +315,10 @@ export function resetPlayer(
   playerList[id].isManagingTyres = false;
   playerList[id].isTyreBlowed = false;
   playerList[id].blowoutTickCounter = 0;
+  playerList[id].blowoutRisk = 0;
+  playerList[id].blowoutRiskLimit = 1;
+  playerList[id].blowoutWarningRiskRatio = 0.65;
+  playerList[id].lastBlowoutRiskTime = 0;
   
   playerList[id].curveResistanceTicks = undefined;
   playerList[id].directionChangerEndTime = undefined;

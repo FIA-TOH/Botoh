@@ -1788,6 +1788,13 @@ export const MESSAGES = {
     tr: replaceTemplateString(tr_messages.YOU_WERENT_RACING_BEFORE, {}),
     pt: replaceTemplateString(pt_messages.YOU_WERENT_RACING_BEFORE, {}),
   }),
+  ALREADY_RACING: (): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.ALREADY_RACING, {}),
+    es: replaceTemplateString(es_messages.ALREADY_RACING, {}),
+    fr: replaceTemplateString(fr_messages.ALREADY_RACING, {}),
+    tr: replaceTemplateString(tr_messages.ALREADY_RACING, {}),
+    pt: replaceTemplateString(pt_messages.ALREADY_RACING, {}),
+  }),
   THE_JOIN_TIME_IS_OVER: (): LocalizedMessageFunction => ({
     en: replaceTemplateString(en_messages.THE_JOIN_TIME_IS_OVER, {}),
     es: replaceTemplateString(es_messages.THE_JOIN_TIME_IS_OVER, {}),

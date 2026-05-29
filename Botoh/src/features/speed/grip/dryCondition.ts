@@ -49,15 +49,15 @@ const RAIN_GRIP_VALUES = {
   DRY_TYRE_LOSS_PER_10_PERCENT_AFTER_20: 0.0015,
 } as const;
 
-function calculateDynamicGripForRain(
+function calculateDynamicGripForCondition(
   baseGrip: number,
-  rainPercent: number,
-  maxRainPercent: number,
+  conditionPercent: number,
+  maxConditionPercent: number,
   maxGrip: number
 ): number {
-  if (rainPercent <= 0) return baseGrip;
-  if (rainPercent >= maxRainPercent) return maxGrip;
-  const ratio = rainPercent / maxRainPercent;
+  if (conditionPercent <= 0) return baseGrip;
+  if (conditionPercent >= maxConditionPercent) return maxGrip;
+  const ratio = conditionPercent / maxConditionPercent;
   return baseGrip + (maxGrip - baseGrip) * ratio;
 }
 
@@ -91,7 +91,7 @@ function calculateInterGripForWet(wetPercent: number): number {
   
   if (wetPercent <= RAIN_GRIP_VALUES.INTER_MAX_INCREASE_PERCENT) {
     return increaseGripPenalty(
-      calculateDynamicGripForRain(
+      calculateDynamicGripForCondition(
         GRIP_BASE_VALUES.INTER_BASE_DRY,
         wetPercent,
         RAIN_GRIP_VALUES.INTER_MAX_INCREASE_PERCENT,
@@ -103,7 +103,7 @@ function calculateInterGripForWet(wetPercent: number): number {
     return 1.0;
   } else {
     return increaseGripPenalty(
-      calculateDynamicGripForRain(
+      calculateDynamicGripForCondition(
         1.0,
         wetPercent - RAIN_GRIP_VALUES.INTER_DECREASE_START_PERCENT,
         100 - RAIN_GRIP_VALUES.INTER_DECREASE_START_PERCENT,
@@ -123,7 +123,7 @@ function calculateWetGripForWet(wetPercent: number): number {
   }
   if (wetPercent >= RAIN_GRIP_VALUES.WET_MAX_INCREASE_PERCENT) return 1.0;
   return increaseGripPenalty(
-    calculateDynamicGripForRain(
+    calculateDynamicGripForCondition(
       GRIP_BASE_VALUES.WET_BASE_DRY,
       wetPercent,
       RAIN_GRIP_VALUES.WET_MAX_INCREASE_PERCENT,

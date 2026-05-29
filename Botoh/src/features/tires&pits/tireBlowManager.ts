@@ -13,6 +13,14 @@ import { raceTyresInQualyEnabled, tyresActivated } from "./tires";
 
 export let blowoutTyresActivated = true;
 
+const MANAGE_TYRES_STINT_BLOWOUT_CHANCE = 0.10;
+const BLOWOUT_RISK_START_WEAR = 45;
+const BLOWOUT_RISK_MIN_PER_SECOND = 0.001;
+const BLOWOUT_RISK_MAX_PER_SECOND = 0.25;
+const BLOWOUT_RISK_EXPONENT = 2.5;
+const BLOWOUT_WARNING_MIN_RISK_RATIO = 0.20;
+const BLOWOUT_WARNING_MAX_RISK_RATIO = 0.80;
+
 export function setBlowoutTyresActivated(boolean: boolean) {
   blowoutTyresActivated = boolean;
 }
@@ -86,33 +94,20 @@ export function decideBlowoutPoint(player: PlayerObject) {
     p.tireBlowWarning = false;
     p.isTyreBlowed = false;
   } else {
-    const willBlow = Math.random() <= 0.1;
+    const willBlow = Math.random() <= MANAGE_TYRES_STINT_BLOWOUT_CHANCE;
+    p.blowoutRisk = 0;
+    p.blowoutRiskLimit = randomBetween(0.9, 1.15);
+    p.blowoutWarningRiskRatio = randomBetween(
+      BLOWOUT_WARNING_MIN_RISK_RATIO,
+      BLOWOUT_WARNING_MAX_RISK_RATIO
+    );
+    p.lastBlowoutRiskTime = 0;
+    p.blowoutTickCounter = 0;
     
     if (willBlow) {
-      p.blowoutTickCounter = 0;
       p.blowAtWear = -1;
-
-      let warningOffset = 0;
-      let warningIsFalse = false;
-      
-      if (Math.random() <= 0.95) {
-        warningOffset = randomBetween(2, 15);
-        warningIsFalse = false;
-      } else {
-        warningOffset = randomBetween(2, 15);
-        warningIsFalse = true;
-      }
-      
-      if (warningOffset > 0) {
-        p.warningAtWear = warningIsFalse
-          ? randomBetween(50, 90) 
-          : Math.max(0, 100 - warningOffset);
-        p.warningIsFalse = warningIsFalse;
-      } else {
-        p.warningAtWear = null;
-        p.warningIsFalse = false;
-      }
-      
+      p.warningAtWear = null;
+      p.warningIsFalse = false;
       p.tireBlowWarning = false;
     } else {
       p.blowAtWear = 9999;
@@ -134,6 +129,10 @@ export function resetBlowoutChance(playerId: number) {
   p.warningIsFalse = false;
   p.tireBlowWarning = false;
   p.blowoutTickCounter = 0;
+  p.blowoutRisk = 0;
+  p.blowoutRiskLimit = 1;
+  p.blowoutWarningRiskRatio = 0.65;
+  p.lastBlowoutRiskTime = 0;
 }
 
 export function checkTireStatus(player: PlayerObject, room: RoomObject) {
@@ -167,38 +166,73 @@ export function checkTireStatus(player: PlayerObject, room: RoomObject) {
     }
   } else {
     if (p.blowAtWear === -1 && !p.isTyreBlowed) {
-      if (p.warningAtWear && p.wear >= p.warningAtWear && !p.tireBlowWarning) {
-        handleAvatar(Situacions.BlowoutWarning, player, room);
-        sendAlertMessage(room, MESSAGES.TYRES_ABOUT_TO_PUNCTURE(), player.id);
-        p.tireBlowWarning = true;
-      }
-
-      if (!p.isManagingTyres) {
-        p.blowoutTickCounter++;
-        
-        const blowChance = getBlowChanceByWear(p.wear);
-        
-        if (Math.random() <= blowChance) {
-          sendAlertMessage(room, MESSAGES.PUNCTURED_TYRE(), player.id);
-          sendChatMessage(room, MESSAGES.TYRE_PUNCTURE(player.name));
-          p.isTyreBlowed = true;
-          p.isManagingTyres = true;
-        }
-      }
+      const currentTime = room.getScores()?.time ?? 0;
+      updateManagedTyreBlowoutRisk(player, room, currentTime);
     }
   }
 }
 
-function getBlowChanceByWear(wear: number): number {
-  if (wear <= 35) return 0;
-  if (wear <= 40) return 0.05;
-  if (wear <= 50) return 0.10;
-  if (wear <= 60) return 0.20;
-  if (wear <= 70) return 0.25;
-  if (wear <= 80) return 0.20;
-  if (wear <= 90) return 0.10;
-  if (wear <= 99) return 0.05;
-  return 0;
+function updateManagedTyreBlowoutRisk(
+  player: PlayerObject,
+  room: RoomObject,
+  currentTime: number
+) {
+  const p = playerList[player.id];
+  if (!p) return;
+
+  if (!p.lastBlowoutRiskTime) {
+    p.lastBlowoutRiskTime = currentTime;
+    return;
+  }
+
+  const elapsedSeconds = Math.max(0, currentTime - p.lastBlowoutRiskTime);
+  p.lastBlowoutRiskTime = currentTime;
+
+  if (p.isManagingTyres || elapsedSeconds <= 0) {
+    return;
+  }
+
+  const riskGain = getManagedTyreBlowoutRiskGainPerSecond(p.wear);
+  if (riskGain <= 0) {
+    return;
+  }
+
+  p.blowoutTickCounter++;
+  p.blowoutRisk += riskGain * elapsedSeconds;
+
+  const riskLimit = p.blowoutRiskLimit || 1;
+  const warningRiskRatio = p.blowoutWarningRiskRatio || 0.65;
+  if (
+    p.blowoutRisk >= riskLimit * warningRiskRatio &&
+    !p.tireBlowWarning
+  ) {
+    handleAvatar(Situacions.BlowoutWarning, player, room);
+    sendAlertMessage(room, MESSAGES.TYRES_ABOUT_TO_PUNCTURE(), player.id);
+    p.tireBlowWarning = true;
+  }
+
+  if (p.blowoutRisk >= riskLimit && !p.isTyreBlowed) {
+    sendAlertMessage(room, MESSAGES.PUNCTURED_TYRE(), player.id);
+    sendChatMessage(room, MESSAGES.TYRE_PUNCTURE(player.name));
+    p.isTyreBlowed = true;
+    p.isManagingTyres = true;
+  }
+}
+
+function getManagedTyreBlowoutRiskGainPerSecond(wear: number): number {
+  if (wear <= BLOWOUT_RISK_START_WEAR) return 0;
+
+  const normalizedWear = Math.min(
+    1,
+    (wear - BLOWOUT_RISK_START_WEAR) / (100 - BLOWOUT_RISK_START_WEAR)
+  );
+  const exponentialRisk = normalizedWear ** BLOWOUT_RISK_EXPONENT;
+
+  return (
+    BLOWOUT_RISK_MIN_PER_SECOND +
+    (BLOWOUT_RISK_MAX_PER_SECOND - BLOWOUT_RISK_MIN_PER_SECOND) *
+      exponentialRisk
+  );
 }
 
 function randomBetween(min: number, max: number) {

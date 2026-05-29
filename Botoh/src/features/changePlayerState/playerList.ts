@@ -151,6 +151,10 @@ export interface PlayerInfo {
   isTyreBlowed: boolean;
   
   blowoutTickCounter: number;
+  blowoutRisk: number;
+  blowoutRiskLimit: number;
+  blowoutWarningRiskRatio: number;
+  lastBlowoutRiskTime: number;
   
   pubAvatar: string;
 

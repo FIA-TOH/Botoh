@@ -159,6 +159,7 @@
   "DSQ_MINIMUM_PITS": "❌ ¡Descalificado! No cumpliste con el número mínimo de paradas en boxes.",
   "YOU_CAN_LEAVE_THE_BOX": "✅ ¡Ahora puedes salir del box!",
   "YOU_WERENT_RACING_BEFORE": "❌ No estabas corriendo antes de salir.",
+  "ALREADY_RACING": "❌ Ya estás corriendo.",
   "THE_JOIN_TIME_IS_OVER": "❌ El tiempo para volver a unirse ha expirado.",
   "CAME_BACK_RACE_ONE": "🏁 ¡Has vuelto a la carrera!",
   "TYPE_REJOIN": "⚠️ Saliste durante la carrera. Escribe !rejoin para volver a correr.",

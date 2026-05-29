@@ -7,8 +7,8 @@ export const DRIFT_CONFIG = {
     WETNESS_MAX: 50,
   },
   
-  RAIN_THRESHOLDS: {
-    DRY_TIRE: 30,
+  WET_TRACK_THRESHOLDS: {
+    DRY_TIRE: 90,
     INTER_TIRE: 75,
     WET_TIRE: 90,
   },
@@ -17,7 +17,7 @@ export const DRIFT_CONFIG = {
   
   DIRECTION_CHANGER_DURATION: 2,
   
-  EXPONENTIAL_FACTORS: {
+  WET_TRACK_EXPONENTIAL_FACTORS: {
     DRY_TIRE: 0.15,
     INTER_TIRE: 0.05,
     WET_TIRE: 0.008,
@@ -33,6 +33,6 @@ export enum TireType {
 export const DEFAULT_VALUES = {
   BASE_DRIFT: 0,
   WETNESS_BONUS_MAX: 50,
-  RAIN_BONUS_MAX: 50,
+  WET_TRACK_BONUS_MAX: 50,
   MAX_TOTAL_DRIFT: 100,
 };

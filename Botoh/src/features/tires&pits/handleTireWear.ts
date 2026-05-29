@@ -31,21 +31,21 @@ function getPlayerSectorWeather(playerId: number) {
 
   switch (sector) {
     case 1:
-      return { rain: currentWeather.rainS1, wet: currentWeather.wetS1 };
+      return currentWeather.wetS1;
     case 2:
-      return { rain: currentWeather.rainS2, wet: currentWeather.wetS2 };
+      return currentWeather.wetS2;
     case 3:
-      return { rain: currentWeather.rainS3, wet: currentWeather.wetS3 };
+      return currentWeather.wetS3;
     default:
-      return { rain: currentWeather.rainGlobal, wet: currentWeather.wetAvg };
+      return currentWeather.wetAvg;
   }
 }
 
 function getWeatherTireWearMultiplier(playerId: number, tires: Tires) {
   if (tires !== Tires.INTER && tires !== Tires.WET) return 1;
 
-  const weather = getPlayerSectorWeather(playerId);
-  if (weather.rain > 0 || weather.wet > 0) return 1;
+  const sectorWet = getPlayerSectorWeather(playerId);
+  if (sectorWet > 0) return 1;
 
   return DRY_TRACK_WET_TYRE_WEAR_MULTIPLIER;
 }

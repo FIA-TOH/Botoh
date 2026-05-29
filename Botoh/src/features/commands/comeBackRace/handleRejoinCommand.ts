@@ -28,6 +28,11 @@ export function handleRejoinCommand(
     return;
   }
 
+  if (byPlayer.team === Teams.RUNNERS) {
+    sendErrorMessage(room, MESSAGES.ALREADY_RACING(), byPlayer.id);
+    return;
+  }
+
   const playerAuth = idToAuth[byPlayer.id] || byPlayer.auth;
 
   const rejoinData = rejoinManager.getPlayerData(playerAuth);

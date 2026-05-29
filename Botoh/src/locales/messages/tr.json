@@ -159,6 +159,7 @@
   "DSQ_MINIMUM_PITS": "❌ Diskalifiye! Minimum pit stop sayısını karşılamadın.",
   "YOU_CAN_LEAVE_THE_BOX": "✅ Artık pit alanından çıkabilirsiniz!",
   "YOU_WERENT_RACING_BEFORE": "❌ Ayrılmadan önce yarışmıyordunuz.",
+  "ALREADY_RACING": "❌ Zaten yarışıyorsunuz.",
   "THE_JOIN_TIME_IS_OVER": "❌ Yeniden katılma süresi doldu.",
   "CAME_BACK_RACE_ONE": "🏁 Yarışa geri döndünüz!",
   "TYPE_REJOIN": "⚠️ Yarış sırasında ayrıldınız. Yarışa geri dönmek için !rejoin yazın.",
