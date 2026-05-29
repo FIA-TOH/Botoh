@@ -181,6 +181,10 @@ export function PlayersPanel({
 
   const getGapText = (driver: Driver) => {
 
+    if (raceSession?.sessionType === 'race' && driver.isFinished) {
+      return '🏁';
+    }
+
     if (raceSession?.sessionType === 'race' && driver.isOut) {
       return 'OUT';
     }
@@ -194,7 +198,7 @@ export function PlayersPanel({
 
       return driver.position === 1
         ? t.players.gap
-        : driver.gapToLeader;
+        : driver.gapToNext;
     }
 
     if (
@@ -490,6 +494,7 @@ export function PlayersPanel({
                   <PlayerRow
                     driver={driver}
                     isOut={raceSession?.sessionType === 'race' && driver.isOut}
+                    isFinished={raceSession?.sessionType === 'race' && driver.isFinished}
                     gapText={getGapText(
                       driver
                     )}

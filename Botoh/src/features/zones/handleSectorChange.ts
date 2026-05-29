@@ -108,14 +108,14 @@ export function checkPlayerSector(
       );
       playerList[p.id].sectorTimeCounter = 0;
 
-      updatePositionList(players, room);
+      updatePositionList(players, room, p.id);
 
       if (
         generalGameMode !== GeneralGameMode.GENERAL_RACE &&
         playerList[p.id].currentLap > 0
       ) {
         const result = evaluateSector(3, playerList[p.id].sectorTime[2], p.id);
-        room.sendAnnouncement(result.text, p.id, result.color);
+        if (result.text) room.sendAnnouncement(result.text, p.id, result.color);
       }
     } else if (ifInSectorTwoChangeZone(pad, room)) {
       playerList[p.id].totalTime = room.getScores().time;
@@ -132,11 +132,11 @@ export function checkPlayerSector(
         playerList[p.id].currentLap > 0
       ) {
         const result = evaluateSector(1, playerList[p.id].sectorTime[0], p.id);
-        room.sendAnnouncement(result.text, p.id, result.color);
+        if (result.text) room.sendAnnouncement(result.text, p.id, result.color);
       }
 
       playerList[p.id].sectorTimeCounter = 0;
-      updatePositionList(players, room);
+      updatePositionList(players, room, p.id);
       checkBlueFlag(p, room);
     } else if (ifInSectorThreeChangeZone(pad, room)) {
       playerList[p.id].totalTime = room.getScores().time;
@@ -153,11 +153,11 @@ export function checkPlayerSector(
         playerList[p.id].currentLap > 0
       ) {
         const result = evaluateSector(2, playerList[p.id].sectorTime[1], p.id);
-        room.sendAnnouncement(result.text, p.id, result.color);
+        if (result.text) room.sendAnnouncement(result.text, p.id, result.color);
       }
 
       playerList[p.id].sectorTimeCounter = 0;
-      updatePositionList(players, room);
+      updatePositionList(players, room, p.id);
       checkBlueFlag(p, room);
     }
   });

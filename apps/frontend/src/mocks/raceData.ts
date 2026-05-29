@@ -54,6 +54,7 @@ export interface Driver {
   isFirstDriver?: boolean;
   scuderiaColor?: number | null;
   isOut?: boolean;
+  isFinished?: boolean;
 }
 
 export interface RaceSession {

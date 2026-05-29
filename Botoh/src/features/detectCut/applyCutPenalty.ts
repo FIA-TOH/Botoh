@@ -12,4 +12,5 @@ export function applyCutPenalty(
   playerInfo.cutPenaltyEndTime = penalty > 0 ? currentTime + penalty : undefined;
   playerInfo.cutPenaltyMultiplier = penalty > 0 ? constants.PENALTY_SPEED : 1;
   playerInfo.cuttedTrackOnThisLap = true;
+  playerInfo.lastLapValid = false;
 }

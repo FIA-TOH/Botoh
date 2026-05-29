@@ -203,6 +203,7 @@ export function detectCrashWallDetectors(
           );
 
           if (damage.damageTaken > 0) {
+            playerList[pad.p.id].lastLapValid = false;
             handleAvatar(Situacions.CrashDamage, pad.p, room);
           }
         }

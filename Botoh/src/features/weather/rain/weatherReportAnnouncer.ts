@@ -217,6 +217,15 @@ export function checkWeatherReportAnnouncements(currentTime: number, weatherId: 
     const report = weatherReportData.reports[i];
     
     if (report.time === currentTimeStr) {
+      if (
+        report.id === 'RAIN_STARTED' &&
+        lastWeatherAnnouncement?.id === 'RAIN_STARTED' &&
+        currentWeather.rainGlobal > 0
+      ) {
+        weatherReportData.lastReportIndex = i + 1;
+        break;
+      }
+
       const message = getWeatherMessage(report.id, report.meta);
       lastWeatherAnnouncement = {
         id: report.id,
@@ -236,6 +245,24 @@ export function checkWeatherReportAnnouncements(currentTime: number, weatherId: 
       weatherReportData.lastReportIndex = i + 1;
     }
   }
+}
+
+export function sendWeatherAnnouncementNow(
+  id: string,
+  room: any,
+  currentTime: number,
+  meta?: { rain?: number; wet?: number },
+): void {
+  const message = getWeatherMessage(id, meta);
+  lastWeatherAnnouncement = {
+    id,
+    message,
+    announcedAtGameTime: currentTime,
+    announcedAtTimestamp: Date.now(),
+  };
+
+  sendCyanMessage(room, message);
+  console.log(`[Weather] ${currentTime.toFixed(1)}s: ${message.pt || message.en}`);
 }
 
 export function resetWeatherReportAnnouncements(): void {

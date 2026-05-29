@@ -30,11 +30,20 @@ export function evaluateSector(
   const playerData = playerList[playerId];
   const playerBest = playerData.bestSectorTimes[sectorIndex - 1];
   const sessionBest = sessionBestSectors[sectorIndex];
+  const isCurrentLapValid =
+    playerData.lastLapValid !== false && !playerData.cuttedTrackOnThisLap;
 
   let color = COLORS.GREEN;
   let messageExtra = "";
   let emojiStart = "🟢";
   let emojiEnd = "🟢";
+
+  if (!isCurrentLapValid) {
+    return {
+      color: COLORS.RED,
+      text: "",
+    };
+  }
 
   // -------------------------
   // 1️⃣ Check Session Record
