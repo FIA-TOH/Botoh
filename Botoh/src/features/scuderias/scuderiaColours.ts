@@ -33,4 +33,6 @@ export enum ScuderiaColors {
   GENSKE = 0x6B1212,
   YAMAHA = 0xf9f9f9,
   FORMULA2 = 0X272EF5,
+  GT = 0x707070,
+  LMDH = 0x6CA1F5,
 }

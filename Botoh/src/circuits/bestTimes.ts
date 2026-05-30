@@ -66,6 +66,7 @@ const trackNameMapping: { [key: string]: string } = {
   sroda: "Sroda Track",
     le_mans: "Le Mans By Nanoseb Remake",
   river: "Circuito Antonio V. Liberti by New Era",
+  balaton_haxmaps: "Balaton Park Circuit by Liberty from HaxMaps",
 };
 
 export const bestTimes: { [key: string]: [number, string, string] } = {
@@ -156,6 +157,7 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   sroda: [999.99, "undefined", "Sroda Track"],
   le_mans: [999.99, "undefined", "Le Mans By Nanoseb Remake"],
   river: [999.99, "undefined", "Circuito Antonio V. Liberti by New Era"],
+  balaton_haxmaps: [999.99, "undefined", "Balaton Park Circuit by Liberty from HaxMaps"],
 };
 export const getAbbreviatedTrackName = (
   fullTrackName: string,
