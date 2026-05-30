@@ -97,7 +97,6 @@ const YAS_MARINA_NANO_INFO: CircuitInfo = {
   Angle: 90,
   Limit: 5,
   Votes: 0,
-  TireDegradationPercentage: 75,
   CutDetectSegments: [
     {
       v0: [-27, 894],
