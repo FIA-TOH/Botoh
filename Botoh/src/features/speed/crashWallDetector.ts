@@ -5,6 +5,7 @@ import { MESSAGES } from "../chat/messages";
 import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
 import { playerList } from "../changePlayerState/playerList";
 import { vectorSpeed } from "../utils";
+import { getRaceControlState, RaceControlState } from "../commands/flagsAndVSC/raceControl";
 
 type Point = [number, number];
 type Segment = [Point, Point];
@@ -17,6 +18,14 @@ export let damageEnabled = false;
 
 export function enableDamage(enable: boolean) {
   damageEnabled = enable;
+}
+
+function isDamageSuspendedByRaceControl() {
+  const raceControl = getRaceControlState();
+
+  return raceControl.flag === RaceControlState.YellowFlag
+    || raceControl.neutralization === RaceControlState.SafetyCar
+    || raceControl.neutralization === RaceControlState.VirtualSafetyCar;
 }
 
 function clampCurvature(curvatura: number): number {
@@ -171,6 +180,7 @@ export function detectCrashWallDetectors(
 
   const detectors = ACTUAL_CIRCUIT?.info?.CrashWallDetector;
   if (!detectors?.length) return;
+  const damageSuspended = isDamageSuspendedByRaceControl();
 
   for (const pad of playersAndDiscs) {
     if (!pad.disc) continue;
@@ -187,6 +197,15 @@ export function detectCrashWallDetectors(
     for (const detector of detectors) {
       const detectorTouchKey = getCacheKey(detector);
       const isTouching = isTouchingDetector(pad.disc, detector);
+
+      if (damageSuspended) {
+        if (isTouching) {
+          touchedSet.add(detectorTouchKey);
+        } else {
+          touchedSet.delete(detectorTouchKey);
+        }
+        continue;
+      }
 
       if (isTouching && !touchedSet.has(detectorTouchKey)) {
         const speed = Math.max(currentSpeed, previousSpeed);

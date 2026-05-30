@@ -428,6 +428,27 @@ export function translateDriverReleaseNotification(
   };
 }
 
+export function translateDriverContractWebhookWarningNotification(language: Language) {
+  if (language === 'en') {
+    return {
+      title: 'Contract signed, Discord notice failed',
+      message: 'Your contract was accepted, but the Discord webhook did not work. Please notify an administrator.',
+    };
+  }
+
+  if (language === 'es') {
+    return {
+      title: 'Contrato firmado, fallo el aviso de Discord',
+      message: 'Tu contrato fue aceptado, pero el webhook de Discord no funciono. Avisa a un administrador.',
+    };
+  }
+
+  return {
+    title: 'Contrato assinado, aviso do Discord falhou',
+    message: 'Seu contrato foi aceito, mas o webhook do Discord nao funcionou. Avise um administrador.',
+  };
+}
+
 export function translateValidationErrors<T extends { msg?: string }>(
   errors: T[],
   language: Language,

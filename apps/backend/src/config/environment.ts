@@ -34,6 +34,7 @@ interface EnvironmentConfig {
   logLevel: string;
   sentryDsn?: string | undefined;
   databaseUrl: string;
+  discordDriverContractWebhookUrl?: string | undefined;
 }
 
 const config: EnvironmentConfig = {
@@ -48,6 +49,7 @@ const config: EnvironmentConfig = {
   logLevel: process.env.LOG_LEVEL || 'info',
   sentryDsn: process.env.SENTRY_DSN || undefined,
   databaseUrl: process.env.DATABASE_URL || '',
+  discordDriverContractWebhookUrl: process.env.DISCORD_DRIVER_CONTRACT_WEBHOOK_URL || undefined,
 };
 
 // Validate required environment variables

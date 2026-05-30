@@ -1,7 +1,9 @@
 import { query, queryOne, insert, transaction } from '../config/database';
 import { AuthRequest } from '../middleware/auth';
+import config from '../config/environment';
 import notificationService from './notificationService';
 import {
+  translateDriverContractWebhookWarningNotification,
   translateDriverProposalNotification,
   translateDriverReleaseNotification,
 } from '../i18n';
@@ -458,7 +460,7 @@ class GarageService {
     proposalId: string,
     decision: 'accept' | 'decline',
   ) {
-    return transaction(async (client) => {
+    const result = await transaction(async (client) => {
       const proposalResult = await client.query(
         `SELECT
           p.id,
@@ -472,10 +474,13 @@ class GarageService {
           p.notification_id,
           t.name AS team_name,
           u.username,
-          u.driver_number
+          u.driver_number,
+          proposed_by.username AS proposed_by_username,
+          u.language
          FROM driver_contract_proposals p
          JOIN teams t ON t.id = p.team_id
          JOIN users u ON u.id = p.user_id
+         JOIN users proposed_by ON proposed_by.id = p.proposed_by_user_id
          WHERE p.id = $1
            AND p.user_id = $2
          FOR UPDATE`,
@@ -570,11 +575,50 @@ class GarageService {
       );
       await this.markProposalNotificationAnswered(client, proposal.notification_id, 'accepted');
 
-      return { success: true };
+      return {
+        success: true,
+        acceptedContract: {
+          teamName: proposal.team_name as string,
+          pilotName: proposal.username as string,
+          pilotUserId: userId,
+          pilotLanguage: proposal.language as 'pt' | 'en' | 'es',
+          proposedByName: proposal.proposed_by_username as string,
+          contractRaces: Number(proposal.contract_races),
+          salaryPerRace: Number(proposal.salary_per_race),
+          category: proposal.category as 'starter' | 'reserve',
+        },
+      };
     });
+
+    if (result.success && result.acceptedContract) {
+      const webhookSent = await this.sendDriverContractWebhook(result.acceptedContract).then(
+        () => true,
+      ).catch((error) => {
+        console.error('Failed to send driver contract webhook:', error);
+        return false;
+      });
+
+      if (!webhookSent) {
+        const warning = translateDriverContractWebhookWarningNotification(
+          result.acceptedContract.pilotLanguage,
+        );
+        await notificationService.create({
+          userId: result.acceptedContract.pilotUserId,
+          title: warning.title,
+          message: warning.message,
+          type: 'info',
+          metadata: {
+            action: 'driver_contract_webhook_failed',
+            teamName: result.acceptedContract.teamName,
+          },
+        });
+      }
+    }
+
+    return result;
   }
 
-  async releaseDriver(teamId: string, driverId: string) {
+  async releaseDriver(teamId: string, driverId: string, releasedByUserId: string) {
     const result = await transaction(async (client) => {
       const driverResult = await client.query(
         `SELECT
@@ -598,6 +642,13 @@ class GarageService {
       const driver = driverResult.rows[0];
       if (!driver) return { success: false, message: 'Driver contract not found' };
 
+      const releasedByResult = await client.query(
+        `SELECT username
+         FROM users
+         WHERE id = $1`,
+        [releasedByUserId],
+      );
+      const releasedByName = releasedByResult.rows[0]?.username ?? 'Unknown';
       const penalty = Number(driver.salary_per_race) * Number(driver.contract_ends_after_races) * 2;
       await client.query(
         `UPDATE team_drivers
@@ -627,6 +678,8 @@ class GarageService {
         success: true,
         releasedUserId: driver.user_id as string | null,
         teamName: driver.team_name as string,
+        driverName: driver.display_name as string,
+        releasedByName,
         language: (driver.language as 'pt' | 'en' | 'es' | null) ?? 'pt',
         penalty,
       };
@@ -649,6 +702,17 @@ class GarageService {
           teamName: result.teamName,
           penalty: result.penalty,
         },
+      });
+    }
+
+    if (result.success) {
+      await this.sendDriverReleaseWebhook({
+        teamName: result.teamName,
+        pilotName: result.driverName,
+        releasedByName: result.releasedByName,
+        penalty: result.penalty,
+      }).catch((error) => {
+        console.error('Failed to send driver release webhook:', error);
       });
     }
 
@@ -701,6 +765,95 @@ class GarageService {
 
       return { success: true, penalty };
     });
+  }
+
+  private async sendDriverContractWebhook(contract: {
+    teamName: string;
+    pilotName: string;
+    pilotUserId: string;
+    pilotLanguage: 'pt' | 'en' | 'es';
+    proposedByName: string;
+    contractRaces: number;
+    salaryPerRace: number;
+    category: 'starter' | 'reserve';
+  }) {
+    const webhookUrl = config.discordDriverContractWebhookUrl;
+    if (!webhookUrl) return;
+
+    const categoryLabel = contract.category === 'starter' ? 'Titular' : 'Reserva';
+    const response = await fetch(webhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username: 'FTOH Contract Office',
+        embeds: [
+          {
+            title: 'Contrato assinado',
+            description: 'Um novo contrato de piloto foi oficializado.',
+            color: 0xff232b,
+            fields: [
+              { name: 'Scuderia', value: contract.teamName, inline: true },
+              { name: 'Piloto', value: contract.pilotName, inline: true },
+              { name: 'Enviado por', value: contract.proposedByName, inline: true },
+              { name: 'Duração', value: `${contract.contractRaces} corridas`, inline: true },
+              { name: 'Salário por corrida', value: this.formatMoney(contract.salaryPerRace), inline: true },
+              { name: 'Categoria', value: categoryLabel, inline: true },
+            ],
+            footer: { text: 'FTOH • contrato aceito pelo piloto' },
+            timestamp: new Date().toISOString(),
+          },
+        ],
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Discord webhook failed with status ${response.status}`);
+    }
+  }
+
+  private async sendDriverReleaseWebhook(release: {
+    teamName: string;
+    pilotName: string;
+    releasedByName: string;
+    penalty: number;
+  }) {
+    const webhookUrl = config.discordDriverContractWebhookUrl;
+    if (!webhookUrl) return;
+
+    const response = await fetch(webhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username: 'FTOH Contract Office',
+        embeds: [
+          {
+            title: 'Contrato rescindido',
+            description: 'Um contrato de piloto foi encerrado pela scuderia.',
+            color: 0xf59e0b,
+            fields: [
+              { name: 'Scuderia', value: release.teamName, inline: true },
+              { name: 'Piloto', value: release.pilotName, inline: true },
+              { name: 'Rescindido por', value: release.releasedByName, inline: true },
+              { name: 'Custo da rescisão', value: this.formatMoney(release.penalty), inline: true },
+            ],
+            footer: { text: 'FTOH • contrato rescindido' },
+            timestamp: new Date().toISOString(),
+          },
+        ],
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Discord webhook failed with status ${response.status}`);
+    }
+  }
+
+  private formatMoney(value: number) {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: 0,
+    }).format(value);
   }
 
   private async markProposalNotificationAnswered(

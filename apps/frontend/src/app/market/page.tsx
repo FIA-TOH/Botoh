@@ -1,6 +1,6 @@
 'use client';
 
-import { Dispatch, FormEvent, SetStateAction, useEffect, useMemo, useState } from 'react';
+import { Dispatch, FormEvent, ReactNode, SetStateAction, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { apiUrl } from '@/config/api';
 import { AppSnackbar, useAppSnackbar } from '@/components/AppSnackbar';
@@ -29,6 +29,17 @@ interface MarketPilot {
   commercialScore: number;
   marketScore: number;
   minimumSalary: number;
+  attributes: {
+    velocidade: number;
+    consistencia: number;
+    tecnica: number;
+    experiencia: number;
+    chuva: number;
+    estrategia: number;
+    potencial: number;
+    popularidade: number;
+    patrocinadorScore: number;
+  };
   hasPersonalSponsor: boolean;
   sponsor: { id: string; name: string; logoUrl: string | null } | null;
   hasStarterContract: boolean;
@@ -48,6 +59,59 @@ function getLocalScuderiaLogoPath(teamName: string) {
   return `/img/scuderia/logos/${encodeURIComponent(teamName.trim().toLowerCase())}.png`;
 }
 
+function TooltipValue({
+  children,
+  tooltip,
+  className = '',
+}: {
+  children: ReactNode;
+  tooltip: string;
+  className?: string;
+}) {
+  const triggerRef = useRef<HTMLSpanElement | null>(null);
+  const [position, setPosition] = useState<{
+    left: number;
+    top: number;
+    placement: 'above' | 'below';
+  } | null>(null);
+
+  function showTooltip() {
+    const element = triggerRef.current;
+    if (!element) return;
+
+    const rect = element.getBoundingClientRect();
+    const placement = rect.top < 140 ? 'below' : 'above';
+    const left = Math.min(Math.max(rect.left + rect.width / 2, 160), window.innerWidth - 160);
+    const top = placement === 'below' ? rect.bottom + 8 : rect.top - 8;
+
+    setPosition({ left, top, placement });
+  }
+
+  return (
+    <span
+      ref={triggerRef}
+      className={`inline-flex cursor-help ${className}`}
+      onMouseEnter={showTooltip}
+      onMouseLeave={() => setPosition(null)}
+      onFocus={showTooltip}
+      onBlur={() => setPosition(null)}
+      tabIndex={0}
+    >
+      {children}
+      {position && (
+        <span
+          className={`pointer-events-none fixed z-[9999] w-72 -translate-x-1/2 whitespace-pre-line border-2 border-[#FF232B] bg-black px-3 py-2 text-left text-xs font-semibold leading-relaxed text-white shadow-2xl ${
+            position.placement === 'above' ? '-translate-y-full' : ''
+          }`}
+          style={{ left: position.left, top: position.top }}
+        >
+          {tooltip}
+        </span>
+      )}
+    </span>
+  );
+}
+
 export default function MarketPage() {
   const { isLoading, isAuthenticated, user, logout } = useAuth();
   const { t } = useTranslations();
@@ -63,6 +127,7 @@ export default function MarketPage() {
   const [page, setPage] = useState(1);
   const [pilotPage, setPilotPage] = useState(1);
   const [negotiatingPilot, setNegotiatingPilot] = useState<MarketPilot | null>(null);
+  const [negotiationLoading, setNegotiationLoading] = useState(false);
   const [negotiationForm, setNegotiationForm] = useState({
     teamId: '',
     contractRaces: '8',
@@ -197,7 +262,7 @@ export default function MarketPage() {
     negotiatingPilot
     && negotiationForm.teamId
     && Number(negotiationForm.contractRaces) > 0
-    && salaryValue > negotiationMinimumSalary,
+    && salaryValue >= negotiationMinimumSalary,
   );
 
   function openNegotiation(pilot: MarketPilot) {
@@ -220,6 +285,46 @@ export default function MarketPage() {
     }));
   }
 
+  function getMinimumSalaryTooltip(pilot: MarketPilot) {
+    return [
+      `${t.market.minimumSalary}: ${money(pilot.minimumSalary)}`,
+      `${t.market.definedBy}: ${t.market.marketScore} ${pilot.marketScore.toFixed(2)}`,
+    ].join('\n');
+  }
+
+  function getMarketScoreTooltip(pilot: MarketPilot) {
+    return [
+      `${t.market.marketScore}: ${pilot.marketScore.toFixed(2)}`,
+      `${t.market.formula}: ${t.market.overall} * 0.75 + ${t.market.commercialScore} * 0.25`,
+      `${t.market.overall}: ${pilot.overall.toFixed(2)}`,
+      `${t.market.commercialScore}: ${pilot.commercialScore.toFixed(2)}`,
+    ].join('\n');
+  }
+
+  function getOverallTooltip(pilot: MarketPilot) {
+    return [
+      `${t.market.overall}: ${pilot.overall.toFixed(2)}`,
+      `${t.market.formula}: (${t.market.speed} + ${t.market.consistency} + ${t.market.technique} + ${t.market.experience} + ${t.market.rainSkill} + ${t.market.strategy}) / 30 * 100`,
+      `${t.market.speed}: ${pilot.attributes.velocidade}`,
+      `${t.market.consistency}: ${pilot.attributes.consistencia}`,
+      `${t.market.technique}: ${pilot.attributes.tecnica}`,
+      `${t.market.experience}: ${pilot.attributes.experiencia}`,
+      `${t.market.rainSkill}: ${pilot.attributes.chuva}`,
+      `${t.market.strategy}: ${pilot.attributes.estrategia}`,
+    ].join('\n');
+  }
+
+  function getCommercialScoreTooltip(pilot: MarketPilot) {
+    return [
+      `${t.market.commercialScore}: ${pilot.commercialScore.toFixed(2)}`,
+      `${t.market.formula}: ${t.market.potential} * 0.45 + ${t.market.popularityScore} * 0.35 + ${t.market.sponsorScore} * 0.20`,
+      `${t.market.potential}: ${pilot.attributes.potencial}`,
+      `${t.market.popularity}: ${pilot.attributes.popularidade}`,
+      `${t.market.popularityScore}: ${pilot.attributes.popularidade * 20}`,
+      `${t.market.sponsorScore}: ${pilot.attributes.patrocinadorScore}`,
+    ].join('\n');
+  }
+
   async function submitNegotiation(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!negotiatingPilot) return;
@@ -229,6 +334,7 @@ export default function MarketPage() {
       return;
     }
 
+    setNegotiationLoading(true);
     try {
       const response = await fetch(apiUrl(`/api/garage/teams/${negotiationForm.teamId}/driver-proposals`), {
         method: 'POST',
@@ -251,6 +357,8 @@ export default function MarketPage() {
       setNegotiatingPilot(null);
     } catch (error) {
       showSnackbar(t.market.proposalFailed, 'error');
+    } finally {
+      setNegotiationLoading(false);
     }
   }
 
@@ -415,10 +523,26 @@ export default function MarketPage() {
                                   <span className="truncate text-lg font-bold">{pilot.username}</span>
                                 </div>
                               </td>
-                              <td className="p-3 text-left text-xl font-bold">{money(pilot.minimumSalary)}</td>
-                              <td className="p-3 text-center font-semibold">{pilot.marketScore.toFixed(2)}</td>
-                              <td className="p-3 text-center">{pilot.overall.toFixed(2)}</td>
-                              <td className="p-3 text-center">{pilot.commercialScore.toFixed(2)}</td>
+                              <td className="p-3 text-left text-xl font-bold">
+                                <TooltipValue tooltip={getMinimumSalaryTooltip(pilot)}>
+                                  {money(pilot.minimumSalary)}
+                                </TooltipValue>
+                              </td>
+                              <td className="p-3 text-center font-semibold">
+                                <TooltipValue tooltip={getMarketScoreTooltip(pilot)}>
+                                  {pilot.marketScore.toFixed(2)}
+                                </TooltipValue>
+                              </td>
+                              <td className="p-3 text-center">
+                                <TooltipValue tooltip={getOverallTooltip(pilot)}>
+                                  {pilot.overall.toFixed(2)}
+                                </TooltipValue>
+                              </td>
+                              <td className="p-3 text-center">
+                                <TooltipValue tooltip={getCommercialScoreTooltip(pilot)}>
+                                  {pilot.commercialScore.toFixed(2)}
+                                </TooltipValue>
+                              </td>
                               <td className="p-3">
                                 {pilot.sponsor && (
                                   <div className="flex items-center justify-center gap-2">
@@ -525,7 +649,7 @@ export default function MarketPage() {
             <input
               id="market-salary"
               required
-              min={negotiationMinimumSalary + 1}
+              min={negotiationMinimumSalary}
               type="number"
               value={negotiationForm.salaryPerRace}
               onChange={(event) => setNegotiationForm((current) => ({ ...current, salaryPerRace: event.target.value }))}
@@ -535,17 +659,18 @@ export default function MarketPage() {
             <div className="mt-6 grid grid-cols-2 gap-4">
               <button
                 type="button"
+                disabled={negotiationLoading}
                 onClick={() => setNegotiatingPilot(null)}
-                className="bg-gray-700 px-4 py-3 font-bold uppercase hover:bg-gray-600"
+                className="bg-gray-700 px-4 py-3 font-bold uppercase hover:bg-gray-600 disabled:cursor-wait disabled:opacity-70"
               >
                 {t.market.cancel}
               </button>
               <button
                 type="submit"
-                disabled={!canSubmitNegotiation}
+                disabled={!canSubmitNegotiation || negotiationLoading}
                 className="bg-[#FF232B] px-4 py-3 font-bold uppercase hover:bg-red-700 disabled:cursor-not-allowed disabled:bg-gray-600 disabled:text-gray-300"
               >
-                {t.market.sendProposal}
+                {negotiationLoading ? t.common.loading : t.market.sendProposal}
               </button>
             </div>
           </form>

@@ -65,6 +65,11 @@ export default function GaragePage() {
   const [teamGarage, setTeamGarage] = useState<TeamGarageData | null>(null);
   const [garageLoading, setGarageLoading] = useState(false);
   const [garageLoadFailed, setGarageLoadFailed] = useState(false);
+  const [selectedTeamLoadingId, setSelectedTeamLoadingId] = useState<string | null>(null);
+  const [facilityActionLoading, setFacilityActionLoading] = useState<string | null>(null);
+  const [driverProposalLoading, setDriverProposalLoading] = useState(false);
+  const [driverReleaseLoading, setDriverReleaseLoading] = useState(false);
+  const [sponsorReleaseLoading, setSponsorReleaseLoading] = useState(false);
   const [hireModalCategory, setHireModalCategory] = useState<'starter' | 'reserve' | null>(null);
   const [hireForm, setHireForm] = useState({
     username: '',
@@ -183,6 +188,8 @@ export default function GaragePage() {
 
   async function updateFacility(facility: 'climate' | 'pitCrew', action: 'upgrade' | 'sell') {
     if (!selectedMembership) return;
+    const actionKey = `${facility}-${action}`;
+    setFacilityActionLoading(actionKey);
     try {
       const token = localStorage.getItem('auth_token');
       const response = await fetch(apiUrl(`/api/garage/teams/${selectedMembership.teamId}/facility`), {
@@ -203,6 +210,8 @@ export default function GaragePage() {
       await loadTeamGarage(selectedMembership.teamId);
     } catch (error) {
       showSnackbar(t.garage.facilityActionFailed, 'error');
+    } finally {
+      setFacilityActionLoading(null);
     }
   }
 
@@ -210,6 +219,7 @@ export default function GaragePage() {
     event.preventDefault();
     if (!selectedMembership || !hireModalCategory) return;
 
+    setDriverProposalLoading(true);
     try {
       const token = localStorage.getItem('auth_token');
       const response = await fetch(apiUrl(`/api/garage/teams/${selectedMembership.teamId}/driver-proposals`), {
@@ -238,12 +248,15 @@ export default function GaragePage() {
       await loadTeamGarage(selectedMembership.teamId);
     } catch (error) {
       showSnackbar(t.garage.driverActionFailed, 'error');
+    } finally {
+      setDriverProposalLoading(false);
     }
   }
 
   async function releaseDriver(driverId: string) {
     if (!selectedMembership) return;
 
+    setDriverReleaseLoading(true);
     try {
       const token = localStorage.getItem('auth_token');
       const response = await fetch(apiUrl(`/api/garage/teams/${selectedMembership.teamId}/drivers/${driverId}`), {
@@ -262,12 +275,15 @@ export default function GaragePage() {
       await loadTeamGarage(selectedMembership.teamId);
     } catch (error) {
       showSnackbar(t.garage.driverActionFailed, 'error');
+    } finally {
+      setDriverReleaseLoading(false);
     }
   }
 
   async function releaseSponsor(teamSponsorId: string) {
     if (!selectedMembership) return;
 
+    setSponsorReleaseLoading(true);
     try {
       const token = localStorage.getItem('auth_token');
       const response = await fetch(apiUrl(`/api/garage/teams/${selectedMembership.teamId}/sponsors/${teamSponsorId}`), {
@@ -287,6 +303,8 @@ export default function GaragePage() {
       await loadTeamGarage(selectedMembership.teamId);
     } catch (error) {
       showSnackbar(t.garage.sponsorActionFailed, 'error');
+    } finally {
+      setSponsorReleaseLoading(false);
     }
   }
 
@@ -471,17 +489,23 @@ export default function GaragePage() {
                   <button
                     key={membership.teamId}
                     type="button"
-                    onClick={() => router.push(`/garage?teamId=${membership.teamId}`)}
-                    className="flex min-h-28 min-w-56 items-center justify-center border-8 border-[#FF0000] bg-[#1E1E1E] px-6 py-5 text-xl font-semibold transition-colors hover:border-white"
+                    disabled={selectedTeamLoadingId !== null}
+                    onClick={() => {
+                      setSelectedTeamLoadingId(membership.teamId);
+                      router.push(`/garage?teamId=${membership.teamId}`);
+                    }}
+                    className="flex min-h-28 min-w-56 items-center justify-center border-8 border-[#FF0000] bg-[#1E1E1E] px-6 py-5 text-xl font-semibold transition-colors hover:border-white disabled:cursor-wait disabled:opacity-70"
                   >
-                    {!hasLoadedLogo && (
+                    {selectedTeamLoadingId === membership.teamId ? (
+                      <span>{t.common.loading}</span>
+                    ) : !hasLoadedLogo && (
                       <span
                         aria-label={t.common.loading}
                         className="h-8 w-8 animate-spin rounded-full border-4 border-white/30 border-t-white"
                       />
                     )}
 
-                    {hasMissingLogo ? (
+                    {selectedTeamLoadingId === membership.teamId ? null : hasMissingLogo ? (
                       membership.teamName
                     ) : (
                       <img
@@ -645,11 +669,11 @@ export default function GaragePage() {
                       {t.garage.buildWeatherQuestion} <strong>{money(climateUpgradeCost)}</strong>?
                     </p>
                     <button
-                      disabled={cashTotal < climateUpgradeCost}
+                      disabled={cashTotal < climateUpgradeCost || facilityActionLoading !== null}
                       onClick={() => updateFacility('climate', 'upgrade')}
                       className="mt-8 w-full bg-[#FF0000] px-3 py-4 text-2xl font-bold uppercase disabled:cursor-not-allowed disabled:bg-[#B0003A]"
                     >
-                      {t.garage.build}
+                      {facilityActionLoading === 'climate-upgrade' ? t.common.loading : t.garage.build}
                     </button>
                   </div>
                 ) : (
@@ -670,20 +694,32 @@ export default function GaragePage() {
                     </div>
                     <div className="mt-auto flex flex-wrap gap-4 pt-4">
                       <button
-                        disabled={weatherMonitoringLevel >= maxFacilityLevel || cashTotal < climateUpgradeCost}
+                        disabled={weatherMonitoringLevel >= maxFacilityLevel || cashTotal < climateUpgradeCost || facilityActionLoading !== null}
                         onClick={() => updateFacility('climate', 'upgrade')}
                         className="group min-w-[120px] flex-1 bg-[#FF0000] px-3 py-3 font-bold uppercase disabled:cursor-not-allowed disabled:bg-[#B0003A]"
                       >
-                        <span className="group-hover:hidden">{t.garage.upgrade}</span>
-                        <span className="hidden group-hover:inline">{money(climateUpgradeCost)}</span>
+                        {facilityActionLoading === 'climate-upgrade' ? (
+                          t.common.loading
+                        ) : (
+                          <>
+                            <span className="group-hover:hidden">{t.garage.upgrade}</span>
+                            <span className="hidden group-hover:inline">{money(climateUpgradeCost)}</span>
+                          </>
+                        )}
                       </button>
                       <button
-                        disabled={weatherMonitoringLevel <= 0}
+                        disabled={weatherMonitoringLevel <= 0 || facilityActionLoading !== null}
                         onClick={() => updateFacility('climate', 'sell')}
                         className="group min-w-[120px] flex-1 bg-[#FF0000] px-3 py-3 font-bold uppercase disabled:cursor-not-allowed disabled:bg-[#B0003A]"
                       >
-                        <span className="group-hover:hidden">{t.garage.sell}</span>
-                        <span className="hidden group-hover:inline">{money(climateSellValue)}</span>
+                        {facilityActionLoading === 'climate-sell' ? (
+                          t.common.loading
+                        ) : (
+                          <>
+                            <span className="group-hover:hidden">{t.garage.sell}</span>
+                            <span className="hidden group-hover:inline">{money(climateSellValue)}</span>
+                          </>
+                        )}
                       </button>
                     </div>
                   </>
@@ -701,11 +737,11 @@ export default function GaragePage() {
                       {t.garage.buildPitCrewQuestion} <strong>{money(pitCrewUpgradeCost)}</strong>?
                     </p>
                     <button
-                      disabled={cashTotal < pitCrewUpgradeCost}
+                      disabled={cashTotal < pitCrewUpgradeCost || facilityActionLoading !== null}
                       onClick={() => updateFacility('pitCrew', 'upgrade')}
                       className="mt-8 w-full bg-[#FF0000] px-3 py-4 text-2xl font-bold uppercase disabled:cursor-not-allowed disabled:bg-[#B0003A]"
                     >
-                      {t.garage.build}
+                      {facilityActionLoading === 'pitCrew-upgrade' ? t.common.loading : t.garage.build}
                     </button>
                   </div>
                 ) : (
@@ -726,20 +762,32 @@ export default function GaragePage() {
                     </div>
                     <div className="mt-auto flex flex-wrap gap-4 pt-4">
                       <button
-                        disabled={pitCrewLevel >= maxFacilityLevel || cashTotal < pitCrewUpgradeCost}
+                        disabled={pitCrewLevel >= maxFacilityLevel || cashTotal < pitCrewUpgradeCost || facilityActionLoading !== null}
                         onClick={() => updateFacility('pitCrew', 'upgrade')}
                         className="group min-w-[120px] flex-1 bg-[#FF0000] px-3 py-3 font-bold uppercase disabled:cursor-not-allowed disabled:bg-[#B0003A]"
                       >
-                        <span className="group-hover:hidden">{t.garage.upgrade}</span>
-                        <span className="hidden group-hover:inline">{money(pitCrewUpgradeCost)}</span>
+                        {facilityActionLoading === 'pitCrew-upgrade' ? (
+                          t.common.loading
+                        ) : (
+                          <>
+                            <span className="group-hover:hidden">{t.garage.upgrade}</span>
+                            <span className="hidden group-hover:inline">{money(pitCrewUpgradeCost)}</span>
+                          </>
+                        )}
                       </button>
                       <button
-                        disabled={pitCrewLevel <= 0}
+                        disabled={pitCrewLevel <= 0 || facilityActionLoading !== null}
                         onClick={() => updateFacility('pitCrew', 'sell')}
                         className="group min-w-[120px] flex-1 bg-[#FF0000] px-3 py-3 font-bold uppercase disabled:cursor-not-allowed disabled:bg-[#B0003A]"
                       >
-                        <span className="group-hover:hidden">{t.garage.sell}</span>
-                        <span className="hidden group-hover:inline">{money(pitCrewSellValue)}</span>
+                        {facilityActionLoading === 'pitCrew-sell' ? (
+                          t.common.loading
+                        ) : (
+                          <>
+                            <span className="group-hover:hidden">{t.garage.sell}</span>
+                            <span className="hidden group-hover:inline">{money(pitCrewSellValue)}</span>
+                          </>
+                        )}
                       </button>
                     </div>
                   </>
@@ -993,16 +1041,18 @@ export default function GaragePage() {
             <div className="mt-6 grid grid-cols-2 gap-4">
               <button
                 type="button"
+                disabled={driverProposalLoading}
                 onClick={() => setHireModalCategory(null)}
-                className="bg-gray-700 px-4 py-3 font-bold uppercase hover:bg-gray-600"
+                className="bg-gray-700 px-4 py-3 font-bold uppercase hover:bg-gray-600 disabled:cursor-wait disabled:opacity-70"
               >
                 {t.garage.cancel}
               </button>
               <button
                 type="submit"
-                className="bg-[#FF0000] px-4 py-3 font-bold uppercase hover:bg-red-700"
+                disabled={driverProposalLoading}
+                className="bg-[#FF0000] px-4 py-3 font-bold uppercase hover:bg-red-700 disabled:cursor-wait disabled:opacity-70"
               >
-                {t.garage.sendProposal}
+                {driverProposalLoading ? t.common.loading : t.garage.sendProposal}
               </button>
             </div>
           </form>
@@ -1085,14 +1135,16 @@ export default function GaragePage() {
                   {confirmSponsorRelease && (
                     <button
                       type="button"
+                      disabled={sponsorReleaseLoading}
                       onClick={() => setConfirmSponsorRelease(false)}
-                      className="bg-gray-700 px-4 py-2 text-sm font-bold uppercase hover:bg-gray-600"
+                      className="bg-gray-700 px-4 py-2 text-sm font-bold uppercase hover:bg-gray-600 disabled:cursor-wait disabled:opacity-70"
                     >
                       {t.common.back}
                     </button>
                   )}
                   <button
                     type="button"
+                    disabled={sponsorReleaseLoading}
                     onClick={() => {
                       if (!confirmSponsorRelease) {
                         setConfirmSponsorRelease(true);
@@ -1100,9 +1152,9 @@ export default function GaragePage() {
                       }
                       releaseSponsor(selectedSponsor.id);
                     }}
-                    className="min-w-40 bg-[#FF0000] px-8 py-2 text-base font-bold uppercase hover:bg-red-700"
+                    className="min-w-40 bg-[#FF0000] px-8 py-2 text-base font-bold uppercase hover:bg-red-700 disabled:cursor-wait disabled:opacity-70"
                   >
-                    {t.garage.release}
+                    {sponsorReleaseLoading ? t.common.loading : t.garage.release}
                   </button>
                 </div>
               </div>
@@ -1134,17 +1186,19 @@ export default function GaragePage() {
             <div className="mt-6 grid grid-cols-2 gap-4">
               <button
                 type="button"
+                disabled={driverReleaseLoading}
                 onClick={() => setReleaseModalDriver(null)}
-                className="bg-gray-700 px-4 py-3 font-bold uppercase hover:bg-gray-600"
+                className="bg-gray-700 px-4 py-3 font-bold uppercase hover:bg-gray-600 disabled:cursor-wait disabled:opacity-70"
               >
                 {t.garage.cancel}
               </button>
               <button
                 type="button"
+                disabled={driverReleaseLoading}
                 onClick={() => releaseDriver(releaseModalDriver.id)}
-                className="bg-[#FF0000] px-4 py-3 font-bold uppercase hover:bg-red-700"
+                className="bg-[#FF0000] px-4 py-3 font-bold uppercase hover:bg-red-700 disabled:cursor-wait disabled:opacity-70"
               >
-                {t.garage.release}
+                {driverReleaseLoading ? t.common.loading : t.garage.release}
               </button>
             </div>
           </div>

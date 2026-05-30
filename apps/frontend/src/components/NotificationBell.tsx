@@ -13,6 +13,15 @@ function BellIcon() {
   );
 }
 
+function notificationClasses(type: string, isRead: boolean) {
+  if (isRead) return { item: 'bg-transparent', dot: 'bg-gray-400' };
+
+  if (type === 'success') return { item: 'bg-emerald-600/25', dot: 'bg-emerald-400' };
+  if (type === 'warning') return { item: 'bg-amber-500/25', dot: 'bg-amber-300' };
+  if (type === 'error') return { item: 'bg-[#AF0034]/25', dot: 'bg-[#FF232B]' };
+  return { item: 'bg-blue-600/25', dot: 'bg-blue-300' };
+}
+
 export function NotificationBell() {
   const { t, language } = useTranslations();
   const {
@@ -24,6 +33,7 @@ export function NotificationBell() {
     respondToDriverProposal,
   } = useNotifications();
   const [isOpen, setIsOpen] = useState(false);
+  const [respondingProposalId, setRespondingProposalId] = useState<string | null>(null);
   const { snackbar, showSnackbar, closeSnackbar } = useAppSnackbar();
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -88,12 +98,14 @@ export function NotificationBell() {
               <p className="px-4 py-6 text-center text-sm text-gray-300">{t.notifications.empty}</p>
             )}
 
-            {!isLoading && notifications.map((notification) => (
+            {!isLoading && notifications.map((notification) => {
+              const classes = notificationClasses(notification.type, notification.isRead);
+              const isResponding = respondingProposalId === notification.metadata?.proposalId;
+
+              return (
               <div
                 key={notification.id}
-                className={`border-b border-white/10 px-4 py-3 transition hover:bg-white/10 ${
-                  notification.isRead ? 'bg-transparent' : 'bg-[#AF0034]/25'
-                }`}
+                className={`border-b border-white/10 px-4 py-3 transition hover:bg-white/10 ${classes.item}`}
               >
                 <button
                   type="button"
@@ -104,7 +116,7 @@ export function NotificationBell() {
                 >
                   <div className="flex items-start gap-3">
                   {!notification.isRead && (
-                    <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#AF0034]" aria-label={t.notifications.unread} />
+                    <span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${classes.dot}`} aria-label={t.notifications.unread} />
                   )}
                     <div className="min-w-0 flex-1">
                       <p className="break-words text-sm font-semibold">{notification.title}</p>
@@ -118,38 +130,51 @@ export function NotificationBell() {
                   <div className="mt-3 grid grid-cols-2 gap-2">
                     <button
                       type="button"
+                      disabled={isResponding}
                       onClick={async () => {
-                        const result = await respondToDriverProposal(notification.metadata.proposalId, 'decline');
-                        if (result.success) {
-                          markAsRead(notification.id);
-                          showSnackbar(t.notifications.proposalDeclined, 'success');
-                        } else {
-                          showSnackbar(result.message ?? t.notifications.actionFailed, 'error');
+                        setRespondingProposalId(notification.metadata.proposalId);
+                        try {
+                          const result = await respondToDriverProposal(notification.metadata.proposalId, 'decline');
+                          if (result.success) {
+                            markAsRead(notification.id);
+                            showSnackbar(t.notifications.proposalDeclined, 'success');
+                          } else {
+                            showSnackbar(result.message ?? t.notifications.actionFailed, 'error');
+                          }
+                        } finally {
+                          setRespondingProposalId(null);
                         }
                       }}
-                      className="bg-gray-700 px-3 py-2 text-xs font-bold uppercase hover:bg-gray-600"
+                      className="bg-gray-700 px-3 py-2 text-xs font-bold uppercase hover:bg-gray-600 disabled:cursor-wait disabled:opacity-70"
                     >
                       {t.notifications.decline}
                     </button>
                     <button
                       type="button"
+                      disabled={isResponding}
                       onClick={async () => {
-                        const result = await respondToDriverProposal(notification.metadata.proposalId, 'accept');
-                        if (result.success) {
-                          markAsRead(notification.id);
-                          showSnackbar(t.notifications.proposalAccepted, 'success');
-                        } else {
-                          showSnackbar(result.message ?? t.notifications.actionFailed, 'error');
+                        setRespondingProposalId(notification.metadata.proposalId);
+                        try {
+                          const result = await respondToDriverProposal(notification.metadata.proposalId, 'accept');
+                          if (result.success) {
+                            markAsRead(notification.id);
+                            showSnackbar(t.notifications.proposalAccepted, 'success');
+                          } else {
+                            showSnackbar(result.message ?? t.notifications.actionFailed, 'error');
+                          }
+                        } finally {
+                          setRespondingProposalId(null);
                         }
                       }}
-                      className="bg-[#FF232B] px-3 py-2 text-xs font-bold uppercase hover:bg-red-700"
+                      className="bg-[#FF232B] px-3 py-2 text-xs font-bold uppercase hover:bg-red-700 disabled:cursor-wait disabled:opacity-70"
                     >
-                      {t.notifications.accept}
+                      {isResponding ? t.common.loading : t.notifications.accept}
                     </button>
                   </div>
                 )}
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}

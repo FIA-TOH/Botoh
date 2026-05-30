@@ -123,6 +123,13 @@ class NotificationService {
       [notificationId, userId],
     );
 
+    if (notification?.metadata?.action === 'driver_contract_released') {
+      await query(
+        'DELETE FROM notifications WHERE id = $1 AND user_id = $2',
+        [notificationId, userId],
+      );
+    }
+
     await this.emitUnreadCount(userId);
     return notification;
   }
@@ -132,6 +139,14 @@ class NotificationService {
       `UPDATE notifications
        SET is_read = true, read_at = COALESCE(read_at, NOW())
        WHERE user_id = $1 AND is_read = false`,
+      [userId],
+    );
+
+    await query(
+      `DELETE FROM notifications
+       WHERE user_id = $1
+         AND is_read = true
+         AND metadata->>'action' = 'driver_contract_released'`,
       [userId],
     );
 

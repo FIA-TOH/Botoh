@@ -116,6 +116,17 @@ router.get('/scuderias', authMiddleware, async (req: AuthRequest, res: Response)
         commercialScore: Number(commercialScore.toFixed(2)),
         marketScore,
         minimumSalary: getMinimumSalaryFromMarketScore(marketScore),
+        attributes: {
+          velocidade: scoreInput.velocidade,
+          consistencia: scoreInput.consistencia,
+          tecnica: scoreInput.tecnica,
+          experiencia: scoreInput.experiencia,
+          chuva: scoreInput.chuva,
+          estrategia: scoreInput.estrategia,
+          potencial: scoreInput.potencial,
+          popularidade: scoreInput.popularidade,
+          patrocinadorScore: hasPersonalSponsor ? 100 : 0,
+        },
         hasPersonalSponsor,
         sponsor: hasPersonalSponsor
           ? {
