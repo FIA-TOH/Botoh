@@ -44,7 +44,7 @@ const BALATON_HAXMAPS_INFO: CircuitInfo = {
     },
     passingDirection: Direction.RIGHT,
   },
-  name: "Balaton Park by Rodri",
+  name: "Balaton Park Circuit by Liberty from HaxMaps",
   boxLine: {
     minX: -248,
     maxX: 526,
