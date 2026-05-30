@@ -33,6 +33,19 @@ export interface AdminUserInput {
   teamMemberships: TeamMembershipInput[];
   driverNumber: number;
   language: 'pt' | 'en' | 'es';
+  driverWallet?: DriverWalletInput | null;
+}
+
+export interface DriverWalletInput {
+  velocidade: number;
+  consistencia: number;
+  tecnica: number;
+  experiencia: number;
+  chuva: number;
+  estrategia: number;
+  potencial: number;
+  popularidade: number;
+  nacionalidade: string;
 }
 
 export interface ScuderiaInput {
@@ -89,6 +102,7 @@ export interface SponsorInput {
   ambicao?: number;
   publicoAlvo1?: string | null;
   publicoAlvo2?: string | null;
+  pilotUserId?: string | null;
 }
 
 type RaceProgressDirection = 'advance' | 'rollback';
@@ -111,7 +125,7 @@ class AdminService {
         u.short_username AS "shortUsername",
         BOOL_OR(COALESCE(utm.is_team_principal, false)) AS "teamPrincipal",
         BOOL_OR(COALESCE(utm.is_team_assistant, false)) AS "teamAssistant",
-        BOOL_OR(COALESCE(utm.is_driver, false)) AS "driver",
+        (COALESCE(u.is_driver, false) OR COALESCE(BOOL_OR(COALESCE(utm.is_driver, false)), false)) AS "driver",
         COALESCE(
           json_agg(
             json_build_object(
@@ -134,10 +148,28 @@ class AdminService {
         ) AS "teamMemberships",
         u.driver_number AS "driverNumber",
         u.language,
+        CASE WHEN u.driver_wallet_created THEN json_build_object(
+          'velocidade', u.driver_velocidade,
+          'consistencia', u.driver_consistencia,
+          'tecnica', u.driver_tecnica,
+          'experiencia', u.driver_experiencia,
+          'chuva', u.driver_chuva,
+          'estrategia', u.driver_estrategia,
+          'potencial', u.driver_potencial,
+          'popularidade', u.driver_popularidade,
+          'nacionalidade', u.driver_nacionalidade,
+          'temPatrocinador', personal_sponsor.id IS NOT NULL,
+          'sponsor', CASE WHEN personal_sponsor.id IS NULL THEN NULL ELSE json_build_object(
+            'id', personal_sponsor.id,
+            'name', personal_sponsor.name,
+            'logoUrl', personal_sponsor.logo_url
+          ) END
+        ) ELSE NULL END AS "driverWallet",
         u.created_at AS "createdAt"
       FROM users u
       LEFT JOIN user_team_memberships utm ON utm.user_id = u.id
       LEFT JOIN teams t ON utm.team_id = t.id
+      LEFT JOIN sponsors personal_sponsor ON personal_sponsor.pilot_user_id = u.id
       LEFT JOIN LATERAL (
         SELECT category, contract_ends_after_races, salary_per_race
         FROM team_drivers td
@@ -149,6 +181,7 @@ class AdminService {
       ) active_driver ON true
       WHERE COALESCE(u.is_active, true) = true
       GROUP BY u.id
+      , personal_sponsor.id
       ORDER BY u.username ASC
     `);
 
@@ -164,6 +197,9 @@ class AdminService {
     const passwordHash = await authService.hashPassword(input.password);
     const validation = await this.validateDriverMemberships(input.teamMemberships);
     if (!validation.success) return validation;
+    const walletValidation = this.validateDriverWallet(input.driverWallet);
+    if (!walletValidation.success) return walletValidation;
+    const wallet = walletValidation.wallet;
 
     const user = await transaction(async (client) => {
       const result = await client.query(
@@ -179,9 +215,19 @@ class AdminService {
           team_id,
           driver_number,
           language,
+          driver_wallet_created,
+          driver_velocidade,
+          driver_consistencia,
+          driver_tecnica,
+          driver_experiencia,
+          driver_chuva,
+          driver_estrategia,
+          driver_potencial,
+          driver_popularidade,
+          driver_nacionalidade,
           is_active,
           created_at
-        ) VALUES ($1, $2, 'user', 50000, $3, $4, $5, $6, $7, $8, $9, true, NOW())
+        ) VALUES ($1, $2, 'user', 50000, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, true, NOW())
         RETURNING id`,
         [
           input.username,
@@ -189,10 +235,20 @@ class AdminService {
           input.shortUsername,
           this.hasAnyRole(input.teamMemberships, 'team_principal'),
           this.hasAnyRole(input.teamMemberships, 'team_assistant'),
-          this.hasAnyRole(input.teamMemberships, 'driver'),
+          this.hasAnyRole(input.teamMemberships, 'driver') || Boolean(wallet),
           input.teamMemberships[0]?.teamId ?? null,
           input.driverNumber,
           input.language,
+          Boolean(wallet),
+          wallet?.velocidade ?? null,
+          wallet?.consistencia ?? null,
+          wallet?.tecnica ?? null,
+          wallet?.experiencia ?? null,
+          wallet?.chuva ?? null,
+          wallet?.estrategia ?? null,
+          wallet?.potencial ?? null,
+          wallet?.popularidade ?? null,
+          wallet?.nacionalidade ?? null,
         ],
       );
 
@@ -212,24 +268,37 @@ class AdminService {
 
     const validation = await this.validateDriverMemberships(input.teamMemberships, userId);
     if (!validation.success) return validation;
+    const walletValidation = this.validateDriverWallet(input.driverWallet);
+    if (!walletValidation.success) return walletValidation;
+    const wallet = walletValidation.wallet;
 
     const values: any[] = [
       input.username,
       input.shortUsername,
       this.hasAnyRole(input.teamMemberships, 'team_principal'),
       this.hasAnyRole(input.teamMemberships, 'team_assistant'),
-      this.hasAnyRole(input.teamMemberships, 'driver'),
+      this.hasAnyRole(input.teamMemberships, 'driver') || Boolean(wallet),
       input.teamMemberships[0]?.teamId ?? null,
       input.driverNumber,
       input.language,
+      Boolean(wallet),
+      wallet?.velocidade ?? null,
+      wallet?.consistencia ?? null,
+      wallet?.tecnica ?? null,
+      wallet?.experiencia ?? null,
+      wallet?.chuva ?? null,
+      wallet?.estrategia ?? null,
+      wallet?.potencial ?? null,
+      wallet?.popularidade ?? null,
+      wallet?.nacionalidade ?? null,
       userId,
     ];
 
     let passwordSql = '';
     if (input.password) {
-      values.splice(8, 0, await authService.hashPassword(input.password));
-      passwordSql = ', password_hash = $9';
-      values[9] = userId;
+      values.splice(18, 0, await authService.hashPassword(input.password));
+      passwordSql = ', password_hash = $19';
+      values[19] = userId;
     }
 
     const result = await transaction(async (client) => {
@@ -243,15 +312,35 @@ class AdminService {
           is_driver = $5,
           team_id = $6,
           driver_number = $7,
-          language = $8
+          language = $8,
+          driver_wallet_created = $9,
+          driver_velocidade = $10,
+          driver_consistencia = $11,
+          driver_tecnica = $12,
+          driver_experiencia = $13,
+          driver_chuva = $14,
+          driver_estrategia = $15,
+          driver_potencial = $16,
+          driver_popularidade = $17,
+          driver_nacionalidade = $18
           ${passwordSql}
-         WHERE id = $${input.password ? 10 : 9}
+         WHERE id = $${input.password ? 20 : 19}
          RETURNING id`,
         values,
       );
 
       if (updated.rows[0]) {
         await this.replaceMemberships(client, userId, input);
+        if (!wallet) {
+          await client.query(
+            `UPDATE sponsors
+             SET pilot_user_id = NULL,
+                 tipo = 'minor_sponsor',
+                 updated_at = NOW()
+             WHERE pilot_user_id = $1`,
+            [userId],
+          );
+        }
       }
 
       return updated;
@@ -265,16 +354,42 @@ class AdminService {
   }
 
   async deleteUser(userId: string) {
-    const result = await query(
-      'UPDATE users SET is_active = false WHERE id = $1 RETURNING id',
-      [userId],
-    );
+    const result = await transaction(async (client) => {
+      await client.query(
+        `UPDATE sponsors
+         SET pilot_user_id = NULL,
+             tipo = 'minor_sponsor',
+             updated_at = NOW()
+         WHERE pilot_user_id = $1`,
+        [userId],
+      );
+      return client.query(
+        'UPDATE users SET is_active = false WHERE id = $1 RETURNING id',
+        [userId],
+      );
+    });
 
     if (!result.rows[0]) {
       return { success: false, message: 'User not found' };
     }
 
     return { success: true };
+  }
+
+  async unlinkUserPersonalSponsor(userId: string) {
+    const result = await query(
+      `UPDATE sponsors
+       SET pilot_user_id = NULL,
+           tipo = 'minor_sponsor',
+           updated_at = NOW()
+       WHERE pilot_user_id = $1
+       RETURNING id`,
+      [userId],
+    );
+
+    return result.rows[0]
+      ? { success: true }
+      : { success: false, message: 'Personal sponsor not found' };
   }
 
   private async replaceMemberships(
@@ -350,6 +465,45 @@ class AdminService {
 
   private hasAnyRole(memberships: TeamMembershipInput[], role: TeamMembershipRole) {
     return memberships.some((membership) => membership.roles.includes(role));
+  }
+
+  private validateDriverWallet(input?: DriverWalletInput | null) {
+    if (!input) return { success: true, wallet: null as DriverWalletInput | null };
+
+    const wallet: DriverWalletInput = {
+      velocidade: Number(input.velocidade),
+      consistencia: Number(input.consistencia),
+      tecnica: Number(input.tecnica),
+      experiencia: Number(input.experiencia),
+      chuva: Number(input.chuva),
+      estrategia: Number(input.estrategia),
+      potencial: Number(input.potencial),
+      popularidade: Number(input.popularidade),
+      nacionalidade: String(input.nacionalidade ?? '').trim(),
+    };
+    const sportAttributes = [
+      wallet.velocidade,
+      wallet.consistencia,
+      wallet.tecnica,
+      wallet.experiencia,
+      wallet.chuva,
+      wallet.estrategia,
+    ];
+
+    if (sportAttributes.some((value) => !Number.isInteger(value) || value < 0 || value > 5)) {
+      return { success: false, message: 'Driver sport attributes must be between 0 and 5' };
+    }
+    if (!Number.isInteger(wallet.potencial) || wallet.potencial < 0 || wallet.potencial > 100) {
+      return { success: false, message: 'Driver potential must be between 0 and 100' };
+    }
+    if (!Number.isInteger(wallet.popularidade) || wallet.popularidade < 0 || wallet.popularidade > 5) {
+      return { success: false, message: 'Driver popularity must be between 0 and 5' };
+    }
+    if (!wallet.nacionalidade || wallet.nacionalidade.length > 120) {
+      return { success: false, message: 'Driver nationality is invalid' };
+    }
+
+    return { success: true, wallet };
   }
 
   private async validateDriverMemberships(memberships: TeamMembershipInput[], userId?: string) {
@@ -1063,24 +1217,26 @@ class AdminService {
   async listSponsors() {
     const result = await query(
       `SELECT
-        id,
-        name,
-        name AS nome,
-        logo_url AS "logoUrl",
-        nacionalidade,
-        tipo,
-        setor,
-        felicidade,
-        prestigio,
-        agressividade,
-        foco_em_midia AS "focoEmMidia",
-        foco_tecnico AS "focoTecnico",
-        nacionalismo,
-        fidelidade,
-        orcamento,
-        ambicao,
-        publico_alvo_1 AS "publicoAlvo1",
-        publico_alvo_2 AS "publicoAlvo2",
+        sponsors.id,
+        sponsors.name,
+        sponsors.name AS nome,
+        sponsors.logo_url AS "logoUrl",
+        sponsors.nacionalidade,
+        sponsors.tipo,
+        sponsors.setor,
+        sponsors.felicidade,
+        sponsors.prestigio,
+        sponsors.agressividade,
+        sponsors.foco_em_midia AS "focoEmMidia",
+        sponsors.foco_tecnico AS "focoTecnico",
+        sponsors.nacionalismo,
+        sponsors.fidelidade,
+        sponsors.orcamento,
+        sponsors.ambicao,
+        sponsors.publico_alvo_1 AS "publicoAlvo1",
+        sponsors.publico_alvo_2 AS "publicoAlvo2",
+        sponsors.pilot_user_id AS "pilotUserId",
+        pilot_user.username AS "pilotUsername",
         COALESCE(
           (
             SELECT json_agg(
@@ -1097,23 +1253,29 @@ class AdminService {
           '[]'::json
         ) AS "scuderiasRelacionadas"
        FROM sponsors
-       ORDER BY name ASC`,
+       LEFT JOIN users pilot_user ON pilot_user.id = sponsors.pilot_user_id
+       ORDER BY sponsors.name ASC`,
     );
     return result.rows;
   }
 
   async createSponsor(input: SponsorInput) {
     const name = input.nome ?? input.name!;
+    const normalizedCategory = normalizeSponsorCategory(input.tipo);
+    const pilotUserId = normalizedCategory === 'personal_sponsor' ? input.pilotUserId : null;
+    const personalSponsorValidation = await this.validatePersonalSponsorPilot(pilotUserId);
+    if (!personalSponsorValidation.success) return personalSponsorValidation;
+
     const result = await query(
       `INSERT INTO sponsors (
         name, logo_url, nacionalidade, tipo, setor, felicidade, prestigio, agressividade,
         foco_em_midia, foco_tecnico, nacionalismo, fidelidade, orcamento, ambicao,
-        publico_alvo_1, publico_alvo_2, created_at, updated_at
+        publico_alvo_1, publico_alvo_2, pilot_user_id, created_at, updated_at
       )
        VALUES (
         $1, $2, $3, $4, $5, COALESCE($6, 50), COALESCE($7, 1), COALESCE($8, 1),
         COALESCE($9, 1), COALESCE($10, 1), COALESCE($11, 1), COALESCE($12, 1),
-        COALESCE($13, 1), COALESCE($14, 1), $15, $16, NOW(), NOW()
+        COALESCE($13, 1), COALESCE($14, 1), $15, $16, $17, NOW(), NOW()
        )
        RETURNING id`,
       [
@@ -1121,7 +1283,7 @@ class AdminService {
         input.felicidade ?? null, input.prestigio ?? null, input.agressividade ?? null,
         input.focoEmMidia ?? null, input.focoTecnico ?? null, input.nacionalismo ?? null,
         input.fidelidade ?? null, input.orcamento ?? null, input.ambicao ?? null,
-        input.publicoAlvo1 ?? null, input.publicoAlvo2 ?? null,
+        input.publicoAlvo1 ?? null, input.publicoAlvo2 ?? null, pilotUserId,
       ],
     );
     return { success: true, sponsor: result.rows[0] };
@@ -1144,12 +1306,14 @@ class AdminService {
       ambicao: number;
       publicoAlvo1: string | null;
       publicoAlvo2: string | null;
+      pilotUserId: string | null;
     }>(
       `SELECT
         name, nacionalidade, tipo, setor, felicidade, prestigio, agressividade,
         foco_em_midia AS "focoEmMidia", foco_tecnico AS "focoTecnico",
         nacionalismo, fidelidade, orcamento, ambicao,
-        publico_alvo_1 AS "publicoAlvo1", publico_alvo_2 AS "publicoAlvo2"
+        publico_alvo_1 AS "publicoAlvo1", publico_alvo_2 AS "publicoAlvo2",
+        pilot_user_id AS "pilotUserId"
        FROM sponsors
        WHERE id = $1`,
       [sponsorId],
@@ -1157,6 +1321,14 @@ class AdminService {
     if (!current) return { success: false, message: 'Sponsor not found' };
 
     const name = input.nome ?? input.name ?? current.name;
+    const nextTipo = input.tipo === undefined ? current.tipo : input.tipo;
+    const normalizedCategory = normalizeSponsorCategory(nextTipo);
+    const nextPilotUserId = normalizedCategory === 'personal_sponsor'
+      ? (input.pilotUserId === undefined ? current.pilotUserId : input.pilotUserId)
+      : null;
+    const personalSponsorValidation = await this.validatePersonalSponsorPilot(nextPilotUserId, sponsorId);
+    if (!personalSponsorValidation.success) return personalSponsorValidation;
+
     const result = await query(
       `UPDATE sponsors
        SET name = $1,
@@ -1175,13 +1347,14 @@ class AdminService {
            ambicao = COALESCE($14, ambicao),
            publico_alvo_1 = $15,
            publico_alvo_2 = $16,
+           pilot_user_id = $17,
            updated_at = NOW()
-       WHERE id = $17
+       WHERE id = $18
        RETURNING id`,
       [
         name, input.logoUrl,
         input.nacionalidade === undefined ? current.nacionalidade : input.nacionalidade,
-        input.tipo === undefined ? current.tipo : input.tipo,
+        nextTipo,
         input.setor === undefined ? current.setor : input.setor,
         input.felicidade ?? current.felicidade,
         input.prestigio ?? current.prestigio,
@@ -1194,6 +1367,7 @@ class AdminService {
         input.ambicao ?? current.ambicao,
         input.publicoAlvo1 === undefined ? current.publicoAlvo1 : input.publicoAlvo1,
         input.publicoAlvo2 === undefined ? current.publicoAlvo2 : input.publicoAlvo2,
+        nextPilotUserId,
         sponsorId,
       ],
     );
@@ -1207,6 +1381,34 @@ class AdminService {
     return result.rows[0]
       ? { success: true }
       : { success: false, message: 'Sponsor not found' };
+  }
+
+  private async validatePersonalSponsorPilot(pilotUserId?: string | null, sponsorId?: string) {
+    if (!pilotUserId) {
+      return { success: false, message: 'Personal sponsor requires a driver wallet' };
+    }
+
+    const driver = await queryOne<{ id: string }>(
+      `SELECT id
+       FROM users
+       WHERE id = $1
+         AND COALESCE(is_active, true) = true
+         AND driver_wallet_created = true`,
+      [pilotUserId],
+    );
+    if (!driver) return { success: false, message: 'Driver wallet not found' };
+
+    const existing = await queryOne<{ id: string }>(
+      `SELECT id
+       FROM sponsors
+       WHERE pilot_user_id = $1
+         AND ($2::uuid IS NULL OR id <> $2::uuid)
+       LIMIT 1`,
+      [pilotUserId, sponsorId ?? null],
+    );
+    if (existing) return { success: false, message: 'Driver already has a personal sponsor' };
+
+    return { success: true };
   }
 
   async generateSponsorMarketRound(scuderiaId: string) {

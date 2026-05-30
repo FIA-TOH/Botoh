@@ -8,9 +8,10 @@ interface FtohCardProps {
   onClick?: () => void;
   hoverImage?: boolean;
   clickSound?: string;
+  className?: string;
 }
 
-export function FtohCard({ title, children, onClick, hoverImage = false, clickSound }: FtohCardProps) {
+export function FtohCard({ title, children, onClick, hoverImage = false, clickSound, className = '' }: FtohCardProps) {
   
   const handleClick = async () => {
     if (onClick && clickSound) {
@@ -34,12 +35,12 @@ export function FtohCard({ title, children, onClick, hoverImage = false, clickSo
 
   return (
     <div 
-      className={`max-w-md w-full relative z-10 pointer-events-auto ${onClick && !hoverImage ? 'cursor-pointer hover:scale-105 transition-transform' : ''} ${onClick ? 'cursor-pointer' : ''}`}
+      className={`w-full min-w-0 max-w-md relative z-10 pointer-events-auto ${onClick && !hoverImage ? 'cursor-pointer hover:scale-105 transition-transform' : ''} ${onClick ? 'cursor-pointer' : ''} ${className}`}
       onClick={handleClick}
     >
       {/* Title Container */}
       <div className="text-center mb-4 py-2" style={{ backgroundColor: '#FF232B' }}>
-        <h2 className="text-[64px] font-bold text-white">
+        <h2 className="text-[clamp(2rem,4vw,4rem)] font-bold text-white">
           {title}
         </h2>
       </div>
@@ -51,8 +52,8 @@ export function FtohCard({ title, children, onClick, hoverImage = false, clickSo
         opacity: 1 
       }}>
         {hoverImage ? (
-          <div className="overflow-hidden">
-            <div className={`${onClick ? 'hover:scale-110 transition-transform duration-300' : ''}`}>
+          <div className="aspect-square overflow-hidden">
+            <div className={`flex h-full w-full items-center justify-center ${onClick ? 'hover:scale-110 transition-transform duration-300' : ''}`}>
               {children}
             </div>
           </div>

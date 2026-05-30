@@ -18,6 +18,11 @@ import {
   SponsorFormModal,
 } from '@/components/admin/SponsorFormModal';
 import { PaginationControls, usePagination } from '@/components/admin/PaginationControls';
+import {
+  calculateDriverCommercialScore,
+  calculateDriverMarketScore,
+  calculateDriverOverall,
+} from '@/app/utils/driverMarket';
 
 interface AdminUser {
   id: string;
@@ -30,6 +35,21 @@ interface AdminUser {
   teamMemberships: TeamMembership[];
   driverNumber: number | null;
   language: 'pt' | 'en' | 'es';
+  driverWallet: DriverWallet | null;
+}
+
+interface DriverWallet {
+  velocidade: number;
+  consistencia: number;
+  tecnica: number;
+  experiencia: number;
+  chuva: number;
+  estrategia: number;
+  potencial: number;
+  popularidade: number;
+  nacionalidade: string;
+  temPatrocinador?: boolean;
+  sponsor?: { id: string; name: string; logoUrl: string | null } | null;
 }
 
 type Scuderia = EconomicScuderia;
@@ -90,6 +110,19 @@ interface UserFormData {
   }[];
   driverNumber: string;
   language: 'pt' | 'en' | 'es';
+  driverWallet: {
+    velocidade: string;
+    consistencia: string;
+    tecnica: string;
+    experiencia: string;
+    chuva: string;
+    estrategia: string;
+    potencial: string;
+    popularidade: string;
+    nacionalidade: string;
+    temPatrocinador?: boolean;
+    sponsor?: { id: string; name: string; logoUrl: string | null } | null;
+  } | null;
 }
 
 interface ScuderiaFormData {
@@ -114,6 +147,7 @@ const EMPTY_USER_FORM: UserFormData = {
   teamMemberships: [],
   driverNumber: '',
   language: 'pt',
+  driverWallet: null,
 };
 
 const EMPTY_SCUDERIA_FORM: ScuderiaFormData = {
@@ -131,11 +165,7 @@ const EMPTY_SCUDERIA_FORM: ScuderiaFormData = {
   setores: [],
 };
 
-const MEMBERSHIP_ROLE_OPTIONS: { value: TeamMembershipRole; label: string }[] = [
-  { value: 'team_principal', label: 'Chefe de equipe' },
-  { value: 'team_assistant', label: 'Assistente de equipe' },
-  { value: 'driver', label: 'Piloto' },
-];
+const MEMBERSHIP_ROLE_OPTIONS: TeamMembershipRole[] = ['team_principal', 'team_assistant', 'driver'];
 
 function getAuthHeaders() {
   const token = localStorage.getItem('auth_token');
@@ -164,6 +194,48 @@ function getReadableTextColor(backgroundColor?: string) {
   const luminance = (0.299 * red + 0.587 * green + 0.114 * blue) / 255;
 
   return luminance > 0.62 ? '#111827' : '#FFFFFF';
+}
+
+function createEmptyDriverWallet() {
+  return {
+    velocidade: '',
+    consistencia: '',
+    tecnica: '',
+    experiencia: '',
+    chuva: '',
+    estrategia: '',
+    potencial: '',
+    popularidade: '',
+    nacionalidade: '',
+    temPatrocinador: false,
+    sponsor: null,
+  };
+}
+
+function calculateSportingOverall(wallet: UserFormData['driverWallet']) {
+  if (!wallet) return 0;
+  return Math.round(calculateDriverOverall({
+    velocidade: Number(wallet.velocidade) || 0,
+    consistencia: Number(wallet.consistencia) || 0,
+    tecnica: Number(wallet.tecnica) || 0,
+    experiencia: Number(wallet.experiencia) || 0,
+    chuva: Number(wallet.chuva) || 0,
+    estrategia: Number(wallet.estrategia) || 0,
+  }));
+}
+
+function getDriverScoreInput(wallet: UserFormData['driverWallet']) {
+  return {
+    velocidade: Number(wallet?.velocidade) || 0,
+    consistencia: Number(wallet?.consistencia) || 0,
+    tecnica: Number(wallet?.tecnica) || 0,
+    experiencia: Number(wallet?.experiencia) || 0,
+    chuva: Number(wallet?.chuva) || 0,
+    estrategia: Number(wallet?.estrategia) || 0,
+    potencial: Number(wallet?.potencial) || 0,
+    popularidade: Number(wallet?.popularidade) || 0,
+    hasPersonalSponsor: Boolean(wallet?.temPatrocinador),
+  };
 }
 
 export default function AdminPage() {
@@ -244,6 +316,25 @@ export default function AdminPage() {
   const usersPagination = usePagination(users);
   const scuderiasPagination = usePagination(sortedScuderias);
   const sponsorsPagination = usePagination(sponsorCatalog);
+  const driverWalletUsers = useMemo(
+    () => users
+      .filter((adminUser) => Boolean(adminUser.driverWallet))
+      .map((adminUser) => ({
+        id: adminUser.id,
+        username: adminUser.username,
+        sponsorId: adminUser.driverWallet?.sponsor?.id ?? null,
+      })),
+    [users],
+  );
+  const sportingOverall = calculateSportingOverall(userForm.driverWallet);
+  const driverScoreInput = getDriverScoreInput(userForm.driverWallet);
+  const commercialScore = Number(calculateDriverCommercialScore(driverScoreInput).toFixed(2));
+  const marketScore = calculateDriverMarketScore(driverScoreInput);
+  const getMembershipRoleLabel = (role: TeamMembershipRole) => ({
+    team_principal: t.admin.teamPrincipal,
+    team_assistant: t.admin.teamAssistant,
+    driver: t.admin.driver,
+  })[role];
 
   async function loadAdminData() {
     setLoadingData(true);
@@ -302,6 +393,21 @@ export default function AdminPage() {
       })),
       driverNumber: adminUser.driverNumber?.toString() ?? '',
       language: adminUser.language ?? 'pt',
+      driverWallet: adminUser.driverWallet
+        ? {
+          velocidade: String(adminUser.driverWallet.velocidade ?? ''),
+          consistencia: String(adminUser.driverWallet.consistencia ?? ''),
+          tecnica: String(adminUser.driverWallet.tecnica ?? ''),
+          experiencia: String(adminUser.driverWallet.experiencia ?? ''),
+          chuva: String(adminUser.driverWallet.chuva ?? ''),
+          estrategia: String(adminUser.driverWallet.estrategia ?? ''),
+          potencial: String(adminUser.driverWallet.potencial ?? ''),
+          popularidade: String(adminUser.driverWallet.popularidade ?? ''),
+          nacionalidade: adminUser.driverWallet.nacionalidade ?? '',
+          temPatrocinador: adminUser.driverWallet.temPatrocinador,
+          sponsor: adminUser.driverWallet.sponsor ?? null,
+        }
+        : null,
     });
     setUserModalOpen(true);
   }
@@ -362,6 +468,19 @@ export default function AdminPage() {
                 ? membership.driverCategory
                 : null,
             })),
+            driverWallet: userForm.driverWallet
+              ? {
+                velocidade: Number(userForm.driverWallet.velocidade),
+                consistencia: Number(userForm.driverWallet.consistencia),
+                tecnica: Number(userForm.driverWallet.tecnica),
+                experiencia: Number(userForm.driverWallet.experiencia),
+                chuva: Number(userForm.driverWallet.chuva),
+                estrategia: Number(userForm.driverWallet.estrategia),
+                potencial: Number(userForm.driverWallet.potencial),
+                popularidade: Number(userForm.driverWallet.popularidade),
+                nacionalidade: userForm.driverWallet.nacionalidade.trim(),
+              }
+              : null,
           }),
         },
       );
@@ -380,7 +499,7 @@ export default function AdminPage() {
   }
 
   async function deleteUser(userId: string) {
-    if (!window.confirm('Excluir este usuário?')) return;
+    if (!window.confirm(t.admin.confirmDeleteUser)) return;
 
     try {
       const response = await fetch(apiUrl(`/api/admin/users/${userId}`), {
@@ -395,6 +514,31 @@ export default function AdminPage() {
     } catch (err) {
       showSnackbar(err instanceof Error ? err.message : t.admin.deleteUserFailed, 'error');
     }
+  }
+
+  async function removeUserPersonalSponsor() {
+    if (!editingUserId || !userForm.driverWallet?.sponsor) return;
+    const response = await fetch(apiUrl(`/api/admin/users/${editingUserId}/personal-sponsor`), {
+      method: 'DELETE',
+      headers: getAuthHeaders(),
+    });
+    const data = await response.json();
+    if (!data.success) {
+      showSnackbar(data.message || t.admin.actionFailed, 'error');
+      return;
+    }
+    setUserForm((current) => current.driverWallet
+      ? {
+        ...current,
+        driverWallet: {
+          ...current.driverWallet,
+          temPatrocinador: false,
+          sponsor: null,
+        },
+      }
+      : current);
+    showSnackbar(t.admin.actionCompleted, 'success');
+    await refreshAdminViews();
   }
 
   async function saveScuderia(event: React.FormEvent) {
@@ -744,6 +888,7 @@ export default function AdminPage() {
       fidelidade: sponsor.fidelidade,
       publicoAlvo1: sponsor.publicoAlvo1,
       publicoAlvo2: sponsor.publicoAlvo2,
+      pilotUserId: sponsor.pilotUserId ?? null,
     });
     setSponsorModalOpen(true);
   }
@@ -928,11 +1073,11 @@ export default function AdminPage() {
               onClick={() => setOpenSections((current) => ({ ...current, users: !current.users }))}
             >
               <span className={`text-xl transition-transform ${openSections.users ? 'rotate-90' : ''}`}>&rsaquo;</span>
-              <h2 className="text-2xl font-semibold">Usuários</h2>
+              <h2 className="text-2xl font-semibold">{t.admin.users}</h2>
             </button>
             {openSections.users && (
               <button className="rounded-lg bg-purple-600 px-4 py-2" onClick={openCreateUser}>
-                Criar Novo Usuário
+                {t.admin.createNewUser}
               </button>
             )}
           </div>
@@ -941,11 +1086,12 @@ export default function AdminPage() {
             <table className="w-full text-left">
               <thead className="text-gray-300">
                 <tr>
-                  <th className="py-2">Usuario</th>
-                  <th className="py-2">Curto</th>
-                  <th className="py-2">Scuderias</th>
-                  <th className="py-2">Número</th>
-                  <th className="py-2 text-right">Ações</th>
+                  <th className="py-2">{t.admin.username}</th>
+                  <th className="py-2">{t.admin.shortUsername}</th>
+                  <th className="py-2">{t.admin.relatedScuderias}</th>
+                  <th className="py-2">{t.admin.number}</th>
+                  <th className="py-2">{t.admin.driverWallet}</th>
+                  <th className="py-2 text-right">{t.admin.actions}</th>
                 </tr>
               </thead>
               <tbody>
@@ -959,7 +1105,7 @@ export default function AdminPage() {
                           <div className="flex flex-wrap gap-2">
                             {adminUser.teamMemberships.map((membership) => {
                               const roleLabels = membership.roles
-                                .map((role) => MEMBERSHIP_ROLE_OPTIONS.find((option) => option.value === role)?.label ?? role)
+                                .map((role) => getMembershipRoleLabel(role))
                                 .join(', ');
                               const backgroundColor = membership.teamColor ?? '#374151';
 
@@ -982,19 +1128,36 @@ export default function AdminPage() {
                         : '-'}
                     </td>
                     <td className="py-3">{adminUser.driverNumber ?? '-'}</td>
+                    <td className="py-3">
+                      {adminUser.driverWallet ? (
+                        <span className="rounded bg-gray-700 px-2 py-1 text-sm">
+                          {t.admin.sportingOverall}: {calculateSportingOverall({
+                            velocidade: String(adminUser.driverWallet.velocidade),
+                            consistencia: String(adminUser.driverWallet.consistencia),
+                            tecnica: String(adminUser.driverWallet.tecnica),
+                            experiencia: String(adminUser.driverWallet.experiencia),
+                            chuva: String(adminUser.driverWallet.chuva),
+                            estrategia: String(adminUser.driverWallet.estrategia),
+                            potencial: String(adminUser.driverWallet.potencial),
+                            popularidade: String(adminUser.driverWallet.popularidade),
+                            nacionalidade: adminUser.driverWallet.nacionalidade,
+                          })}
+                        </span>
+                      ) : '-'}
+                    </td>
                     <td className="py-3 text-right">
                       <button className="px-3 py-1 bg-gray-600 rounded mr-2" onClick={() => openEditUser(adminUser)}>
-                        Editar
+                        {t.admin.edit}
                       </button>
                       <button className="px-3 py-1 bg-red-700 rounded" onClick={() => deleteUser(adminUser.id)}>
-                        Excluir
+                        {t.admin.delete}
                       </button>
                     </td>
                   </tr>
                 ))}
                 {!loadingData && users.length === 0 && (
                   <tr>
-                    <td className="py-4 text-gray-400" colSpan={5}>Nenhum usuário encontrado.</td>
+                    <td className="py-4 text-gray-400" colSpan={6}>{t.admin.noUsersFound}</td>
                   </tr>
                 )}
               </tbody>
@@ -1196,11 +1359,11 @@ export default function AdminPage() {
             onSubmit={saveUser}
             className="max-h-[calc(100vh-2rem)] w-full max-w-2xl overflow-y-auto rounded-lg bg-gray-800 p-6"
           >
-            <h2 className="text-2xl font-bold mb-4">{editingUserId ? 'Editar Usuário' : 'Criar Novo Usuário'}</h2>
+            <h2 className="text-2xl font-bold mb-4">{editingUserId ? t.admin.editUser : t.admin.createNewUser}</h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <label className="block">
-                <span className="block text-sm mb-2">Usuario</span>
+                <span className="block text-sm mb-2">{t.admin.username}</span>
                 <input
                   className="w-full bg-gray-700 rounded-lg px-4 py-2"
                   name="username"
@@ -1213,7 +1376,7 @@ export default function AdminPage() {
               </label>
 
               <label className="block">
-                <span className="block text-sm mb-2">Senha</span>
+                <span className="block text-sm mb-2">{t.admin.password}</span>
                 <input
                   className="w-full bg-gray-700 rounded-lg px-4 py-2"
                   type="password"
@@ -1221,12 +1384,12 @@ export default function AdminPage() {
                   onChange={(event) => setUserForm((prev) => ({ ...prev, password: event.target.value }))}
                   minLength={6}
                   required={!editingUserId}
-                  placeholder={editingUserId ? 'Deixe em branco para manter a atual' : ''}
+                  placeholder={editingUserId ? t.admin.keepPasswordPlaceholder : ''}
                 />
               </label>
 
               <label className="block">
-                <span className="block text-sm mb-2">Usuario curto</span>
+                <span className="block text-sm mb-2">{t.admin.shortUsername}</span>
                 <input
                   className="w-full bg-gray-700 rounded-lg px-4 py-2"
                   value={userForm.shortUsername}
@@ -1239,7 +1402,7 @@ export default function AdminPage() {
               </label>
 
               <label className="block">
-                <span className="block text-sm mb-2">Numero do piloto</span>
+                <span className="block text-sm mb-2">{t.admin.driverNumber}</span>
                 <input
                   className="w-full bg-gray-700 rounded-lg px-4 py-2"
                   type="number"
@@ -1252,21 +1415,118 @@ export default function AdminPage() {
               </label>
 
               <label className="block">
-                <span className="block text-sm mb-2">Idioma</span>
+                <span className="block text-sm mb-2">{t.admin.language}</span>
                 <select
                   className="w-full bg-gray-700 rounded-lg px-4 py-2"
                   value={userForm.language}
                   onChange={(event) => setUserForm((prev) => ({ ...prev, language: event.target.value as 'pt' | 'en' | 'es' }))}
                 >
-                  <option value="pt">Portugues</option>
-                  <option value="en">Ingles</option>
-                  <option value="es">Espanhol</option>
+                  <option value="pt">{t.admin.portuguese}</option>
+                  <option value="en">{t.admin.english}</option>
+                  <option value="es">{t.admin.spanish}</option>
                 </select>
               </label>
             </div>
 
+            <div className="mt-5 rounded-lg bg-gray-900/40 p-4">
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <h3 className="font-semibold">{t.admin.driverWallet}</h3>
+                  {userForm.driverWallet && (
+                    <div className="mt-1 text-sm text-gray-300">
+                      <p>{t.admin.sportingOverall}: {sportingOverall}</p>
+                      <p>{t.admin.commercialScore}: {commercialScore}</p>
+                      <p>{t.admin.marketScore}: {marketScore}</p>
+                    </div>
+                  )}
+                </div>
+                {userForm.driverWallet ? (
+                  <button
+                    type="button"
+                    className="rounded-lg bg-red-700 px-3 py-2 text-sm"
+                    onClick={() => setUserForm((prev) => ({ ...prev, driverWallet: null }))}
+                  >
+                    {t.admin.deleteDriverWallet}
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="rounded-lg bg-gray-700 px-3 py-2 text-sm"
+                    onClick={() => setUserForm((prev) => ({ ...prev, driverWallet: createEmptyDriverWallet() }))}
+                  >
+                    {t.admin.createDriverWallet}
+                  </button>
+                )}
+              </div>
+
+              {userForm.driverWallet && (
+                <>
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                    {([
+                      ['velocidade', t.admin.speed, 0, 5],
+                      ['consistencia', t.admin.consistency, 0, 5],
+                      ['tecnica', t.admin.technique, 0, 5],
+                      ['experiencia', t.admin.experience, 0, 5],
+                      ['chuva', t.admin.rainSkill, 0, 5],
+                      ['estrategia', t.admin.strategy, 0, 5],
+                      ['potencial', t.admin.potential, 0, 100],
+                      ['popularidade', t.admin.popularity, 0, 5],
+                    ] as const).map(([key, label, min, max]) => (
+                      <label key={key} className="block">
+                        <span className="mb-2 block text-sm">{label}</span>
+                        <input
+                          required
+                          type="number"
+                          min={min}
+                          max={max}
+                          className="w-full rounded-lg bg-gray-700 px-4 py-2"
+                          value={userForm.driverWallet?.[key] ?? ''}
+                          onChange={(event) => setUserForm((prev) => prev.driverWallet ? ({
+                            ...prev,
+                            driverWallet: { ...prev.driverWallet, [key]: event.target.value },
+                          }) : prev)}
+                        />
+                      </label>
+                    ))}
+                    <label className="block">
+                      <span className="mb-2 block text-sm">{t.admin.nationality}</span>
+                      <input
+                        required
+                        className="w-full rounded-lg bg-gray-700 px-4 py-2"
+                        value={userForm.driverWallet.nacionalidade}
+                        onChange={(event) => setUserForm((prev) => prev.driverWallet ? ({
+                          ...prev,
+                          driverWallet: { ...prev.driverWallet, nacionalidade: event.target.value },
+                        }) : prev)}
+                        maxLength={120}
+                      />
+                    </label>
+                  </div>
+
+                  <div className="mt-4 rounded-lg bg-gray-800 p-3">
+                    <p className="text-sm">
+                      {t.admin.hasSponsor}: {userForm.driverWallet.temPatrocinador ? t.admin.yes : t.admin.no}
+                    </p>
+                    {userForm.driverWallet.sponsor && (
+                      <div className="mt-2 flex flex-wrap items-center gap-3">
+                        {userForm.driverWallet.sponsor.logoUrl && (
+                          <img src={userForm.driverWallet.sponsor.logoUrl} alt="" className="h-10 w-10 object-contain" />
+                        )}
+                        <span className="font-semibold">{userForm.driverWallet.sponsor.name}</span>
+                        {editingUserId && (
+                          <button type="button" className="rounded bg-red-700 px-3 py-1 text-sm" onClick={removeUserPersonalSponsor}>
+                            {t.admin.removePersonalSponsor}
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
+
             <div className="mt-4">
-              <span className="mb-3 block text-sm">Scuderias relacionadas</span>
+              <span className="mb-3 block text-sm">{t.admin.relatedScuderias}</span>
 
               <div className="space-y-3">
                 {userForm.teamMemberships.map((membership, index) => (
@@ -1284,7 +1544,7 @@ export default function AdminPage() {
                       }
                       required
                     >
-                      <option value="">Selecione a scuderia</option>
+                      <option value="">{t.admin.selectScuderia}</option>
                       {sortedScuderias.map((scuderia) => (
                         <option
                           key={scuderia.id}
@@ -1309,15 +1569,15 @@ export default function AdminPage() {
                         }))
                       }
                     >
-                      Remover
+                      {t.admin.remove}
                     </button>
 
                     <div className="grid grid-cols-1 gap-2 sm:col-span-2 sm:grid-cols-3">
                       {MEMBERSHIP_ROLE_OPTIONS.map((option) => (
-                        <label key={option.value} className="flex items-center gap-2 rounded-lg bg-gray-700 px-3 py-2">
+                        <label key={option} className="flex items-center gap-2 rounded-lg bg-gray-700 px-3 py-2">
                           <input
                             type="checkbox"
-                            checked={membership.roles.includes(option.value)}
+                            checked={membership.roles.includes(option)}
                             onChange={() =>
                               setUserForm((prev) => ({
                                 ...prev,
@@ -1326,15 +1586,15 @@ export default function AdminPage() {
 
                                   return {
                                     ...current,
-                                    roles: current.roles.includes(option.value)
-                                      ? current.roles.filter((role) => role !== option.value)
-                                      : [...current.roles, option.value],
+                                    roles: current.roles.includes(option)
+                                      ? current.roles.filter((role) => role !== option)
+                                      : [...current.roles, option],
                                   };
                                 }),
                               }))
                             }
                           />
-                          {option.label}
+                          {getMembershipRoleLabel(option)}
                         </label>
                       ))}
                     </div>
@@ -1431,16 +1691,16 @@ export default function AdminPage() {
                   }))
                 }
               >
-                Adicionar mais uma scuderia
+                {t.admin.addScuderia}
               </button>
             </div>
 
             <div className="flex gap-3 mt-6">
               <button className="flex-1 bg-purple-600 rounded-lg py-2 disabled:bg-purple-500" disabled={savingUser}>
-                {savingUser ? 'Salvando...' : 'Salvar'}
+                {savingUser ? t.admin.saving : t.admin.save}
               </button>
               <button type="button" className="flex-1 bg-gray-600 rounded-lg py-2" onClick={() => setUserModalOpen(false)}>
-                Cancelar
+                {t.admin.cancel}
               </button>
             </div>
           </form>
@@ -1682,10 +1942,12 @@ export default function AdminPage() {
         <SponsorFormModal
           labels={t.admin}
           isEditing={Boolean(editingSponsorId)}
+          currentSponsorId={editingSponsorId}
           form={sponsorForm}
           onChange={setSponsorForm}
           onClose={() => setSponsorModalOpen(false)}
           onSubmit={saveCatalogSponsor}
+          driverWalletUsers={driverWalletUsers}
         />
       )}
 

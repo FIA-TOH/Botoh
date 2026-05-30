@@ -70,6 +70,8 @@ export interface SponsorCatalogItem {
   fidelidade: number;
   publicoAlvo1: string | null;
   publicoAlvo2: string | null;
+  pilotUserId?: string | null;
+  pilotUsername?: string | null;
   scuderiasRelacionadas: { id: string; name: string }[];
 }
 

@@ -29,6 +29,11 @@ function ProtectedHome() {
     router.push('/pit-wall');
   };
 
+  const handleMarketClick = () => {
+    setLoadingButton('market');
+    router.push('/market');
+  };
+
   const handleAdminClick = () => {
     setLoadingButton('admin');
     router.push('/admin');
@@ -72,18 +77,19 @@ function ProtectedHome() {
         </div>
 
         {/* Main cards section */}
-        <div className="flex-1 flex justify-center items-center gap-8 flex-wrap px-8">
+        <div className="flex-1 flex w-full flex-wrap items-center justify-center gap-[42px] px-4 sm:px-8 lg:px-12">
           {/* Garagem Card */}
           <FtohCard
             title={t.common.garage}
             onClick={handleGarageClick}
             hoverImage
             clickSound="/sounds/garagein.mp3"
+            className="flex-[0_1_28rem]"
           >
             <img
               src="/img/img/garage.png"
               alt={t.common.garage}
-              className="w-full h-auto object-contain"
+              className="h-full w-full object-cover"
             />
           </FtohCard>
 
@@ -93,11 +99,27 @@ function ProtectedHome() {
             onClick={handlePitWallClick}
             hoverImage
             clickSound="/sounds/pitwallin.mp3"
+            className="flex-[0_1_28rem]"
           >
             <img
               src="/img/img/pitwall.png"
               alt={t.common.pitWall}
-              className="w-full h-auto object-contain"
+              className="h-full w-full object-cover"
+            />
+          </FtohCard>
+
+          {/* Mercado Card */}
+          <FtohCard
+            title={t.common.market}
+            onClick={handleMarketClick}
+            hoverImage
+            clickSound="/sounds/sell2.mp3"
+            className="flex-[0_1_28rem]"
+          >
+            <img
+              src="/img/img/market.png"
+              alt={t.common.market}
+              className="h-full w-full object-cover"
             />
           </FtohCard>
         </div>

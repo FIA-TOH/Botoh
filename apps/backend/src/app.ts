@@ -10,6 +10,7 @@ import garageRoutes from './routes/garage';
 import roomRoutes from './routes/room';
 import adminRoutes from './routes/admin';
 import notificationRoutes from './routes/notifications';
+import marketRoutes from './routes/market';
 import { securityHeaders, rateLimiter, validateRequest, errorHandler, requestLogger } from './middleware/security';
 
 interface CreateAppOptions {
@@ -62,6 +63,7 @@ export function createApp(options: CreateAppOptions = {}) {
   app.use('/api/garage', garageRoutes);
   app.use('/api/admin', adminRoutes);
   app.use('/api/notifications', notificationRoutes);
+  app.use('/api/market', marketRoutes);
 
   if (includePitwallRoutes) {
     app.use('/api/room', roomRoutes);

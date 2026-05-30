@@ -29,6 +29,7 @@ export const EMPTY_SPONSOR_FORM: SponsorFormData = {
   fidelidade: 1,
   publicoAlvo1: null,
   publicoAlvo2: null,
+  pilotUserId: null,
 };
 
 interface Labels {
@@ -50,6 +51,8 @@ interface Labels {
   loyalty: string;
   targetAudience1: string;
   targetAudience2: string;
+  sponsoredPilot: string;
+  selectPilot: string;
   targetAudiences: Record<string, string>;
   contractTypes: Record<string, string>;
   save: string;
@@ -59,19 +62,23 @@ interface Labels {
 interface Props {
   labels: Labels;
   isEditing: boolean;
+  currentSponsorId?: string | null;
   form: SponsorFormData;
   onChange: (form: SponsorFormData) => void;
   onClose: () => void;
   onSubmit: (event: React.FormEvent) => void;
+  driverWalletUsers: { id: string; username: string; sponsorId?: string | null }[];
 }
 
 export function SponsorFormModal({
   labels,
   isEditing,
+  currentSponsorId,
   form,
   onChange,
   onClose,
   onSubmit,
+  driverWalletUsers,
 }: Props) {
   function setField<K extends keyof SponsorFormData>(key: K, value: SponsorFormData[K]) {
     onChange({ ...form, [key]: value });
@@ -111,6 +118,28 @@ export function SponsorFormModal({
               {SPONSOR_CONTRACT_CATEGORIES.map((category) => <option key={category} value={category}>{labels.contractTypes[category]}</option>)}
             </select>
           </label>
+          {form.tipo === 'personal_sponsor' && (
+            <label>
+              <span className="mb-2 block text-sm">{labels.sponsoredPilot}</span>
+              <select
+                required
+                className="w-full rounded bg-gray-700 p-2"
+                value={form.pilotUserId ?? ''}
+                onChange={(e) => setField('pilotUserId', e.target.value || null)}
+              >
+                <option value="">{labels.selectPilot}</option>
+                {driverWalletUsers.map((driver) => (
+                  <option
+                    key={driver.id}
+                    value={driver.id}
+                    disabled={Boolean(driver.sponsorId && driver.sponsorId !== currentSponsorId)}
+                  >
+                    {driver.username}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
           <label>
             <span className="mb-2 block text-sm">{labels.sector}</span>
             <select className="w-full rounded bg-gray-700 p-2" value={form.setor ?? ''} onChange={(e) => setField('setor', e.target.value || null)}>
