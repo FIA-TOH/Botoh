@@ -171,4 +171,12 @@
   "BR_ELIMINATED": "☠️🔥 {{name}} eliminated 🔥☠️",
   "BR_REMAINING": "☠️👥 {{remaining}} remaining. 👥☠️",
   "BR_WINNER": "👑🏆 {{name}} won!, {{eliminated}} eliminated. 👑🏆"
+,
+  "GEAR_INFO": "Gear {{gear}}/{{total}} | RPM {{rpm}}/{{redline}} | Mode: {{mode}}",
+  "GEAR_CHANGED": "{{arrow}} Gear {{gear}}  ({{rpm}} rpm)",
+  "GEAR_REJECTED_OVERSPEED": "Downshift refused: too fast for the lower gear.",
+  "GEAR_REJECTED_RANGE": "Already at gear {{gear}} – no further shift in that direction.",
+  "RPM_LIMITER_HIT": "⚠ Rev limiter active – upshift!",
+  "GEAR_MODE_CHANGED": "⚙ Gearbox mode set to {{mode}}.",
+  "GEAR_MODE_INVALID": "Unknown mode '{{mode}}'. Use: manual · auto"
 }

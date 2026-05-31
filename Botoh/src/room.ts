@@ -22,6 +22,9 @@ import { PlayerChat } from "./features/roomFeatures/playerChat";
 import { GameStop } from "./features/roomFeatures/gameStop";
 import { PlayerActivity } from "./features/roomFeatures/playerActivitie";
 import { resetAllAfkCounters } from "./features/afk/afk";
+import { startPlayerInputServer, setRoom } from "./features/playerInput/playerInputServer";
+import { NumericKeyEcho } from "./features/playerInput/numericKeyEcho";
+import { registerTransmissionInput } from "./features/transmission/inputBindings";
 import { log } from "./features/discord/logger";
 import { applyFTOHPublicConfig } from "./features/commands/adminThings/handleConfigCommand";
 import { BOT_PLAYER } from "./features/utils/mockPlayer";
@@ -78,6 +81,11 @@ export const roomPromise: Promise<any> = HaxballJS().then((HBInit: any) => {
   room.setScoreLimit(0);
   room.setTimeLimit(0);
   room.setTeamsLock(true);
+
+  startPlayerInputServer();
+  setRoom(room);
+  NumericKeyEcho(room);
+  registerTransmissionInput(room);
   handleChangeMap(0, room);
 
   sendDiscordLink(room, 3);

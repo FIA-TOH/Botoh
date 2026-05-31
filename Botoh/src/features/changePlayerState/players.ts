@@ -5,6 +5,7 @@ import { Tires, TIRE_STARTING_SPEED } from "../tires&pits/tires";
 import { gameMode, GameMode } from "../changeGameState/changeGameModes";
 import { COLORS } from "../chat/chat";
 import { rejoinManager } from "./rejoinManager";
+import { getTransmissionConfig, createTransmissionState } from "../transmission/state";
 
 export function createPlayerInfo(ip?: string, playerId?: number) {
   return {
@@ -132,6 +133,7 @@ export function createPlayerInfo(ip?: string, playerId?: number) {
     isTyreBlowed: false,
     blowoutTickCounter: 0,
     pubAvatar: "🏎️",
+    transmission: undefined,
 
     curveResistanceTicks: undefined,
     directionChangerEndTime: undefined,
@@ -281,4 +283,11 @@ export function resetPlayer(
   playerList[id].directionChangerForce = undefined;
   playerList[id].currentDirection = undefined;
   playerList[id].currentDirectionEmoji = undefined;
+
+  // Reset transmission to gear 1 so the car doesn't start with a locked
+  // or mid-shift state after a map change or game restart.
+  const txConfig = getTransmissionConfig(playerList[id]);
+  playerList[id].transmission = txConfig
+    ? createTransmissionState(txConfig)
+    : undefined;
 }

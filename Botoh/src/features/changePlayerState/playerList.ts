@@ -4,6 +4,7 @@ import { PitStep } from "../tires&pits/pitMessaging";
 import { PitResult } from "../tires&pits/pitStopFunctions";
 
 import { Tires } from "../tires&pits/tires";
+import { TransmissionState } from "../transmission/types";
 
 export interface PitsInfo {
   pitsNumber: number;
@@ -137,6 +138,9 @@ export interface PlayerInfo {
   blowoutTickCounter: number;
   
   pubAvatar: string;
+
+  /** Per-player transmission state. Created lazily for league players. */
+  transmission?: TransmissionState;
 }
 
 type PlayerList = {

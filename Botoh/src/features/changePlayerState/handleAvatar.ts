@@ -21,6 +21,7 @@ export enum Situacions {
   None = "None",
   ManagingTyresOn = "ManagingTyresOn",
   ManagingTyresOff = "ManagingTyresOff",
+  ShiftHint = "ShiftHint",
 }
 
 export const TIRE_AVATAR: { [key in Tires]: string } = {
@@ -54,6 +55,7 @@ const SITUATION_PRIORITY: Record<Situacions, number> = {
   [Situacions.None]: 0,
   [Situacions.ManagingTyresOn]: 7,
   [Situacions.ManagingTyresOff]: 7,
+  [Situacions.ShiftHint]: 2,
 };
 
 const playerTimers: Record<
@@ -260,6 +262,13 @@ const situationHandlers: Record<
       restoreTyreOrCar(player.id, room);
       currentSituacion[player.id] = Situacions.Null;
     }, 3000);
+  },
+
+  [Situacions.ShiftHint]: (player, room) => {
+    // No auto-clear: the caller (handleSpeed) drives entry & exit explicitly
+    // by re-issuing Situacions.None / restoreTyreOrCar when the RPM leaves
+    // the hint window. Avoids re-setting the avatar every tick.
+    room.setPlayerAvatar(player.id, "⚙️");
   },
 };
 

@@ -345,6 +345,11 @@ export default function en_commands(
     args: string[],
     room: RoomObject,
   ) => void,
+  handleGearCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
 ): Commands {
   return {
     "!admin": handleAdminCommand,
@@ -422,5 +427,7 @@ export default function en_commands(
     "!config": handleConfigCommand,
     "!manage_tyres": handleManageTyresCommand,
     "!pit": handlePitCommand,
+    "!gear": handleGearCommand,
+    "!marcha": handleGearCommand,
   };
 }

@@ -4,6 +4,7 @@ import es_commands from "../../locales/commands/es";
 import tr_commands from "../../locales/commands/tr";
 import pt_commands from "../../locales/commands/pt";
 import { Commands } from "./commands";
+import { handleGearCommand } from "./transmission/handleGearCommand";
 
 import { handleAdminCommand } from "./adminThings/handleAdminCommand";
 import { handleCommandsCommand } from "./commands/handleCommandsCommand";
@@ -424,6 +425,11 @@ export type CommandFunction = (
     args: string[],
     room: RoomObject,
   ) => void,
+  handleGearCommand: (
+    byPlayer: PlayerObject,
+    args: string[],
+    room: RoomObject,
+  ) => void,
 ) => Commands;
 
 function importCommandsByLanguage(commandFunctions: {
@@ -506,6 +512,7 @@ function importCommandsByLanguage(commandFunctions: {
         handleConfigCommand,
         handleManageTyresCommand,
         handlePitCommand,
+        handleGearCommand,
       ),
     }),
     {},
@@ -589,6 +596,7 @@ function importCommands(...commandFunction: CommandFunction[]): Commands {
         handleConfigCommand,
         handleManageTyresCommand,
         handlePitCommand,
+        handleGearCommand,
       ),
     }),
     {},

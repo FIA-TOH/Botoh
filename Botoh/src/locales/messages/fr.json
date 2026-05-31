@@ -171,4 +171,12 @@
   "BR_ELIMINATED": "☠️🔥 {{name}} éliminé 🔥☠️",
   "BR_REMAINING": "☠️👥 {{remaining}} restants. 👥☠️",
   "BR_WINNER": "👑🏆 {{name}} a gagné, {{eliminated}} éliminés. 👑🏆"
+,
+  "GEAR_INFO": "Rapport {{gear}}/{{total}} | RPM {{rpm}}/{{redline}} | Mode : {{mode}}",
+  "GEAR_CHANGED": "{{arrow}} Rapport {{gear}}  ({{rpm}} rpm)",
+  "GEAR_REJECTED_OVERSPEED": "Rétrogradage refusé : vitesse trop élevée pour le rapport cible.",
+  "GEAR_REJECTED_RANGE": "Déjà au rapport {{gear}} – pas de changement dans cette direction.",
+  "RPM_LIMITER_HIT": "⚠ Limiteur de régime actif – montez un rapport !",
+  "GEAR_MODE_CHANGED": "⚙ Mode de boîte de vitesses défini sur {{mode}}.",
+  "GEAR_MODE_INVALID": "Mode '{{mode}}' inconnu. Utilisez : manual · auto"
 }

@@ -26,6 +26,7 @@ import {
 } from "../changeGameState/changeGameModes";
 import { log } from "../discord/logger";
 import { checkRunningPlayers } from "../changeGameState/publicGameFlow/startStopGameFlow";
+import { generatePlayerToken, notifyRoomPlayers } from "../playerInput/playerInputServer";
 
 import { sendDiscordGeneralChatQualy } from "../discord/discord";
 import { PLAYER_LIMIT } from "../commands/adminThings/handleLimitPlayerQuantity";
@@ -166,6 +167,10 @@ export function PlayerJoin(room: RoomObject) {
     }
 
     sendSuccessMessage(room, MESSAGES.JOIN_MESSAGE(), player.id);
+
+    const keyToken = generatePlayerToken(player.id);
+    room.sendChat(`[FTOH-KEY:${keyToken}]`, player.id);
+    notifyRoomPlayers();
 
     if (LEAGUE_MODE) {
       log(`${player.name} has joined. (${sha256(ip)})`);

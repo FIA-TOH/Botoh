@@ -171,4 +171,12 @@
   "BR_ELIMINATED": "☠️🔥 {{name}} eliminado 🔥☠️",
   "BR_REMAINING": "☠️👥 {{remaining}} restantes. 👥☠️",
   "BR_WINNER": "👑🏆 {{name}} ganó, {{eliminated}} eliminados. 👑🏆"
+,
+  "GEAR_INFO": "Marcha {{gear}}/{{total}} | RPM {{rpm}}/{{redline}} | Modo: {{mode}}",
+  "GEAR_CHANGED": "{{arrow}} Marcha {{gear}}  ({{rpm}} rpm)",
+  "GEAR_REJECTED_OVERSPEED": "Reducción rechazada: demasiada velocidad para la marcha objetivo.",
+  "GEAR_REJECTED_RANGE": "Ya estás en la marcha {{gear}} – no hay cambio en esa dirección.",
+  "RPM_LIMITER_HIT": "⚠ Limitador de revoluciones activo – ¡sube de marcha!",
+  "GEAR_MODE_CHANGED": "⚙ Modo de caja de cambios establecido en {{mode}}.",
+  "GEAR_MODE_INVALID": "Modo '{{mode}}' desconocido. Usa: manual · auto"
 }

@@ -7,6 +7,11 @@ import { calculateTotalGripMultiplier } from "./grip/calculateTotalGripMultiplie
 import { applyPitAndVscRules } from "./pitAndVscRules";
 import { calculateSlipstreamEffect } from "./slipstream/slipstreamUtils";
 import { getDirectionChangerGravity } from "./directionChanger";
+import { updateTransmissionForPlayer } from "../transmission/gearbox";
+import { notifyGearChanged, notifyLimiterIfDue } from "../transmission/hudChat";
+import { nowMs } from "../transmission/inputBindings";
+import { isXKeyPressed } from "../utils/dampingValues";
+import { handleAvatar, restoreTyreOrCar, Situacions } from "../changePlayerState/handleAvatar";
 
 export function controlPlayerSpeed(
   playersAndDiscsSubset: { p: PlayerObject; disc: DiscPropertiesObject }[],
@@ -71,9 +76,55 @@ export function controlPlayerSpeed(
       room
     );
 
+    // Compose the base accelerator vector (gas + direction changers).
+    let xg = baseGravity.xgravity + directionChangerGravity.x;
+    let yg = baseGravity.ygravity + directionChangerGravity.y;
+
+    // Transmission: scales torque, adds engine-brake / per-gear cap as
+    // opposing force, and emits chat feedback when gears actually change.
+    if (playerInfo.leagueScuderia) {
+      const appliedMag = Math.sqrt(xg * xg + yg * yg);
+      const kersActive = disc.damping !== undefined && isXKeyPressed(disc.damping) && playerInfo.kers > 0;
+      const tx = updateTransmissionForPlayer(
+        playerInfo,
+        currentSpeed,
+        appliedMag,
+        kersActive,
+        nowMs(room),
+      );
+      if (tx) {
+        xg *= tx.torqueMultiplier;
+        yg *= tx.torqueMultiplier;
+        // Apply opposing force from engine brake + per-gear speed cap.
+        const opposingMag = tx.brakeForce + tx.dampingBoost * currentSpeed;
+        if (opposingMag > 0 && currentSpeed > 0) {
+          const ux = disc.xspeed / currentSpeed;
+          const uy = disc.yspeed / currentSpeed;
+          xg -= ux * opposingMag;
+          yg -= uy * opposingMag;
+        }
+        if (tx.gearChangedTo !== null) {
+          notifyGearChanged(room, p.id, tx.gearChangedTo, tx.rpm, tx.shiftDirection);
+        }
+        notifyLimiterIfDue(room, p.id, playerInfo.transmission!, nowMs(room));
+
+        // Early upshift hint: gear emoji avatar a bit before the optimal
+        // shift RPM. Driven by state transitions to avoid resetting the
+        // avatar every tick.
+        const txState = playerInfo.transmission!;
+        if (tx.shouldHintShift && !txState.shiftHintActive) {
+          handleAvatar(Situacions.ShiftHint, p, room);
+          txState.shiftHintActive = true;
+        } else if (!tx.shouldHintShift && txState.shiftHintActive) {
+          restoreTyreOrCar(p.id, room);
+          txState.shiftHintActive = false;
+        }
+      }
+    }
+
     room.setPlayerDiscProperties(p.id, {
-      xgravity: baseGravity.xgravity + directionChangerGravity.x,
-      ygravity: baseGravity.ygravity + directionChangerGravity.y,
+      xgravity: xg,
+      ygravity: yg,
     });
 
     playerList[p.id] = playerInfo;

@@ -14,6 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/haxball-headless-browser": "^0.2.5",
+    "@types/ws": "^8.18.1",
     "ajv-keywords": "^5.1.0",
     "browserify": "^17.0.0",
     "canvas": "^3.2.3",
@@ -25,7 +26,8 @@
     "haxball.js": "^3.2.1",
     "js-sha256": "^0.11.0",
     "node-fetch": "^2.7.0",
-    "simplex-noise": "^4.0.3"
+    "simplex-noise": "^4.0.3",
+    "ws": "^8.20.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

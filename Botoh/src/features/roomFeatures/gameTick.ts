@@ -28,9 +28,14 @@ import { checkWeatherUpdate } from '../weather/weatherManager';
 import { updateLeagueStartAFKDetection } from '../afk/leagueStartAFKDetection';
 import { checkVSCDuration } from '../safetyCar/vsc';
 import { updateNewPitSystemForPlayer } from "../tires&pits/newPitSystem/pitTickHandler";
-import { handleManageTyreXKeyDetection } from "../utils/handleXKeyDetection";
+import { handleManageTyreXKeyDetection, handleTransmissionXKeyDetection } from "../utils/handleXKeyDetection";
+import { pushHudForPlayer } from "../playerInput/hudBroadcaster";
 
 const detectCutThrottledByPlayer: Map<number, ReturnType<typeof throttlePerSecond>> = new Map();
+
+/** Tick counter for the userscript HUD broadcast (~10 Hz at 60 tps). */
+let hudTickCounter = 0;
+const HUD_TICK_INTERVAL = 6;
 
 export let gameStarted = false;
 export function setGameStarted(value: boolean) {
@@ -78,6 +83,7 @@ export function GameTick(room: RoomObject) {
       checkTireStatus(p, room);
 
       if (pad.disc && pad.disc.damping !== undefined) {
+        handleTransmissionXKeyDetection(p.id, pad.disc, currentTime); // temp: X=up, XX=down
         handleManageTyreXKeyDetection(p.id, pad.disc.damping, currentTime, room, 2);
       }
 
@@ -99,6 +105,14 @@ export function GameTick(room: RoomObject) {
       updateNewPitSystemForPlayer(p, pad.disc, room, currentTime);
 
     });
+
+    hudTickCounter++;
+    if (hudTickCounter >= HUD_TICK_INTERVAL) {
+      hudTickCounter = 0;
+      players.forEach((pad) => {
+        pushHudForPlayer(pad.p.id);
+      });
+    }
 
     afkKick(room);
     checkWeatherUpdate(room);

@@ -8,6 +8,7 @@ import { McLarper } from "./scuderia/mclarper";
 import { Penshiryu } from "./scuderia/penshiryu";
 import { ScuderiaColors } from "./scuderiaColours";
 import { Suspension } from "./tyres";
+import { TransmissionConfig } from "../transmission/types";
 
 export interface leagueScuderia {
   name: string;
@@ -18,6 +19,8 @@ export interface leagueScuderia {
   batery?: Batery;
   suspension?: Suspension;
   pitCrew?: PitCrew;
+  /** Optional per-scuderia transmission override. Falls back to DEFAULT_TRANSMISSION. */
+  transmission?: TransmissionConfig;
 }
 
 export const leagueScuderia: { [key: string]: leagueScuderia } = {

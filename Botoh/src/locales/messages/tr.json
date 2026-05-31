@@ -171,4 +171,12 @@
   "BR_WINNER": "👑🏆 {{name}} kazandı, {{eliminated}} elendi. 👑🏆",
   "LAPPED_NORMALIZED_LAPS": "{{name}} turlarını normalleştirdi ve şimdi grid ile birlikte",
   "LAPPED_REMAINING_LAPS": "{{name}} grid'e katılmak için {{laps}} daha tur(lar) var"
+,
+  "GEAR_INFO": "Vites {{gear}}/{{total}} | RPM {{rpm}}/{{redline}} | Mod: {{mode}}",
+  "GEAR_CHANGED": "{{arrow}} Vites {{gear}}  ({{rpm}} rpm)",
+  "GEAR_REJECTED_OVERSPEED": "Vites küçültme reddedildi: hedef vites için hız çok yüksek.",
+  "GEAR_REJECTED_RANGE": "Zaten {{gear}}. vitedesin – bu yönde başka vites yok.",
+  "RPM_LIMITER_HIT": "⚠ Devir sınırlayıcı etkin – vites yükselt!",
+  "GEAR_MODE_CHANGED": "⚙ Şanzıman modu {{mode}} olarak ayarlandı.",
+  "GEAR_MODE_INVALID": "'{{mode}}' modu bilinmiyor. Kullanın: manual · auto"
 }

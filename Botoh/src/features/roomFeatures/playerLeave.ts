@@ -20,9 +20,11 @@ import { sendQualiResultsToDiscord } from "../discord/logResults";
 import { getPlayerByRacePosition } from "../playerFeatures/getPlayerBy";
 import { sendDiscordGeneralChatQualy } from "../discord/discord";
 import { rejoinManager } from "../changePlayerState/rejoinManager";
+import { clearPlayerInput } from "../playerInput/playerInputServer";
 
 export function PlayerLeave(room: RoomObject) {
   room.onPlayerLeave = function (player) {
+    clearPlayerInput(player.id);
     if (player.admin) delete afkAdmins[player.id];
     updatePlayerActivity(player);
     handlePlayerLeave(player, room);
