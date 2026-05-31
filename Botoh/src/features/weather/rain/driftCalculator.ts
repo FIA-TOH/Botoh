@@ -121,6 +121,8 @@ export function calculateTotalDrift(tireType: TireType, sector: number, currentT
   
   if (tireType === TireType.DRY) {
     finalDrift = Math.min(finalDrift * 4, DEFAULT_VALUES.MAX_TOTAL_DRIFT);
+  } else if (tireType === TireType.WET) {
+    finalDrift *= 0.5;
   }
   
   driftCache.set(cacheKey, finalDrift);
