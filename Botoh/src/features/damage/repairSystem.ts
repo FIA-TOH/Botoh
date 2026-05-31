@@ -95,6 +95,12 @@ export function handleFixCommand(
 
   const currentTime = room.getScores()?.time || 0;
   const delaySeconds = Math.random() * 1.8 + 0.2;
+  room.setPlayerDiscProperties(byPlayer.id, {
+    xspeed: 0,
+    yspeed: 0,
+    xgravity: 0,
+    ygravity: 0,
+  });
 
   playerInfo.repairState = {
     isWaitingForRepair: true,

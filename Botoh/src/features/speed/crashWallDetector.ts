@@ -13,6 +13,8 @@ type Segment = [Point, Point];
 const detectorSegmentsCache = new Map<string, Segment[]>();
 const playerTouchedCrashWallDetectors = new Map<number, Set<string>>();
 const previousPlayerSpeed = new Map<number, number>();
+const lastPlayerDamageAt = new Map<number, number>();
+const DAMAGE_COOLDOWN_MS = 1000;
 
 export let damageEnabled = false;
 
@@ -159,12 +161,17 @@ function applyCrashDamage(playerId: number, impactSpeed: number) {
   const playerInfo = playerList[playerId];
   if (!playerInfo) return null;
 
+  const now = Date.now();
+  const lastDamageAt = lastPlayerDamageAt.get(playerId) ?? 0;
+  if (now - lastDamageAt < DAMAGE_COOLDOWN_MS) return null;
+
   const currentDamage = playerInfo.carDamage ?? 0;
   const calculatedDamage = roundDamage(impactSpeed / 2);
   const newDamage = roundDamage(Math.min(100, currentDamage + calculatedDamage));
   const damageTaken = roundDamage(newDamage - currentDamage);
 
   playerInfo.carDamage = newDamage;
+  lastPlayerDamageAt.set(playerId, now);
 
   return {
     damageTaken,
