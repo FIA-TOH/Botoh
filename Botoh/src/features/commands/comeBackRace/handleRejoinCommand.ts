@@ -12,6 +12,7 @@ import {
 import { MESSAGES } from "../../chat/messages";
 import { rejoinManager } from "../../changePlayerState/rejoinManager";
 import { idToAuth } from "../../changePlayerState/playerList";
+import { clearPlayerAfkActivity } from "../../afk/afk";
 
 export function handleRejoinCommand(
   byPlayer: PlayerObject,
@@ -48,6 +49,7 @@ export function handleRejoinCommand(
   }
 
   room.setPlayerTeam(byPlayer.id, Teams.RUNNERS);
+  clearPlayerAfkActivity(byPlayer.id);
 
   setTimeout(() => {
     const currentPlayerInfo = playerList[byPlayer.id];
@@ -95,6 +97,7 @@ export function handleRejoinCommand(
     handleAvatar(Situacions.ChangeTyre, byPlayer, room);
     
     rejoinManager.clearPlayerData(playerAuth);
+    clearPlayerAfkActivity(byPlayer.id);
   }, 100);
 
   sendAlertMessage(room, MESSAGES.CAME_BACK_RACE_ONE(), byPlayer.id);

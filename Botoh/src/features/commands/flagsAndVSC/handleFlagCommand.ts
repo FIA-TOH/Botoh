@@ -11,6 +11,7 @@ import {
 } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { clearDebris } from "../../debris/clearDebris";
+import { clearAllAfkActivities } from "../../afk/afk";
 import { getPlayerAndDiscs } from "../../playerFeatures/getPlayerAndDiscs";
 import { vsc, changeVSC } from "../../safetyCar/vsc";
 import { isSCActive } from "./handleSCCommand";
@@ -76,6 +77,7 @@ export function handleFlagCommand(
     if (vsc === true) {
       changeVSC();
     }
+    clearAllAfkActivities();
     if (presentationLap === true) {
       handlePresentationLapCommand(undefined, ["off"], room);
     }
@@ -92,6 +94,7 @@ export function handleFlagCommand(
     if (vsc === true) {
       changeVSC();
     }
+    clearAllAfkActivities();
     if (presentationLap === true) {
       handlePresentationLapCommand(undefined, ["off"], room);
     }

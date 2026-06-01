@@ -13,7 +13,7 @@ import {
 } from "../changeGameState/changeGameModes";
 import { Teams } from "../changeGameState/teams";
 import { log } from "../discord/logger";
-import { updatePlayerActivity, handlePlayerLeave } from "../afk/afk";
+import { clearPlayerAfkActivity, handlePlayerLeave } from "../afk/afk";
 import { followPlayerId } from "../cameraAndBall/cameraFollow";
 import { checkRunningPlayers } from "../changeGameState/publicGameFlow/startStopGameFlow";
 import { changeGameStoppedNaturally } from "../changeGameState/gameStopeedNaturally";
@@ -26,8 +26,8 @@ import { rebalanceFirstDriverForTeam } from "../commands/login/handleLoginComman
 export function PlayerLeave(room: RoomObject) {
   room.onPlayerLeave = function (player) {
     if (player.admin) delete afkAdmins[player.id];
-    updatePlayerActivity(player);
     handlePlayerLeave(player, room);
+    clearPlayerAfkActivity(player.id);
 
     const playerObj = playerList[player.id];
     const playerTeamId = playerObj?.leagueScuderia;
