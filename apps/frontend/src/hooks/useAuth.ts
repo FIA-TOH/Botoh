@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, createContext, useContext, ReactNode } from 'react';
+import React, { useState, useEffect, createContext, useContext, ReactNode, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { apiUrl } from '@/config/api';
 import { clearAuthCookie, setAuthCookie } from '@/config/authCookie';
@@ -77,6 +77,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(() => Boolean(initialAuth.token));
   const router = useRouter();
 
+  const clearAuthData = useCallback(() => {
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('user_info');
+    clearAuthCookie();
+    setUser(null);
+    setToken(null);
+  }, []);
+
+  const redirectToLogin = useCallback(() => {
+    clearAuthData();
+    router.replace('/login');
+  }, [clearAuthData, router]);
+
   // Check authentication status on mount
   useEffect(() => {
     const checkAuth = async () => {
@@ -126,7 +139,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               clearAuthData();
             }
           } catch (verifyError) {
-            // Keep localStorage auth even if backend fails
+            // Keep localStorage auth on transient connection failures.
           }
         }
       } catch (error) {
@@ -137,15 +150,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     checkAuth();
-  }, []);
+  }, [clearAuthData]);
 
-  const clearAuthData = () => {
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('user_info');
-    clearAuthCookie();
-    setUser(null);
-    setToken(null);
-  };
+  useEffect(() => {
+    const originalFetch = window.fetch.bind(window);
+    const authApiBaseUrl = apiUrl('/api/auth');
+    const protectedApiBaseUrl = apiUrl('/api');
+
+    window.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
+      const response = await originalFetch(input, init);
+      const requestUrl = typeof input === 'string'
+        ? input
+        : input instanceof URL
+          ? input.toString()
+          : input.url;
+
+      const isProtectedApiRequest = requestUrl.startsWith(protectedApiBaseUrl);
+      const isAuthAction = requestUrl.startsWith(`${authApiBaseUrl}/login`)
+        || requestUrl.startsWith(`${authApiBaseUrl}/logout`);
+
+      if (response.status === 401 && isProtectedApiRequest && !isAuthAction) {
+        redirectToLogin();
+      }
+
+      return response;
+    };
+
+    return () => {
+      window.fetch = originalFetch;
+    };
+  }, [redirectToLogin]);
 
   const login = async (username: string, password: string): Promise<{ success: boolean; message?: string; code?: string }> => {
     try {

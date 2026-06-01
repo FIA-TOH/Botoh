@@ -35,6 +35,28 @@ let safetyCarActivatedForAfkLeave = false;
 const MIN_SPEED_FOR_ACTIVITY = 20;
 const MIN_SPEED_FOR_ACTIVITY_FOR_COME_BACK = 5;
 
+export function clearPlayerAfkActivity(playerId: number) {
+  delete playerActivities[playerId];
+
+  const playerProps = playerList[playerId];
+  if (playerProps) {
+    playerProps.afkAlert = false;
+  }
+}
+
+export function clearAllAfkActivities() {
+  Object.keys(playerActivities).forEach((playerId) => {
+    clearPlayerAfkActivity(Number(playerId));
+  });
+
+  Object.keys(playerList).forEach((playerId) => {
+    const numericPlayerId = Number(playerId);
+    if (!Number.isNaN(numericPlayerId)) {
+      clearPlayerAfkActivity(numericPlayerId);
+    }
+  });
+}
+
 function isAfkSafetyLogicAllowed(): boolean {
   return (
     gameMode !== GameMode.WAITING &&
@@ -103,7 +125,7 @@ export function isPlayerMovingAtComeBackSpeed(playerId: number, room: RoomObject
 
 export function updatePlayerActivity(player: PlayerObject, room?: RoomObject) {
   if (!isAfkSafetyLogicAllowed()) {
-    delete playerActivities[player.id];
+    clearPlayerAfkActivity(player.id);
     return;
   }
 
@@ -171,12 +193,12 @@ export function handlePlayerLeave(player: PlayerObject, room: RoomObject) {
   const playerId = player.id;
 
   if (!isAfkSafetyLogicAllowed()) {
-    delete playerActivities[playerId];
+    clearPlayerAfkActivity(playerId);
     return;
   }
   
   if (!isRealSafetyEnabled()) {
-    delete playerActivities[playerId];
+    clearPlayerAfkActivity(playerId);
     return;
   }
   
@@ -188,12 +210,12 @@ export function handlePlayerLeave(player: PlayerObject, room: RoomObject) {
       extendVSCDuration();
     }
     
-    delete playerActivities[playerId];
+    clearPlayerAfkActivity(playerId);
     return;
   }
   
   if (safetyCarActivatedForAfkLeave) {
-    delete playerActivities[playerId];
+    clearPlayerAfkActivity(playerId);
     return;
   }
   
@@ -229,7 +251,7 @@ export function handlePlayerLeave(player: PlayerObject, room: RoomObject) {
     }
   }
   
-  delete playerActivities[playerId];
+  clearPlayerAfkActivity(playerId);
 }
 
 export function resetSafetyCarActivationForRace() {

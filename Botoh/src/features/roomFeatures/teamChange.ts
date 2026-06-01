@@ -9,7 +9,7 @@ import {
   GeneralGameMode,
 } from "../changeGameState/changeGameModes";
 import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
-import { updatePlayerActivity } from "../afk/afk";
+import { clearPlayerAfkActivity, updatePlayerActivity } from "../afk/afk";
 import { followPlayerId } from "../cameraAndBall/cameraFollow";
 import { moveToBox } from "../comeBackRace.ts/moveToBox";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
@@ -25,7 +25,12 @@ export function TeamChange(room: RoomObject) {
       resetPlayer(changedPlayer, room, changedPlayer.id);
     }
     const playerObj = playerList[changedPlayer.id];
-    updatePlayerActivity(changedPlayer);
+
+    if (changedPlayer.team === Teams.RUNNERS) {
+      updatePlayerActivity(changedPlayer, room);
+    } else {
+      clearPlayerAfkActivity(changedPlayer.id);
+    }
 
     if (
       changedPlayer.id === followPlayerId &&

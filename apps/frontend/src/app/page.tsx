@@ -14,11 +14,6 @@ function ProtectedHome() {
   const router = useRouter();
   const [loadingButton, setLoadingButton] = useState<string | null>(null);
 
-  // Debug: Check user role
-  console.log('User data:', user);
-  console.log('User role:', user?.role);
-  console.log('Is admin?', user?.role === 'admin');
-
   const handleGarageClick = () => {
     setLoadingButton('garage');
     router.push('/garage');

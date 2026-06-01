@@ -1,5 +1,6 @@
 import { sendErrorMessage, sendChatMessage, sendYellowMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
+import { clearAllAfkActivities } from "../../afk/afk";
 import { changeVSC, vsc } from "../../safetyCar/vsc";
 import { RaceControlState, setNeutralizationState } from "./raceControl";
 
@@ -23,6 +24,7 @@ export function handleVSCCommand(
     sendYellowMessage(room, MESSAGES.VSC_DEPLOYED());
   } else {
     setNeutralizationState(null);
+    clearAllAfkActivities();
     sendChatMessage(room, MESSAGES.VSC_NOT_ACTIVE());
   }
 }
