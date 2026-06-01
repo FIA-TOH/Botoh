@@ -22,6 +22,10 @@ const userValidation = [
   body('teamMemberships')
     .isArray()
     .withMessage('Team memberships must be an array'),
+  body('role')
+    .optional()
+    .isIn(['admin', 'user'])
+    .withMessage('User role is invalid'),
   body('teamMemberships.*.teamId')
     .isUUID()
     .withMessage('Team must be a valid UUID when provided'),
