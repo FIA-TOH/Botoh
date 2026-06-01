@@ -18,6 +18,7 @@ export interface User {
   teamColor: string | null;
   pitLevel: number | null;
   weatherLevel: number | null;
+  driverCategory: 'starter' | 'reserve' | null;
   teamMemberships: {
     teamId: string;
     teamName: string;
@@ -76,7 +77,7 @@ class AuthService {
   private selectTeamForLogin(
     user: User,
     teamTag?: string | null,
-  ): Pick<User, 'teamId' | 'teamName' | 'teamTag' | 'teamEmoji' | 'teamColor' | 'pitLevel' | 'weatherLevel'> | null {
+  ): Pick<User, 'teamId' | 'teamName' | 'teamTag' | 'teamEmoji' | 'teamColor' | 'pitLevel' | 'weatherLevel' | 'driverCategory'> | null {
     const memberships = Array.isArray(user.teamMemberships) ? user.teamMemberships : [];
     const normalizedTeamTag = teamTag?.trim().toUpperCase();
 
@@ -95,6 +96,7 @@ class AuthService {
         teamColor: selectedMembership.teamColor,
         pitLevel: selectedMembership.pitLevel,
         weatherLevel: selectedMembership.weatherLevel,
+        driverCategory: selectedMembership.driverCategory,
       };
     }
 
@@ -112,6 +114,7 @@ class AuthService {
         teamColor: fallbackMembership.teamColor,
         pitLevel: fallbackMembership.pitLevel,
         weatherLevel: fallbackMembership.weatherLevel,
+        driverCategory: fallbackMembership.driverCategory,
       };
     }
 
@@ -123,6 +126,7 @@ class AuthService {
       teamColor: user.teamColor,
       pitLevel: user.pitLevel,
       weatherLevel: user.weatherLevel,
+      driverCategory: null,
     };
   }
 
@@ -182,13 +186,14 @@ class AuthService {
           COALESCE(primary_team.color, legacy_team.color) AS "teamColor",
           COALESCE(LEAST(5, GREATEST(0, COALESCE(primary_team.pit_crew_level, legacy_team.pit_crew_level))), 0) AS "pitLevel",
           COALESCE(LEAST(5, GREATEST(0, COALESCE(primary_team.climate_monitoring_level, legacy_team.climate_monitoring_level))), 0) AS "weatherLevel",
+          primary_team.driver_category AS "driverCategory",
           COALESCE(memberships.items, '[]'::json) AS "teamMemberships",
           u.language,
           u.created_at
         FROM users u
         LEFT JOIN teams legacy_team ON u.team_id = legacy_team.id
         LEFT JOIN LATERAL (
-          SELECT t.id, t.name, t.tag, t.emoji, t.color, t.pit_crew_level, t.climate_monitoring_level
+          SELECT t.id, t.name, t.tag, t.emoji, t.color, t.pit_crew_level, t.climate_monitoring_level, COALESCE(td.category, utm.driver_category) AS driver_category
           FROM user_team_memberships utm
           JOIN teams t ON t.id = utm.team_id
           LEFT JOIN team_drivers td
@@ -263,13 +268,14 @@ class AuthService {
           COALESCE(primary_team.color, legacy_team.color) AS "teamColor",
           COALESCE(LEAST(5, GREATEST(0, COALESCE(primary_team.pit_crew_level, legacy_team.pit_crew_level))), 0) AS "pitLevel",
           COALESCE(LEAST(5, GREATEST(0, COALESCE(primary_team.climate_monitoring_level, legacy_team.climate_monitoring_level))), 0) AS "weatherLevel",
+          primary_team.driver_category AS "driverCategory",
           COALESCE(memberships.items, '[]'::json) AS "teamMemberships",
           u.language,
           u.created_at
         FROM users u
         LEFT JOIN teams legacy_team ON u.team_id = legacy_team.id
         LEFT JOIN LATERAL (
-          SELECT t.id, t.name, t.tag, t.emoji, t.color, t.pit_crew_level, t.climate_monitoring_level
+          SELECT t.id, t.name, t.tag, t.emoji, t.color, t.pit_crew_level, t.climate_monitoring_level, COALESCE(td.category, utm.driver_category) AS driver_category
           FROM user_team_memberships utm
           JOIN teams t ON t.id = utm.team_id
           LEFT JOIN team_drivers td

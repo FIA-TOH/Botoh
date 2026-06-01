@@ -59,28 +59,36 @@ export function useNotifications() {
   const markAsRead = useCallback(async (notificationId: string) => {
     if (!token) return;
 
-    let wasUnread = false;
-    setNotifications((current) =>
-      current.flatMap((notification) => {
-        if (notification.id !== notificationId) return [notification];
-
-        wasUnread = !notification.isRead;
-        const readNotification = {
-          ...notification,
-          isRead: true,
-          readAt: notification.readAt ?? new Date().toISOString(),
-        };
-
-        return shouldHideAfterRead(notification) ? [] : [readNotification];
-      }),
-    );
-    setUnreadCount((count) => Math.max(0, count - (wasUnread ? 1 : 0)));
-
     try {
-      await fetch(apiUrl(`/api/notifications/${notificationId}/read`), {
+      const response = await fetch(apiUrl(`/api/notifications/${notificationId}/read`), {
         method: 'PUT',
-        headers: authHeaders,
+        headers: {
+          ...authHeaders,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}),
       });
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        await loadNotifications();
+        return;
+      }
+
+      setNotifications((current) =>
+        current.flatMap((notification) => {
+          if (notification.id !== notificationId) return [notification];
+
+          const readNotification = {
+            ...notification,
+            isRead: true,
+            readAt: notification.readAt ?? new Date().toISOString(),
+          };
+
+          return shouldHideAfterRead(notification) ? [] : [readNotification];
+        }),
+      );
+      await loadNotifications();
     } catch (error) {
       console.error('Failed to mark notification as read:', error);
       loadNotifications();
@@ -90,22 +98,31 @@ export function useNotifications() {
   const markAllAsRead = useCallback(async () => {
     if (!token) return;
 
-    setNotifications((current) =>
-      current
-        .map((notification) => ({
-          ...notification,
-          isRead: true,
-          readAt: notification.readAt ?? new Date().toISOString(),
-        }))
-        .filter((notification) => !shouldHideAfterRead(notification)),
-    );
-    setUnreadCount(0);
-
     try {
-      await fetch(apiUrl('/api/notifications/read-all'), {
+      const response = await fetch(apiUrl('/api/notifications/read-all'), {
         method: 'PUT',
-        headers: authHeaders,
+        headers: {
+          ...authHeaders,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}),
       });
+      if (!response.ok) {
+        await loadNotifications();
+        return;
+      }
+
+      setNotifications((current) =>
+        current
+          .map((notification) => ({
+            ...notification,
+            isRead: true,
+            readAt: notification.readAt ?? new Date().toISOString(),
+          }))
+          .filter((notification) => !shouldHideAfterRead(notification)),
+      );
+      setUnreadCount(0);
+      await loadNotifications();
     } catch (error) {
       console.error('Failed to mark all notifications as read:', error);
       loadNotifications();

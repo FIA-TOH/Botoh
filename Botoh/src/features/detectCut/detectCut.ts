@@ -12,7 +12,11 @@ import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { formatRaceTime, getTimestamp } from "../utils";
 import { applyCutPenalty } from "./applyCutPenalty";
 import { addCutTrackToStorage } from "./cutsOfTracksStorage";
-import { detectCutEnabled, softCutPenalty } from "./enableCutPenalty";
+import {
+  detectCutEnabled,
+  softCutPenalty,
+  zeroRaceCutSpeedPenaltyEnabled,
+} from "./enableCutPenalty";
 
 const SEGMENT_CUT_COLOUR = "696969";
 const DEFAULT_PENALTY_PUBLIC = 5;
@@ -126,6 +130,11 @@ export function detectCut(
       if (!softCutPenalty) {
         let realPeanlty = decidePenalty(seg);
         if (
+          zeroRaceCutSpeedPenaltyEnabled &&
+          generalGameMode === GeneralGameMode.GENERAL_RACE
+        ) {
+          realPeanlty = 0;
+        } else if (
           room.getScores().time < 30 &&
           generalGameMode === GeneralGameMode.GENERAL_RACE
         ) {
@@ -135,11 +144,11 @@ export function detectCut(
         log(`${pad.p.name} cutted the track at ${getTimestamp()}`);
         sendAlertMessage(
           room,
-          MESSAGES.CUTTED_TRACK(realPeanlty || 5),
+          MESSAGES.CUTTED_TRACK(realPeanlty),
           pad.p.id
         );
 
-        applyCutPenalty(pad, realPeanlty || 5, room);
+        applyCutPenalty(pad, realPeanlty, room);
       } else {
         sendAlertMessage(room, MESSAGES.SOFT_CUT_PENALTY(), pad.p.id);
       }

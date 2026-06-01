@@ -1,5 +1,11 @@
 import { sendAlertMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
+import {
+  GameMode,
+  gameMode,
+  GeneralGameMode,
+  generalGameMode,
+} from "../changeGameState/changeGameModes";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 
 interface PlayerPosition {
@@ -16,8 +22,16 @@ let movementTrackers: { [playerId: number]: PlayerMovementTracker } = {};
 let detectionStartTime: number | undefined;
 let isDetectionActive = false;
 
+function isLeagueStartAfkDetectionAllowed(): boolean {
+  return (
+    gameMode !== GameMode.TRAINING &&
+    generalGameMode !== GeneralGameMode.GENERAL_QUALY
+  );
+}
+
 export function initializeLeagueStartAFKDetection(room: RoomObject) {
-  if (!LEAGUE_MODE) {
+  if (!LEAGUE_MODE || !isLeagueStartAfkDetectionAllowed()) {
+    resetDetection();
     return;
   }
 
@@ -44,7 +58,8 @@ export function initializeLeagueStartAFKDetection(room: RoomObject) {
 }
 
 export function updateLeagueStartAFKDetection(room: RoomObject) {
-  if(!LEAGUE_MODE) {
+  if(!LEAGUE_MODE || !isLeagueStartAfkDetectionAllowed()) {
+    resetDetection();
     return;
   }
   if (!isDetectionActive || detectionStartTime === undefined) {

@@ -233,7 +233,7 @@ router.delete('/teams/:teamId/drivers/:driverId', authMiddleware, async (req: Au
       });
     }
 
-    const result = await garageService.releaseDriver(req.params.teamId, req.params.driverId);
+    const result = await garageService.releaseDriver(req.params.teamId, req.params.driverId, req.user.id);
     return res.status(result.success ? 200 : 400).json({
       ...result,
       message: translateMessage(result.message, getRequestLanguage(req)),

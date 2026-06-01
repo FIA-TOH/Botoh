@@ -6,6 +6,7 @@ import { Tires } from '../../../../Botoh/src/features/tires&pits/tires';
 import { GameMode, gameMode } from '../../../../Botoh/src/features/changeGameState/changeGameModes';
 import { qualiTime } from '../../../../Botoh/src/features/commands/gameMode/qualy/qualiMode';
 import { currentSessionLap, laps } from '../../../../Botoh/src/features/zones/laps';
+import { finishList } from '../../../../Botoh/src/features/zones/laps/handleLapChange';
 import { currentTime } from '../../../../Botoh/src/features/roomFeatures/gameTick';
 import { positionList } from '../../../../Botoh/src/features/commands/gameMode/race/positionList';
 import { getPlayersOrderedByQualiTime } from '../../../../Botoh/src/features/commands/gameMode/qualy/playerTime';
@@ -53,6 +54,7 @@ export interface PlayerData extends PlayerPositionData {
   bestTime: string | null;
   bestSectorTimes: [string | null, string | null, string | null];
   tires: Tires;
+  nextPitTires: Tires | null;
   wear: number;
   lapsOnCurrentTire: number;
   inPitLane: boolean;
@@ -77,6 +79,7 @@ export interface PlayerData extends PlayerPositionData {
   isFirstDriver: boolean;
   scuderiaColor: number | null;
   isOut: boolean;
+  isFinished: boolean;
 }
 
 export interface PlayerPositionsUpdate {
@@ -352,6 +355,7 @@ export class PlayerListService {
         formatLapTime(state?.bestSectorTimes?.[2]),
       ] as [string | null, string | null, string | null],
       tires: state?.tires ?? Tires.SOFT,
+      nextPitTires: state?.nextPitTires ?? null,
       wear: state?.wear ?? 0,
       lapsOnCurrentTire: state?.lapsOnCurrentTire ?? 0,
       inPitLane: state?.inPitlane ?? false,
@@ -376,6 +380,7 @@ export class PlayerListService {
       isFirstDriver: state?.isFirstDriver ?? false,
       scuderiaColor: scuderia?.color ?? null,
       isOut: false,
+      isFinished: false,
       ...overrides,
     };
   }
@@ -410,6 +415,7 @@ export class PlayerListService {
         formatLapTime(state?.bestSectorTimes?.[2]),
       ] as [string | null, string | null, string | null],
       tires: state?.tires ?? Tires.SOFT,
+      nextPitTires: state?.nextPitTires ?? null,
       wear: state?.wear ?? 0,
       lapsOnCurrentTire: state?.lapsOnCurrentTire ?? 0,
       inPitLane: false,
@@ -434,6 +440,7 @@ export class PlayerListService {
       isFirstDriver: state?.isFirstDriver ?? false,
       scuderiaColor: scuderia?.color ?? null,
       isOut: false,
+      isFinished: false,
       ...overrides,
     };
   }
@@ -468,12 +475,16 @@ export class PlayerListService {
       return [...timedStandings, ...untimedLivePlayers];
     }
 
+    const finishedNames = new Set(finishList.map((entry) => entry.name.toLowerCase()));
+
     return positionList.map((entry, index) => {
       const live = liveByName.get(entry.name.toLowerCase());
-      const isOut = !live || live.team !== Teams.RUNNERS || !entry.active;
+      const isFinished = finishedNames.has(entry.name.toLowerCase());
+      const isOut = !isFinished && (!live || live.team !== Teams.RUNNERS || !entry.active);
       const overrides = {
         racePosition: index + 1,
         isOut,
+        isFinished,
       };
 
       return live

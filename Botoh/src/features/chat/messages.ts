@@ -351,12 +351,12 @@ export const MESSAGES = {
     tr: tr_messages.BLOWN_OUT_TIRES,
     pt: pt_messages.BLOWN_OUT_TIRES,
   }),
-  BLOWN_OUT_UNLUCKY_TIRES: (): LocalizedMessageFunction => ({
-    en: en_messages.BLOWN_OUT_UNLUCKY_TIRES,
-    es: es_messages.BLOWN_OUT_UNLUCKY_TIRES,
-    fr: fr_messages.BLOWN_OUT_UNLUCKY_TIRES,
-    tr: tr_messages.BLOWN_OUT_UNLUCKY_TIRES,
-    pt: pt_messages.BLOWN_OUT_UNLUCKY_TIRES,
+  PUNCTURED_TYRE: (): LocalizedMessageFunction => ({
+    en: en_messages.PUNCTURED_TYRE,
+    es: es_messages.PUNCTURED_TYRE,
+    fr: fr_messages.PUNCTURED_TYRE,
+    tr: tr_messages.PUNCTURED_TYRE,
+    pt: pt_messages.PUNCTURED_TYRE,
   }),
   NOW_SHOWING_TIRES: (): LocalizedMessageFunction => ({
     en: en_messages.NOW_SHOWING_TIRES,
@@ -406,6 +406,27 @@ export const MESSAGES = {
     fr: fr_messages.INVALID_TIRES,
     tr: tr_messages.INVALID_TIRES,
     pt: pt_messages.INVALID_TIRES,
+  }),
+  NO_PREPARED_PIT_TYRE: (): LocalizedMessageFunction => ({
+    en: en_messages.NO_PREPARED_PIT_TYRE,
+    es: es_messages.NO_PREPARED_PIT_TYRE,
+    fr: fr_messages.NO_PREPARED_PIT_TYRE,
+    tr: tr_messages.NO_PREPARED_PIT_TYRE,
+    pt: pt_messages.NO_PREPARED_PIT_TYRE,
+  }),
+  PIT_TYRE_PREPARED: (tires: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.PIT_TYRE_PREPARED, { tires }),
+    es: replaceTemplateString(es_messages.PIT_TYRE_PREPARED, { tires }),
+    fr: replaceTemplateString(fr_messages.PIT_TYRE_PREPARED, { tires }),
+    tr: replaceTemplateString(tr_messages.PIT_TYRE_PREPARED, { tires }),
+    pt: replaceTemplateString(pt_messages.PIT_TYRE_PREPARED, { tires }),
+  }),
+  PREPARED_PIT_TYRE_ON_ENTRY: (tires: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.PREPARED_PIT_TYRE_ON_ENTRY, { tires }),
+    es: replaceTemplateString(es_messages.PREPARED_PIT_TYRE_ON_ENTRY, { tires }),
+    fr: replaceTemplateString(fr_messages.PREPARED_PIT_TYRE_ON_ENTRY, { tires }),
+    tr: replaceTemplateString(tr_messages.PREPARED_PIT_TYRE_ON_ENTRY, { tires }),
+    pt: replaceTemplateString(pt_messages.PREPARED_PIT_TYRE_ON_ENTRY, { tires }),
   }),
   CHANGED_TIRES: (
     name: string,
@@ -464,20 +485,20 @@ export const MESSAGES = {
       seconds: seconds.toString(),
     }),
   }),
-  TYRE_BLOW: (name: string): LocalizedMessageFunction => ({
-    en: replaceTemplateString(en_messages.TYRE_BLOW, {
+  TYRE_PUNCTURE: (name: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.TYRE_PUNCTURE, {
       name: name,
     }),
-    es: replaceTemplateString(es_messages.TYRE_BLOW, {
+    es: replaceTemplateString(es_messages.TYRE_PUNCTURE, {
       name: name,
     }),
-    fr: replaceTemplateString(fr_messages.TYRE_BLOW, {
+    fr: replaceTemplateString(fr_messages.TYRE_PUNCTURE, {
       name: name,
     }),
-    tr: replaceTemplateString(tr_messages.TYRE_BLOW, {
+    tr: replaceTemplateString(tr_messages.TYRE_PUNCTURE, {
       name: name,
     }),
-    pt: replaceTemplateString(pt_messages.TYRE_BLOW, {
+    pt: replaceTemplateString(pt_messages.TYRE_PUNCTURE, {
       name: name,
     }),
   }),
@@ -1767,6 +1788,13 @@ export const MESSAGES = {
     tr: replaceTemplateString(tr_messages.YOU_WERENT_RACING_BEFORE, {}),
     pt: replaceTemplateString(pt_messages.YOU_WERENT_RACING_BEFORE, {}),
   }),
+  ALREADY_RACING: (): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.ALREADY_RACING, {}),
+    es: replaceTemplateString(es_messages.ALREADY_RACING, {}),
+    fr: replaceTemplateString(fr_messages.ALREADY_RACING, {}),
+    tr: replaceTemplateString(tr_messages.ALREADY_RACING, {}),
+    pt: replaceTemplateString(pt_messages.ALREADY_RACING, {}),
+  }),
   THE_JOIN_TIME_IS_OVER: (): LocalizedMessageFunction => ({
     en: replaceTemplateString(en_messages.THE_JOIN_TIME_IS_OVER, {}),
     es: replaceTemplateString(es_messages.THE_JOIN_TIME_IS_OVER, {}),
@@ -1837,12 +1865,12 @@ export const MESSAGES = {
       player: player.toString(),
     }),
   }),
-  TYRES_ABOUT_TO_BLOWN: (): LocalizedMessageFunction => ({
-    en: replaceTemplateString(en_messages.TYRES_ABOUT_TO_BLOWN, {}),
-    es: replaceTemplateString(es_messages.TYRES_ABOUT_TO_BLOWN, {}),
-    fr: replaceTemplateString(fr_messages.TYRES_ABOUT_TO_BLOWN, {}),
-    tr: replaceTemplateString(tr_messages.TYRES_ABOUT_TO_BLOWN, {}),
-    pt: replaceTemplateString(pt_messages.TYRES_ABOUT_TO_BLOWN, {}),
+  TYRES_ABOUT_TO_PUNCTURE: (): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.TYRES_ABOUT_TO_PUNCTURE, {}),
+    es: replaceTemplateString(es_messages.TYRES_ABOUT_TO_PUNCTURE, {}),
+    fr: replaceTemplateString(fr_messages.TYRES_ABOUT_TO_PUNCTURE, {}),
+    tr: replaceTemplateString(tr_messages.TYRES_ABOUT_TO_PUNCTURE, {}),
+    pt: replaceTemplateString(pt_messages.TYRES_ABOUT_TO_PUNCTURE, {}),
   }),
   INVALID_LAP_CUT: (): LocalizedMessageFunction => ({
     en: replaceTemplateString(en_messages.INVALID_LAP_CUT, {}),
@@ -1946,12 +1974,40 @@ export const MESSAGES = {
     tr: "🌧️ Yağmur altında başlıyoruz!",
     pt: "🌧️ A sessão já começa sob chuva!",
   }),
+  RAIN_ALREADY_STARTED_SECTORS: (sectors: string): LocalizedMessageFunction => ({
+    en: `Rain at race start in sectors ${sectors}.`,
+    es: `Lluvia al inicio en los sectores ${sectors}.`,
+    fr: `Pluie au depart dans les secteurs ${sectors}.`,
+    tr: `Yaris basinda ${sectors}. sektorlerde yagmur var.`,
+    pt: `Esta chovendo no inicio nos setores ${sectors}.`,
+  }),
   TRACK_ALREADY_WET: (): LocalizedMessageFunction => ({
     en: "💧 Track is already wet.",
     es: "💧 La pista ya está mojada.",
     fr: "💧 La piste est déjà mouillée.",
     tr: "💧 Pist zaten ıslak.",
     pt: "💧 A pista já está molhada.",
+  }),
+  TRACK_ALREADY_WET_NO_RAIN: (): LocalizedMessageFunction => ({
+    en: "It is not raining, but the track is wet.",
+    es: "No esta lloviendo, pero la pista esta mojada.",
+    fr: "Il ne pleut pas, mais la piste est mouillee.",
+    tr: "Yagmur yok, ama pist islak.",
+    pt: "Nao esta chovendo, mas a pista esta molhada.",
+  }),
+  TRACK_ALREADY_WET_SECTORS_NO_RAIN: (sectors: string): LocalizedMessageFunction => ({
+    en: `It is not raining, but the track is wet in sectors ${sectors}.`,
+    es: `No esta lloviendo, pero la pista esta mojada en los sectores ${sectors}.`,
+    fr: `Il ne pleut pas, mais la piste est mouillee dans les secteurs ${sectors}.`,
+    tr: `Yagmur yok, ama ${sectors}. sektorlerde pist islak.`,
+    pt: `Nao esta chovendo, mas a pista esta molhada nos setores ${sectors}.`,
+  }),
+  NO_RAIN_START: (): LocalizedMessageFunction => ({
+    en: "It is not raining.",
+    es: "No esta lloviendo.",
+    fr: "Il ne pleut pas.",
+    tr: "Yagmur yok.",
+    pt: "Nao esta chovendo.",
   }),
   RAIN_STARTED: (): LocalizedMessageFunction => ({
     en: "🌧️ IT'S RAINING NOW!",
@@ -2123,6 +2179,20 @@ export const MESSAGES = {
     fr: fr_messages.DAMAGE_DISABLED,
     tr: tr_messages.DAMAGE_DISABLED,
     pt: pt_messages.DAMAGE_DISABLED,
+  }),
+  TYRE_PUNCTURE_ENABLED: (): LocalizedMessageFunction => ({
+    en: en_messages.TYRE_PUNCTURE_ENABLED,
+    es: es_messages.TYRE_PUNCTURE_ENABLED,
+    fr: fr_messages.TYRE_PUNCTURE_ENABLED,
+    tr: tr_messages.TYRE_PUNCTURE_ENABLED,
+    pt: pt_messages.TYRE_PUNCTURE_ENABLED,
+  }),
+  TYRE_PUNCTURE_DISABLED: (): LocalizedMessageFunction => ({
+    en: en_messages.TYRE_PUNCTURE_DISABLED,
+    es: es_messages.TYRE_PUNCTURE_DISABLED,
+    fr: fr_messages.TYRE_PUNCTURE_DISABLED,
+    tr: tr_messages.TYRE_PUNCTURE_DISABLED,
+    pt: pt_messages.TYRE_PUNCTURE_DISABLED,
   }),
   REPAIR_NO_DAMAGE: (): LocalizedMessageFunction => ({
     en: en_messages.REPAIR_NO_DAMAGE,

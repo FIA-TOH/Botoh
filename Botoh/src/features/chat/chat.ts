@@ -63,7 +63,7 @@ export function sendMessage(
 
     log(message[defaultLang] as string);
     sendLogToWebsite({
-      message: message[defaultLang] as string,
+      message,
       timestamp: Date.now(),
       color: color ?? null,
     });
@@ -82,7 +82,7 @@ export function sendCyanMessage(
 
   log(message[defaultLang] as string);
   sendLogToWebsite({
-    message: message[defaultLang] as string,
+    message,
     timestamp: Date.now(),
     color: COLORS.CYAN,
   });
@@ -100,7 +100,7 @@ export function sendOrangeMessage(
 
   log(message[defaultLang] as string);
   sendLogToWebsite({
-    message: message[defaultLang] as string,
+    message,
     timestamp: Date.now(),
     color: COLORS.ORANGE,
   });
@@ -118,7 +118,7 @@ export function sendLimeMessage(
 
   log(message[defaultLang] as string);
   sendLogToWebsite({
-    message: message[defaultLang] as string,
+    message,
     timestamp: Date.now(),
     color: COLORS.LIME,
   });
@@ -173,6 +173,32 @@ export function sendAlertMessage(
     toPlayerID,
     COLORS.YELLOW,
     FONTS.BOLD,
+    SOUNDS.NOTIFICATION,
+  );
+}
+
+export function sendRadioMessage(
+  room: RoomObject,
+  message: LocalizedMessageFunction | string,
+  toPlayerID?: number,
+) {
+  if (typeof message === "string") {
+    room.sendAnnouncement(
+      message,
+      toPlayerID,
+      COLORS.ORANGE,
+      FONTS.ITALIC,
+      SOUNDS.NOTIFICATION,
+    );
+    return;
+  }
+
+  sendMessage(
+    room,
+    message,
+    toPlayerID,
+    COLORS.ORANGE,
+    FONTS.ITALIC,
     SOUNDS.NOTIFICATION,
   );
 }

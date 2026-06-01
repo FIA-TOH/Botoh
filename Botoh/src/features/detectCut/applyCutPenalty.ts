@@ -9,7 +9,8 @@ export function applyCutPenalty(
   const playerInfo = playerList[pad.p.id];
   const currentTime = room.getScores()?.time || 0;
 
-  playerInfo.cutPenaltyEndTime = currentTime + penalty;
-  playerInfo.cutPenaltyMultiplier = constants.PENALTY_SPEED;
+  playerInfo.cutPenaltyEndTime = penalty > 0 ? currentTime + penalty : undefined;
+  playerInfo.cutPenaltyMultiplier = penalty > 0 ? constants.PENALTY_SPEED : 1;
   playerInfo.cuttedTrackOnThisLap = true;
+  playerInfo.lastLapValid = false;
 }

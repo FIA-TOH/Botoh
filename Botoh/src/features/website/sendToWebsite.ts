@@ -1,5 +1,6 @@
 import { playerList } from "../changePlayerState/playerList";
 import { getLeagueScuderia } from "../scuderias/scuderias";
+import type { LocalizedMessageFunction } from "../chat/messages";
 
 export interface WebsiteChatMessage {
   player: string;
@@ -10,7 +11,7 @@ export interface WebsiteChatMessage {
 }
 
 export interface WebsiteLogMessage {
-  message: string;
+  message: string | LocalizedMessageFunction;
   timestamp: number;
   color: number | null;
 }

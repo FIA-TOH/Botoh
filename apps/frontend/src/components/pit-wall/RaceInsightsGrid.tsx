@@ -332,7 +332,11 @@ export function RaceInsightsGrid({
     raceSession?.sessionType === 'training'
     || raceSession?.sessionType === 'qualy'
     || raceSession?.sessionType === 'hard_qualy';
-  const unavailableRaceInsightMessage = t.insights.raceOnly;
+  const hasDriverData = driverOptions.length > 0;
+  const hideDriverDependentInsights = hideRaceOnlyInsights || !hasDriverData;
+  const unavailableRaceInsightMessage = hasDriverData
+    ? t.insights.raceOnly
+    : t.insights.emptyMessage;
 
   useEffect(() => {
     setPaceDriver((current: string) =>
@@ -671,7 +675,7 @@ export function RaceInsightsGrid({
     );
   }
 
-  if (driverOptions.length === 0 && !hideRaceOnlyInsights) {
+  if (driverOptions.length === 0 && !hideRaceOnlyInsights && !raceSession) {
     return (
       <RaceInsightsState
         title={t.insights.emptyTitle}
@@ -751,7 +755,7 @@ export function RaceInsightsGrid({
             }}
             className="p-4"
           >
-            {hideRaceOnlyInsights ? (
+            {hideDriverDependentInsights ? (
               <UnavailableRaceInsight message={unavailableRaceInsightMessage} />
             ) : (
               <>
@@ -830,7 +834,7 @@ export function RaceInsightsGrid({
             }}
             className="p-4"
           >
-            {hideRaceOnlyInsights ? (
+            {hideDriverDependentInsights ? (
               <UnavailableRaceInsight message={unavailableRaceInsightMessage} />
             ) : (
               <>
@@ -920,7 +924,7 @@ export function RaceInsightsGrid({
             }}
             className="p-4"
           >
-            {hideRaceOnlyInsights ? (
+            {hideDriverDependentInsights ? (
               <UnavailableRaceInsight message={unavailableRaceInsightMessage} />
             ) : (
               <>

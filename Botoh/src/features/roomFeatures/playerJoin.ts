@@ -29,8 +29,8 @@ import { checkRunningPlayers } from "../changeGameState/publicGameFlow/startStop
 
 import { sendDiscordGeneralChatQualy } from "../discord/discord";
 import { PLAYER_LIMIT } from "../commands/adminThings/handleLimitPlayerQuantity";
-import { positionList } from "../commands/gameMode/race/positionList";
 import { rejoinManager } from "../changePlayerState/rejoinManager";
+import { clearLoginStateIfUsernameChanged, rebalanceFirstDriverForTeam } from "../commands/login/handleLoginCommand";
 
 const HARD_QUALY_PASSWORD = "hardqualy";
 
@@ -45,7 +45,8 @@ function hasInvalidLeagueNameCharacters(name: string) {
 function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
   const players = room.getPlayerList();
 
-  const wasRunning = positionList.some((p) => p.name === player.name);
+  const rejoinData = rejoinManager.getPlayerData(player.auth);
+  const wasRunning = Boolean(rejoinData);
 
   if (gameMode === GameMode.HARD_QUALY) {
     if (player.name !== "Admin") {
@@ -62,25 +63,15 @@ function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
 
   if (players.length > 1) {
     if (room.getScores()) {
-      if (
-        gameState === "running" &&
-        generalGameMode === GeneralGameMode.GENERAL_RACE
-      ) {
+      if (generalGameMode === GeneralGameMode.GENERAL_RACE) {
         room.setPlayerTeam(player.id, Teams.SPECTATORS);
 
-        if(wasRunning){
-            const rejoinData = rejoinManager.getPlayerData(player.auth);
-            if (rejoinData) {
-              if (playerList[player.id]) {
-                playerList[player.id].canRejoin = rejoinData.playerInfo.canRejoin;
-              }
-            }
-        
-            if (playerList[player.id]?.canRejoin) {
-              sendAlertMessage(room, MESSAGES.TYPE_REJOIN(), player.id);
-            } else {
-              sendErrorMessage(room, MESSAGES.THE_JOIN_TIME_IS_OVER(), player.id);
-            }
+        if (wasRunning) {
+          if (playerList[player.id]) {
+            playerList[player.id].canRejoin = true;
+          }
+
+          sendAlertMessage(room, MESSAGES.TYPE_REJOIN(), player.id);
         }
       } else {
         room.setPlayerTeam(player.id, Teams.RUNNERS);
@@ -157,6 +148,12 @@ export function PlayerJoin(room: RoomObject) {
     if (playerList[player.id] === undefined) {
       playerList[player.id] = createPlayerInfo(ip, player.id);
       playerList[player.id].pubAvatar = getRandomCarEmoji();
+    }
+
+    const existingTeamId = playerList[player.id]?.leagueScuderia;
+    clearLoginStateIfUsernameChanged(player);
+    if (existingTeamId) {
+      rebalanceFirstDriverForTeam(room, existingTeamId);
     }
 
     playerList[player.id].shortName = getPlayerShortName(player.name);

@@ -52,6 +52,8 @@ export function handleDefineRain(
   }
   
   if (args[0] === "start") {
+    stopWeatherMonitoring();
+
     try {
       const weatherDir = join(__dirname, "../../weather");
       writeFileSync(join(weatherDir, "lastWeatherId.json"), JSON.stringify({ lastWeatherId: null }));

@@ -2,6 +2,7 @@ import { COLORS } from "../chat/chat";
 
 export let detectCutEnabled = true;
 export let softCutPenalty = false;
+export let zeroRaceCutSpeedPenaltyEnabled = false;
 
 export function enableCutPenalty(enable: boolean) {
   detectCutEnabled = enable;
@@ -23,4 +24,8 @@ export function enableSoftCutPenalty(enable: boolean, room: RoomObject) {
   }
 
   softCutPenalty = enable;
+}
+
+export function setZeroRaceCutSpeedPenaltyEnabled(enabled: boolean) {
+  zeroRaceCutSpeedPenaltyEnabled = enabled;
 }

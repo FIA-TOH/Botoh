@@ -1,6 +1,7 @@
 import { handleGameStateChange } from "../changeGameState/gameState";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { resetPlayers } from "../changePlayerState/players";
+import { clearAllPreparedPitTires } from "../changePlayerState/playerList";
 import { cleanupLeagueStartAFKDetection } from "../afk/leagueStartAFKDetection";
 import { resetAllAfkCounters } from "../afk/afk";
 import { resetVSCState } from "../safetyCar/vsc";
@@ -60,6 +61,7 @@ let replayData: Uint8Array | null = null;
 export function GameStop(room: RoomObject) {
   room.onGameStop = function (byPlayer) {
     stopWeatherMonitoring();
+    clearAllPreparedPitTires();
 
     if (byPlayer == null) {
       log(`Game stopped`);

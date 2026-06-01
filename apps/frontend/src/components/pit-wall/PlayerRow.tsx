@@ -9,14 +9,16 @@ interface Props {
   driver: Driver;
   gapText: string;
   isOut?: boolean;
+  isFinished?: boolean;
 }
 
 export function PlayerRow({
   driver,
   gapText,
   isOut = false,
+  isFinished = false,
 }: Props) {
-  const textOpacity = isOut
+  const textOpacity = isOut && !isFinished
     ? 0.5
     : 1;
 
@@ -64,12 +66,12 @@ export function PlayerRow({
         >
 
           <span className="text-center">
-            {gapText}
+            {isFinished ? '🏁' : gapText}
           </span>
 
           {/* TIRE */}
           <span className="text-center">
-            {!isOut && (
+            {!isOut && !isFinished && (
               <span
                 style={{
                   color: getTireColor(driver.tires),

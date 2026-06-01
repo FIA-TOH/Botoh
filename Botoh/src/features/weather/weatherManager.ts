@@ -1,8 +1,12 @@
 import { readFileSync, existsSync } from "fs";
 import { join } from "path";
 import { currentWeather } from "./currentWeather";
-import { checkWeatherReportAnnouncements, sendInitialWeatherAnnouncement, resetWeatherReportAnnouncements } from "./rain/weatherReportAnnouncer";
-import { COLORS } from "../chat/chat";
+import {
+  checkWeatherReportAnnouncements,
+  sendInitialWeatherAnnouncement,
+  resetWeatherReportAnnouncements,
+  sendWeatherAnnouncementNow,
+} from "./rain/weatherReportAnnouncer";
 
 let lastRainGlobal: number = 0;
 let lastRainS1: number = 0;
@@ -56,6 +60,20 @@ export function startWeatherMonitoring(weatherId: string, room?: RoomObject) {
   } catch (error) {
     console.error("Failed to start weather monitoring:", error);
   }
+}
+
+export function setCurrentWeatherToInitialData() {
+  if (!weatherData) return;
+
+  currentWeather.rainGlobal = weatherData.rain_global?.[0] || 0;
+  currentWeather.rainS1 = weatherData.rain_s1?.[0] || 0;
+  currentWeather.rainS2 = weatherData.rain_s2?.[0] || 0;
+  currentWeather.rainS3 = weatherData.rain_s3?.[0] || 0;
+  currentWeather.wetS1 = weatherData.wet_s1?.[0] || 0;
+  currentWeather.wetS2 = weatherData.wet_s2?.[0] || 0;
+  currentWeather.wetS3 = weatherData.wet_s3?.[0] || 0;
+  currentWeather.wetAvg = weatherData.wet_avg?.[0] || 0;
+  lastRainGlobal = currentWeather.rainGlobal;
 }
 
 export function checkWeatherUpdate(room: RoomObject) {
@@ -179,33 +197,32 @@ function updateCurrentWeather(room: RoomObject) {
     weatherData.wet_avg[nextDataIndex] || 0
   );
 
-  checkAndAnnounceRainChanges(room);
 }
 
 function checkAndAnnounceRainChanges(room: RoomObject) {
   if (!room) return;
 
   const currentRain = currentWeather.rainGlobal;
-  let shouldAnnounce = false;
-  let message = "";
+  const currentTime = room.getScores()?.time ?? 0;
 
-  if (Math.abs(currentRain - lastRainGlobal) >= 20) {
-    shouldAnnounce = true;
-    message = `\ud83c\udf27\ufe0f Rain: ${currentRain.toFixed(0)}%`;
+  if (lastRainGlobal <= 0 && currentRain > 0) {
+    sendWeatherAnnouncementNow(
+      "RAIN_STARTED",
+      room,
+      currentTime,
+      { rain: Math.max(1, currentRain) },
+    );
     lastRainGlobal = currentRain;
-  }
-  else if (currentRain === 0 && lastRainGlobal !== 0) {
-    shouldAnnounce = true;
-    message = `\ud83c\udf27\ufe0f Rain: 0%`;
-    lastRainGlobal = currentRain;
-  }
-  else if (currentRain === 100 && lastRainGlobal !== 100) {
-    shouldAnnounce = true;
-    message = `\ud83c\udf27\ufe0f Rain: 100%`;
-    lastRainGlobal = currentRain;
+    return;
   }
 
-  if (shouldAnnounce && message) {
-    room.sendAnnouncement(message, undefined, COLORS.CYAN);
+  if (currentRain <= 0 && lastRainGlobal > 0) {
+    sendWeatherAnnouncementNow("RAIN_STOPPED", room, currentTime);
+    lastRainGlobal = currentRain;
+    return;
+  }
+
+  if (Math.abs(currentRain - lastRainGlobal) >= 20 || (currentRain === 100 && lastRainGlobal !== 100)) {
+    lastRainGlobal = currentRain;
   }
 }

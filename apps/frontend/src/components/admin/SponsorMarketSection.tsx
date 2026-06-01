@@ -70,6 +70,8 @@ export interface SponsorCatalogItem {
   fidelidade: number;
   publicoAlvo1: string | null;
   publicoAlvo2: string | null;
+  pilotUserId?: string | null;
+  pilotUsername?: string | null;
   scuderiasRelacionadas: { id: string; name: string }[];
 }
 
@@ -142,6 +144,7 @@ export interface SponsorMarketProposal {
   };
   exigencia: 'team_name' | 'livery' | 'team_name_and_livery' | 'none';
   candidateCount: number;
+  ressalvas?: ('setor_repetido' | 'tipo_repetido')[];
 }
 
 export interface SponsorMarketResult {
@@ -215,6 +218,9 @@ interface Labels {
   scores: string;
   scoreLabels: Record<string, string>;
   finalWeight: string;
+  caveats: string;
+  noCaveats: string;
+  caveatLabels: Record<'setor_repetido' | 'tipo_repetido', string>;
   baseValue: string;
   uncappedValue: string;
   budgetMultiplier: string;
@@ -337,6 +343,11 @@ export function SponsorMarketSection({
     if (proposal.scores.midia >= 0.67 && proposal.scores.midia >= proposal.scores.tecnica) return labels.reasons.media;
     if (proposal.scores.tecnica >= 0.67 && proposal.scores.tecnica > proposal.scores.midia) return labels.reasons.technique;
     return labels.reasons.chance;
+  }
+
+  function proposalCaveats(proposal: SponsorMarketProposal) {
+    if (!proposal.ressalvas?.length) return labels.noCaveats;
+    return proposal.ressalvas.map((caveat) => labels.caveatLabels[caveat]).join(', ');
   }
 
   return (
@@ -550,6 +561,7 @@ export function SponsorMarketSection({
                         <p><strong>{labels.proposalOrigin}:</strong> {labels.proposalOrigins[proposal.origem]}{proposal.origemEquipes.length ? ` (${proposal.origemEquipes.join(', ')})` : ''}</p>
                         <p><strong>{labels.requirement}:</strong> {labels.requirements[proposal.exigencia]}</p>
                         <p><strong>{labels.finalWeight}:</strong> {proposal.pesoFinal}</p>
+                        <p><strong>{labels.caveats}:</strong> {proposalCaveats(proposal)}</p>
                         <p><strong>{labels.proposalReason}:</strong> {proposalReason(proposal)}</p>
                       </div>
                       <details className="text-sm">

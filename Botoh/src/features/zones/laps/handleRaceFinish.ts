@@ -32,7 +32,7 @@ export function handleRaceFinish(
 
   sendSuccessMessage(room, MESSAGES.FINISH_RACE(), p.id);
   playerList[p.id].totalTime = room.getScores().time;
-  updatePositionList(getRunningPlayers(playersAndDiscs), room);
+  updatePositionList(getRunningPlayers(playersAndDiscs), room, p.id);
   room.setPlayerTeam(p.id, Teams.SPECTATORS);
 
   if (isWinner && !LEAGUE_MODE) {

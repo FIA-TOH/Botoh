@@ -11,6 +11,7 @@ import {
   generalGameMode,
   GeneralGameMode,
 } from "../changeGameState/changeGameModes";
+import { Teams } from "../changeGameState/teams";
 import { log } from "../discord/logger";
 import { updatePlayerActivity, handlePlayerLeave } from "../afk/afk";
 import { followPlayerId } from "../cameraAndBall/cameraFollow";
@@ -20,6 +21,7 @@ import { sendQualiResultsToDiscord } from "../discord/logResults";
 import { getPlayerByRacePosition } from "../playerFeatures/getPlayerBy";
 import { sendDiscordGeneralChatQualy } from "../discord/discord";
 import { rejoinManager } from "../changePlayerState/rejoinManager";
+import { rebalanceFirstDriverForTeam } from "../commands/login/handleLoginCommand";
 
 export function PlayerLeave(room: RoomObject) {
   room.onPlayerLeave = function (player) {
@@ -28,6 +30,7 @@ export function PlayerLeave(room: RoomObject) {
     handlePlayerLeave(player, room);
 
     const playerObj = playerList[player.id];
+    const playerTeamId = playerObj?.leagueScuderia;
     const firstPlacePlayer = getPlayerByRacePosition("first", room);
     const firstPlacePlayerLap = firstPlacePlayer
       ? playerList[firstPlacePlayer.id].currentLap
@@ -35,7 +38,11 @@ export function PlayerLeave(room: RoomObject) {
 
     const lapsCompleted = Math.max(0, (playerList[player.id]?.currentLap || 1) - 1);
 
-    if (generalGameMode === GeneralGameMode.GENERAL_RACE && playerObj) {
+    if (
+      generalGameMode === GeneralGameMode.GENERAL_RACE &&
+      player.team === Teams.RUNNERS &&
+      playerObj
+    ) {
       const playerAuth = idToAuth[player.id] || player.auth;
       
       let position = { x: 0, y: 0 };
@@ -47,7 +54,12 @@ export function PlayerLeave(room: RoomObject) {
       }
       
       if (playerAuth) {
-        rejoinManager.savePlayerData(playerAuth, playerObj, position);
+        rejoinManager.savePlayerData(
+          playerAuth,
+          playerObj,
+          position,
+          room.getScores()?.time ?? 0,
+        );
       }
     }
 
@@ -88,5 +100,7 @@ export function PlayerLeave(room: RoomObject) {
         room.stopGame();
       }
     }
+
+    rebalanceFirstDriverForTeam(room, playerTeamId);
   };
 }

@@ -11,7 +11,7 @@ interface FtohHeaderProps {
   onAdminClick?: () => void;
   showBackButton?: boolean;
   onBackClick?: () => void;
-  backText?: string;
+  backText?: string | null;
   align?: 'left' | 'right' | 'center';
 }
 
@@ -25,7 +25,7 @@ export function FtohHeader({
 }: FtohHeaderProps) {
   const { user } = useAuth();
   const { t } = useTranslations();
-  const resolvedBackText = backText ?? t.common.back;
+  const resolvedBackText = backText === null ? null : (backText ?? t.common.back);
 
   const content = (
     <div className="flex items-center gap-4">
@@ -72,7 +72,7 @@ export function FtohHeader({
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            {resolvedBackText}
+            {resolvedBackText && <span>{resolvedBackText}</span>}
           </div>
         </FtohButton>
       </div>

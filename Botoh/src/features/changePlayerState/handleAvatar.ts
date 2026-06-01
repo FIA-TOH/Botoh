@@ -22,6 +22,7 @@ export enum Situacions {
   PitReady = "PitReady",
   RepairReady = "RepairReady",
   Repairing = "Repairing",
+  CrashDamage = "CrashDamage",
   None = "None",
   ManagingTyresOn = "ManagingTyresOn",
   ManagingTyresOff = "ManagingTyresOff",
@@ -57,6 +58,7 @@ const SITUATION_PRIORITY: Record<Situacions, number> = {
   [Situacions.PitReady]: 10,
   [Situacions.RepairReady]: 10,
   [Situacions.Repairing]: 10,
+  [Situacions.CrashDamage]: 9,
   [Situacions.None]: 0,
   [Situacions.ManagingTyresOn]: 7,
   [Situacions.ManagingTyresOff]: 7,
@@ -287,6 +289,15 @@ const situationHandlers: Record<
 
   [Situacions.Repairing]: (player, room) => {
     room.setPlayerAvatar(player.id, "🔧");
+  },
+
+  [Situacions.CrashDamage]: (player, room) => {
+    room.setPlayerAvatar(player.id, "💥");
+
+    playerTimers[player.id].timeout = setTimeout(() => {
+      restoreTyreOrCar(player.id, room);
+      currentSituacion[player.id] = Situacions.Null;
+    }, 1000);
   },
 
   [Situacions.None]: (player, room) => {

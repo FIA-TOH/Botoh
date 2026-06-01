@@ -9,30 +9,30 @@ export function calculateWetnessDrift(wetness: number): number {
   return WETNESS_MIN + (wetness / 100) * (WETNESS_MAX - WETNESS_MIN);
 }
 
-export function calculateRainDrift(rainAmount: number, tireType: TireType): number {
-  const { RAIN_THRESHOLDS, EXPONENTIAL_FACTORS } = DRIFT_CONFIG;
+export function calculateWetTrackDrift(wetness: number, tireType: TireType): number {
+  const { WET_TRACK_THRESHOLDS, WET_TRACK_EXPONENTIAL_FACTORS } = DRIFT_CONFIG;
   
   let threshold: number;
   let exponentialFactor: number;
   
   switch (tireType) {
     case TireType.DRY:
-      threshold = RAIN_THRESHOLDS.DRY_TIRE;
-      exponentialFactor = EXPONENTIAL_FACTORS.DRY_TIRE;
+      threshold = WET_TRACK_THRESHOLDS.DRY_TIRE;
+      exponentialFactor = WET_TRACK_EXPONENTIAL_FACTORS.DRY_TIRE;
       break;
     case TireType.INTER:
-      threshold = RAIN_THRESHOLDS.INTER_TIRE;
-      exponentialFactor = EXPONENTIAL_FACTORS.INTER_TIRE;
+      threshold = WET_TRACK_THRESHOLDS.INTER_TIRE;
+      exponentialFactor = WET_TRACK_EXPONENTIAL_FACTORS.INTER_TIRE;
       break;
     case TireType.WET:
-      threshold = RAIN_THRESHOLDS.WET_TIRE;
-      exponentialFactor = EXPONENTIAL_FACTORS.WET_TIRE;
+      threshold = WET_TRACK_THRESHOLDS.WET_TIRE;
+      exponentialFactor = WET_TRACK_EXPONENTIAL_FACTORS.WET_TIRE;
       break;
     default:
       return 0;
   }
   
-  let maxDrift = DEFAULT_VALUES.RAIN_BONUS_MAX;
+  let maxDrift = DEFAULT_VALUES.WET_TRACK_BONUS_MAX;
   if (tireType === TireType.INTER) {
     maxDrift = 75;
   } else if (tireType === TireType.WET) {
@@ -40,23 +40,23 @@ export function calculateRainDrift(rainAmount: number, tireType: TireType): numb
   }
   
   if (tireType === TireType.WET) {
-    const normalizedRain = rainAmount / 100;
-    const drift = maxDrift * (normalizedRain * normalizedRain);
+    const normalizedWetness = wetness / 100;
+    const drift = maxDrift * (normalizedWetness * normalizedWetness);
     return Math.min(drift, maxDrift);
   }
   
   if (tireType === TireType.INTER) {
-    const normalizedRain = rainAmount / threshold;
-    const drift = maxDrift * (normalizedRain * normalizedRain);
+    const normalizedWetness = wetness / threshold;
+    const drift = maxDrift * (normalizedWetness * normalizedWetness);
     return Math.min(drift, maxDrift);
   }
   
-  if (rainAmount >= threshold) {
+  if (wetness >= threshold) {
     return maxDrift;
   }
   
-  const normalizedRain = rainAmount / threshold;
-  const drift = maxDrift * (1 - Math.exp(-exponentialFactor * normalizedRain * 10));
+  const normalizedWetness = wetness / threshold;
+  const drift = maxDrift * (1 - Math.exp(-exponentialFactor * normalizedWetness * 10));
   
   return Math.min(drift, maxDrift);
 }
@@ -65,13 +65,17 @@ const driftCache = new Map<string, number>();
 let lastWeatherUpdate = 0;
 
 
-export function shouldCalculateDrift(rainAmount: number, wetness: number): boolean {
-  return wetness > 0 || rainAmount > 0;
+export function shouldCalculateDrift(wetness: number): boolean {
+  return wetness > 0;
 }
 
 
-function getDriftCacheKey(sector: number, rainAmount: number, wetness: number): string {
-  return `${sector}_${rainAmount}_${wetness}`;
+function getDriftCacheKey(
+  tireType: TireType,
+  sector: number,
+  wetness: number
+): string {
+  return `${tireType}_${sector}_${wetness}`;
 }
 
 
@@ -80,29 +84,25 @@ function shouldClearCache(currentTime: number): boolean {
 }
 
 export function calculateTotalDrift(tireType: TireType, sector: number, currentTime: number = 0): number {
-  let rainAmount = currentWeather.rainGlobal;
   let wetness = currentWeather.wetAvg;
   
   switch (sector) {
     case 1:
-      rainAmount = currentWeather.rainS1;
       wetness = currentWeather.wetS1;
       break;
     case 2:
-      rainAmount = currentWeather.rainS2;
       wetness = currentWeather.wetS2;
       break;
     case 3:
-      rainAmount = currentWeather.rainS3;
       wetness = currentWeather.wetS3;
       break;
   }
   
-  if (!shouldCalculateDrift(rainAmount, wetness)) {
+  if (!shouldCalculateDrift(wetness)) {
     return 0;
   }
   
-  const cacheKey = getDriftCacheKey(sector, rainAmount, wetness);
+  const cacheKey = getDriftCacheKey(tireType, sector, wetness);
   
   if (shouldClearCache(currentTime)) {
     driftCache.clear();
@@ -114,13 +114,15 @@ export function calculateTotalDrift(tireType: TireType, sector: number, currentT
   }
   
   const wetnessDrift = calculateWetnessDrift(wetness);
-  const rainDrift = calculateRainDrift(rainAmount, tireType);
+  const wetTrackDrift = calculateWetTrackDrift(wetness, tireType);
   
-  const totalDrift = wetnessDrift + rainDrift;
+  const totalDrift = wetnessDrift + wetTrackDrift;
   let finalDrift = Math.min(totalDrift, DEFAULT_VALUES.MAX_TOTAL_DRIFT);
   
   if (tireType === TireType.DRY) {
     finalDrift = Math.min(finalDrift * 4, DEFAULT_VALUES.MAX_TOTAL_DRIFT);
+  } else if (tireType === TireType.WET) {
+    finalDrift *= 0.5;
   }
   
   driftCache.set(cacheKey, finalDrift);

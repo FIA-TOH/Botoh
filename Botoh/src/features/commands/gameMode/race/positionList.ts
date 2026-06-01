@@ -32,18 +32,18 @@ function formatGapAtSharedCheckpoint(
 ) {
   if (reference.id === player.id) return "0.000";
 
+  // Only update a displayed gap after the car behind reaches the same
+  // checkpoint/sector as the reference. Until then, keep the last measured gap.
+  if (reference.currentSector !== player.currentSector) {
+    return null;
+  }
+
   const lapGap = reference.lap - player.lap;
   if (lapGap > 0) {
     return `+${lapGap} Lap${lapGap === 1 ? "" : "s"}`;
   }
 
-  // Time gaps are only meaningful once both cars have crossed the same
-  // checkpoint. If the reference has already crossed a later sector and the
-  // player has not, the previous measured gap remains the correct information.
-  if (
-    lapGap !== 0 ||
-    reference.currentSector !== player.currentSector
-  ) {
+  if (lapGap !== 0) {
     return null;
   }
 
@@ -53,7 +53,11 @@ function formatGapAtSharedCheckpoint(
   return `+${timeGap.toFixed(3)}`;
 }
 
-export function syncRacePositions() {
+function normalizeStaleGap(gap: string | null | undefined) {
+  return gap === "0.000" ? null : gap ?? null;
+}
+
+export function syncRacePositions(triggerPlayerId?: number) {
   const leader = positionList[0];
 
   positionList.forEach((entry, index) => {
@@ -61,6 +65,18 @@ export function syncRacePositions() {
 
     const playerAhead = positionList[index - 1];
     const currentPlayerState = playerList[entry.id];
+    const isTriggeredPlayer =
+      triggerPlayerId === undefined || entry.id === triggerPlayerId;
+
+    if (!isTriggeredPlayer) {
+      updatePlayerListRaceGaps(
+        entry.id,
+        index === 0 ? "0.000" : normalizeStaleGap(currentPlayerState?.gapToLeader),
+        index === 0 ? null : normalizeStaleGap(currentPlayerState?.gapToNext),
+      );
+      return;
+    }
+
     const measuredGapToLeader = leader
       ? formatGapAtSharedCheckpoint(leader, entry)
       : null;
@@ -79,6 +95,7 @@ export function syncRacePositions() {
 export function updatePositionList(
   players: { p: PlayerObject; disc: DiscPropertiesObject }[],
   room: RoomObject,
+  triggerPlayerId?: number,
 ) {
   // Race ranking is authoritative only in race-like modes.
   // Qualifying/training rankings are based on best lap time and must never be
@@ -133,7 +150,7 @@ export function updatePositionList(
     return b.lap - a.lap;
   });
 
-  syncRacePositions();
+  syncRacePositions(triggerPlayerId);
 
   checkSandbagLeader(room);
 }

@@ -1,4 +1,4 @@
-import { sendAlertMessage, sendErrorMessage } from "../chat/chat";
+import { sendErrorMessage, sendRadioMessage } from "../chat/chat";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { CIRCUITS, currentMapIndex } from "../zones/maps";
 import { MESSAGES } from "../chat/messages";
@@ -8,7 +8,17 @@ import { handleExplainTyresCommand } from "../commands/tyres/handleExplainTyresC
 import { generatePitResult } from "./pitStopFunctions";
 import { Teams } from "../changeGameState/teams";
 import { isPitNewSystemEnabled } from "./newPitSystem/newPitManager";
-import { tyresActivated } from "./tires";
+import { Tires, tyresActivated } from "./tires";
+
+const PREPARED_TYRE_LABELS: Record<Tires, string> = {
+  [Tires.SOFT]: "Soft",
+  [Tires.MEDIUM]: "Medium",
+  [Tires.HARD]: "Hard",
+  [Tires.INTER]: "Inter",
+  [Tires.WET]: "Wet",
+  [Tires.FLAT]: "Flat",
+  [Tires.TRAIN]: "Train",
+};
 
 function ifInPitlaneStart(
   player: { p: PlayerObject; disc: DiscPropertiesObject },
@@ -44,6 +54,14 @@ export function handlePitlane(
 
       playerList[p.id].pits.pitsNumber += 1;
       playerList[p.id].inPitlane = true;
+      const preparedTyre = playerList[p.id].nextPitTires;
+      if (preparedTyre) {
+        sendRadioMessage(
+          room,
+          MESSAGES.PREPARED_PIT_TYRE_ON_ENTRY(PREPARED_TYRE_LABELS[preparedTyre]),
+          p.id
+        );
+      }
       if (!LEAGUE_MODE && tyresActivated && !player.p.admin) {
         handleExplainTyresCommand(player.p, undefined, room);
       }

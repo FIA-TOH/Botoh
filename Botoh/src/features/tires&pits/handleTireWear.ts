@@ -15,8 +15,40 @@ import { isSCActive } from "../commands/flagsAndVSC/handleSCCommand";
 import { laps } from "../zones/laps";
 import { changeTires } from "./changeTires";
 import { applyTrackTireDegradation } from "./tireDegradationFunction";
-import { TYRE_DURABILITY, Tires, tyresActivated } from "./tires";
+import {
+  raceTyresInQualyEnabled,
+  TYRE_DURABILITY,
+  Tires,
+  tyresActivated,
+} from "./tires";
 import { constants } from "../speed/constants";
+import { currentWeather } from "../weather/currentWeather";
+
+const DRY_TRACK_WET_TYRE_WEAR_MULTIPLIER = 2;
+
+function getPlayerSectorWeather(playerId: number) {
+  const sector = playerList[playerId]?.currentSector || 1;
+
+  switch (sector) {
+    case 1:
+      return currentWeather.wetS1;
+    case 2:
+      return currentWeather.wetS2;
+    case 3:
+      return currentWeather.wetS3;
+    default:
+      return currentWeather.wetAvg;
+  }
+}
+
+function getWeatherTireWearMultiplier(playerId: number, tires: Tires) {
+  if (tires !== Tires.INTER && tires !== Tires.WET) return 1;
+
+  const sectorWet = getPlayerSectorWeather(playerId);
+  if (sectorWet > 0) return 1;
+
+  return DRY_TRACK_WET_TYRE_WEAR_MULTIPLIER;
+}
 
 export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
   const p = playerList[player.id];
@@ -29,7 +61,8 @@ export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
   }
   if (
     !tyresActivated ||
-    generalGameMode === GeneralGameMode.GENERAL_QUALY ||
+    (generalGameMode === GeneralGameMode.GENERAL_QUALY &&
+      !raceTyresInQualyEnabled) ||
     gameMode === GameMode.WAITING
   ) {
     p.wear = 20;
@@ -55,6 +88,7 @@ export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
   if (p.isManagingTyres) {
     wearReductionFactor *= constants.MANAGE_TYRES_WEAR_REDUCTION;
   }
+  wearReductionFactor *= getWeatherTireWearMultiplier(player.id, p.tires as Tires);
   
   const wearIncrementPerSecond =
     (100 / currentTireDurability) * wearReductionFactor;

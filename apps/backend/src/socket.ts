@@ -42,6 +42,10 @@ export function setupSocketHandlers(io: SocketIOServer) {
       botService.sendToBot('pit:call', data);
     });
 
+    socket.on('pit:prepare-tyre', (data) => {
+      botService.sendToBot('pit:prepare-tyre', data);
+    });
+
     socket.on('disconnect', () => {
       console.log(`Client disconnected: ${socket.id}`);
     });

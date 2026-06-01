@@ -56,6 +56,47 @@ const userValidation = [
   body('language')
     .isIn(['pt', 'en', 'es'])
     .withMessage('Language must be pt, en, or es'),
+  body('driverWallet')
+    .optional({ nullable: true })
+    .isObject()
+    .withMessage('Driver wallet is invalid'),
+  body('driverWallet.velocidade')
+    .optional()
+    .isInt({ min: 0, max: 5 })
+    .withMessage('Driver sport attributes must be between 0 and 5'),
+  body('driverWallet.consistencia')
+    .optional()
+    .isInt({ min: 0, max: 5 })
+    .withMessage('Driver sport attributes must be between 0 and 5'),
+  body('driverWallet.tecnica')
+    .optional()
+    .isInt({ min: 0, max: 5 })
+    .withMessage('Driver sport attributes must be between 0 and 5'),
+  body('driverWallet.experiencia')
+    .optional()
+    .isInt({ min: 0, max: 5 })
+    .withMessage('Driver sport attributes must be between 0 and 5'),
+  body('driverWallet.chuva')
+    .optional()
+    .isInt({ min: 0, max: 5 })
+    .withMessage('Driver sport attributes must be between 0 and 5'),
+  body('driverWallet.estrategia')
+    .optional()
+    .isInt({ min: 0, max: 5 })
+    .withMessage('Driver sport attributes must be between 0 and 5'),
+  body('driverWallet.potencial')
+    .optional()
+    .isInt({ min: 0, max: 100 })
+    .withMessage('Driver potential must be between 0 and 100'),
+  body('driverWallet.popularidade')
+    .optional()
+    .isInt({ min: 0, max: 5 })
+    .withMessage('Driver popularity must be between 0 and 5'),
+  body('driverWallet.nacionalidade')
+    .optional()
+    .isString()
+    .isLength({ min: 1, max: 120 })
+    .withMessage('Driver nationality is invalid'),
 ];
 
 const createUserValidation = [
@@ -231,6 +272,10 @@ const sponsorValidation = [
     .optional({ nullable: true })
     .isIn(SPONSOR_TARGET_AUDIENCES)
     .withMessage('Target audience is invalid'),
+  body('pilotUserId')
+    .optional({ nullable: true })
+    .isUUID()
+    .withMessage('Pilot user must be a valid UUID'),
 ];
 const missionValidation = [
   body('title').isString().isLength({ min: 1, max: 255 }),
@@ -352,6 +397,25 @@ router.delete(
   },
 );
 
+router.delete(
+  '/users/:id/personal-sponsor',
+  param('id').isUUID().withMessage('Invalid user id'),
+  async (req: AuthRequest, res: Response) => {
+    try {
+      if (handleValidation(req, res)) return;
+
+      const result = await adminService.unlinkUserPersonalSponsor(req.params.id);
+      return res.status(result.success ? 200 : 404).json({
+        ...result,
+        message: translateMessage(result.message, getRequestLanguage(req)),
+      });
+    } catch (error) {
+      console.error('Admin unlink user personal sponsor error:', error);
+      return res.status(500).json({ success: false, message: translateMessage('Failed to update user', getRequestLanguage(req)) });
+    }
+  },
+);
+
 router.post(
   '/scuderias/:id/finance-entries',
   param('id').isUUID().withMessage('Invalid scuderia id'),
@@ -445,7 +509,10 @@ router.get('/sponsors', async (_req: AuthRequest, res: Response) => {
 router.post('/sponsors', sponsorValidation, async (req: AuthRequest, res: Response) => {
   if (handleValidation(req, res)) return;
   const result = await adminService.createSponsor(req.body);
-  return res.status(201).json(result);
+  return res.status(result.success ? 201 : 400).json({
+    ...result,
+    message: translateMessage((result as { message?: string }).message, getRequestLanguage(req)),
+  });
 });
 
 router.put('/sponsors/:id', param('id').isUUID(), sponsorValidation, async (req: AuthRequest, res: Response) => {

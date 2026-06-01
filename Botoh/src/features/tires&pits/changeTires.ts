@@ -45,6 +45,7 @@ export function changeTires(
   playerList[player.p.id].maxSpeed = TIRE_STARTING_SPEED[chosen];
   playerList[player.p.id].isTyreBlowed = false;
   if (chosen !== Tires.FLAT) {
+    playerList[player.p.id].nextPitTires = null;
     decideBlowoutPoint(player.p);
     if (pitTime > 1) {
       const isPitRecord = trySetBestPit(

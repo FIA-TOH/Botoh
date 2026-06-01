@@ -2,8 +2,10 @@ import { CrashWallDetector } from "../../circuits/Circuit";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { sendAlertMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
+import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
 import { playerList } from "../changePlayerState/playerList";
 import { vectorSpeed } from "../utils";
+import { getRaceControlState, RaceControlState } from "../commands/flagsAndVSC/raceControl";
 
 type Point = [number, number];
 type Segment = [Point, Point];
@@ -11,11 +13,21 @@ type Segment = [Point, Point];
 const detectorSegmentsCache = new Map<string, Segment[]>();
 const playerTouchedCrashWallDetectors = new Map<number, Set<string>>();
 const previousPlayerSpeed = new Map<number, number>();
+const lastPlayerDamageAt = new Map<number, number>();
+const DAMAGE_COOLDOWN_MS = 1000;
 
 export let damageEnabled = false;
 
 export function enableDamage(enable: boolean) {
   damageEnabled = enable;
+}
+
+function isDamageSuspendedByRaceControl() {
+  const raceControl = getRaceControlState();
+
+  return raceControl.flag === RaceControlState.YellowFlag
+    || raceControl.neutralization === RaceControlState.SafetyCar
+    || raceControl.neutralization === RaceControlState.VirtualSafetyCar;
 }
 
 function clampCurvature(curvatura: number): number {
@@ -149,12 +161,17 @@ function applyCrashDamage(playerId: number, impactSpeed: number) {
   const playerInfo = playerList[playerId];
   if (!playerInfo) return null;
 
+  const now = Date.now();
+  const lastDamageAt = lastPlayerDamageAt.get(playerId) ?? 0;
+  if (now - lastDamageAt < DAMAGE_COOLDOWN_MS) return null;
+
   const currentDamage = playerInfo.carDamage ?? 0;
   const calculatedDamage = roundDamage(impactSpeed / 2);
   const newDamage = roundDamage(Math.min(100, currentDamage + calculatedDamage));
   const damageTaken = roundDamage(newDamage - currentDamage);
 
   playerInfo.carDamage = newDamage;
+  lastPlayerDamageAt.set(playerId, now);
 
   return {
     damageTaken,
@@ -170,6 +187,7 @@ export function detectCrashWallDetectors(
 
   const detectors = ACTUAL_CIRCUIT?.info?.CrashWallDetector;
   if (!detectors?.length) return;
+  const damageSuspended = isDamageSuspendedByRaceControl();
 
   for (const pad of playersAndDiscs) {
     if (!pad.disc) continue;
@@ -187,6 +205,15 @@ export function detectCrashWallDetectors(
       const detectorTouchKey = getCacheKey(detector);
       const isTouching = isTouchingDetector(pad.disc, detector);
 
+      if (damageSuspended) {
+        if (isTouching) {
+          touchedSet.add(detectorTouchKey);
+        } else {
+          touchedSet.delete(detectorTouchKey);
+        }
+        continue;
+      }
+
       if (isTouching && !touchedSet.has(detectorTouchKey)) {
         const speed = Math.max(currentSpeed, previousSpeed);
         const damage = applyCrashDamage(pad.p.id, speed);
@@ -200,6 +227,11 @@ export function detectCrashWallDetectors(
             ),
             pad.p.id,
           );
+
+          if (damage.damageTaken > 0) {
+            playerList[pad.p.id].lastLapValid = false;
+            handleAvatar(Situacions.CrashDamage, pad.p, room);
+          }
         }
 
         touchedSet.add(detectorTouchKey);

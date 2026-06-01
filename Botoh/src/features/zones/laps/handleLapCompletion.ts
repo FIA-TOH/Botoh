@@ -43,7 +43,7 @@ export function handleLapCompletion(
     generalGameMode !== GeneralGameMode.GENERAL_QUALY &&
     gameMode !== GameMode.TRAINING
   ) {
-    updatePositionList(players, room);
+    updatePositionList(players, room, p.id);
     checkBlueFlag(p, room);
   }
 }

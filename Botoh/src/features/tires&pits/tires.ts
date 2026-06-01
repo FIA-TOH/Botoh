@@ -21,11 +21,16 @@ export const TIRE_STARTING_SPEED = {
 };
 
 export let tyresActivated = true;
+export let raceTyresInQualyEnabled = false;
 
 export type TireDurability = Record<Tires, number | typeof Infinity>;
 
 export function enableTyres(boolean: boolean) {
   tyresActivated = boolean;
+}
+
+export function setRaceTyresInQualyEnabled(enabled: boolean) {
+  raceTyresInQualyEnabled = enabled;
 }
 
 export const TYRE_DURABILITY = (limit: number | null): TireDurability => {
@@ -46,8 +51,8 @@ export const TYRE_DURABILITY = (limit: number | null): TireDurability => {
       [Tires.SOFT]: 150, // 2.5
       [Tires.MEDIUM]: 185.94, // 3.1
       [Tires.HARD]: 255, // 4.25
-      [Tires.WET]: 200, // 3.33
-      [Tires.INTER]: 200, // 3.33
+      [Tires.WET]: 150, // 3.33
+      [Tires.INTER]: 150, // 3.33
       [Tires.FLAT]: Infinity,
       [Tires.TRAIN]: Infinity,
     };
@@ -56,8 +61,8 @@ export const TYRE_DURABILITY = (limit: number | null): TireDurability => {
       [Tires.SOFT]: 450, // 7.5
       [Tires.MEDIUM]: 558.06, // 9.3
       [Tires.HARD]: 765, // 12.75
-      [Tires.WET]: 600, // 10
-      [Tires.INTER]: 600, // 10
+      [Tires.WET]: 450, // 10
+      [Tires.INTER]: 450, // 10
       [Tires.FLAT]: Infinity,
       [Tires.TRAIN]: Infinity,
     };
@@ -66,8 +71,8 @@ export const TYRE_DURABILITY = (limit: number | null): TireDurability => {
       [Tires.SOFT]: 750, // 12.5
       [Tires.MEDIUM]: 928.69, // 15.5
       [Tires.HARD]: 1275, // 21.25
-      [Tires.WET]: 1000, // 16.67
-      [Tires.INTER]: 1000, // 16.67
+      [Tires.WET]: 750, // 16.67
+      [Tires.INTER]: 750, // 16.67
       [Tires.FLAT]: Infinity,
       [Tires.TRAIN]: Infinity,
     };
@@ -77,8 +82,8 @@ export const TYRE_DURABILITY = (limit: number | null): TireDurability => {
       [Tires.SOFT]: 900 * 0.7, // ≈ 630
       [Tires.MEDIUM]: 1200 * 0.7, // ≈ 840
       [Tires.HARD]: 1600 * 0.7, // ≈ 1120
-      [Tires.WET]: 1200 * 0.7, // ≈ 840
-      [Tires.INTER]: 1200 * 0.7, // ≈ 840
+      [Tires.WET]: 900 * 0.7, // ≈ 840
+      [Tires.INTER]: 900 * 0.7, // ≈ 840
       [Tires.FLAT]: Infinity,
       [Tires.TRAIN]: Infinity,
     };

@@ -64,6 +64,15 @@ const exactMessages = {
     'Team membership role is invalid': 'A função na scuderia é inválida',
     'A user cannot have duplicate scuderias': 'Um usuário não pode ter scuderias duplicadas',
     'Driver number must be between 0 and 999': 'O número do piloto deve estar entre 0 e 999',
+    'Driver wallet is invalid': 'A carteira do piloto é inválida',
+    'Driver sport attributes must be between 0 and 5': 'Os atributos esportivos do piloto devem estar entre 0 e 5',
+    'Driver potential must be between 0 and 100': 'O potencial do piloto deve estar entre 0 e 100',
+    'Driver popularity must be between 0 and 5': 'A popularidade do piloto deve estar entre 0 e 5',
+    'Driver nationality is invalid': 'A nacionalidade do piloto é inválida',
+    'Personal sponsor requires a driver wallet': 'Sponsor pessoal exige uma carteira de piloto',
+    'Driver wallet not found': 'Carteira de piloto não encontrada',
+    'Driver already has a personal sponsor': 'Piloto já possui um sponsor pessoal',
+    'Personal sponsor not found': 'Sponsor pessoal não encontrado',
     'Language must be pt, en, or es': 'O idioma deve ser pt, en ou es',
     'Scuderia name must be between 2 and 100 characters': 'O nome da scuderia deve ter entre 2 e 100 caracteres',
     'Scuderia abbreviation must be exactly 3 characters': 'A abreviação da scuderia deve ter exatamente 3 caracteres',
@@ -170,6 +179,15 @@ const exactMessages = {
     'Sponsor type is invalid': 'Sponsor type is invalid',
     'Sectors must be an array': 'Sectors must be an array',
     'Race progress direction is invalid': 'Race progress direction is invalid',
+    'Driver wallet is invalid': 'Driver wallet is invalid',
+    'Driver sport attributes must be between 0 and 5': 'Driver sport attributes must be between 0 and 5',
+    'Driver potential must be between 0 and 100': 'Driver potential must be between 0 and 100',
+    'Driver popularity must be between 0 and 5': 'Driver popularity must be between 0 and 5',
+    'Driver nationality is invalid': 'Driver nationality is invalid',
+    'Personal sponsor requires a driver wallet': 'Personal sponsor requires a driver wallet',
+    'Driver wallet not found': 'Driver wallet not found',
+    'Driver already has a personal sponsor': 'Driver already has a personal sponsor',
+    'Personal sponsor not found': 'Personal sponsor not found',
   },
   es: {
     'Validation failed': 'La validación falló',
@@ -231,6 +249,15 @@ const exactMessages = {
     'Team membership role is invalid': 'La función en la scuderia no es válida',
     'A user cannot have duplicate scuderias': 'Un usuario no puede tener scuderias duplicadas',
     'Driver number must be between 0 and 999': 'El número del piloto debe estar entre 0 y 999',
+    'Driver wallet is invalid': 'La cartera del piloto no es válida',
+    'Driver sport attributes must be between 0 and 5': 'Los atributos deportivos del piloto deben estar entre 0 y 5',
+    'Driver potential must be between 0 and 100': 'El potencial del piloto debe estar entre 0 y 100',
+    'Driver popularity must be between 0 and 5': 'La popularidad del piloto debe estar entre 0 y 5',
+    'Driver nationality is invalid': 'La nacionalidad del piloto no es válida',
+    'Personal sponsor requires a driver wallet': 'El sponsor personal requiere una cartera de piloto',
+    'Driver wallet not found': 'Cartera de piloto no encontrada',
+    'Driver already has a personal sponsor': 'El piloto ya tiene un sponsor personal',
+    'Personal sponsor not found': 'Sponsor personal no encontrado',
     'Language must be pt, en, or es': 'El idioma debe ser pt, en o es',
     'Scuderia name must be between 2 and 100 characters': 'El nombre de la scuderia debe tener entre 2 y 100 caracteres',
     'Scuderia abbreviation must be exactly 3 characters': 'La abreviación de la scuderia debe tener exactamente 3 caracteres',
@@ -398,6 +425,27 @@ export function translateDriverReleaseNotification(
   return {
     title: 'Contrato de piloto rescindido',
     message: `${teamName} rescindiu seu contrato e pagou $${penalty} como custo de rescisao.`,
+  };
+}
+
+export function translateDriverContractWebhookWarningNotification(language: Language) {
+  if (language === 'en') {
+    return {
+      title: 'Contract signed, Discord notice failed',
+      message: 'Your contract was accepted, but the Discord webhook did not work. Please notify an administrator.',
+    };
+  }
+
+  if (language === 'es') {
+    return {
+      title: 'Contrato firmado, fallo el aviso de Discord',
+      message: 'Tu contrato fue aceptado, pero el webhook de Discord no funciono. Avisa a un administrador.',
+    };
+  }
+
+  return {
+    title: 'Contrato assinado, aviso do Discord falhou',
+    message: 'Seu contrato foi aceito, mas o webhook do Discord nao funcionou. Avise um administrador.',
   };
 }
 

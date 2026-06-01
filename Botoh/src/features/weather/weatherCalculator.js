@@ -12,6 +12,7 @@ function simulateWeather(rainProbabilityPercent, raceMinutes) {
   const warmupMinutes = raceMinutes > 0 ? Math.floor(raceMinutes / 2) : 10;
   const totalSimMinutes = raceMinutes + warmupMinutes;
   const steps = totalSimMinutes * 60;
+  const shouldRainDuringRace = Math.random() < rainProbabilityPercent / 100;
 
   const timeScale = 0.002;
   const noise2D = createNoise2D();
@@ -25,6 +26,10 @@ function simulateWeather(rainProbabilityPercent, raceMinutes) {
   let wetS1 = 0;
   let wetS2 = 0;
   let wetS3 = 0;
+  const getWetLimitMultiplier = () => 1.05 + ((Math.random() + Math.random()) / 2) * 0.10;
+  const wetLimitMultiplierS1 = getWetLimitMultiplier();
+  const wetLimitMultiplierS2 = getWetLimitMultiplier();
+  const wetLimitMultiplierS3 = getWetLimitMultiplier();
 
   let rainIsStabilized = false;
   let stabilizedIntensity = 0;
@@ -49,7 +54,9 @@ function simulateWeather(rainProbabilityPercent, raceMinutes) {
 
     const rainThreshold = 1 - (rainProbabilityPercent / 100);
 
-    if (rainIsStabilized) {
+    if (!shouldRainDuringRace) {
+      rainGlobal = 0;
+    } else if (rainIsStabilized) {
       rainGlobal = stabilizedIntensity;
     } else if (chanceNoise > rainThreshold) {
       let rainIntensity = intensityNoise * rainProbabilityPercent * 1.5;
@@ -86,15 +93,36 @@ function simulateWeather(rainProbabilityPercent, raceMinutes) {
     if (rainS2 < 5) rainS2 = 0;
     if (rainS3 < 5) rainS3 = 0;
 
-    const updateWet = (wet, rain) => {
-      if (rain > 0) wet += rain * 0.025;
-      else wet -= 0.5;
+    const getWetLimitForRain = (rain, multiplier) => {
+      return Math.max(0, Math.min(100, rain * multiplier));
+    };
+
+    const updateWet = (wet, rain, multiplier) => {
+      if (rain > 0) {
+        const wetLimit = getWetLimitForRain(rain, multiplier);
+        const wetIncrease = rain * 0.018;
+        return Math.max(0, Math.min(wetLimit, wet + wetIncrease));
+      }
+
+      wet -= 0.5;
       return Math.max(0, Math.min(100, wet));
     };
 
-    wetS1 = updateWet(wetS1, rainS1);
-    wetS2 = updateWet(wetS2, rainS2);
-    wetS3 = updateWet(wetS3, rainS3);
+    wetS1 = updateWet(wetS1, rainS1, wetLimitMultiplierS1);
+    wetS2 = updateWet(wetS2, rainS2, wetLimitMultiplierS2);
+    wetS3 = updateWet(wetS3, rainS3, wetLimitMultiplierS3);
+
+    if (
+      t === warmupMinutes * 60 &&
+      rainGlobal === 0 &&
+      rainS1 === 0 &&
+      rainS2 === 0 &&
+      rainS3 === 0
+    ) {
+      wetS1 = 0;
+      wetS2 = 0;
+      wetS3 = 0;
+    }
 
     if (t >= warmupMinutes * 60 && t % 30 === 0) {
       const minute = (t - warmupMinutes * 60) / 60;
@@ -111,7 +139,62 @@ function simulateWeather(rainProbabilityPercent, raceMinutes) {
     }
   }
 
+  if (shouldRainDuringRace && !data.rain_global.some((rain) => rain > 0)) {
+    injectFallbackRain(data, rainProbabilityPercent);
+  }
+
   return data;
+}
+
+function injectFallbackRain(data, rainProbabilityPercent) {
+  if (!data.time.length) return;
+
+  const startIndex = Math.floor(Math.random() * data.time.length);
+  const durationPoints = Math.max(1, Math.min(data.time.length - startIndex, Math.ceil(Math.random() * 4)));
+  const intensity = Math.max(5, Math.min(100, rainProbabilityPercent * (0.65 + Math.random() * 0.55)));
+  const sectorMultipliers = [
+    0.85 + Math.random() * 0.30,
+    0.85 + Math.random() * 0.30,
+    0.85 + Math.random() * 0.30,
+  ];
+  let wetS1 = data.wet_s1[startIndex] || 0;
+  let wetS2 = data.wet_s2[startIndex] || 0;
+  let wetS3 = data.wet_s3[startIndex] || 0;
+
+  const getWetLimitMultiplier = () => 1.05 + ((Math.random() + Math.random()) / 2) * 0.10;
+  const wetLimitMultiplierS1 = getWetLimitMultiplier();
+  const wetLimitMultiplierS2 = getWetLimitMultiplier();
+  const wetLimitMultiplierS3 = getWetLimitMultiplier();
+  const updateWet = (wet, rain, multiplier) => {
+    if (rain > 0) {
+      return Math.max(0, Math.min(Math.min(100, rain * multiplier), wet + rain * 0.025 * 30));
+    }
+
+    return Math.max(0, wet - 0.5 * 30);
+  };
+
+  for (let index = startIndex; index < data.time.length; index++) {
+    const rainRatio = index < startIndex + durationPoints
+      ? Math.sin(((index - startIndex + 1) / (durationPoints + 1)) * Math.PI)
+      : 0;
+    const rainGlobal = Math.max(0, intensity * rainRatio);
+    const rainS1 = rainGlobal > 0 ? Math.max(0, Math.min(100, rainGlobal * sectorMultipliers[0])) : 0;
+    const rainS2 = rainGlobal > 0 ? Math.max(0, Math.min(100, rainGlobal * sectorMultipliers[1])) : 0;
+    const rainS3 = rainGlobal > 0 ? Math.max(0, Math.min(100, rainGlobal * sectorMultipliers[2])) : 0;
+
+    wetS1 = updateWet(wetS1, rainS1, wetLimitMultiplierS1);
+    wetS2 = updateWet(wetS2, rainS2, wetLimitMultiplierS2);
+    wetS3 = updateWet(wetS3, rainS3, wetLimitMultiplierS3);
+
+    data.rain_global[index] = rainGlobal;
+    data.rain_s1[index] = rainS1;
+    data.rain_s2[index] = rainS2;
+    data.rain_s3[index] = rainS3;
+    data.wet_s1[index] = wetS1;
+    data.wet_s2[index] = wetS2;
+    data.wet_s3[index] = wetS3;
+    data.wet_avg[index] = (wetS1 + wetS2 + wetS3) / 3;
+  }
 }
 
 function tstr(t) {

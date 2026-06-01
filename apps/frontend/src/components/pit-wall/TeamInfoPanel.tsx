@@ -1,4 +1,5 @@
 import { Driver } from '@/mocks/raceData';
+import { Tires } from '@/types/game';
 
 import { DriverHud } from './DriverHud';
 import { useTranslations } from '@/i18n';
@@ -7,6 +8,7 @@ interface Props {
   drivers?: Driver[];
   loggedUserTeam?: string | null;
   onPitCall?: (driver: Driver) => void;
+  onPitTyrePrepare?: (driver: Driver, tyre: Tires | null) => void;
   loading?: boolean;
 
   error?: string | null;
@@ -16,6 +18,7 @@ export function TeamInfoPanel({
   drivers = [],
   loggedUserTeam = null,
   onPitCall,
+  onPitTyrePrepare,
   loading = false,
   error = null,
 }: Props) {
@@ -119,12 +122,14 @@ export function TeamInfoPanel({
               driver={driver1}
               align="left"
               onPitCall={onPitCall}
+              onPitTyrePrepare={onPitTyrePrepare}
             />
 
             <DriverHud
               driver={driver2}
               align="right"
               onPitCall={onPitCall}
+              onPitTyrePrepare={onPitTyrePrepare}
             />
           </div>
         )}

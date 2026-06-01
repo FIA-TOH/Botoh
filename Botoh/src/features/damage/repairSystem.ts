@@ -3,10 +3,11 @@ import { playerList } from "../changePlayerState/playerList";
 import { sendAlertMessage, sendErrorMessage, sendSuccessMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { isXKeyPressed } from "../utils/dampingValues";
+import { getPitReactionTimeScale } from "../tires&pits/newPitSystem/pitReactionMultiplier";
 
 const MIN_REPAIR_TIME = 1.5;
 const MAX_REPAIR_TIME = 18;
-const DAMAGE_REPAIR_TIME_FACTOR = 0.03;
+const DAMAGE_REPAIR_TIME_FACTOR = 0.03 * 0.75;
 const REACTION_REPAIR_TIME_FACTOR = 3;
 const BASE_REPAIR_TIME = 1;
 const EARLY_REACTION_PENALTY = 3;
@@ -17,11 +18,13 @@ function roundSeconds(value: number) {
   return Math.round(value * 10) / 10;
 }
 
-function calculateRepairTime(damage: number, reactionTime: number) {
+function calculateRepairTime(playerId: number, damage: number, reactionTime: number) {
+  const reactionTimeFactor =
+    REACTION_REPAIR_TIME_FACTOR * getPitReactionTimeScale(playerId);
   const repairTime =
     BASE_REPAIR_TIME +
     damage * DAMAGE_REPAIR_TIME_FACTOR +
-    reactionTime * REACTION_REPAIR_TIME_FACTOR;
+    reactionTime * reactionTimeFactor;
 
   return roundSeconds(Math.max(MIN_REPAIR_TIME, Math.min(MAX_REPAIR_TIME, repairTime)));
 }
@@ -53,7 +56,7 @@ function startRepair(player: PlayerObject, room: RoomObject, reactionTime: numbe
 
   const currentTime = room.getScores()?.time || 0;
   const damageToRepair = Math.max(0, Math.min(100, playerInfo.repairState.damageToRepair ?? playerInfo.carDamage));
-  const repairTime = calculateRepairTime(damageToRepair, reactionTime);
+  const repairTime = calculateRepairTime(player.id, damageToRepair, reactionTime);
 
   playerInfo.repairState.isWaitingForRepair = false;
   playerInfo.repairState.isRepairing = true;
@@ -92,6 +95,12 @@ export function handleFixCommand(
 
   const currentTime = room.getScores()?.time || 0;
   const delaySeconds = Math.random() * 1.8 + 0.2;
+  room.setPlayerDiscProperties(byPlayer.id, {
+    xspeed: 0,
+    yspeed: 0,
+    xgravity: 0,
+    ygravity: 0,
+  });
 
   playerInfo.repairState = {
     isWaitingForRepair: true,

@@ -63,6 +63,11 @@ async function setupBackendCommunication() {
     socket.emit('register:bot', {
       token: process.env.BOT_SOCKET_TOKEN || undefined,
     });
+    import('../../../Botoh/src/features/integrations/pitWallSync')
+      .then(({ flushPitWallRoomSnapshot }) => flushPitWallRoomSnapshot())
+      .catch((error) => {
+        console.error('Failed to flush Pit Wall room snapshot:', error);
+      });
     emitRoomHeartbeat();
   });
 
@@ -89,6 +94,7 @@ async function setupBackendCommunication() {
         const { playerList } = await import('../../../Botoh/src/features/changePlayerState/playerList');
         const { getLeagueScuderia } = await import('../../../Botoh/src/features/scuderias/scuderias');
         const { MESSAGES, getPlayerLanguage } = await import('../../../Botoh/src/features/chat/messages');
+        const { sendRadioMessage } = await import('../../../Botoh/src/features/chat/chat');
         const { mute_mode } = await import('../../../Botoh/src/features/chat/toggleMuteMode');
 
         if (mute_mode) {
@@ -120,8 +126,8 @@ async function setupBackendCommunication() {
               : target.type === 'player'
                 ? MESSAGES.CHAT_CHANNEL_PRIVATE()[language]
                 : MESSAGES.CHAT_CHANNEL_ALL()[language];
-          const formattedMessage = `[\u{1F4FB} ${player} - ${channelLabel}] ${message}`;
-          room.sendAnnouncement(formattedMessage, recipient.id, 0xFFFFFF);
+          const formattedMessage = `[📻 ${player} - ${channelLabel}] ${message}`;
+          sendRadioMessage(room, formattedMessage, recipient.id);
         });
 
         if (target.type === 'all') {
@@ -150,6 +156,8 @@ async function setupBackendCommunication() {
 
     try {
       const { getRoom } = await import('../../../Botoh/src/room');
+      const { sendRadioMessage } = await import('../../../Botoh/src/features/chat/chat');
+      const { MESSAGES } = await import('../../../Botoh/src/features/chat/messages');
       const room = await getRoom();
       const playerToCall = room?.getPlayerList().find(
         (roomPlayer: PlayerObject) => roomPlayer.name === data.playerName,
@@ -157,13 +165,49 @@ async function setupBackendCommunication() {
 
       if (!room || !playerToCall) return;
 
-      room.sendAnnouncement(
-        '\u{1F4FB} BOX BOX BOX BOX',
-        playerToCall.id,
-        0xffff00,
-      );
+      sendRadioMessage(room, MESSAGES.BOX_BOX_BOX(), playerToCall.id);
     } catch (error) {
       console.error('Error sending pit call to Haxball room:', error);
+    }
+  });
+
+  socket.on('pit:prepare-tyre', async (data: { playerName?: string; tyre?: string | null }) => {
+    if (!data?.playerName) return;
+
+    try {
+      const { getRoom } = await import('../../../Botoh/src/room');
+      const { playerList } = await import('../../../Botoh/src/features/changePlayerState/playerList');
+      const { Tires } = await import('../../../Botoh/src/features/tires&pits/tires');
+      const { sendRadioMessage } = await import('../../../Botoh/src/features/chat/chat');
+      const { MESSAGES } = await import('../../../Botoh/src/features/chat/messages');
+
+      const room = await getRoom();
+      const playerToPrepare = room?.getPlayerList().find(
+        (roomPlayer: PlayerObject) => roomPlayer.name === data.playerName,
+      );
+
+      if (!room || !playerToPrepare || !playerList[playerToPrepare.id]) return;
+
+      const requestedTyre = typeof data.tyre === 'string'
+        ? data.tyre.toUpperCase()
+        : null;
+
+      if (requestedTyre === null) {
+        playerList[playerToPrepare.id].nextPitTires = null;
+        return;
+      }
+
+      const tyre = Object.values(Tires).find((candidate) => candidate === requestedTyre);
+      if (!tyre || tyre === Tires.FLAT) return;
+
+      playerList[playerToPrepare.id].nextPitTires = tyre;
+      sendRadioMessage(
+        room,
+        MESSAGES.PIT_TYRE_PREPARED(tyre),
+        playerToPrepare.id,
+      );
+    } catch (error) {
+      console.error('Error preparing pit tyre in Haxball room:', error);
     }
   });
 

@@ -71,6 +71,32 @@ class MigrationService {
     await query("ALTER TABLE users ADD COLUMN IF NOT EXISTS language VARCHAR(2) NOT NULL DEFAULT 'pt'");
     await query('ALTER TABLE users ADD COLUMN IF NOT EXISTS team_id UUID REFERENCES teams(id) ON DELETE SET NULL');
     await query('ALTER TABLE users ALTER COLUMN team_id DROP NOT NULL');
+    await query('ALTER TABLE users ADD COLUMN IF NOT EXISTS driver_wallet_created BOOLEAN NOT NULL DEFAULT false');
+    await query('ALTER TABLE users ADD COLUMN IF NOT EXISTS driver_velocidade INTEGER');
+    await query('ALTER TABLE users ADD COLUMN IF NOT EXISTS driver_consistencia INTEGER');
+    await query('ALTER TABLE users ADD COLUMN IF NOT EXISTS driver_tecnica INTEGER');
+    await query('ALTER TABLE users ADD COLUMN IF NOT EXISTS driver_experiencia INTEGER');
+    await query('ALTER TABLE users ADD COLUMN IF NOT EXISTS driver_chuva INTEGER');
+    await query('ALTER TABLE users ADD COLUMN IF NOT EXISTS driver_estrategia INTEGER');
+    await query('ALTER TABLE users ADD COLUMN IF NOT EXISTS driver_potencial INTEGER');
+    await query('ALTER TABLE users ADD COLUMN IF NOT EXISTS driver_popularidade INTEGER');
+    await query('ALTER TABLE users ADD COLUMN IF NOT EXISTS driver_nacionalidade VARCHAR(120)');
+    await query('ALTER TABLE users DROP CONSTRAINT IF EXISTS users_driver_velocidade_check');
+    await query('ALTER TABLE users ADD CONSTRAINT users_driver_velocidade_check CHECK (driver_velocidade IS NULL OR driver_velocidade BETWEEN 0 AND 5)');
+    await query('ALTER TABLE users DROP CONSTRAINT IF EXISTS users_driver_consistencia_check');
+    await query('ALTER TABLE users ADD CONSTRAINT users_driver_consistencia_check CHECK (driver_consistencia IS NULL OR driver_consistencia BETWEEN 0 AND 5)');
+    await query('ALTER TABLE users DROP CONSTRAINT IF EXISTS users_driver_tecnica_check');
+    await query('ALTER TABLE users ADD CONSTRAINT users_driver_tecnica_check CHECK (driver_tecnica IS NULL OR driver_tecnica BETWEEN 0 AND 5)');
+    await query('ALTER TABLE users DROP CONSTRAINT IF EXISTS users_driver_experiencia_check');
+    await query('ALTER TABLE users ADD CONSTRAINT users_driver_experiencia_check CHECK (driver_experiencia IS NULL OR driver_experiencia BETWEEN 0 AND 5)');
+    await query('ALTER TABLE users DROP CONSTRAINT IF EXISTS users_driver_chuva_check');
+    await query('ALTER TABLE users ADD CONSTRAINT users_driver_chuva_check CHECK (driver_chuva IS NULL OR driver_chuva BETWEEN 0 AND 5)');
+    await query('ALTER TABLE users DROP CONSTRAINT IF EXISTS users_driver_estrategia_check');
+    await query('ALTER TABLE users ADD CONSTRAINT users_driver_estrategia_check CHECK (driver_estrategia IS NULL OR driver_estrategia BETWEEN 0 AND 5)');
+    await query('ALTER TABLE users DROP CONSTRAINT IF EXISTS users_driver_potencial_check');
+    await query('ALTER TABLE users ADD CONSTRAINT users_driver_potencial_check CHECK (driver_potencial IS NULL OR driver_potencial BETWEEN 0 AND 100)');
+    await query('ALTER TABLE users DROP CONSTRAINT IF EXISTS users_driver_popularidade_check');
+    await query('ALTER TABLE users ADD CONSTRAINT users_driver_popularidade_check CHECK (driver_popularidade IS NULL OR driver_popularidade BETWEEN 0 AND 5)');
 
     await query(`
       CREATE TABLE IF NOT EXISTS user_team_memberships (
@@ -215,6 +241,7 @@ class MigrationService {
     await query('ALTER TABLE sponsors ADD COLUMN IF NOT EXISTS publico_alvo_1 VARCHAR(40)');
     await query('ALTER TABLE sponsors ADD COLUMN IF NOT EXISTS publico_alvo_2 VARCHAR(40)');
     await query('ALTER TABLE sponsors ADD COLUMN IF NOT EXISTS scuderias_relacionadas UUID[]');
+    await query('ALTER TABLE sponsors ADD COLUMN IF NOT EXISTS pilot_user_id UUID REFERENCES users(id) ON DELETE SET NULL');
     await query('ALTER TABLE sponsors DROP CONSTRAINT IF EXISTS sponsors_felicidade_check');
     await query('ALTER TABLE sponsors ADD CONSTRAINT sponsors_felicidade_check CHECK (felicidade BETWEEN 0 AND 100)');
     await query('ALTER TABLE sponsors DROP CONSTRAINT IF EXISTS sponsors_prestigio_check');
@@ -233,6 +260,7 @@ class MigrationService {
     await query('ALTER TABLE sponsors ADD CONSTRAINT sponsors_orcamento_check CHECK (orcamento BETWEEN 0 AND 3)');
     await query('ALTER TABLE sponsors DROP CONSTRAINT IF EXISTS sponsors_ambicao_check');
     await query('ALTER TABLE sponsors ADD CONSTRAINT sponsors_ambicao_check CHECK (ambicao BETWEEN 1 AND 5)');
+    await query('CREATE UNIQUE INDEX IF NOT EXISTS sponsors_pilot_user_unique ON sponsors(pilot_user_id) WHERE pilot_user_id IS NOT NULL');
 
     await query(`
       CREATE TABLE IF NOT EXISTS team_sponsors (
