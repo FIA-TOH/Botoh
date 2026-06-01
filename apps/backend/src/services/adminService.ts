@@ -30,6 +30,7 @@ export interface AdminUserInput {
   username: string;
   password?: string;
   shortUsername: string;
+  role?: 'admin' | 'user';
   teamMemberships: TeamMembershipInput[];
   driverNumber: number;
   language: 'pt' | 'en' | 'es';
@@ -189,19 +190,79 @@ class AdminService {
   }
 
   async createUser(input: Required<AdminUserInput>) {
-    const existingUser = await authService.findUserByUsername(input.username);
-    if (existingUser) {
+    const existingUser = await this.findUserActivationByUsername(input.username);
+    if (existingUser?.isActive) {
       return { success: false, message: 'Username already exists' };
     }
 
     const passwordHash = await authService.hashPassword(input.password);
-    const validation = await this.validateDriverMemberships(input.teamMemberships);
+    const reactivatedUserId = existingUser?.id;
+    const validation = await this.validateDriverMemberships(input.teamMemberships, reactivatedUserId);
     if (!validation.success) return validation;
     const walletValidation = this.validateDriverWallet(input.driverWallet);
     if (!walletValidation.success) return walletValidation;
     const wallet = walletValidation.wallet;
+    const role = input.role === 'admin' ? 'admin' : 'user';
 
     const user = await transaction(async (client) => {
+      if (reactivatedUserId) {
+        const result = await client.query(
+          `UPDATE users
+           SET
+            username = $1,
+            password_hash = $2,
+            role = $21,
+            money = 50000,
+            short_username = $3,
+            is_team_principal = $4,
+            is_team_assistant = $5,
+            is_driver = $6,
+            team_id = $7,
+            driver_number = $8,
+            language = $9,
+            driver_wallet_created = $10,
+            driver_velocidade = $11,
+            driver_consistencia = $12,
+            driver_tecnica = $13,
+            driver_experiencia = $14,
+            driver_chuva = $15,
+            driver_estrategia = $16,
+            driver_potencial = $17,
+            driver_popularidade = $18,
+            driver_nacionalidade = $19,
+            is_active = true
+           WHERE id = $20
+           RETURNING id`,
+          [
+            input.username,
+            passwordHash,
+            input.shortUsername,
+            this.hasAnyRole(input.teamMemberships, 'team_principal'),
+            this.hasAnyRole(input.teamMemberships, 'team_assistant'),
+            this.hasAnyRole(input.teamMemberships, 'driver') || Boolean(wallet),
+            input.teamMemberships[0]?.teamId ?? null,
+            input.driverNumber,
+            input.language,
+            Boolean(wallet),
+            wallet?.velocidade ?? null,
+            wallet?.consistencia ?? null,
+            wallet?.tecnica ?? null,
+            wallet?.experiencia ?? null,
+            wallet?.chuva ?? null,
+            wallet?.estrategia ?? null,
+            wallet?.potencial ?? null,
+            wallet?.popularidade ?? null,
+            wallet?.nacionalidade ?? null,
+            reactivatedUserId,
+            role,
+          ],
+        );
+
+        const reactivatedUser = result.rows[0];
+        await this.replaceMemberships(client, reactivatedUser.id, input);
+        return reactivatedUser;
+      }
+
       const result = await client.query(
         `INSERT INTO users (
           username,
@@ -227,7 +288,7 @@ class AdminService {
           driver_nacionalidade,
           is_active,
           created_at
-        ) VALUES ($1, $2, 'user', 50000, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, true, NOW())
+        ) VALUES ($1, $2, $20, 50000, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, true, NOW())
         RETURNING id`,
         [
           input.username,
@@ -249,6 +310,7 @@ class AdminService {
           wallet?.potencial ?? null,
           wallet?.popularidade ?? null,
           wallet?.nacionalidade ?? null,
+          role,
         ],
       );
 
@@ -275,6 +337,7 @@ class AdminService {
     const values: any[] = [
       input.username,
       input.shortUsername,
+      input.role === 'admin' ? 'admin' : 'user',
       this.hasAnyRole(input.teamMemberships, 'team_principal'),
       this.hasAnyRole(input.teamMemberships, 'team_assistant'),
       this.hasAnyRole(input.teamMemberships, 'driver') || Boolean(wallet),
@@ -296,9 +359,9 @@ class AdminService {
 
     let passwordSql = '';
     if (input.password) {
-      values.splice(18, 0, await authService.hashPassword(input.password));
-      passwordSql = ', password_hash = $19';
-      values[19] = userId;
+      values.splice(19, 0, await authService.hashPassword(input.password));
+      passwordSql = ', password_hash = $20';
+      values[20] = userId;
     }
 
     const result = await transaction(async (client) => {
@@ -307,24 +370,25 @@ class AdminService {
          SET
           username = $1,
           short_username = $2,
-          is_team_principal = $3,
-          is_team_assistant = $4,
-          is_driver = $5,
-          team_id = $6,
-          driver_number = $7,
-          language = $8,
-          driver_wallet_created = $9,
-          driver_velocidade = $10,
-          driver_consistencia = $11,
-          driver_tecnica = $12,
-          driver_experiencia = $13,
-          driver_chuva = $14,
-          driver_estrategia = $15,
-          driver_potencial = $16,
-          driver_popularidade = $17,
-          driver_nacionalidade = $18
+          role = $3,
+          is_team_principal = $4,
+          is_team_assistant = $5,
+          is_driver = $6,
+          team_id = $7,
+          driver_number = $8,
+          language = $9,
+          driver_wallet_created = $10,
+          driver_velocidade = $11,
+          driver_consistencia = $12,
+          driver_tecnica = $13,
+          driver_experiencia = $14,
+          driver_chuva = $15,
+          driver_estrategia = $16,
+          driver_potencial = $17,
+          driver_popularidade = $18,
+          driver_nacionalidade = $19
           ${passwordSql}
-         WHERE id = $${input.password ? 20 : 19}
+         WHERE id = $${input.password ? 21 : 20}
          RETURNING id`,
         values,
       );
@@ -566,6 +630,17 @@ class AdminService {
        FROM users
        WHERE LOWER(username) = LOWER($1)
          AND COALESCE(is_active, true) = true
+       LIMIT 1`,
+      [username],
+    );
+  }
+
+  private async findUserActivationByUsername(username: string) {
+    return queryOne<{ id: string; username: string; isActive: boolean }>(
+      `SELECT id, username, COALESCE(is_active, true) AS "isActive"
+       FROM users
+       WHERE LOWER(username) = LOWER($1)
+       ORDER BY CASE WHEN COALESCE(is_active, true) THEN 0 ELSE 1 END, created_at DESC
        LIMIT 1`,
       [username],
     );

@@ -101,6 +101,7 @@ interface UserFormData {
   username: string;
   password: string;
   shortUsername: string;
+  isAdmin: boolean;
   teamMemberships: {
     teamId: string;
     roles: TeamMembershipRole[];
@@ -144,6 +145,7 @@ const EMPTY_USER_FORM: UserFormData = {
   username: '',
   password: '',
   shortUsername: '',
+  isAdmin: false,
   teamMemberships: [],
   driverNumber: '',
   language: 'pt',
@@ -384,6 +386,7 @@ export default function AdminPage() {
       username: adminUser.username,
       password: '',
       shortUsername: adminUser.shortUsername ?? '',
+      isAdmin: adminUser.role === 'admin',
       teamMemberships: adminUser.teamMemberships.map((membership) => ({
         teamId: membership.teamId,
         roles: membership.roles,
@@ -455,6 +458,7 @@ export default function AdminPage() {
           headers: getAuthHeaders(),
           body: JSON.stringify({
             ...userForm,
+            role: userForm.isAdmin ? 'admin' : 'user',
             driverNumber: Number(userForm.driverNumber),
             teamMemberships: userForm.teamMemberships.map((membership) => ({
               ...membership,
@@ -1425,6 +1429,16 @@ export default function AdminPage() {
                   <option value="en">{t.admin.english}</option>
                   <option value="es">{t.admin.spanish}</option>
                 </select>
+              </label>
+
+              <label className="flex items-center gap-3 rounded-lg bg-gray-900/40 px-4 py-3">
+                <input
+                  type="checkbox"
+                  className="h-5 w-5 accent-red-600"
+                  checked={userForm.isAdmin}
+                  onChange={(event) => setUserForm((prev) => ({ ...prev, isAdmin: event.target.checked }))}
+                />
+                <span className="text-sm font-semibold">{t.admin.makeAdmin}</span>
               </label>
             </div>
 
