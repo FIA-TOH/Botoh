@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { AppSnackbar, useAppSnackbar } from '@/components/AppSnackbar';
-import { useNotifications } from '@/hooks/useNotifications';
+import { requiresNotificationAction, useNotifications } from '@/hooks/useNotifications';
 import { useTranslations } from '@/i18n';
 
 function BellIcon() {
@@ -101,6 +101,7 @@ export function NotificationBell() {
             {!isLoading && notifications.map((notification) => {
               const classes = notificationClasses(notification.type, notification.isRead);
               const isResponding = respondingProposalId === notification.metadata?.proposalId;
+              const needsAction = requiresNotificationAction(notification);
 
               return (
               <div
@@ -110,9 +111,9 @@ export function NotificationBell() {
                 <button
                   type="button"
                   onClick={() => {
-                    if (!notification.isRead) markAsRead(notification.id);
+                    if (!notification.isRead && !needsAction) markAsRead(notification.id);
                   }}
-                  className="block w-full text-left"
+                  className={`block w-full text-left ${needsAction ? 'cursor-default' : ''}`}
                 >
                   <div className="flex items-start gap-3">
                   {!notification.isRead && (
@@ -126,7 +127,7 @@ export function NotificationBell() {
                   </div>
                 </button>
 
-                {notification.metadata?.action === 'driver_contract_proposal' && !notification.isRead && (
+                {needsAction && (
                   <div className="mt-3 grid grid-cols-2 gap-2">
                     <button
                       type="button"

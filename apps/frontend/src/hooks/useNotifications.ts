@@ -25,6 +25,10 @@ function shouldHideAfterRead(notification: AppNotification) {
   return notification.metadata?.action === 'driver_contract_released';
 }
 
+export function requiresNotificationAction(notification: AppNotification) {
+  return notification.metadata?.action === 'driver_contract_proposal' && !notification.isRead;
+}
+
 export function useNotifications() {
   const { token, isAuthenticated } = useAuth();
   const [notifications, setNotifications] = useState<AppNotification[]>([]);
@@ -79,6 +83,10 @@ export function useNotifications() {
         current.flatMap((notification) => {
           if (notification.id !== notificationId) return [notification];
 
+          if (data.notification && !data.notification.isRead) {
+            return [data.notification];
+          }
+
           const readNotification = {
             ...notification,
             isRead: true,
@@ -114,20 +122,23 @@ export function useNotifications() {
 
       setNotifications((current) =>
         current
-          .map((notification) => ({
+          .map((notification) => requiresNotificationAction(notification) ? notification : ({
             ...notification,
             isRead: true,
             readAt: notification.readAt ?? new Date().toISOString(),
           }))
           .filter((notification) => !shouldHideAfterRead(notification)),
       );
-      setUnreadCount(0);
+      setUnreadCount((currentCount) => {
+        const pendingActionCount = notifications.filter(requiresNotificationAction).length;
+        return pendingActionCount > 0 ? pendingActionCount : currentCount;
+      });
       await loadNotifications();
     } catch (error) {
       console.error('Failed to mark all notifications as read:', error);
       loadNotifications();
     }
-  }, [authHeaders, loadNotifications, token]);
+  }, [authHeaders, loadNotifications, notifications, token]);
 
   const sendNotification = useCallback(async (input: {
     userId: string;
