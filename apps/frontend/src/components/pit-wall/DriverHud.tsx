@@ -182,7 +182,7 @@ export function DriverHud({
           gap-2
           ${
             align === 'right'
-              ? 'justify-end'
+              ? 'sm:justify-end'
               : ''
           }
         `}
@@ -212,7 +212,7 @@ export function DriverHud({
           text-[18px]
           ${
             align === 'right'
-              ? 'text-right'
+              ? 'text-left sm:text-right'
               : 'text-left'
           }
         `}
@@ -449,7 +449,7 @@ export function DriverHud({
 
       {info}
 
-      <div className="flex items-end gap-6">
+      <div className="flex items-end gap-4 sm:gap-6">
 
         {align === 'left' ? (
           <>

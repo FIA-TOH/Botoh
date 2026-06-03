@@ -74,7 +74,7 @@ interface TeamSponsor {
   contractRacesRemaining?: number; initialReward?: number; rewardPerRace?: number;
   seasonMissions: Mission[]; raceMissions: Mission[];
 }
-interface Mission { id: string; title: string; reward: number; racesToComplete?: number }
+interface Mission { id: string; title: string; description?: string | null; reward: number; racesToComplete?: number }
 interface RaceProgressAlert {
   id: string;
   entityType: 'driver_contract' | 'sponsor_contract' | 'season_mission';
@@ -287,7 +287,7 @@ export default function AdminPage() {
     type: 'race' | 'season';
     mission?: Mission;
   } | null>(null);
-  const [missionForm, setMissionForm] = useState({ title: '', reward: '', racesToComplete: '' });
+  const [missionForm, setMissionForm] = useState({ title: '', description: '', reward: '', racesToComplete: '' });
   const sponsorCategoryLimits = {
     title_sponsor: 1,
     main_partner: 2,
@@ -787,6 +787,7 @@ export default function AdminPage() {
     setMissionModal({ sponsor, type, mission });
     setMissionForm({
       title: mission?.title ?? '',
+      description: mission?.description ?? '',
       reward: String(mission?.reward ?? ''),
       racesToComplete: String(mission?.racesToComplete ?? ''),
     });
@@ -796,6 +797,7 @@ export default function AdminPage() {
     if (!missionModal) return;
     const payload = {
       title: missionForm.title,
+      description: missionForm.description.trim() || null,
       reward: Number(missionForm.reward.replace(',', '.')),
       racesToComplete: missionModal.type === 'season' ? Number(missionForm.racesToComplete) : undefined,
     };
@@ -1883,9 +1885,9 @@ export default function AdminPage() {
                       <strong>{sponsor.name} - {sponsor.category}</strong>
                       <div className="mt-1 text-sm text-gray-300">
                         {t.admin.contractDuration}: {sponsor.contractRacesRemaining ?? 0} {t.garage.races}
-                        {' Â· '}
+                        {' · '}
                         {t.admin.initialReward}: {sponsor.initialReward ?? 0}
-                        {' Â· '}
+                        {' · '}
                         {t.admin.rewardPerRace}: {sponsor.rewardPerRace ?? 0}
                       </div>
                     </div>
@@ -1906,21 +1908,35 @@ export default function AdminPage() {
                   </div>
                   <p className="mt-2 font-semibold">{t.admin.raceMissions}</p>
                   {sponsor.raceMissions.map((m) => (
-                    <div key={m.id} className="mt-2 flex flex-wrap items-center gap-2">
-                      <span className="mr-auto">{m.title} ({m.reward})</span>
-                      <button className="rounded bg-slate-500 px-3 py-1 font-semibold hover:bg-slate-400" onClick={() => openMissionModal(sponsor, 'race', m)}>{t.admin.edit}</button>
-                      <button className="rounded bg-emerald-600 px-3 py-1 font-bold hover:bg-emerald-500" onClick={() => resolveMission(m.id, 'race', 'success')}>OK</button>
-                      <button className="rounded bg-rose-700 px-3 py-1 font-bold hover:bg-rose-600" onClick={() => resolveMission(m.id, 'race', 'failure')}>X</button>
+                    <div key={m.id} className="mt-2 rounded border border-white/10 bg-gray-800/70 p-3">
+                      <div className="flex flex-wrap items-start gap-2">
+                        <div className="mr-auto">
+                          <p className="font-bold">{m.title}</p>
+                          {m.description && <p className="mt-1 text-sm text-gray-300">{m.description}</p>}
+                          <p className="mt-1 text-sm text-emerald-300">{t.admin.missionReward}: {m.reward}</p>
+                        </div>
+                        <button className="rounded bg-slate-500 px-3 py-1 font-semibold hover:bg-slate-400" onClick={() => openMissionModal(sponsor, 'race', m)}>{t.admin.edit}</button>
+                        <button className="rounded bg-emerald-600 px-3 py-1 font-bold hover:bg-emerald-500" onClick={() => resolveMission(m.id, 'race', 'success')}>OK</button>
+                        <button className="rounded bg-rose-700 px-3 py-1 font-bold hover:bg-rose-600" onClick={() => resolveMission(m.id, 'race', 'failure')}>X</button>
+                      </div>
                     </div>
                   ))}
                   <button className="mt-2 rounded bg-purple-600 px-3 py-2 font-semibold hover:bg-purple-500" onClick={() => openMissionModal(sponsor, 'race')}>{t.admin.add}</button>
                   <p className="mt-2 font-semibold">{t.admin.seasonMissions}</p>
                   {sponsor.seasonMissions.map((m) => (
-                    <div key={m.id} className="mt-2 flex flex-wrap items-center gap-2">
-                      <span className="mr-auto">{m.title} ({m.reward}) {m.racesToComplete} {t.garage.races}</span>
-                      <button className="rounded bg-slate-500 px-3 py-1 font-semibold hover:bg-slate-400" onClick={() => openMissionModal(sponsor, 'season', m)}>{t.admin.edit}</button>
-                      <button className="rounded bg-emerald-600 px-3 py-1 font-bold hover:bg-emerald-500" onClick={() => resolveMission(m.id, 'season', 'success')}>OK</button>
-                      <button className="rounded bg-rose-700 px-3 py-1 font-bold hover:bg-rose-600" onClick={() => resolveMission(m.id, 'season', 'failure')}>X</button>
+                    <div key={m.id} className="mt-2 rounded border border-white/10 bg-gray-800/70 p-3">
+                      <div className="flex flex-wrap items-start gap-2">
+                        <div className="mr-auto">
+                          <p className="font-bold">{m.title}</p>
+                          {m.description && <p className="mt-1 text-sm text-gray-300">{m.description}</p>}
+                          <p className="mt-1 text-sm text-emerald-300">
+                            {t.admin.missionReward}: {m.reward} · {m.racesToComplete} {t.garage.races}
+                          </p>
+                        </div>
+                        <button className="rounded bg-slate-500 px-3 py-1 font-semibold hover:bg-slate-400" onClick={() => openMissionModal(sponsor, 'season', m)}>{t.admin.edit}</button>
+                        <button className="rounded bg-emerald-600 px-3 py-1 font-bold hover:bg-emerald-500" onClick={() => resolveMission(m.id, 'season', 'success')}>OK</button>
+                        <button className="rounded bg-rose-700 px-3 py-1 font-bold hover:bg-rose-600" onClick={() => resolveMission(m.id, 'season', 'failure')}>X</button>
+                      </div>
                     </div>
                   ))}
                   <button className="mt-2 rounded bg-purple-600 px-3 py-2 font-semibold hover:bg-purple-500" onClick={() => openMissionModal(sponsor, 'season')}>{t.admin.add}</button>
@@ -1939,6 +1955,7 @@ export default function AdminPage() {
             </div>
             <div className="space-y-3">
               <input required className="w-full rounded bg-gray-700 p-2" placeholder={t.admin.missionTitle} value={missionForm.title} onChange={(e) => setMissionForm((v) => ({ ...v, title: e.target.value }))} />
+              <textarea required className="min-h-24 w-full rounded bg-gray-700 p-2" placeholder={t.admin.missionDescription} value={missionForm.description} onChange={(e) => setMissionForm((v) => ({ ...v, description: e.target.value }))} />
               <input required inputMode="decimal" className="w-full rounded bg-gray-700 p-2" placeholder={t.admin.missionReward} value={missionForm.reward} onChange={(e) => setMissionForm((v) => ({ ...v, reward: e.target.value }))} />
               {missionModal.type === 'season' && (
                 <input required type="number" min="1" className="w-full rounded bg-gray-700 p-2" placeholder={t.admin.racesToComplete} value={missionForm.racesToComplete} onChange={(e) => setMissionForm((v) => ({ ...v, racesToComplete: e.target.value }))} />

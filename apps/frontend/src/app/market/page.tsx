@@ -224,21 +224,21 @@ export default function MarketPage() {
     totalPageCount: number,
     setPageNumber: Dispatch<SetStateAction<number>>,
   ) => (
-    <div className="flex items-center justify-between gap-4 border-4 border-[#FF232B] bg-gray-700 p-3">
+    <div className="flex flex-col items-stretch justify-between gap-3 border-4 border-[#FF232B] bg-gray-700 p-3 text-center sm:flex-row sm:items-center sm:gap-4">
       <button
         type="button"
-        className="bg-[#FF232B] px-4 py-2 font-bold disabled:cursor-not-allowed disabled:bg-gray-600 disabled:text-gray-300"
+        className="bg-[#FF232B] px-4 py-2 text-sm font-bold disabled:cursor-not-allowed disabled:bg-gray-600 disabled:text-gray-300 sm:text-base"
         disabled={pageNumber <= 1}
         onClick={() => setPageNumber((current) => Math.max(1, current - 1))}
       >
         {t.market.previousPage}
       </button>
-      <span className="font-semibold">
+      <span className="font-semibold sm:px-3">
         {t.market.page} {pageNumber} {t.market.pageOf} {totalPageCount}
       </span>
       <button
         type="button"
-        className="bg-[#FF232B] px-4 py-2 font-bold disabled:cursor-not-allowed disabled:bg-gray-600 disabled:text-gray-300"
+        className="bg-[#FF232B] px-4 py-2 text-sm font-bold disabled:cursor-not-allowed disabled:bg-gray-600 disabled:text-gray-300 sm:text-base"
         disabled={pageNumber >= totalPageCount}
         onClick={() => setPageNumber((current) => Math.min(totalPageCount, current + 1))}
       >
@@ -251,6 +251,36 @@ export default function MarketPage() {
     currency: 'USD',
     maximumFractionDigits: 0,
   }).format(value);
+
+  function getScuderiaSlots(scuderia: MarketScuderia) {
+    return [
+      { label: t.market.starter1, available: scuderia.starterCount < 1 },
+      { label: t.market.starter2, available: scuderia.starterCount < 2 },
+      { label: t.market.reserve1, available: scuderia.reserveCount < 1 },
+      { label: t.market.reserve2, available: scuderia.reserveCount < 2 },
+    ];
+  }
+
+  function renderScuderiaLogo(scuderia: MarketScuderia, className: string) {
+    return (
+      <img
+        src={scuderia.logoUrl || getLocalScuderiaLogoPath(scuderia.name)}
+        alt=""
+        className={className}
+        onError={(event) => {
+          const image = event.currentTarget;
+          const fallback = getLocalScuderiaLogoPath(scuderia.name);
+
+          if (scuderia.logoUrl && !image.src.endsWith(fallback)) {
+            image.src = fallback;
+            return;
+          }
+
+          image.style.visibility = 'hidden';
+        }}
+      />
+    );
+  }
 
   const negotiationMinimumSalary = negotiatingPilot
     ? negotiationForm.category === 'reserve'
@@ -367,7 +397,7 @@ export default function MarketPage() {
       className="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed text-white"
       style={{ backgroundImage: 'url(/img/bg/loginbg.png)' }}
     >
-      <div className="bg-black/45 p-4 sm:p-8">
+      <div className="bg-black/45 px-5 py-4 sm:px-8 sm:py-8">
         <FtohHeader
           onLogout={logout}
           showBackButton
@@ -375,7 +405,7 @@ export default function MarketPage() {
           onBackClick={() => router.push('/')}
         />
 
-        <section className="mx-auto mt-10 w-full max-w-6xl border-[14px] border-[#FF232B] bg-gray-800/90 p-4 shadow-2xl sm:p-6">
+        <section className="mx-auto mt-8 w-full max-w-6xl border-8 border-[#FF232B] bg-gray-800/90 p-3 shadow-2xl sm:mt-10 sm:border-[14px] sm:p-6">
           {loadingMarket ? (
             <div className="py-16 text-center text-xl font-semibold">{t.common.loading}</div>
           ) : loadError ? (
@@ -402,72 +432,90 @@ export default function MarketPage() {
                           {t.market.noScuderias}
                         </div>
                       ) : (
-                        <table className="w-full table-fixed border-collapse text-left">
-                          <thead>
-                            <tr className="bg-[#FF232B] text-white">
-                              <th className="w-[34%] p-3">{t.market.scuderias}</th>
-                              <th className="p-3 text-center">{t.market.starter1}</th>
-                              <th className="p-3 text-center">{t.market.starter2}</th>
-                              <th className="p-3 text-center">{t.market.reserve1}</th>
-                              <th className="p-3 text-center">{t.market.reserve2}</th>
-                            </tr>
-                          </thead>
-                          <tbody>
+                        <>
+                          <div className="grid gap-3 lg:hidden">
                             {visibleScuderias.map((scuderia) => {
                               const hasVacancy = scuderia.starterVacancies > 0 || scuderia.reserveVacancies > 0;
-                              const slots = [
-                                scuderia.starterCount < 1,
-                                scuderia.starterCount < 2,
-                                scuderia.reserveCount < 1,
-                                scuderia.reserveCount < 2,
-                              ];
 
                               return (
-                                <tr
+                                <article
                                   key={scuderia.id}
-                                  className={`border-b-4 border-gray-900 bg-gray-700 ${hasVacancy ? '' : 'opacity-45 grayscale'}`}
+                                  className={`border-4 border-gray-900 bg-gray-700 p-3 ${hasVacancy ? '' : 'opacity-45 grayscale'}`}
                                 >
-                                  <td className="p-3">
-                                    <div className="flex min-w-0 items-center gap-4">
-                                      <img
-                                        src={scuderia.logoUrl || getLocalScuderiaLogoPath(scuderia.name)}
-                                        alt=""
-                                        className="h-14 w-14 shrink-0 object-contain"
-                                        onError={(event) => {
-                                          const image = event.currentTarget;
-                                          const fallback = getLocalScuderiaLogoPath(scuderia.name);
-
-                                          if (scuderia.logoUrl && !image.src.endsWith(fallback)) {
-                                            image.src = fallback;
-                                            return;
-                                          }
-
-                                          image.style.visibility = 'hidden';
-                                        }}
-                                      />
-                                      <div className="min-w-0">
-                                        <p className="truncate text-lg font-bold">{scuderia.name}</p>
-                                        <p className="truncate text-sm text-gray-300">{scuderia.tag}</p>
-                                      </div>
+                                  <div className="flex min-w-0 items-center gap-3">
+                                    {renderScuderiaLogo(scuderia, 'h-14 w-14 shrink-0 object-contain sm:h-16 sm:w-16')}
+                                    <div className="min-w-0">
+                                      <p className="truncate text-lg font-bold sm:text-xl">{scuderia.name}</p>
+                                      <p className="truncate text-sm text-gray-300">{scuderia.tag}</p>
                                     </div>
-                                  </td>
-                                  {slots.map((available, index) => (
-                                    <td key={`${scuderia.id}-${index}`} className="p-3 text-center">
-                                      <span className={`inline-block w-full border-2 px-2 py-2 text-sm font-semibold sm:px-3 sm:text-base ${
-                                        available
-                                          ? 'border-[#FF232B] bg-gray-900 text-white'
-                                          : 'border-gray-600 bg-gray-800 text-gray-400'
-                                      }`}
+                                  </div>
+
+                                  <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                                    {getScuderiaSlots(scuderia).map((slot) => (
+                                      <div
+                                        key={`${scuderia.id}-${slot.label}`}
+                                        className={`border-2 px-2 py-2 text-center text-xs font-semibold sm:text-sm ${
+                                          slot.available
+                                            ? 'border-[#FF232B] bg-gray-900 text-white'
+                                            : 'border-gray-600 bg-gray-800 text-gray-400'
+                                        }`}
                                       >
-                                        {available ? t.market.available : t.market.occupied}
-                                      </span>
-                                    </td>
-                                  ))}
-                                </tr>
+                                        <p className="mb-1 uppercase text-gray-300">{slot.label}</p>
+                                        <p>{slot.available ? t.market.available : t.market.occupied}</p>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </article>
                               );
                             })}
-                          </tbody>
-                        </table>
+                          </div>
+
+                          <table className="hidden w-full table-fixed border-collapse text-left lg:table">
+                            <thead>
+                              <tr className="bg-[#FF232B] text-white">
+                                <th className="w-[34%] p-3">{t.market.scuderias}</th>
+                                <th className="p-3 text-center">{t.market.starter1}</th>
+                                <th className="p-3 text-center">{t.market.starter2}</th>
+                                <th className="p-3 text-center">{t.market.reserve1}</th>
+                                <th className="p-3 text-center">{t.market.reserve2}</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {visibleScuderias.map((scuderia) => {
+                                const hasVacancy = scuderia.starterVacancies > 0 || scuderia.reserveVacancies > 0;
+
+                                return (
+                                  <tr
+                                    key={scuderia.id}
+                                    className={`border-b-4 border-gray-900 bg-gray-700 ${hasVacancy ? '' : 'opacity-45 grayscale'}`}
+                                  >
+                                    <td className="p-3">
+                                      <div className="flex min-w-0 items-center gap-4">
+                                        {renderScuderiaLogo(scuderia, 'h-14 w-14 shrink-0 object-contain')}
+                                        <div className="min-w-0">
+                                          <p className="truncate text-lg font-bold">{scuderia.name}</p>
+                                          <p className="truncate text-sm text-gray-300">{scuderia.tag}</p>
+                                        </div>
+                                      </div>
+                                    </td>
+                                    {getScuderiaSlots(scuderia).map((slot) => (
+                                      <td key={`${scuderia.id}-${slot.label}`} className="p-3 text-center">
+                                        <span className={`inline-block w-full border-2 px-2 py-2 text-sm font-semibold sm:px-3 sm:text-base ${
+                                          slot.available
+                                            ? 'border-[#FF232B] bg-gray-900 text-white'
+                                            : 'border-gray-600 bg-gray-800 text-gray-400'
+                                        }`}
+                                        >
+                                          {slot.available ? t.market.available : t.market.occupied}
+                                        </span>
+                                      </td>
+                                    ))}
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+                        </>
                       )}
 
                       {pagination(currentPage, totalPages, setPage)}
@@ -489,87 +537,178 @@ export default function MarketPage() {
 
                   {isPilotsOpen && (
                     <div>
-                      <div className="overflow-x-auto">
-                      <table className="w-full min-w-[1080px] table-fixed border-collapse text-left">
-                        <thead>
-                          <tr className="bg-[#FF232B] text-white">
-                            <th className="w-[24%] p-3">{t.market.pilots}</th>
-                            <th className="w-[17%] p-3 text-left">{t.market.minimumSalary}</th>
-                            <th className="p-3 text-center">{t.market.marketScore}</th>
-                            <th className="p-3 text-center">{t.market.overall}</th>
-                            <th className="p-3 text-center">{t.market.commercialScore}</th>
-                            <th className="p-3 text-center">{t.market.personalSponsor}</th>
-                            <th className="p-3 text-center">{t.market.starterContract}</th>
-                            <th className="w-[12%] p-3 text-center">{t.market.negotiate}</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {visiblePilots.length === 0 ? (
-                            <tr className="border-b-4 border-gray-900 bg-gray-700">
-                              <td className="p-6 text-center text-gray-300" colSpan={8}>{t.market.noPilots}</td>
-                            </tr>
-                          ) : visiblePilots.map((pilot) => (
-                            <tr
-                              key={pilot.id}
-                              className={`border-b-4 border-gray-900 bg-gray-700 ${pilot.hasStarterContract ? 'opacity-70' : ''}`}
-                            >
-                              <td className="p-3">
-                                <div className="flex min-w-0 items-center gap-4">
+                      <div className="lg:hidden">
+                        {visiblePilots.length === 0 ? (
+                          <div className="border-4 border-[#FF232B] bg-gray-700 p-6 text-center text-gray-300">
+                            {t.market.noPilots}
+                          </div>
+                        ) : (
+                          <div className="grid gap-3">
+                            {visiblePilots.map((pilot) => (
+                              <article
+                                key={pilot.id}
+                                className={`border-4 border-gray-900 bg-gray-700 p-3 ${pilot.hasStarterContract ? 'opacity-70' : ''}`}
+                              >
+                                <div className="flex min-w-0 items-center gap-3">
                                   <DriverCircle
                                     number={pilot.driverNumber ?? '--'}
                                     color={pilot.starterTeamColor ?? '#6B7280'}
                                     size="sm"
                                   />
-                                  <span className="truncate text-lg font-bold">{pilot.username}</span>
-                                </div>
-                              </td>
-                              <td className="p-3 text-left text-xl font-bold">
-                                <TooltipValue tooltip={getMinimumSalaryTooltip(pilot)}>
-                                  {money(pilot.minimumSalary)}
-                                </TooltipValue>
-                              </td>
-                              <td className="p-3 text-center font-semibold">
-                                <TooltipValue tooltip={getMarketScoreTooltip(pilot)}>
-                                  {pilot.marketScore.toFixed(2)}
-                                </TooltipValue>
-                              </td>
-                              <td className="p-3 text-center">
-                                <TooltipValue tooltip={getOverallTooltip(pilot)}>
-                                  {pilot.overall.toFixed(2)}
-                                </TooltipValue>
-                              </td>
-                              <td className="p-3 text-center">
-                                <TooltipValue tooltip={getCommercialScoreTooltip(pilot)}>
-                                  {pilot.commercialScore.toFixed(2)}
-                                </TooltipValue>
-                              </td>
-                              <td className="p-3">
-                                {pilot.sponsor && (
-                                  <div className="flex items-center justify-center gap-2">
-                                    {pilot.sponsor.logoUrl && (
-                                      <img src={pilot.sponsor.logoUrl} alt="" className="h-8 w-8 object-contain" />
-                                    )}
-                                    <span className="truncate text-sm font-semibold">{pilot.sponsor.name}</span>
+                                  <div className="min-w-0 flex-1">
+                                    <p className="truncate text-lg font-bold sm:text-xl">{pilot.username}</p>
+                                    <p className="mt-1 text-xl font-bold text-white sm:text-2xl">
+                                      <TooltipValue tooltip={getMinimumSalaryTooltip(pilot)}>
+                                        {money(pilot.minimumSalary)}
+                                      </TooltipValue>
+                                    </p>
                                   </div>
-                                )}
-                              </td>
-                              <td className="p-3 text-center">
-                                {pilot.hasStarterContract ? t.market.yes : t.market.no}
-                              </td>
-                              <td className="p-3 text-center">
+                                </div>
+
+                                <div className="mt-4 grid grid-cols-3 gap-2">
+                                  <div className="border-2 border-gray-900 bg-gray-800 p-2 text-center">
+                                    <p className="text-[11px] font-bold uppercase text-gray-300">{t.market.marketScore}</p>
+                                    <p className="mt-1 font-semibold">
+                                      <TooltipValue tooltip={getMarketScoreTooltip(pilot)}>
+                                        {pilot.marketScore.toFixed(2)}
+                                      </TooltipValue>
+                                    </p>
+                                  </div>
+                                  <div className="border-2 border-gray-900 bg-gray-800 p-2 text-center">
+                                    <p className="text-[11px] font-bold uppercase text-gray-300">{t.market.overall}</p>
+                                    <p className="mt-1">
+                                      <TooltipValue tooltip={getOverallTooltip(pilot)}>
+                                        {pilot.overall.toFixed(2)}
+                                      </TooltipValue>
+                                    </p>
+                                  </div>
+                                  <div className="border-2 border-gray-900 bg-gray-800 p-2 text-center">
+                                    <p className="text-[11px] font-bold uppercase text-gray-300">{t.market.commercialScore}</p>
+                                    <p className="mt-1">
+                                      <TooltipValue tooltip={getCommercialScoreTooltip(pilot)}>
+                                        {pilot.commercialScore.toFixed(2)}
+                                      </TooltipValue>
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                                  <div className="border-2 border-gray-900 bg-gray-800 p-3">
+                                    <p className="text-xs font-bold uppercase text-gray-300">{t.market.personalSponsor}</p>
+                                    {pilot.sponsor ? (
+                                      <div className="mt-2 flex min-w-0 items-center gap-2">
+                                        {pilot.sponsor.logoUrl && (
+                                          <img src={pilot.sponsor.logoUrl} alt="" className="h-8 w-8 shrink-0 object-contain" />
+                                        )}
+                                        <span className="truncate text-sm font-semibold">{pilot.sponsor.name}</span>
+                                      </div>
+                                    ) : (
+                                      <p className="mt-2 text-sm text-gray-400">{t.market.no}</p>
+                                    )}
+                                  </div>
+                                  <div className="border-2 border-gray-900 bg-gray-800 p-3">
+                                    <p className="text-xs font-bold uppercase text-gray-300">{t.market.starterContract}</p>
+                                    <p className="mt-2 text-sm font-semibold">
+                                      {pilot.hasStarterContract ? t.market.yes : t.market.no}
+                                    </p>
+                                  </div>
+                                </div>
+
                                 <button
                                   type="button"
                                   disabled={pilot.hasStarterContract}
                                   onClick={() => openNegotiation(pilot)}
-                                  className="bg-[#FF232B] px-3 py-2 text-sm font-bold uppercase disabled:cursor-not-allowed disabled:bg-gray-600 disabled:text-gray-300"
+                                  className="mt-3 w-full bg-[#FF232B] px-3 py-3 text-sm font-bold uppercase disabled:cursor-not-allowed disabled:bg-gray-600 disabled:text-gray-300"
                                 >
                                   {t.market.negotiate}
                                 </button>
-                              </td>
+                              </article>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="hidden lg:block">
+                        <table className="w-full table-fixed border-collapse text-left">
+                          <thead>
+                            <tr className="bg-[#FF232B] text-white">
+                              <th className="w-[24%] p-3">{t.market.pilots}</th>
+                              <th className="w-[17%] p-3 text-left">{t.market.minimumSalary}</th>
+                              <th className="p-3 text-center">{t.market.marketScore}</th>
+                              <th className="p-3 text-center">{t.market.overall}</th>
+                              <th className="p-3 text-center">{t.market.commercialScore}</th>
+                              <th className="p-3 text-center">{t.market.personalSponsor}</th>
+                              <th className="p-3 text-center">{t.market.starterContract}</th>
+                              <th className="w-[12%] p-3 text-center">{t.market.negotiate}</th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody>
+                            {visiblePilots.length === 0 ? (
+                              <tr className="border-b-4 border-gray-900 bg-gray-700">
+                                <td className="p-6 text-center text-gray-300" colSpan={8}>{t.market.noPilots}</td>
+                              </tr>
+                            ) : visiblePilots.map((pilot) => (
+                              <tr
+                                key={pilot.id}
+                                className={`border-b-4 border-gray-900 bg-gray-700 ${pilot.hasStarterContract ? 'opacity-70' : ''}`}
+                              >
+                                <td className="p-3">
+                                  <div className="flex min-w-0 items-center gap-4">
+                                    <DriverCircle
+                                      number={pilot.driverNumber ?? '--'}
+                                      color={pilot.starterTeamColor ?? '#6B7280'}
+                                      size="sm"
+                                    />
+                                    <span className="truncate text-lg font-bold">{pilot.username}</span>
+                                  </div>
+                                </td>
+                                <td className="p-3 text-left text-xl font-bold">
+                                  <TooltipValue tooltip={getMinimumSalaryTooltip(pilot)}>
+                                    {money(pilot.minimumSalary)}
+                                  </TooltipValue>
+                                </td>
+                                <td className="p-3 text-center font-semibold">
+                                  <TooltipValue tooltip={getMarketScoreTooltip(pilot)}>
+                                    {pilot.marketScore.toFixed(2)}
+                                  </TooltipValue>
+                                </td>
+                                <td className="p-3 text-center">
+                                  <TooltipValue tooltip={getOverallTooltip(pilot)}>
+                                    {pilot.overall.toFixed(2)}
+                                  </TooltipValue>
+                                </td>
+                                <td className="p-3 text-center">
+                                  <TooltipValue tooltip={getCommercialScoreTooltip(pilot)}>
+                                    {pilot.commercialScore.toFixed(2)}
+                                  </TooltipValue>
+                                </td>
+                                <td className="p-3">
+                                  {pilot.sponsor && (
+                                    <div className="flex items-center justify-center gap-2">
+                                      {pilot.sponsor.logoUrl && (
+                                        <img src={pilot.sponsor.logoUrl} alt="" className="h-8 w-8 object-contain" />
+                                      )}
+                                      <span className="truncate text-sm font-semibold">{pilot.sponsor.name}</span>
+                                    </div>
+                                  )}
+                                </td>
+                                <td className="p-3 text-center">
+                                  {pilot.hasStarterContract ? t.market.yes : t.market.no}
+                                </td>
+                                <td className="p-3 text-center">
+                                  <button
+                                    type="button"
+                                    disabled={pilot.hasStarterContract}
+                                    onClick={() => openNegotiation(pilot)}
+                                    className="bg-[#FF232B] px-3 py-2 text-sm font-bold uppercase disabled:cursor-not-allowed disabled:bg-gray-600 disabled:text-gray-300"
+                                  >
+                                    {t.market.negotiate}
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
                       </div>
 
                       {pagination(currentPilotPage, pilotTotalPages, setPilotPage)}

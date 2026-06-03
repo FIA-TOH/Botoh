@@ -119,8 +119,8 @@ export interface TeamGarage {
     publicoAlvo1: string | null;
     publicoAlvo2: string | null;
     scuderiasRelacionadas: string[] | null;
-    seasonMissions: Array<{ id: string; title: string; reward: number; racesToComplete: number }>;
-    raceMissions: Array<{ id: string; title: string; reward: number }>;
+    seasonMissions: Array<{ id: string; title: string; description: string | null; reward: number; racesToComplete: number }>;
+    raceMissions: Array<{ id: string; title: string; description: string | null; reward: number }>;
   }>;
   financialHistory: Array<{
     id: string;
@@ -237,6 +237,7 @@ class GarageService {
                 json_build_object(
                   'id', sm.id,
                   'title', sm.title,
+                  'description', sm.description,
                   'reward', sm.reward,
                   'racesToComplete', sm.races_to_complete
                 )
@@ -253,6 +254,7 @@ class GarageService {
                 json_build_object(
                   'id', rm.id,
                   'title', rm.title,
+                  'description', rm.description,
                   'reward', rm.reward
                 )
                 ORDER BY rm.created_at ASC

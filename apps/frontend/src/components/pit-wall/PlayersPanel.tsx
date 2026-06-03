@@ -98,6 +98,7 @@ export function PlayersPanel({
     setHoveredDriverPosition,
   ] = useState<number | null>(null);
   const [visibleFlag, setVisibleFlag] = useState<RaceSession['flag'] | null>(null);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const previousFlag = useRef<RaceSession['flag'] | null>(null);
 
   useEffect(() => {
@@ -133,6 +134,24 @@ export function PlayersPanel({
     setVisibleFlag(nextFlag);
     previousFlag.current = nextFlag;
   }, [raceSession?.flag]);
+
+  useEffect(() => {
+    const openOnDesktop = () => {
+      if (!window.matchMedia('(max-width: 1023px)').matches) {
+        setIsCollapsed(false);
+      }
+    };
+
+    openOnDesktop();
+    window.addEventListener('resize', openOnDesktop);
+
+    return () => window.removeEventListener('resize', openOnDesktop);
+  }, []);
+
+  const toggleMobilePanel = () => {
+    if (!window.matchMedia('(max-width: 1023px)').matches) return;
+    setIsCollapsed((current) => !current);
+  };
 
   const isQualifyingSession =
     raceSession?.sessionType === 'qualy'
@@ -306,17 +325,17 @@ export function PlayersPanel({
 
   return (
     <div
-      className="px-0 py-0 h-fit"
+      className="fixed right-3 top-3 z-40 h-fit w-[min(15.5rem,calc(100vw-1.5rem))] border-4 border-[#FF232B] px-0 py-0 text-sm lg:static lg:w-auto lg:border-0 lg:text-base lg:outline lg:outline-[8px] lg:outline-[#FF232B]"
       style={{
         gridArea: 'players',
         backgroundColor: '#1E1E1E',
-        outline: '8px solid #FF232B',
       }}
     >
 
       {/* HEADER */}
       <div
-        className="py-2 text-center"
+        className="flex cursor-pointer items-center justify-between gap-2 px-2 py-1.5 text-center lg:block lg:px-0 lg:py-2"
+        onClick={toggleMobilePanel}
         style={{
           backgroundColor:
             flagHeader?.backgroundColor
@@ -326,38 +345,45 @@ export function PlayersPanel({
             ?? '#FFFFFF',
         }}
       >
-        <div className="text-4xl font-bold leading-none">
-          {flagHeader?.title
-            ?? raceSession?.sessionType?.toUpperCase()
-            ?? 'RACE'}
+        <div className="min-w-0 flex-1 lg:flex-none">
+          <div className="truncate text-xl font-bold leading-none lg:text-4xl">
+            {flagHeader?.title
+              ?? raceSession?.sessionType?.toUpperCase()
+              ?? 'RACE'}
+          </div>
+
+          <div className="truncate text-sm font-bold leading-tight lg:text-xl">
+            {flagHeader ? (
+              flagHeader.subtitle
+            ) : isQualyOvertime ? (
+              <span className="text-red-500">
+                {t.players.overtime}
+              </span>
+            ) : isTimedSession ? (
+              sessionTimeLeft
+            ) : (
+              <>
+                {t.players.lap}{' '}
+                <strong>
+                  {raceSession?.currentLap ?? 0}
+                </strong>
+                /
+                {raceSession?.totalLaps ?? 0}
+              </>
+            )}
+          </div>
         </div>
 
-        <div className="text-xl font-bold leading-tight">
-          {flagHeader ? (
-            flagHeader.subtitle
-          ) : isQualyOvertime ? (
-            <span className="text-red-500">
-              {t.players.overtime}
-            </span>
-          ) : isTimedSession ? (
-            sessionTimeLeft
-          ) : (
-            <>
-              {t.players.lap}{' '}
-              <strong>
-                {raceSession?.currentLap ?? 0}
-              </strong>
-              /
-              {raceSession?.totalLaps ?? 0}
-            </>
-          )}
-        </div>
+        <span className="flex h-7 w-7 shrink-0 items-center justify-center border-2 border-current text-base font-black leading-none lg:hidden">
+          {isCollapsed ? '+' : '-'}
+        </span>
       </div>
 
-      <div className="border-b border-white" />
+      <div className="border-b border-white/80" />
 
       {/* CONTENT */}
-      <div className="px-2 relative min-h-[400px]">
+      {!isCollapsed && (
+      <div className="relative max-h-[min(58vh,460px)] min-h-[240px] overflow-y-auto px-1.5 lg:max-h-none lg:min-h-[400px] lg:overflow-visible lg:px-2">
 
         {/* LOADING */}
         {loading && (
@@ -458,6 +484,25 @@ export function PlayersPanel({
               {displayedDrivers.map((driver) => (
                 <div
                   key={`${driver.driverNumber}-${driver.name}`}
+                  onClick={(e) => {
+                    setHoveredDriver((current) => (
+                      current === driver.name ? null : driver.name
+                    ));
+
+                    const rect =
+                      e.currentTarget.getBoundingClientRect();
+
+                    const parentRect =
+                      e.currentTarget.parentElement?.getBoundingClientRect();
+
+                    if (parentRect) {
+
+                      setHoveredDriverPosition(
+                        rect.top -
+                          parentRect.top
+                      );
+                    }
+                  }}
                   onMouseEnter={(e) => {
 
                     setHoveredDriver(
@@ -516,6 +561,7 @@ export function PlayersPanel({
             </>
           )}
       </div>
+      )}
     </div>
   );
 }

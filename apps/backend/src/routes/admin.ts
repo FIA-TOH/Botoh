@@ -283,6 +283,7 @@ const sponsorValidation = [
 ];
 const missionValidation = [
   body('title').isString().isLength({ min: 1, max: 255 }),
+  body('description').optional({ nullable: true }).isString().isLength({ max: 2000 }),
   body('reward').isFloat({ min: 0 }),
   body('racesToComplete').optional().isInt({ min: 1 }),
 ];

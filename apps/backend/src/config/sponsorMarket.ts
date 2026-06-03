@@ -60,7 +60,12 @@ export interface ContractValueBreakdown {
   valorFinal: number;
 }
 
-export type SponsorRequirement = 'team_name' | 'livery' | 'team_name_and_livery' | 'none';
+export type SponsorRequirement =
+  | 'title_sponsor_name_media'
+  | 'title_sponsor_full_livery_media'
+  | 'title_sponsor_40_livery_media'
+  | 'title_sponsor_25_livery_media'
+  | 'none';
 export type MarketSponsorOrigin = 'unassigned' | 'unhappy_0_10' | 'unhappy_10_20' | 'unhappy_20_30';
 
 const CONTRACT_BASES: Record<SponsorContractCategory, number> = {
@@ -211,13 +216,26 @@ export function calculateContractValue(
 
 export function drawSponsorRequirement(
   category: SponsorContractCategory,
+  hasTitleSponsor: boolean,
   randomScore = Math.random(),
+  variantScore = Math.random(),
 ): SponsorRequirement {
-  if (category !== 'title_sponsor') return 'none';
-  if (randomScore < 0.4) return 'team_name';
-  if (randomScore < 0.6) return 'livery';
-  if (randomScore < 0.7) return 'team_name_and_livery';
-  return 'none';
+  if (hasTitleSponsor) return 'none';
+
+  const titleSponsorDemandChance: Record<SponsorContractCategory, number> = {
+    title_sponsor: 1,
+    main_partner: 0.4,
+    official_partner: 0.2,
+    minor_sponsor: 0.05,
+    personal_sponsor: 0,
+  };
+
+  if (randomScore >= titleSponsorDemandChance[category]) return 'none';
+
+  if (variantScore < 0.4) return 'title_sponsor_name_media';
+  if (variantScore < 0.6) return 'title_sponsor_full_livery_media';
+  if (variantScore < 0.9) return 'title_sponsor_40_livery_media';
+  return 'title_sponsor_25_livery_media';
 }
 
 export function selectWeightedProposal<T extends { pesoFinal: number }>(

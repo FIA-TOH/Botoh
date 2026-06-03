@@ -16,9 +16,9 @@ export function DriverCircle({
     : '#FFFFFF';
 
   const sizeClass = {
-    sm: 'h-24 w-24 text-4xl',
-    md: 'h-28 w-28 text-5xl',
-    lg: 'h-[10vw] w-[10vw] max-h-[140px] max-w-[140px] text-[min(64px,5vw)]',
+    sm: 'h-[clamp(72px,18vw,96px)] w-[clamp(72px,18vw,96px)] text-[clamp(30px,8vw,36px)]',
+    md: 'h-[clamp(84px,20vw,112px)] w-[clamp(84px,20vw,112px)] text-[clamp(36px,9vw,48px)]',
+    lg: 'h-[clamp(92px,10vw,140px)] w-[clamp(92px,10vw,140px)] text-[clamp(38px,5vw,64px)]',
   }[size];
 
   return (

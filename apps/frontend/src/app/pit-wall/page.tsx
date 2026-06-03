@@ -159,7 +159,7 @@ export default function PitWallPage() {
 
             router.push('/');
           }}
-          className="absolute left-6 top-6 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-[#FF232B] text-white shadow-lg transition-transform hover:scale-105"
+          className="absolute left-6 top-6 z-20 hidden h-12 w-12 items-center justify-center rounded-full bg-[#FF232B] text-white shadow-lg transition-transform hover:scale-105 lg:flex"
         >
           <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
@@ -237,7 +237,7 @@ export default function PitWallPage() {
 
   return (
     <main
-      className="relative min-h-screen p-8 text-white bg-cover  bg-center
+      className="relative min-h-screen p-5 text-white bg-cover bg-center sm:p-6 lg:p-8
   bg-no-repeat
   bg-fixed"
       style={{
@@ -262,7 +262,7 @@ export default function PitWallPage() {
 
           router.push('/');
         }}
-        className="absolute left-6 top-6 z-20 flex h-12 w-12 items-center justify-center rounded-full bg-[#FF232B] text-white shadow-lg transition-transform hover:scale-105"
+        className="absolute left-6 top-6 z-20 hidden h-12 w-12 items-center justify-center rounded-full bg-[#FF232B] text-white shadow-lg transition-transform hover:scale-105 lg:flex"
       >
         <svg
           className="h-7 w-7"

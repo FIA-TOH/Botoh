@@ -23,18 +23,18 @@ export function PlayerRow({
     : 1;
 
   return (
-    <div className="flex items-center justify-between py-0.5 relative">
+    <div className="relative flex items-center justify-between py-px text-xs lg:py-0.5 lg:text-base">
 
       {/* LEFT SIDE */}
       <div
-        className="flex items-center gap-2"
+        className="flex min-w-0 items-center gap-1.5 lg:gap-2"
         style={{
           opacity: textOpacity,
         }}
       >
 
         {/* POSITION */}
-        <div className="font-bold w-4 text-center">
+        <div className="w-3.5 text-center font-bold lg:w-4">
           {driver.position ?? '-'}
         </div>
 
@@ -48,7 +48,7 @@ export function PlayerRow({
         />
 
         {/* DRIVER NAME */}
-        <div className="font-bold">
+        <div className="truncate font-bold">
           {driver.shortName}
         </div>
       </div>
@@ -59,7 +59,7 @@ export function PlayerRow({
         style={{ marginLeft: 'auto' }}
       >
         <div
-          className="font-bold grid grid-cols-[88px_24px] items-center"
+          className="grid grid-cols-[62px_20px] items-center font-bold lg:grid-cols-[88px_24px]"
           style={{
             opacity: textOpacity,
           }}

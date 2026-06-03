@@ -81,6 +81,7 @@ export interface TeamSponsorInput {
 
 export interface SponsorMissionInput {
   title: string;
+  description?: string | null;
   reward: number;
   racesToComplete?: number;
 }
@@ -1338,8 +1339,10 @@ class AdminService {
     const name = input.nome ?? input.name!;
     const normalizedCategory = normalizeSponsorCategory(input.tipo);
     const pilotUserId = normalizedCategory === 'personal_sponsor' ? input.pilotUserId : null;
-    const personalSponsorValidation = await this.validatePersonalSponsorPilot(pilotUserId);
-    if (!personalSponsorValidation.success) return personalSponsorValidation;
+    if (normalizedCategory === 'personal_sponsor') {
+      const personalSponsorValidation = await this.validatePersonalSponsorPilot(pilotUserId);
+      if (!personalSponsorValidation.success) return personalSponsorValidation;
+    }
 
     const result = await query(
       `INSERT INTO sponsors (
@@ -1401,8 +1404,10 @@ class AdminService {
     const nextPilotUserId = normalizedCategory === 'personal_sponsor'
       ? (input.pilotUserId === undefined ? current.pilotUserId : input.pilotUserId)
       : null;
-    const personalSponsorValidation = await this.validatePersonalSponsorPilot(nextPilotUserId, sponsorId);
-    if (!personalSponsorValidation.success) return personalSponsorValidation;
+    if (normalizedCategory === 'personal_sponsor') {
+      const personalSponsorValidation = await this.validatePersonalSponsorPilot(nextPilotUserId, sponsorId);
+      if (!personalSponsorValidation.success) return personalSponsorValidation;
+    }
 
     const result = await query(
       `UPDATE sponsors
@@ -1503,12 +1508,17 @@ class AdminService {
     );
     if (!team) return { success: false, message: 'Scuderia not found' };
 
-    const assignedSponsors = await query<{ tipo: string | null; setor: string | null }>(
-      `SELECT s.tipo, s.setor
+    const assignedSponsors = await query<{ tipo: string | null; setor: string | null; category: string }>(
+      `SELECT s.tipo, s.setor, ts.category
        FROM team_sponsors ts
        JOIN sponsors s ON s.id = ts.sponsor_id
        WHERE ts.team_id = $1`,
       [scuderiaId],
+    );
+    const hasTitleSponsor = assignedSponsors.rows.some(
+      (sponsor) =>
+        sponsor.category === 'title_sponsor'
+        || normalizeSponsorCategory(sponsor.tipo) === 'title_sponsor',
     );
     const normalizeMarketText = (value: string | null | undefined) => value?.trim().toLocaleLowerCase() ?? '';
     const assignedTypes = new Set(
@@ -1611,7 +1621,7 @@ class AdminService {
         scores: selected.scores,
         nationalityCompatible: selected.nationalityCompatible,
         valorContrato: calculateContractValue(category, selected.sponsor, team),
-        exigencia: drawSponsorRequirement(category),
+        exigencia: drawSponsorRequirement(category, hasTitleSponsor),
         candidateCount: candidates.length,
         ressalvas: getCaveats(selected.sponsor),
       });
@@ -1777,16 +1787,16 @@ class AdminService {
   async addSponsorMission(teamSponsorId: string, type: 'race' | 'season', input: SponsorMissionInput) {
     const result = type === 'race'
       ? await query(
-        `INSERT INTO team_sponsor_race_missions (team_sponsor_id, title, reward)
-         VALUES ($1, $2, $3)
-         RETURNING id`,
-        [teamSponsorId, input.title, input.reward],
-      )
-      : await query(
-        `INSERT INTO team_sponsor_season_missions (team_sponsor_id, title, reward, races_to_complete)
+        `INSERT INTO team_sponsor_race_missions (team_sponsor_id, title, description, reward)
          VALUES ($1, $2, $3, $4)
          RETURNING id`,
-        [teamSponsorId, input.title, input.reward, input.racesToComplete],
+        [teamSponsorId, input.title, input.description ?? null, input.reward],
+      )
+      : await query(
+        `INSERT INTO team_sponsor_season_missions (team_sponsor_id, title, description, reward, races_to_complete)
+         VALUES ($1, $2, $3, $4, $5)
+         RETURNING id`,
+        [teamSponsorId, input.title, input.description ?? null, input.reward, input.racesToComplete],
       );
     return { success: true, mission: result.rows[0] };
   }
@@ -1795,17 +1805,17 @@ class AdminService {
     const result = type === 'race'
       ? await query(
         `UPDATE team_sponsor_race_missions
-         SET title = $1, reward = $2
-         WHERE id = $3
+         SET title = $1, description = $2, reward = $3
+         WHERE id = $4
          RETURNING id`,
-        [input.title, input.reward, missionId],
+        [input.title, input.description ?? null, input.reward, missionId],
       )
       : await query(
         `UPDATE team_sponsor_season_missions
-         SET title = $1, reward = $2, races_to_complete = $3
-         WHERE id = $4
+         SET title = $1, description = $2, reward = $3, races_to_complete = $4
+         WHERE id = $5
          RETURNING id`,
-        [input.title, input.reward, input.racesToComplete, missionId],
+        [input.title, input.description ?? null, input.reward, input.racesToComplete, missionId],
       );
     return result.rows[0]
       ? { success: true }

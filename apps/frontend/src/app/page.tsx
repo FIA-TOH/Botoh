@@ -1,15 +1,14 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
-import { FtohButton } from '@/components/FtohButton';
 import { FtohCard } from '@/components/FtohCard';
 import { FtohHeader } from '@/components/FtohHeader';
 import { useTranslations } from '@/i18n';
 
 function ProtectedHome() {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const { t } = useTranslations();
   const router = useRouter();
   const [loadingButton, setLoadingButton] = useState<string | null>(null);
@@ -40,30 +39,30 @@ function ProtectedHome() {
 
   return (
     <main
-      className="h-screen bg-cover bg-center bg-no-repeat text-white relative overflow-hidden"
+      className="relative min-h-screen overflow-x-hidden bg-cover bg-center bg-fixed bg-no-repeat text-white lg:h-screen lg:overflow-hidden"
       style={{ backgroundImage: 'url(/img/bg/loginbg.png)' }}
     >
       {/* Black overlay with 29% opacity */}
       <div
-        className="absolute inset-0 bg-black pointer-events-none"
+        className="fixed inset-0 bg-black pointer-events-none"
         style={{ opacity: 0.29 }}
       />
 
       {/* Red block rotated -45 degrees and centered on screen with 67% opacity */}
       <div
-        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+        className="pointer-events-none fixed left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 transform lg:block"
         style={{
           backgroundColor: '#AF0034',
           opacity: 0.67,
-          width: '100%',
-          height: '100%',
+          width: '180vw',
+          height: '130vh',
           transform: 'translate(-50%, -50%) rotate(-45deg)',
         }}
       />
 
-      <div className="absolute inset-0 flex flex-col relative z-10">
+      <div className="relative z-10 flex min-h-screen flex-col">
         {/* Header with user info and logout */}
-        <div className="p-8">
+        <div className="relative z-20 px-6 py-6 sm:px-8 lg:absolute lg:left-0 lg:right-0 lg:top-0 lg:p-8">
           <FtohHeader
             onLogout={handleLogout}
             onAdminClick={handleAdminClick}
@@ -72,14 +71,14 @@ function ProtectedHome() {
         </div>
 
         {/* Main cards section */}
-        <div className="flex-1 flex w-full flex-wrap items-center justify-center gap-[42px] px-4 sm:px-8 lg:px-12">
+        <div className="flex min-h-[calc(100vh-6rem)] w-full flex-col items-center justify-center gap-8 px-8 pb-10 pt-2 sm:px-12 md:px-16 lg:min-h-screen lg:flex-row lg:flex-nowrap lg:gap-[42px] lg:px-12 lg:py-8">
           {/* Garagem Card */}
           <FtohCard
             title={t.common.garage}
             onClick={handleGarageClick}
             hoverImage
             clickSound="/sounds/garagein.mp3"
-            className="flex-[0_1_28rem]"
+            className="w-full !max-w-[20rem] sm:!max-w-[23rem] md:!max-w-[26rem] lg:min-w-0 lg:!max-w-[28rem] lg:flex-[1_1_0]"
           >
             <img
               src="/img/img/garage.png"
@@ -94,7 +93,7 @@ function ProtectedHome() {
             onClick={handlePitWallClick}
             hoverImage
             clickSound="/sounds/pitwallin.mp3"
-            className="flex-[0_1_28rem]"
+            className="w-full !max-w-[20rem] sm:!max-w-[23rem] md:!max-w-[26rem] lg:min-w-0 lg:!max-w-[28rem] lg:flex-[1_1_0]"
           >
             <img
               src="/img/img/pitwall.png"
@@ -109,7 +108,7 @@ function ProtectedHome() {
             onClick={handleMarketClick}
             hoverImage
             clickSound="/sounds/sell2.mp3"
-            className="flex-[0_1_28rem]"
+            className="w-full !max-w-[20rem] sm:!max-w-[23rem] md:!max-w-[26rem] lg:min-w-0 lg:!max-w-[28rem] lg:flex-[1_1_0]"
           >
             <img
               src="/img/img/market.png"
@@ -165,7 +164,7 @@ export default function Home() {
 
         {/* Red block animation */}
         <div
-          className={`absolute pointer-events-none transition-all duration-700 ease-in-out ${
+          className={`pointer-events-none absolute hidden transition-all duration-700 ease-in-out lg:block ${
             loadingEndTime !== null
               ? 'top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'
               : 'top-0 right-0'
@@ -173,8 +172,8 @@ export default function Home() {
           style={{
             backgroundColor: '#AF0034',
             opacity: 0.67,
-            width: loadingEndTime !== null ? '100%' : '50%',
-            height: '100%',
+            width: loadingEndTime !== null ? '180vw' : '50%',
+            height: loadingEndTime !== null ? '130vh' : '100%',
             transform:
               loadingEndTime !== null
                 ? 'translate(-50%, -50%) rotate(-45deg)'
