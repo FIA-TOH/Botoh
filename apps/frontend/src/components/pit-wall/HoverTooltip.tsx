@@ -15,6 +15,7 @@ export function HoverTooltip({
 
   return (
     <div
+      className="pit-wall-player-tooltip"
       style={{
         position: 'absolute',
         left: '100%',

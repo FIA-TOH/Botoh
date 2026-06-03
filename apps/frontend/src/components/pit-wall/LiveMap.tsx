@@ -68,10 +68,15 @@ export function LiveMap({
   const [smoothedPositions, setSmoothedPositions] = React.useState<
     Record<number, { x: number; y: number }>
   >({});
+  const [mapZoom, setMapZoom] = React.useState(1);
   const targetsRef = React.useRef<Record<number, { x: number; y: number }>>({});
   const smoothedRef = React.useRef<Record<number, { x: number; y: number }>>({});
   const rafRef = React.useRef<number | null>(null);
   const lastFrameRef = React.useRef<number | null>(null);
+  const pinchRef = React.useRef<{
+    distance: number;
+    zoom: number;
+  } | null>(null);
   const playerDetailsById = React.useMemo(
     () =>
       new Map(
@@ -289,6 +294,45 @@ export function LiveMap({
     };
   }, []);
 
+  const getTouchDistance = (touches: React.TouchList) => {
+    if (touches.length < 2) return 0;
+
+    const first = touches[0];
+    const second = touches[1];
+
+    return Math.hypot(
+      second.clientX - first.clientX,
+      second.clientY - first.clientY,
+    );
+  };
+
+  const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
+    if (event.touches.length !== 2) return;
+
+    pinchRef.current = {
+      distance: getTouchDistance(event.touches),
+      zoom: mapZoom,
+    };
+  };
+
+  const handleTouchMove = (event: React.TouchEvent<HTMLDivElement>) => {
+    if (event.touches.length !== 2 || !pinchRef.current) return;
+
+    event.preventDefault();
+
+    const nextDistance = getTouchDistance(event.touches);
+    if (nextDistance <= 0 || pinchRef.current.distance <= 0) return;
+
+    const nextZoom = pinchRef.current.zoom * (nextDistance / pinchRef.current.distance);
+    setMapZoom(Math.min(3, Math.max(1, nextZoom)));
+  };
+
+  const handleTouchEnd = (event: React.TouchEvent<HTMLDivElement>) => {
+    if (event.touches.length < 2) {
+      pinchRef.current = null;
+    }
+  };
+
   // =========================================
   // RENDER
   // =========================================
@@ -302,7 +346,7 @@ export function LiveMap({
         outline: '8px solid #FF232B',
         position: 'relative',
       }}
-      className=""
+      className="pit-wall-live-map"
     >
       {gameState !== 'running' && (
         <div
@@ -333,7 +377,12 @@ export function LiveMap({
 
       <div
         ref={containerRef}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchEnd}
         className="
+          pit-wall-live-map-inner
           relative
           rounded-lg
           mx-auto
@@ -343,9 +392,9 @@ export function LiveMap({
         "
         style={{
           width: '100%',
-          height: '400px',
           position: 'relative',
           overflow: 'hidden',
+          touchAction: 'pan-x pan-y',
           backgroundColor: backgroundUrl
             ? 'transparent'
             : '#374151',
@@ -358,6 +407,8 @@ export function LiveMap({
             width: `${mapDimensions.width}px`,
             height: `${mapDimensions.height}px`,
             position: 'relative',
+            transform: `scale(${mapZoom})`,
+            transformOrigin: 'center center',
 
             backgroundImage: backgroundUrl
               ? `url(${backgroundUrl})`

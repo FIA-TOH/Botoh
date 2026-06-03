@@ -42,7 +42,7 @@ export function TeamInfoPanel({
         backgroundColor: '#1E1E1E',
         outline: '8px solid #FF232B',
       }}
-      className="p-4"
+      className="p-3 sm:p-4"
     >
 
       {/* LOADING */}
@@ -117,7 +117,7 @@ export function TeamInfoPanel({
 
       {!loading &&
         !error && (
-          <div className="flex justify-between">
+          <div className="flex flex-col gap-4 sm:flex-row sm:justify-between">
             <DriverHud
               driver={driver1}
               align="left"

@@ -300,11 +300,13 @@ class MigrationService {
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         team_sponsor_id UUID NOT NULL REFERENCES team_sponsors(id) ON DELETE CASCADE,
         title VARCHAR(255) NOT NULL,
+        description TEXT,
         reward NUMERIC NOT NULL CHECK (reward >= 0),
         races_to_complete INTEGER NOT NULL CHECK (races_to_complete >= 0),
         created_at TIMESTAMP NOT NULL DEFAULT NOW()
       )
     `);
+    await query('ALTER TABLE team_sponsor_season_missions ADD COLUMN IF NOT EXISTS description TEXT');
     await query('ALTER TABLE team_sponsor_season_missions DROP CONSTRAINT IF EXISTS team_sponsor_season_missions_races_to_complete_check');
     await query(`
       ALTER TABLE team_sponsor_season_missions
@@ -317,10 +319,12 @@ class MigrationService {
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         team_sponsor_id UUID NOT NULL REFERENCES team_sponsors(id) ON DELETE CASCADE,
         title VARCHAR(255) NOT NULL,
+        description TEXT,
         reward NUMERIC NOT NULL CHECK (reward >= 0),
         created_at TIMESTAMP NOT NULL DEFAULT NOW()
       )
     `);
+    await query('ALTER TABLE team_sponsor_race_missions ADD COLUMN IF NOT EXISTS description TEXT');
 
     await query(`
       CREATE TABLE IF NOT EXISTS notifications (

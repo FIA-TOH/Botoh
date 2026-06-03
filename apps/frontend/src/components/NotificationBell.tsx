@@ -62,7 +62,7 @@ export function NotificationBell() {
       <button
         type="button"
         onClick={() => setIsOpen((value) => !value)}
-        className="relative flex h-11 w-11 items-center justify-center rounded border-2 border-white bg-[#AF0034] text-white shadow-lg transition hover:bg-[#d4003f]"
+        className="relative flex h-10 w-10 items-center justify-center rounded border-2 border-white bg-[#AF0034] text-white shadow-lg transition hover:bg-[#d4003f] sm:h-11 sm:w-11"
         aria-label={t.notifications.open}
         title={t.notifications.open}
       >
@@ -75,7 +75,7 @@ export function NotificationBell() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 z-30 mt-3 w-80 overflow-hidden rounded border border-white/20 bg-[#101015] text-left text-white shadow-2xl">
+        <div className="absolute right-0 z-30 mt-3 w-[min(20rem,calc(100vw-2rem))] overflow-hidden rounded border border-white/20 bg-[#101015] text-left text-white shadow-2xl">
           <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
             <h2 className="text-sm font-bold uppercase">{t.notifications.title}</h2>
             {unreadCount > 0 && (

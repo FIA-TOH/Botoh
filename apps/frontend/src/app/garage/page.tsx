@@ -40,8 +40,8 @@ interface TeamGarageData {
     contractRacesRemaining: number;
     initialReward: number;
     rewardPerRace: number;
-    seasonMissions: { id: string; title: string; reward: number; racesToComplete: number }[];
-    raceMissions: { id: string; title: string; reward: number }[];
+    seasonMissions: { id: string; title: string; description?: string | null; reward: number; racesToComplete: number }[];
+    raceMissions: { id: string; title: string; description?: string | null; reward: number }[];
   }[];
   facilityEconomy?: {
     maxLevel: number;
@@ -1097,9 +1097,13 @@ export default function GaragePage() {
                   <div className="mt-2 max-h-32 overflow-y-auto pr-2">
                     {selectedSponsor.seasonMissions.length > 0 ? (
                       selectedSponsor.seasonMissions.map((mission) => (
-                        <p key={mission.id} className="text-base">
-                          {mission.title}: {money(Number(mission.reward))} - {mission.racesToComplete} {t.garage.races}
-                        </p>
+                        <article key={mission.id} className="mb-3 border border-white/20 bg-black/20 p-3">
+                          <p className="font-bold">{mission.title}</p>
+                          {mission.description && <p className="mt-1 text-sm text-gray-300">{mission.description}</p>}
+                          <p className="mt-2 text-sm text-emerald-300">
+                            {money(Number(mission.reward))} · {mission.racesToComplete} {t.garage.races}
+                          </p>
+                        </article>
                       ))
                     ) : (
                       <p className="text-base text-gray-300">{t.garage.noMissions}</p>
@@ -1112,9 +1116,11 @@ export default function GaragePage() {
                   <div className="mt-2 max-h-32 overflow-y-auto pr-2">
                     {selectedSponsor.raceMissions.length > 0 ? (
                       selectedSponsor.raceMissions.map((mission) => (
-                        <p key={mission.id} className="text-base">
-                          {mission.title}: {money(Number(mission.reward))}
-                        </p>
+                        <article key={mission.id} className="mb-3 border border-white/20 bg-black/20 p-3">
+                          <p className="font-bold">{mission.title}</p>
+                          {mission.description && <p className="mt-1 text-sm text-gray-300">{mission.description}</p>}
+                          <p className="mt-2 text-sm text-emerald-300">{money(Number(mission.reward))}</p>
+                        </article>
                       ))
                     ) : (
                       <p className="text-base text-gray-300">{t.garage.noMissions}</p>

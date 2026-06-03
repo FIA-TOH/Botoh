@@ -57,19 +57,20 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center p-4 relative" style={{ backgroundImage: 'url(/img/bg/loginbg.png)' }}>
-      {/* Black overlay with 29% opacity */}
-      <div className="absolute inset-0 bg-black pointer-events-none" style={{ opacity: 0.29 }}></div>
-      
-      {/* Red block covering 50% of screen on the right with 67% opacity */}
-      <div className="absolute top-0 right-0 w-1/2 h-full pointer-events-none" style={{ backgroundColor: '#AF0034', opacity: 0.67 }}></div>
-      
-      {/* Login container - no opacity inheritance */}
-      <div className="absolute top-0 right-0 w-1/2 h-full flex items-center justify-center pointer-events-none">
-        <FtohCard title={t.auth.loginTitle}>
-          {/* Login Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Username Field */}
+    <main
+      className="relative flex min-h-screen items-center justify-center overflow-hidden bg-cover bg-center bg-no-repeat px-8 py-8 sm:px-10 lg:justify-end lg:p-0"
+      style={{ backgroundImage: 'url(/img/bg/loginbg.png)' }}
+    >
+      <div className="absolute inset-0 bg-black pointer-events-none" style={{ opacity: 0.29 }} />
+
+      <div
+        className="pointer-events-none absolute right-0 top-0 hidden h-full w-[20%] lg:block"
+        style={{ backgroundColor: '#AF0034', opacity: 0.67 }}
+      />
+
+      <div className="relative z-10 flex w-full justify-center lg:h-screen lg:w-1/2 lg:items-center lg:px-8">
+        <FtohCard title={t.auth.loginTitle} className="max-w-[min(100%,28rem)]">
+          <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
             <FtohInput
               id="username"
               name="username"
@@ -81,7 +82,6 @@ export default function LoginPage() {
               disabled={isLoading}
             />
 
-            {/* Password Field */}
             <FtohInput
               id="password"
               name="password"
@@ -93,7 +93,6 @@ export default function LoginPage() {
               disabled={isLoading}
             />
 
-            {/* Submit Button */}
             <FtohButton
               type="submit"
               loading={isLoading}

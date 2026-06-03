@@ -44,3 +44,46 @@ body {
       "players chat logs";
   }
 }
+
+.pit-wall-live-map-inner {
+  height: 400px;
+}
+
+@media (max-width: 1023px) {
+  .pit-wall-main-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+      "map map"
+      "team-info team-info"
+      "chat logs";
+  }
+
+  .pit-wall-live-map-inner {
+    height: min(74vh, 640px);
+    min-height: 420px;
+  }
+
+  .pit-wall-player-tooltip {
+    left: auto !important;
+    right: 100%;
+    border-left: 2px solid #FF0000 !important;
+    border-right: none !important;
+  }
+}
+
+@media (max-width: 639px) {
+  .pit-wall-main-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "map"
+      "team-info"
+      "chat"
+      "logs";
+  }
+
+  .pit-wall-live-map-inner {
+    height: min(70vh, 560px);
+    min-height: 360px;
+  }
+}

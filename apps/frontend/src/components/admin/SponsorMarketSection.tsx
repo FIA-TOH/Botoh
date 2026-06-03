@@ -142,7 +142,12 @@ export interface SponsorMarketProposal {
     valorAntesDoTeto: number;
     valorFinal: number;
   };
-  exigencia: 'team_name' | 'livery' | 'team_name_and_livery' | 'none';
+  exigencia:
+    | 'title_sponsor_name_media'
+    | 'title_sponsor_full_livery_media'
+    | 'title_sponsor_40_livery_media'
+    | 'title_sponsor_25_livery_media'
+    | 'none';
   candidateCount: number;
   ressalvas?: ('setor_repetido' | 'tipo_repetido')[];
 }
