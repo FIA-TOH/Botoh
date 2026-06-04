@@ -90,6 +90,8 @@ import { RIVADAVIA } from "../../circuits/rivadavia/rivadavia";
 import { AUSTIN_CRESPO } from "../../circuits/austin/austin_crespo";
 import { SEXCANO } from "../../circuits/sexcano/sexcano";
 import { MEERSBURG } from "../../circuits/meersburg/meersburg";
+import { IMOLATESTE } from "../../circuits/imola/imolaTeste";
+import { IMOLASEASONTRES } from "../../circuits/imola/imolaSeasonTres";
 
 // import {DAYTONA} from "../circuits/daytona/daytona";
 // import {BARCELONA} from "../circuits/barcelona/barcelona";
@@ -101,7 +103,9 @@ import { MEERSBURG } from "../../circuits/meersburg/meersburg";
 
 export const CIRCUITS: Circuit[] = LEAGUE_MODE
   ? [
-      IMOLA,
+    IMOLATESTE,
+    IMOLASEASONTRES,  
+    IMOLA,
       SUZUKA,
       MELBOURNE,
       BAKU,
@@ -243,6 +247,8 @@ export const CIRCUIT_FILE_NAMES: string[] = LEAGUE_MODE
       "indianapolis.hbs",
       "podium.hbs",
       "waitRoom.hbs",
+      "imolaSeasonTres.hbs",
+      "imolaTeste.hbs",
     ]
   : [
       "suzuka.hbs",
