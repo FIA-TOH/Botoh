@@ -28,11 +28,11 @@ export const GARAGE_FACILITY_ECONOMY: {
         5: 3300000,
       },
       sellValueByCurrentLevel: {
-        1: 350000,
-        2: 595000,
-        3: 945000,
-        4: 1470000,
-        5: 2310000,
+        1: 175000,
+        2: 350000,
+        3: 595000,
+        4: 945000,
+        5: 1470000,
       },
       costPerRaceByLevel: {
         0: 0,
@@ -53,11 +53,11 @@ export const GARAGE_FACILITY_ECONOMY: {
         5: 4000000,
       },
       sellValueByCurrentLevel: {
-        1: 490000,
-        2: 770000,
-        3: 1190000,
-        4: 1820000,
-        5: 2800000,
+        1: 210000,
+        2: 490000,
+        3: 770000,
+        4: 1190000,
+        5: 1820000,
       },
       costPerRaceByLevel: {
         0: 0,

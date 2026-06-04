@@ -3,10 +3,10 @@ import { Circuit, CircuitInfo, CircuitPhysics, Direction, SpecificDirection } fr
 
 import { readFileSync } from "fs";
 import { join } from "path";
-const imola_raw = readFileSync(join(__dirname, "imola.hbs"), "utf-8");
-const imola_json = JSON.parse(imola_raw);
+const imolaSeasonTres_raw = readFileSync(join(__dirname, "imolaSeasonTres.hbs"), "utf-8");
+const imolaSeasonTres_json = JSON.parse(imolaSeasonTres_raw);
 
-const IMOLA_INFO: CircuitInfo = {
+const IMOLASEASONTRES_INFO: CircuitInfo = {
   finishLine: {
     bounds: {
       minX: -168,
@@ -43,18 +43,18 @@ const IMOLA_INFO: CircuitInfo = {
     },
     passingDirection: Direction.LEFT,
   },
-  name: "Autodromo Imola - By Ximb",
+  name: "Autodromo Imola - By Ximb - NewgenV3",
   boxLine: {
-    minX: -1068,
+    minX: -1162,
     maxX: -168,
     minY: 1263,
-    maxY: 1345,
+    maxY: 1346,
   },
   pitlaneStart: {
-    minX: -1266,
-    maxX: -1236,
-    minY: 1194,
-    maxY: 1345,
+    minX: -1664,
+    maxX: -1632,
+    minY: 1360,
+    maxY: 1497,
   },
   pitlaneEnd: {
     minX: 474,
@@ -80,21 +80,21 @@ const IMOLA_INFO: CircuitInfo = {
   ],
   checkpoints: [],
     firstPlace: {
-  x: imola_json.redSpawnPoints[0][0],
-  y: imola_json.redSpawnPoints[0][1],
+  x: imolaSeasonTres_json.redSpawnPoints[0][0],
+  y: imolaSeasonTres_json.redSpawnPoints[0][1],
 },
   lastPlace: {
-    x: imola_json.redSpawnPoints[imola_json.redSpawnPoints.length - 1][0],
-    y: imola_json.redSpawnPoints[imola_json.redSpawnPoints.length - 1][1],
+    x: imolaSeasonTres_json.redSpawnPoints[imolaSeasonTres_json.redSpawnPoints.length - 1][0],
+    y: imolaSeasonTres_json.redSpawnPoints[imolaSeasonTres_json.redSpawnPoints.length - 1][1],
   },
-  BestTime: bestTimes.imola,
+  BestTime: bestTimes.imolaSeasonTres,
   MainColor: [0x009246, 0xfffff1, 0xce2b37],
   AvatarColor: 0x000001,
   Angle: 0,
   Limit: 5,
   Votes: 0,
   TireDegradationPercentage: 5,
-  physicsType: CircuitPhysics.F1_NEWGEN,
+  physicsType: CircuitPhysics.WEC_NEWGEN,
   new_safetycar: true,
   CrashWallDetector: [
     {
@@ -461,7 +461,7 @@ const IMOLA_INFO: CircuitInfo = {
 ]
 };
 
-export const IMOLA: Circuit = {
-  map: imola_raw,
-  info: IMOLA_INFO,
+export const IMOLASEASONTRES: Circuit = {
+  map: imolaSeasonTres_raw,
+  info: IMOLASEASONTRES_INFO,
 };

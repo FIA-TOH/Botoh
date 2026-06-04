@@ -69,6 +69,7 @@ export function LiveMap({
     Record<number, { x: number; y: number }>
   >({});
   const [mapZoom, setMapZoom] = React.useState(1);
+  const [mapPan, setMapPan] = React.useState({ x: 0, y: 0 });
   const targetsRef = React.useRef<Record<number, { x: number; y: number }>>({});
   const smoothedRef = React.useRef<Record<number, { x: number; y: number }>>({});
   const rafRef = React.useRef<number | null>(null);
@@ -76,7 +77,15 @@ export function LiveMap({
   const pinchRef = React.useRef<{
     distance: number;
     zoom: number;
+    center: { x: number; y: number };
+    pan: { x: number; y: number };
   } | null>(null);
+  const dragRef = React.useRef<{
+    pointerId?: number;
+    start: { x: number; y: number };
+    pan: { x: number; y: number };
+  } | null>(null);
+  const panRef = React.useRef({ x: 0, y: 0 });
   const playerDetailsById = React.useMemo(
     () =>
       new Map(
@@ -294,6 +303,31 @@ export function LiveMap({
     };
   }, []);
 
+  React.useEffect(() => {
+    panRef.current = mapPan;
+  }, [mapPan]);
+
+  const clampPan = React.useCallback((
+    pan: { x: number; y: number },
+    zoom = mapZoom,
+  ) => {
+    const container = containerRef.current;
+
+    if (!container || zoom <= 1) return { x: 0, y: 0 };
+
+    const maxX = Math.max(0, (mapDimensions.width * zoom - container.clientWidth) / 2);
+    const maxY = Math.max(0, (mapDimensions.height * zoom - container.clientHeight) / 2);
+
+    return {
+      x: Math.max(-maxX, Math.min(maxX, pan.x)),
+      y: Math.max(-maxY, Math.min(maxY, pan.y)),
+    };
+  }, [mapDimensions.height, mapDimensions.width, mapZoom]);
+
+  React.useEffect(() => {
+    setMapPan((current) => clampPan(current, mapZoom));
+  }, [clampPan, mapDimensions.height, mapDimensions.width, mapZoom]);
+
   const getTouchDistance = (touches: React.TouchList) => {
     if (touches.length < 2) return 0;
 
@@ -306,16 +340,53 @@ export function LiveMap({
     );
   };
 
+  const getTouchCenter = (touches: React.TouchList) => {
+    if (touches.length < 2) {
+      const touch = touches[0];
+      return { x: touch?.clientX ?? 0, y: touch?.clientY ?? 0 };
+    }
+
+    return {
+      x: (touches[0].clientX + touches[1].clientX) / 2,
+      y: (touches[0].clientY + touches[1].clientY) / 2,
+    };
+  };
+
   const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
+    if (event.touches.length === 1 && mapZoom > 1) {
+      const touch = event.touches[0];
+      dragRef.current = {
+        start: { x: touch.clientX, y: touch.clientY },
+        pan: panRef.current,
+      };
+      return;
+    }
+
     if (event.touches.length !== 2) return;
+
+    event.preventDefault();
 
     pinchRef.current = {
       distance: getTouchDistance(event.touches),
       zoom: mapZoom,
+      center: getTouchCenter(event.touches),
+      pan: panRef.current,
     };
+    dragRef.current = null;
   };
 
   const handleTouchMove = (event: React.TouchEvent<HTMLDivElement>) => {
+    if (event.touches.length === 1 && dragRef.current && mapZoom > 1) {
+      event.preventDefault();
+
+      const touch = event.touches[0];
+      setMapPan(clampPan({
+        x: dragRef.current.pan.x + touch.clientX - dragRef.current.start.x,
+        y: dragRef.current.pan.y + touch.clientY - dragRef.current.start.y,
+      }));
+      return;
+    }
+
     if (event.touches.length !== 2 || !pinchRef.current) return;
 
     event.preventDefault();
@@ -324,12 +395,49 @@ export function LiveMap({
     if (nextDistance <= 0 || pinchRef.current.distance <= 0) return;
 
     const nextZoom = pinchRef.current.zoom * (nextDistance / pinchRef.current.distance);
-    setMapZoom(Math.min(3, Math.max(1, nextZoom)));
+    const clampedZoom = Math.min(3, Math.max(1, nextZoom));
+    const nextCenter = getTouchCenter(event.touches);
+
+    setMapZoom(clampedZoom);
+    setMapPan(clampPan({
+      x: pinchRef.current.pan.x + nextCenter.x - pinchRef.current.center.x,
+      y: pinchRef.current.pan.y + nextCenter.y - pinchRef.current.center.y,
+    }, clampedZoom));
   };
 
   const handleTouchEnd = (event: React.TouchEvent<HTMLDivElement>) => {
     if (event.touches.length < 2) {
       pinchRef.current = null;
+    }
+
+    if (event.touches.length === 0) {
+      dragRef.current = null;
+    }
+  };
+
+  const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === 'touch' || mapZoom <= 1) return;
+
+    dragRef.current = {
+      pointerId: event.pointerId,
+      start: { x: event.clientX, y: event.clientY },
+      pan: panRef.current,
+    };
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === 'touch' || !dragRef.current || mapZoom <= 1) return;
+
+    setMapPan(clampPan({
+      x: dragRef.current.pan.x + event.clientX - dragRef.current.start.x,
+      y: dragRef.current.pan.y + event.clientY - dragRef.current.start.y,
+    }));
+  };
+
+  const handlePointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (dragRef.current?.pointerId === event.pointerId) {
+      dragRef.current = null;
     }
   };
 
@@ -381,6 +489,10 @@ export function LiveMap({
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         onTouchCancel={handleTouchEnd}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
         className="
           pit-wall-live-map-inner
           relative
@@ -394,7 +506,8 @@ export function LiveMap({
           width: '100%',
           position: 'relative',
           overflow: 'hidden',
-          touchAction: 'pan-x pan-y',
+          cursor: mapZoom > 1 ? 'grab' : 'default',
+          touchAction: 'none',
           backgroundColor: backgroundUrl
             ? 'transparent'
             : '#374151',
@@ -407,7 +520,7 @@ export function LiveMap({
             width: `${mapDimensions.width}px`,
             height: `${mapDimensions.height}px`,
             position: 'relative',
-            transform: `scale(${mapZoom})`,
+            transform: `translate(${mapPan.x}px, ${mapPan.y}px) scale(${mapZoom})`,
             transformOrigin: 'center center',
 
             backgroundImage: backgroundUrl
