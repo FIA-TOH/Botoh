@@ -37,7 +37,7 @@ const BALATON_HAXMAPS_INFO: CircuitInfo = {
   },
   sectorThree: {
     bounds: {
-      minX: 525,
+      minX: 545,
       maxX: 575,
       minY: 1311,
       maxY: 1434,
