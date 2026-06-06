@@ -11,7 +11,7 @@ const BALATON_HAXMAPS_INFO: CircuitInfo = {
   finishLine: {
     bounds: {
       minX: -20,
-      maxX: 10,
+      maxX: -10,
       minY: -280,
       maxY: -20,
     },

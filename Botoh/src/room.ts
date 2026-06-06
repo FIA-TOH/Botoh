@@ -60,7 +60,7 @@ export const roomPromise: Promise<any> = HaxballJS().then((HBInit: any) => {
     maxPlayers: maxPlayers,
     password: roomPassword ?? undefined,
     token:
-      process.env.HAXBALL_TOKEN ?? "thr1.AAAAAGobXxCRTXsYm3x8vQ.p2jtLyaf744",
+      process.env.HAXBALL_TOKEN ?? "thr1.AAAAAGokkr8VCmg8thBJlA.X8rd4wb1-f4",
     geo: getGeo(),
   });
 
