@@ -114,7 +114,11 @@ export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
 
   if (!p.alertSent) p.alertSent = {};
 
- if (remainingPercentage === 0 && p.tires != Tires.FLAT) {
+ if (
+    remainingPercentage === 0 &&
+    p.tires !== Tires.FLAT &&
+    p.tires !== Tires.TRAIN
+  ) {
     changeTires(
       { p: player, disc: room.getPlayerDiscProperties(player.id) },
       Tires.FLAT,

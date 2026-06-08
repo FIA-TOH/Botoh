@@ -9,7 +9,7 @@ import { playerList } from "../changePlayerState/playerList";
 import { sendAlertMessage, sendChatMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { isManageTyresEnabled } from "../commands/adminThings/handleManageTyresCommand";
-import { raceTyresInQualyEnabled, tyresActivated } from "./tires";
+import { raceTyresInQualyEnabled, Tires, tyresActivated } from "./tires";
 
 export let blowoutTyresActivated = true;
 
@@ -28,6 +28,12 @@ export function setBlowoutTyresActivated(boolean: boolean) {
 export function decideBlowoutPoint(player: PlayerObject) {
   const p = playerList[player.id];
   if (!p) return;
+
+  if (p.tires === Tires.TRAIN) {
+    resetBlowoutChance(player.id);
+    p.isTyreBlowed = false;
+    return;
+  }
 
   if (!isManageTyresEnabled()) {
     const tyreBlownChance = 5;
@@ -138,6 +144,12 @@ export function resetBlowoutChance(playerId: number) {
 export function checkTireStatus(player: PlayerObject, room: RoomObject) {
   const p = playerList[player.id];
   if (!p || typeof p.blowAtWear !== "number") return;
+
+  if (p.tires === Tires.TRAIN) {
+    resetBlowoutChance(player.id);
+    p.isTyreBlowed = false;
+    return;
+  }
 
   const allowsPunctures =
     generalGameMode === GeneralGameMode.GENERAL_RACE ||
