@@ -34,16 +34,16 @@ export function setupSocketHandlers(io: SocketIOServer) {
       });
     });
     
-    socket.on('chat:send', (data) => {
-      botService.sendToBot('chat:send', data);
+    socket.on('chat:send', (data, callback) => {
+      botService.sendToBot('chat:send', data, callback);
     });
 
-    socket.on('pit:call', (data) => {
-      botService.sendToBot('pit:call', data);
+    socket.on('pit:call', (data, callback) => {
+      botService.sendToBot('pit:call', data, callback);
     });
 
-    socket.on('pit:prepare-tyre', (data) => {
-      botService.sendToBot('pit:prepare-tyre', data);
+    socket.on('pit:prepare-tyre', (data, callback) => {
+      botService.sendToBot('pit:prepare-tyre', data, callback);
     });
 
     socket.on('disconnect', () => {

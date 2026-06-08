@@ -75,7 +75,7 @@ async function setupBackendCommunication() {
     console.error('Botoh bot failed to connect to backend:', error.message);
   });
 
-  socket.on('chat:send', async (data: any) => {  
+  socket.on('chat:send', async (data: any, respond?: (response: any) => void) => {
     // Data is coming as a string, not an object
     const message = typeof data === 'string' ? data : data.message;
     const player = typeof data === 'object' && data.player
@@ -98,6 +98,7 @@ async function setupBackendCommunication() {
         const { mute_mode } = await import('../../../Botoh/src/features/chat/toggleMuteMode');
 
         if (mute_mode) {
+          respond?.({ success: false, code: 'chat_muted' });
           return;
         }
 
@@ -112,12 +113,29 @@ async function setupBackendCommunication() {
 
           if (target.type === 'team') {
             const playerState = playerList[roomPlayer.id];
+            if (target.teamId && playerState?.leagueScuderia === target.teamId) {
+              return true;
+            }
+
             const scuderia = getLeagueScuderia(playerState?.leagueScuderia);
             return scuderia?.name === target.teamName;
           }
 
           return false;
         });
+
+        if (recipients.length === 0) {
+          const code =
+            target.type === 'team'
+              ? 'no_team_recipients'
+              : target.type === 'player'
+                ? 'player_not_found'
+                : 'no_recipients';
+          console.warn('Pitwall chat target has no recipients:', { target, player, message });
+          respond?.({ success: false, code });
+          return;
+        }
+
         recipients.forEach((recipient: PlayerObject) => {
           const language = getPlayerLanguage(recipient.id);
           const channelLabel =
@@ -140,19 +158,26 @@ async function setupBackendCommunication() {
             source: 'frontend',
           });
         }
+
+        respond?.({ success: true });
       } else {
         console.log('No room or message:', { 
           room: !!room, 
           message: message
         });
+        respond?.({ success: false, code: !room ? 'room_not_available' : 'empty_message' });
       }
     } catch (error) {
       console.error('Error sending message to Haxball room:', error);
+      respond?.({ success: false, code: 'bot_error' });
     }
   });
 
-  socket.on('pit:call', async (data: { playerName?: string }) => {
-    if (!data?.playerName) return;
+  socket.on('pit:call', async (data: { playerName?: string; playerId?: number }, respond?: (response: any) => void) => {
+    if (!data?.playerName && !Number.isFinite(data?.playerId)) {
+      respond?.({ success: false, code: 'player_not_found' });
+      return;
+    }
 
     try {
       const { getRoom } = await import('../../../Botoh/src/room');
@@ -160,19 +185,37 @@ async function setupBackendCommunication() {
       const { MESSAGES } = await import('../../../Botoh/src/features/chat/messages');
       const room = await getRoom();
       const playerToCall = room?.getPlayerList().find(
-        (roomPlayer: PlayerObject) => roomPlayer.name === data.playerName,
+        (roomPlayer: PlayerObject) =>
+          (Number.isFinite(data.playerId) && roomPlayer.id === data.playerId)
+          || roomPlayer.name === data.playerName,
       );
 
-      if (!room || !playerToCall) return;
+      if (!room) {
+        respond?.({ success: false, code: 'room_not_available' });
+        return;
+      }
+
+      if (!playerToCall) {
+        respond?.({ success: false, code: 'player_not_found' });
+        return;
+      }
 
       sendRadioMessage(room, MESSAGES.BOX_BOX_BOX(), playerToCall.id);
+      respond?.({ success: true });
     } catch (error) {
       console.error('Error sending pit call to Haxball room:', error);
+      respond?.({ success: false, code: 'bot_error' });
     }
   });
 
-  socket.on('pit:prepare-tyre', async (data: { playerName?: string; tyre?: string | null }) => {
-    if (!data?.playerName) return;
+  socket.on('pit:prepare-tyre', async (
+    data: { playerName?: string; playerId?: number; tyre?: string | null },
+    respond?: (response: any) => void,
+  ) => {
+    if (!data?.playerName && !Number.isFinite(data?.playerId)) {
+      respond?.({ success: false, code: 'player_not_found' });
+      return;
+    }
 
     try {
       const { getRoom } = await import('../../../Botoh/src/room');
@@ -183,10 +226,29 @@ async function setupBackendCommunication() {
 
       const room = await getRoom();
       const playerToPrepare = room?.getPlayerList().find(
-        (roomPlayer: PlayerObject) => roomPlayer.name === data.playerName,
+        (roomPlayer: PlayerObject) =>
+          (Number.isFinite(data.playerId) && roomPlayer.id === data.playerId)
+          || roomPlayer.name === data.playerName,
       );
 
-      if (!room || !playerToPrepare || !playerList[playerToPrepare.id]) return;
+      if (!room) {
+        respond?.({ success: false, code: 'room_not_available' });
+        return;
+      }
+
+      if (!playerToPrepare) {
+        respond?.({ success: false, code: 'player_not_found' });
+        return;
+      }
+
+      if (!playerList[playerToPrepare.id]) {
+        console.warn('Pitwall tyre prepare failed: player state missing', {
+          playerId: playerToPrepare.id,
+          playerName: playerToPrepare.name,
+        });
+        respond?.({ success: false, code: 'player_state_missing' });
+        return;
+      }
 
       const requestedTyre = typeof data.tyre === 'string'
         ? data.tyre.toUpperCase()
@@ -194,11 +256,15 @@ async function setupBackendCommunication() {
 
       if (requestedTyre === null) {
         playerList[playerToPrepare.id].nextPitTires = null;
+        respond?.({ success: true });
         return;
       }
 
       const tyre = Object.values(Tires).find((candidate) => candidate === requestedTyre);
-      if (!tyre || tyre === Tires.FLAT) return;
+      if (!tyre || tyre === Tires.FLAT) {
+        respond?.({ success: false, code: 'invalid_tyre' });
+        return;
+      }
 
       playerList[playerToPrepare.id].nextPitTires = tyre;
       sendRadioMessage(
@@ -206,8 +272,10 @@ async function setupBackendCommunication() {
         MESSAGES.PIT_TYRE_PREPARED(tyre),
         playerToPrepare.id,
       );
+      respond?.({ success: true });
     } catch (error) {
       console.error('Error preparing pit tyre in Haxball room:', error);
+      respond?.({ success: false, code: 'bot_error' });
     }
   });
 

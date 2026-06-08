@@ -52,11 +52,19 @@ export class BotService {
     });
   }
 
-  sendToBot(event: string, data: any) {
+  sendToBot(event: string, data: any, callback?: (response: any) => void) {
     if (this.botSocket) {
-      this.botSocket.emit(event, data);
+      this.botSocket.timeout(5000).emit(event, data, (error: Error | null, response: any) => {
+        if (error) {
+          callback?.({ success: false, code: 'bot_timeout' });
+          return;
+        }
+
+        callback?.(response ?? { success: true });
+      });
     } else {
       console.log('Bot not connected, cannot send:', event, data);
+      callback?.({ success: false, code: 'bot_not_connected' });
     }
   }
 

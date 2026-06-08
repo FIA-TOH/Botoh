@@ -106,10 +106,19 @@ export default function PitWallPage() {
   );
   const teamDrivers = useMemo(
     () =>
-      loggedUserTeam
-        ? drivers.filter((driver) => driver.leagueScuderia === loggedUserTeam)
+      loggedUserTeam || selectedTeamId
+        ? drivers.filter((driver) =>
+          (
+            selectedTeamId !== null
+            && selectedTeamId !== 'public'
+            && driver.leagueScuderiaId === selectedTeamId
+          )
+          || (
+            loggedUserTeam !== null
+            && driver.leagueScuderia === loggedUserTeam
+          ))
         : [],
-    [drivers, loggedUserTeam],
+    [drivers, loggedUserTeam, selectedTeamId],
   );
   const recipientOptions = useMemo(
     () => [
@@ -136,6 +145,18 @@ export default function PitWallPage() {
       showSnackbar(t.pitWall.connectionError, 'error');
     }
   }, [playerListError, showSnackbar, t.pitWall.connectionError]);
+
+  const getPitWallActionMessage = (code?: string) => {
+    const messages = t.pitWall.actionErrors;
+    if (!code) return messages.actionFailed;
+
+    return messages[code as keyof typeof messages] ?? messages.actionFailed;
+  };
+
+  const showPitWallActionResult = (result: { success: boolean; code?: string; message?: string }) => {
+    if (result.success) return;
+    showSnackbar(result.message ?? getPitWallActionMessage(result.code), 'error');
+  };
 
   if (!isAuthenticated) {
     return null;
@@ -313,8 +334,15 @@ export default function PitWallPage() {
             <TeamInfoPanel
               drivers={drivers}
               loggedUserTeam={loggedUserTeam}
-              onPitCall={(driver) => sendPitCall(driver.name)}
-              onPitTyrePrepare={(driver, tyre) => preparePitTyre(driver.name, tyre)}
+              loggedUserTeamId={selectedTeamId}
+              onPitCall={async (driver) => {
+                const result = await sendPitCall(driver.name, driver.id);
+                showPitWallActionResult(result);
+              }}
+              onPitTyrePrepare={async (driver, tyre) => {
+                const result = await preparePitTyre(driver.name, tyre, driver.id);
+                showPitWallActionResult(result);
+              }}
               loading={!playerList}
             />
           )}
@@ -325,15 +353,20 @@ export default function PitWallPage() {
             setMessage={setMessage}
             handleSendMessage={(event) => {
               event.preventDefault();
+              const selectedDriver = teamDrivers.find((driver) => driver.name === selectedRecipient);
               const target: ChatTarget =
                 isPublicPitWall || selectedRecipient === t.chat.everyone
                   ? { type: 'all' }
                   : selectedRecipient === t.chat.team && loggedUserTeam
-                    ? { type: 'team', teamName: loggedUserTeam }
-                    : { type: 'player', playerName: selectedRecipient };
+                    ? { type: 'team', teamId: selectedTeamId ?? undefined, teamName: loggedUserTeam }
+                    : { type: 'player', playerId: selectedDriver?.id, playerName: selectedRecipient };
 
-              sendMessage(message, user?.username ?? 'Frontend', target);
-              setMessage('');
+              sendMessage(message, user?.username ?? 'Frontend', target).then((result) => {
+                showPitWallActionResult(result);
+                if (result.success) {
+                  setMessage('');
+                }
+              });
             }}
             isConnected={isChatConnected}
             isMuted={playerList?.raceSession.isChatMuted ?? false}

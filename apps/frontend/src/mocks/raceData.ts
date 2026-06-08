@@ -19,10 +19,12 @@ export type FlagType =
   | 'VIRTUAL_SAFETY';
 
 export interface Driver {
+  id: number;
   name: string;
   team: Teams;
   ip: string;
   isInTheRoom: boolean;
+  leagueScuderiaId?: string | null;
   leagueScuderia: string | null;
   totalTime: number;
   currentLap: number;
