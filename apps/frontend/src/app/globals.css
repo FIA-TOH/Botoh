@@ -34,14 +34,6 @@ body {
     "players team-info logs";
 }
 
-.pit-wall-public-grid {
-  grid-template-columns: 200px minmax(0, 1fr) minmax(320px, 5fr);
-  grid-template-rows: 1fr 1fr;
-  grid-template-areas:
-    "players map chat"
-    "players map logs";
-}
-
 @media (max-width: 1365px) {
   .pit-wall-main-grid {
     grid-template-columns: 200px minmax(0, 1fr) minmax(0, 1fr);
@@ -52,13 +44,6 @@ body {
       "players chat logs";
   }
 
-  .pit-wall-public-grid {
-    grid-template-columns: 200px minmax(0, 1fr) minmax(0, 1fr);
-    grid-template-rows: auto auto;
-    grid-template-areas:
-      "players map map"
-      "players chat logs";
-  }
 }
 
 .pit-wall-live-map-inner {
@@ -72,14 +57,6 @@ body {
     grid-template-areas:
       "map map"
       "team-info team-info"
-      "chat logs";
-  }
-
-  .pit-wall-public-grid {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    grid-template-rows: auto auto;
-    grid-template-areas:
-      "map map"
       "chat logs";
   }
 
@@ -102,14 +79,6 @@ body {
     grid-template-areas:
       "map"
       "team-info"
-      "chat"
-      "logs";
-  }
-
-  .pit-wall-public-grid {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      "map"
       "chat"
       "logs";
   }

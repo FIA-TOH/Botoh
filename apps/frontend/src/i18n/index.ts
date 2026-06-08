@@ -122,6 +122,7 @@ const dictionaries = {
     pitWall: {
       chooseScuderia: 'Escolha a scuderia',
       enterWithoutTeam: 'Entrar sem equipe',
+      availableOnlyWithTeam: 'Disponível apenas com equipe',
       noScuderiaAvailable: 'Nenhuma scuderia disponível para o pit wall.',
       connectionError: 'Erro de conexao com o servidor.',
       selectPitTyre: 'Selecionar pneu do pit',
@@ -602,6 +603,7 @@ const dictionaries = {
     pitWall: {
       chooseScuderia: 'Choose a scuderia',
       enterWithoutTeam: 'Enter without team',
+      availableOnlyWithTeam: 'Available only with a team',
       noScuderiaAvailable: 'No scuderia available for the pit wall.',
       connectionError: 'Server connection error.',
       selectPitTyre: 'Select pit tyre',
@@ -1082,6 +1084,7 @@ const dictionaries = {
     pitWall: {
       chooseScuderia: 'Elige una scuderia',
       enterWithoutTeam: 'Entrar sin equipo',
+      availableOnlyWithTeam: 'Disponible solo con equipo',
       noScuderiaAvailable: 'No hay ninguna scuderia disponible para el pit wall.',
       connectionError: 'Error de conexion con el servidor.',
       selectPitTyre: 'Seleccionar neumatico del pit',

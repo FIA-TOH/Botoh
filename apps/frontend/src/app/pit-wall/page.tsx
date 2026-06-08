@@ -289,7 +289,7 @@ export default function PitWallPage() {
       </button>
 
     <div className="max-w-[1440px] mx-auto">
-        <div className={`${isPublicPitWall ? 'pit-wall-public-grid' : 'pit-wall-main-grid'} grid gap-8`}>
+        <div className="pit-wall-main-grid grid gap-8">
           <PlayersPanel
             drivers={standings}
             raceSession={playerList?.raceSession}
@@ -298,7 +298,18 @@ export default function PitWallPage() {
 
           <LogsPanel logs={logs} loading={false}/>
 
-          {!isPublicPitWall && (
+          {isPublicPitWall ? (
+            <div
+              className="flex min-h-[220px] items-center justify-center p-4 text-center text-xl font-bold uppercase text-gray-300"
+              style={{
+                gridArea: 'team-info',
+                backgroundColor: '#1E1E1E',
+                outline: '8px solid #FF232B',
+              }}
+            >
+              {t.pitWall.availableOnlyWithTeam}
+            </div>
+          ) : (
             <TeamInfoPanel
               drivers={drivers}
               loggedUserTeam={loggedUserTeam}
@@ -337,7 +348,11 @@ export default function PitWallPage() {
           />
         </div>
 
-        {!isPublicPitWall && (
+        {isPublicPitWall ? (
+          <div className="mt-8 border-8 border-[#FF232B] bg-[#1E1E1E] p-8 text-center text-xl font-bold uppercase text-gray-300">
+            {t.pitWall.availableOnlyWithTeam}
+          </div>
+        ) : (
           <RaceInsightsGrid
             drivers={standings}
             loggedUserTeam={loggedUserTeam}
