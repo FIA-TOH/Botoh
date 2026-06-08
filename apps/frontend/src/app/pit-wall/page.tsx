@@ -45,9 +45,10 @@ export default function PitWallPage() {
     [user?.teamMemberships],
   );
   const selectedTeamId = searchParams.get('teamId');
-  const selectedMembership =
-    eligibleMemberships.find((membership) => membership.teamId === selectedTeamId)
-    ?? null;
+  const isPublicPitWall = selectedTeamId === 'public';
+  const selectedMembership = isPublicPitWall
+    ? null
+    : (eligibleMemberships.find((membership) => membership.teamId === selectedTeamId) ?? null);
   const loggedUserTeam = selectedMembership?.teamName ?? null;
   const authWeatherLevel = selectedMembership?.weatherLevel ?? 0;
   const [liveWeatherLevel, setLiveWeatherLevel] = useState<number | null>(null);
@@ -140,7 +141,7 @@ export default function PitWallPage() {
     return null;
   }
 
-  if (!selectedMembership) {
+  if (!selectedMembership && !isPublicPitWall) {
     return (
       <main
         className="relative min-h-screen bg-cover bg-center bg-no-repeat bg-fixed text-white"
@@ -171,6 +172,14 @@ export default function PitWallPage() {
             <h1 className="mb-6 text-3xl font-bold uppercase">{t.pitWall.chooseScuderia}</h1>
 
             <div className="flex flex-wrap justify-center gap-4">
+              <button
+                type="button"
+                onClick={() => router.push('/pit-wall?teamId=public')}
+                className="flex min-h-28 min-w-56 items-center justify-center border-8 border-[#FF0000] bg-[#1E1E1E] px-6 py-5 text-xl font-semibold uppercase transition-colors hover:border-white"
+              >
+                {t.pitWall.enterWithoutTeam}
+              </button>
+
               {eligibleMemberships.map((membership) => {
                 const logoSrc = `/img/scuderia/logos/${encodeURIComponent(
                   membership.teamName.trim().toLowerCase(),
@@ -280,7 +289,7 @@ export default function PitWallPage() {
       </button>
 
     <div className="max-w-[1440px] mx-auto">
-        <div className="pit-wall-main-grid grid gap-8">
+        <div className={`${isPublicPitWall ? 'pit-wall-public-grid' : 'pit-wall-main-grid'} grid gap-8`}>
           <PlayersPanel
             drivers={standings}
             raceSession={playerList?.raceSession}
@@ -289,13 +298,15 @@ export default function PitWallPage() {
 
           <LogsPanel logs={logs} loading={false}/>
 
-          <TeamInfoPanel
-            drivers={drivers}
-            loggedUserTeam={loggedUserTeam}
-            onPitCall={(driver) => sendPitCall(driver.name)}
-            onPitTyrePrepare={(driver, tyre) => preparePitTyre(driver.name, tyre)}
-            loading={!playerList}
-          />
+          {!isPublicPitWall && (
+            <TeamInfoPanel
+              drivers={drivers}
+              loggedUserTeam={loggedUserTeam}
+              onPitCall={(driver) => sendPitCall(driver.name)}
+              onPitTyrePrepare={(driver, tyre) => preparePitTyre(driver.name, tyre)}
+              loading={!playerList}
+            />
+          )}
 
           <ChatPanel
             messages={messages}
@@ -304,7 +315,7 @@ export default function PitWallPage() {
             handleSendMessage={(event) => {
               event.preventDefault();
               const target: ChatTarget =
-                selectedRecipient === t.chat.everyone
+                isPublicPitWall || selectedRecipient === t.chat.everyone
                   ? { type: 'all' }
                   : selectedRecipient === t.chat.team && loggedUserTeam
                     ? { type: 'team', teamName: loggedUserTeam }
@@ -326,14 +337,16 @@ export default function PitWallPage() {
           />
         </div>
 
+        {!isPublicPitWall && (
           <RaceInsightsGrid
-          drivers={standings}
-          loggedUserTeam={loggedUserTeam}
-          weatherChartLevel={weatherChartLevel}
-          raceSession={playerList?.raceSession}
-          loading={!playerList}
-          error={null}
-        />
+            drivers={standings}
+            loggedUserTeam={loggedUserTeam}
+            weatherChartLevel={weatherChartLevel}
+            raceSession={playerList?.raceSession}
+            loading={!playerList}
+            error={null}
+          />
+        )}
       </div>
     </main>
   );
