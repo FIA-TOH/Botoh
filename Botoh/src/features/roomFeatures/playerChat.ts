@@ -15,6 +15,11 @@ function getPlayerScuderia(playerInfo: PlayerInfo) {
 
 export function PlayerChat(room: RoomObject) {
   room.onPlayerChat = function (player, message) {
+    if (/^\s+!login(?:\s|$)/i.test(message)) {
+      sendErrorMessage(room, MESSAGES.LOGIN_USAGE(), player.id);
+      return false;
+    }
+
     log(`${player.name}: ${message}`);
 
     if (player.admin) afkAdmins[player.id] = 0;
