@@ -59,7 +59,7 @@ import { resetLapHistory } from "../zones/laps/lapHistory";
 let replayData: Uint8Array | null = null;
 
 export function GameStop(room: RoomObject) {
-  room.onGameStop = function (byPlayer) {
+  room.onGameStop = async function (byPlayer) {
     stopWeatherMonitoring();
     clearAllPreparedPitTires();
 
@@ -71,10 +71,11 @@ export function GameStop(room: RoomObject) {
     }
 
     handleGameStateChange(null, room);
+    let replayToSend: Uint8Array | null = null;
     if (gameMode !== GameMode.TRAINING) {
       replayData = room.stopRecording();
       if (replayData && gameStarted) {
-        sendDiscordReplay(replayData);
+        replayToSend = replayData;
       } else {
         log("Replay discarted");
       }
@@ -95,7 +96,7 @@ export function GameStop(room: RoomObject) {
       } else {
         handleGameStateChange(null, room);
         if (generalGameMode === GeneralGameMode.GENERAL_QUALY) {
-          sendQualiResultsToDiscord();
+          await sendQualiResultsToDiscord();
           printAllTimes(room);
           reorderPlayersInRoomRace(room);
           movePlayersToCorrectSide();
@@ -108,7 +109,7 @@ export function GameStop(room: RoomObject) {
           handleRREnabledCommand(undefined, ["off"], room);
           sendAllCutsToDiscord();
         } else if (gameMode == GameMode.TRAINING) {
-          sendQualiResultsToDiscord();
+          await sendQualiResultsToDiscord();
           printAllTimes(room);
           reorderPlayersInRoomRace(room);
           movePlayersToCorrectSide();
@@ -118,7 +119,7 @@ export function GameStop(room: RoomObject) {
           });
           handleRREnabledCommand(undefined, ["off"], room);
         } else {
-          sendRaceResultsToDiscord();
+          await sendRaceResultsToDiscord();
           printAllPositions(room);
           movePlayersToCorrectSide();
           resetPlayers(room);
@@ -130,6 +131,9 @@ export function GameStop(room: RoomObject) {
             sendDiscordMessage(room);
           }, 3000);
         }
+      }
+      if (replayToSend) {
+        await sendDiscordReplay(replayToSend);
       }
       clearPlayers();
   

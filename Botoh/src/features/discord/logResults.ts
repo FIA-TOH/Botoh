@@ -9,6 +9,7 @@ import { TIRE_AVATAR } from "../changePlayerState/handleAvatar";
 import { getPlayersOrderedByQualiTime } from "../commands/gameMode/qualy/playerTime";
 import { positionList } from "../commands/gameMode/race/positionList";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
+import { getLeagueScuderia } from "../scuderias/scuderias";
 import { getBestPit } from "../tires&pits/trackBestPit";
 import { getTimestamp } from "../utils";
 import { laps } from "../zones/laps";
@@ -25,6 +26,13 @@ function formatTimeSec(seconds: number): string {
   return `${minutes}:${secs.toString().padStart(2, "0")}.${millis
     .toString()
     .padStart(3, "0")}`;
+}
+
+function formatTeamName(teamId: string | null) {
+  if (!teamId) return "";
+
+  const scuderia = getLeagueScuderia(teamId);
+  return scuderia?.name || scuderia?.tag || teamId;
 }
 
 export function sendQualiResultsToDiscord() {
@@ -51,7 +59,8 @@ export function sendQualiResultsToDiscord() {
   let body = "";
   orderedList.forEach((p, idx) => {
     const pos = (idx + 1).toString().padStart(2, " ");
-    const team = p.team ? `(${p.team})` : "";
+    const teamName = formatTeamName(p.team);
+    const team = teamName ? `(${teamName})` : "";
     const nameWithTeam = `${p.name.trim()} ${team}`.padEnd(20, " ");
 
     const bestLap = formatTimeSec(p.time);
@@ -67,7 +76,7 @@ export function sendQualiResultsToDiscord() {
     )}`;
   });
 
-  sendDiscordResult(header + body);
+  return sendDiscordResult(header + body);
 }
 export function sendRaceResultsToDiscord() {
   if (positionList.length === 0) return;
@@ -84,7 +93,6 @@ export function sendRaceResultsToDiscord() {
 
   const winner = positionList[0];
   const header =
-    "```" +
     `\n🏁 FINAL ${gameModeResult} RESULTS - ${ACTUAL_CIRCUIT.info.name} 🏁` +
     `\nTime: ${getTimestamp()}` +
     `\nLaps: ${laps}` +
@@ -94,7 +102,8 @@ export function sendRaceResultsToDiscord() {
   let body = "";
   positionList.forEach((p, idx) => {
     const pos = (idx + 1).toString().padStart(2, " ");
-    const team = p.team ? `(${p.team})` : "";
+    const teamName = formatTeamName(p.team);
+    const team = teamName ? `(${teamName})` : "";
     const nameWithTeam = `${p.name.trim()} ${team}`.padEnd(20, " ");
     const totalTime = formatTimeSec(p.totalTime);
     const fastLap = formatTimeSec(p.time);
@@ -135,6 +144,5 @@ export function sendRaceResultsToDiscord() {
     } - ${bestPit.pitTime.toFixed(3)}s (Stop ${bestPit.pitNumber})`;
   }
 
-  const footer = "\n```";
-  sendDiscordResult(header + body + footer);
+  return sendDiscordResult(header + body);
 }
