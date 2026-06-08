@@ -129,6 +129,11 @@ export function updatePlayerActivity(player: PlayerObject, room?: RoomObject) {
     return;
   }
 
+  if (player.team !== Teams.RUNNERS) {
+    clearPlayerAfkActivity(player.id);
+    return;
+  }
+
   const playerId = player.id;
   const currentTime = room ? getCurrentGameTime(room) : 0;
   
@@ -260,6 +265,19 @@ export function resetSafetyCarActivationForRace() {
 
 export function afkKick(room: RoomObject) {
   const players = room.getPlayerList();
+  const runningPlayerIds = new Set(
+    players
+      .filter((player) => player.team === Teams.RUNNERS)
+      .map((player) => player.id)
+  );
+
+  Object.keys(playerActivities).forEach((playerId) => {
+    const numericPlayerId = Number(playerId);
+    if (!runningPlayerIds.has(numericPlayerId)) {
+      clearPlayerAfkActivity(numericPlayerId);
+    }
+  });
+
   const currentGameTime = getCurrentGameTime(room);
   const afkTimeout = getAfkTimeout();
   const warningTimeout = getWarningTimeout();
