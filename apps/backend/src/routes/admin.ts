@@ -33,7 +33,7 @@ const userValidation = [
     .isArray({ min: 1 })
     .withMessage('At least one user function must be selected'),
   body('teamMemberships.*.roles.*')
-    .isIn(['team_principal', 'team_assistant', 'driver'])
+    .isIn(['team_principal', 'team_assistant', 'driver', 'engineer'])
     .withMessage('Team membership role is invalid'),
   body('teamMemberships.*.driverCategory')
     .optional({ nullable: true })

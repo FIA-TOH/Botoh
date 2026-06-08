@@ -30,7 +30,7 @@ export interface TeamMembership {
   teamColor: string;
   pitLevel?: number | null;
   weatherLevel?: number | null;
-  roles: ('team_principal' | 'team_assistant' | 'driver')[];
+  roles: ('team_principal' | 'team_assistant' | 'driver' | 'engineer')[];
   driverCategory?: 'starter' | 'reserve' | null;
 }
 

@@ -84,7 +84,7 @@ interface RaceProgressAlert {
   createdAt: string;
 }
 
-type TeamMembershipRole = 'team_principal' | 'team_assistant' | 'driver';
+type TeamMembershipRole = 'team_principal' | 'team_assistant' | 'driver' | 'engineer';
 
 interface TeamMembership {
   teamId: string;
@@ -167,7 +167,7 @@ const EMPTY_SCUDERIA_FORM: ScuderiaFormData = {
   setores: [],
 };
 
-const MEMBERSHIP_ROLE_OPTIONS: TeamMembershipRole[] = ['team_principal', 'team_assistant', 'driver'];
+const MEMBERSHIP_ROLE_OPTIONS: TeamMembershipRole[] = ['team_principal', 'team_assistant', 'engineer', 'driver'];
 
 function getAuthHeaders() {
   const token = localStorage.getItem('auth_token');
@@ -335,6 +335,7 @@ export default function AdminPage() {
   const getMembershipRoleLabel = (role: TeamMembershipRole) => ({
     team_principal: t.admin.teamPrincipal,
     team_assistant: t.admin.teamAssistant,
+    engineer: t.admin.engineer,
     driver: t.admin.driver,
   })[role];
 

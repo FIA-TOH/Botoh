@@ -145,6 +145,19 @@ class GarageService {
        FROM user_team_memberships
        WHERE user_id = $1
          AND team_id = $2
+          AND (is_team_principal = true OR is_team_assistant = true OR is_engineer = true)`,
+      [userId, teamId],
+    );
+
+    return Boolean(membership);
+  }
+
+  async userCanManageTeam(userId: string, teamId: string): Promise<boolean> {
+    const membership = await queryOne(
+      `SELECT 1
+       FROM user_team_memberships
+       WHERE user_id = $1
+         AND team_id = $2
          AND (is_team_principal = true OR is_team_assistant = true)`,
       [userId, teamId],
     );
@@ -953,9 +966,10 @@ class GarageService {
         role,
         is_team_principal,
         is_team_assistant,
+        is_engineer,
         is_driver,
         driver_category
-      ) VALUES ($1, $2, 'driver', false, false, true, $3)
+      ) VALUES ($1, $2, 'driver', false, false, false, true, $3)
       ON CONFLICT (user_id, team_id)
       DO UPDATE SET
         is_driver = true,
@@ -963,6 +977,7 @@ class GarageService {
         role = CASE
           WHEN user_team_memberships.is_team_principal THEN user_team_memberships.role
           WHEN user_team_memberships.is_team_assistant THEN user_team_memberships.role
+          WHEN user_team_memberships.is_engineer THEN user_team_memberships.role
           ELSE 'driver'
         END`,
       [userId, teamId, category],
@@ -985,7 +1000,7 @@ class GarageService {
     if (remaining.rows[0]) return;
 
     const membership = await client.query(
-      `SELECT is_team_principal, is_team_assistant
+      `SELECT is_team_principal, is_team_assistant, is_engineer
        FROM user_team_memberships
        WHERE user_id = $1
          AND team_id = $2`,
@@ -994,7 +1009,7 @@ class GarageService {
     const row = membership.rows[0];
     if (!row) return;
 
-    if (!row.is_team_principal && !row.is_team_assistant) {
+    if (!row.is_team_principal && !row.is_team_assistant && !row.is_engineer) {
       await client.query(
         'DELETE FROM user_team_memberships WHERE user_id = $1 AND team_id = $2',
         [userId, teamId],
@@ -1006,7 +1021,11 @@ class GarageService {
       `UPDATE user_team_memberships
        SET is_driver = false,
            driver_category = null,
-           role = CASE WHEN is_team_principal THEN 'team_principal' ELSE 'team_assistant' END
+           role = CASE
+             WHEN is_team_principal THEN 'team_principal'
+             WHEN is_team_assistant THEN 'team_assistant'
+             ELSE 'engineer'
+           END
        WHERE user_id = $1
          AND team_id = $2`,
       [userId, teamId],

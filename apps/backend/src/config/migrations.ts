@@ -103,9 +103,10 @@ class MigrationService {
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
         team_id UUID NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
-        role VARCHAR(30) NOT NULL CHECK (role IN ('team_principal', 'team_assistant', 'driver')),
+        role VARCHAR(30) NOT NULL CHECK (role IN ('team_principal', 'team_assistant', 'driver', 'engineer')),
         is_team_principal BOOLEAN NOT NULL DEFAULT false,
         is_team_assistant BOOLEAN NOT NULL DEFAULT false,
+        is_engineer BOOLEAN NOT NULL DEFAULT false,
         is_driver BOOLEAN NOT NULL DEFAULT false,
         created_at TIMESTAMP DEFAULT NOW(),
         UNIQUE(user_id, team_id)
@@ -114,7 +115,10 @@ class MigrationService {
 
     await query('ALTER TABLE user_team_memberships ADD COLUMN IF NOT EXISTS is_team_principal BOOLEAN NOT NULL DEFAULT false');
     await query('ALTER TABLE user_team_memberships ADD COLUMN IF NOT EXISTS is_team_assistant BOOLEAN NOT NULL DEFAULT false');
+    await query('ALTER TABLE user_team_memberships ADD COLUMN IF NOT EXISTS is_engineer BOOLEAN NOT NULL DEFAULT false');
     await query('ALTER TABLE user_team_memberships ADD COLUMN IF NOT EXISTS is_driver BOOLEAN NOT NULL DEFAULT false');
+    await query('ALTER TABLE user_team_memberships DROP CONSTRAINT IF EXISTS user_team_memberships_role_check');
+    await query("ALTER TABLE user_team_memberships ADD CONSTRAINT user_team_memberships_role_check CHECK (role IN ('team_principal', 'team_assistant', 'driver', 'engineer'))");
 
     await query(`
       INSERT INTO user_team_memberships (
@@ -146,6 +150,7 @@ class MigrationService {
       SET
         is_team_principal = CASE WHEN role = 'team_principal' THEN true ELSE is_team_principal END,
         is_team_assistant = CASE WHEN role = 'team_assistant' THEN true ELSE is_team_assistant END,
+        is_engineer = CASE WHEN role = 'engineer' THEN true ELSE is_engineer END,
         is_driver = CASE WHEN role = 'driver' THEN true ELSE is_driver END
     `);
 

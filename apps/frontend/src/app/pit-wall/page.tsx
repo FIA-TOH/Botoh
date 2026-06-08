@@ -40,8 +40,9 @@ export default function PitWallPage() {
       (user?.teamMemberships ?? []).filter(
         (membership) =>
           membership.roles.includes('team_principal')
-          || membership.roles.includes('team_assistant'),
-      ),
+          || membership.roles.includes('team_assistant')
+          || membership.roles.includes('engineer'),
+       ),
     [user?.teamMemberships],
   );
   const selectedTeamId = searchParams.get('teamId');

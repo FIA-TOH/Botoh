@@ -27,7 +27,7 @@ export interface User {
     teamColor: string | null;
     pitLevel: number | null;
     weatherLevel: number | null;
-    roles: ('team_principal' | 'team_assistant' | 'driver')[];
+    roles: ('team_principal' | 'team_assistant' | 'driver' | 'engineer')[];
     driverCategory: 'starter' | 'reserve' | null;
   }[];
   language: 'pt' | 'en' | 'es';
@@ -219,6 +219,7 @@ class AuthService {
               'roles', ARRAY_REMOVE(ARRAY[
                 CASE WHEN utm.is_team_principal THEN 'team_principal' END,
                 CASE WHEN utm.is_team_assistant THEN 'team_assistant' END,
+                CASE WHEN utm.is_engineer THEN 'engineer' END,
                 CASE WHEN utm.is_driver THEN 'driver' END
               ], NULL),
               'driverCategory', COALESCE(td.category, utm.driver_category)
@@ -301,6 +302,7 @@ class AuthService {
               'roles', ARRAY_REMOVE(ARRAY[
                 CASE WHEN utm.is_team_principal THEN 'team_principal' END,
                 CASE WHEN utm.is_team_assistant THEN 'team_assistant' END,
+                CASE WHEN utm.is_engineer THEN 'engineer' END,
                 CASE WHEN utm.is_driver THEN 'driver' END
               ], NULL),
               'driverCategory', COALESCE(td.category, utm.driver_category)

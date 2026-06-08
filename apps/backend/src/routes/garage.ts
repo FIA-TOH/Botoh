@@ -94,7 +94,7 @@ router.post('/teams/:teamId/facility', authMiddleware, [
       });
     }
 
-    const canAccess = await garageService.userCanAccessTeam(req.user.id, req.params.teamId);
+    const canAccess = await garageService.userCanManageTeam(req.user.id, req.params.teamId);
     if (!canAccess) {
       return res.status(403).json({
         success: false,
@@ -150,7 +150,7 @@ router.post('/teams/:teamId/driver-proposals', authMiddleware, [
       });
     }
 
-    const canAccess = await garageService.userCanAccessTeam(req.user.id, req.params.teamId);
+    const canAccess = await garageService.userCanManageTeam(req.user.id, req.params.teamId);
     if (!canAccess) {
       return res.status(403).json({
         success: false,
@@ -225,7 +225,7 @@ router.delete('/teams/:teamId/drivers/:driverId', authMiddleware, async (req: Au
       });
     }
 
-    const canAccess = await garageService.userCanAccessTeam(req.user.id, req.params.teamId);
+    const canAccess = await garageService.userCanManageTeam(req.user.id, req.params.teamId);
     if (!canAccess) {
       return res.status(403).json({
         success: false,
@@ -256,7 +256,7 @@ router.delete('/teams/:teamId/sponsors/:teamSponsorId', authMiddleware, async (r
       });
     }
 
-    const canAccess = await garageService.userCanAccessTeam(req.user.id, req.params.teamId);
+    const canAccess = await garageService.userCanManageTeam(req.user.id, req.params.teamId);
     if (!canAccess) {
       return res.status(403).json({
         success: false,

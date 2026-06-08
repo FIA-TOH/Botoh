@@ -1,5 +1,6 @@
 import { playerList } from "../../changePlayerState/playerList";
 import { sendErrorMessage, sendSuccessMessage } from "../../chat/chat";
+import { isSupportedLanguage, Language } from "../../chat/language";
 import { MESSAGES } from "../../chat/messages";
 import { registerLeagueScuderia } from "../../scuderias/scuderias";
 
@@ -15,6 +16,7 @@ type LoginUser = {
   pitLevel?: number | null;
   weatherLevel?: number | null;
   driverCategory?: "starter" | "reserve" | null;
+  language?: Language | string | null;
 };
 
 type LoginResponse = {
@@ -132,6 +134,9 @@ export async function handleLoginCommand(
     player.driverCategory = loggedUser.driverCategory ?? null;
     player.loggedUsername = loggedUser.username ?? byPlayer.name;
     player.isFirstDriver = false;
+    if (loggedUser.language && isSupportedLanguage(loggedUser.language)) {
+      player.language = loggedUser.language;
+    }
 
     if (
       loggedUser.teamId &&

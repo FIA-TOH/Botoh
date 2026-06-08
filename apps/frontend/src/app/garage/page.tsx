@@ -84,12 +84,17 @@ export default function GaragePage() {
   const eligibleMemberships = (user?.teamMemberships ?? []).filter(
     (membership) =>
       membership.roles.includes('team_principal')
-      || membership.roles.includes('team_assistant'),
+      || membership.roles.includes('team_assistant')
+      || membership.roles.includes('engineer'),
   );
   const selectedTeamId = searchParams.get('teamId');
   const selectedMembership =
     eligibleMemberships.find((membership) => membership.teamId === selectedTeamId)
     ?? null;
+  const canManageGarage = Boolean(
+    selectedMembership?.roles.includes('team_principal')
+    || selectedMembership?.roles.includes('team_assistant'),
+  );
   const selectedLogoSrc = selectedMembership
     ? `/img/scuderia/logos/${encodeURIComponent(
       selectedMembership.teamName.trim().toLowerCase(),
@@ -187,7 +192,7 @@ export default function GaragePage() {
   }, [teamGarage?.financialHistory]);
 
   async function updateFacility(facility: 'climate' | 'pitCrew', action: 'upgrade' | 'sell') {
-    if (!selectedMembership) return;
+    if (!selectedMembership || !canManageGarage) return;
     const actionKey = `${facility}-${action}`;
     setFacilityActionLoading(actionKey);
     try {
@@ -217,7 +222,7 @@ export default function GaragePage() {
 
   async function sendDriverProposal(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!selectedMembership || !hireModalCategory) return;
+    if (!selectedMembership || !hireModalCategory || !canManageGarage) return;
 
     setDriverProposalLoading(true);
     try {
@@ -254,7 +259,7 @@ export default function GaragePage() {
   }
 
   async function releaseDriver(driverId: string) {
-    if (!selectedMembership) return;
+    if (!selectedMembership || !canManageGarage) return;
 
     setDriverReleaseLoading(true);
     try {
@@ -281,7 +286,7 @@ export default function GaragePage() {
   }
 
   async function releaseSponsor(teamSponsorId: string) {
-    if (!selectedMembership) return;
+    if (!selectedMembership || !canManageGarage) return;
 
     setSponsorReleaseLoading(true);
     try {
@@ -309,6 +314,7 @@ export default function GaragePage() {
   }
 
   function openHireModal(category: 'starter' | 'reserve') {
+    if (!canManageGarage) return;
     setHireModalCategory(category);
   }
 
@@ -669,7 +675,7 @@ export default function GaragePage() {
                       {t.garage.buildWeatherQuestion} <strong>{money(climateUpgradeCost)}</strong>?
                     </p>
                     <button
-                      disabled={cashTotal < climateUpgradeCost || facilityActionLoading !== null}
+                    disabled={!canManageGarage || cashTotal < climateUpgradeCost || facilityActionLoading !== null}
                       onClick={() => updateFacility('climate', 'upgrade')}
                       className="mt-8 w-full bg-[#FF0000] px-3 py-4 text-2xl font-bold uppercase disabled:cursor-not-allowed disabled:bg-[#B0003A]"
                     >
@@ -694,7 +700,7 @@ export default function GaragePage() {
                     </div>
                     <div className="mt-auto flex flex-wrap gap-4 pt-4">
                       <button
-                        disabled={weatherMonitoringLevel >= maxFacilityLevel || cashTotal < climateUpgradeCost || facilityActionLoading !== null}
+                        disabled={!canManageGarage || weatherMonitoringLevel >= maxFacilityLevel || cashTotal < climateUpgradeCost || facilityActionLoading !== null}
                         onClick={() => updateFacility('climate', 'upgrade')}
                         className="group min-w-[120px] flex-1 bg-[#FF0000] px-3 py-3 font-bold uppercase disabled:cursor-not-allowed disabled:bg-[#B0003A]"
                       >
@@ -708,7 +714,7 @@ export default function GaragePage() {
                         )}
                       </button>
                       <button
-                        disabled={weatherMonitoringLevel <= 0 || facilityActionLoading !== null}
+                        disabled={!canManageGarage || weatherMonitoringLevel <= 0 || facilityActionLoading !== null}
                         onClick={() => updateFacility('climate', 'sell')}
                         className="group min-w-[120px] flex-1 bg-[#FF0000] px-3 py-3 font-bold uppercase disabled:cursor-not-allowed disabled:bg-[#B0003A]"
                       >
@@ -737,7 +743,7 @@ export default function GaragePage() {
                       {t.garage.buildPitCrewQuestion} <strong>{money(pitCrewUpgradeCost)}</strong>?
                     </p>
                     <button
-                      disabled={cashTotal < pitCrewUpgradeCost || facilityActionLoading !== null}
+                      disabled={!canManageGarage || cashTotal < pitCrewUpgradeCost || facilityActionLoading !== null}
                       onClick={() => updateFacility('pitCrew', 'upgrade')}
                       className="mt-8 w-full bg-[#FF0000] px-3 py-4 text-2xl font-bold uppercase disabled:cursor-not-allowed disabled:bg-[#B0003A]"
                     >
@@ -762,7 +768,7 @@ export default function GaragePage() {
                     </div>
                     <div className="mt-auto flex flex-wrap gap-4 pt-4">
                       <button
-                        disabled={pitCrewLevel >= maxFacilityLevel || cashTotal < pitCrewUpgradeCost || facilityActionLoading !== null}
+                        disabled={!canManageGarage || pitCrewLevel >= maxFacilityLevel || cashTotal < pitCrewUpgradeCost || facilityActionLoading !== null}
                         onClick={() => updateFacility('pitCrew', 'upgrade')}
                         className="group min-w-[120px] flex-1 bg-[#FF0000] px-3 py-3 font-bold uppercase disabled:cursor-not-allowed disabled:bg-[#B0003A]"
                       >
@@ -776,7 +782,7 @@ export default function GaragePage() {
                         )}
                       </button>
                       <button
-                        disabled={pitCrewLevel <= 0 || facilityActionLoading !== null}
+                        disabled={!canManageGarage || pitCrewLevel <= 0 || facilityActionLoading !== null}
                         onClick={() => updateFacility('pitCrew', 'sell')}
                         className="group min-w-[120px] flex-1 bg-[#FF0000] px-3 py-3 font-bold uppercase disabled:cursor-not-allowed disabled:bg-[#B0003A]"
                       >
@@ -884,16 +890,18 @@ export default function GaragePage() {
                       {driver ? (
                         <button
                           type="button"
+                          disabled={!canManageGarage}
                           onClick={() => setReleaseModalDriver(driver)}
-                          className="mt-auto bg-[#FF0000] px-4 py-3 font-bold uppercase"
+                          className="mt-auto bg-[#FF0000] px-4 py-3 font-bold uppercase disabled:cursor-not-allowed disabled:bg-[#B0003A] disabled:opacity-60"
                         >
                           {t.garage.release}
                         </button>
                       ) : (
                         <button
                           type="button"
+                          disabled={!canManageGarage}
                           onClick={() => openHireModal(category)}
-                          className="mt-auto bg-[#FF0000] px-4 py-3 font-bold uppercase"
+                          className="mt-auto bg-[#FF0000] px-4 py-3 font-bold uppercase disabled:cursor-not-allowed disabled:bg-[#B0003A] disabled:opacity-60"
                         >
                           {t.garage.hire}
                         </button>
@@ -1150,7 +1158,7 @@ export default function GaragePage() {
                   )}
                   <button
                     type="button"
-                    disabled={sponsorReleaseLoading}
+                    disabled={!canManageGarage || sponsorReleaseLoading}
                     onClick={() => {
                       if (!confirmSponsorRelease) {
                         setConfirmSponsorRelease(true);

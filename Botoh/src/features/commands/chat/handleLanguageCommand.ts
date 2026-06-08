@@ -1,5 +1,6 @@
 import { playerList } from "../../changePlayerState/playerList";
 import { sendErrorMessage, sendSuccessMessage } from "../../chat/chat";
+import { isSupportedLanguage } from "../../chat/language";
 import { MESSAGES } from "../../chat/messages";
 
 export function handleLanguageCommand(
@@ -13,13 +14,7 @@ export function handleLanguageCommand(
   }
 
   const lang = args[0].toLowerCase();
-  if (
-    lang != "en" &&
-    lang != "es" &&
-    lang != "fr" &&
-    lang != "tr" &&
-    lang != "pt"
-  ) {
+  if (!isSupportedLanguage(lang)) {
     sendErrorMessage(room, MESSAGES.LANG_USAGE(), byPlayer.id);
     return;
   }
