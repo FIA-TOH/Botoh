@@ -1,6 +1,7 @@
 import { ghostMode } from "../changePlayerState/ghost";
 import { updatePlayerCollision } from "../changePlayerState/updatePlayerCollision";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
+import { constants } from "../speed/constants";
 import { inHitbox } from "../utils";
 
 const suzukaTunnelHitBox = {
@@ -80,7 +81,7 @@ export function handleChangePlayerSizeSuzuka(
       player.disc.radius === 5
     ) {
       room.setPlayerDiscProperties(player.p.id, {
-        radius: 15,
+        radius: constants.DEFAULT_PLAYER_RADIUS,
       });
     }
   }

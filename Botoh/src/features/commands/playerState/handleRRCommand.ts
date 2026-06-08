@@ -11,6 +11,7 @@ import { updatePlayerCollision } from "../../changePlayerState/updatePlayerColli
 import { sendErrorMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { getPlayerAndDiscs } from "../../playerFeatures/getPlayerAndDiscs";
+import { constants } from "../../speed/constants";
 import { getRunningPlayers } from "../../utils";
 import { CIRCUITS, currentMapIndex } from "../../zones/maps";
 import { rrEnabled } from "../adminThings/handleRREnabledCommand";
@@ -21,7 +22,7 @@ export function moveToRRPosition(player: PlayerObject, room: RoomObject) {
   const rrPosition = RR_POSITION ?? CIRCUITS[currentMapIndex].info.lastPlace;
   if (rrPosition) {
     room.setPlayerDiscProperties(player.id, {
-      radius: 15,
+      radius: constants.DEFAULT_PLAYER_RADIUS,
       xspeed: 0,
       yspeed: 0,
       xgravity: 0,
@@ -66,7 +67,7 @@ export function handleRRAllCommand(room: RoomObject) {
     const position = RR_POSITION ?? CIRCUITS[currentMapIndex].info.lastPlace;
 
     room.setPlayerDiscProperties(player.p.id, {
-      radius: 15,
+      radius: constants.DEFAULT_PLAYER_RADIUS,
       xspeed: 0,
       yspeed: 0,
       xgravity: 0,
@@ -114,7 +115,7 @@ export function handleRRCommand(
   const position = RR_POSITION ?? CIRCUITS[currentMapIndex].info.lastPlace;
 
   room.setPlayerDiscProperties(byPlayer.id, {
-    radius: 15,
+    radius: constants.DEFAULT_PLAYER_RADIUS,
     xspeed: 0,
     yspeed: 0,
     xgravity: 0,

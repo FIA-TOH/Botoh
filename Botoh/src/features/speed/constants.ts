@@ -3,6 +3,7 @@ export const constants = {
   // Speed and Base Performance
   // ===============================
   NORMAL_SPEED: 1,
+  DEFAULT_PLAYER_RADIUS: 14.25,
   DRS_SPEED_GAIN: 0.001,
   ERS_PENALTY: -0.006,
   JUMP_START_PENALTY: -0.005,
