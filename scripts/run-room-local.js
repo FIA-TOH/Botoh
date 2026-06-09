@@ -7,6 +7,22 @@ const npmCommand = isWindows ? 'npm.cmd' : 'npm';
 
 const children = new Map();
 let shuttingDown = false;
+let latestRoomLink = null;
+let roomLinkPrinted = false;
+const readyServices = new Set();
+
+function shouldPrintRoomLink() {
+  if (!latestRoomLink || roomLinkPrinted || shuttingDown) return false;
+  if (!readyServices.has('bot')) return false;
+  if (!readyServices.has('backend')) return false;
+  return !includeFrontend || readyServices.has('frontend');
+}
+
+function printRoomLinkOnceIfReady() {
+  if (!shouldPrintRoomLink()) return;
+  roomLinkPrinted = true;
+  process.stdout.write(`\n[room:local] \u{1F3C1} Link da sala: ${latestRoomLink}\n`);
+}
 
 function parseEnvFile(filePath) {
   if (!fs.existsSync(filePath)) return {};
@@ -61,6 +77,25 @@ function prefixOutput(name, stream, chunk) {
   for (const line of lines) {
     if (line.length > 0) {
       stream.write(`[${name}] ${line}\n`);
+
+      const roomLinkMatch = line.match(/Room link:\s*(https?:\/\/\S+)/i);
+      if (roomLinkMatch) {
+        latestRoomLink = roomLinkMatch[1];
+      }
+
+      if (name === 'bot' && line.includes('Complete Botoh bot started')) {
+        readyServices.add('bot');
+      }
+
+      if (name === 'backend' && line.includes('Backend server running')) {
+        readyServices.add('backend');
+      }
+
+      if (name === 'frontend' && line.includes('Ready')) {
+        readyServices.add('frontend');
+      }
+
+      printRoomLinkOnceIfReady();
     }
   }
 }

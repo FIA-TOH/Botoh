@@ -10,6 +10,7 @@ import { enableGas, enableSlipstream } from "../speed/handleSlipstream";
 import { enableTyres } from "../tires&pits/tires";
 import { laps } from "../zones/laps";
 import { CIRCUITS, currentMapIndex } from "../zones/maps";
+import { log } from "../discord/logger";
 
 export enum GameMode {
   RACE = "race",
@@ -30,9 +31,18 @@ export enum GeneralGameMode {
 export let gameMode: GameMode = GameMode.RACE;
 export let generalGameMode: GeneralGameMode = GeneralGameMode.GENERAL_RACE;
 
-export function changeGameMode(newMode: GameMode, room: RoomObject) {
+type ChangeGameModeOptions = {
+  reloadStadium?: boolean;
+};
+
+export function changeGameMode(
+  newMode: GameMode,
+  room: RoomObject,
+  options: ChangeGameModeOptions = {},
+) {
   gameMode = newMode;
   const timeLimit = newMode === GameMode.QUALY ? qualiTime : raceTime;
+  const shouldReloadStadium = options.reloadStadium ?? true;
   room.setTimeLimit(timeLimit);
 
   let result;
@@ -61,7 +71,17 @@ export function changeGameMode(newMode: GameMode, room: RoomObject) {
       break;
   }
 
-  room.setCustomStadium(CIRCUITS[currentMapIndex].map);
+  if (shouldReloadStadium) {
+    try {
+      room.setCustomStadium(CIRCUITS[currentMapIndex].map);
+    } catch (error) {
+      log(
+        `Failed to reload stadium while changing game mode to ${newMode}: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+      );
+    }
+  }
 
   return result;
 }

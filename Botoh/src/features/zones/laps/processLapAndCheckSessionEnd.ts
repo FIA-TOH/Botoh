@@ -18,6 +18,8 @@ import { notifyPositionOrLeaders } from "./utils/annoucements/notifyPositionsOrL
 import { registerLapPosition } from "./utils/registerLapPosition";
 import { isPlayerLapped, getLapDeficit, setLapDeficit, clearLappedCarAvatar, isSCActive } from "../../commands/flagsAndVSC/handleSCCommand";
 
+const QUALY_OVERTIME_EPSILON_SECONDS = 0.5;
+
 export function processLapAndCheckSessionEnd(
   pad: { p: PlayerObject; disc: DiscPropertiesObject },
   room: RoomObject,
@@ -89,8 +91,17 @@ function handleQualyLap(p: PlayerObject, room: RoomObject) {
     return;
   }
 
-  if (room.getScores().time >= qualiTime * 60) {
+  if (isQualyOvertime(room)) {
     sendSuccessMessage(room, MESSAGES.FINISH_QUALI(), p.id);
     room.setPlayerTeam(p.id, Teams.SPECTATORS);
   }
+}
+
+function isQualyOvertime(room: RoomObject) {
+  if (qualiTime === Number.MAX_VALUE) return false;
+
+  const scores = room.getScores();
+  if (!scores) return false;
+
+  return scores.time + QUALY_OVERTIME_EPSILON_SECONDS >= qualiTime * 60;
 }

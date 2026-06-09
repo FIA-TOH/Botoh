@@ -100,7 +100,7 @@ export function GameStop(room: RoomObject) {
           printAllTimes(room);
           reorderPlayersInRoomRace(room);
           movePlayersToCorrectSide();
-          changeGameMode(GameMode.RACE, room);
+          changeGameMode(GameMode.RACE, room, { reloadStadium: false });
           changeLaps("7", undefined, room);
           resetPlayers(room);
           room.getPlayerList().forEach(player => {

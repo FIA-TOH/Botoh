@@ -86,6 +86,21 @@ export const roomPromise: Promise<any> = HaxballJS().then((HBInit: any) => {
     geo: getGeo(),
   });
 
+  room.onRoomLink = function (link: any) {
+    if (!LEAGUE_MODE) {
+      applyFTOHPublicConfig(room, BOT_PLAYER);
+    }
+    emitPitWallRoomOpened({
+      roomName,
+      roomLink: link,
+      leagueMode: LEAGUE_MODE,
+      envName,
+      maxPlayers,
+      public: !LEAGUE_MODE,
+    });
+    console.log("\u{1F3C1} Room link:", link);
+  };
+
   room.setScoreLimit(0);
   room.setTimeLimit(0);
   room.setTeamsLock(true);
@@ -102,21 +117,6 @@ export const roomPromise: Promise<any> = HaxballJS().then((HBInit: any) => {
   StadiumChange(room);
   TeamChange(room);
   PlayerActivity(room);
-
-  room.onRoomLink = function (link: any) {
-      if(!LEAGUE_MODE) {
-      applyFTOHPublicConfig(room, BOT_PLAYER);
-    }
-    emitPitWallRoomOpened({
-      roomName,
-      roomLink: link,
-      leagueMode: LEAGUE_MODE,
-      envName,
-      maxPlayers,
-      public: !LEAGUE_MODE,
-    });
-    console.log("Room link:", link);
-  };
 
   room.onGamePause = function (byPlayer: any) {
     byPlayer == null

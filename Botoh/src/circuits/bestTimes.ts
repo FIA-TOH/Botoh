@@ -49,6 +49,7 @@ const trackNameMapping: { [key: string]: string } = {
   sexcano: "Cano Sexcuit by Rodri",
   meersburg: "Meersburg by Splinter",
   imolaSeasonTres: "Autodromo Imola - By Ximb - NewgenV3",
+  miamiSeasonTres: "Miami by Rodri - NewgenV3",
 };
 
 export const bestTimes: { [key: string]: [number, string, string] } = {
@@ -112,6 +113,7 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   meersburg: [34.885, "Splinter", "Meersburg by Splinter"],
 
   imolaSeasonTres: [46.817, "Suri", "Autodromo Imola - By Ximb - NewgenV3"],
+  miamiSeasonTres: [42.918, "Rodri", "Miami by Rodri - NewgenV3"],
 };
 
 export const getAbbreviatedTrackName = (

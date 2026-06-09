@@ -43,7 +43,7 @@ const IMOLATESTE_INFO: CircuitInfo = {
     },
     passingDirection: Direction.LEFT,
   },
-  name: "Autodromo Imola - By Ximb - NewgenV3",
+  name: "Autodromo Imola - By Ximb - Teste",
   boxLine: {
     minX: -1162,
     maxX: -168,
