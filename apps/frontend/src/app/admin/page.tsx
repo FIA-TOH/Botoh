@@ -260,6 +260,9 @@ export default function AdminPage() {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [scuderias, setScuderias] = useState<Scuderia[]>([]);
   const [sponsorCatalog, setSponsorCatalog] = useState<SponsorCatalogItem[]>([]);
+  const [usersSearch, setUsersSearch] = useState('');
+  const [scuderiasSearch, setScuderiasSearch] = useState('');
+  const [sponsorsSearch, setSponsorsSearch] = useState('');
   const [raceProgressAlerts, setRaceProgressAlerts] = useState<RaceProgressAlert[]>([]);
   const [raceProgressLoading, setRaceProgressLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(false);
@@ -319,6 +322,45 @@ export default function AdminPage() {
     () => [...scuderias].sort((a, b) => a.name.localeCompare(b.name)),
     [scuderias],
   );
+  const filteredUsers = useMemo(() => {
+    const search = usersSearch.trim().toLocaleLowerCase();
+    if (!search) return users;
+    return users.filter((adminUser) => [
+      adminUser.username,
+      adminUser.shortUsername,
+      adminUser.role,
+      adminUser.driverNumber?.toString(),
+      ...adminUser.teamMemberships.flatMap((membership) => [
+        membership.teamName,
+        membership.teamTag,
+        ...(membership.roles ?? []),
+      ]),
+      adminUser.driverWallet?.nacionalidade,
+    ].filter(Boolean).join(' ').toLocaleLowerCase().includes(search));
+  }, [users, usersSearch]);
+  const filteredScuderias = useMemo(() => {
+    const search = scuderiasSearch.trim().toLocaleLowerCase();
+    if (!search) return sortedScuderias;
+    return sortedScuderias.filter((scuderia) => [
+      scuderia.name,
+      scuderia.tag,
+      scuderia.emoji,
+      scuderia.color,
+      ...(scuderia.nacionalidades ?? []),
+    ].filter(Boolean).join(' ').toLocaleLowerCase().includes(search));
+  }, [scuderiasSearch, sortedScuderias]);
+  const filteredSponsors = useMemo(() => {
+    const search = sponsorsSearch.trim().toLocaleLowerCase();
+    if (!search) return sponsorCatalog;
+    return sponsorCatalog.filter((sponsor) => [
+      sponsor.name,
+      sponsor.nacionalidade,
+      sponsor.tipo,
+      sponsor.setor,
+      sponsor.pilotUsername,
+      ...(sponsor.scuderiasRelacionadas ?? []).map((scuderia) => scuderia.name),
+    ].filter(Boolean).join(' ').toLocaleLowerCase().includes(search));
+  }, [sponsorCatalog, sponsorsSearch]);
   const availableScuderias = useMemo(
     () =>
       sortedScuderias.filter(
@@ -327,9 +369,9 @@ export default function AdminPage() {
       ),
     [sortedScuderias, userForm.teamMemberships],
   );
-  const usersPagination = usePagination(users);
-  const scuderiasPagination = usePagination(sortedScuderias);
-  const sponsorsPagination = usePagination(sponsorCatalog);
+  const usersPagination = usePagination(filteredUsers);
+  const scuderiasPagination = usePagination(filteredScuderias);
+  const sponsorsPagination = usePagination(filteredSponsors);
   const editingScuderia = useMemo(
     () => scuderias.find((scuderia) => scuderia.id === editingScuderiaId) ?? null,
     [editingScuderiaId, scuderias],
@@ -1114,7 +1156,15 @@ export default function AdminPage() {
             )}
           </div>
 
-          {openSections.users && <div className="mt-4 overflow-x-auto">
+          {openSections.users && <div className="mt-4">
+            <input
+              type="search"
+              className="mb-4 w-full rounded-lg bg-gray-700 px-4 py-2 text-white placeholder:text-gray-400"
+              value={usersSearch}
+              onChange={(event) => setUsersSearch(event.target.value)}
+              placeholder={t.admin.searchUsers}
+            />
+            <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead className="text-gray-300">
                 <tr>
@@ -1187,13 +1237,14 @@ export default function AdminPage() {
                     </td>
                   </tr>
                 ))}
-                {!loadingData && users.length === 0 && (
+                {!loadingData && filteredUsers.length === 0 && (
                   <tr>
                     <td className="py-4 text-gray-400" colSpan={6}>{t.admin.noUsersFound}</td>
                   </tr>
                 )}
               </tbody>
             </table>
+            </div>
             <PaginationControls labels={t.admin} {...usersPagination} />
           </div>}
         </section>
@@ -1215,7 +1266,15 @@ export default function AdminPage() {
             )}
           </div>
 
-          {openSections.scuderias && <div className="mt-4 overflow-x-auto">
+          {openSections.scuderias && <div className="mt-4">
+            <input
+              type="search"
+              className="mb-4 w-full rounded-lg bg-gray-700 px-4 py-2 text-white placeholder:text-gray-400"
+              value={scuderiasSearch}
+              onChange={(event) => setScuderiasSearch(event.target.value)}
+              placeholder={t.admin.searchScuderias}
+            />
+            <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead className="text-gray-300">
                 <tr>
@@ -1274,13 +1333,14 @@ export default function AdminPage() {
                     </td>
                   </tr>
                 ))}
-                {!loadingData && sortedScuderias.length === 0 && (
+                {!loadingData && filteredScuderias.length === 0 && (
                   <tr>
-                    <td className="py-4 text-gray-400" colSpan={5}>Nenhuma scuderia encontrada.</td>
+                    <td className="py-4 text-gray-400" colSpan={5}>{t.admin.noScuderiasFound}</td>
                   </tr>
                 )}
               </tbody>
             </table>
+            </div>
             <PaginationControls labels={t.admin} {...scuderiasPagination} />
           </div>}
         </section>
@@ -1299,7 +1359,14 @@ export default function AdminPage() {
               <button type="button" onClick={openCreateSponsor} className="mb-4 rounded bg-purple-600 px-4 py-2">
                 {t.admin.createSponsor}
               </button>
-              {sponsorCatalog.length === 0 ? (
+              <input
+                type="search"
+                className="mb-4 w-full rounded-lg bg-gray-700 px-4 py-2 text-white placeholder:text-gray-400"
+                value={sponsorsSearch}
+                onChange={(event) => setSponsorsSearch(event.target.value)}
+                placeholder={t.admin.searchSponsors}
+              />
+              {filteredSponsors.length === 0 ? (
                 <div className="text-gray-400">{t.admin.sponsorsEmpty}</div>
               ) : (
                 <div className="space-y-2">
