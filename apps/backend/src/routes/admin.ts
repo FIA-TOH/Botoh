@@ -546,6 +546,15 @@ router.post('/scuderias/:id/sponsor-market', param('id').isUUID(), async (req: A
   });
 });
 
+router.post('/sponsor-market/race-missions', body('teamIds').isArray({ min: 1 }), body('teamIds.*').isUUID(), async (req: AuthRequest, res: Response) => {
+  if (handleValidation(req, res)) return;
+  const result = await adminService.generateRaceSponsorMissions(req.body.teamIds);
+  return res.status(result.success ? 200 : 400).json({
+    ...result,
+    message: translateMessage((result as { message?: string }).message, getRequestLanguage(req)),
+  });
+});
+
 router.post('/scuderias/:id/sponsors', param('id').isUUID(), teamSponsorValidation, async (req: AuthRequest, res: Response) => {
   if (handleValidation(req, res)) return;
   const result = await adminService.addTeamSponsor(req.params.id, req.body);

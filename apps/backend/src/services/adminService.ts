@@ -87,6 +87,35 @@ export interface SponsorMissionInput {
   racesToComplete?: number;
 }
 
+type RaceMissionDifficulty = 'easy' | 'medium' | 'hard' | 'insane';
+
+const RACE_MISSION_GENERATOR_ID = 'race_mission_generator';
+const RACE_MISSION_GENERATION_CHANCES: Partial<Record<SponsorContractCategory, number>> = {
+  title_sponsor: 0.75,
+  main_partner: 0.5,
+};
+const RACE_MISSION_BASES: Partial<Record<SponsorContractCategory, number>> = {
+  title_sponsor: 60000,
+  main_partner: 35000,
+};
+const RACE_MISSION_BUDGET_MULTIPLIERS = [0.75, 1, 1.25, 1.55];
+const RACE_MISSION_AMBITION_MULTIPLIERS = [0.8, 1, 1.25, 1.55, 1.75, 2];
+const RACE_MISSION_PRESTIGE_MULTIPLIERS = [0, 0.8, 0.95, 1.1, 1.25, 1.4];
+const RACE_MISSION_DIFFICULTY_MULTIPLIERS: Record<RaceMissionDifficulty, number> = {
+  easy: 0.75,
+  medium: 1,
+  hard: 1.35,
+  insane: 1.75,
+};
+const RACE_MISSION_DIFFICULTY_WEIGHTS: Record<number, { difficulty: RaceMissionDifficulty; chance: number }[]> = {
+  0: [{ difficulty: 'easy', chance: 0.7 }, { difficulty: 'medium', chance: 0.25 }, { difficulty: 'hard', chance: 0.05 }],
+  1: [{ difficulty: 'easy', chance: 0.5 }, { difficulty: 'medium', chance: 0.4 }, { difficulty: 'hard', chance: 0.1 }],
+  2: [{ difficulty: 'easy', chance: 0.3 }, { difficulty: 'medium', chance: 0.5 }, { difficulty: 'hard', chance: 0.2 }],
+  3: [{ difficulty: 'easy', chance: 0.15 }, { difficulty: 'medium', chance: 0.55 }, { difficulty: 'hard', chance: 0.3 }],
+  4: [{ difficulty: 'easy', chance: 0.1 }, { difficulty: 'medium', chance: 0.4 }, { difficulty: 'hard', chance: 0.4 }, { difficulty: 'insane', chance: 0.1 }],
+  5: [{ difficulty: 'easy', chance: 0.05 }, { difficulty: 'medium', chance: 0.3 }, { difficulty: 'hard', chance: 0.5 }, { difficulty: 'insane', chance: 0.15 }],
+};
+
 export interface SponsorInput {
   name?: string;
   nome?: string;
@@ -2078,6 +2107,167 @@ class AdminService {
 
       await this.recalculateTeamSponsorIncome(client, result.rows[0].team_id);
       return { success: true };
+    });
+  }
+
+  private drawRaceMissionDifficulty(ambition: number, randomScore = Math.random()): RaceMissionDifficulty {
+    const normalizedAmbition = Math.min(5, Math.max(0, Math.trunc(Number(ambition) || 0)));
+    const weights = RACE_MISSION_DIFFICULTY_WEIGHTS[normalizedAmbition] ?? RACE_MISSION_DIFFICULTY_WEIGHTS[1];
+    let cumulative = 0;
+    for (const weight of weights) {
+      cumulative += weight.chance;
+      if (randomScore <= cumulative) return weight.difficulty;
+    }
+    return weights[weights.length - 1].difficulty;
+  }
+
+  private calculateRaceMissionReward(
+    category: SponsorContractCategory,
+    sponsor: { orcamento: number; ambicao: number; prestigio: number },
+    difficulty: RaceMissionDifficulty,
+  ) {
+    const base = RACE_MISSION_BASES[category] ?? 0;
+    const budgetMultiplier = RACE_MISSION_BUDGET_MULTIPLIERS[sponsor.orcamento] ?? 1;
+    const ambitionMultiplier = RACE_MISSION_AMBITION_MULTIPLIERS[sponsor.ambicao] ?? 1;
+    const prestigeMultiplier = RACE_MISSION_PRESTIGE_MULTIPLIERS[sponsor.prestigio] ?? 1;
+    const difficultyMultiplier = RACE_MISSION_DIFFICULTY_MULTIPLIERS[difficulty];
+    const value = base * budgetMultiplier * ambitionMultiplier * prestigeMultiplier * difficultyMultiplier;
+    return {
+      base,
+      budgetMultiplier,
+      ambitionMultiplier,
+      prestigeMultiplier,
+      difficultyMultiplier,
+      reward: Math.round(value / 1000) * 1000,
+    };
+  }
+
+  async generateRaceSponsorMissions(teamIds: string[]) {
+    const uniqueTeamIds = Array.from(new Set(teamIds.filter(Boolean)));
+    if (uniqueTeamIds.length === 0) {
+      return { success: false, message: 'At least one scuderia must be selected' };
+    }
+
+    return transaction(async (client) => {
+      const teams = await client.query(
+        `SELECT id, name
+         FROM teams
+         WHERE id = ANY($1::uuid[])
+         ORDER BY name ASC`,
+        [uniqueTeamIds],
+      );
+
+      const contracts = await client.query(
+        `SELECT
+          ts.id AS team_sponsor_id,
+          ts.team_id,
+          ts.category,
+          teams.name AS team_name,
+          sponsors.id AS sponsor_id,
+          sponsors.name AS sponsor_name,
+          sponsors.orcamento,
+          sponsors.ambicao,
+          sponsors.prestigio
+         FROM team_sponsors ts
+         JOIN teams ON teams.id = ts.team_id
+         JOIN sponsors ON sponsors.id = ts.sponsor_id
+         WHERE ts.team_id = ANY($1::uuid[])
+           AND ts.category IN ('title_sponsor', 'main_partner')
+         ORDER BY teams.name ASC, CASE WHEN ts.category = 'title_sponsor' THEN 0 ELSE 1 END, ts.slot_number ASC`,
+        [uniqueTeamIds],
+      );
+
+      await client.query(
+        `DELETE FROM team_sponsor_race_missions
+         WHERE generated_by = $1
+           AND team_sponsor_id IN (
+             SELECT id
+             FROM team_sponsors
+             WHERE team_id = ANY($2::uuid[])
+               AND category IN ('title_sponsor', 'main_partner')
+           )`,
+        [RACE_MISSION_GENERATOR_ID, uniqueTeamIds],
+      );
+
+      type RaceMissionGenerationTeamResult = {
+        team: { id: string; name: string };
+        missions: Array<{
+          sponsorId: string;
+          sponsorName: string;
+          category: SponsorContractCategory;
+          difficulty: RaceMissionDifficulty;
+          reward: number;
+          missionId: string;
+        }>;
+        skipped: Array<{
+          sponsorId: string;
+          sponsorName: string;
+          category: SponsorContractCategory;
+        }>;
+      };
+      const results: RaceMissionGenerationTeamResult[] = teams.rows.map((team: any) => ({
+        team: { id: team.id as string, name: team.name as string },
+        missions: [],
+        skipped: [],
+      }));
+      const resultByTeamId = new Map<string, RaceMissionGenerationTeamResult>(
+        results.map((result) => [result.team.id, result]),
+      );
+
+      for (const contract of contracts.rows) {
+        const category = contract.category as SponsorContractCategory;
+        const chance = RACE_MISSION_GENERATION_CHANCES[category] ?? 0;
+        const result = resultByTeamId.get(contract.team_id);
+        if (!result) continue;
+
+        if (Math.random() > chance) {
+          result.skipped.push({
+            sponsorId: contract.sponsor_id,
+            sponsorName: contract.sponsor_name,
+            category,
+          });
+          continue;
+        }
+
+        const difficulty = this.drawRaceMissionDifficulty(Number(contract.ambicao));
+        const value = this.calculateRaceMissionReward(category, {
+          orcamento: Number(contract.orcamento),
+          ambicao: Number(contract.ambicao),
+          prestigio: Number(contract.prestigio),
+        }, difficulty);
+        const title = `Race mission - ${contract.sponsor_name}`;
+        const description = `Automatic race mission generated for ${contract.team_name}. Difficulty: ${difficulty}.`;
+        const mission = await client.query(
+          `INSERT INTO team_sponsor_race_missions (
+            team_sponsor_id,
+            title,
+            description,
+            reward,
+            difficulty,
+            generated_by
+          ) VALUES ($1, $2, $3, $4, $5, $6)
+          RETURNING id`,
+          [
+            contract.team_sponsor_id,
+            title,
+            description,
+            value.reward,
+            difficulty,
+            RACE_MISSION_GENERATOR_ID,
+          ],
+        );
+
+        result.missions.push({
+          sponsorId: contract.sponsor_id,
+          sponsorName: contract.sponsor_name,
+          category,
+          difficulty,
+          reward: value.reward,
+          missionId: mission.rows[0].id,
+        });
+      }
+
+      return { success: true, raceMissionResults: results };
     });
   }
 

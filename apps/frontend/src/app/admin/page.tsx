@@ -8,6 +8,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useTranslations } from '@/i18n';
 import {
   EconomicScuderia,
+  RaceMissionGenerationResult,
   SponsorCatalogItem,
   SponsorMarketResult,
   SponsorMarketSection,
@@ -1019,6 +1020,23 @@ export default function AdminPage() {
     }
     return data.marketResult;
   }
+
+  async function generateRaceMissions(teamIds: string[]) {
+    const response = await fetch(apiUrl('/api/admin/sponsor-market/race-missions'), {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ teamIds }),
+    });
+    const data: { success: boolean; raceMissionResults?: RaceMissionGenerationResult[]; message?: string } = await response.json();
+    if (!data.success || !data.raceMissionResults) {
+      showSnackbar(data.message || t.admin.actionFailed, 'error');
+      return [];
+    }
+    showSnackbar(t.admin.actionCompleted, 'success');
+    await refreshAdminViews();
+    return data.raceMissionResults;
+  }
+
   async function saveTeamSponsor(event: React.FormEvent) {
     event.preventDefault();
     if (!managingScuderia) return;
@@ -1449,6 +1467,7 @@ export default function AdminPage() {
           onScuderiaDraftChange={updateScuderiaDraft}
           onScuderiaSave={saveScuderiaDraft}
           onGenerateMarket={generateSponsorMarketRound}
+          onGenerateRaceMissions={generateRaceMissions}
         />
       </div>
 

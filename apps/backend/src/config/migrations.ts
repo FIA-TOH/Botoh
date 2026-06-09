@@ -482,6 +482,14 @@ class MigrationService {
       )
     `);
     await query('ALTER TABLE team_sponsor_race_missions ADD COLUMN IF NOT EXISTS description TEXT');
+    await query('ALTER TABLE team_sponsor_race_missions ADD COLUMN IF NOT EXISTS difficulty VARCHAR(20)');
+    await query("ALTER TABLE team_sponsor_race_missions ADD COLUMN IF NOT EXISTS generated_by VARCHAR(60)");
+    await query('ALTER TABLE team_sponsor_race_missions DROP CONSTRAINT IF EXISTS team_sponsor_race_missions_difficulty_check');
+    await query(`
+      ALTER TABLE team_sponsor_race_missions
+      ADD CONSTRAINT team_sponsor_race_missions_difficulty_check
+      CHECK (difficulty IS NULL OR difficulty IN ('easy', 'medium', 'hard', 'insane'))
+    `);
 
     await query(`
       CREATE TABLE IF NOT EXISTS notifications (
