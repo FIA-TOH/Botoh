@@ -583,6 +583,8 @@ class GarageService {
       await this.upsertDriverMembership(client, userId, proposal.team_id, proposal.category);
       await this.recalculateTeamSalaryCost(client, proposal.team_id);
       await this.syncTeamNationalities(client, proposal.team_id);
+      const { default: adminService } = await import('./adminService');
+      await adminService.syncPersonalSponsorsForPilot(userId, client);
       await client.query(
         `UPDATE driver_contract_proposals
          SET status = 'accepted', responded_at = NOW()
@@ -690,6 +692,8 @@ class GarageService {
       }
       await this.recalculateTeamSalaryCost(client, teamId);
       await this.syncTeamNationalities(client, teamId);
+      const { default: adminService } = await import('./adminService');
+      await adminService.syncPersonalSponsorsForPilot(driver.user_id as string | null, client);
 
       return {
         success: true,

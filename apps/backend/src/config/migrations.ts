@@ -334,7 +334,123 @@ class MigrationService {
         AND duplicate.sponsor_id = keeper.sponsor_id
         AND duplicate.created_at > keeper.created_at
     `);
+    await query("ALTER TABLE team_sponsors ADD COLUMN IF NOT EXISTS source VARCHAR(30) NOT NULL DEFAULT 'manual'");
+    await query('ALTER TABLE team_sponsors ADD COLUMN IF NOT EXISTS pilot_user_id UUID REFERENCES users(id) ON DELETE CASCADE');
+    await query('ALTER TABLE team_sponsors DROP CONSTRAINT IF EXISTS team_sponsors_source_check');
+    await query("ALTER TABLE team_sponsors ADD CONSTRAINT team_sponsors_source_check CHECK (source IN ('manual', 'personal_sponsor'))");
     await query('CREATE UNIQUE INDEX IF NOT EXISTS team_sponsors_team_sponsor_unique ON team_sponsors(team_id, sponsor_id)');
+    await query("DELETE FROM team_sponsors WHERE source = 'personal_sponsor'");
+    await query(`
+      INSERT INTO team_sponsors (
+        team_id,
+        sponsor_id,
+        category,
+        slot_number,
+        contract_races_remaining,
+        initial_reward,
+        reward_per_race,
+        source,
+        pilot_user_id
+      )
+      SELECT
+        team_driver.team_id,
+        sponsor.id,
+        'personal_sponsor',
+        team_driver.personal_slot,
+        team_driver.contract_ends_after_races,
+        LEAST(
+          450000,
+          ROUND((
+            180000
+            * CASE sponsor.orcamento
+                WHEN 0 THEN 0.75
+                WHEN 1 THEN 1.00
+                WHEN 2 THEN 1.35
+                WHEN 3 THEN 1.70
+                ELSE 1.00
+              END
+            * CASE sponsor.prestigio
+                WHEN 1 THEN 0.80
+                WHEN 2 THEN 0.95
+                WHEN 3 THEN 1.10
+                WHEN 4 THEN 1.25
+                WHEN 5 THEN 1.40
+                ELSE 1.00
+              END
+            * CASE
+                WHEN team.momento_comercial >= 80 THEN 1.30
+                WHEN team.momento_comercial >= 60 THEN 1.15
+                WHEN team.momento_comercial >= 40 THEN 1.00
+                WHEN team.momento_comercial >= 20 THEN 0.85
+                ELSE 0.70
+              END
+          ) / 1000) * 1000
+        ),
+        0,
+        'personal_sponsor',
+        team_driver.user_id
+      FROM sponsors sponsor
+      JOIN (
+        SELECT
+          team_drivers.*,
+          ROW_NUMBER() OVER (PARTITION BY team_drivers.team_id ORDER BY CASE WHEN team_drivers.category = 'starter' THEN 0 ELSE 1 END, team_drivers.slot_number) AS personal_slot
+        FROM team_drivers
+        WHERE team_drivers.status = 'active'
+          AND team_drivers.user_id IS NOT NULL
+      ) team_driver ON team_driver.user_id = sponsor.pilot_user_id
+      JOIN teams team ON team.id = team_driver.team_id
+      WHERE sponsor.tipo = 'personal_sponsor'
+        AND team_driver.personal_slot BETWEEN 1 AND 4
+        AND NOT EXISTS (
+          SELECT 1
+          FROM team_sponsors manual_personal
+          WHERE manual_personal.team_id = team_driver.team_id
+            AND manual_personal.category = 'personal_sponsor'
+            AND manual_personal.source = 'manual'
+        )
+      ON CONFLICT (team_id, sponsor_id)
+      DO UPDATE SET
+        category = 'personal_sponsor',
+        slot_number = EXCLUDED.slot_number,
+        contract_races_remaining = EXCLUDED.contract_races_remaining,
+        initial_reward = EXCLUDED.initial_reward,
+        reward_per_race = 0,
+        source = 'personal_sponsor',
+        pilot_user_id = EXCLUDED.pilot_user_id,
+        updated_at = NOW()
+    `);
+    await query(`
+      WITH new_history AS (
+        INSERT INTO team_financial_history (team_id, amount, entry_type, reason, source)
+        SELECT
+          team_sponsors.team_id,
+          team_sponsors.initial_reward,
+          'income',
+          'Personal sponsor ' || sponsors.name,
+          'sponsor'
+        FROM team_sponsors
+        JOIN sponsors ON sponsors.id = team_sponsors.sponsor_id
+        WHERE team_sponsors.source = 'personal_sponsor'
+          AND NOT EXISTS (
+            SELECT 1
+            FROM team_financial_history existing_history
+            WHERE existing_history.team_id = team_sponsors.team_id
+              AND existing_history.entry_type = 'income'
+              AND existing_history.source = 'sponsor'
+              AND existing_history.reason = 'Personal sponsor ' || sponsors.name
+          )
+        RETURNING team_id, amount
+      )
+      UPDATE teams
+      SET cash_total = cash_total + grouped.amount,
+          updated_at = NOW()
+      FROM (
+        SELECT team_id, SUM(amount) AS amount
+        FROM new_history
+        GROUP BY team_id
+      ) grouped
+      WHERE teams.id = grouped.team_id
+    `);
 
     await query(`
       CREATE TABLE IF NOT EXISTS team_sponsor_season_missions (

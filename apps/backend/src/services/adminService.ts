@@ -4,6 +4,7 @@ import garageService from './garageService';
 import {
   calculateCompatibility,
   calculateContractValue,
+  calculatePersonalSponsorSeasonValue,
   drawMarketProposalCategory,
   drawMarketProposalCount,
   drawMarketSponsorOrigin,
@@ -406,6 +407,7 @@ class AdminService {
              WHERE pilot_user_id = $1`,
             [userId],
           );
+          await this.syncPersonalSponsorsForPilot(userId, client);
         }
       }
 
@@ -429,6 +431,7 @@ class AdminService {
          WHERE pilot_user_id = $1`,
         [userId],
       );
+      await this.syncPersonalSponsorsForPilot(userId, client);
       return client.query(
         'UPDATE users SET is_active = false WHERE id = $1 RETURNING id',
         [userId],
@@ -443,15 +446,19 @@ class AdminService {
   }
 
   async unlinkUserPersonalSponsor(userId: string) {
-    const result = await query(
-      `UPDATE sponsors
-       SET pilot_user_id = NULL,
-           tipo = 'minor_sponsor',
-           updated_at = NOW()
-       WHERE pilot_user_id = $1
-       RETURNING id`,
-      [userId],
-    );
+    const result = await transaction(async (client) => {
+      const updated = await client.query(
+        `UPDATE sponsors
+         SET pilot_user_id = NULL,
+             tipo = 'minor_sponsor',
+             updated_at = NOW()
+         WHERE pilot_user_id = $1
+         RETURNING id`,
+        [userId],
+      );
+      await this.syncPersonalSponsorsForPilot(userId, client);
+      return updated;
+    });
 
     return result.rows[0]
       ? { success: true }
@@ -530,6 +537,7 @@ class AdminService {
       await this.recalculateTeamSalaryCost(client, teamId);
       await this.syncTeamNationalities(teamId, client);
     }
+    await this.syncPersonalSponsorsForPilot(userId, client);
   }
 
   private hasAnyRole(memberships: TeamMembershipInput[], role: TeamMembershipRole) {
@@ -671,6 +679,32 @@ class AdminService {
     const slot = [baseSlot, baseSlot + 1].find((candidate) => !used.has(candidate));
     if (!slot) throw new Error('Driver category is full');
     return slot;
+  }
+
+  private async findAvailableSponsorSlot(
+    client: { query: (sql: string, params?: any[]) => Promise<any> },
+    teamId: string,
+    category: SponsorContractCategory,
+    currentTeamSponsorId?: string,
+  ) {
+    const limits: Record<SponsorContractCategory, number> = {
+      title_sponsor: 1,
+      main_partner: 2,
+      official_partner: 4,
+      minor_sponsor: 8,
+      personal_sponsor: 4,
+    };
+    const occupied = await client.query(
+      `SELECT slot_number
+       FROM team_sponsors
+       WHERE team_id = $1
+         AND category = $2
+         AND ($3::uuid IS NULL OR id <> $3::uuid)`,
+      [teamId, category, currentTeamSponsorId ?? null],
+    );
+    const used = new Set(occupied.rows.map((row: any) => Number(row.slot_number)));
+    return Array.from({ length: limits[category] }, (_, index) => index + 1)
+      .find((slot) => !used.has(slot)) ?? null;
   }
 
   private async upsertTeamDriver(
@@ -881,6 +915,179 @@ class AdminService {
        updated_at = NOW()
        WHERE id = $1`,
       [teamId],
+    );
+  }
+
+  async syncPersonalSponsorsForPilot(
+    pilotUserId: string | null | undefined,
+    client: { query: (sql: string, params?: any[]) => Promise<any> } = { query },
+  ) {
+    if (!pilotUserId) return;
+
+    const existingAssignments = await client.query(
+      `SELECT DISTINCT team_id, sponsor_id
+       FROM team_sponsors
+       WHERE source = 'personal_sponsor'
+         AND pilot_user_id = $1`,
+      [pilotUserId],
+    );
+    const existingAssignmentKeys = new Set(
+      existingAssignments.rows.map((row: any) => `${row.team_id}:${row.sponsor_id}`),
+    );
+
+    await client.query(
+      `DELETE FROM team_sponsors
+       WHERE source = 'personal_sponsor'
+         AND pilot_user_id = $1`,
+      [pilotUserId],
+    );
+
+    const sponsors = await client.query(
+      `SELECT id, name, orcamento, prestigio
+       FROM sponsors
+       WHERE pilot_user_id = $1
+         AND tipo = 'personal_sponsor'`,
+      [pilotUserId],
+    );
+
+    if (sponsors.rows.length === 0) {
+      await this.recalculatePersonalSponsorTeams(client, existingAssignments.rows.map((row: any) => row.team_id));
+      return;
+    }
+
+    const contracts = await client.query(
+      `SELECT DISTINCT ON (td.team_id)
+        td.team_id,
+        td.contract_ends_after_races,
+        teams.momento_comercial
+       FROM team_drivers td
+       JOIN teams ON teams.id = td.team_id
+       WHERE td.user_id = $1
+         AND td.status = 'active'
+       ORDER BY td.team_id, CASE WHEN td.category = 'starter' THEN 0 ELSE 1 END, td.slot_number ASC`,
+      [pilotUserId],
+    );
+
+    const affectedTeamIds = new Set<string>(existingAssignments.rows.map((row: any) => row.team_id));
+    for (const contract of contracts.rows) {
+      affectedTeamIds.add(contract.team_id);
+      for (const sponsor of sponsors.rows) {
+        const slotNumber = await this.findAvailableSponsorSlot(
+          client,
+          contract.team_id,
+          'personal_sponsor',
+        );
+        if (!slotNumber) continue;
+
+        const initialReward = calculatePersonalSponsorSeasonValue(
+          sponsor,
+          { momentoComercial: Number(contract.momento_comercial) },
+        );
+
+        await client.query(
+          `INSERT INTO team_sponsors (
+            team_id,
+            sponsor_id,
+            category,
+            slot_number,
+            contract_races_remaining,
+            initial_reward,
+            reward_per_race,
+            source,
+            pilot_user_id
+          ) VALUES ($1, $2, 'personal_sponsor', $3, $4, $5, 0, 'personal_sponsor', $6)
+          ON CONFLICT (team_id, sponsor_id)
+          DO UPDATE SET
+            category = 'personal_sponsor',
+            slot_number = EXCLUDED.slot_number,
+            contract_races_remaining = EXCLUDED.contract_races_remaining,
+            initial_reward = EXCLUDED.initial_reward,
+            reward_per_race = 0,
+            source = 'personal_sponsor',
+            pilot_user_id = EXCLUDED.pilot_user_id,
+            updated_at = NOW()`,
+          [
+            contract.team_id,
+            sponsor.id,
+            slotNumber,
+            Number(contract.contract_ends_after_races),
+            initialReward,
+            pilotUserId,
+          ],
+        );
+
+        if (!existingAssignmentKeys.has(`${contract.team_id}:${sponsor.id}`)) {
+          await this.addPersonalSponsorIncomeIfMissing(
+            client,
+            contract.team_id,
+            sponsor.name,
+            initialReward,
+          );
+        }
+      }
+    }
+
+    await this.recalculatePersonalSponsorTeams(client, Array.from(affectedTeamIds));
+  }
+
+  async syncPersonalSponsorAssignments(
+    sponsorId: string,
+    previousPilotUserId?: string | null,
+    client: { query: (sql: string, params?: any[]) => Promise<any> } = { query },
+  ) {
+    if (previousPilotUserId) {
+      await this.syncPersonalSponsorsForPilot(previousPilotUserId, client);
+    }
+
+    const sponsor = await client.query(
+      `SELECT pilot_user_id
+       FROM sponsors
+       WHERE id = $1`,
+      [sponsorId],
+    );
+    await this.syncPersonalSponsorsForPilot(sponsor.rows[0]?.pilot_user_id, client);
+  }
+
+  private async recalculatePersonalSponsorTeams(
+    client: { query: (sql: string, params?: any[]) => Promise<any> },
+    teamIds: string[],
+  ) {
+    for (const teamId of new Set(teamIds.filter(Boolean))) {
+      await this.recalculateTeamSponsorIncome(client, teamId);
+    }
+  }
+
+  private async addPersonalSponsorIncomeIfMissing(
+    client: { query: (sql: string, params?: any[]) => Promise<any> },
+    teamId: string,
+    sponsorName: string,
+    amount: number,
+  ) {
+    const reason = `Personal sponsor ${sponsorName}`;
+    const existing = await client.query(
+      `SELECT id
+       FROM team_financial_history
+       WHERE team_id = $1
+         AND amount = $2
+         AND entry_type = 'income'
+         AND source = 'sponsor'
+         AND reason = $3
+       LIMIT 1`,
+      [teamId, amount, reason],
+    );
+    if (existing.rows[0]) return;
+
+    await client.query(
+      `UPDATE teams
+       SET cash_total = cash_total + $1,
+           updated_at = NOW()
+       WHERE id = $2`,
+      [amount, teamId],
+    );
+    await client.query(
+      `INSERT INTO team_financial_history (team_id, amount, entry_type, reason, source)
+       VALUES ($1, $2, 'income', $3, 'sponsor')`,
+      [teamId, amount, reason],
     );
   }
 
@@ -1285,6 +1492,7 @@ class AdminService {
       await this.upsertDriverMembership(client, user.id, scuderiaId, input.category);
       await this.recalculateTeamSalaryCost(client, scuderiaId);
       await this.syncTeamNationalities(scuderiaId, client);
+      await this.syncPersonalSponsorsForPilot(user.id, client);
       return { success: true };
     });
   }
@@ -1319,6 +1527,7 @@ class AdminService {
       await this.upsertDriverMembership(client, existing.user_id, scuderiaId, input.category);
       await this.recalculateTeamSalaryCost(client, scuderiaId);
       await this.syncTeamNationalities(scuderiaId, client);
+      await this.syncPersonalSponsorsForPilot(existing.user_id, client);
       return { success: true };
     });
   }
@@ -1348,6 +1557,7 @@ class AdminService {
       }
       await this.recalculateTeamSalaryCost(client, scuderiaId);
       await this.syncTeamNationalities(scuderiaId, client);
+      await this.syncPersonalSponsorsForPilot(row.user_id, client);
       return { success: true };
     });
   }
@@ -1420,27 +1630,30 @@ class AdminService {
       if (!personalSponsorValidation.success) return personalSponsorValidation;
     }
 
-    const result = await query(
-      `INSERT INTO sponsors (
-        name, logo_url, nacionalidade, tipo, setor, felicidade, prestigio, agressividade,
-        foco_em_midia, foco_tecnico, nacionalismo, fidelidade, orcamento, ambicao,
-        publico_alvo_1, publico_alvo_2, pilot_user_id, created_at, updated_at
-      )
-       VALUES (
-        $1, $2, $3, $4, $5, COALESCE($6, 50), COALESCE($7, 1), COALESCE($8, 1),
-        COALESCE($9, 1), COALESCE($10, 1), COALESCE($11, 1), COALESCE($12, 1),
-        COALESCE($13, 1), COALESCE($14, 1), $15, $16, $17, NOW(), NOW()
-       )
-       RETURNING id`,
-      [
-        name, input.logoUrl, input.nacionalidade ?? null, input.tipo ?? null, input.setor ?? null,
-        input.felicidade ?? null, input.prestigio ?? null, input.agressividade ?? null,
-        input.focoEmMidia ?? null, input.focoTecnico ?? null, input.nacionalismo ?? null,
-        input.fidelidade ?? null, input.orcamento ?? null, input.ambicao ?? null,
-        input.publicoAlvo1 ?? null, input.publicoAlvo2 ?? null, pilotUserId,
-      ],
-    );
-    return { success: true, sponsor: result.rows[0] };
+    return transaction(async (client) => {
+      const result = await client.query(
+        `INSERT INTO sponsors (
+          name, logo_url, nacionalidade, tipo, setor, felicidade, prestigio, agressividade,
+          foco_em_midia, foco_tecnico, nacionalismo, fidelidade, orcamento, ambicao,
+          publico_alvo_1, publico_alvo_2, pilot_user_id, created_at, updated_at
+        )
+         VALUES (
+          $1, $2, $3, $4, $5, COALESCE($6, 50), COALESCE($7, 1), COALESCE($8, 1),
+          COALESCE($9, 1), COALESCE($10, 1), COALESCE($11, 1), COALESCE($12, 1),
+          COALESCE($13, 1), COALESCE($14, 1), $15, $16, $17, NOW(), NOW()
+         )
+         RETURNING id`,
+        [
+          name, input.logoUrl, input.nacionalidade ?? null, input.tipo ?? null, input.setor ?? null,
+          input.felicidade ?? null, input.prestigio ?? null, input.agressividade ?? null,
+          input.focoEmMidia ?? null, input.focoTecnico ?? null, input.nacionalismo ?? null,
+          input.fidelidade ?? null, input.orcamento ?? null, input.ambicao ?? null,
+          input.publicoAlvo1 ?? null, input.publicoAlvo2 ?? null, pilotUserId,
+        ],
+      );
+      await this.syncPersonalSponsorsForPilot(pilotUserId, client);
+      return { success: true, sponsor: result.rows[0] };
+    });
   }
 
   async updateSponsor(sponsorId: string, input: SponsorInput) {
@@ -1485,58 +1698,66 @@ class AdminService {
       if (!personalSponsorValidation.success) return personalSponsorValidation;
     }
 
-    const result = await query(
-      `UPDATE sponsors
-       SET name = $1,
-           logo_url = $2,
-           nacionalidade = $3,
-           tipo = $4,
-           setor = $5,
-           felicidade = COALESCE($6, felicidade),
-           prestigio = COALESCE($7, prestigio),
-           agressividade = COALESCE($8, agressividade),
-           foco_em_midia = COALESCE($9, foco_em_midia),
-           foco_tecnico = COALESCE($10, foco_tecnico),
-           nacionalismo = COALESCE($11, nacionalismo),
-           fidelidade = COALESCE($12, fidelidade),
-           orcamento = COALESCE($13, orcamento),
-           ambicao = COALESCE($14, ambicao),
-           publico_alvo_1 = $15,
-           publico_alvo_2 = $16,
-           pilot_user_id = $17,
-           updated_at = NOW()
-       WHERE id = $18
-       RETURNING id`,
-      [
-        name, input.logoUrl,
-        input.nacionalidade === undefined ? current.nacionalidade : input.nacionalidade,
-        nextTipo,
-        input.setor === undefined ? current.setor : input.setor,
-        input.felicidade ?? current.felicidade,
-        input.prestigio ?? current.prestigio,
-        input.agressividade ?? current.agressividade,
-        input.focoEmMidia ?? current.focoEmMidia,
-        input.focoTecnico ?? current.focoTecnico,
-        input.nacionalismo ?? current.nacionalismo,
-        input.fidelidade ?? current.fidelidade,
-        input.orcamento ?? current.orcamento,
-        input.ambicao ?? current.ambicao,
-        input.publicoAlvo1 === undefined ? current.publicoAlvo1 : input.publicoAlvo1,
-        input.publicoAlvo2 === undefined ? current.publicoAlvo2 : input.publicoAlvo2,
-        nextPilotUserId,
-        sponsorId,
-      ],
-    );
-    return result.rows[0]
-      ? { success: true }
-      : { success: false, message: 'Sponsor not found' };
+    return transaction(async (client) => {
+      const result = await client.query(
+        `UPDATE sponsors
+         SET name = $1,
+             logo_url = $2,
+             nacionalidade = $3,
+             tipo = $4,
+             setor = $5,
+             felicidade = COALESCE($6, felicidade),
+             prestigio = COALESCE($7, prestigio),
+             agressividade = COALESCE($8, agressividade),
+             foco_em_midia = COALESCE($9, foco_em_midia),
+             foco_tecnico = COALESCE($10, foco_tecnico),
+             nacionalismo = COALESCE($11, nacionalismo),
+             fidelidade = COALESCE($12, fidelidade),
+             orcamento = COALESCE($13, orcamento),
+             ambicao = COALESCE($14, ambicao),
+             publico_alvo_1 = $15,
+             publico_alvo_2 = $16,
+             pilot_user_id = $17,
+             updated_at = NOW()
+         WHERE id = $18
+         RETURNING id`,
+        [
+          name, input.logoUrl,
+          input.nacionalidade === undefined ? current.nacionalidade : input.nacionalidade,
+          nextTipo,
+          input.setor === undefined ? current.setor : input.setor,
+          input.felicidade ?? current.felicidade,
+          input.prestigio ?? current.prestigio,
+          input.agressividade ?? current.agressividade,
+          input.focoEmMidia ?? current.focoEmMidia,
+          input.focoTecnico ?? current.focoTecnico,
+          input.nacionalismo ?? current.nacionalismo,
+          input.fidelidade ?? current.fidelidade,
+          input.orcamento ?? current.orcamento,
+          input.ambicao ?? current.ambicao,
+          input.publicoAlvo1 === undefined ? current.publicoAlvo1 : input.publicoAlvo1,
+          input.publicoAlvo2 === undefined ? current.publicoAlvo2 : input.publicoAlvo2,
+          nextPilotUserId,
+          sponsorId,
+        ],
+      );
+      if (!result.rows[0]) return { success: false, message: 'Sponsor not found' };
+      await this.syncPersonalSponsorAssignments(sponsorId, current.pilotUserId, client);
+      return { success: true };
+    });
   }
 
   async deleteSponsor(sponsorId: string) {
-    const result = await query('DELETE FROM sponsors WHERE id = $1 RETURNING id', [sponsorId]);
-    return result.rows[0]
-      ? { success: true }
-      : { success: false, message: 'Sponsor not found' };
+    return transaction(async (client) => {
+      const current = await client.query(
+        'SELECT pilot_user_id FROM sponsors WHERE id = $1',
+        [sponsorId],
+      );
+      const result = await client.query('DELETE FROM sponsors WHERE id = $1 RETURNING id', [sponsorId]);
+      if (!result.rows[0]) return { success: false, message: 'Sponsor not found' };
+      await this.syncPersonalSponsorsForPilot(current.rows[0]?.pilot_user_id, client);
+      return { success: true };
+    });
   }
 
   private async validatePersonalSponsorPilot(pilotUserId?: string | null, sponsorId?: string) {
