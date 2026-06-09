@@ -112,6 +112,8 @@ export interface EconomicScuderia {
   popularidade: number;
   tecnica: number;
   nacionalidades: string[] | null;
+  manualNacionalidades?: string[] | null;
+  driverNacionalidades?: string[] | null;
   setores: string[] | null;
   sponsors: { name: string; category: SponsorContractCategory; slotNumber: number }[];
 }

@@ -41,8 +41,44 @@ class MigrationService {
     await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS popularidade INTEGER NOT NULL DEFAULT 1');
     await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS tecnica INTEGER NOT NULL DEFAULT 1');
     await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS nacionalidades TEXT[]');
+    await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS manual_nacionalidades TEXT[]');
     await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS setores TEXT[]');
     await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS logo_url TEXT');
+    await query(`
+      UPDATE teams
+      SET manual_nacionalidades = nacionalidades
+      WHERE manual_nacionalidades IS NULL
+        AND nacionalidades IS NOT NULL
+    `);
+    await query(`
+      UPDATE teams
+      SET nacionalidades = (
+        SELECT ARRAY_AGG(nationality ORDER BY normalized)
+        FROM (
+          SELECT DISTINCT ON (normalized)
+            nationality,
+            normalized
+          FROM (
+            SELECT
+              TRIM(value) AS nationality,
+              LOWER(TRIM(value)) AS normalized
+            FROM UNNEST(COALESCE(teams.manual_nacionalidades, ARRAY[]::text[])) AS value
+            WHERE TRIM(value) <> ''
+            UNION ALL
+            SELECT
+              TRIM(users.driver_nacionalidade) AS nationality,
+              LOWER(TRIM(users.driver_nacionalidade)) AS normalized
+            FROM team_drivers
+            JOIN users ON users.id = team_drivers.user_id
+            WHERE team_drivers.team_id = teams.id
+              AND team_drivers.status = 'active'
+              AND users.driver_wallet_created = true
+              AND TRIM(COALESCE(users.driver_nacionalidade, '')) <> ''
+          ) nationalities
+          ORDER BY normalized, nationality
+        ) unique_nationalities
+      )
+    `);
     await query('ALTER TABLE teams DROP CONSTRAINT IF EXISTS teams_momento_comercial_check');
     await query('ALTER TABLE teams ADD CONSTRAINT teams_momento_comercial_check CHECK (momento_comercial BETWEEN 0 AND 100)');
     await query('ALTER TABLE teams DROP CONSTRAINT IF EXISTS teams_prestigio_check');

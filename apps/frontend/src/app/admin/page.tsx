@@ -137,7 +137,7 @@ interface ScuderiaFormData {
   agressividade: number;
   popularidade: number;
   tecnica: number;
-  nacionalidades: string;
+  nacionalidades: string[];
   setores: string[];
 }
 
@@ -163,7 +163,7 @@ const EMPTY_SCUDERIA_FORM: ScuderiaFormData = {
   agressividade: 1,
   popularidade: 1,
   tecnica: 1,
-  nacionalidades: '',
+  nacionalidades: [],
   setores: [],
 };
 
@@ -196,6 +196,17 @@ function getReadableTextColor(backgroundColor?: string) {
   const luminance = (0.299 * red + 0.587 * green + 0.114 * blue) / 255;
 
   return luminance > 0.62 ? '#111827' : '#FFFFFF';
+}
+
+function normalizeNationality(value: string) {
+  return value.trim().toLocaleLowerCase();
+}
+
+function addUniqueNationality(current: string[], nextValue: string) {
+  const next = nextValue.trim();
+  if (!next) return current;
+  const exists = current.some((value) => normalizeNationality(value) === normalizeNationality(next));
+  return exists ? current : [...current, next];
 }
 
 function createEmptyDriverWallet() {
@@ -261,6 +272,7 @@ export default function AdminPage() {
   const [scuderiaModalOpen, setScuderiaModalOpen] = useState(false);
   const [editingScuderiaId, setEditingScuderiaId] = useState<string | null>(null);
   const [scuderiaForm, setScuderiaForm] = useState<ScuderiaFormData>(EMPTY_SCUDERIA_FORM);
+  const [scuderiaNationalityDraft, setScuderiaNationalityDraft] = useState('');
   const [savingScuderia, setSavingScuderia] = useState(false);
   const [managingScuderia, setManagingScuderia] = useState<Scuderia | null>(null);
   const [managedGarage, setManagedGarage] = useState<TeamGarageManage | null>(null);
@@ -318,6 +330,17 @@ export default function AdminPage() {
   const usersPagination = usePagination(users);
   const scuderiasPagination = usePagination(sortedScuderias);
   const sponsorsPagination = usePagination(sponsorCatalog);
+  const editingScuderia = useMemo(
+    () => scuderias.find((scuderia) => scuderia.id === editingScuderiaId) ?? null,
+    [editingScuderiaId, scuderias],
+  );
+  const lockedDriverNationalities = editingScuderia?.driverNacionalidades ?? [];
+  const visibleLockedDriverNationalities = lockedDriverNationalities.filter(
+    (nationality) =>
+      !scuderiaForm.nacionalidades.some(
+        (manualNationality) => normalizeNationality(manualNationality) === normalizeNationality(nationality),
+      ),
+  );
   const driverWalletUsers = useMemo(
     () => users
       .filter((adminUser) => Boolean(adminUser.driverWallet))
@@ -419,6 +442,7 @@ export default function AdminPage() {
   function openCreateScuderia() {
     setEditingScuderiaId(null);
     setScuderiaForm(EMPTY_SCUDERIA_FORM);
+    setScuderiaNationalityDraft('');
     setScuderiaModalOpen(true);
   }
 
@@ -435,9 +459,10 @@ export default function AdminPage() {
       agressividade: scuderia.agressividade,
       popularidade: scuderia.popularidade,
       tecnica: scuderia.tecnica,
-      nacionalidades: (scuderia.nacionalidades ?? []).join(', '),
+      nacionalidades: scuderia.manualNacionalidades ?? scuderia.nacionalidades ?? [],
       setores: scuderia.setores ?? [],
     });
+    setScuderiaNationalityDraft('');
     setScuderiaModalOpen(true);
   }
 
@@ -566,7 +591,7 @@ export default function AdminPage() {
             ...scuderiaForm,
             emoji: scuderiaForm.emoji.trim(),
             logoUrl: scuderiaForm.logoUrl || null,
-            nacionalidades: scuderiaForm.nacionalidades.split(',').map((value) => value.trim()).filter(Boolean),
+            nacionalidades: scuderiaForm.nacionalidades,
           }),
         },
       );
@@ -2079,12 +2104,65 @@ export default function AdminPage() {
               ))}
               <label className="sm:col-span-3">
                 <span className="mb-2 block text-sm">{t.admin.nationalities}</span>
-                <input
-                  className="w-full rounded-lg bg-gray-700 px-4 py-2"
-                  value={scuderiaForm.nacionalidades}
-                  onChange={(event) => setScuderiaForm((prev) => ({ ...prev, nacionalidades: event.target.value }))}
-                  placeholder={t.admin.commaSeparated}
-                />
+                <div className="flex gap-2">
+                  <input
+                    className="min-w-0 flex-1 rounded-lg bg-gray-700 px-4 py-2"
+                    value={scuderiaNationalityDraft}
+                    onChange={(event) => setScuderiaNationalityDraft(event.target.value)}
+                    onKeyDown={(event) => {
+                      if (event.key !== 'Enter') return;
+                      event.preventDefault();
+                      setScuderiaForm((prev) => ({
+                        ...prev,
+                        nacionalidades: addUniqueNationality(prev.nacionalidades, scuderiaNationalityDraft),
+                      }));
+                      setScuderiaNationalityDraft('');
+                    }}
+                    placeholder={t.admin.nationality}
+                  />
+                  <button
+                    type="button"
+                    className="rounded-lg bg-red-600 px-4 py-2 font-semibold disabled:cursor-not-allowed disabled:bg-red-500"
+                    disabled={!scuderiaNationalityDraft.trim()}
+                    onClick={() => {
+                      setScuderiaForm((prev) => ({
+                        ...prev,
+                        nacionalidades: addUniqueNationality(prev.nacionalidades, scuderiaNationalityDraft),
+                      }));
+                      setScuderiaNationalityDraft('');
+                    }}
+                  >
+                    {t.admin.addNationality}
+                  </button>
+                </div>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {scuderiaForm.nacionalidades.map((nationality) => (
+                    <span key={`manual-${nationality}`} className="inline-flex items-center gap-2 rounded-full bg-gray-700 px-3 py-1 text-sm">
+                      {nationality}
+                      <button
+                        type="button"
+                        className="font-bold text-red-300 hover:text-red-100"
+                        aria-label={t.admin.removeNationality}
+                        onClick={() => setScuderiaForm((prev) => ({
+                          ...prev,
+                          nacionalidades: prev.nacionalidades.filter(
+                            (value) => normalizeNationality(value) !== normalizeNationality(nationality),
+                          ),
+                        }))}
+                      >
+                        X
+                      </button>
+                    </span>
+                  ))}
+                  {visibleLockedDriverNationalities.map((nationality) => (
+                    <span key={`driver-${nationality}`} className="inline-flex items-center rounded-full border border-red-500 bg-gray-900 px-3 py-1 text-sm">
+                      {nationality}
+                    </span>
+                  ))}
+                </div>
+                {visibleLockedDriverNationalities.length > 0 && (
+                  <p className="mt-2 text-xs text-gray-300">{t.admin.driverNationalitiesLocked}</p>
+                )}
               </label>
             </div>
 

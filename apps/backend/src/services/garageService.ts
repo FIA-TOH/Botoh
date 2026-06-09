@@ -582,6 +582,7 @@ class GarageService {
 
       await this.upsertDriverMembership(client, userId, proposal.team_id, proposal.category);
       await this.recalculateTeamSalaryCost(client, proposal.team_id);
+      await this.syncTeamNationalities(client, proposal.team_id);
       await client.query(
         `UPDATE driver_contract_proposals
          SET status = 'accepted', responded_at = NOW()
@@ -688,6 +689,7 @@ class GarageService {
         await this.removeDriverMembershipIfNeeded(client, driver.user_id, teamId);
       }
       await this.recalculateTeamSalaryCost(client, teamId);
+      await this.syncTeamNationalities(client, teamId);
 
       return {
         success: true,
@@ -1046,6 +1048,44 @@ class GarageService {
             AND status = 'active'
          ),
          0
+       ),
+       updated_at = NOW()
+       WHERE id = $1`,
+      [teamId],
+    );
+  }
+
+  private async syncTeamNationalities(
+    client: { query: (sql: string, params?: any[]) => Promise<any> },
+    teamId: string,
+  ) {
+    await client.query(
+      `UPDATE teams
+       SET nacionalidades = (
+         SELECT ARRAY_AGG(nationality ORDER BY normalized)
+         FROM (
+           SELECT DISTINCT ON (normalized)
+             nationality,
+             normalized
+           FROM (
+             SELECT
+               TRIM(value) AS nationality,
+               LOWER(TRIM(value)) AS normalized
+             FROM UNNEST(COALESCE(teams.manual_nacionalidades, ARRAY[]::text[])) AS value
+             WHERE TRIM(value) <> ''
+             UNION ALL
+             SELECT
+               TRIM(users.driver_nacionalidade) AS nationality,
+               LOWER(TRIM(users.driver_nacionalidade)) AS normalized
+             FROM team_drivers
+             JOIN users ON users.id = team_drivers.user_id
+             WHERE team_drivers.team_id = teams.id
+               AND team_drivers.status = 'active'
+               AND users.driver_wallet_created = true
+               AND TRIM(COALESCE(users.driver_nacionalidade, '')) <> ''
+           ) nationalities
+           ORDER BY normalized, nationality
+         ) unique_nationalities
        ),
        updated_at = NOW()
        WHERE id = $1`,

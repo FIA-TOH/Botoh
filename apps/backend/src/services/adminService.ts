@@ -528,6 +528,7 @@ class AdminService {
     ]);
     for (const teamId of affectedTeamIds) {
       await this.recalculateTeamSalaryCost(client, teamId);
+      await this.syncTeamNationalities(teamId, client);
     }
   }
 
@@ -845,6 +846,44 @@ class AdminService {
     );
   }
 
+  private async syncTeamNationalities(
+    teamId: string,
+    client: { query: (sql: string, params?: any[]) => Promise<any> } = { query },
+  ) {
+    await client.query(
+      `UPDATE teams
+       SET nacionalidades = (
+         SELECT ARRAY_AGG(nationality ORDER BY normalized)
+         FROM (
+           SELECT DISTINCT ON (normalized)
+             nationality,
+             normalized
+           FROM (
+             SELECT
+               TRIM(value) AS nationality,
+               LOWER(TRIM(value)) AS normalized
+             FROM UNNEST(COALESCE(teams.manual_nacionalidades, ARRAY[]::text[])) AS value
+             WHERE TRIM(value) <> ''
+             UNION ALL
+             SELECT
+               TRIM(users.driver_nacionalidade) AS nationality,
+               LOWER(TRIM(users.driver_nacionalidade)) AS normalized
+             FROM team_drivers
+             JOIN users ON users.id = team_drivers.user_id
+             WHERE team_drivers.team_id = teams.id
+               AND team_drivers.status = 'active'
+               AND users.driver_wallet_created = true
+               AND TRIM(COALESCE(users.driver_nacionalidade, '')) <> ''
+           ) nationalities
+           ORDER BY normalized, nationality
+         ) unique_nationalities
+       ),
+       updated_at = NOW()
+       WHERE id = $1`,
+      [teamId],
+    );
+  }
+
   private async recalculateTeamSponsorIncome(
     client: { query: (sql: string, params?: any[]) => Promise<any> },
     teamId: string,
@@ -875,6 +914,25 @@ class AdminService {
         popularidade,
         tecnica,
         nacionalidades,
+        manual_nacionalidades AS "manualNacionalidades",
+        COALESCE(
+          (
+            SELECT ARRAY_AGG(nationality ORDER BY normalized)
+            FROM (
+              SELECT DISTINCT ON (LOWER(TRIM(u.driver_nacionalidade)))
+                TRIM(u.driver_nacionalidade) AS nationality,
+                LOWER(TRIM(u.driver_nacionalidade)) AS normalized
+              FROM team_drivers td
+              JOIN users u ON u.id = td.user_id
+              WHERE td.team_id = teams.id
+                AND td.status = 'active'
+                AND u.driver_wallet_created = true
+                AND TRIM(COALESCE(u.driver_nacionalidade, '')) <> ''
+              ORDER BY LOWER(TRIM(u.driver_nacionalidade)), TRIM(u.driver_nacionalidade)
+            ) driver_nationalities
+          ),
+          ARRAY[]::text[]
+        ) AS "driverNacionalidades",
         setores,
         COALESCE(
           (
@@ -926,6 +984,7 @@ class AdminService {
         agressividade,
         popularidade,
         tecnica,
+        manual_nacionalidades,
         nacionalidades,
         setores,
         logo_url,
@@ -933,7 +992,7 @@ class AdminService {
         updated_at
       )
        VALUES ($1, $2, $3, $4, 0, 0, 0, 0, COALESCE($5, 50), COALESCE($6, 1),
-         COALESCE($7, 1), COALESCE($8, 1), COALESCE($9, 1), $10, $11, $12, NOW(), NOW())
+         COALESCE($7, 1), COALESCE($8, 1), COALESCE($9, 1), $10, $10, $11, $12, NOW(), NOW())
        RETURNING id`,
       [
         input.name, input.tag.toUpperCase(), emoji, input.color,
@@ -942,6 +1001,8 @@ class AdminService {
         input.setores ?? null, input.logoUrl ?? null,
       ],
     );
+
+    await this.syncTeamNationalities(result.rows[0].id);
 
     return { success: true, scuderia: result.rows[0] };
   }
@@ -959,6 +1020,7 @@ class AdminService {
            agressividade = COALESCE($7, agressividade),
            popularidade = COALESCE($8, popularidade),
            tecnica = COALESCE($9, tecnica),
+           manual_nacionalidades = COALESCE($10, manual_nacionalidades),
            nacionalidades = COALESCE($10, nacionalidades),
            setores = COALESCE($11, setores),
            logo_url = COALESCE($12, logo_url),
@@ -976,6 +1038,8 @@ class AdminService {
     if (!result.rows[0]) {
       return { success: false, message: 'Scuderia not found' };
     }
+
+    await this.syncTeamNationalities(scuderiaId);
 
     return { success: true, scuderia: result.rows[0] };
   }
@@ -1220,6 +1284,7 @@ class AdminService {
       await this.upsertTeamDriver(client, scuderiaId, user.id, input, user.driver_number);
       await this.upsertDriverMembership(client, user.id, scuderiaId, input.category);
       await this.recalculateTeamSalaryCost(client, scuderiaId);
+      await this.syncTeamNationalities(scuderiaId, client);
       return { success: true };
     });
   }
@@ -1253,6 +1318,7 @@ class AdminService {
       );
       await this.upsertDriverMembership(client, existing.user_id, scuderiaId, input.category);
       await this.recalculateTeamSalaryCost(client, scuderiaId);
+      await this.syncTeamNationalities(scuderiaId, client);
       return { success: true };
     });
   }
@@ -1281,6 +1347,7 @@ class AdminService {
         await this.removeDriverMembershipIfNeeded(client, row.user_id, scuderiaId);
       }
       await this.recalculateTeamSalaryCost(client, scuderiaId);
+      await this.syncTeamNationalities(scuderiaId, client);
       return { success: true };
     });
   }
