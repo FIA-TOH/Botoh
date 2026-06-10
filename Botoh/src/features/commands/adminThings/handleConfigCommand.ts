@@ -24,6 +24,7 @@ import { setManageTyresEnabled } from "./handleManageTyresCommand";
 import { handlePresentationLapCommand } from "../gameState/handlePresentationLapCommand";
 import { handleRREnabledCommand } from "./handleRREnabledCommand";
 import { setScuderiaAvatar } from "../../scuderias/scuderiaAvatar";
+import { setTeamCircuitBoxesEnabled } from "../../teamBoxes/teamCircuitBoxes";
 
 
 export function handleConfigCommand(
@@ -92,6 +93,7 @@ function applyFTOHConfig(room: RoomObject, byPlayer: PlayerObject) {
   setManageTyresEnabled(true);
   handleRREnabledCommand(byPlayer, ["off"], room);
   setScuderiaAvatar(true);
+  setTeamCircuitBoxesEnabled(true);
 }
 
 
@@ -116,7 +118,8 @@ export function applyFTOHPublicConfig(room: RoomObject, byPlayer: PlayerObject) 
   handlePitCommand(byPlayer, ["old"], room);
   setManageTyresEnabled(false);
   handleRREnabledCommand(byPlayer, ["on"], room);
-   setScuderiaAvatar(false);
+  setScuderiaAvatar(false);
+  setTeamCircuitBoxesEnabled(false);
 }
 
 function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {
@@ -140,7 +143,8 @@ function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {
   handlePitCommand(byPlayer, ["old"], room);
   setManageTyresEnabled(false);
   handleRREnabledCommand(byPlayer, ["on"], room);
-   setScuderiaAvatar(false);
+  setScuderiaAvatar(false);
+  setTeamCircuitBoxesEnabled(false);
 }
 
 function applyHaxbulaConfig(room: RoomObject, byPlayer: PlayerObject) {
@@ -164,5 +168,6 @@ function applyHaxbulaConfig(room: RoomObject, byPlayer: PlayerObject) {
   handlePitCommand(byPlayer, ["old"], room);
   setManageTyresEnabled(false);
   handleRREnabledCommand(byPlayer, ["on"], room);
-   setScuderiaAvatar(false);
+  setScuderiaAvatar(false);
+  setTeamCircuitBoxesEnabled(false);
 }

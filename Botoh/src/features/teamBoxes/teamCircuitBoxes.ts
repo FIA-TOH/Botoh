@@ -1,8 +1,20 @@
+import {
+  GeneralGameMode,
+  generalGameMode,
+} from "../changeGameState/changeGameModes";
 import { Teams } from "../changeGameState/teams";
 import { playerList } from "../changePlayerState/playerList";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 
+let teamCircuitBoxesEnabled = false;
+
+export function setTeamCircuitBoxesEnabled(enabled: boolean) {
+  teamCircuitBoxesEnabled = enabled;
+}
+
 export function movePlayerToTeamCircuitBox(player: PlayerObject, room: RoomObject) {
+  if (!teamCircuitBoxesEnabled) return false;
+  if (generalGameMode === GeneralGameMode.GENERAL_RACE) return false;
   if (player.team !== Teams.RUNNERS) return false;
 
   const playerInfo = playerList[player.id];
