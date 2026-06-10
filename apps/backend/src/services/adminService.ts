@@ -1251,16 +1251,38 @@ class AdminService {
     return { category, isJuniorTeam, parentTeamId };
   }
 
-  private async applyJuniorTeamRules(
+  private async applyFormula2TeamRules(
     client: { query: (sql: string, params?: any[]) => Promise<any> },
-    juniorTeamId: string,
+    teamId: string,
     parentTeamId: string | null,
     previousParentTeamId?: string | null,
   ) {
+    const currentTeam = await client.query(
+      'SELECT category, is_junior_team FROM teams WHERE id = $1',
+      [teamId],
+    );
+    const isFormula2 = currentTeam.rows[0]?.category === 'formula_2';
+    const isJuniorTeam = Boolean(currentTeam.rows[0]?.is_junior_team);
+
+    if (isFormula2) {
+      await client.query(
+        `UPDATE teams
+         SET climate_monitoring_level = 5,
+             pit_crew_level = 5,
+             climate_cost_per_race = 0,
+             pit_crew_cost_per_race = 0,
+             updated_at = NOW()
+         WHERE id = $1`,
+        [teamId],
+      );
+    }
+
     if (!parentTeamId) {
+      if (isFormula2) return;
+
       const team = await client.query(
         'SELECT climate_monitoring_level, pit_crew_level FROM teams WHERE id = $1',
-        [juniorTeamId],
+        [teamId],
       );
       const climateLevel = Number(team.rows[0]?.climate_monitoring_level ?? 0);
       const pitCrewLevel = Number(team.rows[0]?.pit_crew_level ?? 0);
@@ -1271,7 +1293,7 @@ class AdminService {
              updated_at = NOW()
          WHERE id = $1`,
         [
-          juniorTeamId,
+          teamId,
           getFacilityCostPerRace('climate', climateLevel),
           getFacilityCostPerRace('pitCrew', pitCrewLevel),
         ],
@@ -1279,16 +1301,7 @@ class AdminService {
       return;
     }
 
-    await client.query(
-      `UPDATE teams
-       SET climate_monitoring_level = 5,
-           pit_crew_level = 5,
-           climate_cost_per_race = 0,
-           pit_crew_cost_per_race = 0,
-           updated_at = NOW()
-       WHERE id = $1`,
-      [juniorTeamId],
-    );
+    if (!isJuniorTeam) return;
 
     await client.query(
       `INSERT INTO user_team_memberships (
@@ -1328,7 +1341,7 @@ class AdminService {
           WHEN user_team_memberships.is_engineer OR EXCLUDED.is_engineer THEN 'engineer'
           ELSE user_team_memberships.role
         END`,
-      [parentTeamId, juniorTeamId],
+      [parentTeamId, teamId],
     );
 
     if (previousParentTeamId === parentTeamId) return;
@@ -1406,7 +1419,7 @@ class AdminService {
       );
 
       await this.syncTeamNationalities(result.rows[0].id, client);
-      await this.applyJuniorTeamRules(client, result.rows[0].id, junior.parentTeamId);
+      await this.applyFormula2TeamRules(client, result.rows[0].id, junior.parentTeamId);
 
       return { success: true, scuderia: result.rows[0] };
     });
@@ -1460,7 +1473,7 @@ class AdminService {
       );
 
       await this.syncTeamNationalities(scuderiaId, client);
-      await this.applyJuniorTeamRules(client, scuderiaId, junior.parentTeamId, current.parent_team_id);
+      await this.applyFormula2TeamRules(client, scuderiaId, junior.parentTeamId, current.parent_team_id);
 
       return { success: true, scuderia: result.rows[0] };
     });

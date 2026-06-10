@@ -229,8 +229,8 @@ class GarageService {
           )
         END AS "parentStarterCount",
         teams.cash_total AS "cashTotal",
-        teams.climate_cost_per_race AS "climateCostPerRace",
-        teams.pit_crew_cost_per_race AS "pitCrewCostPerRace",
+        CASE WHEN COALESCE(teams.category, 'formula_1') = 'formula_2' THEN 0 ELSE teams.climate_cost_per_race END AS "climateCostPerRace",
+        CASE WHEN COALESCE(teams.category, 'formula_1') = 'formula_2' THEN 0 ELSE teams.pit_crew_cost_per_race END AS "pitCrewCostPerRace",
         teams.salary_cost_per_race AS "salaryCostPerRace",
         COALESCE(
           (

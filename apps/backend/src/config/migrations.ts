@@ -65,7 +65,7 @@ class MigrationService {
           climate_cost_per_race = 0,
           pit_crew_cost_per_race = 0,
           updated_at = NOW()
-      WHERE is_junior_team = true
+      WHERE category = 'formula_2'
     `);
     await query(`
       UPDATE teams
@@ -617,10 +617,20 @@ class MigrationService {
          SET ${args.costColumn} = $1,
              updated_at = NOW()
          WHERE COALESCE(${args.levelColumn}, 0) = $2
+           AND COALESCE(category, 'formula_1') <> 'formula_2'
            AND COALESCE(${args.costColumn}, 0) <> $1`,
         [costPerRace, level],
       );
     }
+
+    await query(
+      `UPDATE teams
+       SET ${args.levelColumn} = 5,
+           ${args.costColumn} = 0,
+           updated_at = NOW()
+       WHERE COALESCE(category, 'formula_1') = 'formula_2'
+         AND (COALESCE(${args.levelColumn}, 0) <> 5 OR COALESCE(${args.costColumn}, 0) <> 0)`,
+    );
   }
 }
 
