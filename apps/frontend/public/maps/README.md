@@ -9,15 +9,15 @@ apps/frontend/public/maps/<nome-do-mapa>.svg
 Gerar pelo nome do mapa:
 
 ```powershell
-node scripts/generate-map-svg-cli.js imolaTeste --transparent
-node scripts/generate-map-svg-cli.js imolaSeasonTres --transparent
-node scripts/generate-map-svg-cli.js sepang --transparent
+node scripts/generate-map-svg-cli.js imolaTeste --no-vertices --no-grid --transparent
+node scripts/generate-map-svg-cli.js bahrainSeasonTres --no-vertices --no-grid --transparent
+node scripts/generate-map-svg-cli.js sepang --no-vertices --no-grid --transparent
 ```
 
 Gerar direto de um `.hbs`:
 
 ```powershell
-node scripts/generate-map-svg-advanced.js "Botoh/src/circuits/imola/imolaTeste.hbs" "apps/frontend/public/maps/imolateste.svg" --no-vertices --no-grid
+node scripts/generate-map-svg-advanced.js "Botoh/src/circuits/bahrain/bahrainSeasonTres.hbs" "apps/frontend/public/maps/bahrainSeasonTres.svg" --no-vertices --no-grid --transparent
 ```
 
 Gerar todos:
