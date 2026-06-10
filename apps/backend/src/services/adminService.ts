@@ -16,6 +16,7 @@ import {
   selectWeightedProposal,
   SponsorContractCategory,
 } from '../config/sponsorMarket';
+import { getFacilityCostPerRace } from '../config/facilityEconomy';
 
 export type TeamMembershipRole = 'team_principal' | 'team_assistant' | 'driver' | 'engineer';
 
@@ -56,6 +57,9 @@ export interface ScuderiaInput {
   emoji?: string | null;
   color: string;
   logoUrl?: string | null;
+  category?: 'formula_1' | 'formula_2';
+  isJuniorTeam?: boolean;
+  parentTeamId?: string | null;
   momentoComercial?: number;
   prestigio?: number;
   agressividade?: number;
@@ -896,10 +900,29 @@ class AdminService {
       `UPDATE teams
        SET salary_cost_per_race = COALESCE(
          (
-          SELECT SUM(salary_per_race)
+          SELECT SUM(
+            CASE
+              WHEN team_drivers.category = 'reserve'
+                AND teams.category = 'formula_1'
+                AND team_drivers.user_id IS NOT NULL
+                AND EXISTS (
+                  SELECT 1
+                  FROM team_drivers junior_driver
+                  JOIN teams junior_team ON junior_team.id = junior_driver.team_id
+                  WHERE junior_driver.user_id = team_drivers.user_id
+                    AND junior_driver.status = 'active'
+                    AND junior_team.category = 'formula_2'
+                    AND junior_team.is_junior_team = true
+                    AND junior_team.parent_team_id = teams.id
+                )
+              THEN 0
+              ELSE team_drivers.salary_per_race
+            END
+          )
           FROM team_drivers
-          WHERE team_id = $1
-            AND status = 'active'
+          JOIN teams ON teams.id = team_drivers.team_id
+          WHERE team_drivers.team_id = $1
+            AND team_drivers.status = 'active'
          ),
          0
        ),
@@ -945,6 +968,14 @@ class AdminService {
        WHERE id = $1`,
       [teamId],
     );
+
+    const parent = await client.query(
+      'SELECT parent_team_id FROM teams WHERE id = $1',
+      [teamId],
+    );
+    if (parent.rows[0]?.parent_team_id) {
+      await this.recalculateTeamSalaryCost(client, parent.rows[0].parent_team_id);
+    }
   }
 
   async syncPersonalSponsorsForPilot(
@@ -1143,14 +1174,32 @@ class AdminService {
   async listScuderias() {
     const result = await query(`
       SELECT
-        id, name, tag, emoji, color, logo_url AS "logoUrl",
-        momento_comercial AS "momentoComercial",
-        prestigio,
-        agressividade,
-        popularidade,
-        tecnica,
-        nacionalidades,
-        manual_nacionalidades AS "manualNacionalidades",
+        teams.id, teams.name, teams.tag, teams.emoji, teams.color, teams.logo_url AS "logoUrl",
+        teams.category,
+        teams.is_junior_team AS "isJuniorTeam",
+        teams.parent_team_id AS "parentTeamId",
+        parent_team.name AS "parentTeamName",
+        (
+          SELECT COUNT(*)::int
+          FROM team_drivers starter_driver
+          WHERE starter_driver.team_id = teams.id
+            AND starter_driver.status = 'active'
+            AND starter_driver.category = 'starter'
+        ) AS "starterDriverCount",
+        (
+          SELECT COUNT(*)::int
+          FROM team_drivers reserve_driver
+          WHERE reserve_driver.team_id = teams.id
+            AND reserve_driver.status = 'active'
+            AND reserve_driver.category = 'reserve'
+        ) AS "reserveDriverCount",
+        teams.momento_comercial AS "momentoComercial",
+        teams.prestigio,
+        teams.agressividade,
+        teams.popularidade,
+        teams.tecnica,
+        teams.nacionalidades,
+        teams.manual_nacionalidades AS "manualNacionalidades",
         COALESCE(
           (
             SELECT ARRAY_AGG(nationality ORDER BY normalized)
@@ -1169,7 +1218,7 @@ class AdminService {
           ),
           ARRAY[]::text[]
         ) AS "driverNacionalidades",
-        setores,
+        teams.setores,
         COALESCE(
           (
             SELECT json_agg(
@@ -1186,16 +1235,121 @@ class AdminService {
           ),
           '[]'::json
         ) AS sponsors,
-        created_at AS "createdAt"
+        teams.created_at AS "createdAt"
       FROM teams
-      ORDER BY name ASC
+      LEFT JOIN teams parent_team ON parent_team.id = teams.parent_team_id
+      ORDER BY teams.name ASC
     `);
 
     return result.rows;
   }
 
+  private normalizeScuderiaCategory(input: ScuderiaInput) {
+    const category = input.category === 'formula_2' ? 'formula_2' : 'formula_1';
+    const isJuniorTeam = category === 'formula_2' && Boolean(input.isJuniorTeam);
+    const parentTeamId = isJuniorTeam ? (input.parentTeamId ?? null) : null;
+    return { category, isJuniorTeam, parentTeamId };
+  }
+
+  private async applyJuniorTeamRules(
+    client: { query: (sql: string, params?: any[]) => Promise<any> },
+    juniorTeamId: string,
+    parentTeamId: string | null,
+    previousParentTeamId?: string | null,
+  ) {
+    if (!parentTeamId) {
+      const team = await client.query(
+        'SELECT climate_monitoring_level, pit_crew_level FROM teams WHERE id = $1',
+        [juniorTeamId],
+      );
+      const climateLevel = Number(team.rows[0]?.climate_monitoring_level ?? 0);
+      const pitCrewLevel = Number(team.rows[0]?.pit_crew_level ?? 0);
+      await client.query(
+        `UPDATE teams
+         SET climate_cost_per_race = $2,
+             pit_crew_cost_per_race = $3,
+             updated_at = NOW()
+         WHERE id = $1`,
+        [
+          juniorTeamId,
+          getFacilityCostPerRace('climate', climateLevel),
+          getFacilityCostPerRace('pitCrew', pitCrewLevel),
+        ],
+      );
+      return;
+    }
+
+    await client.query(
+      `UPDATE teams
+       SET climate_monitoring_level = 5,
+           pit_crew_level = 5,
+           climate_cost_per_race = 0,
+           pit_crew_cost_per_race = 0,
+           updated_at = NOW()
+       WHERE id = $1`,
+      [juniorTeamId],
+    );
+
+    await client.query(
+      `INSERT INTO user_team_memberships (
+        user_id,
+        team_id,
+        role,
+        is_team_principal,
+        is_team_assistant,
+        is_engineer,
+        is_driver,
+        driver_category
+      )
+      SELECT
+        parent_membership.user_id,
+        $2,
+        parent_membership.role,
+        parent_membership.is_team_principal,
+        parent_membership.is_team_assistant,
+        parent_membership.is_engineer,
+        false,
+        null
+      FROM user_team_memberships parent_membership
+      WHERE parent_membership.team_id = $1
+        AND (
+          parent_membership.is_team_principal = true
+          OR parent_membership.is_team_assistant = true
+          OR parent_membership.is_engineer = true
+        )
+      ON CONFLICT (user_id, team_id)
+      DO UPDATE SET
+        is_team_principal = user_team_memberships.is_team_principal OR EXCLUDED.is_team_principal,
+        is_team_assistant = user_team_memberships.is_team_assistant OR EXCLUDED.is_team_assistant,
+        is_engineer = user_team_memberships.is_engineer OR EXCLUDED.is_engineer,
+        role = CASE
+          WHEN user_team_memberships.is_team_principal OR EXCLUDED.is_team_principal THEN 'team_principal'
+          WHEN user_team_memberships.is_team_assistant OR EXCLUDED.is_team_assistant THEN 'team_assistant'
+          WHEN user_team_memberships.is_engineer OR EXCLUDED.is_engineer THEN 'engineer'
+          ELSE user_team_memberships.role
+        END`,
+      [parentTeamId, juniorTeamId],
+    );
+
+    if (previousParentTeamId === parentTeamId) return;
+
+    await client.query(
+      `UPDATE teams
+       SET cash_total = cash_total + 1500000,
+           updated_at = NOW()
+       WHERE id = $1`,
+      [parentTeamId],
+    );
+    await client.query(
+      `INSERT INTO team_financial_history (team_id, amount, entry_type, reason, source)
+       VALUES ($1, 1500000, 'income', $2, 'manual')`,
+      [parentTeamId, 'Junior team registration bonus'],
+    );
+  }
+
   async createScuderia(input: ScuderiaInput) {
     const emoji = input.emoji?.trim() ?? '';
+    const junior = this.normalizeScuderiaCategory(input);
     const existing = await queryOne(
       'SELECT id FROM teams WHERE LOWER(name) = LOWER($1) OR UPPER(tag) = UPPER($2)',
       [input.name, input.tag],
@@ -1205,79 +1359,111 @@ class AdminService {
       return { success: false, message: 'Scuderia name or abbreviation already exists' };
     }
 
-    const result = await query(
-      `INSERT INTO teams (
-        name,
-        tag,
-        emoji,
-        color,
-        climate_monitoring_level,
-        pit_crew_level,
-        climate_cost_per_race,
-        pit_crew_cost_per_race,
-        momento_comercial,
-        prestigio,
-        agressividade,
-        popularidade,
-        tecnica,
-        manual_nacionalidades,
-        nacionalidades,
-        setores,
-        logo_url,
-        created_at,
-        updated_at
-      )
-       VALUES ($1, $2, $3, $4, 0, 0, 0, 0, COALESCE($5, 50), COALESCE($6, 1),
-         COALESCE($7, 1), COALESCE($8, 1), COALESCE($9, 1), $10, $10, $11, $12, NOW(), NOW())
-       RETURNING id`,
-      [
-        input.name, input.tag.toUpperCase(), emoji, input.color,
-        input.momentoComercial ?? null, input.prestigio ?? null, input.agressividade ?? null,
-        input.popularidade ?? null, input.tecnica ?? null, input.nacionalidades ?? null,
-        input.setores ?? null, input.logoUrl ?? null,
-      ],
-    );
+    if (junior.isJuniorTeam) {
+      const parent = await queryOne(
+        "SELECT id FROM teams WHERE id = $1 AND category = 'formula_1'",
+        [junior.parentTeamId],
+      );
+      if (!parent) return { success: false, message: 'Parent Formula 1 scuderia not found' };
+    }
 
-    await this.syncTeamNationalities(result.rows[0].id);
+    return transaction(async (client) => {
+      const result = await client.query(
+        `INSERT INTO teams (
+          name,
+          tag,
+          emoji,
+          color,
+          category,
+          is_junior_team,
+          parent_team_id,
+          climate_monitoring_level,
+          pit_crew_level,
+          climate_cost_per_race,
+          pit_crew_cost_per_race,
+          momento_comercial,
+          prestigio,
+          agressividade,
+          popularidade,
+          tecnica,
+          manual_nacionalidades,
+          nacionalidades,
+          setores,
+          logo_url,
+          created_at,
+          updated_at
+        )
+         VALUES ($1, $2, $3, $4, $5, $6, $7, CASE WHEN $6 THEN 5 ELSE 0 END, CASE WHEN $6 THEN 5 ELSE 0 END, 0, 0, COALESCE($8, 50), COALESCE($9, 1),
+           COALESCE($10, 1), COALESCE($11, 1), COALESCE($12, 1), $13, $13, $14, $15, NOW(), NOW())
+         RETURNING id`,
+        [
+          input.name, input.tag.toUpperCase(), emoji, input.color,
+          junior.category, junior.isJuniorTeam, junior.parentTeamId,
+          input.momentoComercial ?? null, input.prestigio ?? null, input.agressividade ?? null,
+          input.popularidade ?? null, input.tecnica ?? null, input.nacionalidades ?? null,
+          input.setores ?? null, input.logoUrl ?? null,
+        ],
+      );
 
-    return { success: true, scuderia: result.rows[0] };
+      await this.syncTeamNationalities(result.rows[0].id, client);
+      await this.applyJuniorTeamRules(client, result.rows[0].id, junior.parentTeamId);
+
+      return { success: true, scuderia: result.rows[0] };
+    });
   }
 
   async updateScuderia(scuderiaId: string, input: ScuderiaInput) {
     const emoji = input.emoji?.trim() ?? '';
-    const result = await query(
-      `UPDATE teams
+    const junior = this.normalizeScuderiaCategory(input);
+    const current = await queryOne<{ parent_team_id: string | null }>(
+      'SELECT parent_team_id FROM teams WHERE id = $1',
+      [scuderiaId],
+    );
+    if (!current) return { success: false, message: 'Scuderia not found' };
+    if (junior.isJuniorTeam) {
+      const parent = await queryOne(
+        "SELECT id FROM teams WHERE id = $1 AND category = 'formula_1' AND id <> $2",
+        [junior.parentTeamId, scuderiaId],
+      );
+      if (!parent) return { success: false, message: 'Parent Formula 1 scuderia not found' };
+    }
+
+    return transaction(async (client) => {
+      const result = await client.query(
+        `UPDATE teams
        SET name = $1,
            tag = $2,
            emoji = $3,
            color = $4,
-           momento_comercial = COALESCE($5, momento_comercial),
-           prestigio = COALESCE($6, prestigio),
-           agressividade = COALESCE($7, agressividade),
-           popularidade = COALESCE($8, popularidade),
-           tecnica = COALESCE($9, tecnica),
-           manual_nacionalidades = COALESCE($10, manual_nacionalidades),
-           nacionalidades = COALESCE($10, nacionalidades),
-           setores = COALESCE($11, setores),
-           logo_url = COALESCE($12, logo_url),
+           category = $5,
+           is_junior_team = $6,
+           parent_team_id = $7,
+           momento_comercial = COALESCE($8, momento_comercial),
+           prestigio = COALESCE($9, prestigio),
+           agressividade = COALESCE($10, agressividade),
+           popularidade = COALESCE($11, popularidade),
+           tecnica = COALESCE($12, tecnica),
+           manual_nacionalidades = COALESCE($13, manual_nacionalidades),
+           nacionalidades = COALESCE($13, nacionalidades),
+           setores = COALESCE($14, setores),
+           logo_url = COALESCE($15, logo_url),
            updated_at = NOW()
-       WHERE id = $13
+       WHERE id = $16
        RETURNING id`,
-      [
-        input.name, input.tag.toUpperCase(), emoji, input.color,
-        input.momentoComercial ?? null, input.prestigio ?? null, input.agressividade ?? null,
-        input.popularidade ?? null, input.tecnica ?? null, input.nacionalidades ?? null,
-        input.setores ?? null, input.logoUrl ?? null, scuderiaId,
-      ],
-    );
+        [
+          input.name, input.tag.toUpperCase(), emoji, input.color,
+          junior.category, junior.isJuniorTeam, junior.parentTeamId,
+          input.momentoComercial ?? null, input.prestigio ?? null, input.agressividade ?? null,
+          input.popularidade ?? null, input.tecnica ?? null, input.nacionalidades ?? null,
+          input.setores ?? null, input.logoUrl ?? null, scuderiaId,
+        ],
+      );
 
-    if (!result.rows[0]) {
-      return { success: false, message: 'Scuderia not found' };
-    }
+      await this.syncTeamNationalities(scuderiaId, client);
+      await this.applyJuniorTeamRules(client, scuderiaId, junior.parentTeamId, current.parent_team_id);
 
-    await this.syncTeamNationalities(scuderiaId);
-
-    return { success: true, scuderia: result.rows[0] };
+      return { success: true, scuderia: result.rows[0] };
+    });
   }
 
   async deleteScuderia(scuderiaId: string) {

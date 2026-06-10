@@ -57,6 +57,7 @@ type Scuderia = EconomicScuderia;
 interface TeamGarageManage {
   id: string; name: string; carName: string; cashTotal: number; climateCostPerRace: number;
   pitCrewCostPerRace: number; salaryCostPerRace: number; sponsorIncomePerRace: number;
+  category: 'formula_1' | 'formula_2'; isJuniorTeam: boolean; parentTeamId: string | null;
   climateMonitoringLevel: number; pitCrewLevel: number;
   financialHistory: { id: string; amount: number; entryType: string; reason: string; occurredAt: string }[];
   drivers: {
@@ -86,6 +87,7 @@ interface RaceProgressAlert {
 }
 
 type TeamMembershipRole = 'team_principal' | 'team_assistant' | 'driver' | 'engineer';
+type ScuderiaFilter = 'formula_1' | 'formula_2' | 'starter_available' | 'reserve_available';
 
 interface TeamMembership {
   teamId: string;
@@ -133,6 +135,9 @@ interface ScuderiaFormData {
   emoji: string;
   color: string;
   logoUrl: string;
+  category: 'formula_1' | 'formula_2';
+  isJuniorTeam: boolean;
+  parentTeamId: string;
   momentoComercial: number;
   prestigio: number;
   agressividade: number;
@@ -159,6 +164,9 @@ const EMPTY_SCUDERIA_FORM: ScuderiaFormData = {
   emoji: '',
   color: '#FFFFFF',
   logoUrl: '',
+  category: 'formula_1',
+  isJuniorTeam: false,
+  parentTeamId: '',
   momentoComercial: 50,
   prestigio: 1,
   agressividade: 1,
@@ -263,6 +271,7 @@ export default function AdminPage() {
   const [sponsorCatalog, setSponsorCatalog] = useState<SponsorCatalogItem[]>([]);
   const [usersSearch, setUsersSearch] = useState('');
   const [scuderiasSearch, setScuderiasSearch] = useState('');
+  const [scuderiaFilters, setScuderiaFilters] = useState<ScuderiaFilter[]>([]);
   const [sponsorsSearch, setSponsorsSearch] = useState('');
   const [raceProgressAlerts, setRaceProgressAlerts] = useState<RaceProgressAlert[]>([]);
   const [raceProgressLoading, setRaceProgressLoading] = useState(false);
@@ -320,7 +329,10 @@ export default function AdminPage() {
   });
 
   const sortedScuderias = useMemo(
-    () => [...scuderias].sort((a, b) => a.name.localeCompare(b.name)),
+    () => [...scuderias].sort((a, b) => {
+      if (a.category !== b.category) return a.category === 'formula_1' ? -1 : 1;
+      return a.name.localeCompare(b.name);
+    }),
     [scuderias],
   );
   const filteredUsers = useMemo(() => {
@@ -341,15 +353,24 @@ export default function AdminPage() {
   }, [users, usersSearch]);
   const filteredScuderias = useMemo(() => {
     const search = scuderiasSearch.trim().toLocaleLowerCase();
-    if (!search) return sortedScuderias;
-    return sortedScuderias.filter((scuderia) => [
-      scuderia.name,
-      scuderia.tag,
-      scuderia.emoji,
-      scuderia.color,
-      ...(scuderia.nacionalidades ?? []),
-    ].filter(Boolean).join(' ').toLocaleLowerCase().includes(search));
-  }, [scuderiasSearch, sortedScuderias]);
+    const activeCategories = scuderiaFilters.filter(
+      (filter): filter is 'formula_1' | 'formula_2' => filter === 'formula_1' || filter === 'formula_2',
+    );
+    return sortedScuderias.filter((scuderia) => {
+      if (activeCategories.length > 0 && !activeCategories.includes(scuderia.category)) return false;
+      if (scuderiaFilters.includes('starter_available') && Number(scuderia.starterDriverCount ?? 0) >= 2) return false;
+      if (scuderiaFilters.includes('reserve_available') && Number(scuderia.reserveDriverCount ?? 0) >= 2) return false;
+      if (!search) return true;
+      return [
+        scuderia.name,
+        scuderia.tag,
+        scuderia.emoji,
+        scuderia.color,
+        scuderia.category,
+        ...(scuderia.nacionalidades ?? []),
+      ].filter(Boolean).join(' ').toLocaleLowerCase().includes(search);
+    });
+  }, [scuderiaFilters, scuderiasSearch, sortedScuderias]);
   const filteredSponsors = useMemo(() => {
     const search = sponsorsSearch.trim().toLocaleLowerCase();
     if (!search) return sponsorCatalog;
@@ -384,6 +405,10 @@ export default function AdminPage() {
         (manualNationality) => normalizeNationality(manualNationality) === normalizeNationality(nationality),
       ),
   );
+  const formulaOneScuderias = useMemo(
+    () => sortedScuderias.filter((scuderia) => scuderia.category === 'formula_1' && scuderia.id !== editingScuderiaId),
+    [editingScuderiaId, sortedScuderias],
+  );
   const driverWalletUsers = useMemo(
     () => users
       .filter((adminUser) => Boolean(adminUser.driverWallet))
@@ -404,6 +429,13 @@ export default function AdminPage() {
     engineer: t.admin.engineer,
     driver: t.admin.driver,
   })[role];
+  function toggleScuderiaFilter(filter: ScuderiaFilter) {
+    setScuderiaFilters((current) =>
+      current.includes(filter)
+        ? current.filter((item) => item !== filter)
+        : [...current, filter],
+    );
+  }
 
   async function loadAdminData() {
     setLoadingData(true);
@@ -497,6 +529,9 @@ export default function AdminPage() {
       emoji: scuderia.emoji ?? '',
       color: scuderia.color,
       logoUrl: scuderia.logoUrl ?? '',
+      category: scuderia.category ?? 'formula_1',
+      isJuniorTeam: Boolean(scuderia.isJuniorTeam),
+      parentTeamId: scuderia.parentTeamId ?? '',
       momentoComercial: scuderia.momentoComercial,
       prestigio: scuderia.prestigio,
       agressividade: scuderia.agressividade,
@@ -634,6 +669,10 @@ export default function AdminPage() {
             ...scuderiaForm,
             emoji: scuderiaForm.emoji.trim(),
             logoUrl: scuderiaForm.logoUrl || null,
+            isJuniorTeam: scuderiaForm.category === 'formula_2' && scuderiaForm.isJuniorTeam,
+            parentTeamId: scuderiaForm.category === 'formula_2' && scuderiaForm.isJuniorTeam
+              ? scuderiaForm.parentTeamId
+              : null,
             nacionalidades: scuderiaForm.nacionalidades,
           }),
         },
@@ -1285,6 +1324,28 @@ export default function AdminPage() {
           </div>
 
           {openSections.scuderias && <div className="mt-4">
+            <div className="mb-4 flex flex-wrap gap-2">
+              {([
+                ['formula_1', t.admin.formula1],
+                ['formula_2', t.admin.formula2],
+                ['starter_available', t.admin.starterAvailable],
+                ['reserve_available', t.admin.reserveAvailable],
+              ] as const).map(([filter, label]) => {
+                const active = scuderiaFilters.includes(filter);
+                return (
+                  <button
+                    key={filter}
+                    type="button"
+                    onClick={() => toggleScuderiaFilter(filter)}
+                    className={`rounded-lg px-3 py-2 text-sm font-semibold transition ${
+                      active ? 'bg-red-600 text-white' : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
+                    }`}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
             <input
               type="search"
               className="mb-4 w-full rounded-lg bg-gray-700 px-4 py-2 text-white placeholder:text-gray-400"
@@ -1297,6 +1358,7 @@ export default function AdminPage() {
               <thead className="text-gray-300">
                 <tr>
                   <th className="py-2">Nome</th>
+                  <th className="py-2">{t.admin.scuderiaCategory}</th>
                   <th className="py-2">{t.admin.emoji}</th>
                   <th className="py-2">Abreviação</th>
                   <th className="py-2">Cor</th>
@@ -1327,6 +1389,16 @@ export default function AdminPage() {
                         {scuderia.name}
                       </span>
                     </td>
+                    <td className="py-3">
+                      <span className={`inline-flex rounded px-2 py-1 text-xs font-bold ${
+                        scuderia.category === 'formula_1'
+                          ? 'bg-red-600 text-white'
+                          : 'bg-sky-300 text-sky-950'
+                      }`}
+                      >
+                        {scuderia.category === 'formula_1' ? 'F1' : 'F2'}
+                      </span>
+                    </td>
                     <td className="py-3 text-2xl">{scuderia.emoji || '---'}</td>
                     <td className="py-3">{scuderia.tag}</td>
                     <td className="py-3">
@@ -1353,7 +1425,7 @@ export default function AdminPage() {
                 ))}
                 {!loadingData && filteredScuderias.length === 0 && (
                   <tr>
-                    <td className="py-4 text-gray-400" colSpan={5}>{t.admin.noScuderiasFound}</td>
+                    <td className="py-4 text-gray-400" colSpan={6}>{t.admin.noScuderiasFound}</td>
                   </tr>
                 )}
               </tbody>
@@ -2166,6 +2238,57 @@ export default function AdminPage() {
                 onChange={(event) => setScuderiaForm((prev) => ({ ...prev, logoUrl: event.target.value }))}
               />
             </label>
+
+            <div className="mb-6 grid gap-4 sm:grid-cols-2">
+              <label>
+                <span className="mb-2 block text-sm">{t.admin.scuderiaCategory}</span>
+                <select
+                  className="w-full rounded-lg bg-gray-700 px-4 py-2"
+                  value={scuderiaForm.category}
+                  onChange={(event) => setScuderiaForm((prev) => ({
+                    ...prev,
+                    category: event.target.value as 'formula_1' | 'formula_2',
+                    isJuniorTeam: event.target.value === 'formula_2' ? prev.isJuniorTeam : false,
+                    parentTeamId: event.target.value === 'formula_2' ? prev.parentTeamId : '',
+                  }))}
+                >
+                  <option value="formula_1">{t.admin.formula1}</option>
+                  <option value="formula_2">{t.admin.formula2}</option>
+                </select>
+              </label>
+
+              {scuderiaForm.category === 'formula_2' && (
+                <label className="flex items-end gap-3 rounded-lg bg-gray-700 px-4 py-2">
+                  <input
+                    type="checkbox"
+                    checked={scuderiaForm.isJuniorTeam}
+                    onChange={(event) => setScuderiaForm((prev) => ({
+                      ...prev,
+                      isJuniorTeam: event.target.checked,
+                      parentTeamId: event.target.checked ? prev.parentTeamId : '',
+                    }))}
+                  />
+                  <span>{t.admin.isJuniorTeam}</span>
+                </label>
+              )}
+
+              {scuderiaForm.category === 'formula_2' && scuderiaForm.isJuniorTeam && (
+                <label className="sm:col-span-2">
+                  <span className="mb-2 block text-sm">{t.admin.parentScuderia}</span>
+                  <select
+                    required
+                    className="w-full rounded-lg bg-gray-700 px-4 py-2"
+                    value={scuderiaForm.parentTeamId}
+                    onChange={(event) => setScuderiaForm((prev) => ({ ...prev, parentTeamId: event.target.value }))}
+                  >
+                    <option value="">{t.admin.selectScuderia}</option>
+                    {formulaOneScuderias.map((scuderia) => (
+                      <option key={scuderia.id} value={scuderia.id}>{scuderia.name}</option>
+                    ))}
+                  </select>
+                </label>
+              )}
+            </div>
 
             <div className="mb-6 grid gap-4 sm:grid-cols-3">
               {([

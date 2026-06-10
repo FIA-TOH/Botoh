@@ -139,6 +139,18 @@ const scuderiaValidation = [
     .optional({ nullable: true })
     .isURL()
     .withMessage('Scuderia logo URL is invalid'),
+  body('category')
+    .optional()
+    .isIn(['formula_1', 'formula_2'])
+    .withMessage('Scuderia category is invalid'),
+  body('isJuniorTeam')
+    .optional()
+    .isBoolean()
+    .withMessage('Junior team flag is invalid'),
+  body('parentTeamId')
+    .optional({ nullable: true })
+    .isUUID()
+    .withMessage('Parent scuderia id is invalid'),
   body('momentoComercial')
     .optional()
     .isInt({ min: 0, max: 100 })
@@ -622,7 +634,7 @@ router.post('/scuderias', scuderiaValidation, async (req: AuthRequest, res: Resp
     const result = await adminService.createScuderia(req.body);
     return res.status(result.success ? 201 : 400).json({
       ...result,
-      message: translateMessage(result.message, getRequestLanguage(req)),
+      message: translateMessage((result as { message?: string }).message, getRequestLanguage(req)),
     });
   } catch (error) {
     console.error('Admin create scuderia error:', error);
@@ -641,7 +653,7 @@ router.put(
       const result = await adminService.updateScuderia(req.params.id, req.body);
       return res.status(result.success ? 200 : 404).json({
         ...result,
-        message: translateMessage(result.message, getRequestLanguage(req)),
+        message: translateMessage((result as { message?: string }).message, getRequestLanguage(req)),
       });
     } catch (error) {
       console.error('Admin update scuderia error:', error);

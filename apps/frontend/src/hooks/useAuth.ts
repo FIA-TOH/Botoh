@@ -28,6 +28,7 @@ export interface TeamMembership {
   teamTag: string;
   teamEmoji?: string | null;
   teamColor: string;
+  teamCategory?: 'formula_1' | 'formula_2';
   pitLevel?: number | null;
   weatherLevel?: number | null;
   roles: ('team_principal' | 'team_assistant' | 'driver' | 'engineer')[];

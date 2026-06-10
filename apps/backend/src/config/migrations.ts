@@ -44,6 +44,29 @@ class MigrationService {
     await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS manual_nacionalidades TEXT[]');
     await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS setores TEXT[]');
     await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS logo_url TEXT');
+    await query("ALTER TABLE teams ADD COLUMN IF NOT EXISTS category VARCHAR(20) NOT NULL DEFAULT 'formula_1'");
+    await query("ALTER TABLE teams ADD COLUMN IF NOT EXISTS is_junior_team BOOLEAN NOT NULL DEFAULT false");
+    await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS parent_team_id UUID REFERENCES teams(id) ON DELETE SET NULL');
+    await query('ALTER TABLE teams DROP CONSTRAINT IF EXISTS teams_category_check');
+    await query("ALTER TABLE teams ADD CONSTRAINT teams_category_check CHECK (category IN ('formula_1', 'formula_2'))");
+    await query('ALTER TABLE teams DROP CONSTRAINT IF EXISTS teams_junior_parent_check');
+    await query(`
+      ALTER TABLE teams
+      ADD CONSTRAINT teams_junior_parent_check
+      CHECK (
+        (is_junior_team = false AND parent_team_id IS NULL)
+        OR (is_junior_team = true AND category = 'formula_2' AND parent_team_id IS NOT NULL AND parent_team_id <> id)
+      )
+    `);
+    await query(`
+      UPDATE teams
+      SET climate_monitoring_level = 5,
+          pit_crew_level = 5,
+          climate_cost_per_race = 0,
+          pit_crew_cost_per_race = 0,
+          updated_at = NOW()
+      WHERE is_junior_team = true
+    `);
     await query(`
       UPDATE teams
       SET manual_nacionalidades = nacionalidades
@@ -238,6 +261,37 @@ class MigrationService {
     await query('CREATE UNIQUE INDEX IF NOT EXISTS team_drivers_active_team_slot_unique ON team_drivers(team_id, slot_number) WHERE status = \'active\'');
     await query('CREATE UNIQUE INDEX IF NOT EXISTS team_drivers_active_user_team_unique ON team_drivers(user_id, team_id) WHERE status = \'active\' AND user_id IS NOT NULL');
     await query('CREATE UNIQUE INDEX IF NOT EXISTS team_drivers_active_starter_user_unique ON team_drivers(user_id) WHERE status = \'active\' AND category = \'starter\' AND user_id IS NOT NULL');
+    await query(`
+      UPDATE teams
+      SET salary_cost_per_race = COALESCE(
+        (
+          SELECT SUM(
+            CASE
+              WHEN team_drivers.category = 'reserve'
+                AND teams.category = 'formula_1'
+                AND team_drivers.user_id IS NOT NULL
+                AND EXISTS (
+                  SELECT 1
+                  FROM team_drivers junior_driver
+                  JOIN teams junior_team ON junior_team.id = junior_driver.team_id
+                  WHERE junior_driver.user_id = team_drivers.user_id
+                    AND junior_driver.status = 'active'
+                    AND junior_team.category = 'formula_2'
+                    AND junior_team.is_junior_team = true
+                    AND junior_team.parent_team_id = teams.id
+                )
+              THEN 0
+              ELSE team_drivers.salary_per_race
+            END
+          )
+          FROM team_drivers
+          WHERE team_drivers.team_id = teams.id
+            AND team_drivers.status = 'active'
+        ),
+        0
+      ),
+      updated_at = NOW()
+    `);
 
     await query("ALTER TABLE user_team_memberships ADD COLUMN IF NOT EXISTS driver_category VARCHAR(20)");
     await query("ALTER TABLE user_team_memberships DROP CONSTRAINT IF EXISTS user_team_memberships_driver_category_check");
@@ -401,13 +455,6 @@ class MigrationService {
       JOIN teams team ON team.id = team_driver.team_id
       WHERE sponsor.tipo = 'personal_sponsor'
         AND team_driver.personal_slot BETWEEN 1 AND 4
-        AND NOT EXISTS (
-          SELECT 1
-          FROM team_sponsors manual_personal
-          WHERE manual_personal.team_id = team_driver.team_id
-            AND manual_personal.category = 'personal_sponsor'
-            AND manual_personal.source = 'manual'
-        )
       ON CONFLICT (team_id, sponsor_id)
       DO UPDATE SET
         category = 'personal_sponsor',

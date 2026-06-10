@@ -34,8 +34,25 @@ router.get('/scuderias', authMiddleware, async (req: AuthRequest, res: Response)
         teams.id,
         teams.name,
         teams.tag,
+        COALESCE(teams.category, 'formula_1') AS category,
         teams.color,
         teams.logo_url AS "logoUrl",
+        COALESCE(
+          (
+            SELECT json_agg(
+              json_build_object(
+                'category', occupied_driver.category,
+                'slotNumber', occupied_driver.slot_number,
+                'displayName', occupied_driver.display_name
+              )
+              ORDER BY occupied_driver.category, occupied_driver.slot_number
+            )
+            FROM team_drivers occupied_driver
+            WHERE occupied_driver.team_id = teams.id
+              AND occupied_driver.status = 'active'
+          ),
+          '[]'::json
+        ) AS drivers,
         COUNT(team_drivers.id) FILTER (
           WHERE team_drivers.status = 'active' AND team_drivers.category = 'starter'
         )::int AS "starterCount",
@@ -63,11 +80,31 @@ router.get('/scuderias', authMiddleware, async (req: AuthRequest, res: Response)
           personal_sponsor.id AS "sponsorId",
           personal_sponsor.name AS "sponsorName",
           personal_sponsor.logo_url AS "sponsorLogoUrl",
+          COALESCE(driver_contracts.contracts, '[]'::json) AS contracts,
           active_starter.id IS NOT NULL AS "hasStarterContract",
           active_starter.team_color AS "starterTeamColor",
           active_reserve.id IS NOT NULL AS "hasReserveContract"
          FROM users
          LEFT JOIN sponsors personal_sponsor ON personal_sponsor.pilot_user_id = users.id
+         LEFT JOIN LATERAL (
+           SELECT json_agg(
+             json_build_object(
+               'teamId', teams.id,
+               'teamName', teams.name,
+               'teamCategory', COALESCE(teams.category, 'formula_1'),
+               'driverCategory', team_drivers.category,
+               'teamColor', teams.color
+             )
+             ORDER BY
+               CASE WHEN team_drivers.category = 'starter' THEN 0 ELSE 1 END,
+               CASE WHEN COALESCE(teams.category, 'formula_1') = 'formula_1' THEN 0 ELSE 1 END,
+               teams.name
+           ) AS contracts
+           FROM team_drivers
+           JOIN teams ON teams.id = team_drivers.team_id
+           WHERE team_drivers.user_id = users.id
+             AND team_drivers.status = 'active'
+         ) driver_contracts ON true
          LEFT JOIN LATERAL (
            SELECT team_drivers.id, teams.color AS team_color
            FROM team_drivers
@@ -138,6 +175,7 @@ router.get('/scuderias', authMiddleware, async (req: AuthRequest, res: Response)
         hasStarterContract: Boolean(pilot.hasStarterContract),
         starterTeamColor: pilot.starterTeamColor ?? null,
         hasReserveContract: Boolean(pilot.hasReserveContract),
+        contracts: pilot.contracts ?? [],
       };
     });
 

@@ -176,6 +176,58 @@ router.post('/teams/:teamId/driver-proposals', authMiddleware, [
   }
 });
 
+router.post('/teams/:teamId/drivers/:driverId/promote', authMiddleware, [
+  body('contractRaces')
+    .isInt({ min: 1, max: 200 })
+    .withMessage('Contract duration is invalid'),
+  body('salaryPerRace')
+    .isFloat({ min: 0 })
+    .withMessage('Driver salary is invalid'),
+], async (req: AuthRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: translateMessage('User not authenticated', getRequestLanguage(req)),
+      });
+    }
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        message: translateMessage('Validation failed', getRequestLanguage(req)),
+        errors: translateValidationErrors(errors.array(), getRequestLanguage(req)),
+      });
+    }
+
+    const canAccess = await garageService.userCanManageTeam(req.user.id, req.params.teamId);
+    if (!canAccess) {
+      return res.status(403).json({
+        success: false,
+        message: translateMessage('Insufficient permissions', getRequestLanguage(req)),
+      });
+    }
+
+    const result = await garageService.createJuniorPromotionProposal(
+      req.params.teamId,
+      req.params.driverId,
+      req.user.id,
+      req.body,
+    );
+    return res.status(result.success ? 201 : 400).json({
+      ...result,
+      message: translateMessage('message' in result ? result.message : undefined, getRequestLanguage(req)),
+    });
+  } catch (error) {
+    console.error('Create junior promotion proposal error:', error);
+    return res.status(500).json({
+      success: false,
+      message: translateMessage('Failed to send driver proposal', getRequestLanguage(req)),
+    });
+  }
+});
+
 router.post('/driver-proposals/:proposalId/respond', authMiddleware, [
   body('decision')
     .isIn(['accept', 'decline'])

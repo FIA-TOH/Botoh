@@ -106,6 +106,12 @@ export interface EconomicScuderia {
   emoji: string;
   color: string;
   logoUrl: string | null;
+  category: 'formula_1' | 'formula_2';
+  isJuniorTeam: boolean;
+  parentTeamId: string | null;
+  parentTeamName?: string | null;
+  starterDriverCount?: number;
+  reserveDriverCount?: number;
   momentoComercial: number;
   prestigio: number;
   agressividade: number;

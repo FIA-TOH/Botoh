@@ -25,6 +25,7 @@ export interface User {
     teamTag: string | null;
     teamEmoji: string | null;
     teamColor: string | null;
+    teamCategory: 'formula_1' | 'formula_2';
     pitLevel: number | null;
     weatherLevel: number | null;
     roles: ('team_principal' | 'team_assistant' | 'driver' | 'engineer')[];
@@ -193,8 +194,40 @@ class AuthService {
         FROM users u
         LEFT JOIN teams legacy_team ON u.team_id = legacy_team.id
         LEFT JOIN LATERAL (
-          SELECT t.id, t.name, t.tag, t.emoji, t.color, t.pit_crew_level, t.climate_monitoring_level, COALESCE(td.category, utm.driver_category) AS driver_category
-          FROM user_team_memberships utm
+          SELECT t.id, t.name, t.tag, t.emoji, t.color, COALESCE(t.category, 'formula_1') AS team_category, t.pit_crew_level, t.climate_monitoring_level, COALESCE(td.category, utm.driver_category) AS driver_category
+          FROM (
+            SELECT
+              direct.user_id,
+              direct.team_id,
+              direct.is_team_principal,
+              direct.is_team_assistant,
+              direct.is_engineer,
+              direct.is_driver,
+              direct.driver_category
+            FROM user_team_memberships direct
+            WHERE direct.user_id = u.id
+            UNION ALL
+            SELECT
+              parent.user_id,
+              junior_team.id AS team_id,
+              parent.is_team_principal,
+              parent.is_team_assistant,
+              parent.is_engineer,
+              false AS is_driver,
+              null AS driver_category
+            FROM user_team_memberships parent
+            JOIN teams junior_team
+              ON junior_team.parent_team_id = parent.team_id
+             AND junior_team.is_junior_team = true
+            WHERE parent.user_id = u.id
+              AND (parent.is_team_principal = true OR parent.is_team_assistant = true OR parent.is_engineer = true)
+              AND NOT EXISTS (
+                SELECT 1
+                FROM user_team_memberships direct
+                WHERE direct.user_id = parent.user_id
+                  AND direct.team_id = junior_team.id
+              )
+          ) utm
           JOIN teams t ON t.id = utm.team_id
           LEFT JOIN team_drivers td
             ON td.user_id = utm.user_id
@@ -214,6 +247,7 @@ class AuthService {
               'teamTag', t.tag,
               'teamEmoji', t.emoji,
               'teamColor', t.color,
+              'teamCategory', COALESCE(t.category, 'formula_1'),
               'pitLevel', COALESCE(LEAST(5, GREATEST(0, t.pit_crew_level)), 0),
               'weatherLevel', COALESCE(LEAST(5, GREATEST(0, t.climate_monitoring_level)), 0),
               'roles', ARRAY_REMOVE(ARRAY[
@@ -226,7 +260,39 @@ class AuthService {
             )
             ORDER BY t.name
           ) AS items
-          FROM user_team_memberships utm
+          FROM (
+            SELECT
+              direct.user_id,
+              direct.team_id,
+              direct.is_team_principal,
+              direct.is_team_assistant,
+              direct.is_engineer,
+              direct.is_driver,
+              direct.driver_category
+            FROM user_team_memberships direct
+            WHERE direct.user_id = u.id
+            UNION ALL
+            SELECT
+              parent.user_id,
+              junior_team.id AS team_id,
+              parent.is_team_principal,
+              parent.is_team_assistant,
+              parent.is_engineer,
+              false AS is_driver,
+              null AS driver_category
+            FROM user_team_memberships parent
+            JOIN teams junior_team
+              ON junior_team.parent_team_id = parent.team_id
+             AND junior_team.is_junior_team = true
+            WHERE parent.user_id = u.id
+              AND (parent.is_team_principal = true OR parent.is_team_assistant = true OR parent.is_engineer = true)
+              AND NOT EXISTS (
+                SELECT 1
+                FROM user_team_memberships direct
+                WHERE direct.user_id = parent.user_id
+                  AND direct.team_id = junior_team.id
+              )
+          ) utm
           JOIN teams t ON t.id = utm.team_id
           LEFT JOIN team_drivers td
             ON td.user_id = utm.user_id
@@ -276,8 +342,40 @@ class AuthService {
         FROM users u
         LEFT JOIN teams legacy_team ON u.team_id = legacy_team.id
         LEFT JOIN LATERAL (
-          SELECT t.id, t.name, t.tag, t.emoji, t.color, t.pit_crew_level, t.climate_monitoring_level, COALESCE(td.category, utm.driver_category) AS driver_category
-          FROM user_team_memberships utm
+          SELECT t.id, t.name, t.tag, t.emoji, t.color, COALESCE(t.category, 'formula_1') AS team_category, t.pit_crew_level, t.climate_monitoring_level, COALESCE(td.category, utm.driver_category) AS driver_category
+          FROM (
+            SELECT
+              direct.user_id,
+              direct.team_id,
+              direct.is_team_principal,
+              direct.is_team_assistant,
+              direct.is_engineer,
+              direct.is_driver,
+              direct.driver_category
+            FROM user_team_memberships direct
+            WHERE direct.user_id = u.id
+            UNION ALL
+            SELECT
+              parent.user_id,
+              junior_team.id AS team_id,
+              parent.is_team_principal,
+              parent.is_team_assistant,
+              parent.is_engineer,
+              false AS is_driver,
+              null AS driver_category
+            FROM user_team_memberships parent
+            JOIN teams junior_team
+              ON junior_team.parent_team_id = parent.team_id
+             AND junior_team.is_junior_team = true
+            WHERE parent.user_id = u.id
+              AND (parent.is_team_principal = true OR parent.is_team_assistant = true OR parent.is_engineer = true)
+              AND NOT EXISTS (
+                SELECT 1
+                FROM user_team_memberships direct
+                WHERE direct.user_id = parent.user_id
+                  AND direct.team_id = junior_team.id
+              )
+          ) utm
           JOIN teams t ON t.id = utm.team_id
           LEFT JOIN team_drivers td
             ON td.user_id = utm.user_id
@@ -297,6 +395,7 @@ class AuthService {
               'teamTag', t.tag,
               'teamEmoji', t.emoji,
               'teamColor', t.color,
+              'teamCategory', COALESCE(t.category, 'formula_1'),
               'pitLevel', COALESCE(LEAST(5, GREATEST(0, t.pit_crew_level)), 0),
               'weatherLevel', COALESCE(LEAST(5, GREATEST(0, t.climate_monitoring_level)), 0),
               'roles', ARRAY_REMOVE(ARRAY[
@@ -309,7 +408,39 @@ class AuthService {
             )
             ORDER BY t.name
           ) AS items
-          FROM user_team_memberships utm
+          FROM (
+            SELECT
+              direct.user_id,
+              direct.team_id,
+              direct.is_team_principal,
+              direct.is_team_assistant,
+              direct.is_engineer,
+              direct.is_driver,
+              direct.driver_category
+            FROM user_team_memberships direct
+            WHERE direct.user_id = u.id
+            UNION ALL
+            SELECT
+              parent.user_id,
+              junior_team.id AS team_id,
+              parent.is_team_principal,
+              parent.is_team_assistant,
+              parent.is_engineer,
+              false AS is_driver,
+              null AS driver_category
+            FROM user_team_memberships parent
+            JOIN teams junior_team
+              ON junior_team.parent_team_id = parent.team_id
+             AND junior_team.is_junior_team = true
+            WHERE parent.user_id = u.id
+              AND (parent.is_team_principal = true OR parent.is_team_assistant = true OR parent.is_engineer = true)
+              AND NOT EXISTS (
+                SELECT 1
+                FROM user_team_memberships direct
+                WHERE direct.user_id = parent.user_id
+                  AND direct.team_id = junior_team.id
+              )
+          ) utm
           JOIN teams t ON t.id = utm.team_id
           LEFT JOIN team_drivers td
             ON td.user_id = utm.user_id
