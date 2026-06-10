@@ -3,6 +3,9 @@ import { sendErrorMessage, sendSuccessMessage } from "../../chat/chat";
 import { isSupportedLanguage, Language } from "../../chat/language";
 import { MESSAGES } from "../../chat/messages";
 import { registerLeagueScuderia } from "../../scuderias/scuderias";
+import { ACTUAL_CIRCUIT } from "../../roomFeatures/stadiumChange";
+import { Teams } from "../../changeGameState/teams";
+import { movePlayerToTeamCircuitBox } from "../../teamBoxes/teamCircuitBoxes";
 
 type LoginUser = {
   username?: string;
@@ -17,6 +20,8 @@ type LoginUser = {
   weatherLevel?: number | null;
   driverCategory?: "starter" | "reserve" | null;
   language?: Language | string | null;
+  boxCoordinates?: { x: number; y: number } | null;
+  boxCoordinatesByCircuit?: Record<string, { x: number; y: number }>;
 };
 
 type LoginResponse = {
@@ -45,6 +50,8 @@ function clearLoginState(playerId: number) {
   player.isFirstDriver = false;
   player.driverCategory = null;
   player.loggedUsername = null;
+  player.boxCoordinates = null;
+  player.boxCoordinatesByCircuit = {};
 }
 
 export function clearLoginStateIfUsernameChanged(player: PlayerObject) {
@@ -113,6 +120,7 @@ export async function handleLoginCommand(
           username: byPlayer.name,
           password,
           ...(teamTag ? { teamTag } : {}),
+          circuitFullName: ACTUAL_CIRCUIT?.info?.name ?? null,
         }),
       },
     );
@@ -133,6 +141,8 @@ export async function handleLoginCommand(
     player.leagueScuderia = loggedUser.teamId;
     player.driverCategory = loggedUser.driverCategory ?? null;
     player.loggedUsername = loggedUser.username ?? byPlayer.name;
+    player.boxCoordinates = loggedUser.boxCoordinates ?? null;
+    player.boxCoordinatesByCircuit = loggedUser.boxCoordinatesByCircuit ?? {};
     player.isFirstDriver = false;
     if (loggedUser.language && isSupportedLanguage(loggedUser.language)) {
       player.language = loggedUser.language;
@@ -157,6 +167,10 @@ export async function handleLoginCommand(
       rebalanceFirstDriverForTeam(room, previousTeamId);
     }
     rebalanceFirstDriverForTeam(room, loggedUser.teamId);
+
+    if (byPlayer.team === Teams.RUNNERS && room.getScores()?.time > 0) {
+      movePlayerToTeamCircuitBox(byPlayer, room);
+    }
 
     sendSuccessMessage(room, MESSAGES.LOGIN_SUCCESS(), byPlayer.id);
   } catch {

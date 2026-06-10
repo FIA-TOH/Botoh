@@ -162,6 +162,8 @@ export interface PlayerInfo {
   isFirstDriver: boolean;
   driverCategory: "starter" | "reserve" | null;
   loggedUsername: string | null;
+  boxCoordinates: { x: number; y: number } | null;
+  boxCoordinatesByCircuit: Record<string, { x: number; y: number }>;
 
   carDamage: number;
 

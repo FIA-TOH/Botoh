@@ -19,6 +19,8 @@ export interface User {
   pitLevel: number | null;
   weatherLevel: number | null;
   driverCategory: 'starter' | 'reserve' | null;
+  boxCoordinates?: { x: number; y: number } | null;
+  boxCoordinatesByCircuit?: Record<string, { x: number; y: number }>;
   teamMemberships: {
     teamId: string;
     teamName: string;
@@ -39,6 +41,7 @@ export interface LoginRequest {
   username: string;
   password: string;
   teamTag?: string | null;
+  circuitFullName?: string | null;
 }
 
 export interface AuthResponse {
@@ -129,6 +132,46 @@ class AuthService {
       weatherLevel: user.weatherLevel,
       driverCategory: null,
     };
+  }
+
+  private async findTeamCircuitBox(teamId: string | null, circuitFullName?: string | null) {
+    if (!teamId || !circuitFullName?.trim()) return null;
+
+    const box = await queryOne<{ x: string | number; y: string | number }>(
+      `SELECT team_circuit_boxes.x, team_circuit_boxes.y
+       FROM team_circuit_boxes
+       JOIN circuits ON circuits.id = team_circuit_boxes.circuit_id
+       WHERE team_circuit_boxes.team_id = $1
+         AND LOWER(circuits.full_name) = LOWER($2)
+       LIMIT 1`,
+      [teamId, circuitFullName.trim()],
+    );
+
+    if (!box) return null;
+    return {
+      x: Number(box.x),
+      y: Number(box.y),
+    };
+  }
+
+  private async findTeamCircuitBoxes(teamId: string | null) {
+    if (!teamId) return {};
+
+    const result = await query(
+      `SELECT circuits.full_name AS "fullName", team_circuit_boxes.x, team_circuit_boxes.y
+       FROM team_circuit_boxes
+       JOIN circuits ON circuits.id = team_circuit_boxes.circuit_id
+       WHERE team_circuit_boxes.team_id = $1`,
+      [teamId],
+    );
+
+    return result.rows.reduce<Record<string, { x: number; y: number }>>((boxes, row) => {
+      boxes[row.fullName] = {
+        x: Number(row.x),
+        y: Number(row.y),
+      };
+      return boxes;
+    }, {});
   }
 
   // Hash password
@@ -505,9 +548,12 @@ class AuthService {
 
       // Remove password hash from user object
       const { password_hash, ...userWithoutPassword } = user;
+      const boxCoordinatesByCircuit = await this.findTeamCircuitBoxes(selectedTeam?.teamId ?? null);
       const userWithSelectedTeam = {
         ...userWithoutPassword,
         ...(selectedTeam ?? {}),
+        boxCoordinates: await this.findTeamCircuitBox(selectedTeam?.teamId ?? null, loginData.circuitFullName),
+        boxCoordinatesByCircuit,
       };
 
       // Generate JWT token

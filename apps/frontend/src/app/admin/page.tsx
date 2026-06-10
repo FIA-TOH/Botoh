@@ -54,6 +54,12 @@ interface DriverWallet {
 }
 
 type Scuderia = EconomicScuderia;
+interface Circuit {
+  id: string;
+  simpleName: string;
+  fullName: string;
+  createdAt: string;
+}
 interface TeamGarageManage {
   id: string; name: string; carName: string; cashTotal: number; climateCostPerRace: number;
   pitCrewCostPerRace: number; salaryCostPerRace: number; sponsorIncomePerRace: number;
@@ -70,6 +76,15 @@ interface TeamGarageManage {
     salaryPerRace: number;
   }[];
   sponsors: TeamSponsor[];
+  circuitBoxes: TeamCircuitBox[];
+}
+interface TeamCircuitBox {
+  id: string;
+  circuitId: string;
+  circuitSimpleName: string;
+  circuitFullName: string;
+  x: number;
+  y: number;
 }
 interface TeamSponsor {
   id: string; sponsorId?: string; name: string; category: string; slotNumber: number;
@@ -268,11 +283,13 @@ export default function AdminPage() {
 
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [scuderias, setScuderias] = useState<Scuderia[]>([]);
+  const [circuits, setCircuits] = useState<Circuit[]>([]);
   const [sponsorCatalog, setSponsorCatalog] = useState<SponsorCatalogItem[]>([]);
   const [usersSearch, setUsersSearch] = useState('');
   const [scuderiasSearch, setScuderiasSearch] = useState('');
   const [scuderiaFilters, setScuderiaFilters] = useState<ScuderiaFilter[]>([]);
   const [sponsorsSearch, setSponsorsSearch] = useState('');
+  const [circuitsSearch, setCircuitsSearch] = useState('');
   const [raceProgressAlerts, setRaceProgressAlerts] = useState<RaceProgressAlert[]>([]);
   const [raceProgressLoading, setRaceProgressLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(false);
@@ -301,6 +318,9 @@ export default function AdminPage() {
   const [sponsorForm, setSponsorForm] = useState<SponsorFormData>(EMPTY_SPONSOR_FORM);
   const [sponsorModalOpen, setSponsorModalOpen] = useState(false);
   const [editingSponsorId, setEditingSponsorId] = useState<string | null>(null);
+  const [circuitForm, setCircuitForm] = useState({ simpleName: '', fullName: '' });
+  const [editingCircuitId, setEditingCircuitId] = useState<string | null>(null);
+  const [boxForm, setBoxForm] = useState({ circuitId: '', x: '', y: '' });
   const [teamSponsorForm, setTeamSponsorForm] = useState({
     sponsorId: '', category: 'title_sponsor',
     contractRacesRemaining: '', initialReward: '', rewardPerRace: '',
@@ -324,6 +344,7 @@ export default function AdminPage() {
     users: false,
     scuderias: false,
     sponsors: false,
+    circuits: false,
     raceLogs: false,
     sponsorMarket: false,
   });
@@ -383,6 +404,14 @@ export default function AdminPage() {
       ...(sponsor.scuderiasRelacionadas ?? []).map((scuderia) => scuderia.name),
     ].filter(Boolean).join(' ').toLocaleLowerCase().includes(search));
   }, [sponsorCatalog, sponsorsSearch]);
+  const filteredCircuits = useMemo(() => {
+    const search = circuitsSearch.trim().toLocaleLowerCase();
+    if (!search) return circuits;
+    return circuits.filter((circuit) => [
+      circuit.simpleName,
+      circuit.fullName,
+    ].some((value) => value.toLocaleLowerCase().includes(search)));
+  }, [circuits, circuitsSearch]);
   const availableScuderias = useMemo(
     () =>
       sortedScuderias.filter(
@@ -394,6 +423,7 @@ export default function AdminPage() {
   const usersPagination = usePagination(filteredUsers);
   const scuderiasPagination = usePagination(filteredScuderias);
   const sponsorsPagination = usePagination(filteredSponsors);
+  const circuitsPagination = usePagination(filteredCircuits);
   const editingScuderia = useMemo(
     () => scuderias.find((scuderia) => scuderia.id === editingScuderiaId) ?? null,
     [editingScuderiaId, scuderias],
@@ -441,16 +471,18 @@ export default function AdminPage() {
     setLoadingData(true);
 
     try {
-      const [usersResponse, scuderiasResponse, sponsorsResponse, raceAlertsResponse] = await Promise.all([
+      const [usersResponse, scuderiasResponse, sponsorsResponse, circuitsResponse, raceAlertsResponse] = await Promise.all([
         fetch(apiUrl('/api/admin/users'), { headers: getAuthHeaders() }),
         fetch(apiUrl('/api/admin/scuderias'), { headers: getAuthHeaders() }),
         fetch(apiUrl('/api/admin/sponsors'), { headers: getAuthHeaders() }),
+        fetch(apiUrl('/api/admin/circuits'), { headers: getAuthHeaders() }),
         fetch(apiUrl('/api/admin/race-progress/alerts'), { headers: getAuthHeaders(), cache: 'no-store' }),
       ]);
 
       const usersData = await usersResponse.json();
       const scuderiasData = await scuderiasResponse.json();
       const sponsorsData = await sponsorsResponse.json();
+      const circuitsData = await circuitsResponse.json();
       const raceAlertsData = await raceAlertsResponse.json();
 
       if (!usersData.success) throw new Error(usersData.message || t.admin.loadUsersFailed);
@@ -459,6 +491,7 @@ export default function AdminPage() {
       setUsers(usersData.users);
       setScuderias(scuderiasData.scuderias);
       if (sponsorsData.success) setSponsorCatalog(sponsorsData.sponsors);
+      if (circuitsData.success) setCircuits(circuitsData.circuits);
       if (raceAlertsData.success) setRaceProgressAlerts(raceAlertsData.alerts);
     } catch (err) {
       showSnackbar(err instanceof Error ? err.message : t.admin.loadDataFailed, 'error');
@@ -1031,6 +1064,75 @@ export default function AdminPage() {
       await loadAdminData();
     }
   }
+  async function saveCircuit(event: React.FormEvent) {
+    event.preventDefault();
+    const response = await fetch(apiUrl(editingCircuitId ? `/api/admin/circuits/${editingCircuitId}` : '/api/admin/circuits'), {
+      method: editingCircuitId ? 'PUT' : 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(circuitForm),
+    });
+    const data = await response.json();
+    if (!data.success) {
+      showSnackbar(data.message || t.admin.actionFailed, 'error');
+      return;
+    }
+    setCircuitForm({ simpleName: '', fullName: '' });
+    setEditingCircuitId(null);
+    showSnackbar(t.admin.actionCompleted, 'success');
+    await loadAdminData();
+  }
+  function startEditCircuit(circuit: Circuit) {
+    setEditingCircuitId(circuit.id);
+    setCircuitForm({ simpleName: circuit.simpleName, fullName: circuit.fullName });
+  }
+  async function deleteCircuit(circuitId: string) {
+    const response = await fetch(apiUrl(`/api/admin/circuits/${circuitId}`), {
+      method: 'DELETE',
+      headers: getAuthHeaders(),
+    });
+    const data = await response.json();
+    if (!data.success) {
+      showSnackbar(data.message || t.admin.actionFailed, 'error');
+      return;
+    }
+    showSnackbar(t.admin.actionCompleted, 'success');
+    await refreshAdminViews();
+  }
+  async function saveCircuitBox(event: React.FormEvent) {
+    event.preventDefault();
+    if (!managingScuderia) return;
+    const response = await fetch(apiUrl(`/api/admin/scuderias/${managingScuderia.id}/circuit-boxes`), {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({
+        circuitId: boxForm.circuitId,
+        x: Number(boxForm.x),
+        y: Number(boxForm.y),
+      }),
+    });
+    const data = await response.json();
+    if (!data.success) {
+      showSnackbar(data.message || t.admin.actionFailed, 'error');
+      return;
+    }
+    setBoxForm({ circuitId: '', x: '', y: '' });
+    showSnackbar(t.admin.actionCompleted, 'success');
+    await refreshManagedGarage();
+  }
+  async function removeCircuitBox(boxId: string) {
+    if (!managingScuderia) return;
+    const response = await fetch(apiUrl(`/api/admin/scuderias/${managingScuderia.id}/circuit-boxes/${boxId}`), {
+      method: 'DELETE',
+      headers: getAuthHeaders(),
+    });
+    const data = await response.json();
+    if (!data.success) {
+      showSnackbar(data.message || t.admin.actionFailed, 'error');
+      return;
+    }
+    showSnackbar(t.admin.actionCompleted, 'success');
+    await refreshManagedGarage();
+  }
   function updateScuderiaDraft(scuderia: Scuderia) {
     setScuderias((current) => current.map((row) => row.id === scuderia.id ? scuderia : row));
   }
@@ -1481,6 +1583,96 @@ export default function AdminPage() {
                   <PaginationControls labels={t.admin} {...sponsorsPagination} />
                 </div>
               )}
+            </div>
+          )}
+        </section>
+
+        <section className="mb-6 rounded-lg bg-gray-800 p-6">
+          <button
+            type="button"
+            className="inline-flex items-center gap-3 text-left"
+            onClick={() => setOpenSections((current) => ({ ...current, circuits: !current.circuits }))}
+          >
+            <span className={`text-xl transition-transform ${openSections.circuits ? 'rotate-90' : ''}`}>&rsaquo;</span>
+            <h2 className="text-2xl font-semibold">{t.admin.circuits}</h2>
+          </button>
+          {openSections.circuits && (
+            <div className="mt-4">
+              <form onSubmit={saveCircuit} className="mb-4 grid gap-2 md:grid-cols-[1fr_2fr_auto_auto]">
+                <input
+                  required
+                  minLength={2}
+                  maxLength={80}
+                  className="rounded bg-gray-700 p-2"
+                  placeholder={t.admin.circuitSimpleName}
+                  value={circuitForm.simpleName}
+                  onChange={(event) => setCircuitForm((current) => ({ ...current, simpleName: event.target.value }))}
+                />
+                <input
+                  required
+                  minLength={2}
+                  maxLength={180}
+                  className="rounded bg-gray-700 p-2"
+                  placeholder={t.admin.circuitFullName}
+                  value={circuitForm.fullName}
+                  onChange={(event) => setCircuitForm((current) => ({ ...current, fullName: event.target.value }))}
+                />
+                <button className="rounded bg-purple-600 px-4 py-2">
+                  {editingCircuitId ? t.admin.save : t.admin.add}
+                </button>
+                {editingCircuitId && (
+                  <button
+                    type="button"
+                    className="rounded bg-gray-600 px-4 py-2"
+                    onClick={() => {
+                      setEditingCircuitId(null);
+                      setCircuitForm({ simpleName: '', fullName: '' });
+                    }}
+                  >
+                    {t.admin.cancel}
+                  </button>
+                )}
+              </form>
+              <input
+                type="search"
+                className="mb-4 w-full rounded-lg bg-gray-700 px-4 py-2 text-white placeholder:text-gray-400"
+                value={circuitsSearch}
+                onChange={(event) => setCircuitsSearch(event.target.value)}
+                placeholder={t.admin.searchCircuits}
+              />
+              <div className="overflow-x-auto">
+                <table className="w-full text-left">
+                  <thead className="text-gray-300">
+                    <tr>
+                      <th className="py-2">{t.admin.circuitSimpleName}</th>
+                      <th className="py-2">{t.admin.circuitFullName}</th>
+                      <th className="py-2 text-right">{t.admin.actions}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {circuitsPagination.rows.map((circuit) => (
+                      <tr key={circuit.id} className="border-t border-gray-700">
+                        <td className="py-3">{circuit.simpleName}</td>
+                        <td className="py-3">{circuit.fullName}</td>
+                        <td className="py-3 text-right">
+                          <button className="mr-2 rounded bg-gray-600 px-3 py-1" onClick={() => startEditCircuit(circuit)}>
+                            {t.admin.edit}
+                          </button>
+                          <button className="rounded bg-red-700 px-3 py-1" onClick={() => deleteCircuit(circuit.id)}>
+                            {t.admin.remove}
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                    {!loadingData && filteredCircuits.length === 0 && (
+                      <tr>
+                        <td className="py-4 text-gray-400" colSpan={3}>{t.admin.noCircuitsFound}</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+              <PaginationControls labels={t.admin} {...circuitsPagination} />
             </div>
           )}
         </section>
@@ -2046,6 +2238,60 @@ export default function AdminPage() {
                   </p>
                 ))}
               </div>
+            </section>
+            <section className="mt-6 rounded bg-gray-900/40 p-4">
+              <details>
+                <summary className="cursor-pointer font-bold">{t.admin.circuitBoxes}</summary>
+                <form onSubmit={saveCircuitBox} className="mt-4 grid gap-2 md:grid-cols-[1fr_120px_120px_auto]">
+                  <select
+                    required
+                    className="rounded bg-gray-700 p-2"
+                    value={boxForm.circuitId}
+                    onChange={(event) => setBoxForm((current) => ({ ...current, circuitId: event.target.value }))}
+                  >
+                    <option value="">{t.admin.selectCircuit}</option>
+                    {circuits.map((circuit) => (
+                      <option key={circuit.id} value={circuit.id}>{circuit.simpleName}</option>
+                    ))}
+                  </select>
+                  <input
+                    required
+                    type="number"
+                    step="0.01"
+                    className="rounded bg-gray-700 p-2"
+                    placeholder={t.admin.coordinateX}
+                    value={boxForm.x}
+                    onChange={(event) => setBoxForm((current) => ({ ...current, x: event.target.value }))}
+                  />
+                  <input
+                    required
+                    type="number"
+                    step="0.01"
+                    className="rounded bg-gray-700 p-2"
+                    placeholder={t.admin.coordinateY}
+                    value={boxForm.y}
+                    onChange={(event) => setBoxForm((current) => ({ ...current, y: event.target.value }))}
+                  />
+                  <button className="rounded bg-purple-600 px-3 py-2">{t.admin.add}</button>
+                </form>
+                <div className="mt-4 space-y-2">
+                  {managedGarage.circuitBoxes.map((box) => (
+                    <div key={box.id} className="flex flex-wrap items-center justify-between gap-3 rounded bg-gray-700 p-3">
+                      <div>
+                        <p className="font-semibold">{box.circuitSimpleName}</p>
+                        <p className="text-sm text-gray-300">{box.circuitFullName}</p>
+                        <p className="text-sm text-gray-300">{t.admin.coordinateX}: {box.x} · {t.admin.coordinateY}: {box.y}</p>
+                      </div>
+                      <button className="rounded bg-red-700 px-3 py-1" onClick={() => removeCircuitBox(box.id)}>
+                        {t.admin.remove}
+                      </button>
+                    </div>
+                  ))}
+                  {managedGarage.circuitBoxes.length === 0 && (
+                    <p className="text-sm text-gray-400">{t.admin.noCircuitBoxes}</p>
+                  )}
+                </div>
+              </details>
             </section>
             <section className="mt-6">
               <h3 className="mb-3 font-bold">{t.garage.sponsors}</h3>

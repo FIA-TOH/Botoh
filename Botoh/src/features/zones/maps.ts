@@ -91,8 +91,9 @@ import { AUSTIN_CRESPO } from "../../circuits/austin/austin_crespo";
 import { SEXCANO } from "../../circuits/sexcano/sexcano";
 import { MEERSBURG } from "../../circuits/meersburg/meersburg";
 import { IMOLATESTE } from "../../circuits/imola/imolaTeste";
-import { IMOLASEASONTRES } from "../../circuits/imola/imolaSeasonTres";
 import { MIAMISEASONTRES } from "../../circuits/miami/miamiSeasonTres";
+import { BAHRAINSEASONTRES } from "../../circuits/bahrain/bahrainSeasonTres";
+
 
 // import {DAYTONA} from "../circuits/daytona/daytona";
 // import {BARCELONA} from "../circuits/barcelona/barcelona";
@@ -106,6 +107,7 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
   ? [
     IMOLATESTE,
     MIAMISEASONTRES,
+    BAHRAINSEASONTRES,
       IMOLA,
       SUZUKA,
       MELBOURNE,
@@ -199,6 +201,9 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
 
 export const CIRCUIT_FILE_NAMES: string[] = LEAGUE_MODE
   ? [
+      "imolaTeste.hbs",
+      "miamiSeasonTres.hbs",
+      "bahrainSeasonTres.hbs",
       "imola.hbs",
       "suzuka.hbs",
       "melbourne.hbs",
@@ -248,8 +253,6 @@ export const CIRCUIT_FILE_NAMES: string[] = LEAGUE_MODE
       "indianapolis.hbs",
       "podium.hbs",
       "waitRoom.hbs",
-      "imolaSeasonTres.hbs",
-      "imolaTeste.hbs",
     ]
   : [
       "suzuka.hbs",

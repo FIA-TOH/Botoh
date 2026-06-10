@@ -15,6 +15,7 @@ const playerTouchedCrashWallDetectors = new Map<number, Set<string>>();
 const previousPlayerSpeed = new Map<number, number>();
 const lastPlayerDamageAt = new Map<number, number>();
 const DAMAGE_COOLDOWN_MS = 1000;
+const CRASH_DAMAGE_PER_SPEED = 0.375;
 
 export let damageEnabled = false;
 
@@ -166,7 +167,7 @@ function applyCrashDamage(playerId: number, impactSpeed: number) {
   if (now - lastDamageAt < DAMAGE_COOLDOWN_MS) return null;
 
   const currentDamage = playerInfo.carDamage ?? 0;
-  const calculatedDamage = roundDamage(impactSpeed / 2);
+  const calculatedDamage = roundDamage(impactSpeed * CRASH_DAMAGE_PER_SPEED);
   const newDamage = roundDamage(Math.min(100, currentDamage + calculatedDamage));
   const damageTaken = roundDamage(newDamage - currentDamage);
 

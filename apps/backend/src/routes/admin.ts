@@ -118,6 +118,31 @@ const updateUserValidation = [
     .withMessage('Password must be at least 6 characters long'),
 ];
 
+const circuitValidation = [
+  body('simpleName')
+    .isString()
+    .trim()
+    .isLength({ min: 2, max: 80 })
+    .withMessage('Circuit simple name is invalid'),
+  body('fullName')
+    .isString()
+    .trim()
+    .isLength({ min: 2, max: 180 })
+    .withMessage('Circuit full name is invalid'),
+];
+
+const teamCircuitBoxValidation = [
+  body('circuitId')
+    .isUUID()
+    .withMessage('Circuit must be valid'),
+  body('x')
+    .isFloat()
+    .withMessage('Box X coordinate is invalid'),
+  body('y')
+    .isFloat()
+    .withMessage('Box Y coordinate is invalid'),
+];
+
 const scuderiaValidation = [
   body('name')
     .isLength({ min: 2, max: 100 })
@@ -476,6 +501,54 @@ router.delete('/race-progress/alerts', async (_req: AuthRequest, res: Response) 
   return res.json(result);
 });
 
+router.get('/circuits', async (_req: AuthRequest, res: Response) => {
+  const circuits = await adminService.listCircuits();
+  return res.json({ success: true, circuits });
+});
+
+router.post('/circuits', circuitValidation, async (req: AuthRequest, res: Response) => {
+  try {
+    if (handleValidation(req, res)) return;
+    const result = await adminService.createCircuit(req.body);
+    return res.status(201).json({
+      ...result,
+      message: translateMessage('Circuit created successfully', getRequestLanguage(req)),
+    });
+  } catch (error) {
+    console.error('Admin create circuit error:', error);
+    return res.status(400).json({
+      success: false,
+      message: translateMessage('Failed to save circuit', getRequestLanguage(req)),
+    });
+  }
+});
+
+router.put('/circuits/:id', param('id').isUUID(), circuitValidation, async (req: AuthRequest, res: Response) => {
+  try {
+    if (handleValidation(req, res)) return;
+    const result = await adminService.updateCircuit(req.params.id, req.body);
+    return res.status(result.success ? 200 : 404).json({
+      ...result,
+      message: translateMessage(result.success ? 'Circuit updated successfully' : result.message, getRequestLanguage(req)),
+    });
+  } catch (error) {
+    console.error('Admin update circuit error:', error);
+    return res.status(400).json({
+      success: false,
+      message: translateMessage('Failed to save circuit', getRequestLanguage(req)),
+    });
+  }
+});
+
+router.delete('/circuits/:id', param('id').isUUID(), async (req: AuthRequest, res: Response) => {
+  if (handleValidation(req, res)) return;
+  const result = await adminService.deleteCircuit(req.params.id);
+  return res.status(result.success ? 200 : 404).json({
+    ...result,
+    message: translateMessage(result.message, getRequestLanguage(req)),
+  });
+});
+
 router.post('/race-progress', raceProgressValidation, async (req: AuthRequest, res: Response) => {
   if (handleValidation(req, res)) return;
   const result = await adminService.progressRace(req.body.direction);
@@ -489,6 +562,24 @@ router.put('/scuderias/:id/car-name', param('id').isUUID(), carNameValidation, a
   if (handleValidation(req, res)) return;
   const result = await adminService.updateScuderiaCarName(req.params.id, req.body.carName ?? null);
   return res.status(result.success ? 200 : 404).json(result);
+});
+
+router.post('/scuderias/:id/circuit-boxes', param('id').isUUID(), teamCircuitBoxValidation, async (req: AuthRequest, res: Response) => {
+  if (handleValidation(req, res)) return;
+  const result = await adminService.addTeamCircuitBox(req.params.id, req.body);
+  return res.status(result.success ? 201 : 400).json({
+    ...result,
+    message: translateMessage('Circuit box saved successfully', getRequestLanguage(req)),
+  });
+});
+
+router.delete('/scuderias/:id/circuit-boxes/:boxId', param('id').isUUID(), param('boxId').isUUID(), async (req: AuthRequest, res: Response) => {
+  if (handleValidation(req, res)) return;
+  const result = await adminService.removeTeamCircuitBox(req.params.id, req.params.boxId);
+  return res.status(result.success ? 200 : 404).json({
+    ...result,
+    message: translateMessage(result.message, getRequestLanguage(req)),
+  });
 });
 
 router.post('/scuderias/:id/drivers', param('id').isUUID(), adminDriverValidation, async (req: AuthRequest, res: Response) => {

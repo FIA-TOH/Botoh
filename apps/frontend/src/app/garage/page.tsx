@@ -137,8 +137,8 @@ export default function GaragePage() {
   const maxFacilityLevel = teamGarage?.facilityEconomy?.maxLevel ?? 5;
   const sponsorProfitPerRace = Number(teamGarage?.sponsorIncomePerRace ?? 0);
   const salaryCostPerRace = Number(teamGarage?.salaryCostPerRace ?? 0);
-  const pitCrewCostPerRace = Number(teamGarage?.pitCrewCostPerRace ?? pitCrewLevel * 50);
-  const climateCostPerRace = Number(teamGarage?.climateCostPerRace ?? weatherMonitoringLevel * 50);
+  const pitCrewCostPerRace = isFormula2Garage ? 0 : Number(teamGarage?.pitCrewCostPerRace ?? pitCrewLevel * 50);
+  const climateCostPerRace = isFormula2Garage ? 0 : Number(teamGarage?.climateCostPerRace ?? weatherMonitoringLevel * 50);
   const expensesPerRace = salaryCostPerRace + pitCrewCostPerRace + climateCostPerRace;
   const netPerRace = sponsorProfitPerRace - expensesPerRace;
   const cashTotal = Number(teamGarage?.cashTotal ?? 0);
@@ -942,25 +942,23 @@ export default function GaragePage() {
               </section>
               </div>
 
-              <section className="relative h-[250px] overflow-hidden border-8 border-[#FF0000] bg-[#1E1E1E]">
-                <div className="absolute  flex items-center justify-center h-full">
-                  <img
-                    key={selectedCarSrc}
-                    src={selectedCarSrc}
-                    alt=""
-                    className="block p-10 object-contain"
-                    onError={(event) => {
-                      if (event.currentTarget.src.endsWith('/img/scuderia/cars/default.png')) return;
-                      event.currentTarget.src = '/img/scuderia/cars/default.png';
-                    }}
-                  />
-                </div>
-                <div className="relative z-10 flex items-center gap-4">
+              <section className="relative h-[320px] overflow-hidden border-8 border-[#FF0000] bg-[#1E1E1E] p-4">
+                <img
+                  key={selectedCarSrc}
+                  src={selectedCarSrc}
+                  alt=""
+                  className="absolute left-1/2 top-1/2 w-full -translate-x-1/2 -translate-y-1/2"
+                  onError={(event) => {
+                    if (event.currentTarget.src.endsWith('/img/scuderia/cars/default.png')) return;
+                    event.currentTarget.src = '/img/scuderia/cars/default.png';
+                  }}
+                />
+                <div className="absolute left-4 top-4 z-10 flex max-w-[72%] items-center gap-3">
                   {!selectedLogoIsMissing && selectedLogoSrc && (
                     <img
                       src={selectedLogoSrc}
                       alt=""
-                      className="h-16 w-16 object-contain"
+                      className="h-20 w-20 shrink-0 object-contain"
                       onError={() =>
                         setMissingTeamLogos((current) => ({
                           ...current,
@@ -969,7 +967,7 @@ export default function GaragePage() {
                       }
                     />
                   )}
-                  <h2 className="text-4xl font-bold uppercase">{teamGarage?.carName ?? '---'}</h2>
+                  <h2 className="truncate text-5xl font-bold uppercase">{teamGarage?.carName ?? '---'}</h2>
                 </div>
               </section>
             </div>
