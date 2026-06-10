@@ -76,6 +76,17 @@ export interface TeamFinanceEntryInput {
   occurredAt?: string;
 }
 
+export interface CircuitInput {
+  simpleName: string;
+  fullName: string;
+}
+
+export interface TeamCircuitBoxInput {
+  circuitId: string;
+  x: number;
+  y: number;
+}
+
 export interface TeamSponsorInput {
   sponsorId: string;
   category: 'title_sponsor' | 'main_partner' | 'official_partner' | 'minor_sponsor' | 'personal_sponsor';
@@ -1536,7 +1547,108 @@ class AdminService {
   }
 
   async getScuderiaManagement(scuderiaId: string) {
-    return garageService.getTeamGarage(scuderiaId);
+    const garage = await garageService.getTeamGarage(scuderiaId);
+    if (!garage) return null;
+
+    const boxes = await query(
+      `SELECT
+        team_circuit_boxes.id,
+        team_circuit_boxes.circuit_id AS "circuitId",
+        circuits.simple_name AS "circuitSimpleName",
+        circuits.full_name AS "circuitFullName",
+        team_circuit_boxes.x,
+        team_circuit_boxes.y,
+        team_circuit_boxes.created_at AS "createdAt"
+       FROM team_circuit_boxes
+       JOIN circuits ON circuits.id = team_circuit_boxes.circuit_id
+       WHERE team_circuit_boxes.team_id = $1
+       ORDER BY circuits.simple_name ASC`,
+      [scuderiaId],
+    );
+
+    return {
+      ...garage,
+      circuitBoxes: boxes.rows.map((box) => ({
+        ...box,
+        x: Number(box.x),
+        y: Number(box.y),
+      })),
+    };
+  }
+
+  async listCircuits() {
+    const result = await query(
+      `SELECT
+        id,
+        simple_name AS "simpleName",
+        full_name AS "fullName",
+        created_at AS "createdAt"
+       FROM circuits
+       ORDER BY simple_name ASC`,
+    );
+
+    return result.rows;
+  }
+
+  async createCircuit(input: CircuitInput) {
+    const result = await query(
+      `INSERT INTO circuits (simple_name, full_name, created_at, updated_at)
+       VALUES ($1, $2, NOW(), NOW())
+       RETURNING id, simple_name AS "simpleName", full_name AS "fullName", created_at AS "createdAt"`,
+      [input.simpleName.trim(), input.fullName.trim()],
+    );
+
+    return { success: true, circuit: result.rows[0] };
+  }
+
+  async updateCircuit(circuitId: string, input: CircuitInput) {
+    const result = await query(
+      `UPDATE circuits
+       SET simple_name = $1,
+           full_name = $2,
+           updated_at = NOW()
+       WHERE id = $3
+       RETURNING id, simple_name AS "simpleName", full_name AS "fullName", created_at AS "createdAt"`,
+      [input.simpleName.trim(), input.fullName.trim(), circuitId],
+    );
+
+    return result.rows[0]
+      ? { success: true, circuit: result.rows[0] }
+      : { success: false, message: 'Circuit not found' };
+  }
+
+  async deleteCircuit(circuitId: string) {
+    const result = await query('DELETE FROM circuits WHERE id = $1 RETURNING id', [circuitId]);
+    return result.rows[0]
+      ? { success: true }
+      : { success: false, message: 'Circuit not found' };
+  }
+
+  async addTeamCircuitBox(scuderiaId: string, input: TeamCircuitBoxInput) {
+    const result = await query(
+      `INSERT INTO team_circuit_boxes (team_id, circuit_id, x, y, created_at, updated_at)
+       VALUES ($1, $2, $3, $4, NOW(), NOW())
+       ON CONFLICT (team_id, circuit_id)
+       DO UPDATE SET
+         x = EXCLUDED.x,
+         y = EXCLUDED.y,
+         updated_at = NOW()
+       RETURNING id`,
+      [scuderiaId, input.circuitId, input.x, input.y],
+    );
+
+    return { success: true, circuitBox: result.rows[0] };
+  }
+
+  async removeTeamCircuitBox(scuderiaId: string, boxId: string) {
+    const result = await query(
+      'DELETE FROM team_circuit_boxes WHERE id = $1 AND team_id = $2 RETURNING id',
+      [boxId, scuderiaId],
+    );
+
+    return result.rows[0]
+      ? { success: true }
+      : { success: false, message: 'Circuit box not found' };
   }
 
   async listRaceProgressAlerts() {

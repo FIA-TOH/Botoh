@@ -20,6 +20,7 @@ import { initBattleRoyale } from "../commands/gameMode/battleRoyale.ts/handleBat
 import { playerList } from "../changePlayerState/playerList";
 import { initializeLeagueStartAFKDetection } from "../afk/leagueStartAFKDetection";
 import { resetLapHistory } from "../zones/laps/lapHistory";
+import { movePlayerToTeamCircuitBox } from "../teamBoxes/teamCircuitBoxes";
 
 export function GameStart(room: RoomObject) {
   room.onGameStart = function (byPlayer) {
@@ -67,6 +68,7 @@ export function GameStart(room: RoomObject) {
       updatePlayerActivity(p);
       playerList[p.id].speedEnabled = true;
       if (p.team === Teams.RUNNERS) {
+        movePlayerToTeamCircuitBox(p, room);
         decideBlowoutPoint(p);
       }
     });

@@ -168,6 +168,8 @@ export function createPlayerInfo(ip?: string, playerId?: number) {
     isFirstDriver: false,
     driverCategory: null,
     loggedUsername: null,
+    boxCoordinates: null,
+    boxCoordinatesByCircuit: {},
   };
 }
 

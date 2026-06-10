@@ -16,6 +16,7 @@ import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { decideBlowoutPoint } from "../tires&pits/tireBlowManager";
 import { moveToRRPosition } from "../commands/playerState/handleRRCommand";
 import { rejoinManager } from "../changePlayerState/rejoinManager";
+import { movePlayerToTeamCircuitBox } from "../teamBoxes/teamCircuitBoxes";
 
 export function TeamChange(room: RoomObject) {
   room.onPlayerTeamChange = function (changedPlayer: PlayerObject) {
@@ -50,7 +51,7 @@ export function TeamChange(room: RoomObject) {
       ) {
         if (generalGameMode === GeneralGameMode.GENERAL_QUALY && !LEAGUE_MODE) {
           moveToRRPosition(changedPlayer, room);
-        } else {
+        } else if (!movePlayerToTeamCircuitBox(changedPlayer, room)) {
           moveToBox(changedPlayer, room, "end");
         }
       }

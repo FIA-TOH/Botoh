@@ -29,6 +29,11 @@ const loginValidation = [
     .withMessage('Scuderia abbreviation must be exactly 3 characters')
     .matches(/^[A-Za-z0-9]+$/)
     .withMessage('Scuderia abbreviation can only contain letters and numbers'),
+  body('circuitFullName')
+    .optional({ nullable: true })
+    .isString()
+    .isLength({ min: 1, max: 180 })
+    .withMessage('Circuit full name is invalid'),
 ];
 
 // Validation rules for user creation
@@ -78,10 +83,10 @@ router.post('/login', loginValidation, async (req: Request, res: Response) => {
       });
     }
 
-    const { username, password, teamTag } = req.body;
+    const { username, password, teamTag, circuitFullName } = req.body;
 
     // Attempt login
-    const result = await authService.login({ username, password, teamTag });
+    const result = await authService.login({ username, password, teamTag, circuitFullName });
 
     if (result.success) {
       // Set HTTP-only cookie with token (optional, for web clients)

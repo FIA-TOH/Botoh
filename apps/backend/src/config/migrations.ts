@@ -588,6 +588,37 @@ class MigrationService {
       )
     `);
     await query('CREATE INDEX IF NOT EXISTS race_progress_alerts_created_idx ON race_progress_alerts(created_at DESC)');
+
+    await query(`
+      CREATE TABLE IF NOT EXISTS circuits (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        simple_name VARCHAR(80) NOT NULL UNIQUE,
+        full_name VARCHAR(180) NOT NULL UNIQUE,
+        created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+        updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+      )
+    `);
+    await query('ALTER TABLE circuits ADD COLUMN IF NOT EXISTS simple_name VARCHAR(80)');
+    await query('ALTER TABLE circuits ADD COLUMN IF NOT EXISTS full_name VARCHAR(180)');
+    await query('ALTER TABLE circuits ADD COLUMN IF NOT EXISTS created_at TIMESTAMP NOT NULL DEFAULT NOW()');
+    await query('ALTER TABLE circuits ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP NOT NULL DEFAULT NOW()');
+    await query('CREATE UNIQUE INDEX IF NOT EXISTS circuits_simple_name_unique ON circuits(LOWER(simple_name))');
+    await query('CREATE UNIQUE INDEX IF NOT EXISTS circuits_full_name_unique ON circuits(LOWER(full_name))');
+
+    await query(`
+      CREATE TABLE IF NOT EXISTS team_circuit_boxes (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        team_id UUID NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
+        circuit_id UUID NOT NULL REFERENCES circuits(id) ON DELETE CASCADE,
+        x NUMERIC NOT NULL,
+        y NUMERIC NOT NULL,
+        created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+        updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+        UNIQUE(team_id, circuit_id)
+      )
+    `);
+    await query('CREATE INDEX IF NOT EXISTS team_circuit_boxes_team_idx ON team_circuit_boxes(team_id)');
+    await query('CREATE INDEX IF NOT EXISTS team_circuit_boxes_circuit_idx ON team_circuit_boxes(circuit_id)');
   }
 
   private async normalizeFacilityCosts(): Promise<void> {
