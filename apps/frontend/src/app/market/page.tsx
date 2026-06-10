@@ -13,12 +13,18 @@ interface MarketScuderia {
   id: string;
   name: string;
   tag: string;
+  category: 'formula_1' | 'formula_2';
   color: string;
   logoUrl: string | null;
   starterCount: number;
   reserveCount: number;
   starterVacancies: number;
   reserveVacancies: number;
+  drivers: {
+    category: 'starter' | 'reserve';
+    slotNumber: number;
+    displayName: string;
+  }[];
 }
 
 interface MarketPilot {
@@ -45,7 +51,17 @@ interface MarketPilot {
   hasStarterContract: boolean;
   starterTeamColor: string | null;
   hasReserveContract: boolean;
+  contracts: {
+    teamId: string;
+    teamName: string;
+    teamCategory: 'formula_1' | 'formula_2';
+    driverCategory: 'starter' | 'reserve';
+    teamColor: string | null;
+  }[];
 }
+
+type ScuderiaFilter = 'formula_1' | 'formula_2' | 'starter_available' | 'reserve_available';
+type PilotFilter = 'formula_1' | 'formula_2' | 'starter_contract' | 'reserve_contract';
 
 function getAuthHeaders() {
   const token = localStorage.getItem('auth_token');
@@ -123,7 +139,9 @@ export default function MarketPage() {
   const [isScuderiasOpen, setIsScuderiasOpen] = useState(true);
   const [isPilotsOpen, setIsPilotsOpen] = useState(false);
   const [scuderias, setScuderias] = useState<MarketScuderia[]>([]);
+  const [scuderiaFilters, setScuderiaFilters] = useState<ScuderiaFilter[]>([]);
   const [pilots, setPilots] = useState<MarketPilot[]>([]);
+  const [pilotFilters, setPilotFilters] = useState<PilotFilter[]>([]);
   const [page, setPage] = useState(1);
   const [pilotPage, setPilotPage] = useState(1);
   const [negotiatingPilot, setNegotiatingPilot] = useState<MarketPilot | null>(null);
@@ -144,6 +162,8 @@ export default function MarketPage() {
     [user?.teamMemberships],
   );
   const canManageDrivers = managedTeams.length > 0;
+  const selectedNegotiationTeam = managedTeams.find((team) => team.teamId === negotiationForm.teamId) ?? null;
+  const isNegotiatingFormula2 = selectedNegotiationTeam?.teamCategory === 'formula_2';
 
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -173,38 +193,63 @@ export default function MarketPage() {
     loadMarket();
   }, [isAuthenticated, t.market.loadFailed]);
 
-  const sortedScuderias = useMemo(
-    () => [...scuderias].sort((left, right) => {
+  const sortedScuderias = useMemo(() => {
+    const activeCategoryFilters = scuderiaFilters.filter((filter) => filter === 'formula_1' || filter === 'formula_2');
+    const filtered = scuderias.filter((scuderia) => {
+      const category = scuderia.category ?? 'formula_1';
+      const matchesCategory = activeCategoryFilters.length === 0 || activeCategoryFilters.includes(category);
+      const matchesStarter = !scuderiaFilters.includes('starter_available') || scuderia.starterVacancies > 0;
+      const matchesReserve = !scuderiaFilters.includes('reserve_available') || scuderia.reserveVacancies > 0;
+
+      return matchesCategory && matchesStarter && matchesReserve;
+    });
+
+    return filtered.sort((left, right) => {
+      const leftCategory = (left.category ?? 'formula_1') === 'formula_1' ? 0 : 1;
+      const rightCategory = (right.category ?? 'formula_1') === 'formula_1' ? 0 : 1;
+      if (leftCategory !== rightCategory) return leftCategory - rightCategory;
+
       const leftGroup = left.starterVacancies > 0 ? 0 : left.reserveVacancies > 0 ? 1 : 2;
       const rightGroup = right.starterVacancies > 0 ? 0 : right.reserveVacancies > 0 ? 1 : 2;
       if (leftGroup !== rightGroup) return leftGroup - rightGroup;
       return left.name.localeCompare(right.name);
-    }),
-    [scuderias],
-  );
+    });
+  }, [scuderias, scuderiaFilters]);
   const totalPages = Math.max(1, Math.ceil(sortedScuderias.length / pageSize));
   const currentPage = Math.min(page, totalPages);
   const visibleScuderias = sortedScuderias.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-  const sortedPilots = useMemo(
-    () => [...pilots].sort((left, right) => {
-      if (left.hasStarterContract !== right.hasStarterContract) {
-        return left.hasStarterContract ? 1 : -1;
-      }
+  const sortedPilots = useMemo(() => {
+    const activeCategoryFilters = pilotFilters.filter((filter) => filter === 'formula_1' || filter === 'formula_2');
+    const activeContractFilters = pilotFilters.filter((filter) => filter === 'starter_contract' || filter === 'reserve_contract');
+    const filtered = pilots.filter((pilot) => {
+      const matchesCategory = activeCategoryFilters.length === 0 || pilot.contracts.some((contract) => (
+        activeCategoryFilters.includes(contract.teamCategory)
+      ));
+      const matchesContract = activeContractFilters.length === 0 || pilot.contracts.some((contract) => (
+        activeContractFilters.includes(contract.driverCategory === 'starter' ? 'starter_contract' : 'reserve_contract')
+      ));
+
+      return matchesCategory && matchesContract;
+    });
+
+    return filtered.sort((left, right) => {
+      const leftRank = getPilotSortRank(left);
+      const rightRank = getPilotSortRank(right);
+      if (leftRank !== rightRank) return leftRank - rightRank;
 
       return right.marketScore - left.marketScore;
-    }),
-    [pilots],
-  );
+    });
+  }, [pilots, pilotFilters]);
   const pilotTotalPages = Math.max(1, Math.ceil(sortedPilots.length / pageSize));
   const currentPilotPage = Math.min(pilotPage, pilotTotalPages);
   const visiblePilots = sortedPilots.slice((currentPilotPage - 1) * pageSize, currentPilotPage * pageSize);
 
   useEffect(() => {
     setPage(1);
-  }, [scuderias.length]);
+  }, [scuderias.length, scuderiaFilters]);
   useEffect(() => {
     setPilotPage(1);
-  }, [pilots.length]);
+  }, [pilots.length, pilotFilters]);
 
   if (isLoading) {
     return (
@@ -254,11 +299,98 @@ export default function MarketPage() {
 
   function getScuderiaSlots(scuderia: MarketScuderia) {
     return [
-      { label: t.market.starter1, available: scuderia.starterCount < 1 },
-      { label: t.market.starter2, available: scuderia.starterCount < 2 },
-      { label: t.market.reserve1, available: scuderia.reserveCount < 1 },
-      { label: t.market.reserve2, available: scuderia.reserveCount < 2 },
+      {
+        label: t.market.starter1,
+        available: scuderia.starterCount < 1,
+        driverName: scuderia.drivers.find((driver) => driver.category === 'starter' && driver.slotNumber === 1)?.displayName ?? null,
+      },
+      {
+        label: t.market.starter2,
+        available: scuderia.starterCount < 2,
+        driverName: scuderia.drivers.find((driver) => driver.category === 'starter' && driver.slotNumber === 2)?.displayName ?? null,
+      },
+      {
+        label: t.market.reserve1,
+        available: scuderia.reserveCount < 1,
+        driverName: scuderia.drivers.find((driver) => driver.category === 'reserve' && driver.slotNumber === 3)?.displayName ?? null,
+      },
+      {
+        label: t.market.reserve2,
+        available: scuderia.reserveCount < 2,
+        driverName: scuderia.drivers.find((driver) => driver.category === 'reserve' && driver.slotNumber === 4)?.displayName ?? null,
+      },
     ];
+  }
+
+  function toggleScuderiaFilter(filter: ScuderiaFilter) {
+    setScuderiaFilters((current) => (
+      current.includes(filter)
+        ? current.filter((item) => item !== filter)
+        : [...current, filter]
+    ));
+  }
+
+  function togglePilotFilter(filter: PilotFilter) {
+    setPilotFilters((current) => (
+      current.includes(filter)
+        ? current.filter((item) => item !== filter)
+        : [...current, filter]
+    ));
+  }
+
+  function hasPilotContract(
+    pilot: MarketPilot,
+    teamCategory: 'formula_1' | 'formula_2',
+    driverCategory: 'starter' | 'reserve',
+  ) {
+    return pilot.contracts.some((contract) => (
+      contract.teamCategory === teamCategory && contract.driverCategory === driverCategory
+    ));
+  }
+
+  function getPilotSortRank(pilot: MarketPilot) {
+    if (pilot.contracts.length === 0) return 0;
+    if (hasPilotContract(pilot, 'formula_2', 'reserve')) return 1;
+    if (hasPilotContract(pilot, 'formula_2', 'starter')) return 2;
+    if (hasPilotContract(pilot, 'formula_1', 'reserve')) return 3;
+    if (hasPilotContract(pilot, 'formula_1', 'starter')) return 4;
+    return 5;
+  }
+
+  function isFormula1Starter(pilot: MarketPilot) {
+    return hasPilotContract(pilot, 'formula_1', 'starter');
+  }
+
+  function getPilotSituation(pilot: MarketPilot) {
+    const starterF1 = pilot.contracts.find((contract) => contract.teamCategory === 'formula_1' && contract.driverCategory === 'starter');
+    if (starterF1) return `${t.market.starterAtTeam} ${starterF1.teamName}`;
+
+    const starterF2 = pilot.contracts.find((contract) => contract.teamCategory === 'formula_2' && contract.driverCategory === 'starter');
+    if (starterF2) return `${t.market.starterAtTeam} ${starterF2.teamName}`;
+
+    const reserveF1 = pilot.contracts.find((contract) => contract.teamCategory === 'formula_1' && contract.driverCategory === 'reserve');
+    if (reserveF1) return `${t.market.reserveAtTeam} ${reserveF1.teamName}`;
+
+    const reserveF2 = pilot.contracts.find((contract) => contract.teamCategory === 'formula_2' && contract.driverCategory === 'reserve');
+    if (reserveF2) return `${t.market.reserveAtTeam} ${reserveF2.teamName}`;
+
+    return t.market.free;
+  }
+
+  function renderScuderiaCategory(scuderia: MarketScuderia) {
+    const isFormula2 = scuderia.category === 'formula_2';
+
+    return (
+      <span
+        className={`inline-flex min-w-12 justify-center border-2 px-2 py-1 text-sm font-black ${
+          isFormula2
+            ? 'border-sky-300 bg-sky-300/15 text-sky-200'
+            : 'border-[#FF232B] bg-[#FF232B]/15 text-[#FF232B]'
+        }`}
+      >
+        {isFormula2 ? t.market.formula2 : t.market.formula1}
+      </span>
+    );
   }
 
   function renderScuderiaLogo(scuderia: MarketScuderia, className: string) {
@@ -283,7 +415,9 @@ export default function MarketPage() {
   }
 
   const negotiationMinimumSalary = negotiatingPilot
-    ? negotiationForm.category === 'reserve'
+    ? isNegotiatingFormula2
+      ? 0
+      : negotiationForm.category === 'reserve'
       ? Math.round(negotiatingPilot.minimumSalary * 0.25)
       : negotiatingPilot.minimumSalary
     : 0;
@@ -296,11 +430,14 @@ export default function MarketPage() {
   );
 
   function openNegotiation(pilot: MarketPilot) {
+    const firstTeam = managedTeams[0] ?? null;
+    const isFormula2 = firstTeam?.teamCategory === 'formula_2';
+
     setNegotiatingPilot(pilot);
     setNegotiationForm({
-      teamId: managedTeams[0]?.teamId ?? '',
+      teamId: firstTeam?.teamId ?? '',
       contractRaces: '8',
-      salaryPerRace: String(pilot.minimumSalary),
+      salaryPerRace: isFormula2 ? '0' : String(pilot.minimumSalary),
       category: 'starter',
     });
   }
@@ -310,8 +447,21 @@ export default function MarketPage() {
       ...current,
       category,
       salaryPerRace: negotiatingPilot
-        ? String(category === 'reserve' ? Math.round(negotiatingPilot.minimumSalary * 0.25) : negotiatingPilot.minimumSalary)
+        ? String(isNegotiatingFormula2 ? 0 : category === 'reserve' ? Math.round(negotiatingPilot.minimumSalary * 0.25) : negotiatingPilot.minimumSalary)
         : current.salaryPerRace,
+    }));
+  }
+
+  function updateNegotiationTeam(teamId: string) {
+    const team = managedTeams.find((managedTeam) => managedTeam.teamId === teamId);
+    setNegotiationForm((current) => ({
+      ...current,
+      teamId,
+      salaryPerRace: team?.teamCategory === 'formula_2'
+        ? '0'
+        : String(current.category === 'reserve' && negotiatingPilot
+          ? Math.round(negotiatingPilot.minimumSalary * 0.25)
+          : negotiatingPilot?.minimumSalary ?? current.salaryPerRace),
     }));
   }
 
@@ -372,7 +522,7 @@ export default function MarketPage() {
         body: JSON.stringify({
           username: negotiatingPilot.username,
           contractRaces: Number(negotiationForm.contractRaces),
-          salaryPerRace: salaryValue,
+          salaryPerRace: isNegotiatingFormula2 ? 0 : salaryValue,
           category: negotiationForm.category,
         }),
       });
@@ -427,6 +577,32 @@ export default function MarketPage() {
 
                   {isScuderiasOpen && (
                     <div>
+                      <div className="flex flex-wrap gap-2 border-x-4 border-[#FF232B] bg-gray-800 p-3">
+                        {([
+                          ['formula_1', t.market.formula1],
+                          ['formula_2', t.market.formula2],
+                          ['starter_available', t.market.starterAvailable],
+                          ['reserve_available', t.market.reserveAvailable],
+                        ] as const).map(([filter, label]) => {
+                          const isActive = scuderiaFilters.includes(filter);
+
+                          return (
+                            <button
+                              key={filter}
+                              type="button"
+                              className={`border-2 px-3 py-2 text-xs font-black uppercase transition sm:text-sm ${
+                                isActive
+                                  ? 'border-[#FF232B] bg-[#FF232B] text-white'
+                                  : 'border-gray-500 bg-gray-900 text-gray-200 hover:border-[#FF232B]'
+                              }`}
+                              onClick={() => toggleScuderiaFilter(filter)}
+                            >
+                              {label}
+                            </button>
+                          );
+                        })}
+                      </div>
+
                       {visibleScuderias.length === 0 ? (
                         <div className="border-4 border-[#FF232B] bg-gray-700 p-6 text-center">
                           {t.market.noScuderias}
@@ -445,7 +621,10 @@ export default function MarketPage() {
                                   <div className="flex min-w-0 items-center gap-3">
                                     {renderScuderiaLogo(scuderia, 'h-14 w-14 shrink-0 object-contain sm:h-16 sm:w-16')}
                                     <div className="min-w-0">
-                                      <p className="truncate text-lg font-bold sm:text-xl">{scuderia.name}</p>
+                                      <div className="flex min-w-0 items-center gap-2">
+                                        <p className="truncate text-lg font-bold sm:text-xl">{scuderia.name}</p>
+                                        {renderScuderiaCategory(scuderia)}
+                                      </div>
                                       <p className="truncate text-sm text-gray-300">{scuderia.tag}</p>
                                     </div>
                                   </div>
@@ -461,7 +640,7 @@ export default function MarketPage() {
                                         }`}
                                       >
                                         <p className="mb-1 uppercase text-gray-300">{slot.label}</p>
-                                        <p>{slot.available ? t.market.available : t.market.occupied}</p>
+                                        <p className="truncate">{slot.available ? t.market.available : slot.driverName ?? t.market.occupied}</p>
                                       </div>
                                     ))}
                                   </div>
@@ -473,7 +652,8 @@ export default function MarketPage() {
                           <table className="hidden w-full table-fixed border-collapse text-left lg:table">
                             <thead>
                               <tr className="bg-[#FF232B] text-white">
-                                <th className="w-[34%] p-3">{t.market.scuderias}</th>
+                                <th className="w-[28%] p-3">{t.market.scuderias}</th>
+                                <th className="w-[12%] p-3 text-center">{t.market.category}</th>
                                 <th className="p-3 text-center">{t.market.starter1}</th>
                                 <th className="p-3 text-center">{t.market.starter2}</th>
                                 <th className="p-3 text-center">{t.market.reserve1}</th>
@@ -498,6 +678,7 @@ export default function MarketPage() {
                                         </div>
                                       </div>
                                     </td>
+                                    <td className="p-3 text-center">{renderScuderiaCategory(scuderia)}</td>
                                     {getScuderiaSlots(scuderia).map((slot) => (
                                       <td key={`${scuderia.id}-${slot.label}`} className="p-3 text-center">
                                         <span className={`inline-block w-full border-2 px-2 py-2 text-sm font-semibold sm:px-3 sm:text-base ${
@@ -506,7 +687,9 @@ export default function MarketPage() {
                                             : 'border-gray-600 bg-gray-800 text-gray-400'
                                         }`}
                                         >
-                                          {slot.available ? t.market.available : t.market.occupied}
+                                          <span className="block truncate">
+                                            {slot.available ? t.market.available : slot.driverName ?? t.market.occupied}
+                                          </span>
                                         </span>
                                       </td>
                                     ))}
@@ -537,6 +720,32 @@ export default function MarketPage() {
 
                   {isPilotsOpen && (
                     <div>
+                      <div className="flex flex-wrap gap-2 border-x-4 border-[#FF232B] bg-gray-800 p-3">
+                        {([
+                          ['formula_1', t.market.formula1],
+                          ['formula_2', t.market.formula2],
+                          ['starter_contract', t.market.starterContractFilter],
+                          ['reserve_contract', t.market.reserveContractFilter],
+                        ] as const).map(([filter, label]) => {
+                          const isActive = pilotFilters.includes(filter);
+
+                          return (
+                            <button
+                              key={filter}
+                              type="button"
+                              className={`border-2 px-3 py-2 text-xs font-black uppercase transition sm:text-sm ${
+                                isActive
+                                  ? 'border-[#FF232B] bg-[#FF232B] text-white'
+                                  : 'border-gray-500 bg-gray-900 text-gray-200 hover:border-[#FF232B]'
+                              }`}
+                              onClick={() => togglePilotFilter(filter)}
+                            >
+                              {label}
+                            </button>
+                          );
+                        })}
+                      </div>
+
                       <div className="lg:hidden">
                         {visiblePilots.length === 0 ? (
                           <div className="border-4 border-[#FF232B] bg-gray-700 p-6 text-center text-gray-300">
@@ -547,7 +756,7 @@ export default function MarketPage() {
                             {visiblePilots.map((pilot) => (
                               <article
                                 key={pilot.id}
-                                className={`border-4 border-gray-900 bg-gray-700 p-3 ${pilot.hasStarterContract ? 'opacity-70' : ''}`}
+                                className={`border-4 border-gray-900 bg-gray-700 p-3 ${isFormula1Starter(pilot) ? 'opacity-70' : ''}`}
                               >
                                 <div className="flex min-w-0 items-center gap-3">
                                   <DriverCircle
@@ -607,16 +816,14 @@ export default function MarketPage() {
                                     )}
                                   </div>
                                   <div className="border-2 border-gray-900 bg-gray-800 p-3">
-                                    <p className="text-xs font-bold uppercase text-gray-300">{t.market.starterContract}</p>
-                                    <p className="mt-2 text-sm font-semibold">
-                                      {pilot.hasStarterContract ? t.market.yes : t.market.no}
-                                    </p>
+                                    <p className="text-xs font-bold uppercase text-gray-300">{t.market.situation}</p>
+                                    <p className="mt-2 text-sm font-semibold">{getPilotSituation(pilot)}</p>
                                   </div>
                                 </div>
 
                                 <button
                                   type="button"
-                                  disabled={pilot.hasStarterContract}
+                                  disabled={isFormula1Starter(pilot)}
                                   onClick={() => openNegotiation(pilot)}
                                   className="mt-3 w-full bg-[#FF232B] px-3 py-3 text-sm font-bold uppercase disabled:cursor-not-allowed disabled:bg-gray-600 disabled:text-gray-300"
                                 >
@@ -638,7 +845,7 @@ export default function MarketPage() {
                               <th className="p-3 text-center">{t.market.overall}</th>
                               <th className="p-3 text-center">{t.market.commercialScore}</th>
                               <th className="p-3 text-center">{t.market.personalSponsor}</th>
-                              <th className="p-3 text-center">{t.market.starterContract}</th>
+                              <th className="p-3 text-center">{t.market.situation}</th>
                               <th className="w-[12%] p-3 text-center">{t.market.negotiate}</th>
                             </tr>
                           </thead>
@@ -650,7 +857,7 @@ export default function MarketPage() {
                             ) : visiblePilots.map((pilot) => (
                               <tr
                                 key={pilot.id}
-                                className={`border-b-4 border-gray-900 bg-gray-700 ${pilot.hasStarterContract ? 'opacity-70' : ''}`}
+                                className={`border-b-4 border-gray-900 bg-gray-700 ${isFormula1Starter(pilot) ? 'opacity-70' : ''}`}
                               >
                                 <td className="p-3">
                                   <div className="flex min-w-0 items-center gap-4">
@@ -693,12 +900,12 @@ export default function MarketPage() {
                                   )}
                                 </td>
                                 <td className="p-3 text-center">
-                                  {pilot.hasStarterContract ? t.market.yes : t.market.no}
+                                  {getPilotSituation(pilot)}
                                 </td>
                                 <td className="p-3 text-center">
                                   <button
                                     type="button"
-                                    disabled={pilot.hasStarterContract}
+                                    disabled={isFormula1Starter(pilot)}
                                     onClick={() => openNegotiation(pilot)}
                                     className="bg-[#FF232B] px-3 py-2 text-sm font-bold uppercase disabled:cursor-not-allowed disabled:bg-gray-600 disabled:text-gray-300"
                                   >
@@ -729,9 +936,11 @@ export default function MarketPage() {
           >
             <h2 className="text-2xl font-bold uppercase">{t.market.contractProposal}</h2>
             <p className="mt-2 text-lg font-bold">{negotiatingPilot.username}</p>
-            <p className="text-sm text-gray-300">
-              {t.market.minimumSalary}: {money(negotiationMinimumSalary)}
-            </p>
+            {!isNegotiatingFormula2 && (
+              <p className="text-sm text-gray-300">
+                {t.market.minimumSalary}: {money(negotiationMinimumSalary)}
+              </p>
+            )}
 
             <label className="mt-5 block text-sm font-semibold" htmlFor="market-team">
               {t.market.team}
@@ -740,7 +949,7 @@ export default function MarketPage() {
               id="market-team"
               required
               value={negotiationForm.teamId}
-              onChange={(event) => setNegotiationForm((current) => ({ ...current, teamId: event.target.value }))}
+              onChange={(event) => updateNegotiationTeam(event.target.value)}
               className="mt-2 w-full border-2 border-[#FF232B] bg-black px-4 py-3 text-white outline-none"
             >
               {managedTeams.map((team) => (
@@ -776,24 +985,28 @@ export default function MarketPage() {
               <option value="starter">{t.market.starter}</option>
               <option value="reserve">{t.market.reserve}</option>
             </select>
-            {negotiationForm.category === 'reserve' && (
+            {negotiationForm.category === 'reserve' && !isNegotiatingFormula2 && (
               <p className="mt-2 border border-[#FF232B] bg-black/50 p-3 text-sm font-semibold text-red-100">
                 {t.market.reserveSalaryWarning}
               </p>
             )}
 
-            <label className="mt-4 block text-sm font-semibold" htmlFor="market-salary">
-              {t.market.salaryPerRace}
-            </label>
-            <input
-              id="market-salary"
-              required
-              min={negotiationMinimumSalary}
-              type="number"
-              value={negotiationForm.salaryPerRace}
-              onChange={(event) => setNegotiationForm((current) => ({ ...current, salaryPerRace: event.target.value }))}
-              className="mt-2 w-full border-2 border-[#FF232B] bg-black px-4 py-3 text-white outline-none"
-            />
+            {!isNegotiatingFormula2 && (
+              <>
+                <label className="mt-4 block text-sm font-semibold" htmlFor="market-salary">
+                  {t.market.salaryPerRace}
+                </label>
+                <input
+                  id="market-salary"
+                  required
+                  min={negotiationMinimumSalary}
+                  type="number"
+                  value={negotiationForm.salaryPerRace}
+                  onChange={(event) => setNegotiationForm((current) => ({ ...current, salaryPerRace: event.target.value }))}
+                  className="mt-2 w-full border-2 border-[#FF232B] bg-black px-4 py-3 text-white outline-none"
+                />
+              </>
+            )}
 
             <div className="mt-6 grid grid-cols-2 gap-4">
               <button

@@ -26,12 +26,44 @@ function splitMessage(msg: string, size = 2000): string[] {
   }
   return chunks;
 }
-function splitCodeMessage(msg: string, size = 1900): string[] {
+function stripCodeBlock(message: string) {
+  const trimmed = message.trim();
+  if (!trimmed.startsWith("```") || !trimmed.endsWith("```")) {
+    return message;
+  }
+
+  return trimmed.slice(3, -3).trim();
+}
+
+function splitCodeMessage(msg: string, size = 1850): string[] {
   const chunks: string[] = [];
-  for (let i = 0; i < msg.length; i += size) {
-    const part = msg.slice(i, i + size);
+
+  const lines = msg.split("\n");
+  let part = "";
+
+  for (const line of lines) {
+    const nextPart = part ? `${part}\n${line}` : line;
+    if (nextPart.length > size && part) {
+      chunks.push("```" + part + "```");
+      part = line;
+      continue;
+    }
+
+    if (line.length > size) {
+      for (let i = 0; i < line.length; i += size) {
+        chunks.push("```" + line.slice(i, i + size) + "```");
+      }
+      part = "";
+      continue;
+    }
+
+    part = nextPart;
+  }
+
+  if (part) {
     chunks.push("```" + part + "```");
   }
+
   return chunks;
 }
 
@@ -141,8 +173,7 @@ export function sendDiscordPlayerChat(userInfo: PlayerObject, message: string) {
   }
 }
 
-export function sendDiscordResult(message: string) {
-  (async () => {
+export async function sendDiscordResult(message: string) {
     try {
       if (!message) return;
       const envName = process.env.LEAGUE_ENV || "ftoh";
@@ -157,18 +188,17 @@ export function sendDiscordResult(message: string) {
         LOG_URL = LEAGUE_MODE ? webhooks.LEAGUE_REPLAY_URL_FH : webhooks.PUBLIC_REPLAY_URL;
       }
 
-      const sanitized = message.replace(/@(?=[a-zA-Z])/g, "@ ");
+      const sanitized = stripCodeBlock(message).replace(/@(?=[a-zA-Z])/g, "@ ");
       const timestamp = `📅 ${getTimestamp()}`;
       const timestamped = `${sanitized}\n\n${timestamp}`;
 
-      const parts = splitMessage(timestamped);
+      const parts = splitCodeMessage(timestamped);
       for (const part of parts) {
         await safeSend(LOG_URL, { content: part }, "RESULT");
       }
     } catch (err) {
       console.error("❌ [sendDiscordResult ERROR]:", err);
     }
-  })();
 }
 
 export function sendDiscordTrackRecord(playerName: string, lapTime: number) {
@@ -236,7 +266,7 @@ export function sendDiscordReplay(replay: Uint8Array) {
     const formData = new FormData();
     formData.append("file", blob, generateFileName());
 
-    safeSend(REPLAYS_URL, formData, "REPLAY", true);
+    return safeSend(REPLAYS_URL, formData, "REPLAY", true);
   } catch (err) {
     console.error("❌ [sendDiscordReplay ERROR]:", err);
   }

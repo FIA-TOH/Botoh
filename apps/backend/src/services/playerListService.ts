@@ -47,6 +47,7 @@ export interface PlayerPositionData {
 export interface PlayerData extends PlayerPositionData {
   ip: string;
   isInTheRoom: boolean;
+  leagueScuderiaId: string | null;
   leagueScuderia: string | null;
   totalTime: number;
   currentLap: number;
@@ -344,6 +345,7 @@ export class PlayerListService {
       ...this.toPositionData(player),
       ip: state?.ip ?? '',
       isInTheRoom: state?.isInTheRoom ?? true,
+      leagueScuderiaId: state?.leagueScuderia ?? null,
       leagueScuderia: scuderia?.name ?? null,
       totalTime: state?.totalTime ?? 0,
       currentLap: state?.currentLap ?? 0,
@@ -404,6 +406,7 @@ export class PlayerListService {
       auth: '',
       ip: state?.ip ?? '',
       isInTheRoom: false,
+      leagueScuderiaId: state?.leagueScuderia ?? null,
       leagueScuderia: scuderia?.name ?? null,
       totalTime: state?.totalTime ?? 0,
       currentLap: state?.currentLap ?? 0,

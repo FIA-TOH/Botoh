@@ -7,6 +7,7 @@ import { useTranslations } from '@/i18n';
 interface Props {
   drivers?: Driver[];
   loggedUserTeam?: string | null;
+  loggedUserTeamId?: string | null;
   onPitCall?: (driver: Driver) => void;
   onPitTyrePrepare?: (driver: Driver, tyre: Tires | null) => void;
   loading?: boolean;
@@ -17,6 +18,7 @@ interface Props {
 export function TeamInfoPanel({
   drivers = [],
   loggedUserTeam = null,
+  loggedUserTeamId = null,
   onPitCall,
   onPitTyrePrepare,
   loading = false,
@@ -27,8 +29,14 @@ export function TeamInfoPanel({
   const teamDrivers = drivers
     .filter(
       (driver) =>
-        loggedUserTeam !== null
-        && driver.leagueScuderia === loggedUserTeam
+        (
+          loggedUserTeamId !== null
+          && driver.leagueScuderiaId === loggedUserTeamId
+        )
+        || (
+          loggedUserTeam !== null
+          && driver.leagueScuderia === loggedUserTeam
+        )
     )
     .slice(0, 2);
 

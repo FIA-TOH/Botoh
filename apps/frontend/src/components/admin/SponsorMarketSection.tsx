@@ -106,12 +106,20 @@ export interface EconomicScuderia {
   emoji: string;
   color: string;
   logoUrl: string | null;
+  category: 'formula_1' | 'formula_2';
+  isJuniorTeam: boolean;
+  parentTeamId: string | null;
+  parentTeamName?: string | null;
+  starterDriverCount?: number;
+  reserveDriverCount?: number;
   momentoComercial: number;
   prestigio: number;
   agressividade: number;
   popularidade: number;
   tecnica: number;
   nacionalidades: string[] | null;
+  manualNacionalidades?: string[] | null;
+  driverNacionalidades?: string[] | null;
   setores: string[] | null;
   sponsors: { name: string; category: SponsorContractCategory; slotNumber: number }[];
 }
@@ -158,6 +166,25 @@ export interface SponsorMarketResult {
   proposals: SponsorMarketProposal[];
 }
 
+export type RaceMissionDifficulty = 'easy' | 'medium' | 'hard' | 'insane';
+
+export interface RaceMissionGenerationResult {
+  team: { id: string; name: string };
+  missions: {
+    sponsorId: string;
+    sponsorName: string;
+    category: SponsorContractCategory;
+    difficulty: RaceMissionDifficulty;
+    reward: number;
+    missionId: string;
+  }[];
+  skipped: {
+    sponsorId: string;
+    sponsorName: string;
+    category: SponsorContractCategory;
+  }[];
+}
+
 interface Labels {
   sponsorMarket: string;
   sponsorTable: string;
@@ -199,11 +226,18 @@ interface Labels {
   noScuderias: string;
   generateMarket: string;
   generatingMarket: string;
+  generateRaceMissions: string;
+  generatingRaceMissions: string;
   selectAllScuderias: string;
   clearSelection: string;
   selectedScuderias: string;
   noProposalsReceived: string;
   proposalsReceived: string;
+  raceMissionsGenerated: string;
+  noRaceMissionsGenerated: string;
+  raceMissionSkipped: string;
+  difficulty: string;
+  raceMissionDifficulties: Record<RaceMissionDifficulty, string>;
   proposalOrigin: string;
   proposalOrigins: Record<SponsorMarketProposal['origem'], string>;
   contractType: string;
@@ -259,6 +293,7 @@ interface Props {
   onScuderiaDraftChange: (scuderia: EconomicScuderia) => void;
   onScuderiaSave: (scuderia: EconomicScuderia) => Promise<void>;
   onGenerateMarket: (teamId: string) => Promise<SponsorMarketResult | null>;
+  onGenerateRaceMissions: (teamIds: string[]) => Promise<RaceMissionGenerationResult[]>;
 }
 
 function clampInput(value: string, min: number, max: number) {
@@ -282,10 +317,13 @@ export function SponsorMarketSection({
   onScuderiaDraftChange,
   onScuderiaSave,
   onGenerateMarket,
+  onGenerateRaceMissions,
 }: Props) {
   const [selectedScuderiaIds, setSelectedScuderiaIds] = useState<string[]>([]);
   const [generating, setGenerating] = useState(false);
+  const [generatingRaceMissions, setGeneratingRaceMissions] = useState(false);
   const [marketResults, setMarketResults] = useState<SponsorMarketResult[]>([]);
+  const [raceMissionResults, setRaceMissionResults] = useState<RaceMissionGenerationResult[]>([]);
   const sponsorPagination = usePagination(sponsors);
   const scuderiaPagination = usePagination(scuderias);
   const sponsorSlots = [
@@ -327,6 +365,16 @@ export function SponsorMarketSection({
       setMarketResults(proposals.filter((result): result is SponsorMarketResult => result !== null));
     } finally {
       setGenerating(false);
+    }
+  }
+
+  async function generateRaceMissions() {
+    if (selectedScuderiaIds.length === 0) return;
+    setGeneratingRaceMissions(true);
+    try {
+      setRaceMissionResults(await onGenerateRaceMissions(selectedScuderiaIds));
+    } finally {
+      setGeneratingRaceMissions(false);
     }
   }
 
@@ -531,9 +579,14 @@ export function SponsorMarketSection({
                 </div>
                 <p className="mt-2 text-xs text-gray-400">{labels.selectedScuderias}: {selectedScuderiaIds.length}</p>
               </div>
-              <button type="button" disabled={selectedScuderiaIds.length === 0 || generating} onClick={generateProposal} className="rounded bg-purple-600 px-4 py-2 disabled:bg-gray-600">
-                {generating ? labels.generatingMarket : labels.generateMarket}
-              </button>
+              <div className="flex flex-wrap gap-2">
+                <button type="button" disabled={selectedScuderiaIds.length === 0 || generating} onClick={generateProposal} className="rounded bg-purple-600 px-4 py-2 disabled:bg-gray-600">
+                  {generating ? labels.generatingMarket : labels.generateMarket}
+                </button>
+                <button type="button" disabled={selectedScuderiaIds.length === 0 || generatingRaceMissions} onClick={generateRaceMissions} className="rounded bg-red-600 px-4 py-2 disabled:bg-gray-600">
+                  {generatingRaceMissions ? labels.generatingRaceMissions : labels.generateRaceMissions}
+                </button>
+              </div>
             </div>
             <div className="mt-5 grid gap-4 xl:grid-cols-2">
               {marketResults.map((result) => (
@@ -592,6 +645,40 @@ export function SponsorMarketSection({
             {marketResults.length === 0 && (
               <div className="mt-4 text-sm text-gray-400">
                 {labels.selectOption}
+              </div>
+            )}
+            {raceMissionResults.length > 0 && (
+              <div className="mt-6">
+                <h4 className="mb-3 text-lg font-semibold">{labels.raceMissionsGenerated}</h4>
+                <div className="grid gap-4 xl:grid-cols-2">
+                  {raceMissionResults.map((result) => (
+                    <article key={`race-missions-${result.team.id}`} className="rounded-lg border border-gray-600 bg-gray-700 p-4">
+                      <h5 className="mb-3 font-bold">{result.team.name}</h5>
+                      {result.missions.length === 0 ? (
+                        <p className="rounded bg-gray-800 p-3 text-sm text-gray-300">{labels.noRaceMissionsGenerated}</p>
+                      ) : (
+                        <div className="space-y-2">
+                          {result.missions.map((mission) => (
+                            <div key={mission.missionId} className="rounded bg-gray-800 p-3 text-sm">
+                              <div className="flex flex-wrap items-center justify-between gap-2">
+                                <span className="font-semibold">{mission.sponsorName}</span>
+                                <span className="text-emerald-300">{formatMoney(mission.reward)}</span>
+                              </div>
+                              <p className="mt-1 text-gray-300">
+                                {labels.contractTypes[mission.category]} · {labels.difficulty}: {labels.raceMissionDifficulties[mission.difficulty]}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      {result.skipped.length > 0 && (
+                        <p className="mt-3 text-xs text-gray-400">
+                          {labels.raceMissionSkipped}: {result.skipped.map((sponsor) => sponsor.sponsorName).join(', ')}
+                        </p>
+                      )}
+                    </article>
+                  ))}
+                </div>
               </div>
             )}
           </section>

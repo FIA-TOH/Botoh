@@ -4,6 +4,7 @@ import garageService from './garageService';
 import {
   calculateCompatibility,
   calculateContractValue,
+  calculatePersonalSponsorSeasonValue,
   drawMarketProposalCategory,
   drawMarketProposalCount,
   drawMarketSponsorOrigin,
@@ -15,8 +16,9 @@ import {
   selectWeightedProposal,
   SponsorContractCategory,
 } from '../config/sponsorMarket';
+import { getFacilityCostPerRace } from '../config/facilityEconomy';
 
-export type TeamMembershipRole = 'team_principal' | 'team_assistant' | 'driver';
+export type TeamMembershipRole = 'team_principal' | 'team_assistant' | 'driver' | 'engineer';
 
 export interface TeamMembershipInput {
   teamId: string;
@@ -55,6 +57,9 @@ export interface ScuderiaInput {
   emoji?: string | null;
   color: string;
   logoUrl?: string | null;
+  category?: 'formula_1' | 'formula_2';
+  isJuniorTeam?: boolean;
+  parentTeamId?: string | null;
   momentoComercial?: number;
   prestigio?: number;
   agressividade?: number;
@@ -85,6 +90,35 @@ export interface SponsorMissionInput {
   reward: number;
   racesToComplete?: number;
 }
+
+type RaceMissionDifficulty = 'easy' | 'medium' | 'hard' | 'insane';
+
+const RACE_MISSION_GENERATOR_ID = 'race_mission_generator';
+const RACE_MISSION_GENERATION_CHANCES: Partial<Record<SponsorContractCategory, number>> = {
+  title_sponsor: 0.75,
+  main_partner: 0.5,
+};
+const RACE_MISSION_BASES: Partial<Record<SponsorContractCategory, number>> = {
+  title_sponsor: 60000,
+  main_partner: 35000,
+};
+const RACE_MISSION_BUDGET_MULTIPLIERS = [0.75, 1, 1.25, 1.55];
+const RACE_MISSION_AMBITION_MULTIPLIERS = [0.8, 1, 1.25, 1.55, 1.75, 2];
+const RACE_MISSION_PRESTIGE_MULTIPLIERS = [0, 0.8, 0.95, 1.1, 1.25, 1.4];
+const RACE_MISSION_DIFFICULTY_MULTIPLIERS: Record<RaceMissionDifficulty, number> = {
+  easy: 0.75,
+  medium: 1,
+  hard: 1.35,
+  insane: 1.75,
+};
+const RACE_MISSION_DIFFICULTY_WEIGHTS: Record<number, { difficulty: RaceMissionDifficulty; chance: number }[]> = {
+  0: [{ difficulty: 'easy', chance: 0.7 }, { difficulty: 'medium', chance: 0.25 }, { difficulty: 'hard', chance: 0.05 }],
+  1: [{ difficulty: 'easy', chance: 0.5 }, { difficulty: 'medium', chance: 0.4 }, { difficulty: 'hard', chance: 0.1 }],
+  2: [{ difficulty: 'easy', chance: 0.3 }, { difficulty: 'medium', chance: 0.5 }, { difficulty: 'hard', chance: 0.2 }],
+  3: [{ difficulty: 'easy', chance: 0.15 }, { difficulty: 'medium', chance: 0.55 }, { difficulty: 'hard', chance: 0.3 }],
+  4: [{ difficulty: 'easy', chance: 0.1 }, { difficulty: 'medium', chance: 0.4 }, { difficulty: 'hard', chance: 0.4 }, { difficulty: 'insane', chance: 0.1 }],
+  5: [{ difficulty: 'easy', chance: 0.05 }, { difficulty: 'medium', chance: 0.3 }, { difficulty: 'hard', chance: 0.5 }, { difficulty: 'insane', chance: 0.15 }],
+};
 
 export interface SponsorInput {
   name?: string;
@@ -138,6 +172,7 @@ class AdminService {
               'roles', ARRAY_REMOVE(ARRAY[
                 CASE WHEN utm.is_team_principal THEN 'team_principal' END,
                 CASE WHEN utm.is_team_assistant THEN 'team_assistant' END,
+                CASE WHEN utm.is_engineer THEN 'engineer' END,
                 CASE WHEN utm.is_driver THEN 'driver' END
               ], NULL),
               'driverCategory', active_driver.category,
@@ -405,6 +440,7 @@ class AdminService {
              WHERE pilot_user_id = $1`,
             [userId],
           );
+          await this.syncPersonalSponsorsForPilot(userId, client);
         }
       }
 
@@ -428,6 +464,7 @@ class AdminService {
          WHERE pilot_user_id = $1`,
         [userId],
       );
+      await this.syncPersonalSponsorsForPilot(userId, client);
       return client.query(
         'UPDATE users SET is_active = false WHERE id = $1 RETURNING id',
         [userId],
@@ -442,15 +479,19 @@ class AdminService {
   }
 
   async unlinkUserPersonalSponsor(userId: string) {
-    const result = await query(
-      `UPDATE sponsors
-       SET pilot_user_id = NULL,
-           tipo = 'minor_sponsor',
-           updated_at = NOW()
-       WHERE pilot_user_id = $1
-       RETURNING id`,
-      [userId],
-    );
+    const result = await transaction(async (client) => {
+      const updated = await client.query(
+        `UPDATE sponsors
+         SET pilot_user_id = NULL,
+             tipo = 'minor_sponsor',
+             updated_at = NOW()
+         WHERE pilot_user_id = $1
+         RETURNING id`,
+        [userId],
+      );
+      await this.syncPersonalSponsorsForPilot(userId, client);
+      return updated;
+    });
 
     return result.rows[0]
       ? { success: true }
@@ -484,16 +525,18 @@ class AdminService {
           role,
           is_team_principal,
           is_team_assistant,
+          is_engineer,
           is_driver,
           driver_category
         )
-         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
         [
           userId,
           membership.teamId,
           primaryRole,
           membership.roles.includes('team_principal'),
           membership.roles.includes('team_assistant'),
+          membership.roles.includes('engineer'),
           isDriver,
           driverCategory,
         ],
@@ -525,7 +568,9 @@ class AdminService {
     ]);
     for (const teamId of affectedTeamIds) {
       await this.recalculateTeamSalaryCost(client, teamId);
+      await this.syncTeamNationalities(teamId, client);
     }
+    await this.syncPersonalSponsorsForPilot(userId, client);
   }
 
   private hasAnyRole(memberships: TeamMembershipInput[], role: TeamMembershipRole) {
@@ -669,6 +714,32 @@ class AdminService {
     return slot;
   }
 
+  private async findAvailableSponsorSlot(
+    client: { query: (sql: string, params?: any[]) => Promise<any> },
+    teamId: string,
+    category: SponsorContractCategory,
+    currentTeamSponsorId?: string,
+  ) {
+    const limits: Record<SponsorContractCategory, number> = {
+      title_sponsor: 1,
+      main_partner: 2,
+      official_partner: 4,
+      minor_sponsor: 8,
+      personal_sponsor: 4,
+    };
+    const occupied = await client.query(
+      `SELECT slot_number
+       FROM team_sponsors
+       WHERE team_id = $1
+         AND category = $2
+         AND ($3::uuid IS NULL OR id <> $3::uuid)`,
+      [teamId, category, currentTeamSponsorId ?? null],
+    );
+    const used = new Set(occupied.rows.map((row: any) => Number(row.slot_number)));
+    return Array.from({ length: limits[category] }, (_, index) => index + 1)
+      .find((slot) => !used.has(slot)) ?? null;
+  }
+
   private async upsertTeamDriver(
     client: { query: (sql: string, params?: any[]) => Promise<any> },
     teamId: string,
@@ -755,9 +826,10 @@ class AdminService {
         role,
         is_team_principal,
         is_team_assistant,
+        is_engineer,
         is_driver,
         driver_category
-      ) VALUES ($1, $2, 'driver', false, false, true, $3)
+      ) VALUES ($1, $2, 'driver', false, false, false, true, $3)
       ON CONFLICT (user_id, team_id)
       DO UPDATE SET
         is_driver = true,
@@ -765,6 +837,7 @@ class AdminService {
         role = CASE
           WHEN user_team_memberships.is_team_principal THEN user_team_memberships.role
           WHEN user_team_memberships.is_team_assistant THEN user_team_memberships.role
+          WHEN user_team_memberships.is_engineer THEN user_team_memberships.role
           ELSE 'driver'
         END`,
       [userId, teamId, category],
@@ -787,7 +860,7 @@ class AdminService {
     if (remaining.rows[0]) return;
 
     const membership = await client.query(
-      `SELECT is_team_principal, is_team_assistant
+      `SELECT is_team_principal, is_team_assistant, is_engineer
        FROM user_team_memberships
        WHERE user_id = $1
          AND team_id = $2`,
@@ -796,7 +869,7 @@ class AdminService {
     const row = membership.rows[0];
     if (!row) return;
 
-    if (!row.is_team_principal && !row.is_team_assistant) {
+    if (!row.is_team_principal && !row.is_team_assistant && !row.is_engineer) {
       await client.query(
         'DELETE FROM user_team_memberships WHERE user_id = $1 AND team_id = $2',
         [userId, teamId],
@@ -808,7 +881,11 @@ class AdminService {
       `UPDATE user_team_memberships
        SET is_driver = false,
            driver_category = null,
-           role = CASE WHEN is_team_principal THEN 'team_principal' ELSE 'team_assistant' END
+           role = CASE
+             WHEN is_team_principal THEN 'team_principal'
+             WHEN is_team_assistant THEN 'team_assistant'
+             ELSE 'engineer'
+           END
        WHERE user_id = $1
          AND team_id = $2`,
       [userId, teamId],
@@ -823,16 +900,254 @@ class AdminService {
       `UPDATE teams
        SET salary_cost_per_race = COALESCE(
          (
-          SELECT SUM(salary_per_race)
+          SELECT SUM(
+            CASE
+              WHEN team_drivers.category = 'reserve'
+                AND teams.category = 'formula_1'
+                AND team_drivers.user_id IS NOT NULL
+                AND EXISTS (
+                  SELECT 1
+                  FROM team_drivers junior_driver
+                  JOIN teams junior_team ON junior_team.id = junior_driver.team_id
+                  WHERE junior_driver.user_id = team_drivers.user_id
+                    AND junior_driver.status = 'active'
+                    AND junior_team.category = 'formula_2'
+                    AND junior_team.is_junior_team = true
+                    AND junior_team.parent_team_id = teams.id
+                )
+              THEN 0
+              ELSE team_drivers.salary_per_race
+            END
+          )
           FROM team_drivers
-          WHERE team_id = $1
-            AND status = 'active'
+          JOIN teams ON teams.id = team_drivers.team_id
+          WHERE team_drivers.team_id = $1
+            AND team_drivers.status = 'active'
          ),
          0
        ),
        updated_at = NOW()
        WHERE id = $1`,
       [teamId],
+    );
+  }
+
+  private async syncTeamNationalities(
+    teamId: string,
+    client: { query: (sql: string, params?: any[]) => Promise<any> } = { query },
+  ) {
+    await client.query(
+      `UPDATE teams
+       SET nacionalidades = (
+         SELECT ARRAY_AGG(nationality ORDER BY normalized)
+         FROM (
+           SELECT DISTINCT ON (normalized)
+             nationality,
+             normalized
+           FROM (
+             SELECT
+               TRIM(value) AS nationality,
+               LOWER(TRIM(value)) AS normalized
+             FROM UNNEST(COALESCE(teams.manual_nacionalidades, ARRAY[]::text[])) AS value
+             WHERE TRIM(value) <> ''
+             UNION ALL
+             SELECT
+               TRIM(users.driver_nacionalidade) AS nationality,
+               LOWER(TRIM(users.driver_nacionalidade)) AS normalized
+             FROM team_drivers
+             JOIN users ON users.id = team_drivers.user_id
+             WHERE team_drivers.team_id = teams.id
+               AND team_drivers.status = 'active'
+               AND users.driver_wallet_created = true
+               AND TRIM(COALESCE(users.driver_nacionalidade, '')) <> ''
+           ) nationalities
+           ORDER BY normalized, nationality
+         ) unique_nationalities
+       ),
+       updated_at = NOW()
+       WHERE id = $1`,
+      [teamId],
+    );
+
+    const parent = await client.query(
+      'SELECT parent_team_id FROM teams WHERE id = $1',
+      [teamId],
+    );
+    if (parent.rows[0]?.parent_team_id) {
+      await this.recalculateTeamSalaryCost(client, parent.rows[0].parent_team_id);
+    }
+  }
+
+  async syncPersonalSponsorsForPilot(
+    pilotUserId: string | null | undefined,
+    client: { query: (sql: string, params?: any[]) => Promise<any> } = { query },
+  ) {
+    if (!pilotUserId) return;
+
+    const existingAssignments = await client.query(
+      `SELECT DISTINCT team_id, sponsor_id
+       FROM team_sponsors
+       WHERE source = 'personal_sponsor'
+         AND pilot_user_id = $1`,
+      [pilotUserId],
+    );
+    const existingAssignmentKeys = new Set(
+      existingAssignments.rows.map((row: any) => `${row.team_id}:${row.sponsor_id}`),
+    );
+
+    await client.query(
+      `DELETE FROM team_sponsors
+       WHERE source = 'personal_sponsor'
+         AND pilot_user_id = $1`,
+      [pilotUserId],
+    );
+
+    const sponsors = await client.query(
+      `SELECT id, name, orcamento, prestigio
+       FROM sponsors
+       WHERE pilot_user_id = $1
+         AND tipo = 'personal_sponsor'`,
+      [pilotUserId],
+    );
+
+    if (sponsors.rows.length === 0) {
+      await this.recalculatePersonalSponsorTeams(client, existingAssignments.rows.map((row: any) => row.team_id));
+      return;
+    }
+
+    const contracts = await client.query(
+      `SELECT DISTINCT ON (td.team_id)
+        td.team_id,
+        td.contract_ends_after_races,
+        teams.momento_comercial
+       FROM team_drivers td
+       JOIN teams ON teams.id = td.team_id
+       WHERE td.user_id = $1
+         AND td.status = 'active'
+       ORDER BY td.team_id, CASE WHEN td.category = 'starter' THEN 0 ELSE 1 END, td.slot_number ASC`,
+      [pilotUserId],
+    );
+
+    const affectedTeamIds = new Set<string>(existingAssignments.rows.map((row: any) => row.team_id));
+    for (const contract of contracts.rows) {
+      affectedTeamIds.add(contract.team_id);
+      for (const sponsor of sponsors.rows) {
+        const slotNumber = await this.findAvailableSponsorSlot(
+          client,
+          contract.team_id,
+          'personal_sponsor',
+        );
+        if (!slotNumber) continue;
+
+        const initialReward = calculatePersonalSponsorSeasonValue(
+          sponsor,
+          { momentoComercial: Number(contract.momento_comercial) },
+        );
+
+        await client.query(
+          `INSERT INTO team_sponsors (
+            team_id,
+            sponsor_id,
+            category,
+            slot_number,
+            contract_races_remaining,
+            initial_reward,
+            reward_per_race,
+            source,
+            pilot_user_id
+          ) VALUES ($1, $2, 'personal_sponsor', $3, $4, $5, 0, 'personal_sponsor', $6)
+          ON CONFLICT (team_id, sponsor_id)
+          DO UPDATE SET
+            category = 'personal_sponsor',
+            slot_number = EXCLUDED.slot_number,
+            contract_races_remaining = EXCLUDED.contract_races_remaining,
+            initial_reward = EXCLUDED.initial_reward,
+            reward_per_race = 0,
+            source = 'personal_sponsor',
+            pilot_user_id = EXCLUDED.pilot_user_id,
+            updated_at = NOW()`,
+          [
+            contract.team_id,
+            sponsor.id,
+            slotNumber,
+            Number(contract.contract_ends_after_races),
+            initialReward,
+            pilotUserId,
+          ],
+        );
+
+        if (!existingAssignmentKeys.has(`${contract.team_id}:${sponsor.id}`)) {
+          await this.addPersonalSponsorIncomeIfMissing(
+            client,
+            contract.team_id,
+            sponsor.name,
+            initialReward,
+          );
+        }
+      }
+    }
+
+    await this.recalculatePersonalSponsorTeams(client, Array.from(affectedTeamIds));
+  }
+
+  async syncPersonalSponsorAssignments(
+    sponsorId: string,
+    previousPilotUserId?: string | null,
+    client: { query: (sql: string, params?: any[]) => Promise<any> } = { query },
+  ) {
+    if (previousPilotUserId) {
+      await this.syncPersonalSponsorsForPilot(previousPilotUserId, client);
+    }
+
+    const sponsor = await client.query(
+      `SELECT pilot_user_id
+       FROM sponsors
+       WHERE id = $1`,
+      [sponsorId],
+    );
+    await this.syncPersonalSponsorsForPilot(sponsor.rows[0]?.pilot_user_id, client);
+  }
+
+  private async recalculatePersonalSponsorTeams(
+    client: { query: (sql: string, params?: any[]) => Promise<any> },
+    teamIds: string[],
+  ) {
+    for (const teamId of new Set(teamIds.filter(Boolean))) {
+      await this.recalculateTeamSponsorIncome(client, teamId);
+    }
+  }
+
+  private async addPersonalSponsorIncomeIfMissing(
+    client: { query: (sql: string, params?: any[]) => Promise<any> },
+    teamId: string,
+    sponsorName: string,
+    amount: number,
+  ) {
+    const reason = `Personal sponsor ${sponsorName}`;
+    const existing = await client.query(
+      `SELECT id
+       FROM team_financial_history
+       WHERE team_id = $1
+         AND amount = $2
+         AND entry_type = 'income'
+         AND source = 'sponsor'
+         AND reason = $3
+       LIMIT 1`,
+      [teamId, amount, reason],
+    );
+    if (existing.rows[0]) return;
+
+    await client.query(
+      `UPDATE teams
+       SET cash_total = cash_total + $1,
+           updated_at = NOW()
+       WHERE id = $2`,
+      [amount, teamId],
+    );
+    await client.query(
+      `INSERT INTO team_financial_history (team_id, amount, entry_type, reason, source)
+       VALUES ($1, $2, 'income', $3, 'sponsor')`,
+      [teamId, amount, reason],
     );
   }
 
@@ -859,14 +1174,51 @@ class AdminService {
   async listScuderias() {
     const result = await query(`
       SELECT
-        id, name, tag, emoji, color, logo_url AS "logoUrl",
-        momento_comercial AS "momentoComercial",
-        prestigio,
-        agressividade,
-        popularidade,
-        tecnica,
-        nacionalidades,
-        setores,
+        teams.id, teams.name, teams.tag, teams.emoji, teams.color, teams.logo_url AS "logoUrl",
+        teams.category,
+        teams.is_junior_team AS "isJuniorTeam",
+        teams.parent_team_id AS "parentTeamId",
+        parent_team.name AS "parentTeamName",
+        (
+          SELECT COUNT(*)::int
+          FROM team_drivers starter_driver
+          WHERE starter_driver.team_id = teams.id
+            AND starter_driver.status = 'active'
+            AND starter_driver.category = 'starter'
+        ) AS "starterDriverCount",
+        (
+          SELECT COUNT(*)::int
+          FROM team_drivers reserve_driver
+          WHERE reserve_driver.team_id = teams.id
+            AND reserve_driver.status = 'active'
+            AND reserve_driver.category = 'reserve'
+        ) AS "reserveDriverCount",
+        teams.momento_comercial AS "momentoComercial",
+        teams.prestigio,
+        teams.agressividade,
+        teams.popularidade,
+        teams.tecnica,
+        teams.nacionalidades,
+        teams.manual_nacionalidades AS "manualNacionalidades",
+        COALESCE(
+          (
+            SELECT ARRAY_AGG(nationality ORDER BY normalized)
+            FROM (
+              SELECT DISTINCT ON (LOWER(TRIM(u.driver_nacionalidade)))
+                TRIM(u.driver_nacionalidade) AS nationality,
+                LOWER(TRIM(u.driver_nacionalidade)) AS normalized
+              FROM team_drivers td
+              JOIN users u ON u.id = td.user_id
+              WHERE td.team_id = teams.id
+                AND td.status = 'active'
+                AND u.driver_wallet_created = true
+                AND TRIM(COALESCE(u.driver_nacionalidade, '')) <> ''
+              ORDER BY LOWER(TRIM(u.driver_nacionalidade)), TRIM(u.driver_nacionalidade)
+            ) driver_nationalities
+          ),
+          ARRAY[]::text[]
+        ) AS "driverNacionalidades",
+        teams.setores,
         COALESCE(
           (
             SELECT json_agg(
@@ -883,16 +1235,121 @@ class AdminService {
           ),
           '[]'::json
         ) AS sponsors,
-        created_at AS "createdAt"
+        teams.created_at AS "createdAt"
       FROM teams
-      ORDER BY name ASC
+      LEFT JOIN teams parent_team ON parent_team.id = teams.parent_team_id
+      ORDER BY teams.name ASC
     `);
 
     return result.rows;
   }
 
+  private normalizeScuderiaCategory(input: ScuderiaInput) {
+    const category = input.category === 'formula_2' ? 'formula_2' : 'formula_1';
+    const isJuniorTeam = category === 'formula_2' && Boolean(input.isJuniorTeam);
+    const parentTeamId = isJuniorTeam ? (input.parentTeamId ?? null) : null;
+    return { category, isJuniorTeam, parentTeamId };
+  }
+
+  private async applyJuniorTeamRules(
+    client: { query: (sql: string, params?: any[]) => Promise<any> },
+    juniorTeamId: string,
+    parentTeamId: string | null,
+    previousParentTeamId?: string | null,
+  ) {
+    if (!parentTeamId) {
+      const team = await client.query(
+        'SELECT climate_monitoring_level, pit_crew_level FROM teams WHERE id = $1',
+        [juniorTeamId],
+      );
+      const climateLevel = Number(team.rows[0]?.climate_monitoring_level ?? 0);
+      const pitCrewLevel = Number(team.rows[0]?.pit_crew_level ?? 0);
+      await client.query(
+        `UPDATE teams
+         SET climate_cost_per_race = $2,
+             pit_crew_cost_per_race = $3,
+             updated_at = NOW()
+         WHERE id = $1`,
+        [
+          juniorTeamId,
+          getFacilityCostPerRace('climate', climateLevel),
+          getFacilityCostPerRace('pitCrew', pitCrewLevel),
+        ],
+      );
+      return;
+    }
+
+    await client.query(
+      `UPDATE teams
+       SET climate_monitoring_level = 5,
+           pit_crew_level = 5,
+           climate_cost_per_race = 0,
+           pit_crew_cost_per_race = 0,
+           updated_at = NOW()
+       WHERE id = $1`,
+      [juniorTeamId],
+    );
+
+    await client.query(
+      `INSERT INTO user_team_memberships (
+        user_id,
+        team_id,
+        role,
+        is_team_principal,
+        is_team_assistant,
+        is_engineer,
+        is_driver,
+        driver_category
+      )
+      SELECT
+        parent_membership.user_id,
+        $2,
+        parent_membership.role,
+        parent_membership.is_team_principal,
+        parent_membership.is_team_assistant,
+        parent_membership.is_engineer,
+        false,
+        null
+      FROM user_team_memberships parent_membership
+      WHERE parent_membership.team_id = $1
+        AND (
+          parent_membership.is_team_principal = true
+          OR parent_membership.is_team_assistant = true
+          OR parent_membership.is_engineer = true
+        )
+      ON CONFLICT (user_id, team_id)
+      DO UPDATE SET
+        is_team_principal = user_team_memberships.is_team_principal OR EXCLUDED.is_team_principal,
+        is_team_assistant = user_team_memberships.is_team_assistant OR EXCLUDED.is_team_assistant,
+        is_engineer = user_team_memberships.is_engineer OR EXCLUDED.is_engineer,
+        role = CASE
+          WHEN user_team_memberships.is_team_principal OR EXCLUDED.is_team_principal THEN 'team_principal'
+          WHEN user_team_memberships.is_team_assistant OR EXCLUDED.is_team_assistant THEN 'team_assistant'
+          WHEN user_team_memberships.is_engineer OR EXCLUDED.is_engineer THEN 'engineer'
+          ELSE user_team_memberships.role
+        END`,
+      [parentTeamId, juniorTeamId],
+    );
+
+    if (previousParentTeamId === parentTeamId) return;
+
+    await client.query(
+      `UPDATE teams
+       SET cash_total = cash_total + 1500000,
+           updated_at = NOW()
+       WHERE id = $1`,
+      [parentTeamId],
+    );
+    await client.query(
+      `INSERT INTO team_financial_history (team_id, amount, entry_type, reason, source)
+       VALUES ($1, 1500000, 'income', $2, 'manual')`,
+      [parentTeamId, 'Junior team registration bonus'],
+    );
+  }
+
   async createScuderia(input: ScuderiaInput) {
     const emoji = input.emoji?.trim() ?? '';
+    const junior = this.normalizeScuderiaCategory(input);
     const existing = await queryOne(
       'SELECT id FROM teams WHERE LOWER(name) = LOWER($1) OR UPPER(tag) = UPPER($2)',
       [input.name, input.tag],
@@ -902,73 +1359,111 @@ class AdminService {
       return { success: false, message: 'Scuderia name or abbreviation already exists' };
     }
 
-    const result = await query(
-      `INSERT INTO teams (
-        name,
-        tag,
-        emoji,
-        color,
-        climate_monitoring_level,
-        pit_crew_level,
-        climate_cost_per_race,
-        pit_crew_cost_per_race,
-        momento_comercial,
-        prestigio,
-        agressividade,
-        popularidade,
-        tecnica,
-        nacionalidades,
-        setores,
-        logo_url,
-        created_at,
-        updated_at
-      )
-       VALUES ($1, $2, $3, $4, 0, 0, 0, 0, COALESCE($5, 50), COALESCE($6, 1),
-         COALESCE($7, 1), COALESCE($8, 1), COALESCE($9, 1), $10, $11, $12, NOW(), NOW())
-       RETURNING id`,
-      [
-        input.name, input.tag.toUpperCase(), emoji, input.color,
-        input.momentoComercial ?? null, input.prestigio ?? null, input.agressividade ?? null,
-        input.popularidade ?? null, input.tecnica ?? null, input.nacionalidades ?? null,
-        input.setores ?? null, input.logoUrl ?? null,
-      ],
-    );
+    if (junior.isJuniorTeam) {
+      const parent = await queryOne(
+        "SELECT id FROM teams WHERE id = $1 AND category = 'formula_1'",
+        [junior.parentTeamId],
+      );
+      if (!parent) return { success: false, message: 'Parent Formula 1 scuderia not found' };
+    }
 
-    return { success: true, scuderia: result.rows[0] };
+    return transaction(async (client) => {
+      const result = await client.query(
+        `INSERT INTO teams (
+          name,
+          tag,
+          emoji,
+          color,
+          category,
+          is_junior_team,
+          parent_team_id,
+          climate_monitoring_level,
+          pit_crew_level,
+          climate_cost_per_race,
+          pit_crew_cost_per_race,
+          momento_comercial,
+          prestigio,
+          agressividade,
+          popularidade,
+          tecnica,
+          manual_nacionalidades,
+          nacionalidades,
+          setores,
+          logo_url,
+          created_at,
+          updated_at
+        )
+         VALUES ($1, $2, $3, $4, $5, $6, $7, CASE WHEN $6 THEN 5 ELSE 0 END, CASE WHEN $6 THEN 5 ELSE 0 END, 0, 0, COALESCE($8, 50), COALESCE($9, 1),
+           COALESCE($10, 1), COALESCE($11, 1), COALESCE($12, 1), $13, $13, $14, $15, NOW(), NOW())
+         RETURNING id`,
+        [
+          input.name, input.tag.toUpperCase(), emoji, input.color,
+          junior.category, junior.isJuniorTeam, junior.parentTeamId,
+          input.momentoComercial ?? null, input.prestigio ?? null, input.agressividade ?? null,
+          input.popularidade ?? null, input.tecnica ?? null, input.nacionalidades ?? null,
+          input.setores ?? null, input.logoUrl ?? null,
+        ],
+      );
+
+      await this.syncTeamNationalities(result.rows[0].id, client);
+      await this.applyJuniorTeamRules(client, result.rows[0].id, junior.parentTeamId);
+
+      return { success: true, scuderia: result.rows[0] };
+    });
   }
 
   async updateScuderia(scuderiaId: string, input: ScuderiaInput) {
     const emoji = input.emoji?.trim() ?? '';
-    const result = await query(
-      `UPDATE teams
+    const junior = this.normalizeScuderiaCategory(input);
+    const current = await queryOne<{ parent_team_id: string | null }>(
+      'SELECT parent_team_id FROM teams WHERE id = $1',
+      [scuderiaId],
+    );
+    if (!current) return { success: false, message: 'Scuderia not found' };
+    if (junior.isJuniorTeam) {
+      const parent = await queryOne(
+        "SELECT id FROM teams WHERE id = $1 AND category = 'formula_1' AND id <> $2",
+        [junior.parentTeamId, scuderiaId],
+      );
+      if (!parent) return { success: false, message: 'Parent Formula 1 scuderia not found' };
+    }
+
+    return transaction(async (client) => {
+      const result = await client.query(
+        `UPDATE teams
        SET name = $1,
            tag = $2,
            emoji = $3,
            color = $4,
-           momento_comercial = COALESCE($5, momento_comercial),
-           prestigio = COALESCE($6, prestigio),
-           agressividade = COALESCE($7, agressividade),
-           popularidade = COALESCE($8, popularidade),
-           tecnica = COALESCE($9, tecnica),
-           nacionalidades = COALESCE($10, nacionalidades),
-           setores = COALESCE($11, setores),
-           logo_url = COALESCE($12, logo_url),
+           category = $5,
+           is_junior_team = $6,
+           parent_team_id = $7,
+           momento_comercial = COALESCE($8, momento_comercial),
+           prestigio = COALESCE($9, prestigio),
+           agressividade = COALESCE($10, agressividade),
+           popularidade = COALESCE($11, popularidade),
+           tecnica = COALESCE($12, tecnica),
+           manual_nacionalidades = COALESCE($13, manual_nacionalidades),
+           nacionalidades = COALESCE($13, nacionalidades),
+           setores = COALESCE($14, setores),
+           logo_url = COALESCE($15, logo_url),
            updated_at = NOW()
-       WHERE id = $13
+       WHERE id = $16
        RETURNING id`,
-      [
-        input.name, input.tag.toUpperCase(), emoji, input.color,
-        input.momentoComercial ?? null, input.prestigio ?? null, input.agressividade ?? null,
-        input.popularidade ?? null, input.tecnica ?? null, input.nacionalidades ?? null,
-        input.setores ?? null, input.logoUrl ?? null, scuderiaId,
-      ],
-    );
+        [
+          input.name, input.tag.toUpperCase(), emoji, input.color,
+          junior.category, junior.isJuniorTeam, junior.parentTeamId,
+          input.momentoComercial ?? null, input.prestigio ?? null, input.agressividade ?? null,
+          input.popularidade ?? null, input.tecnica ?? null, input.nacionalidades ?? null,
+          input.setores ?? null, input.logoUrl ?? null, scuderiaId,
+        ],
+      );
 
-    if (!result.rows[0]) {
-      return { success: false, message: 'Scuderia not found' };
-    }
+      await this.syncTeamNationalities(scuderiaId, client);
+      await this.applyJuniorTeamRules(client, scuderiaId, junior.parentTeamId, current.parent_team_id);
 
-    return { success: true, scuderia: result.rows[0] };
+      return { success: true, scuderia: result.rows[0] };
+    });
   }
 
   async deleteScuderia(scuderiaId: string) {
@@ -1211,6 +1706,8 @@ class AdminService {
       await this.upsertTeamDriver(client, scuderiaId, user.id, input, user.driver_number);
       await this.upsertDriverMembership(client, user.id, scuderiaId, input.category);
       await this.recalculateTeamSalaryCost(client, scuderiaId);
+      await this.syncTeamNationalities(scuderiaId, client);
+      await this.syncPersonalSponsorsForPilot(user.id, client);
       return { success: true };
     });
   }
@@ -1244,6 +1741,8 @@ class AdminService {
       );
       await this.upsertDriverMembership(client, existing.user_id, scuderiaId, input.category);
       await this.recalculateTeamSalaryCost(client, scuderiaId);
+      await this.syncTeamNationalities(scuderiaId, client);
+      await this.syncPersonalSponsorsForPilot(existing.user_id, client);
       return { success: true };
     });
   }
@@ -1272,6 +1771,8 @@ class AdminService {
         await this.removeDriverMembershipIfNeeded(client, row.user_id, scuderiaId);
       }
       await this.recalculateTeamSalaryCost(client, scuderiaId);
+      await this.syncTeamNationalities(scuderiaId, client);
+      await this.syncPersonalSponsorsForPilot(row.user_id, client);
       return { success: true };
     });
   }
@@ -1344,27 +1845,30 @@ class AdminService {
       if (!personalSponsorValidation.success) return personalSponsorValidation;
     }
 
-    const result = await query(
-      `INSERT INTO sponsors (
-        name, logo_url, nacionalidade, tipo, setor, felicidade, prestigio, agressividade,
-        foco_em_midia, foco_tecnico, nacionalismo, fidelidade, orcamento, ambicao,
-        publico_alvo_1, publico_alvo_2, pilot_user_id, created_at, updated_at
-      )
-       VALUES (
-        $1, $2, $3, $4, $5, COALESCE($6, 50), COALESCE($7, 1), COALESCE($8, 1),
-        COALESCE($9, 1), COALESCE($10, 1), COALESCE($11, 1), COALESCE($12, 1),
-        COALESCE($13, 1), COALESCE($14, 1), $15, $16, $17, NOW(), NOW()
-       )
-       RETURNING id`,
-      [
-        name, input.logoUrl, input.nacionalidade ?? null, input.tipo ?? null, input.setor ?? null,
-        input.felicidade ?? null, input.prestigio ?? null, input.agressividade ?? null,
-        input.focoEmMidia ?? null, input.focoTecnico ?? null, input.nacionalismo ?? null,
-        input.fidelidade ?? null, input.orcamento ?? null, input.ambicao ?? null,
-        input.publicoAlvo1 ?? null, input.publicoAlvo2 ?? null, pilotUserId,
-      ],
-    );
-    return { success: true, sponsor: result.rows[0] };
+    return transaction(async (client) => {
+      const result = await client.query(
+        `INSERT INTO sponsors (
+          name, logo_url, nacionalidade, tipo, setor, felicidade, prestigio, agressividade,
+          foco_em_midia, foco_tecnico, nacionalismo, fidelidade, orcamento, ambicao,
+          publico_alvo_1, publico_alvo_2, pilot_user_id, created_at, updated_at
+        )
+         VALUES (
+          $1, $2, $3, $4, $5, COALESCE($6, 50), COALESCE($7, 1), COALESCE($8, 1),
+          COALESCE($9, 1), COALESCE($10, 1), COALESCE($11, 1), COALESCE($12, 1),
+          COALESCE($13, 1), COALESCE($14, 1), $15, $16, $17, NOW(), NOW()
+         )
+         RETURNING id`,
+        [
+          name, input.logoUrl, input.nacionalidade ?? null, input.tipo ?? null, input.setor ?? null,
+          input.felicidade ?? null, input.prestigio ?? null, input.agressividade ?? null,
+          input.focoEmMidia ?? null, input.focoTecnico ?? null, input.nacionalismo ?? null,
+          input.fidelidade ?? null, input.orcamento ?? null, input.ambicao ?? null,
+          input.publicoAlvo1 ?? null, input.publicoAlvo2 ?? null, pilotUserId,
+        ],
+      );
+      await this.syncPersonalSponsorsForPilot(pilotUserId, client);
+      return { success: true, sponsor: result.rows[0] };
+    });
   }
 
   async updateSponsor(sponsorId: string, input: SponsorInput) {
@@ -1409,58 +1913,66 @@ class AdminService {
       if (!personalSponsorValidation.success) return personalSponsorValidation;
     }
 
-    const result = await query(
-      `UPDATE sponsors
-       SET name = $1,
-           logo_url = $2,
-           nacionalidade = $3,
-           tipo = $4,
-           setor = $5,
-           felicidade = COALESCE($6, felicidade),
-           prestigio = COALESCE($7, prestigio),
-           agressividade = COALESCE($8, agressividade),
-           foco_em_midia = COALESCE($9, foco_em_midia),
-           foco_tecnico = COALESCE($10, foco_tecnico),
-           nacionalismo = COALESCE($11, nacionalismo),
-           fidelidade = COALESCE($12, fidelidade),
-           orcamento = COALESCE($13, orcamento),
-           ambicao = COALESCE($14, ambicao),
-           publico_alvo_1 = $15,
-           publico_alvo_2 = $16,
-           pilot_user_id = $17,
-           updated_at = NOW()
-       WHERE id = $18
-       RETURNING id`,
-      [
-        name, input.logoUrl,
-        input.nacionalidade === undefined ? current.nacionalidade : input.nacionalidade,
-        nextTipo,
-        input.setor === undefined ? current.setor : input.setor,
-        input.felicidade ?? current.felicidade,
-        input.prestigio ?? current.prestigio,
-        input.agressividade ?? current.agressividade,
-        input.focoEmMidia ?? current.focoEmMidia,
-        input.focoTecnico ?? current.focoTecnico,
-        input.nacionalismo ?? current.nacionalismo,
-        input.fidelidade ?? current.fidelidade,
-        input.orcamento ?? current.orcamento,
-        input.ambicao ?? current.ambicao,
-        input.publicoAlvo1 === undefined ? current.publicoAlvo1 : input.publicoAlvo1,
-        input.publicoAlvo2 === undefined ? current.publicoAlvo2 : input.publicoAlvo2,
-        nextPilotUserId,
-        sponsorId,
-      ],
-    );
-    return result.rows[0]
-      ? { success: true }
-      : { success: false, message: 'Sponsor not found' };
+    return transaction(async (client) => {
+      const result = await client.query(
+        `UPDATE sponsors
+         SET name = $1,
+             logo_url = $2,
+             nacionalidade = $3,
+             tipo = $4,
+             setor = $5,
+             felicidade = COALESCE($6, felicidade),
+             prestigio = COALESCE($7, prestigio),
+             agressividade = COALESCE($8, agressividade),
+             foco_em_midia = COALESCE($9, foco_em_midia),
+             foco_tecnico = COALESCE($10, foco_tecnico),
+             nacionalismo = COALESCE($11, nacionalismo),
+             fidelidade = COALESCE($12, fidelidade),
+             orcamento = COALESCE($13, orcamento),
+             ambicao = COALESCE($14, ambicao),
+             publico_alvo_1 = $15,
+             publico_alvo_2 = $16,
+             pilot_user_id = $17,
+             updated_at = NOW()
+         WHERE id = $18
+         RETURNING id`,
+        [
+          name, input.logoUrl,
+          input.nacionalidade === undefined ? current.nacionalidade : input.nacionalidade,
+          nextTipo,
+          input.setor === undefined ? current.setor : input.setor,
+          input.felicidade ?? current.felicidade,
+          input.prestigio ?? current.prestigio,
+          input.agressividade ?? current.agressividade,
+          input.focoEmMidia ?? current.focoEmMidia,
+          input.focoTecnico ?? current.focoTecnico,
+          input.nacionalismo ?? current.nacionalismo,
+          input.fidelidade ?? current.fidelidade,
+          input.orcamento ?? current.orcamento,
+          input.ambicao ?? current.ambicao,
+          input.publicoAlvo1 === undefined ? current.publicoAlvo1 : input.publicoAlvo1,
+          input.publicoAlvo2 === undefined ? current.publicoAlvo2 : input.publicoAlvo2,
+          nextPilotUserId,
+          sponsorId,
+        ],
+      );
+      if (!result.rows[0]) return { success: false, message: 'Sponsor not found' };
+      await this.syncPersonalSponsorAssignments(sponsorId, current.pilotUserId, client);
+      return { success: true };
+    });
   }
 
   async deleteSponsor(sponsorId: string) {
-    const result = await query('DELETE FROM sponsors WHERE id = $1 RETURNING id', [sponsorId]);
-    return result.rows[0]
-      ? { success: true }
-      : { success: false, message: 'Sponsor not found' };
+    return transaction(async (client) => {
+      const current = await client.query(
+        'SELECT pilot_user_id FROM sponsors WHERE id = $1',
+        [sponsorId],
+      );
+      const result = await client.query('DELETE FROM sponsors WHERE id = $1 RETURNING id', [sponsorId]);
+      if (!result.rows[0]) return { success: false, message: 'Sponsor not found' };
+      await this.syncPersonalSponsorsForPilot(current.rows[0]?.pilot_user_id, client);
+      return { success: true };
+    });
   }
 
   private async validatePersonalSponsorPilot(pilotUserId?: string | null, sponsorId?: string) {
@@ -1781,6 +2293,167 @@ class AdminService {
 
       await this.recalculateTeamSponsorIncome(client, result.rows[0].team_id);
       return { success: true };
+    });
+  }
+
+  private drawRaceMissionDifficulty(ambition: number, randomScore = Math.random()): RaceMissionDifficulty {
+    const normalizedAmbition = Math.min(5, Math.max(0, Math.trunc(Number(ambition) || 0)));
+    const weights = RACE_MISSION_DIFFICULTY_WEIGHTS[normalizedAmbition] ?? RACE_MISSION_DIFFICULTY_WEIGHTS[1];
+    let cumulative = 0;
+    for (const weight of weights) {
+      cumulative += weight.chance;
+      if (randomScore <= cumulative) return weight.difficulty;
+    }
+    return weights[weights.length - 1].difficulty;
+  }
+
+  private calculateRaceMissionReward(
+    category: SponsorContractCategory,
+    sponsor: { orcamento: number; ambicao: number; prestigio: number },
+    difficulty: RaceMissionDifficulty,
+  ) {
+    const base = RACE_MISSION_BASES[category] ?? 0;
+    const budgetMultiplier = RACE_MISSION_BUDGET_MULTIPLIERS[sponsor.orcamento] ?? 1;
+    const ambitionMultiplier = RACE_MISSION_AMBITION_MULTIPLIERS[sponsor.ambicao] ?? 1;
+    const prestigeMultiplier = RACE_MISSION_PRESTIGE_MULTIPLIERS[sponsor.prestigio] ?? 1;
+    const difficultyMultiplier = RACE_MISSION_DIFFICULTY_MULTIPLIERS[difficulty];
+    const value = base * budgetMultiplier * ambitionMultiplier * prestigeMultiplier * difficultyMultiplier;
+    return {
+      base,
+      budgetMultiplier,
+      ambitionMultiplier,
+      prestigeMultiplier,
+      difficultyMultiplier,
+      reward: Math.round(value / 1000) * 1000,
+    };
+  }
+
+  async generateRaceSponsorMissions(teamIds: string[]) {
+    const uniqueTeamIds = Array.from(new Set(teamIds.filter(Boolean)));
+    if (uniqueTeamIds.length === 0) {
+      return { success: false, message: 'At least one scuderia must be selected' };
+    }
+
+    return transaction(async (client) => {
+      const teams = await client.query(
+        `SELECT id, name
+         FROM teams
+         WHERE id = ANY($1::uuid[])
+         ORDER BY name ASC`,
+        [uniqueTeamIds],
+      );
+
+      const contracts = await client.query(
+        `SELECT
+          ts.id AS team_sponsor_id,
+          ts.team_id,
+          ts.category,
+          teams.name AS team_name,
+          sponsors.id AS sponsor_id,
+          sponsors.name AS sponsor_name,
+          sponsors.orcamento,
+          sponsors.ambicao,
+          sponsors.prestigio
+         FROM team_sponsors ts
+         JOIN teams ON teams.id = ts.team_id
+         JOIN sponsors ON sponsors.id = ts.sponsor_id
+         WHERE ts.team_id = ANY($1::uuid[])
+           AND ts.category IN ('title_sponsor', 'main_partner')
+         ORDER BY teams.name ASC, CASE WHEN ts.category = 'title_sponsor' THEN 0 ELSE 1 END, ts.slot_number ASC`,
+        [uniqueTeamIds],
+      );
+
+      await client.query(
+        `DELETE FROM team_sponsor_race_missions
+         WHERE generated_by = $1
+           AND team_sponsor_id IN (
+             SELECT id
+             FROM team_sponsors
+             WHERE team_id = ANY($2::uuid[])
+               AND category IN ('title_sponsor', 'main_partner')
+           )`,
+        [RACE_MISSION_GENERATOR_ID, uniqueTeamIds],
+      );
+
+      type RaceMissionGenerationTeamResult = {
+        team: { id: string; name: string };
+        missions: Array<{
+          sponsorId: string;
+          sponsorName: string;
+          category: SponsorContractCategory;
+          difficulty: RaceMissionDifficulty;
+          reward: number;
+          missionId: string;
+        }>;
+        skipped: Array<{
+          sponsorId: string;
+          sponsorName: string;
+          category: SponsorContractCategory;
+        }>;
+      };
+      const results: RaceMissionGenerationTeamResult[] = teams.rows.map((team: any) => ({
+        team: { id: team.id as string, name: team.name as string },
+        missions: [],
+        skipped: [],
+      }));
+      const resultByTeamId = new Map<string, RaceMissionGenerationTeamResult>(
+        results.map((result) => [result.team.id, result]),
+      );
+
+      for (const contract of contracts.rows) {
+        const category = contract.category as SponsorContractCategory;
+        const chance = RACE_MISSION_GENERATION_CHANCES[category] ?? 0;
+        const result = resultByTeamId.get(contract.team_id);
+        if (!result) continue;
+
+        if (Math.random() > chance) {
+          result.skipped.push({
+            sponsorId: contract.sponsor_id,
+            sponsorName: contract.sponsor_name,
+            category,
+          });
+          continue;
+        }
+
+        const difficulty = this.drawRaceMissionDifficulty(Number(contract.ambicao));
+        const value = this.calculateRaceMissionReward(category, {
+          orcamento: Number(contract.orcamento),
+          ambicao: Number(contract.ambicao),
+          prestigio: Number(contract.prestigio),
+        }, difficulty);
+        const title = `Race mission - ${contract.sponsor_name}`;
+        const description = `Automatic race mission generated for ${contract.team_name}. Difficulty: ${difficulty}.`;
+        const mission = await client.query(
+          `INSERT INTO team_sponsor_race_missions (
+            team_sponsor_id,
+            title,
+            description,
+            reward,
+            difficulty,
+            generated_by
+          ) VALUES ($1, $2, $3, $4, $5, $6)
+          RETURNING id`,
+          [
+            contract.team_sponsor_id,
+            title,
+            description,
+            value.reward,
+            difficulty,
+            RACE_MISSION_GENERATOR_ID,
+          ],
+        );
+
+        result.missions.push({
+          sponsorId: contract.sponsor_id,
+          sponsorName: contract.sponsor_name,
+          category,
+          difficulty,
+          reward: value.reward,
+          missionId: mission.rows[0].id,
+        });
+      }
+
+      return { success: true, raceMissionResults: results };
     });
   }
 

@@ -33,7 +33,7 @@ const userValidation = [
     .isArray({ min: 1 })
     .withMessage('At least one user function must be selected'),
   body('teamMemberships.*.roles.*')
-    .isIn(['team_principal', 'team_assistant', 'driver'])
+    .isIn(['team_principal', 'team_assistant', 'driver', 'engineer'])
     .withMessage('Team membership role is invalid'),
   body('teamMemberships.*.driverCategory')
     .optional({ nullable: true })
@@ -139,6 +139,18 @@ const scuderiaValidation = [
     .optional({ nullable: true })
     .isURL()
     .withMessage('Scuderia logo URL is invalid'),
+  body('category')
+    .optional()
+    .isIn(['formula_1', 'formula_2'])
+    .withMessage('Scuderia category is invalid'),
+  body('isJuniorTeam')
+    .optional()
+    .isBoolean()
+    .withMessage('Junior team flag is invalid'),
+  body('parentTeamId')
+    .optional({ nullable: true })
+    .isUUID()
+    .withMessage('Parent scuderia id is invalid'),
   body('momentoComercial')
     .optional()
     .isInt({ min: 0, max: 100 })
@@ -546,6 +558,15 @@ router.post('/scuderias/:id/sponsor-market', param('id').isUUID(), async (req: A
   });
 });
 
+router.post('/sponsor-market/race-missions', body('teamIds').isArray({ min: 1 }), body('teamIds.*').isUUID(), async (req: AuthRequest, res: Response) => {
+  if (handleValidation(req, res)) return;
+  const result = await adminService.generateRaceSponsorMissions(req.body.teamIds);
+  return res.status(result.success ? 200 : 400).json({
+    ...result,
+    message: translateMessage((result as { message?: string }).message, getRequestLanguage(req)),
+  });
+});
+
 router.post('/scuderias/:id/sponsors', param('id').isUUID(), teamSponsorValidation, async (req: AuthRequest, res: Response) => {
   if (handleValidation(req, res)) return;
   const result = await adminService.addTeamSponsor(req.params.id, req.body);
@@ -613,7 +634,7 @@ router.post('/scuderias', scuderiaValidation, async (req: AuthRequest, res: Resp
     const result = await adminService.createScuderia(req.body);
     return res.status(result.success ? 201 : 400).json({
       ...result,
-      message: translateMessage(result.message, getRequestLanguage(req)),
+      message: translateMessage((result as { message?: string }).message, getRequestLanguage(req)),
     });
   } catch (error) {
     console.error('Admin create scuderia error:', error);
@@ -632,7 +653,7 @@ router.put(
       const result = await adminService.updateScuderia(req.params.id, req.body);
       return res.status(result.success ? 200 : 404).json({
         ...result,
-        message: translateMessage(result.message, getRequestLanguage(req)),
+        message: translateMessage((result as { message?: string }).message, getRequestLanguage(req)),
       });
     } catch (error) {
       console.error('Admin update scuderia error:', error);

@@ -86,6 +86,10 @@ const CONTRACT_CAPS: Record<SponsorContractCategory, number> = {
 
 const BUDGET_MULTIPLIERS = [0.75, 1, 1.35, 1.75];
 const PRESTIGE_MULTIPLIERS = [0, 0.8, 0.95, 1.1, 1.25, 1.4];
+const PERSONAL_SPONSOR_BASE = 180000;
+const PERSONAL_SPONSOR_CAP = 450000;
+const PERSONAL_SPONSOR_BUDGET_MULTIPLIERS = [0.75, 1, 1.35, 1.7];
+const PERSONAL_SPONSOR_PRESTIGE_MULTIPLIERS = [0, 0.8, 0.95, 1.1, 1.25, 1.4];
 
 function getProposalChances(momentum: number) {
   if (momentum >= 90) return [0.95, 0.5, 0.2, 0.1];
@@ -190,6 +194,25 @@ function getCommercialMomentumMultiplier(momentum: number) {
   if (momentum >= 40) return 0.9;
   if (momentum >= 30) return 0.75;
   return 0.6;
+}
+
+function getPersonalSponsorCommercialMomentumMultiplier(momentum: number) {
+  if (momentum >= 80) return 1.3;
+  if (momentum >= 60) return 1.15;
+  if (momentum >= 40) return 1;
+  if (momentum >= 20) return 0.85;
+  return 0.7;
+}
+
+export function calculatePersonalSponsorSeasonValue(
+  sponsor: Pick<MarketSponsorProfile, 'orcamento' | 'prestigio'>,
+  team: Pick<MarketTeamProfile, 'momentoComercial'>,
+) {
+  const budgetMultiplier = PERSONAL_SPONSOR_BUDGET_MULTIPLIERS[sponsor.orcamento] ?? 1;
+  const prestigeMultiplier = PERSONAL_SPONSOR_PRESTIGE_MULTIPLIERS[sponsor.prestigio] ?? 1;
+  const commercialMomentumMultiplier = getPersonalSponsorCommercialMomentumMultiplier(team.momentoComercial);
+  const valueBeforeCap = PERSONAL_SPONSOR_BASE * budgetMultiplier * prestigeMultiplier * commercialMomentumMultiplier;
+  return Math.min(PERSONAL_SPONSOR_CAP, Math.round(valueBeforeCap / 1000) * 1000);
 }
 
 export function calculateContractValue(

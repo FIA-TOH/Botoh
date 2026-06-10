@@ -11,6 +11,11 @@ import { apiUrl } from '@/config/api';
 
 interface TeamGarageData {
   id: string;
+  category: 'formula_1' | 'formula_2';
+  isJuniorTeam: boolean;
+  parentTeamId: string | null;
+  parentTeamName: string | null;
+  parentStarterCount: number | null;
   cashTotal: number;
   climateCostPerRace: number;
   pitCrewCostPerRace: number;
@@ -27,6 +32,7 @@ interface TeamGarageData {
     driverNumber: number | null;
     contractEndsAfterRaces: number;
     salaryPerRace: number;
+    minimumSalary: number;
     slotNumber: number;
     category: 'starter' | 'reserve';
   }[];
@@ -54,6 +60,13 @@ interface TeamGarageData {
   };
 }
 
+interface AvailablePilot {
+  id: string;
+  username: string;
+  driverNumber: number | null;
+  minimumSalary: number;
+}
+
 export default function GaragePage() {
   const { isAuthenticated, isLoading: authLoading, user } = useAuth();
   const { t } = useTranslations();
@@ -68,15 +81,23 @@ export default function GaragePage() {
   const [selectedTeamLoadingId, setSelectedTeamLoadingId] = useState<string | null>(null);
   const [facilityActionLoading, setFacilityActionLoading] = useState<string | null>(null);
   const [driverProposalLoading, setDriverProposalLoading] = useState(false);
+  const [promotionLoading, setPromotionLoading] = useState(false);
+  const [availablePilotsLoading, setAvailablePilotsLoading] = useState(false);
+  const [availablePilots, setAvailablePilots] = useState<AvailablePilot[]>([]);
   const [driverReleaseLoading, setDriverReleaseLoading] = useState(false);
   const [sponsorReleaseLoading, setSponsorReleaseLoading] = useState(false);
   const [hireModalCategory, setHireModalCategory] = useState<'starter' | 'reserve' | null>(null);
   const [hireForm, setHireForm] = useState({
     username: '',
     contractRaces: '8',
-    salaryPerRace: '4500000',
+    salaryPerRace: '',
   });
   const [releaseModalDriver, setReleaseModalDriver] = useState<TeamGarageData['drivers'][number] | null>(null);
+  const [promotionModalDriver, setPromotionModalDriver] = useState<TeamGarageData['drivers'][number] | null>(null);
+  const [promotionForm, setPromotionForm] = useState({
+    contractRaces: '8',
+    salaryPerRace: '',
+  });
   const [selectedSponsor, setSelectedSponsor] = useState<TeamGarageData['sponsors'][number] | null>(null);
   const [confirmSponsorRelease, setConfirmSponsorRelease] = useState(false);
   const financialHistoryRef = useRef<HTMLDivElement | null>(null);
@@ -84,12 +105,17 @@ export default function GaragePage() {
   const eligibleMemberships = (user?.teamMemberships ?? []).filter(
     (membership) =>
       membership.roles.includes('team_principal')
-      || membership.roles.includes('team_assistant'),
+      || membership.roles.includes('team_assistant')
+      || membership.roles.includes('engineer'),
   );
   const selectedTeamId = searchParams.get('teamId');
   const selectedMembership =
     eligibleMemberships.find((membership) => membership.teamId === selectedTeamId)
     ?? null;
+  const canManageGarage = Boolean(
+    selectedMembership?.roles.includes('team_principal')
+    || selectedMembership?.roles.includes('team_assistant'),
+  );
   const selectedLogoSrc = selectedMembership
     ? `/img/scuderia/logos/${encodeURIComponent(
       selectedMembership.teamName.trim().toLowerCase(),
@@ -104,6 +130,10 @@ export default function GaragePage() {
     : false;
   const weatherMonitoringLevel = teamGarage?.climateMonitoringLevel ?? 1;
   const pitCrewLevel = teamGarage?.pitCrewLevel ?? 1;
+  const isJuniorTeamGarage = Boolean(teamGarage?.isJuniorTeam);
+  const isFormula2Garage = teamGarage?.category === 'formula_2';
+  const canPromoteFromJunior = Boolean(isFormula2Garage && isJuniorTeamGarage && teamGarage?.parentTeamId);
+  const parentHasStarterVacancy = Number(teamGarage?.parentStarterCount ?? 2) < 2;
   const maxFacilityLevel = teamGarage?.facilityEconomy?.maxLevel ?? 5;
   const sponsorProfitPerRace = Number(teamGarage?.sponsorIncomePerRace ?? 0);
   const salaryCostPerRace = Number(teamGarage?.salaryCostPerRace ?? 0);
@@ -138,6 +168,29 @@ export default function GaragePage() {
     starter: (teamGarage?.drivers ?? []).filter((driver) => driver.category === 'starter'),
     reserve: (teamGarage?.drivers ?? []).filter((driver) => driver.category === 'reserve'),
   }), [teamGarage?.drivers]);
+  const selectedHirePilot = availablePilots.find((pilot) => pilot.username === hireForm.username) ?? null;
+  const hireMinimumSalary = selectedHirePilot
+    ? hireModalCategory === 'reserve'
+      ? Math.round(selectedHirePilot.minimumSalary * 0.25)
+      : selectedHirePilot.minimumSalary
+    : 0;
+  const canSubmitDriverProposal = Boolean(
+    hireForm.username
+    && Number(hireForm.contractRaces) > 0
+    && (
+      isFormula2Garage
+      || (selectedHirePilot && Number(hireForm.salaryPerRace) >= hireMinimumSalary)
+    ),
+  );
+  const promotionMinimumSalary = promotionModalDriver
+    ? Math.round(Number(promotionModalDriver.minimumSalary ?? 0) * 0.5)
+    : 0;
+  const canSubmitPromotion = Boolean(
+    promotionModalDriver
+    && parentHasStarterVacancy
+    && Number(promotionForm.contractRaces) > 0
+    && Number(promotionForm.salaryPerRace) >= promotionMinimumSalary
+  );
 
   async function loadTeamGarage(teamId: string, options: { reset?: boolean } = {}) {
     if (options.reset) {
@@ -187,7 +240,7 @@ export default function GaragePage() {
   }, [teamGarage?.financialHistory]);
 
   async function updateFacility(facility: 'climate' | 'pitCrew', action: 'upgrade' | 'sell') {
-    if (!selectedMembership) return;
+    if (!selectedMembership || !canManageGarage || isJuniorTeamGarage) return;
     const actionKey = `${facility}-${action}`;
     setFacilityActionLoading(actionKey);
     try {
@@ -217,7 +270,11 @@ export default function GaragePage() {
 
   async function sendDriverProposal(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!selectedMembership || !hireModalCategory) return;
+    if (!selectedMembership || !hireModalCategory || !canManageGarage) return;
+    if (!canSubmitDriverProposal) {
+      showSnackbar(t.garage.salaryTooLow, 'error');
+      return;
+    }
 
     setDriverProposalLoading(true);
     try {
@@ -231,7 +288,7 @@ export default function GaragePage() {
         body: JSON.stringify({
           username: hireForm.username,
           contractRaces: Number(hireForm.contractRaces),
-          salaryPerRace: Number(hireForm.salaryPerRace),
+          salaryPerRace: isFormula2Garage ? 0 : Number(hireForm.salaryPerRace),
           category: hireModalCategory,
         }),
       });
@@ -244,7 +301,7 @@ export default function GaragePage() {
 
       showSnackbar(t.garage.driverProposalSent, 'success');
       setHireModalCategory(null);
-      setHireForm({ username: '', contractRaces: '8', salaryPerRace: '4500000' });
+      setHireForm({ username: '', contractRaces: '8', salaryPerRace: '' });
       await loadTeamGarage(selectedMembership.teamId);
     } catch (error) {
       showSnackbar(t.garage.driverActionFailed, 'error');
@@ -254,7 +311,7 @@ export default function GaragePage() {
   }
 
   async function releaseDriver(driverId: string) {
-    if (!selectedMembership) return;
+    if (!selectedMembership || !canManageGarage) return;
 
     setDriverReleaseLoading(true);
     try {
@@ -280,8 +337,48 @@ export default function GaragePage() {
     }
   }
 
+  async function submitPromotion(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!selectedMembership || !promotionModalDriver || !canManageGarage) return;
+
+    if (!canSubmitPromotion) {
+      showSnackbar(t.garage.salaryTooLow, 'error');
+      return;
+    }
+
+    setPromotionLoading(true);
+    try {
+      const token = localStorage.getItem('auth_token');
+      const response = await fetch(apiUrl(`/api/garage/teams/${selectedMembership.teamId}/drivers/${promotionModalDriver.id}/promote`), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          contractRaces: Number(promotionForm.contractRaces),
+          salaryPerRace: Number(promotionForm.salaryPerRace),
+        }),
+      });
+      const data = await response.json();
+
+      if (!data.success) {
+        showSnackbar(data.message ?? t.garage.driverActionFailed, 'error');
+        return;
+      }
+
+      showSnackbar(t.garage.promotionProposalSent, 'success');
+      setPromotionModalDriver(null);
+      setPromotionForm({ contractRaces: '8', salaryPerRace: '' });
+    } catch (error) {
+      showSnackbar(t.garage.driverActionFailed, 'error');
+    } finally {
+      setPromotionLoading(false);
+    }
+  }
+
   async function releaseSponsor(teamSponsorId: string) {
-    if (!selectedMembership) return;
+    if (!selectedMembership || !canManageGarage) return;
 
     setSponsorReleaseLoading(true);
     try {
@@ -309,7 +406,57 @@ export default function GaragePage() {
   }
 
   function openHireModal(category: 'starter' | 'reserve') {
+    if (!canManageGarage) return;
+    setHireForm({ username: '', contractRaces: '8', salaryPerRace: isFormula2Garage ? '0' : '' });
     setHireModalCategory(category);
+    void loadAvailablePilots();
+  }
+
+  function selectHirePilot(username: string) {
+    const pilot = availablePilots.find((item) => item.username === username);
+    setHireForm((current) => ({
+      ...current,
+      username,
+      salaryPerRace: isFormula2Garage
+        ? '0'
+        : pilot
+          ? String(hireModalCategory === 'reserve' ? Math.round(pilot.minimumSalary * 0.25) : pilot.minimumSalary)
+          : '',
+    }));
+  }
+
+  function openPromotionModal(driver: TeamGarageData['drivers'][number]) {
+    setPromotionModalDriver(driver);
+    setPromotionForm({
+      contractRaces: '8',
+      salaryPerRace: String(Math.round(Number(driver.minimumSalary ?? 0) * 0.5)),
+    });
+  }
+
+  async function loadAvailablePilots() {
+    if (availablePilots.length > 0 || availablePilotsLoading) return;
+
+    setAvailablePilotsLoading(true);
+    try {
+      const token = localStorage.getItem('auth_token');
+      const response = await fetch(apiUrl('/api/market/scuderias'), {
+        headers: { Authorization: `Bearer ${token}` },
+        cache: 'no-store',
+      });
+      const data = await response.json();
+      if (!data.success) {
+        showSnackbar(data.message ?? t.garage.loadPilotsFailed, 'error');
+        return;
+      }
+
+      setAvailablePilots([...(data.pilots ?? [])].sort((left: AvailablePilot, right: AvailablePilot) => (
+        left.username.localeCompare(right.username)
+      )));
+    } catch (error) {
+      showSnackbar(t.garage.loadPilotsFailed, 'error');
+    } finally {
+      setAvailablePilotsLoading(false);
+    }
   }
 
   function playRandomSound(sounds: string[]) {
@@ -669,7 +816,7 @@ export default function GaragePage() {
                       {t.garage.buildWeatherQuestion} <strong>{money(climateUpgradeCost)}</strong>?
                     </p>
                     <button
-                      disabled={cashTotal < climateUpgradeCost || facilityActionLoading !== null}
+                    disabled={!canManageGarage || isJuniorTeamGarage || cashTotal < climateUpgradeCost || facilityActionLoading !== null}
                       onClick={() => updateFacility('climate', 'upgrade')}
                       className="mt-8 w-full bg-[#FF0000] px-3 py-4 text-2xl font-bold uppercase disabled:cursor-not-allowed disabled:bg-[#B0003A]"
                     >
@@ -694,7 +841,7 @@ export default function GaragePage() {
                     </div>
                     <div className="mt-auto flex flex-wrap gap-4 pt-4">
                       <button
-                        disabled={weatherMonitoringLevel >= maxFacilityLevel || cashTotal < climateUpgradeCost || facilityActionLoading !== null}
+                        disabled={!canManageGarage || isJuniorTeamGarage || weatherMonitoringLevel >= maxFacilityLevel || cashTotal < climateUpgradeCost || facilityActionLoading !== null}
                         onClick={() => updateFacility('climate', 'upgrade')}
                         className="group min-w-[120px] flex-1 bg-[#FF0000] px-3 py-3 font-bold uppercase disabled:cursor-not-allowed disabled:bg-[#B0003A]"
                       >
@@ -708,7 +855,7 @@ export default function GaragePage() {
                         )}
                       </button>
                       <button
-                        disabled={weatherMonitoringLevel <= 0 || facilityActionLoading !== null}
+                        disabled={!canManageGarage || isJuniorTeamGarage || weatherMonitoringLevel <= 0 || facilityActionLoading !== null}
                         onClick={() => updateFacility('climate', 'sell')}
                         className="group min-w-[120px] flex-1 bg-[#FF0000] px-3 py-3 font-bold uppercase disabled:cursor-not-allowed disabled:bg-[#B0003A]"
                       >
@@ -737,7 +884,7 @@ export default function GaragePage() {
                       {t.garage.buildPitCrewQuestion} <strong>{money(pitCrewUpgradeCost)}</strong>?
                     </p>
                     <button
-                      disabled={cashTotal < pitCrewUpgradeCost || facilityActionLoading !== null}
+                      disabled={!canManageGarage || isJuniorTeamGarage || cashTotal < pitCrewUpgradeCost || facilityActionLoading !== null}
                       onClick={() => updateFacility('pitCrew', 'upgrade')}
                       className="mt-8 w-full bg-[#FF0000] px-3 py-4 text-2xl font-bold uppercase disabled:cursor-not-allowed disabled:bg-[#B0003A]"
                     >
@@ -762,7 +909,7 @@ export default function GaragePage() {
                     </div>
                     <div className="mt-auto flex flex-wrap gap-4 pt-4">
                       <button
-                        disabled={pitCrewLevel >= maxFacilityLevel || cashTotal < pitCrewUpgradeCost || facilityActionLoading !== null}
+                        disabled={!canManageGarage || isJuniorTeamGarage || pitCrewLevel >= maxFacilityLevel || cashTotal < pitCrewUpgradeCost || facilityActionLoading !== null}
                         onClick={() => updateFacility('pitCrew', 'upgrade')}
                         className="group min-w-[120px] flex-1 bg-[#FF0000] px-3 py-3 font-bold uppercase disabled:cursor-not-allowed disabled:bg-[#B0003A]"
                       >
@@ -776,7 +923,7 @@ export default function GaragePage() {
                         )}
                       </button>
                       <button
-                        disabled={pitCrewLevel <= 0 || facilityActionLoading !== null}
+                        disabled={!canManageGarage || isJuniorTeamGarage || pitCrewLevel <= 0 || facilityActionLoading !== null}
                         onClick={() => updateFacility('pitCrew', 'sell')}
                         className="group min-w-[120px] flex-1 bg-[#FF0000] px-3 py-3 font-bold uppercase disabled:cursor-not-allowed disabled:bg-[#B0003A]"
                       >
@@ -882,18 +1029,32 @@ export default function GaragePage() {
                       </div>
 
                       {driver ? (
-                        <button
-                          type="button"
-                          onClick={() => setReleaseModalDriver(driver)}
-                          className="mt-auto bg-[#FF0000] px-4 py-3 font-bold uppercase"
-                        >
-                          {t.garage.release}
-                        </button>
+                        <div className="mt-auto flex flex-wrap justify-center gap-2">
+                          {canPromoteFromJunior && driver.userId && (
+                            <button
+                              type="button"
+                              disabled={!canManageGarage}
+                              onClick={() => openPromotionModal(driver)}
+                              className="bg-[#FF0000] px-4 py-3 font-bold uppercase disabled:cursor-not-allowed disabled:bg-[#B0003A] disabled:opacity-60"
+                            >
+                              {t.garage.promote}
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            disabled={!canManageGarage}
+                            onClick={() => setReleaseModalDriver(driver)}
+                            className="bg-[#FF0000] px-4 py-3 font-bold uppercase disabled:cursor-not-allowed disabled:bg-[#B0003A] disabled:opacity-60"
+                          >
+                            {t.garage.release}
+                          </button>
+                        </div>
                       ) : (
                         <button
                           type="button"
+                          disabled={!canManageGarage}
                           onClick={() => openHireModal(category)}
-                          className="mt-auto bg-[#FF0000] px-4 py-3 font-bold uppercase"
+                          className="mt-auto bg-[#FF0000] px-4 py-3 font-bold uppercase disabled:cursor-not-allowed disabled:bg-[#B0003A] disabled:opacity-60"
                         >
                           {t.garage.hire}
                         </button>
@@ -904,6 +1065,7 @@ export default function GaragePage() {
               </div>
             </section>
 
+            {!isFormula2Garage && (
             <section className="border-8 border-[#FF0000] bg-[#1E1E1E] p-6">
               <div className="grid gap-6">
                 <div className="grid grid-cols-2 gap-6">
@@ -986,6 +1148,7 @@ export default function GaragePage() {
                 ))}
               </div>
             </section>
+            )}
           </div>
         </div>
       </div>
@@ -1004,13 +1167,23 @@ export default function GaragePage() {
             <label className="mt-5 block text-sm font-semibold" htmlFor="driver-username">
               {t.garage.driverUsername}
             </label>
-            <input
+            <select
               id="driver-username"
               required
               value={hireForm.username}
-              onChange={(event) => setHireForm((current) => ({ ...current, username: event.target.value }))}
+              disabled={availablePilotsLoading}
+              onChange={(event) => selectHirePilot(event.target.value)}
               className="mt-2 w-full border-2 border-[#FF0000] bg-black px-4 py-3 text-white outline-none"
-            />
+            >
+              <option value="">
+                {availablePilotsLoading ? t.common.loading : t.garage.selectPilot}
+              </option>
+              {availablePilots.map((pilot) => (
+                <option key={pilot.id} value={pilot.username}>
+                  {pilot.driverNumber !== null ? `${pilot.driverNumber} - ` : ''}{pilot.username}
+                </option>
+              ))}
+            </select>
 
             <label className="mt-4 block text-sm font-semibold" htmlFor="contract-races">
               {t.garage.contractDuration}
@@ -1025,18 +1198,27 @@ export default function GaragePage() {
               className="mt-2 w-full border-2 border-[#FF0000] bg-black px-4 py-3 text-white outline-none"
             />
 
-            <label className="mt-4 block text-sm font-semibold" htmlFor="salary-per-race">
-              {t.garage.salaryPerRace}
-            </label>
-            <input
-              id="salary-per-race"
-              required
-              min="0"
-              type="number"
-              value={hireForm.salaryPerRace}
-              onChange={(event) => setHireForm((current) => ({ ...current, salaryPerRace: event.target.value }))}
-              className="mt-2 w-full border-2 border-[#FF0000] bg-black px-4 py-3 text-white outline-none"
-            />
+            {!isFormula2Garage && (
+              <>
+                {selectedHirePilot && (
+                  <p className="mt-4 text-sm text-gray-300">
+                    {t.garage.minimumSalary}: {money(hireMinimumSalary)}
+                  </p>
+                )}
+                <label className="mt-4 block text-sm font-semibold" htmlFor="salary-per-race">
+                  {t.garage.salaryPerRace}
+                </label>
+                <input
+                  id="salary-per-race"
+                  required
+                  min={hireMinimumSalary}
+                  type="number"
+                  value={hireForm.salaryPerRace}
+                  onChange={(event) => setHireForm((current) => ({ ...current, salaryPerRace: event.target.value }))}
+                  className="mt-2 w-full border-2 border-[#FF0000] bg-black px-4 py-3 text-white outline-none"
+                />
+              </>
+            )}
 
             <div className="mt-6 grid grid-cols-2 gap-4">
               <button
@@ -1049,7 +1231,7 @@ export default function GaragePage() {
               </button>
               <button
                 type="submit"
-                disabled={driverProposalLoading}
+                disabled={driverProposalLoading || !canSubmitDriverProposal}
                 className="bg-[#FF0000] px-4 py-3 font-bold uppercase hover:bg-red-700 disabled:cursor-wait disabled:opacity-70"
               >
                 {driverProposalLoading ? t.common.loading : t.garage.sendProposal}
@@ -1150,7 +1332,7 @@ export default function GaragePage() {
                   )}
                   <button
                     type="button"
-                    disabled={sponsorReleaseLoading}
+                    disabled={!canManageGarage || sponsorReleaseLoading}
                     onClick={() => {
                       if (!confirmSponsorRelease) {
                         setConfirmSponsorRelease(true);
@@ -1166,6 +1348,74 @@ export default function GaragePage() {
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {promotionModalDriver && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
+          <form
+            onSubmit={submitPromotion}
+            className="w-full max-w-md border-4 border-[#FF0000] bg-[#1E1E1E] p-6 text-white shadow-2xl"
+          >
+            <h2 className="text-2xl font-bold uppercase">{t.garage.promoteDriver}</h2>
+            <p className="mt-3 font-bold uppercase">{promotionModalDriver.displayName}</p>
+            <p className="mt-2 text-sm text-gray-300">
+              {t.garage.promotionOnlyStarterF1} {teamGarage?.parentTeamName ?? ''}
+            </p>
+            <p className="mt-2 border border-[#FF0000] bg-black/40 p-3 text-sm font-semibold text-red-100">
+              {t.garage.promotionMinimumExplanation}: {money(promotionMinimumSalary)}
+            </p>
+
+            {!parentHasStarterVacancy && (
+              <p className="mt-4 border-2 border-[#FF0000] bg-[#2A0000] p-3 text-sm font-bold text-red-100">
+                {t.garage.parentNoStarterVacancy}
+              </p>
+            )}
+
+            <label className="mt-5 block text-sm font-semibold" htmlFor="promotion-contract-races">
+              {t.garage.contractDuration}
+            </label>
+            <input
+              id="promotion-contract-races"
+              required
+              min="1"
+              type="number"
+              value={promotionForm.contractRaces}
+              onChange={(event) => setPromotionForm((current) => ({ ...current, contractRaces: event.target.value }))}
+              className="mt-2 w-full border-2 border-[#FF0000] bg-black px-4 py-3 text-white outline-none"
+            />
+
+            <label className="mt-4 block text-sm font-semibold" htmlFor="promotion-salary">
+              {t.garage.salaryPerRace}
+            </label>
+            <input
+              id="promotion-salary"
+              required
+              min={promotionMinimumSalary}
+              type="number"
+              value={promotionForm.salaryPerRace}
+              onChange={(event) => setPromotionForm((current) => ({ ...current, salaryPerRace: event.target.value }))}
+              className="mt-2 w-full border-2 border-[#FF0000] bg-black px-4 py-3 text-white outline-none"
+            />
+
+            <div className="mt-6 grid grid-cols-2 gap-4">
+              <button
+                type="button"
+                disabled={promotionLoading}
+                onClick={() => setPromotionModalDriver(null)}
+                className="bg-gray-700 px-4 py-3 font-bold uppercase hover:bg-gray-600 disabled:cursor-wait disabled:opacity-70"
+              >
+                {t.garage.cancel}
+              </button>
+              <button
+                type="submit"
+                disabled={!canSubmitPromotion || promotionLoading}
+                className="bg-[#FF0000] px-4 py-3 font-bold uppercase hover:bg-red-700 disabled:cursor-not-allowed disabled:bg-[#B0003A] disabled:opacity-70"
+              >
+                {promotionLoading ? t.common.loading : t.garage.sendProposal}
+              </button>
+            </div>
+          </form>
         </div>
       )}
 

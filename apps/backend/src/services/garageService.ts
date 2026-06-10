@@ -14,6 +14,10 @@ import {
   getFacilitySellValue,
   getFacilityUpgradeCost,
 } from '../config/facilityEconomy';
+import {
+  calculateDriverMarketScore,
+  getMinimumSalaryFromMarketScore,
+} from '../config/driverMarket';
 
 export interface UserGarage {
   id: string;
@@ -69,6 +73,11 @@ export interface TeamGarage {
   name: string;
   tag: string;
   color: string;
+  category: 'formula_1' | 'formula_2';
+  isJuniorTeam: boolean;
+  parentTeamId: string | null;
+  parentTeamName: string | null;
+  parentStarterCount: number | null;
   cashTotal: number;
   climateCostPerRace: number;
   pitCrewCostPerRace: number;
@@ -91,6 +100,7 @@ export interface TeamGarage {
     driverNumber: number | null;
     contractEndsAfterRaces: number;
     salaryPerRace: number;
+    minimumSalary: number;
     slotNumber: number;
     category: 'starter' | 'reserve';
   }>;
@@ -142,10 +152,55 @@ class GarageService {
   async userCanAccessTeam(userId: string, teamId: string): Promise<boolean> {
     const membership = await queryOne(
       `SELECT 1
-       FROM user_team_memberships
-       WHERE user_id = $1
-         AND team_id = $2
-         AND (is_team_principal = true OR is_team_assistant = true)`,
+       FROM teams target_team
+       LEFT JOIN user_team_memberships direct_membership
+         ON direct_membership.team_id = target_team.id
+        AND direct_membership.user_id = $1
+       LEFT JOIN user_team_memberships parent_membership
+         ON parent_membership.team_id = target_team.parent_team_id
+        AND parent_membership.user_id = $1
+       WHERE target_team.id = $2
+         AND (
+           direct_membership.is_team_principal = true
+           OR direct_membership.is_team_assistant = true
+           OR direct_membership.is_engineer = true
+           OR (
+             target_team.is_junior_team = true
+             AND (
+               parent_membership.is_team_principal = true
+               OR parent_membership.is_team_assistant = true
+               OR parent_membership.is_engineer = true
+             )
+           )
+         )`,
+      [userId, teamId],
+    );
+
+    return Boolean(membership);
+  }
+
+  async userCanManageTeam(userId: string, teamId: string): Promise<boolean> {
+    const membership = await queryOne(
+      `SELECT 1
+       FROM teams target_team
+       LEFT JOIN user_team_memberships direct_membership
+         ON direct_membership.team_id = target_team.id
+        AND direct_membership.user_id = $1
+       LEFT JOIN user_team_memberships parent_membership
+         ON parent_membership.team_id = target_team.parent_team_id
+        AND parent_membership.user_id = $1
+       WHERE target_team.id = $2
+         AND (
+           direct_membership.is_team_principal = true
+           OR direct_membership.is_team_assistant = true
+           OR (
+             target_team.is_junior_team = true
+             AND (
+               parent_membership.is_team_principal = true
+               OR parent_membership.is_team_assistant = true
+             )
+           )
+         )`,
       [userId, teamId],
     );
 
@@ -155,14 +210,28 @@ class GarageService {
   async getTeamGarage(teamId: string): Promise<TeamGarage | null> {
     const team = await queryOne(
       `SELECT
-        id,
-        name,
-        tag,
-        color,
-        cash_total AS "cashTotal",
-        climate_cost_per_race AS "climateCostPerRace",
-        pit_crew_cost_per_race AS "pitCrewCostPerRace",
-        salary_cost_per_race AS "salaryCostPerRace",
+        teams.id,
+        teams.name,
+        teams.tag,
+        teams.color,
+        teams.category,
+        teams.is_junior_team AS "isJuniorTeam",
+        teams.parent_team_id AS "parentTeamId",
+        parent_team.name AS "parentTeamName",
+        CASE
+          WHEN teams.parent_team_id IS NULL THEN NULL
+          ELSE (
+            SELECT COUNT(*)::int
+            FROM team_drivers parent_starter
+            WHERE parent_starter.team_id = teams.parent_team_id
+              AND parent_starter.status = 'active'
+              AND parent_starter.category = 'starter'
+          )
+        END AS "parentStarterCount",
+        teams.cash_total AS "cashTotal",
+        teams.climate_cost_per_race AS "climateCostPerRace",
+        teams.pit_crew_cost_per_race AS "pitCrewCostPerRace",
+        teams.salary_cost_per_race AS "salaryCostPerRace",
         COALESCE(
           (
             SELECT SUM(ts.reward_per_race)
@@ -171,18 +240,19 @@ class GarageService {
           ),
           0
         ) AS "sponsorIncomePerRace",
-        climate_monitoring_level AS "climateMonitoringLevel",
-        pit_crew_level AS "pitCrewLevel",
-        car_name AS "carName",
-        momento_comercial AS "momentoComercial",
-        prestigio,
-        agressividade,
-        popularidade,
-        tecnica,
-        nacionalidades,
-        setores
+        teams.climate_monitoring_level AS "climateMonitoringLevel",
+        teams.pit_crew_level AS "pitCrewLevel",
+        teams.car_name AS "carName",
+        teams.momento_comercial AS "momentoComercial",
+        teams.prestigio,
+        teams.agressividade,
+        teams.popularidade,
+        teams.tecnica,
+        teams.nacionalidades,
+        teams.setores
        FROM teams
-       WHERE id = $1`,
+       LEFT JOIN teams parent_team ON parent_team.id = teams.parent_team_id
+       WHERE teams.id = $1`,
       [teamId],
     );
 
@@ -191,18 +261,29 @@ class GarageService {
     const [drivers, sponsors, financialHistory] = await Promise.all([
       query(
         `SELECT
-          id,
-          user_id AS "userId",
-          display_name AS "displayName",
-          driver_number AS "driverNumber",
-          contract_ends_after_races AS "contractEndsAfterRaces",
-          salary_per_race AS "salaryPerRace",
-          slot_number AS "slotNumber",
-          category
+          team_drivers.id,
+          team_drivers.user_id AS "userId",
+          team_drivers.display_name AS "displayName",
+          team_drivers.driver_number AS "driverNumber",
+          team_drivers.contract_ends_after_races AS "contractEndsAfterRaces",
+          team_drivers.salary_per_race AS "salaryPerRace",
+          team_drivers.slot_number AS "slotNumber",
+          team_drivers.category,
+          users.driver_velocidade AS velocidade,
+          users.driver_consistencia AS consistencia,
+          users.driver_tecnica AS tecnica,
+          users.driver_experiencia AS experiencia,
+          users.driver_chuva AS chuva,
+          users.driver_estrategia AS estrategia,
+          users.driver_potencial AS potencial,
+          users.driver_popularidade AS popularidade,
+          personal_sponsor.id AS "sponsorId"
          FROM team_drivers
-         WHERE team_id = $1
-           AND status = 'active'
-         ORDER BY CASE WHEN category = 'starter' THEN 0 ELSE 1 END, slot_number ASC`,
+         LEFT JOIN users ON users.id = team_drivers.user_id
+         LEFT JOIN sponsors personal_sponsor ON personal_sponsor.pilot_user_id = users.id
+         WHERE team_drivers.team_id = $1
+           AND team_drivers.status = 'active'
+         ORDER BY CASE WHEN team_drivers.category = 'starter' THEN 0 ELSE 1 END, team_drivers.slot_number ASC`,
         [teamId],
       ),
       query(
@@ -287,7 +368,26 @@ class GarageService {
 
     return {
       ...team,
-      drivers: drivers.rows,
+      drivers: drivers.rows.map((driver: any) => {
+        if (!driver.userId) return { ...driver, minimumSalary: 0 };
+
+        const marketScore = calculateDriverMarketScore({
+          velocidade: Number(driver.velocidade ?? 0),
+          consistencia: Number(driver.consistencia ?? 0),
+          tecnica: Number(driver.tecnica ?? 0),
+          experiencia: Number(driver.experiencia ?? 0),
+          chuva: Number(driver.chuva ?? 0),
+          estrategia: Number(driver.estrategia ?? 0),
+          potencial: Number(driver.potencial ?? 0),
+          popularidade: Number(driver.popularidade ?? 0),
+          hasPersonalSponsor: Boolean(driver.sponsorId),
+        });
+
+        return {
+          ...driver,
+          minimumSalary: getMinimumSalaryFromMarketScore(marketScore),
+        };
+      }),
       sponsors: sponsors.rows,
       financialHistory: financialHistory.rows,
       facilityEconomy: GARAGE_FACILITY_ECONOMY,
@@ -303,13 +403,15 @@ class GarageService {
     const costColumn = facility === 'climate' ? 'climate_cost_per_race' : 'pit_crew_cost_per_race';
     const label = facility === 'climate' ? 'Climate monitoring' : 'Pit crew';
     const team = await queryOne(
-      `SELECT id, cash_total, ${levelColumn} AS level
+      `SELECT id, cash_total, is_junior_team, ${levelColumn} AS level
        FROM teams
+       LEFT JOIN teams parent_team ON parent_team.id = teams.parent_team_id
        WHERE id = $1`,
       [teamId],
     );
 
     if (!team) return { success: false, message: 'Scuderia not found' };
+    if (team.is_junior_team) return { success: false, message: 'Junior teams cannot manage facilities' };
 
     const currentLevel = Number(team.level);
     if (action === 'upgrade') {
@@ -375,21 +477,67 @@ class GarageService {
       category: 'starter' | 'reserve';
     },
   ) {
-    const team = await queryOne<{ id: string; name: string }>(
-      'SELECT id, name FROM teams WHERE id = $1',
+    const team = await queryOne<{ id: string; name: string; category: 'formula_1' | 'formula_2' | null }>(
+      "SELECT id, name, COALESCE(category, 'formula_1') AS category FROM teams WHERE id = $1",
       [teamId],
     );
     if (!team) return { success: false, message: 'Scuderia not found' };
-
-    const user = await queryOne<{ id: string; username: string; driver_number: number | null; language: 'pt' | 'en' | 'es' }>(
-      `SELECT id, username, driver_number, language
+    const user = await queryOne<{
+      id: string;
+      username: string;
+      driver_number: number | null;
+      language: 'pt' | 'en' | 'es';
+      driver_wallet_created: boolean;
+      velocidade: number | null;
+      consistencia: number | null;
+      tecnica: number | null;
+      experiencia: number | null;
+      chuva: number | null;
+      estrategia: number | null;
+      potencial: number | null;
+      popularidade: number | null;
+      sponsor_id: string | null;
+    }>(
+      `SELECT users.id, username, driver_number, language
+        , COALESCE(driver_wallet_created, false) AS driver_wallet_created
+        , driver_velocidade AS velocidade
+        , driver_consistencia AS consistencia
+        , driver_tecnica AS tecnica
+        , driver_experiencia AS experiencia
+        , driver_chuva AS chuva
+        , driver_estrategia AS estrategia
+        , driver_potencial AS potencial
+        , driver_popularidade AS popularidade
+        , personal_sponsor.id AS sponsor_id
        FROM users
+       LEFT JOIN sponsors personal_sponsor ON personal_sponsor.pilot_user_id = users.id
        WHERE LOWER(username) = LOWER($1)
          AND COALESCE(is_active, true) = true
        LIMIT 1`,
       [input.username],
     );
     if (!user) return { success: false, message: 'Driver user not found' };
+    if (!user.driver_wallet_created) return { success: false, message: 'Driver wallet not found' };
+
+    const marketScore = calculateDriverMarketScore({
+      velocidade: Number(user.velocidade ?? 0),
+      consistencia: Number(user.consistencia ?? 0),
+      tecnica: Number(user.tecnica ?? 0),
+      experiencia: Number(user.experiencia ?? 0),
+      chuva: Number(user.chuva ?? 0),
+      estrategia: Number(user.estrategia ?? 0),
+      potencial: Number(user.potencial ?? 0),
+      popularidade: Number(user.popularidade ?? 0),
+      hasPersonalSponsor: Boolean(user.sponsor_id),
+    });
+    const minimumSalary = getMinimumSalaryFromMarketScore(marketScore);
+    const minimumSalaryForCategory = input.category === 'reserve'
+      ? Math.round(minimumSalary * 0.25)
+      : minimumSalary;
+    const salaryPerRace = team.category === 'formula_2' ? 0 : input.salaryPerRace;
+    if (team.category !== 'formula_2' && salaryPerRace < minimumSalaryForCategory) {
+      return { success: false, message: 'Driver salary is below minimum' };
+    }
 
     const validation = await this.validateDriverContractAvailability(teamId, user.id, input.category);
     if (!validation.success) return validation;
@@ -420,7 +568,7 @@ class GarageService {
         proposedByUserId,
         input.category,
         input.contractRaces,
-        input.salaryPerRace,
+        salaryPerRace,
       ],
     );
     if (!proposal) return { success: false, message: 'Failed to send driver proposal' };
@@ -430,7 +578,7 @@ class GarageService {
       team.name,
       input.category,
       input.contractRaces,
-      input.salaryPerRace,
+      salaryPerRace,
     );
     const notification = await notificationService.create({
       userId: user.id,
@@ -445,7 +593,195 @@ class GarageService {
         teamName: team.name,
         category: input.category,
         contractRaces: input.contractRaces,
+        salaryPerRace,
+      },
+    });
+
+    await query(
+      'UPDATE driver_contract_proposals SET notification_id = $1 WHERE id = $2',
+      [notification.id, proposal.id],
+    );
+
+    return { success: true, proposalId: proposal.id };
+  }
+
+  async createJuniorPromotionProposal(
+    juniorTeamId: string,
+    driverId: string,
+    proposedByUserId: string,
+    input: {
+      contractRaces: number;
+      salaryPerRace: number;
+    },
+  ) {
+    const juniorTeam = await queryOne<{
+      id: string;
+      name: string;
+      category: 'formula_1' | 'formula_2' | null;
+      is_junior_team: boolean;
+      parent_team_id: string | null;
+      parent_team_name: string | null;
+    }>(
+      `SELECT
+        junior.id,
+        junior.name,
+        COALESCE(junior.category, 'formula_1') AS category,
+        junior.is_junior_team,
+        junior.parent_team_id,
+        parent.name AS parent_team_name
+       FROM teams junior
+       LEFT JOIN teams parent ON parent.id = junior.parent_team_id
+       WHERE junior.id = $1`,
+      [juniorTeamId],
+    );
+    if (!juniorTeam) return { success: false, message: 'Scuderia not found' };
+    if (juniorTeam.category !== 'formula_2' || !juniorTeam.is_junior_team || !juniorTeam.parent_team_id) {
+      return { success: false, message: 'Promotion is only available from a Formula 2 junior team' };
+    }
+
+    const parentStarterCount = await queryOne<{ count: number }>(
+      `SELECT COUNT(*)::int AS count
+       FROM team_drivers
+       WHERE team_id = $1
+         AND status = 'active'
+         AND category = 'starter'`,
+      [juniorTeam.parent_team_id],
+    );
+    if (Number(parentStarterCount?.count ?? 0) >= 2) {
+      return { success: false, message: 'Parent scuderia has no starter vacancy' };
+    }
+
+    const driver = await queryOne<{
+      userId: string | null;
+      username: string;
+      driverNumber: number | null;
+      language: 'pt' | 'en' | 'es';
+      velocidade: number | null;
+      consistencia: number | null;
+      tecnica: number | null;
+      experiencia: number | null;
+      chuva: number | null;
+      estrategia: number | null;
+      potencial: number | null;
+      popularidade: number | null;
+      sponsorId: string | null;
+    }>(
+      `SELECT
+        team_drivers.user_id AS "userId",
+        users.username,
+        users.driver_number AS "driverNumber",
+        users.language,
+        users.driver_velocidade AS velocidade,
+        users.driver_consistencia AS consistencia,
+        users.driver_tecnica AS tecnica,
+        users.driver_experiencia AS experiencia,
+        users.driver_chuva AS chuva,
+        users.driver_estrategia AS estrategia,
+        users.driver_potencial AS potencial,
+        users.driver_popularidade AS popularidade,
+        personal_sponsor.id AS "sponsorId"
+       FROM team_drivers
+       JOIN users ON users.id = team_drivers.user_id
+       LEFT JOIN sponsors personal_sponsor ON personal_sponsor.pilot_user_id = users.id
+       WHERE team_drivers.id = $1
+         AND team_drivers.team_id = $2
+         AND team_drivers.status = 'active'`,
+      [driverId, juniorTeamId],
+    );
+    if (!driver?.userId) return { success: false, message: 'Driver contract not found' };
+
+    const activeParentContract = await queryOne<{ category: 'starter' | 'reserve' }>(
+      `SELECT category
+       FROM team_drivers
+       WHERE team_id = $1
+         AND user_id = $2
+         AND status = 'active'
+       LIMIT 1`,
+      [juniorTeam.parent_team_id, driver.userId],
+    );
+    if (activeParentContract?.category === 'starter') {
+      return { success: false, message: 'Driver already belongs to this scuderia' };
+    }
+
+    const starterContract = await queryOne(
+      `SELECT id
+       FROM team_drivers
+       WHERE user_id = $1
+         AND category = 'starter'
+         AND status = 'active'`,
+      [driver.userId],
+    );
+    if (starterContract) return { success: false, message: 'Driver already has a starter contract' };
+
+    const marketScore = calculateDriverMarketScore({
+      velocidade: Number(driver.velocidade ?? 0),
+      consistencia: Number(driver.consistencia ?? 0),
+      tecnica: Number(driver.tecnica ?? 0),
+      experiencia: Number(driver.experiencia ?? 0),
+      chuva: Number(driver.chuva ?? 0),
+      estrategia: Number(driver.estrategia ?? 0),
+      potencial: Number(driver.potencial ?? 0),
+      popularidade: Number(driver.popularidade ?? 0),
+      hasPersonalSponsor: Boolean(driver.sponsorId),
+    });
+    const minimumSalary = Math.round(getMinimumSalaryFromMarketScore(marketScore) * 0.5);
+    if (input.salaryPerRace < minimumSalary) {
+      return { success: false, message: 'Driver salary is below minimum' };
+    }
+
+    const pending = await queryOne(
+      `SELECT id
+       FROM driver_contract_proposals
+       WHERE team_id = $1
+         AND user_id = $2
+         AND status = 'pending'`,
+      [juniorTeam.parent_team_id, driver.userId],
+    );
+    if (pending) return { success: false, message: 'Driver already has a pending proposal from this scuderia' };
+
+    const proposal = await queryOne<{ id: string }>(
+      `INSERT INTO driver_contract_proposals (
+        team_id,
+        user_id,
+        proposed_by_user_id,
+        category,
+        contract_races,
+        salary_per_race
+      ) VALUES ($1, $2, $3, 'starter', $4, $5)
+      RETURNING id`,
+      [
+        juniorTeam.parent_team_id,
+        driver.userId,
+        proposedByUserId,
+        input.contractRaces,
+        input.salaryPerRace,
+      ],
+    );
+    if (!proposal) return { success: false, message: 'Failed to send driver proposal' };
+
+    const notificationText = translateDriverProposalNotification(
+      driver.language,
+      juniorTeam.parent_team_name ?? 'Formula 1',
+      'starter',
+      input.contractRaces,
+      input.salaryPerRace,
+    );
+    const notification = await notificationService.create({
+      userId: driver.userId,
+      senderUserId: proposedByUserId,
+      title: notificationText.title,
+      message: notificationText.message,
+      type: 'info',
+      metadata: {
+        action: 'driver_contract_proposal',
+        proposalId: proposal.id,
+        teamId: juniorTeam.parent_team_id,
+        teamName: juniorTeam.parent_team_name,
+        category: 'starter',
+        contractRaces: input.contractRaces,
         salaryPerRace: input.salaryPerRace,
+        source: 'junior_promotion',
+        juniorTeamId,
       },
     });
 
@@ -504,14 +840,18 @@ class GarageService {
       }
 
       const activeForTeam = await client.query(
-        `SELECT id
+        `SELECT id, category
          FROM team_drivers
          WHERE team_id = $1
            AND user_id = $2
            AND status = 'active'`,
         [proposal.team_id, userId],
       );
-      if (activeForTeam.rows[0]) {
+      const activeTeamContract = activeForTeam.rows[0];
+      const canPromoteReserveToStarter = activeTeamContract
+        && proposal.category === 'starter'
+        && activeTeamContract.category === 'reserve';
+      if (activeTeamContract && !canPromoteReserveToStarter) {
         return { success: false, message: 'Driver already belongs to this scuderia' };
       }
 
@@ -542,33 +882,59 @@ class GarageService {
       }
 
       const slotNumber = await this.findAvailableDriverSlot(client, proposal.team_id, proposal.category);
-      await client.query(
-        `INSERT INTO team_drivers (
-          team_id,
-          user_id,
-          display_name,
-          driver_number,
-          contract_ends_after_races,
-          salary_per_race,
-          slot_number,
-          category,
-          status,
-          accepted_at
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'active', NOW())`,
-        [
-          proposal.team_id,
-          userId,
-          proposal.username,
-          proposal.driver_number,
-          proposal.contract_races,
-          proposal.salary_per_race,
-          slotNumber,
-          proposal.category,
-        ],
-      );
+      if (canPromoteReserveToStarter) {
+        await client.query(
+          `UPDATE team_drivers
+           SET display_name = $1,
+               driver_number = $2,
+               contract_ends_after_races = $3,
+               salary_per_race = $4,
+               slot_number = $5,
+               category = 'starter',
+               accepted_at = NOW(),
+               updated_at = NOW()
+           WHERE id = $6`,
+          [
+            proposal.username,
+            proposal.driver_number,
+            proposal.contract_races,
+            proposal.salary_per_race,
+            slotNumber,
+            activeTeamContract.id,
+          ],
+        );
+      } else {
+        await client.query(
+          `INSERT INTO team_drivers (
+            team_id,
+            user_id,
+            display_name,
+            driver_number,
+            contract_ends_after_races,
+            salary_per_race,
+            slot_number,
+            category,
+            status,
+            accepted_at
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'active', NOW())`,
+          [
+            proposal.team_id,
+            userId,
+            proposal.username,
+            proposal.driver_number,
+            proposal.contract_races,
+            proposal.salary_per_race,
+            slotNumber,
+            proposal.category,
+          ],
+        );
+      }
 
       await this.upsertDriverMembership(client, userId, proposal.team_id, proposal.category);
       await this.recalculateTeamSalaryCost(client, proposal.team_id);
+      await this.syncTeamNationalities(client, proposal.team_id);
+      const { default: adminService } = await import('./adminService');
+      await adminService.syncPersonalSponsorsForPilot(userId, client);
       await client.query(
         `UPDATE driver_contract_proposals
          SET status = 'accepted', responded_at = NOW()
@@ -675,6 +1041,9 @@ class GarageService {
         await this.removeDriverMembershipIfNeeded(client, driver.user_id, teamId);
       }
       await this.recalculateTeamSalaryCost(client, teamId);
+      await this.syncTeamNationalities(client, teamId);
+      const { default: adminService } = await import('./adminService');
+      await adminService.syncPersonalSponsorsForPilot(driver.user_id as string | null, client);
 
       return {
         success: true,
@@ -953,9 +1322,10 @@ class GarageService {
         role,
         is_team_principal,
         is_team_assistant,
+        is_engineer,
         is_driver,
         driver_category
-      ) VALUES ($1, $2, 'driver', false, false, true, $3)
+      ) VALUES ($1, $2, 'driver', false, false, false, true, $3)
       ON CONFLICT (user_id, team_id)
       DO UPDATE SET
         is_driver = true,
@@ -963,6 +1333,7 @@ class GarageService {
         role = CASE
           WHEN user_team_memberships.is_team_principal THEN user_team_memberships.role
           WHEN user_team_memberships.is_team_assistant THEN user_team_memberships.role
+          WHEN user_team_memberships.is_engineer THEN user_team_memberships.role
           ELSE 'driver'
         END`,
       [userId, teamId, category],
@@ -985,7 +1356,7 @@ class GarageService {
     if (remaining.rows[0]) return;
 
     const membership = await client.query(
-      `SELECT is_team_principal, is_team_assistant
+      `SELECT is_team_principal, is_team_assistant, is_engineer
        FROM user_team_memberships
        WHERE user_id = $1
          AND team_id = $2`,
@@ -994,7 +1365,7 @@ class GarageService {
     const row = membership.rows[0];
     if (!row) return;
 
-    if (!row.is_team_principal && !row.is_team_assistant) {
+    if (!row.is_team_principal && !row.is_team_assistant && !row.is_engineer) {
       await client.query(
         'DELETE FROM user_team_memberships WHERE user_id = $1 AND team_id = $2',
         [userId, teamId],
@@ -1006,7 +1377,11 @@ class GarageService {
       `UPDATE user_team_memberships
        SET is_driver = false,
            driver_category = null,
-           role = CASE WHEN is_team_principal THEN 'team_principal' ELSE 'team_assistant' END
+           role = CASE
+             WHEN is_team_principal THEN 'team_principal'
+             WHEN is_team_assistant THEN 'team_assistant'
+             ELSE 'engineer'
+           END
        WHERE user_id = $1
          AND team_id = $2`,
       [userId, teamId],
@@ -1021,10 +1396,29 @@ class GarageService {
       `UPDATE teams
        SET salary_cost_per_race = COALESCE(
          (
-          SELECT SUM(salary_per_race)
+          SELECT SUM(
+            CASE
+              WHEN team_drivers.category = 'reserve'
+                AND teams.category = 'formula_1'
+                AND team_drivers.user_id IS NOT NULL
+                AND EXISTS (
+                  SELECT 1
+                  FROM team_drivers junior_driver
+                  JOIN teams junior_team ON junior_team.id = junior_driver.team_id
+                  WHERE junior_driver.user_id = team_drivers.user_id
+                    AND junior_driver.status = 'active'
+                    AND junior_team.category = 'formula_2'
+                    AND junior_team.is_junior_team = true
+                    AND junior_team.parent_team_id = teams.id
+                )
+              THEN 0
+              ELSE team_drivers.salary_per_race
+            END
+          )
           FROM team_drivers
-          WHERE team_id = $1
-            AND status = 'active'
+          JOIN teams ON teams.id = team_drivers.team_id
+          WHERE team_drivers.team_id = $1
+            AND team_drivers.status = 'active'
          ),
          0
        ),
@@ -1032,6 +1426,52 @@ class GarageService {
        WHERE id = $1`,
       [teamId],
     );
+  }
+
+  private async syncTeamNationalities(
+    client: { query: (sql: string, params?: any[]) => Promise<any> },
+    teamId: string,
+  ) {
+    await client.query(
+      `UPDATE teams
+       SET nacionalidades = (
+         SELECT ARRAY_AGG(nationality ORDER BY normalized)
+         FROM (
+           SELECT DISTINCT ON (normalized)
+             nationality,
+             normalized
+           FROM (
+             SELECT
+               TRIM(value) AS nationality,
+               LOWER(TRIM(value)) AS normalized
+             FROM UNNEST(COALESCE(teams.manual_nacionalidades, ARRAY[]::text[])) AS value
+             WHERE TRIM(value) <> ''
+             UNION ALL
+             SELECT
+               TRIM(users.driver_nacionalidade) AS nationality,
+               LOWER(TRIM(users.driver_nacionalidade)) AS normalized
+             FROM team_drivers
+             JOIN users ON users.id = team_drivers.user_id
+             WHERE team_drivers.team_id = teams.id
+               AND team_drivers.status = 'active'
+               AND users.driver_wallet_created = true
+               AND TRIM(COALESCE(users.driver_nacionalidade, '')) <> ''
+           ) nationalities
+           ORDER BY normalized, nationality
+         ) unique_nationalities
+       ),
+       updated_at = NOW()
+       WHERE id = $1`,
+      [teamId],
+    );
+
+    const parent = await client.query(
+      'SELECT parent_team_id FROM teams WHERE id = $1',
+      [teamId],
+    );
+    if (parent.rows[0]?.parent_team_id) {
+      await this.recalculateTeamSalaryCost(client, parent.rows[0].parent_team_id);
+    }
   }
 
   async recordStandardRaceFinancialEntries(teamId: string, raceId?: string): Promise<void> {

@@ -40,14 +40,16 @@ export default function PitWallPage() {
       (user?.teamMemberships ?? []).filter(
         (membership) =>
           membership.roles.includes('team_principal')
-          || membership.roles.includes('team_assistant'),
-      ),
+          || membership.roles.includes('team_assistant')
+          || membership.roles.includes('engineer'),
+       ),
     [user?.teamMemberships],
   );
   const selectedTeamId = searchParams.get('teamId');
-  const selectedMembership =
-    eligibleMemberships.find((membership) => membership.teamId === selectedTeamId)
-    ?? null;
+  const isPublicPitWall = selectedTeamId === 'public';
+  const selectedMembership = isPublicPitWall
+    ? null
+    : (eligibleMemberships.find((membership) => membership.teamId === selectedTeamId) ?? null);
   const loggedUserTeam = selectedMembership?.teamName ?? null;
   const authWeatherLevel = selectedMembership?.weatherLevel ?? 0;
   const [liveWeatherLevel, setLiveWeatherLevel] = useState<number | null>(null);
@@ -105,10 +107,19 @@ export default function PitWallPage() {
   );
   const teamDrivers = useMemo(
     () =>
-      loggedUserTeam
-        ? drivers.filter((driver) => driver.leagueScuderia === loggedUserTeam)
+      loggedUserTeam || selectedTeamId
+        ? drivers.filter((driver) =>
+          (
+            selectedTeamId !== null
+            && selectedTeamId !== 'public'
+            && driver.leagueScuderiaId === selectedTeamId
+          )
+          || (
+            loggedUserTeam !== null
+            && driver.leagueScuderia === loggedUserTeam
+          ))
         : [],
-    [drivers, loggedUserTeam],
+    [drivers, loggedUserTeam, selectedTeamId],
   );
   const recipientOptions = useMemo(
     () => [
@@ -136,11 +147,23 @@ export default function PitWallPage() {
     }
   }, [playerListError, showSnackbar, t.pitWall.connectionError]);
 
+  const getPitWallActionMessage = (code?: string) => {
+    const messages = t.pitWall.actionErrors;
+    if (!code) return messages.actionFailed;
+
+    return messages[code as keyof typeof messages] ?? messages.actionFailed;
+  };
+
+  const showPitWallActionResult = (result: { success: boolean; code?: string; message?: string }) => {
+    if (result.success) return;
+    showSnackbar(result.message ?? getPitWallActionMessage(result.code), 'error');
+  };
+
   if (!isAuthenticated) {
     return null;
   }
 
-  if (!selectedMembership) {
+  if (!selectedMembership && !isPublicPitWall) {
     return (
       <main
         className="relative min-h-screen bg-cover bg-center bg-no-repeat bg-fixed text-white"
@@ -171,6 +194,14 @@ export default function PitWallPage() {
             <h1 className="mb-6 text-3xl font-bold uppercase">{t.pitWall.chooseScuderia}</h1>
 
             <div className="flex flex-wrap justify-center gap-4">
+              <button
+                type="button"
+                onClick={() => router.push('/pit-wall?teamId=public')}
+                className="flex min-h-28 min-w-56 items-center justify-center border-8 border-[#FF0000] bg-[#1E1E1E] px-6 py-5 text-xl font-semibold uppercase transition-colors hover:border-white"
+              >
+                {t.pitWall.enterWithoutTeam}
+              </button>
+
               {eligibleMemberships.map((membership) => {
                 const logoSrc = `/img/scuderia/logos/${encodeURIComponent(
                   membership.teamName.trim().toLowerCase(),
@@ -289,13 +320,33 @@ export default function PitWallPage() {
 
           <LogsPanel logs={logs} loading={false}/>
 
-          <TeamInfoPanel
-            drivers={drivers}
-            loggedUserTeam={loggedUserTeam}
-            onPitCall={(driver) => sendPitCall(driver.name)}
-            onPitTyrePrepare={(driver, tyre) => preparePitTyre(driver.name, tyre)}
-            loading={!playerList}
-          />
+          {isPublicPitWall ? (
+            <div
+              className="flex min-h-[220px] items-center justify-center p-4 text-center text-xl font-bold uppercase text-gray-300"
+              style={{
+                gridArea: 'team-info',
+                backgroundColor: '#1E1E1E',
+                outline: '8px solid #FF232B',
+              }}
+            >
+              {t.pitWall.availableOnlyWithTeam}
+            </div>
+          ) : (
+            <TeamInfoPanel
+              drivers={drivers}
+              loggedUserTeam={loggedUserTeam}
+              loggedUserTeamId={selectedTeamId}
+              onPitCall={async (driver) => {
+                const result = await sendPitCall(driver.name, driver.id);
+                showPitWallActionResult(result);
+              }}
+              onPitTyrePrepare={async (driver, tyre) => {
+                const result = await preparePitTyre(driver.name, tyre, driver.id);
+                showPitWallActionResult(result);
+              }}
+              loading={!playerList}
+            />
+          )}
 
           <ChatPanel
             messages={messages}
@@ -303,15 +354,20 @@ export default function PitWallPage() {
             setMessage={setMessage}
             handleSendMessage={(event) => {
               event.preventDefault();
+              const selectedDriver = teamDrivers.find((driver) => driver.name === selectedRecipient);
               const target: ChatTarget =
-                selectedRecipient === t.chat.everyone
+                isPublicPitWall || selectedRecipient === t.chat.everyone
                   ? { type: 'all' }
                   : selectedRecipient === t.chat.team && loggedUserTeam
-                    ? { type: 'team', teamName: loggedUserTeam }
-                    : { type: 'player', playerName: selectedRecipient };
+                    ? { type: 'team', teamId: selectedTeamId ?? undefined, teamName: loggedUserTeam }
+                    : { type: 'player', playerId: selectedDriver?.id, playerName: selectedRecipient };
 
-              sendMessage(message, user?.username ?? 'Frontend', target);
-              setMessage('');
+              sendMessage(message, user?.username ?? 'Frontend', target).then((result) => {
+                showPitWallActionResult(result);
+                if (result.success) {
+                  setMessage('');
+                }
+              });
             }}
             isConnected={isChatConnected}
             isMuted={playerList?.raceSession.isChatMuted ?? false}
@@ -326,14 +382,20 @@ export default function PitWallPage() {
           />
         </div>
 
+        {isPublicPitWall ? (
+          <div className="mt-8 border-8 border-[#FF232B] bg-[#1E1E1E] p-8 text-center text-xl font-bold uppercase text-gray-300">
+            {t.pitWall.availableOnlyWithTeam}
+          </div>
+        ) : (
           <RaceInsightsGrid
-          drivers={standings}
-          loggedUserTeam={loggedUserTeam}
-          weatherChartLevel={weatherChartLevel}
-          raceSession={playerList?.raceSession}
-          loading={!playerList}
-          error={null}
-        />
+            drivers={standings}
+            loggedUserTeam={loggedUserTeam}
+            weatherChartLevel={weatherChartLevel}
+            raceSession={playerList?.raceSession}
+            loading={!playerList}
+            error={null}
+          />
+        )}
       </div>
     </main>
   );

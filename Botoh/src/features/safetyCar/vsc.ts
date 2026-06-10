@@ -47,7 +47,14 @@ export function checkVSCDuration(room: any) {
   
   if (elapsedTime >= vscDuration) {
     if (vscTriggeredByPlayer !== undefined) {
-      if (!isPlayerMovingAtComeBackSpeed(vscTriggeredByPlayer, room)) {
+      const triggeredPlayer = room
+        .getPlayerList()
+        .find((player: PlayerObject) => player.id === vscTriggeredByPlayer);
+
+      if (
+        triggeredPlayer?.team === Teams.RUNNERS &&
+        !isPlayerMovingAtComeBackSpeed(vscTriggeredByPlayer, room)
+      ) {
         room.setPlayerTeam(vscTriggeredByPlayer, Teams.SPECTATORS);
       }
       clearPlayerAfkActivity(vscTriggeredByPlayer);
