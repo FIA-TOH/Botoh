@@ -7,7 +7,11 @@ import type { PitWallActionResult } from './useChat';
 export function usePitCall() {
   const { socket, isConnected } = useSocket();
 
-  const sendPitCall = (playerName: string, playerId?: number): Promise<PitWallActionResult> => {
+  const sendPitCall = (
+    playerName: string,
+    playerId?: number,
+    playerAuth?: string,
+  ): Promise<PitWallActionResult> => {
     if (!socket || !isConnected || !playerName) {
       return Promise.resolve({ success: false, code: 'socket_unavailable' });
     }
@@ -16,6 +20,7 @@ export function usePitCall() {
       socket.timeout(5000).emit('pit:call', {
         playerName,
         playerId,
+        playerAuth,
       }, (error: Error | null, response?: PitWallActionResult) => {
         if (error) {
           resolve({ success: false, code: 'bot_timeout' });
@@ -31,6 +36,7 @@ export function usePitCall() {
     playerName: string,
     tyre: Tires | null,
     playerId?: number,
+    playerAuth?: string,
   ): Promise<PitWallActionResult> => {
     if (!socket || !isConnected || !playerName) {
       return Promise.resolve({ success: false, code: 'socket_unavailable' });
@@ -40,6 +46,7 @@ export function usePitCall() {
       socket.timeout(5000).emit('pit:prepare-tyre', {
         playerName,
         playerId,
+        playerAuth,
         tyre,
       }, (error: Error | null, response?: PitWallActionResult) => {
         if (error) {

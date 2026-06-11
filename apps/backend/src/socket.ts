@@ -18,6 +18,10 @@ export function setupSocketHandlers(io: SocketIOServer) {
     return data?.token === expectedToken || socket?.handshake?.auth?.botToken === expectedToken;
   }
 
+  function isCurrentBot(socket: any) {
+    return isAuthorizedBot(undefined, socket) && botService.isCurrentBotSocket(socket);
+  }
+
   io.on('connection', (socket) => {
     console.log(`Client connected: ${socket.id}`);
 
@@ -52,13 +56,13 @@ export function setupSocketHandlers(io: SocketIOServer) {
 
     // Handle broadcast events from bot
     socket.on('broadcast:toFrontend', (data) => {
-      if (!isAuthorizedBot(undefined, socket)) return;
+      if (!isCurrentBot(socket)) return;
 
       io.emit(data.event, data.data);
     });
 
     socket.on('room:mapChanged', (data: { mapName?: string; timestamp?: number }) => {
-      if (!isAuthorizedBot(undefined, socket)) return;
+      if (!isCurrentBot(socket)) return;
       if (!data?.mapName) return;
 
       roomService.updateRoomState({
@@ -72,7 +76,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
     });
 
     socket.on('room:gameStateChanged', (data: { gameState?: 'running' | 'paused' | null; timestamp?: number }) => {
-      if (!isAuthorizedBot(undefined, socket)) return;
+      if (!isCurrentBot(socket)) return;
       if (data?.gameState !== 'running' && data?.gameState !== 'paused' && data?.gameState !== null) {
         return;
       }
@@ -94,7 +98,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
       public?: boolean;
       timestamp?: number;
     }) => {
-      if (!isAuthorizedBot(undefined, socket)) return;
+      if (!isCurrentBot(socket)) return;
 
       const openedState: Parameters<typeof roomService.markRoomOpened>[0] = {
         startTime: new Date(data?.timestamp || Date.now()),
@@ -122,7 +126,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
       gameState?: 'running' | 'paused' | null;
       timestamp?: number;
     }) => {
-      if (!isAuthorizedBot(undefined, socket)) return;
+      if (!isCurrentBot(socket)) return;
 
       const heartbeatState: Parameters<typeof roomService.markRoomHeartbeat>[0] = {};
       if (Number.isFinite(data?.playerCount)) {

@@ -38,6 +38,8 @@ io.on('connection', (socket: any) => {
     console.log('Bot registration received');
     botService.registerBot(socket);
     socket.on('disconnect', () => {
+      if (!botService.isCurrentBotSocket(socket)) return;
+
       roomService.markRoomOffline();
       io.emit('room:offline', {
         timestamp: Date.now(),

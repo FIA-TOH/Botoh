@@ -39,8 +39,10 @@ export class BotService {
     console.log('Bot connected to backend');
     
     socket.on('disconnect', () => {
-      this.botSocket = null;
-      console.log('Bot disconnected from backend');
+      if (this.botSocket === socket) {
+        this.botSocket = null;
+        console.log('Bot disconnected from backend');
+      }
     });
 
     socket.on('chat:message', (data: BotMessage) => {
@@ -50,6 +52,10 @@ export class BotService {
     socket.on('log:message', (data: BotLogMessage) => {
       this.broadcastToClients('log:message', data);
     });
+  }
+
+  isCurrentBotSocket(socket: any): boolean {
+    return this.botSocket === socket;
   }
 
   sendToBot(event: string, data: any, callback?: (response: any) => void) {
