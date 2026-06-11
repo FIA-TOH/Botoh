@@ -31,6 +31,7 @@ import { sendDiscordGeneralChatQualy } from "../discord/discord";
 import { PLAYER_LIMIT } from "../commands/adminThings/handleLimitPlayerQuantity";
 import { rejoinManager } from "../changePlayerState/rejoinManager";
 import { clearLoginStateIfUsernameChanged, rebalanceFirstDriverForTeam } from "../commands/login/handleLoginCommand";
+import { clearPlayerAvatarState } from "../changePlayerState/handleAvatar";
 
 const HARD_QUALY_PASSWORD = "hardqualy";
 
@@ -102,6 +103,7 @@ function WhatToDoWhenJoin(room: RoomObject, player: PlayerObject) {
 export function PlayerJoin(room: RoomObject) {
   room.onPlayerJoin = function (player) {
     const players = room.getPlayerList();
+    clearPlayerAvatarState(player.id);
 
     const ip = decodeIPFromConn(player.conn);
     log(`The IP ${ip} joined!`);

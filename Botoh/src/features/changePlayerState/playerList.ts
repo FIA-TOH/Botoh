@@ -234,10 +234,6 @@ function normalizePreparedPitTireName(playerName?: string | null) {
   return (playerName ?? "").trim().toLowerCase();
 }
 
-function debugPreparedPitTire(message: string, data: Record<string, unknown>) {
-  console.log("[PitWall][PreparedTyres]", message, data);
-}
-
 export function setPreparedPitTire(
   playerId: number,
   tire: Tires | null,
@@ -254,17 +250,6 @@ export function setPreparedPitTire(
   if (player) {
     player.nextPitTires = tire;
   }
-
-  debugPreparedPitTire("set", {
-    playerId,
-    playerName,
-    normalizedName,
-    tire,
-    hasPlayerState: Boolean(player),
-    auth: idToAuth[playerId] ?? null,
-    storeIds: Object.keys(store.byPlayerId),
-    storeNames: Object.keys(store.byPlayerName),
-  });
 }
 
 export function getPreparedPitTire(
@@ -278,29 +263,12 @@ export function getPreparedPitTire(
   const fromName = normalizedName ? store.byPlayerName[normalizedName] ?? null : null;
   const result = fromState ?? fromId ?? fromName ?? null;
 
-  debugPreparedPitTire("get", {
-    playerId,
-    playerName,
-    normalizedName,
-    result,
-    fromState,
-    fromId,
-    fromName,
-    hasPlayerState: Boolean(playerList[playerId]),
-    auth: idToAuth[playerId] ?? null,
-    storeIds: Object.keys(store.byPlayerId),
-    storeNames: Object.keys(store.byPlayerName),
-  });
-
   return result;
 }
 
 export function clearPreparedPitTire(playerId: number, playerName?: string | null) {
   const store = getPreparedPitTireStore();
   const normalizedName = normalizePreparedPitTireName(playerName);
-  const beforeId = store.byPlayerId[playerId] ?? null;
-  const beforeName = normalizedName ? store.byPlayerName[normalizedName] ?? null : null;
-  const beforeState = playerList[playerId]?.nextPitTires ?? null;
 
   delete store.byPlayerId[playerId];
   if (normalizedName) {
@@ -311,19 +279,6 @@ export function clearPreparedPitTire(playerId: number, playerName?: string | nul
   if (player) {
     player.nextPitTires = null;
   }
-
-  debugPreparedPitTire("clear", {
-    playerId,
-    playerName,
-    normalizedName,
-    beforeId,
-    beforeName,
-    beforeState,
-    hasPlayerState: Boolean(player),
-    auth: idToAuth[playerId] ?? null,
-    storeIds: Object.keys(store.byPlayerId),
-    storeNames: Object.keys(store.byPlayerName),
-  });
 }
 
 export function updatePlayerListPosition(

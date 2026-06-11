@@ -22,9 +22,11 @@ import { getPlayerByRacePosition } from "../playerFeatures/getPlayerBy";
 import { sendDiscordGeneralChatQualy } from "../discord/discord";
 import { rejoinManager } from "../changePlayerState/rejoinManager";
 import { rebalanceFirstDriverForTeam } from "../commands/login/handleLoginCommand";
+import { clearPlayerAvatarState } from "../changePlayerState/handleAvatar";
 
 export function PlayerLeave(room: RoomObject) {
   room.onPlayerLeave = function (player) {
+    clearPlayerAvatarState(player.id);
     if (player.admin) delete afkAdmins[player.id];
     handlePlayerLeave(player, room);
     clearPlayerAfkActivity(player.id);

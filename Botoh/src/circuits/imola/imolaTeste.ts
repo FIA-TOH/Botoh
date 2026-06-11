@@ -87,7 +87,7 @@ const IMOLATESTE_INFO: CircuitInfo = {
     x: imolaTeste_json.redSpawnPoints[imolaTeste_json.redSpawnPoints.length - 1][0],
     y: imolaTeste_json.redSpawnPoints[imolaTeste_json.redSpawnPoints.length - 1][1],
   },
-  BestTime: bestTimes.imolaSeasonTres,
+  BestTime: bestTimes.imolaTeste,
   MainColor: [0x009246, 0xfffff1, 0xce2b37],
   AvatarColor: 0x000001,
   Angle: 0,
