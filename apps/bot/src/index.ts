@@ -30,6 +30,10 @@ function getBackendWsUrl() {
   return LOCAL_BACKEND_WS_URL;
 }
 
+function normalizeComparableName(name?: string | null) {
+  return (name ?? '').trim().toLowerCase();
+}
+
 async function emitRoomHeartbeat() {
   if (!backendSocket?.emit || !room?.getPlayerList) return;
 
@@ -102,16 +106,37 @@ async function setupBackendCommunication() {
           return;
         }
 
+        const targetPlayerIds = new Set(
+          Array.isArray(target.playerIds)
+            ? target.playerIds.filter((id: unknown) => Number.isFinite(id))
+            : [],
+        );
+        const targetPlayerNames = new Set(
+          Array.isArray(target.playerNames)
+            ? target.playerNames.map(normalizeComparableName).filter(Boolean)
+            : [],
+        );
+
         const recipients = room.getPlayerList().filter((roomPlayer: PlayerObject) => {
           if (target.type === 'all') {
             return true;
           }
 
           if (target.type === 'player') {
-            return roomPlayer.name === target.playerName;
+            return (
+              (Number.isFinite(target.playerId) && roomPlayer.id === target.playerId)
+              || normalizeComparableName(roomPlayer.name) === normalizeComparableName(target.playerName)
+            );
           }
 
           if (target.type === 'team') {
+            if (
+              targetPlayerIds.has(roomPlayer.id)
+              || targetPlayerNames.has(normalizeComparableName(roomPlayer.name))
+            ) {
+              return true;
+            }
+
             const playerState = playerList[roomPlayer.id];
             if (target.teamId && playerState?.leagueScuderia === target.teamId) {
               return true;
@@ -219,7 +244,8 @@ async function setupBackendCommunication() {
 
     try {
       const { getRoom } = await import('../../../Botoh/src/room');
-      const { playerList } = await import('../../../Botoh/src/features/changePlayerState/playerList');
+      const { playerList, idToAuth } = await import('../../../Botoh/src/features/changePlayerState/playerList');
+      const { createPlayerInfo } = await import('../../../Botoh/src/features/changePlayerState/players');
       const { Tires } = await import('../../../Botoh/src/features/tires&pits/tires');
       const { sendRadioMessage } = await import('../../../Botoh/src/features/chat/chat');
       const { MESSAGES } = await import('../../../Botoh/src/features/chat/messages');
@@ -239,6 +265,13 @@ async function setupBackendCommunication() {
       if (!playerToPrepare) {
         respond?.({ success: false, code: 'player_not_found' });
         return;
+      }
+
+      if (!playerList[playerToPrepare.id]) {
+        if (playerToPrepare.auth) {
+          idToAuth[playerToPrepare.id] = playerToPrepare.auth;
+          playerList[playerToPrepare.id] = createPlayerInfo(undefined, playerToPrepare.id);
+        }
       }
 
       if (!playerList[playerToPrepare.id]) {
