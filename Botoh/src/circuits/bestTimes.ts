@@ -49,6 +49,7 @@ const trackNameMapping: { [key: string]: string } = {
   sexcano: "Cano Sexcuit by Rodri",
   meersburg: "Meersburg by Splinter",
   imolaSeasonTres: "Autodromo Imola - By Ximb - NewgenV3",
+  imolaTeste: "Autodromo Imola - By Ximb - Teste",
   miamiSeasonTres: "Miami by Rodri - NewgenV3",
   bahrainSeasonTres: "Sakhir Bahrain International Circuit - By Ximb - NewgenV3",
 };
@@ -114,6 +115,7 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   meersburg: [34.885, "Splinter", "Meersburg by Splinter"],
 
   imolaSeasonTres: [46.817, "Suri", "Autodromo Imola - By Ximb - NewgenV3"],
+  imolaTeste: [999.999, "undefined", trackNameMapping["imolaTeste"]],
   miamiSeasonTres: [92.918, "Rodri", "Miami by Rodri - NewgenV3"],
   bahrainSeasonTres: [44.999, "Ximb", trackNameMapping["bahrainSeasonTres"]],
 };
