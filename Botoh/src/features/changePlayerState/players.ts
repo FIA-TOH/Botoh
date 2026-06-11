@@ -244,7 +244,9 @@ export function resetPlayer(
   };
   playerList[id].pitCountdown = 0;
   playerList[id].pitTargetTires = Tires.SOFT;
-  clearPreparedPitTire(id);
+  if (!startingRace) {
+    clearPreparedPitTire(id);
+  }
   playerList[id].pitInitialPos = { x: 0, y: 0 };
   playerList[id].drs = false;
   playerList[id].speedEnabled = false;
