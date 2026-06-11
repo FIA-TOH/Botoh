@@ -181,8 +181,26 @@ type PlayerList = {
 };
 
 let actualPlayerList: PlayerList = {};
-const preparedPitTiresByPlayerId: { [id: number]: Tires | null } = {};
-const preparedPitTiresByPlayerName: { [name: string]: Tires | null } = {};
+
+type PreparedPitTireStore = {
+  byPlayerId: { [id: number]: Tires | null };
+  byPlayerName: { [name: string]: Tires | null };
+};
+
+function getPreparedPitTireStore(): PreparedPitTireStore {
+  const globalStore = globalThis as typeof globalThis & {
+    __ftohPreparedPitTires?: PreparedPitTireStore;
+  };
+
+  if (!globalStore.__ftohPreparedPitTires) {
+    globalStore.__ftohPreparedPitTires = {
+      byPlayerId: {},
+      byPlayerName: {},
+    };
+  }
+
+  return globalStore.__ftohPreparedPitTires;
+}
 
 export let idToAuth: { [id: number]: string } = {};
 
@@ -198,11 +216,13 @@ export const playerList = new Proxy(actualPlayerList, {
 });
 
 export function clearAllPreparedPitTires() {
-  Object.keys(preparedPitTiresByPlayerId).forEach((id) => {
-    delete preparedPitTiresByPlayerId[Number(id)];
+  const store = getPreparedPitTireStore();
+
+  Object.keys(store.byPlayerId).forEach((id) => {
+    delete store.byPlayerId[Number(id)];
   });
-  Object.keys(preparedPitTiresByPlayerName).forEach((name) => {
-    delete preparedPitTiresByPlayerName[name];
+  Object.keys(store.byPlayerName).forEach((name) => {
+    delete store.byPlayerName[name];
   });
 
   Object.values(actualPlayerList).forEach((player) => {
@@ -223,10 +243,11 @@ export function setPreparedPitTire(
   tire: Tires | null,
   playerName?: string | null,
 ) {
-  preparedPitTiresByPlayerId[playerId] = tire;
+  const store = getPreparedPitTireStore();
+  store.byPlayerId[playerId] = tire;
   const normalizedName = normalizePreparedPitTireName(playerName);
   if (normalizedName) {
-    preparedPitTiresByPlayerName[normalizedName] = tire;
+    store.byPlayerName[normalizedName] = tire;
   }
 
   const player = playerList[playerId];
@@ -241,6 +262,8 @@ export function setPreparedPitTire(
     tire,
     hasPlayerState: Boolean(player),
     auth: idToAuth[playerId] ?? null,
+    storeIds: Object.keys(store.byPlayerId),
+    storeNames: Object.keys(store.byPlayerName),
   });
 }
 
@@ -248,10 +271,11 @@ export function getPreparedPitTire(
   playerId: number,
   playerName?: string | null,
 ): Tires | null {
+  const store = getPreparedPitTireStore();
   const normalizedName = normalizePreparedPitTireName(playerName);
   const fromState = playerList[playerId]?.nextPitTires ?? null;
-  const fromId = preparedPitTiresByPlayerId[playerId] ?? null;
-  const fromName = normalizedName ? preparedPitTiresByPlayerName[normalizedName] ?? null : null;
+  const fromId = store.byPlayerId[playerId] ?? null;
+  const fromName = normalizedName ? store.byPlayerName[normalizedName] ?? null : null;
   const result = fromState ?? fromId ?? fromName ?? null;
 
   debugPreparedPitTire("get", {
@@ -264,20 +288,23 @@ export function getPreparedPitTire(
     fromName,
     hasPlayerState: Boolean(playerList[playerId]),
     auth: idToAuth[playerId] ?? null,
+    storeIds: Object.keys(store.byPlayerId),
+    storeNames: Object.keys(store.byPlayerName),
   });
 
   return result;
 }
 
 export function clearPreparedPitTire(playerId: number, playerName?: string | null) {
+  const store = getPreparedPitTireStore();
   const normalizedName = normalizePreparedPitTireName(playerName);
-  const beforeId = preparedPitTiresByPlayerId[playerId] ?? null;
-  const beforeName = normalizedName ? preparedPitTiresByPlayerName[normalizedName] ?? null : null;
+  const beforeId = store.byPlayerId[playerId] ?? null;
+  const beforeName = normalizedName ? store.byPlayerName[normalizedName] ?? null : null;
   const beforeState = playerList[playerId]?.nextPitTires ?? null;
 
-  delete preparedPitTiresByPlayerId[playerId];
+  delete store.byPlayerId[playerId];
   if (normalizedName) {
-    delete preparedPitTiresByPlayerName[normalizedName];
+    delete store.byPlayerName[normalizedName];
   }
 
   const player = playerList[playerId];
@@ -294,6 +321,8 @@ export function clearPreparedPitTire(playerId: number, playerName?: string | nul
     beforeState,
     hasPlayerState: Boolean(player),
     auth: idToAuth[playerId] ?? null,
+    storeIds: Object.keys(store.byPlayerId),
+    storeNames: Object.keys(store.byPlayerName),
   });
 }
 
