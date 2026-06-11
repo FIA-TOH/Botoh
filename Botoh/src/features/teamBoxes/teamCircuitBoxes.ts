@@ -28,6 +28,7 @@ export function movePlayerToTeamCircuitBox(player: PlayerObject, room: RoomObjec
 
   if (!coordinates) return false;
 
+  playerInfo.inPitlane = true;
   room.setPlayerDiscProperties(player.id, {
     x: coordinates.x,
     y: coordinates.y,

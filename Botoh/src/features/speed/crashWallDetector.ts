@@ -16,6 +16,8 @@ const previousPlayerSpeed = new Map<number, number>();
 const lastPlayerDamageAt = new Map<number, number>();
 const DAMAGE_COOLDOWN_MS = 1000;
 const CRASH_DAMAGE_PER_SPEED = 0.375;
+const CURVED_DETECTOR_STEP_DEGREES = 5;
+const CURVED_DETECTOR_EXTRA_RADIUS = 1;
 
 export let damageEnabled = false;
 
@@ -107,7 +109,7 @@ function buildCurvedSegments(detector: CrashWallDetector): Segment[] {
   const radius = distance / (2 * sinHalfAngle);
   const startAngle = Math.atan2(y0 - centerY, x0 - centerX);
   const deltaAngle = direction * angleRadians;
-  const steps = Math.max(6, Math.ceil(angleDegrees / 15));
+  const steps = Math.max(8, Math.ceil(angleDegrees / CURVED_DETECTOR_STEP_DEGREES));
   const points: Point[] = [];
 
   for (let i = 0; i <= steps; i++) {
@@ -140,7 +142,10 @@ function getDetectorSegments(detector: CrashWallDetector): Segment[] {
 }
 
 function isTouchingDetector(disc: DiscPropertiesObject, detector: CrashWallDetector) {
-  const radiusSq = disc.radius * disc.radius;
+  const touchRadius =
+    disc.radius +
+    (detector.curvatura !== 0 ? CURVED_DETECTOR_EXTRA_RADIUS : 0);
+  const radiusSq = touchRadius * touchRadius;
 
   return getDetectorSegments(detector).some(([v0, v1]) => {
     return pointToSegmentDistanceSq(
