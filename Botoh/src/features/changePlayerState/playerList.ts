@@ -182,6 +182,7 @@ type PlayerList = {
 
 let actualPlayerList: PlayerList = {};
 const preparedPitTiresByPlayerId: { [id: number]: Tires | null } = {};
+const preparedPitTiresByPlayerName: { [name: string]: Tires | null } = {};
 
 export let idToAuth: { [id: number]: string } = {};
 
@@ -200,14 +201,29 @@ export function clearAllPreparedPitTires() {
   Object.keys(preparedPitTiresByPlayerId).forEach((id) => {
     delete preparedPitTiresByPlayerId[Number(id)];
   });
+  Object.keys(preparedPitTiresByPlayerName).forEach((name) => {
+    delete preparedPitTiresByPlayerName[name];
+  });
 
   Object.values(actualPlayerList).forEach((player) => {
     player.nextPitTires = null;
   });
 }
 
-export function setPreparedPitTire(playerId: number, tire: Tires | null) {
+function normalizePreparedPitTireName(playerName?: string | null) {
+  return (playerName ?? "").trim().toLowerCase();
+}
+
+export function setPreparedPitTire(
+  playerId: number,
+  tire: Tires | null,
+  playerName?: string | null,
+) {
   preparedPitTiresByPlayerId[playerId] = tire;
+  const normalizedName = normalizePreparedPitTireName(playerName);
+  if (normalizedName) {
+    preparedPitTiresByPlayerName[normalizedName] = tire;
+  }
 
   const player = playerList[playerId];
   if (player) {
@@ -215,12 +231,26 @@ export function setPreparedPitTire(playerId: number, tire: Tires | null) {
   }
 }
 
-export function getPreparedPitTire(playerId: number): Tires | null {
-  return playerList[playerId]?.nextPitTires ?? preparedPitTiresByPlayerId[playerId] ?? null;
+export function getPreparedPitTire(
+  playerId: number,
+  playerName?: string | null,
+): Tires | null {
+  const normalizedName = normalizePreparedPitTireName(playerName);
+
+  return (
+    playerList[playerId]?.nextPitTires
+    ?? preparedPitTiresByPlayerId[playerId]
+    ?? (normalizedName ? preparedPitTiresByPlayerName[normalizedName] : null)
+    ?? null
+  );
 }
 
-export function clearPreparedPitTire(playerId: number) {
+export function clearPreparedPitTire(playerId: number, playerName?: string | null) {
   delete preparedPitTiresByPlayerId[playerId];
+  const normalizedName = normalizePreparedPitTireName(playerName);
+  if (normalizedName) {
+    delete preparedPitTiresByPlayerName[normalizedName];
+  }
 
   const player = playerList[playerId];
   if (player) {

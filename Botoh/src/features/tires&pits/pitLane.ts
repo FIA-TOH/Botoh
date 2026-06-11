@@ -54,7 +54,7 @@ export function handlePitlane(
 
       playerList[p.id].pits.pitsNumber += 1;
       playerList[p.id].inPitlane = true;
-      const preparedTyre = getPreparedPitTire(p.id);
+      const preparedTyre = getPreparedPitTire(p.id, p.name);
       if (preparedTyre) {
         sendRadioMessage(
           room,

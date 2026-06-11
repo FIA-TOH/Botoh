@@ -47,7 +47,7 @@ export function handleTiresCommand(
     let tiresKey: Tires | undefined = undefined;
 
     if (args.length === 0) {
-      tiresKey = getPreparedPitTire(byPlayer.id) ?? undefined;
+      tiresKey = getPreparedPitTire(byPlayer.id, byPlayer.name) ?? undefined;
 
       if (!tiresKey) {
         sendErrorMessage(room, MESSAGES.NO_PREPARED_PIT_TYRE(), byPlayer.id);
