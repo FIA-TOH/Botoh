@@ -132,9 +132,6 @@ export function setupSocketHandlers(io: SocketIOServer) {
       if (Number.isFinite(data?.playerCount)) {
         heartbeatState.playerCount = data.playerCount;
       }
-      if (typeof data?.currentMap === 'string' && data.currentMap.length > 0) {
-        heartbeatState.currentMap = data.currentMap;
-      }
       // Heartbeats only include `gameState` once the bot has captured a real
       // room state event; `null` then means the game actually stopped.
       if (data?.gameState === 'running' || data?.gameState === 'paused' || data?.gameState === null) {
@@ -145,7 +142,6 @@ export function setupSocketHandlers(io: SocketIOServer) {
 
       io.emit('room:heartbeat', {
         playerCount: data?.playerCount,
-        currentMap: data?.currentMap,
         ...(heartbeatState.gameState !== undefined ? { gameState: heartbeatState.gameState } : {}),
         timestamp: data?.timestamp || Date.now(),
       });

@@ -181,6 +181,7 @@ type PlayerList = {
 };
 
 let actualPlayerList: PlayerList = {};
+const preparedPitTiresByPlayerId: { [id: number]: Tires | null } = {};
 
 export let idToAuth: { [id: number]: string } = {};
 
@@ -196,9 +197,35 @@ export const playerList = new Proxy(actualPlayerList, {
 });
 
 export function clearAllPreparedPitTires() {
+  Object.keys(preparedPitTiresByPlayerId).forEach((id) => {
+    delete preparedPitTiresByPlayerId[Number(id)];
+  });
+
   Object.values(actualPlayerList).forEach((player) => {
     player.nextPitTires = null;
   });
+}
+
+export function setPreparedPitTire(playerId: number, tire: Tires | null) {
+  preparedPitTiresByPlayerId[playerId] = tire;
+
+  const player = playerList[playerId];
+  if (player) {
+    player.nextPitTires = tire;
+  }
+}
+
+export function getPreparedPitTire(playerId: number): Tires | null {
+  return playerList[playerId]?.nextPitTires ?? preparedPitTiresByPlayerId[playerId] ?? null;
+}
+
+export function clearPreparedPitTire(playerId: number) {
+  delete preparedPitTiresByPlayerId[playerId];
+
+  const player = playerList[playerId];
+  if (player) {
+    player.nextPitTires = null;
+  }
 }
 
 export function updatePlayerListPosition(
