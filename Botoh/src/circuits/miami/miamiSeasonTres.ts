@@ -2,7 +2,7 @@ import { readFileSync } from "fs";
 import { join } from "path";
 
 import { bestTimes } from "../bestTimes";
-import { Circuit, CircuitInfo, Direction } from "../Circuit";
+import { Circuit, CircuitInfo, Direction, SpecificDirection } from "../Circuit";
 
 const miamiSeasonTres_raw = readFileSync(join(__dirname, "miamiSeasonTres.hbs"), "utf-8");
 const miamiSeasonTres_json = JSON.parse(miamiSeasonTres_raw);
@@ -123,6 +123,110 @@ const MIAMISEASONTRES_INFO: CircuitInfo = {
   { index: "217-218", v0: [-1505.64, 2075.2800000000007], v1: [-1573.7600000000004, 2150.4800000000005], curvatura: -78.70089599718575 },
   { index: "185-184", v0: [1953.5459969571255, -564.0308005879831], v1: [1431.1903366186752, 410.934105678033], curvatura: 16.360573822910926 },
   { index: "135-133", v0: [-1550.0437953635626, 428.1320752824014], v1: [-999.9959489886011, 13], curvatura: 68.38308681672697 },
+],
+
+DirectionChangerDetector: [
+  {
+    v0: [282, 192],
+    v1: [279, 10],
+    index: "000001",
+    direction: SpecificDirection.RIGHT,
+    force: 0.7,
+    sector: 1
+  },
+  {
+    v0: [379, 771],
+    v1: [518, 622],
+    index: "000002",
+    direction: SpecificDirection.RIGHTDOWN,
+    force: 0.5,
+    sector: 1
+  },
+  {
+    v0: [-1650, 1398],
+    v1: [-1652, 1620],
+    index: "000003",
+    direction: SpecificDirection.LEFT,
+    force: 0.5,
+    sector: 1
+  },
+  {
+    v0: [-1813, 2171],
+    v1: [-2449, 2194],
+    index: "000004",
+    direction: SpecificDirection.DOWN,
+    force: 0.5,
+    sector: 1
+  },
+  {
+    v0: [-1739, 2164],
+    v1: [-1489, 2152],
+    index: "000005",
+    direction: SpecificDirection.UP,
+    force: 0.4,
+    sector: 1
+  },
+  {
+    v0: [1445, -49],
+    v1: [1774, -32],
+    index: "000006",
+    direction: SpecificDirection.RIGHTUP,
+    force: 0.9,
+    sector: 2
+  },
+  {
+    v0: [1514, -895],
+    v1: [1514, -715],
+    index: "000007",
+    direction: SpecificDirection.RIGHT,
+    force: 0.4,
+    sector: 2
+  },
+  {
+    v0: [1617, -1080],
+    v1: [1899, -1075],
+    index: "000008",
+    direction: SpecificDirection.UP,
+    force: 0.5,
+    sector: 2
+  },
+  {
+    v0: [1491, -1396],
+    v1: [1657, -1393],
+    index: "000009",
+    direction: SpecificDirection.UP,
+    force: 0.4,
+    sector: 2
+  },
+  {
+    v0: [-2044, 307],
+    v1: [-1945, 481],
+    index: "000010",
+    direction: SpecificDirection.LEFTDOWN,
+    force: 0.9,
+    sector: 3
+  },
+  
+],
+CutDetectSegments: [
+  {
+    v0: [1468, 44],
+    v1: [1566, -142],
+    index: 255,
+    penalty: 5,
+  },
+  {
+    v0: [1623, -1093],
+    v1: [1656, -1121],
+    index: 257,
+    penalty: 5,
+  },
+  {
+    v0: [1593, -1258],
+    v1: [1646, -1357],
+    index: 259,
+    penalty: 5,
+  },
 ],
 };
 
