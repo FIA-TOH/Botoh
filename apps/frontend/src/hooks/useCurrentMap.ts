@@ -15,6 +15,20 @@ const svgCache = new Map<string, boolean>();
 const PITWALL_REQUEST_HEADERS = {
   'ngrok-skip-browser-warning': 'true',
 };
+const KNOWN_MAP_SVG_FILES = [
+  'bahrainSeasonTres.svg',
+  'imola.svg',
+  'imolaSeasonTres.svg',
+  'imolaTeste.svg',
+  'miamiSeasonTres.svg',
+  'suzuka.svg',
+];
+const mapSvgFileByNormalizedName = new Map(
+  KNOWN_MAP_SVG_FILES.map((fileName) => [
+    fileName.replace(/\.svg$/i, '').toLowerCase(),
+    fileName,
+  ]),
+);
 
 async function checkSvgExists(url: string): Promise<boolean> {
   if (svgCache.has(url)) {
@@ -33,7 +47,12 @@ async function checkSvgExists(url: string): Promise<boolean> {
 }
 
 function normalizeMapName(mapName: string | null): string | null {
-  return mapName ? mapName.replace(/\.(hbs|json)$/i, '').toLowerCase() : null;
+  return mapName ? mapName.replace(/\.(hbs|json)$/i, '') : null;
+}
+
+function getMapSvgUrl(mapName: string): string {
+  const mappedFileName = mapSvgFileByNormalizedName.get(mapName.toLowerCase());
+  return `/maps/${mappedFileName ?? `${mapName}.svg`}`;
 }
 
 export function useCurrentMap(): CurrentMapData {
@@ -65,7 +84,7 @@ export function useCurrentMap(): CurrentMapData {
         isLoading: true,
       }));
 
-      const svgUrl = `/maps/${normalizedMap}.svg`;
+      const svgUrl = getMapSvgUrl(normalizedMap);
       const hasSvg = await checkSvgExists(svgUrl);
 
       setMapData({

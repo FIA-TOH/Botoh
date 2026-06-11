@@ -13,7 +13,7 @@ export interface ChatMessage {
 
 export type ChatTarget =
   | { type: 'all' }
-  | { type: 'team'; teamId?: string; teamName: string }
+  | { type: 'team'; teamId?: string; teamName: string; playerIds?: number[]; playerNames?: string[] }
   | { type: 'player'; playerId?: number; playerName: string };
 
 export interface PitWallActionResult {

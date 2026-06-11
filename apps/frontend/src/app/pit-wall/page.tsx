@@ -359,7 +359,13 @@ export default function PitWallPage() {
                 isPublicPitWall || selectedRecipient === t.chat.everyone
                   ? { type: 'all' }
                   : selectedRecipient === t.chat.team && loggedUserTeam
-                    ? { type: 'team', teamId: selectedTeamId ?? undefined, teamName: loggedUserTeam }
+                    ? {
+                        type: 'team',
+                        teamId: selectedTeamId ?? undefined,
+                        teamName: loggedUserTeam,
+                        playerIds: teamDrivers.map((driver) => driver.id),
+                        playerNames: teamDrivers.map((driver) => driver.name),
+                      }
                     : { type: 'player', playerId: selectedDriver?.id, playerName: selectedRecipient };
 
               sendMessage(message, user?.username ?? 'Frontend', target).then((result) => {
