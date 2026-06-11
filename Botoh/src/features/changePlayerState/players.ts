@@ -184,6 +184,7 @@ export function resetPlayer(
   room: RoomObject,
   id: number,
   startingRace?: boolean,
+  preservePreparedPitTire?: boolean,
 ) {
   if (playerList[id] === undefined) {
     playerList[id] = createPlayerInfo();
@@ -244,8 +245,8 @@ export function resetPlayer(
   };
   playerList[id].pitCountdown = 0;
   playerList[id].pitTargetTires = Tires.SOFT;
-  if (!startingRace) {
-    clearPreparedPitTire(id);
+  if (!startingRace && !preservePreparedPitTire) {
+    clearPreparedPitTire(id, player.name);
   }
   playerList[id].pitInitialPos = { x: 0, y: 0 };
   playerList[id].drs = false;

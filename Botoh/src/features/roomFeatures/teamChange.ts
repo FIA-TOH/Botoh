@@ -23,7 +23,7 @@ export function TeamChange(room: RoomObject) {
     const playerCanRejoin = rejoinManager.hasRejoinData(changedPlayer.auth);
     
     if (!playerCanRejoin) {
-      resetPlayer(changedPlayer, room, changedPlayer.id);
+      resetPlayer(changedPlayer, room, changedPlayer.id, false, true);
     }
     const playerObj = playerList[changedPlayer.id];
 

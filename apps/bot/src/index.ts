@@ -299,7 +299,7 @@ async function setupBackendCommunication() {
         : null;
 
       if (requestedTyre === null) {
-        setPreparedPitTire(playerToPrepare.id, null);
+        setPreparedPitTire(playerToPrepare.id, null, playerToPrepare.name);
         respond?.({ success: true });
         return;
       }
@@ -310,7 +310,7 @@ async function setupBackendCommunication() {
         return;
       }
 
-      setPreparedPitTire(playerToPrepare.id, tyre);
+      setPreparedPitTire(playerToPrepare.id, tyre, playerToPrepare.name);
       sendRadioMessage(
         room,
         MESSAGES.PIT_TYRE_PREPARED(tyre),
