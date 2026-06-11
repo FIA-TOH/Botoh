@@ -22,6 +22,7 @@ export interface Driver {
   id: number;
   name: string;
   team: Teams;
+  auth?: string;
   ip: string;
   isInTheRoom: boolean;
   leagueScuderiaId?: string | null;

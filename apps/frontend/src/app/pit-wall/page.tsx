@@ -337,11 +337,11 @@ export default function PitWallPage() {
               loggedUserTeam={loggedUserTeam}
               loggedUserTeamId={selectedTeamId}
               onPitCall={async (driver) => {
-                const result = await sendPitCall(driver.name, driver.id);
+                const result = await sendPitCall(driver.name, driver.id, driver.auth);
                 showPitWallActionResult(result);
               }}
               onPitTyrePrepare={async (driver, tyre) => {
-                const result = await preparePitTyre(driver.name, tyre, driver.id);
+                const result = await preparePitTyre(driver.name, tyre, driver.id, driver.auth);
                 showPitWallActionResult(result);
               }}
               loading={!playerList}

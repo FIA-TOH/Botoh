@@ -34,6 +34,10 @@ function normalizeComparableName(name?: string | null) {
   return (name ?? '').trim().toLowerCase();
 }
 
+function getPitWallSyntheticAuth(playerId: number, playerName?: string | null) {
+  return `pitwall:${playerId}:${normalizeComparableName(playerName) || 'unknown'}`;
+}
+
 async function emitRoomHeartbeat() {
   if (!backendSocket?.emit || !room?.getPlayerList) return;
 
@@ -198,7 +202,7 @@ async function setupBackendCommunication() {
     }
   });
 
-  socket.on('pit:call', async (data: { playerName?: string; playerId?: number }, respond?: (response: any) => void) => {
+  socket.on('pit:call', async (data: { playerName?: string; playerId?: number; playerAuth?: string }, respond?: (response: any) => void) => {
     if (!data?.playerName && !Number.isFinite(data?.playerId)) {
       respond?.({ success: false, code: 'player_not_found' });
       return;
@@ -234,7 +238,7 @@ async function setupBackendCommunication() {
   });
 
   socket.on('pit:prepare-tyre', async (
-    data: { playerName?: string; playerId?: number; tyre?: string | null },
+    data: { playerName?: string; playerId?: number; playerAuth?: string; tyre?: string | null },
     respond?: (response: any) => void,
   ) => {
     if (!data?.playerName && !Number.isFinite(data?.playerId)) {
@@ -254,7 +258,7 @@ async function setupBackendCommunication() {
       const playerToPrepare = room?.getPlayerList().find(
         (roomPlayer: PlayerObject) =>
           (Number.isFinite(data.playerId) && roomPlayer.id === data.playerId)
-          || roomPlayer.name === data.playerName,
+          || normalizeComparableName(roomPlayer.name) === normalizeComparableName(data.playerName),
       );
 
       if (!room) {
@@ -268,16 +272,23 @@ async function setupBackendCommunication() {
       }
 
       if (!playerList[playerToPrepare.id]) {
-        if (playerToPrepare.auth) {
-          idToAuth[playerToPrepare.id] = playerToPrepare.auth;
-          playerList[playerToPrepare.id] = createPlayerInfo(undefined, playerToPrepare.id);
-        }
+        const fallbackAuth =
+          data.playerAuth
+          || playerToPrepare.auth
+          || idToAuth[playerToPrepare.id]
+          || getPitWallSyntheticAuth(playerToPrepare.id, playerToPrepare.name);
+
+        idToAuth[playerToPrepare.id] = fallbackAuth;
+        playerList[playerToPrepare.id] = createPlayerInfo(undefined, playerToPrepare.id);
       }
 
       if (!playerList[playerToPrepare.id]) {
         console.warn('Pitwall tyre prepare failed: player state missing', {
           playerId: playerToPrepare.id,
           playerName: playerToPrepare.name,
+          hasFrontendAuth: Boolean(data.playerAuth),
+          hasRoomAuth: Boolean(playerToPrepare.auth),
+          hasMappedAuth: Boolean(idToAuth[playerToPrepare.id]),
         });
         respond?.({ success: false, code: 'player_state_missing' });
         return;
