@@ -248,7 +248,7 @@ async function setupBackendCommunication() {
 
     try {
       const { getRoom } = await import('../../../Botoh/src/room');
-      const { playerList, idToAuth } = await import('../../../Botoh/src/features/changePlayerState/playerList');
+      const { playerList, idToAuth, setPreparedPitTire } = await import('../../../Botoh/src/features/changePlayerState/playerList');
       const { createPlayerInfo } = await import('../../../Botoh/src/features/changePlayerState/players');
       const { Tires } = await import('../../../Botoh/src/features/tires&pits/tires');
       const { sendRadioMessage } = await import('../../../Botoh/src/features/chat/chat');
@@ -299,7 +299,7 @@ async function setupBackendCommunication() {
         : null;
 
       if (requestedTyre === null) {
-        playerList[playerToPrepare.id].nextPitTires = null;
+        setPreparedPitTire(playerToPrepare.id, null);
         respond?.({ success: true });
         return;
       }
@@ -310,7 +310,7 @@ async function setupBackendCommunication() {
         return;
       }
 
-      playerList[playerToPrepare.id].nextPitTires = tyre;
+      setPreparedPitTire(playerToPrepare.id, tyre);
       sendRadioMessage(
         room,
         MESSAGES.PIT_TYRE_PREPARED(tyre),

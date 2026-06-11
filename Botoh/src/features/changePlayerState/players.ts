@@ -1,5 +1,5 @@
 import { DEFAULT_LANGUAGE } from "../chat/language";
-import { playerList, idToAuth } from "../changePlayerState/playerList";
+import { clearPreparedPitTire, playerList, idToAuth } from "../changePlayerState/playerList";
 import { handleAvatar, Situacions } from "./handleAvatar";
 import { Tires, TIRE_STARTING_SPEED } from "../tires&pits/tires";
 import { gameMode, GameMode } from "../changeGameState/changeGameModes";
@@ -244,7 +244,7 @@ export function resetPlayer(
   };
   playerList[id].pitCountdown = 0;
   playerList[id].pitTargetTires = Tires.SOFT;
-  playerList[id].nextPitTires = null;
+  clearPreparedPitTire(id);
   playerList[id].pitInitialPos = { x: 0, y: 0 };
   playerList[id].drs = false;
   playerList[id].speedEnabled = false;

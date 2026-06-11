@@ -2,7 +2,7 @@ import { sendErrorMessage, sendRadioMessage } from "../chat/chat";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { CIRCUITS, currentMapIndex } from "../zones/maps";
 import { MESSAGES } from "../chat/messages";
-import { playerList } from "../changePlayerState/playerList";
+import { getPreparedPitTire, playerList } from "../changePlayerState/playerList";
 import { inHitbox, getRunningPlayers } from "../utils";
 import { handleExplainTyresCommand } from "../commands/tyres/handleExplainTyresCommand";
 import { generatePitResult } from "./pitStopFunctions";
@@ -54,7 +54,7 @@ export function handlePitlane(
 
       playerList[p.id].pits.pitsNumber += 1;
       playerList[p.id].inPitlane = true;
-      const preparedTyre = playerList[p.id].nextPitTires;
+      const preparedTyre = getPreparedPitTire(p.id);
       if (preparedTyre) {
         sendRadioMessage(
           room,

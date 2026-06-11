@@ -10,7 +10,7 @@ import { ifInBoxZone } from "../../tires&pits/pitLane";
 import { Tires, tyresActivated } from "../../tires&pits/tires";
 import { isPitNewSystemEnabled, startNewPitSequence } from "../../tires&pits/newPitSystem/newPitManager";
 import { isPlayerRepairing } from "../../damage/repairSystem";
-import { playerList } from "../../changePlayerState/playerList";
+import { getPreparedPitTire, playerList } from "../../changePlayerState/playerList";
 
 export function handleTiresCommand(
   byPlayer: PlayerObject,
@@ -47,7 +47,7 @@ export function handleTiresCommand(
     let tiresKey: Tires | undefined = undefined;
 
     if (args.length === 0) {
-      tiresKey = playerInfo?.nextPitTires ?? undefined;
+      tiresKey = getPreparedPitTire(byPlayer.id) ?? undefined;
 
       if (!tiresKey) {
         sendErrorMessage(room, MESSAGES.NO_PREPARED_PIT_TYRE(), byPlayer.id);

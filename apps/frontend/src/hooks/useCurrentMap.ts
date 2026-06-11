@@ -144,13 +144,11 @@ export function useCurrentMap(): CurrentMapData {
 
     if (socket && isConnected) {
       socket.on('room:mapChanged', handleMapChange);
-      socket.on('room:heartbeat', handleMapChange);
     }
 
     return () => {
       if (socket) {
         socket.off('room:mapChanged', handleMapChange);
-        socket.off('room:heartbeat', handleMapChange);
       }
     };
   }, [socket, isConnected]);
