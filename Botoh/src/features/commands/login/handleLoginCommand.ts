@@ -6,6 +6,7 @@ import { registerLeagueScuderia } from "../../scuderias/scuderias";
 import { ACTUAL_CIRCUIT } from "../../roomFeatures/stadiumChange";
 import { Teams } from "../../changeGameState/teams";
 import { movePlayerToTeamCircuitBox } from "../../teamBoxes/teamCircuitBoxes";
+import { restorePlayerPersistentAvatar } from "../../changePlayerState/handleAvatar";
 
 type LoginUser = {
   username?: string;
@@ -162,6 +163,7 @@ export async function handleLoginCommand(
         weatherLevel: parseFacilityLevel(loggedUser.weatherLevel),
       });
     }
+    restorePlayerPersistentAvatar(byPlayer.id, room);
 
     if (previousTeamId && previousTeamId !== loggedUser.teamId) {
       rebalanceFirstDriverForTeam(room, previousTeamId);

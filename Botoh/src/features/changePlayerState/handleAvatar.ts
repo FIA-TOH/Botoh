@@ -124,7 +124,13 @@ function clearPlayerTimers(playerId: number) {
   playerTimers[playerId] = {};
 }
 
+export function clearPlayerAvatarState(playerId: number) {
+  clearPlayerTimers(playerId);
+  currentSituacion[playerId] = Situacions.Null;
+}
+
 export function restorePlayerPersistentAvatar(playerId: number, room: RoomObject) {
+  clearPlayerAvatarState(playerId);
   room.setPlayerAvatar(playerId, getPlayerRestoredAvatar(playerId));
 }
 
