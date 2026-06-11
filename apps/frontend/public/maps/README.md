@@ -10,7 +10,7 @@ Gerar pelo nome do mapa:
 
 ```powershell
 node scripts/generate-map-svg-cli.js imolaTeste --no-vertices --no-grid --transparent
-node scripts/generate-map-svg-cli.js bahrainSeasonTres --no-vertices --no-grid --transparent
+node scripts/generate-map-svg-cli.js miamiSeasonTres --no-vertices --no-grid
 node scripts/generate-map-svg-cli.js sepang --no-vertices --no-grid --transparent
 ```
 

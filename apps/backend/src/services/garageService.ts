@@ -403,10 +403,13 @@ class GarageService {
     const costColumn = facility === 'climate' ? 'climate_cost_per_race' : 'pit_crew_cost_per_race';
     const label = facility === 'climate' ? 'Climate monitoring' : 'Pit crew';
     const team = await queryOne(
-      `SELECT id, cash_total, is_junior_team, ${levelColumn} AS level
+      `SELECT teams.id,
+              teams.cash_total,
+              teams.is_junior_team,
+              teams.${levelColumn} AS level
        FROM teams
        LEFT JOIN teams parent_team ON parent_team.id = teams.parent_team_id
-       WHERE id = $1`,
+       WHERE teams.id = $1`,
       [teamId],
     );
 
