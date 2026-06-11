@@ -271,6 +271,20 @@ async function setupBackendCommunication() {
         return;
       }
 
+    
+        console.log('[PitWall][PreparedTyres] prepare-request', {
+          payloadPlayerId: data.playerId ?? null,
+          payloadPlayerName: data.playerName ?? null,
+          payloadPlayerAuth: data.playerAuth ? 'present' : null,
+          roomPlayerId: playerToPrepare.id,
+          roomPlayerName: playerToPrepare.name,
+          roomPlayerAuth: playerToPrepare.auth ? 'present' : null,
+          existingMappedAuth: idToAuth[playerToPrepare.id] ?? null,
+          hasPlayerStateBefore: Boolean(playerList[playerToPrepare.id]),
+          tyre: data.tyre ?? null,
+        });
+      
+
       if (!playerList[playerToPrepare.id]) {
         const fallbackAuth =
           data.playerAuth
