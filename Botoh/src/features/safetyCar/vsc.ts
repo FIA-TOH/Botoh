@@ -29,10 +29,19 @@ export function deployVSCAutomatically(room: any, playerId?: number) {
   }
   
   changeVSC();
+
+  const { resetAllAfkCounters } = require("../afk/afk");
+  resetAllAfkCounters(room);
   
   const { sendYellowMessage } = require("../chat/chat");
   const { MESSAGES } = require("../chat/messages");
   sendYellowMessage(room, MESSAGES.VSC_DEPLOYED());
+}
+
+export function clearVSCTriggerPlayer(playerId: number) {
+  if (vscTriggeredByPlayer === playerId) {
+    vscTriggeredByPlayer = undefined;
+  }
 }
 
 export function checkVSCDuration(room: any) {
@@ -66,6 +75,9 @@ export function checkVSCDuration(room: any) {
     const { MESSAGES } = require("../chat/messages");
     sendGreenMessage(room, MESSAGES.GREEN_FLAG());
     sendGreenMessage(room, MESSAGES.GREEN_FLAG_TWO());
+
+    const { resetAllAfkCounters } = require("../afk/afk");
+    resetAllAfkCounters(room);
     
     vscAutoDeployed = false;
     vscStartTime = undefined;

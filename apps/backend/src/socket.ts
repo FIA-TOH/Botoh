@@ -7,6 +7,14 @@ import notificationService from './services/notificationService';
 export function setupSocketHandlers(io: SocketIOServer) {
   const botService = new BotService(io);
   notificationService.setSocketServer(io);
+  roomService.setCurrentMapRequester(async (reason) => {
+    const response = await botService.requestCurrentMap(reason);
+    console.log('[socket] current map requested from bot:', {
+      reason,
+      response,
+    });
+    return response.mapName;
+  });
 
   function isAuthorizedBot(data?: { token?: string }, socket?: any) {
     const expectedToken = process.env.BOT_SOCKET_TOKEN;
@@ -24,6 +32,17 @@ export function setupSocketHandlers(io: SocketIOServer) {
 
   io.on('connection', (socket) => {
     console.log(`Client connected: ${socket.id}`);
+
+    const currentMap = roomService.getCurrentMap();
+    const roomState = roomService.getRoomState();
+    socket.emit('room:snapshot', {
+      currentMap,
+      mapName: currentMap,
+      gameState: roomState?.gameState ?? null,
+      playerCount: roomState?.playerCount ?? 0,
+      isOnline: roomState?.isOnline ?? false,
+      timestamp: Date.now(),
+    });
 
     socket.on('notifications:join', async (data: { token?: string }) => {
       const token = data?.token;
@@ -65,6 +84,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
       if (!isCurrentBot(socket)) return;
       if (!data?.mapName) return;
 
+      console.log('[socket] room:mapChanged from bot:', data);
       roomService.updateRoomState({
         currentMap: data.mapName
       });
@@ -122,6 +142,7 @@ export function setupSocketHandlers(io: SocketIOServer) {
 
     socket.on('room:heartbeat', (data: {
       playerCount?: number;
+      currentMap?: string | null;
       gameState?: 'running' | 'paused' | null;
       timestamp?: number;
     }) => {
@@ -131,16 +152,21 @@ export function setupSocketHandlers(io: SocketIOServer) {
       if (Number.isFinite(data?.playerCount)) {
         heartbeatState.playerCount = data.playerCount;
       }
+      if (typeof data?.currentMap === 'string' && data.currentMap.trim()) {
+        heartbeatState.currentMap = data.currentMap;
+      }
       // Heartbeats only include `gameState` once the bot has captured a real
       // room state event; `null` then means the game actually stopped.
       if (data?.gameState === 'running' || data?.gameState === 'paused' || data?.gameState === null) {
         heartbeatState.gameState = data.gameState;
       }
 
+      console.log('[socket] room:heartbeat from bot:', heartbeatState);
       roomService.markRoomHeartbeat(heartbeatState);
 
       io.emit('room:heartbeat', {
         playerCount: data?.playerCount,
+        ...(heartbeatState.currentMap !== undefined ? { currentMap: heartbeatState.currentMap } : {}),
         ...(heartbeatState.gameState !== undefined ? { gameState: heartbeatState.gameState } : {}),
         timestamp: data?.timestamp || Date.now(),
       });

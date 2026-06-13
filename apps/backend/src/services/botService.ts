@@ -74,6 +74,18 @@ export class BotService {
     }
   }
 
+  requestCurrentMap(reason: string): Promise<{ success: boolean; mapName: string | null; code?: string }> {
+    return new Promise((resolve) => {
+      this.sendToBot('room:requestCurrentMap', { reason }, (response) => {
+        resolve({
+          success: response?.success === true && typeof response?.mapName === 'string',
+          mapName: typeof response?.mapName === 'string' ? response.mapName : null,
+          code: response?.code,
+        });
+      });
+    });
+  }
+
   broadcastToClients(event: string, data: any) {
     this.io.emit(event, data);
   }

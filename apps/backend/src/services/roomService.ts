@@ -1,42 +1,28 @@
 import { RoomState } from '../types';
 
-/**
- * Service para gerenciar informações do Room/Haxball
- * Conecta com o sistema do bot para obter dados em tempo real
- */
-
 class RoomService {
   private currentMap: string | null = null;
   private roomState: RoomState | null = null;
   private lastUpdate: Date | null = null;
   private isGameStateSynced = false;
+  private currentMapRequester: ((reason: string) => Promise<string | null>) | null = null;
 
-  /**
-   * Obtém o mapa atual do Room
-   */
+  setCurrentMapRequester(requester: (reason: string) => Promise<string | null>): void {
+    this.currentMapRequester = requester;
+  }
+
   getCurrentMap(): string | null {
-    // Tentar obter do estado do Room primeiro
     if (this.roomState?.currentMap) {
       return this.roomState.currentMap;
     }
 
-    // Tentar obter do cache
-    if (this.currentMap && this.lastUpdate) {
-      // Verificar se o cache ainda é válido (5 minutos)
-      const now = new Date();
-      const cacheAge = now.getTime() - this.lastUpdate.getTime();
-      if (cacheAge < 5 * 60 * 1000) {
-        return this.currentMap;
-      }
+    if (this.currentMap) {
+      return this.currentMap;
     }
 
-    // Tentar obter do sistema do bot
-    return this.getBotCurrentMap();
+    return this.getBotCurrentMapFallback();
   }
 
-  /**
-   * Obtém informações completas do Room
-   */
   getRoomState(): RoomState | null {
     return this.roomState;
   }
@@ -48,17 +34,20 @@ class RoomService {
     };
   }
 
-  /**
-   * Atualiza o estado do Room
-   */
   updateRoomState(state: Partial<RoomState>): void {
+    if (Object.prototype.hasOwnProperty.call(state, 'currentMap')) {
+      console.log('[roomService] currentMap update:', {
+        previous: this.roomState?.currentMap ?? this.currentMap,
+        next: state.currentMap,
+      });
+    }
+
     this.roomState = {
       ...this.roomState,
       ...state,
-      lastUpdate: new Date()
+      lastUpdate: new Date(),
     } as RoomState;
 
-    // Atualizar cache do mapa
     if (state.currentMap) {
       this.currentMap = state.currentMap;
       this.lastUpdate = new Date();
@@ -100,91 +89,80 @@ class RoomService {
     });
   }
 
-  /**
-   * Obtém o mapa atual do sistema do bot
-   */
-  private getBotCurrentMap(): string | null {
+  private getBotCurrentMapFallback(): string | null {
     try {
-      // Tentar obter do sistema do bot Haxball
-      // Isso pode vir de várias fontes:
-      
-      // 1. Variáveis globais do bot
       if (typeof global !== 'undefined' && (global as any).haxballRoom) {
         const room = (global as any).haxballRoom;
         if (room.currentMap) {
+          console.log('[roomService] currentMap from global haxballRoom:', room.currentMap);
           return room.currentMap;
         }
       }
 
-      // 2. Sistema de arquivos (ler do arquivo de estado)
       const fs = require('fs');
       const path = require('path');
-      
-      // Tentar ler de um arquivo de estado do Room
       const stateFile = path.join(process.cwd(), 'room-state.json');
-      console.log('🗺️ Procurando arquivo de estado:', stateFile);
-      
+      console.log('[roomService] checking local room-state fallback:', stateFile);
+
       if (fs.existsSync(stateFile)) {
-        console.log('📁 Arquivo de estado encontrado');
         const stateData = JSON.parse(fs.readFileSync(stateFile, 'utf8'));
         if (stateData.currentMap) {
-          console.log('🗺️ Mapa encontrado no arquivo:', stateData.currentMap);
+          console.log('[roomService] currentMap from local room-state fallback:', stateData.currentMap);
           this.updateRoomState(stateData);
           return stateData.currentMap;
         }
-      } else {
-        console.log('❌ Arquivo de estado não encontrado');
       }
 
-      // 3. Variáveis de ambiente
       const envMap = process.env.CURRENT_MAP;
       if (envMap) {
+        console.log('[roomService] currentMap from CURRENT_MAP env:', envMap);
         return envMap;
       }
 
-      // 4. Configuração padrão (para desenvolvimento)
       const defaultMap = process.env.DEFAULT_MAP || 'imola';
       if (process.env.NODE_ENV === 'development') {
+        console.log('[roomService] currentMap from development DEFAULT_MAP:', defaultMap);
         return defaultMap;
       }
 
       return null;
     } catch (error) {
-      console.error('Error getting bot current map:', error);
+      console.error('[roomService] error reading current map fallback:', error);
       return null;
     }
   }
 
-  /**
-   * Força atualização do estado do Room
-   */
-  async refreshRoomState(): Promise<void> {
+  async refreshRoomState(options: { forceBotRefresh?: boolean; reason?: string } = {}): Promise<void> {
     try {
-      // Socket events from the bot are the freshest source. Fallbacks are only
-      // used before the bot has pushed a map into this service.
-      const currentMap = this.roomState?.currentMap || this.currentMap || this.getBotCurrentMap();
-      
+      if (options.forceBotRefresh && this.currentMapRequester) {
+        const requestedMap = await this.currentMapRequester(options.reason || 'refreshRoomState');
+        console.log('[roomService] bot currentMap refresh:', {
+          reason: options.reason,
+          requestedMap,
+        });
+
+        if (requestedMap) {
+          this.updateRoomState({ currentMap: requestedMap });
+        }
+      }
+
+      const currentMap = this.roomState?.currentMap || this.currentMap || this.getBotCurrentMapFallback();
+
       this.updateRoomState({
         currentMap,
         playerCount: this.roomState?.playerCount || 0,
         gameState: this.roomState?.gameState ?? null,
-        lastUpdate: new Date()
+        lastUpdate: new Date(),
       });
     } catch (error) {
-      console.error('Error refreshing room state:', error);
+      console.error('[roomService] error refreshing room state:', error);
     }
   }
 
-  /**
-   * Verifica se o Room está ativo
-   */
   isRoomActive(): boolean {
     return this.roomState?.isOnline === true && this.roomState.lastUpdate > new Date(Date.now() - 60000);
   }
 
-  /**
-   * Obtém estatísticas do Room
-   */
   getRoomStats(): {
     playerCount: number;
     gameState: string | null;
@@ -195,13 +173,12 @@ class RoomService {
       playerCount: this.roomState?.playerCount || 0,
       gameState: this.roomState?.gameState ?? null,
       currentMap: this.getCurrentMap(),
-      uptime: this.roomState?.startTime 
+      uptime: this.roomState?.startTime
         ? Date.now() - this.roomState.startTime.getTime()
-        : null
+        : null,
     };
   }
 }
 
-// Export singleton instance
 const roomService = new RoomService();
 export default roomService;

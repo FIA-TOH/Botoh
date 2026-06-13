@@ -118,6 +118,8 @@ const dictionaries = {
       paused: 'Jogo pausado',
       idle: 'Nenhuma ação na pista no momento',
       missingMap: 'Sem mapa para esse circuito',
+      retryMap: 'Tentar buscar mapa novamente',
+      retryingMap: 'Buscando mapa...',
     },
     pitWall: {
       chooseScuderia: 'Escolha a scuderia',
@@ -672,6 +674,8 @@ const dictionaries = {
       paused: 'Game paused',
       idle: 'No track action at the moment',
       missingMap: 'No map available for this circuit',
+      retryMap: 'Try loading map again',
+      retryingMap: 'Loading map...',
     },
     pitWall: {
       chooseScuderia: 'Choose a scuderia',
@@ -1226,6 +1230,8 @@ const dictionaries = {
       paused: 'Juego pausado',
       idle: 'No hay accion en pista en este momento',
       missingMap: 'No hay mapa para este circuito',
+      retryMap: 'Intentar cargar mapa otra vez',
+      retryingMap: 'Buscando mapa...',
     },
     pitWall: {
       chooseScuderia: 'Elige una scuderia',
