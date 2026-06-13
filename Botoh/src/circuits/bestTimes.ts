@@ -67,6 +67,7 @@ const trackNameMapping: { [key: string]: string } = {
     le_mans: "Le Mans By Nanoseb Remake",
   river: "Circuito Antonio V. Liberti by New Era",
   balaton_haxmaps: "Balaton Park Circuit by Liberty from HaxMaps",
+  hemmingsen: "Hemmingsen-banen by Rodri",
 };
 
 export const bestTimes: { [key: string]: [number, string, string] } = {
@@ -158,6 +159,7 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   le_mans: [999.99, "undefined", "Le Mans By Nanoseb Remake"],
   river: [999.99, "undefined", "Circuito Antonio V. Liberti by New Era"],
   balaton_haxmaps: [999.99, "undefined", "Balaton Park Circuit by Liberty from HaxMaps"],
+  hemmingsen: [999.99, "undefined", "Hemmingsen-banen by Rodri"],
 };
 export const getAbbreviatedTrackName = (
   fullTrackName: string,

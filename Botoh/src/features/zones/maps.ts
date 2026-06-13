@@ -106,6 +106,7 @@ import { SRODA } from "../../circuits/sroda/sroda";
 import { LE_MANS } from "../../circuits/le_mans/le_mans";
 import { RIVER } from "../../circuits/argentina/river";
 import { BALATON_HAXMAPS } from "../../circuits/balaton/balaton_haxmaps";
+import { HEMMINGSEN } from "../../circuits/hemmingsen/hemmingsen";
 // import {DAYTONA} from "../circuits/daytona/daytona";
 // import {BARCELONA} from "../circuits/barcelona/barcelona";
 // import {MACAU} from "../circuits/macau/macau";
@@ -181,6 +182,7 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
       LE_MANS,
       RIVER,
       BALATON_HAXMAPS,
+      HEMMINGSEN,
       PODIUM,
       WAITROOM,
     ]

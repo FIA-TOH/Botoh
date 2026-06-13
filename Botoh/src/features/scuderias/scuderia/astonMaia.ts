@@ -8,9 +8,9 @@ import { Suspension } from '../tyres';
 
 export const AstonMaiaEngine: Engine = {
   name: 'Aston Maia Engine',
-  initialAccelerationNerf: 98,
-  medialAccelerationNerf: 36,
-  finalAccelerationNerf: 66,
+  initialAccelerationNerf: 0,
+  medialAccelerationNerf: 0,
+  finalAccelerationNerf: 0,
   topSpeedBoostNerf: 0,
   confiability: 100,
 };
