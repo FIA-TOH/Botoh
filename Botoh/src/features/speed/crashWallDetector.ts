@@ -15,7 +15,7 @@ const playerTouchedCrashWallDetectors = new Map<number, Set<string>>();
 const previousPlayerSpeed = new Map<number, number>();
 const lastPlayerDamageAt = new Map<number, number>();
 const DAMAGE_COOLDOWN_MS = 1000;
-const CRASH_DAMAGE_PER_SPEED = 0.375;
+const CRASH_DAMAGE_PER_SPEED = 0.28125;
 const CURVED_DETECTOR_STEP_DEGREES = 5;
 const CURVED_DETECTOR_EXTRA_RADIUS = 1;
 
