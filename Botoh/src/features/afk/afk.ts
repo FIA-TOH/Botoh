@@ -189,6 +189,7 @@ export function resetAllAfkCounters(room: RoomObject) {
       playerActivities[playerId].lastActivityTime = currentTime;
       playerActivities[playerId].warningSent = false;
       playerActivities[playerId].lastWarningTime = 0;
+      playerActivities[playerId].vscActivated = false;
       playerProps.afkAlert = false;
     }
   });
@@ -208,13 +209,9 @@ export function handlePlayerLeave(player: PlayerObject, room: RoomObject) {
   }
   
   if (vsc && vscTriggeredByPlayer === playerId) {
-    if (Math.random() < 0.25) {
-      handleSCCommand(undefined, ["on"], room);
-    } else {
-      const { extendVSCDuration } = require("../safetyCar/vsc");
-      extendVSCDuration();
-    }
-    
+    const { clearVSCTriggerPlayer } = require("../safetyCar/vsc");
+    clearVSCTriggerPlayer(playerId);
+    resetAllAfkCounters(room);
     clearPlayerAfkActivity(playerId);
     return;
   }
@@ -291,6 +288,11 @@ export function afkKick(room: RoomObject) {
     return;
   }
 
+  if (vsc || isSCActive()) {
+    resetAllAfkCounters(room);
+    return;
+  }
+
   for (const player of players) {
     const playerId = player.id;
     const playerProps = playerList[playerId];
@@ -316,7 +318,11 @@ export function afkKick(room: RoomObject) {
     const activity = playerActivities[playerId];
     const afkDuration = currentGameTime - activity.lastActivityTime;
 
-    if (isPlayerMovingAtSpeed(playerId, room)) {
+    const isMoving = isRealSafetyEnabled()
+      ? isPlayerMovingAtComeBackSpeed(playerId, room)
+      : isPlayerMovingAtSpeed(playerId, room);
+
+    if (isMoving) {
       activity.lastActivityTime = currentGameTime;
       activity.warningSent = false;
       activity.lastWarningTime = 0;
@@ -327,6 +333,7 @@ export function afkKick(room: RoomObject) {
     if (isRealSafetyEnabled() && afkDuration >= 2 && !activity.vscActivated) {
       if (!vsc && !presentationLap) {
         deployVSCAutomatically(room, playerId);
+        resetAllAfkCounters(room);
         
         if (
           ACTUAL_CIRCUIT.info.sectorOne &&

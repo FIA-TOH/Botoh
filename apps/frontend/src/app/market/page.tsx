@@ -430,6 +430,8 @@ export default function MarketPage() {
   );
 
   function openNegotiation(pilot: MarketPilot) {
+    if (!canManageDrivers) return;
+
     const firstTeam = managedTeams[0] ?? null;
     const isFormula2 = firstTeam?.teamCategory === 'formula_2';
 
@@ -507,7 +509,7 @@ export default function MarketPage() {
 
   async function submitNegotiation(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!negotiatingPilot) return;
+    if (!negotiatingPilot || !canManageDrivers) return;
 
     if (!canSubmitNegotiation) {
       showSnackbar(t.market.salaryTooLow, 'error');
@@ -560,12 +562,9 @@ export default function MarketPage() {
             <div className="py-16 text-center text-xl font-semibold">{t.common.loading}</div>
           ) : loadError ? (
             <div className="py-16 text-center text-xl font-semibold text-red-200">{loadError}</div>
-          ) : !hasDriverWallet && !canManageDrivers ? (
-            <div className="py-16 text-center text-xl font-semibold">{t.market.noDriverWallet}</div>
           ) : (
             <div className="flex flex-col">
-              {hasDriverWallet && (
-                <div className="order-2">
+              <div className="order-2">
                   <button
                     type="button"
                     className="flex w-full items-center justify-between border-4 border-[#FF232B] bg-gray-700 px-4 py-3 text-left text-2xl font-bold uppercase"
@@ -704,11 +703,9 @@ export default function MarketPage() {
                       {pagination(currentPage, totalPages, setPage)}
                     </div>
                   )}
-                </div>
-              )}
+              </div>
 
-              {canManageDrivers && (
-                <div className={`order-1 ${hasDriverWallet ? 'mb-8' : ''}`}>
+              <div className="order-1 mb-8">
                   <button
                     type="button"
                     className="flex w-full items-center justify-between border-4 border-[#FF232B] bg-gray-700 px-4 py-3 text-left text-2xl font-bold uppercase"
@@ -821,14 +818,16 @@ export default function MarketPage() {
                                   </div>
                                 </div>
 
-                                <button
-                                  type="button"
-                                  disabled={isFormula1Starter(pilot)}
-                                  onClick={() => openNegotiation(pilot)}
-                                  className="mt-3 w-full bg-[#FF232B] px-3 py-3 text-sm font-bold uppercase disabled:cursor-not-allowed disabled:bg-gray-600 disabled:text-gray-300"
-                                >
-                                  {t.market.negotiate}
-                                </button>
+                                {canManageDrivers && (
+                                  <button
+                                    type="button"
+                                    disabled={isFormula1Starter(pilot)}
+                                    onClick={() => openNegotiation(pilot)}
+                                    className="mt-3 w-full bg-[#FF232B] px-3 py-3 text-sm font-bold uppercase disabled:cursor-not-allowed disabled:bg-gray-600 disabled:text-gray-300"
+                                  >
+                                    {t.market.negotiate}
+                                  </button>
+                                )}
                               </article>
                             ))}
                           </div>
@@ -846,13 +845,15 @@ export default function MarketPage() {
                               <th className="p-3 text-center">{t.market.commercialScore}</th>
                               <th className="p-3 text-center">{t.market.personalSponsor}</th>
                               <th className="p-3 text-center">{t.market.situation}</th>
-                              <th className="w-[12%] p-3 text-center">{t.market.negotiate}</th>
+                              {canManageDrivers && (
+                                <th className="w-[12%] p-3 text-center">{t.market.negotiate}</th>
+                              )}
                             </tr>
                           </thead>
                           <tbody>
                             {visiblePilots.length === 0 ? (
                               <tr className="border-b-4 border-gray-900 bg-gray-700">
-                                <td className="p-6 text-center text-gray-300" colSpan={8}>{t.market.noPilots}</td>
+                                <td className="p-6 text-center text-gray-300" colSpan={canManageDrivers ? 8 : 7}>{t.market.noPilots}</td>
                               </tr>
                             ) : visiblePilots.map((pilot) => (
                               <tr
@@ -902,16 +903,18 @@ export default function MarketPage() {
                                 <td className="p-3 text-center">
                                   {getPilotSituation(pilot)}
                                 </td>
-                                <td className="p-3 text-center">
-                                  <button
-                                    type="button"
-                                    disabled={isFormula1Starter(pilot)}
-                                    onClick={() => openNegotiation(pilot)}
-                                    className="bg-[#FF232B] px-3 py-2 text-sm font-bold uppercase disabled:cursor-not-allowed disabled:bg-gray-600 disabled:text-gray-300"
-                                  >
-                                    {t.market.negotiate}
-                                  </button>
-                                </td>
+                                {canManageDrivers && (
+                                  <td className="p-3 text-center">
+                                    <button
+                                      type="button"
+                                      disabled={isFormula1Starter(pilot)}
+                                      onClick={() => openNegotiation(pilot)}
+                                      className="bg-[#FF232B] px-3 py-2 text-sm font-bold uppercase disabled:cursor-not-allowed disabled:bg-gray-600 disabled:text-gray-300"
+                                    >
+                                      {t.market.negotiate}
+                                    </button>
+                                  </td>
+                                )}
                               </tr>
                             ))}
                           </tbody>
@@ -921,14 +924,13 @@ export default function MarketPage() {
                       {pagination(currentPilotPage, pilotTotalPages, setPilotPage)}
                     </div>
                   )}
-                </div>
-              )}
+              </div>
             </div>
           )}
         </section>
       </div>
 
-      {negotiatingPilot && (
+      {negotiatingPilot && canManageDrivers && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 px-4">
           <form
             onSubmit={submitNegotiation}

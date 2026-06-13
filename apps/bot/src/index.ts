@@ -38,14 +38,31 @@ function getPitWallSyntheticAuth(playerId: number, playerName?: string | null) {
   return `pitwall:${playerId}:${normalizeComparableName(playerName) || 'unknown'}`;
 }
 
+async function getCurrentPitWallMapName() {
+  const globalMap = (global as any).pitWallCurrentMap;
+  if (typeof globalMap === 'string' && globalMap.trim()) {
+    return globalMap;
+  }
+
+  try {
+    const { CIRCUIT_FILE_NAMES, currentMapIndex } = await import('../../../Botoh/src/features/zones/maps');
+    return CIRCUIT_FILE_NAMES[currentMapIndex] || null;
+  } catch (error) {
+    console.error('Failed to read current Pit Wall map from bot:', error);
+    return null;
+  }
+}
+
 async function emitRoomHeartbeat() {
   if (!backendSocket?.emit || !room?.getPlayerList) return;
 
   try {
     const hasGameStateSnapshot = Object.prototype.hasOwnProperty.call(global, 'pitWallGameState');
+    const currentMap = await getCurrentPitWallMapName();
 
     backendSocket.emit('room:heartbeat', {
       playerCount: room.getPlayerList().length,
+      ...(currentMap ? { currentMap } : {}),
       ...(hasGameStateSnapshot
         ? { gameState: (global as any).pitWallGameState }
         : {}),
@@ -79,6 +96,35 @@ async function setupBackendCommunication() {
 
   socket.on('connect_error', (error) => {
     console.error('Botoh bot failed to connect to backend:', error.message);
+  });
+
+  socket.on('room:requestCurrentMap', async (data: { reason?: string } | undefined, respond?: (response: any) => void) => {
+    try {
+      const currentMap = await getCurrentPitWallMapName();
+      console.log('Pit Wall current map requested by backend:', {
+        reason: data?.reason,
+        currentMap,
+      });
+
+      if (currentMap) {
+        socket.emit('room:mapChanged', {
+          mapName: currentMap,
+          timestamp: Date.now(),
+        });
+      }
+
+      respond?.({
+        success: Boolean(currentMap),
+        mapName: currentMap,
+      });
+    } catch (error) {
+      console.error('Error responding current map to backend:', error);
+      respond?.({
+        success: false,
+        mapName: null,
+        code: 'bot_error',
+      });
+    }
   });
 
   socket.on('chat:send', async (data: any, respond?: (response: any) => void) => {

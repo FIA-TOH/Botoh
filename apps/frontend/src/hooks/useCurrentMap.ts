@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { pitwallApiUrl } from '@/config/api';
 import { useSocket } from './useSocket';
 
@@ -7,6 +7,8 @@ interface CurrentMapData {
   hasSvg: boolean;
   svgUrl: string | null;
   isLoading: boolean;
+  isRefreshing: boolean;
+  refreshCurrentMap: () => Promise<void>;
 }
 
 export type PitWallGameState = 'running' | 'paused' | null;
@@ -62,19 +64,27 @@ export function useCurrentMap(): CurrentMapData {
     hasSvg: false,
     svgUrl: null,
     isLoading: true,
+    isRefreshing: false,
+    refreshCurrentMap: async () => {},
   });
 
-  useEffect(() => {
-    const applyMapName = async (mapName: string | null) => {
+  const applyMapName = React.useCallback(async (mapName: string | null, source: string) => {
       const normalizedMap = normalizeMapName(mapName);
+      console.log('[liveMap] apply current map:', {
+        source,
+        rawMap: mapName,
+        normalizedMap,
+      });
 
       if (!normalizedMap) {
-        setMapData({
+        setMapData(prev => ({
+          ...prev,
           mapName: null,
           hasSvg: false,
           svgUrl: null,
           isLoading: false,
-        });
+          isRefreshing: false,
+        }));
         return;
       }
 
@@ -87,71 +97,113 @@ export function useCurrentMap(): CurrentMapData {
       const svgUrl = getMapSvgUrl(normalizedMap);
       const hasSvg = await checkSvgExists(svgUrl);
 
-      setMapData({
+      setMapData(prev => ({
+        ...prev,
         mapName: normalizedMap,
         hasSvg,
         svgUrl: hasSvg ? svgUrl : null,
         isLoading: false,
-      });
+        isRefreshing: false,
+      }));
 
       localStorage.setItem('currentMap', normalizedMap);
-    };
+    }, []);
 
-    const detectCurrentMap = async () => {
+  const fetchCurrentMap = React.useCallback(async (forceRefresh = false) => {
       let detectedMap: string | null = null;
+      let apiAnswered = false;
 
       const roomInfo = (window as any).__ROOM_INFO__;
       if (roomInfo?.currentMap) {
         detectedMap = roomInfo.currentMap;
+        console.log('[liveMap] current map from window room info:', detectedMap);
       }
 
       if (!detectedMap) {
         const urlParams = new URLSearchParams(window.location.search);
         detectedMap = urlParams.get('map') || null;
+        if (detectedMap) {
+          console.log('[liveMap] current map from URL param:', detectedMap);
+        }
       }
 
       if (!detectedMap) {
         try {
-          const response = await fetch(pitwallApiUrl('/api/room/current-map'), {
+          const endpoint = forceRefresh
+            ? '/api/room/current-map?refresh=1'
+            : '/api/room/current-map';
+          const response = await fetch(pitwallApiUrl(endpoint), {
             headers: PITWALL_REQUEST_HEADERS,
+            cache: 'no-store',
+          });
+          apiAnswered = true;
+          console.log('[liveMap] current map API response:', {
+            endpoint,
+            status: response.status,
+            ok: response.ok,
           });
 
           if (response.ok) {
             const data = await response.json();
             detectedMap = data.mapName;
+            console.log('[liveMap] current map from API:', detectedMap);
           }
         } catch (error) {
-          console.warn('Erro ao buscar mapa atual da API:', error);
+          console.warn('[liveMap] failed to fetch current map from API:', error);
         }
       }
 
-      if (!detectedMap) {
+      if (!detectedMap && !forceRefresh && !apiAnswered) {
         detectedMap = localStorage.getItem('currentMap') || null;
+        if (detectedMap) {
+          console.log('[liveMap] current map from localStorage fallback:', detectedMap);
+        }
       }
 
-      await applyMapName(detectedMap);
-    };
+      await applyMapName(detectedMap, forceRefresh ? 'manual-refresh' : 'initial-detect');
+    }, [applyMapName]);
 
-    detectCurrentMap();
+  const refreshCurrentMap = React.useCallback(async () => {
+    setMapData(prev => ({
+      ...prev,
+      isRefreshing: true,
+      isLoading: true,
+    }));
+    await fetchCurrentMap(true);
+  }, [fetchCurrentMap]);
+
+  useEffect(() => {
+    setMapData(prev => ({
+      ...prev,
+      refreshCurrentMap,
+    }));
+  }, [refreshCurrentMap]);
+
+  useEffect(() => {
+    fetchCurrentMap(false);
 
     const handleMapChange = (event: { mapName?: string | null; currentMap?: string | null }) => {
       const mapName = event?.mapName ?? event?.currentMap;
 
       if (mapName) {
-        applyMapName(mapName);
+        applyMapName(mapName, 'socket-event');
       }
     };
 
     if (socket && isConnected) {
       socket.on('room:mapChanged', handleMapChange);
+      socket.on('room:heartbeat', handleMapChange);
+      socket.on('room:snapshot', handleMapChange);
     }
 
     return () => {
       if (socket) {
         socket.off('room:mapChanged', handleMapChange);
+        socket.off('room:heartbeat', handleMapChange);
+        socket.off('room:snapshot', handleMapChange);
       }
     };
-  }, [socket, isConnected]);
+  }, [socket, isConnected, applyMapName, fetchCurrentMap]);
 
   return mapData;
 }
@@ -218,20 +270,30 @@ export function usePitWallGameState(): PitWallGameState {
 export function useMapBackground(): {
   backgroundUrl: string | null;
   fallbackType: 'svg' | 'missing' | 'default';
+  mapName: string | null;
+  isRefreshing: boolean;
+  refreshCurrentMap: () => Promise<void>;
 } {
-  const { mapName, hasSvg, svgUrl, isLoading } = useCurrentMap();
+  const {
+    mapName,
+    hasSvg,
+    svgUrl,
+    isLoading,
+    isRefreshing,
+    refreshCurrentMap,
+  } = useCurrentMap();
 
   if (isLoading) {
-    return { backgroundUrl: null, fallbackType: 'default' };
+    return { backgroundUrl: null, fallbackType: 'default', mapName, isRefreshing, refreshCurrentMap };
   }
 
   if (hasSvg && svgUrl) {
-    return { backgroundUrl: svgUrl, fallbackType: 'svg' };
+    return { backgroundUrl: svgUrl, fallbackType: 'svg', mapName, isRefreshing, refreshCurrentMap };
   }
 
   if (mapName) {
-    return { backgroundUrl: null, fallbackType: 'missing' };
+    return { backgroundUrl: null, fallbackType: 'missing', mapName, isRefreshing, refreshCurrentMap };
   }
 
-  return { backgroundUrl: null, fallbackType: 'default' };
+  return { backgroundUrl: null, fallbackType: 'default', mapName, isRefreshing, refreshCurrentMap };
 }

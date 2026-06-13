@@ -82,8 +82,8 @@ export const TYRE_DURABILITY = (limit: number | null): TireDurability => {
       [Tires.SOFT]: 900 * 0.7, // ≈ 630
       [Tires.MEDIUM]: 1200 * 0.7, // ≈ 840
       [Tires.HARD]: 1600 * 0.7, // ≈ 1120
-      [Tires.WET]: 900 * 0.7, // ≈ 840
-      [Tires.INTER]: 900 * 0.7, // ≈ 840
+      [Tires.WET]: 1200 * 0.7, // ≈ 840
+      [Tires.INTER]: 1200 * 0.7, // ≈ 840
       [Tires.FLAT]: Infinity,
       [Tires.TRAIN]: Infinity,
     };

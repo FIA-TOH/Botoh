@@ -54,7 +54,12 @@ export function LiveMap({
   playerDetails,
 }: Props) {
   const { t } = useTranslations();
-  const { backgroundUrl, fallbackType } = useMapBackground();
+  const {
+    backgroundUrl,
+    fallbackType,
+    isRefreshing,
+    refreshCurrentMap,
+  } = useMapBackground();
   const gameState = usePitWallGameState();
 
   const containerRef = React.useRef<HTMLDivElement>(null);
@@ -543,8 +548,10 @@ export function LiveMap({
                 absolute
                 inset-0
                 flex
+                flex-col
                 items-center
                 justify-center
+                gap-3
                 text-sm
                 font-semibold
                 text-white
@@ -553,7 +560,34 @@ export function LiveMap({
                 backgroundColor: '#1f2937',
               }}
             >
-              {t.liveMap.missingMap}
+              <span>{t.liveMap.missingMap}</span>
+              <button
+                type="button"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  refreshCurrentMap();
+                }}
+                disabled={isRefreshing}
+                className="
+                  rounded
+                  border
+                  border-white/30
+                  bg-white/10
+                  px-3
+                  py-1.5
+                  text-xs
+                  font-semibold
+                  text-white
+                  transition
+                  hover:bg-white/20
+                  disabled:cursor-wait
+                  disabled:opacity-60
+                "
+              >
+                {isRefreshing
+                  ? t.liveMap.retryingMap
+                  : t.liveMap.retryMap}
+              </button>
             </div>
           )}
 
