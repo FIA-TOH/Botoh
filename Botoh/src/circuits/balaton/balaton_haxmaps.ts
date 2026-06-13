@@ -11,7 +11,7 @@ const BALATON_HAXMAPS_INFO: CircuitInfo = {
   finishLine: {
     bounds: {
       minX: -20,
-      maxX: 10,
+      maxX: -10,
       minY: -280,
       maxY: -20,
     },
@@ -37,7 +37,7 @@ const BALATON_HAXMAPS_INFO: CircuitInfo = {
   },
   sectorThree: {
     bounds: {
-      minX: 525,
+      minX: 545,
       maxX: 575,
       minY: 1311,
       maxY: 1434,
