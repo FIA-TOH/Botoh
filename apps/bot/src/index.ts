@@ -42,12 +42,10 @@ async function emitRoomHeartbeat() {
   if (!backendSocket?.emit || !room?.getPlayerList) return;
 
   try {
-    const { CIRCUIT_FILE_NAMES, currentMapIndex } = await import('../../../Botoh/src/features/zones/maps');
     const hasGameStateSnapshot = Object.prototype.hasOwnProperty.call(global, 'pitWallGameState');
 
     backendSocket.emit('room:heartbeat', {
       playerCount: room.getPlayerList().length,
-      currentMap: CIRCUIT_FILE_NAMES[currentMapIndex] ?? null,
       ...(hasGameStateSnapshot
         ? { gameState: (global as any).pitWallGameState }
         : {}),
