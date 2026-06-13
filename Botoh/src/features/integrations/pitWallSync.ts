@@ -30,6 +30,8 @@ export function emitPitWallRoomOpened(payload: PitWallRoomOpenedPayload) {
 
 export function emitPitWallMapChange(mapName: string) {
   lastMapName = mapName;
+  (global as any).pitWallCurrentMap = mapName;
+
   const socket = getBackendSocket();
 
   if (!socket?.emit) return;
@@ -52,9 +54,11 @@ export function flushPitWallRoomSnapshot() {
     });
   }
 
-  if (lastMapName) {
+  const currentMap = lastMapName || (global as any).pitWallCurrentMap;
+
+  if (currentMap) {
     socket.emit("room:mapChanged", {
-      mapName: lastMapName,
+      mapName: currentMap,
       timestamp: Date.now(),
     });
   }

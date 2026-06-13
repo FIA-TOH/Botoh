@@ -122,7 +122,6 @@ export function setupSocketHandlers(io: SocketIOServer) {
 
     socket.on('room:heartbeat', (data: {
       playerCount?: number;
-      currentMap?: string | null;
       gameState?: 'running' | 'paused' | null;
       timestamp?: number;
     }) => {
