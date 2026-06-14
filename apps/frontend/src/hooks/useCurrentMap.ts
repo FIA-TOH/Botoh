@@ -70,11 +70,6 @@ export function useCurrentMap(): CurrentMapData {
 
   const applyMapName = React.useCallback(async (mapName: string | null, source: string) => {
       const normalizedMap = normalizeMapName(mapName);
-      console.log('[liveMap] apply current map:', {
-        source,
-        rawMap: mapName,
-        normalizedMap,
-      });
 
       if (!normalizedMap) {
         setMapData(prev => ({
@@ -116,15 +111,11 @@ export function useCurrentMap(): CurrentMapData {
       const roomInfo = (window as any).__ROOM_INFO__;
       if (roomInfo?.currentMap) {
         detectedMap = roomInfo.currentMap;
-        console.log('[liveMap] current map from window room info:', detectedMap);
       }
 
       if (!detectedMap) {
         const urlParams = new URLSearchParams(window.location.search);
         detectedMap = urlParams.get('map') || null;
-        if (detectedMap) {
-          console.log('[liveMap] current map from URL param:', detectedMap);
-        }
       }
 
       if (!detectedMap) {
@@ -137,27 +128,18 @@ export function useCurrentMap(): CurrentMapData {
             cache: 'no-store',
           });
           apiAnswered = true;
-          console.log('[liveMap] current map API response:', {
-            endpoint,
-            status: response.status,
-            ok: response.ok,
-          });
 
           if (response.ok) {
             const data = await response.json();
             detectedMap = data.mapName;
-            console.log('[liveMap] current map from API:', detectedMap);
           }
         } catch (error) {
-          console.warn('[liveMap] failed to fetch current map from API:', error);
+          // Keep the map fallback quiet; the UI already shows the missing map state.
         }
       }
 
       if (!detectedMap && !forceRefresh && !apiAnswered) {
         detectedMap = localStorage.getItem('currentMap') || null;
-        if (detectedMap) {
-          console.log('[liveMap] current map from localStorage fallback:', detectedMap);
-        }
       }
 
       await applyMapName(detectedMap, forceRefresh ? 'manual-refresh' : 'initial-detect');

@@ -2,18 +2,10 @@ import { Router, Response } from 'express';
 import roomService from '../services/roomService';
 import { getRequestLanguage, translateMessage } from '../i18n';
 
-console.log('[roomRoutes] module loaded');
 const router = Router();
-console.log('[roomRoutes] router created');
-
-router.use((req, res, next) => {
-  console.log(`[roomRoutes] ${req.method} ${req.originalUrl}`);
-  next();
-});
 
 router.get('/current-map', async (req, res: Response) => {
   const forceRefresh = req.query.refresh === '1' || req.query.refresh === 'true';
-  console.log('[roomRoutes] current-map endpoint hit:', { forceRefresh });
 
   try {
     await roomService.refreshRoomState({
@@ -22,10 +14,6 @@ router.get('/current-map', async (req, res: Response) => {
     });
 
     const currentMap = roomService.getCurrentMap();
-    console.log('[roomRoutes] current-map result:', {
-      currentMap,
-      forceRefresh,
-    });
 
     if (!currentMap) {
       return res.status(404).json({
@@ -132,7 +120,6 @@ router.post('/map', async (req, res: Response) => {
       });
     }
 
-    console.log('[roomRoutes] map set through HTTP:', { mapName });
     roomService.updateRoomState({
       currentMap: mapName,
     });

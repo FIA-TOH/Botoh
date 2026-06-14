@@ -101,10 +101,6 @@ async function setupBackendCommunication() {
   socket.on('room:requestCurrentMap', async (data: { reason?: string } | undefined, respond?: (response: any) => void) => {
     try {
       const currentMap = await getCurrentPitWallMapName();
-      console.log('Pit Wall current map requested by backend:', {
-        reason: data?.reason,
-        currentMap,
-      });
 
       if (currentMap) {
         socket.emit('room:mapChanged', {
@@ -146,7 +142,7 @@ async function setupBackendCommunication() {
         const { playerList } = await import('../../../Botoh/src/features/changePlayerState/playerList');
         const { getLeagueScuderia } = await import('../../../Botoh/src/features/scuderias/scuderias');
         const { MESSAGES, getPlayerLanguage } = await import('../../../Botoh/src/features/chat/messages');
-        const { sendRadioMessage } = await import('../../../Botoh/src/features/chat/chat');
+        const { sendRadioMessage, SOUNDS } = await import('../../../Botoh/src/features/chat/chat');
         const { mute_mode } = await import('../../../Botoh/src/features/chat/toggleMuteMode');
 
         if (mute_mode) {
@@ -209,6 +205,10 @@ async function setupBackendCommunication() {
           return;
         }
 
+        const pitWallMessageSound = target.type === 'all'
+          ? SOUNDS.CHAT
+          : SOUNDS.NOTIFICATION;
+
         recipients.forEach((recipient: PlayerObject) => {
           const language = getPlayerLanguage(recipient.id);
           const channelLabel =
@@ -218,7 +218,7 @@ async function setupBackendCommunication() {
                 ? MESSAGES.CHAT_CHANNEL_PRIVATE()[language]
                 : MESSAGES.CHAT_CHANNEL_ALL()[language];
           const formattedMessage = `[📻 ${player} - ${channelLabel}] ${message}`;
-          sendRadioMessage(room, formattedMessage, recipient.id);
+          sendRadioMessage(room, formattedMessage, recipient.id, pitWallMessageSound);
         });
 
         if (target.type === 'all') {

@@ -38,7 +38,7 @@ export enum FONTS {
   SMALL_ITALIC = "small-italic",
 }
 
-enum SOUNDS {
+export enum SOUNDS {
   MUTE = 0,
   CHAT = 1,
   NOTIFICATION = 2,
@@ -181,6 +181,7 @@ export function sendRadioMessage(
   room: RoomObject,
   message: LocalizedMessageFunction | string,
   toPlayerID?: number,
+  sound: SOUNDS = SOUNDS.NOTIFICATION,
 ) {
   if (typeof message === "string") {
     room.sendAnnouncement(
@@ -188,7 +189,7 @@ export function sendRadioMessage(
       toPlayerID,
       COLORS.ORANGE,
       FONTS.ITALIC,
-      SOUNDS.NOTIFICATION,
+      sound,
     );
     return;
   }
@@ -199,7 +200,7 @@ export function sendRadioMessage(
     toPlayerID,
     COLORS.ORANGE,
     FONTS.ITALIC,
-    SOUNDS.NOTIFICATION,
+    sound,
   );
 }
 
