@@ -4,23 +4,9 @@ import { Engine } from "./engine";
 import { PitCrew } from "./pitstop";
 import { AstonMaia } from "./scuderia/astonMaia";
 import { Bracchiari } from "./scuderia/bracchiari";
-import { McLarper } from "./scuderia/mclarper";
 import { Penshiryu } from "./scuderia/penshiryu";
-import { Gorsche } from "./scuderia/gorsche";
 import { ScuderiaColors } from "./scuderiaColours";
 import { Suspension } from "./tyres";
-import { BmwSwiss } from "./scuderia/bmwSwiss";
-import { Ferrari } from "./scuderia/ferrari";
-import { HRT } from "./scuderia/hrt";
-import { Audi } from "./scuderia/audi";
-import { Alpine } from "./scuderia/alpine";
-import { Cadillac } from "./scuderia/cadillac";
-import { Prema } from "./scuderia/prema";
-import { Mclaren } from "./scuderia/mclaren";
-import { Hispalis } from "./scuderia/hispalis";
-import { Meise } from "./scuderia/meise";
-import { Genske } from "./scuderia/genske";
-import { Yamaha } from "./scuderia/yamaha";
 import { Formula2 } from "./scuderia/f2";
 import { Gt } from "./scuderia/gt";
 import { Lmdh } from "./scuderia/lmdh";
@@ -122,19 +108,6 @@ export const leagueScuderia: { [key: string]: leagueScuderia } = {
   //   tag: "PH",
   //   color: ScuderiaColours.PHM,
   // },*/
-  Gorsche,
-  Ferrari,
-  HRT,
-  BmwSwiss,
-  Audi,
-  Alpine,
-  Cadillac,
-  Prema,
-  Mclaren,
-  Hispalis,
-  Meise,
-  Genske,
-  Yamaha,
   Formula2,
   Gt,
   Lmdh,
