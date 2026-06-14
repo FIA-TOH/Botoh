@@ -35,13 +35,6 @@ class RoomService {
   }
 
   updateRoomState(state: Partial<RoomState>): void {
-    if (Object.prototype.hasOwnProperty.call(state, 'currentMap')) {
-      console.log('[roomService] currentMap update:', {
-        previous: this.roomState?.currentMap ?? this.currentMap,
-        next: state.currentMap,
-      });
-    }
-
     this.roomState = {
       ...this.roomState,
       ...state,
@@ -94,7 +87,6 @@ class RoomService {
       if (typeof global !== 'undefined' && (global as any).haxballRoom) {
         const room = (global as any).haxballRoom;
         if (room.currentMap) {
-          console.log('[roomService] currentMap from global haxballRoom:', room.currentMap);
           return room.currentMap;
         }
       }
@@ -102,12 +94,10 @@ class RoomService {
       const fs = require('fs');
       const path = require('path');
       const stateFile = path.join(process.cwd(), 'room-state.json');
-      console.log('[roomService] checking local room-state fallback:', stateFile);
 
       if (fs.existsSync(stateFile)) {
         const stateData = JSON.parse(fs.readFileSync(stateFile, 'utf8'));
         if (stateData.currentMap) {
-          console.log('[roomService] currentMap from local room-state fallback:', stateData.currentMap);
           this.updateRoomState(stateData);
           return stateData.currentMap;
         }
@@ -115,13 +105,11 @@ class RoomService {
 
       const envMap = process.env.CURRENT_MAP;
       if (envMap) {
-        console.log('[roomService] currentMap from CURRENT_MAP env:', envMap);
         return envMap;
       }
 
       const defaultMap = process.env.DEFAULT_MAP || 'imola';
       if (process.env.NODE_ENV === 'development') {
-        console.log('[roomService] currentMap from development DEFAULT_MAP:', defaultMap);
         return defaultMap;
       }
 
@@ -136,10 +124,6 @@ class RoomService {
     try {
       if (options.forceBotRefresh && this.currentMapRequester) {
         const requestedMap = await this.currentMapRequester(options.reason || 'refreshRoomState');
-        console.log('[roomService] bot currentMap refresh:', {
-          reason: options.reason,
-          requestedMap,
-        });
 
         if (requestedMap) {
           this.updateRoomState({ currentMap: requestedMap });

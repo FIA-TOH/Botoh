@@ -9,10 +9,6 @@ export function setupSocketHandlers(io: SocketIOServer) {
   notificationService.setSocketServer(io);
   roomService.setCurrentMapRequester(async (reason) => {
     const response = await botService.requestCurrentMap(reason);
-    console.log('[socket] current map requested from bot:', {
-      reason,
-      response,
-    });
     return response.mapName;
   });
 
@@ -84,7 +80,6 @@ export function setupSocketHandlers(io: SocketIOServer) {
       if (!isCurrentBot(socket)) return;
       if (!data?.mapName) return;
 
-      console.log('[socket] room:mapChanged from bot:', data);
       roomService.updateRoomState({
         currentMap: data.mapName
       });
@@ -161,7 +156,6 @@ export function setupSocketHandlers(io: SocketIOServer) {
         heartbeatState.gameState = data.gameState;
       }
 
-      console.log('[socket] room:heartbeat from bot:', heartbeatState);
       roomService.markRoomHeartbeat(heartbeatState);
 
       io.emit('room:heartbeat', {
