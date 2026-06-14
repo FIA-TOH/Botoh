@@ -1,0 +1,75 @@
+[
+  {
+    "time": "00:00",
+    "id": "RAIN_ALREADY_STARTED",
+    "meta": {
+      "rain": 27
+    }
+  },
+  {
+    "time": "00:30",
+    "id": "SECTOR_DIFFERENCE"
+  },
+  {
+    "time": "03:30",
+    "id": "RAIN_WEAKENING"
+  },
+  {
+    "time": "04:30",
+    "id": "SECTOR_DIFFERENCE"
+  },
+  {
+    "time": "05:30",
+    "id": "RAIN_STOPPING_1_MIN"
+  },
+  {
+    "time": "06:30",
+    "id": "RAIN_STOPPED"
+  },
+  {
+    "time": "09:30",
+    "id": "CLOUDS_FORMING"
+  },
+  {
+    "time": "11:30",
+    "id": "RAIN_IN_1_MIN"
+  },
+  {
+    "time": "12:30",
+    "id": "RAIN_STARTED",
+    "meta": {
+      "rain": 71
+    }
+  },
+  {
+    "time": "14:00",
+    "id": "TRACK_WET",
+    "meta": {
+      "wet": 100
+    }
+  },
+  {
+    "time": "15:30",
+    "id": "RAIN_WEAKENING"
+  },
+  {
+    "time": "16:00",
+    "id": "SECTOR_DIFFERENCE"
+  },
+  {
+    "time": "18:00",
+    "id": "TRACK_DRY"
+  },
+  {
+    "time": "22:30",
+    "id": "SECTOR_DIFFERENCE"
+  },
+  {
+    "time": "26:00",
+    "id": "RAIN_WEAKENING"
+  },
+  {
+    "time": "29:00",
+    "id": "RAIN_STOPPING_1_MIN"
+  }
+]
