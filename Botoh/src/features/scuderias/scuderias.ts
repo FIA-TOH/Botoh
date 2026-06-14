@@ -7,6 +7,16 @@ import { Bracchiari } from "./scuderia/bracchiari";
 import { Penshiryu } from "./scuderia/penshiryu";
 import { ScuderiaColors } from "./scuderiaColours";
 import { Suspension } from "./tyres";
+import { Genske } from "./scuderia/genske";
+import { Gorsche } from "./scuderia/gorsche";
+import { Hispalis } from "./scuderia/hispalis";
+import { Lotus } from "./scuderia/lotus";
+import { Panchitos } from "./scuderia/panchitos";
+import { Ferrari } from "./scuderia/ferrari";
+import { Cadillac } from "./scuderia/cadillac";
+import { Audi } from "./scuderia/audi";
+import { Hrt } from "./scuderia/hrt";
+import { Williams } from "./scuderia/williams";
 import { Formula2 } from "./scuderia/f2";
 import { Gt } from "./scuderia/gt";
 import { Lmdh } from "./scuderia/lmdh";
@@ -108,6 +118,16 @@ export const leagueScuderia: { [key: string]: leagueScuderia } = {
   //   tag: "PH",
   //   color: ScuderiaColours.PHM,
   // },*/
+  Genske,
+  Gorsche,
+  Hispalis,
+  Lotus,
+  Panchitos,
+  Ferrari,
+  Cadillac,
+  Audi,
+  Hrt,
+  Williams,
   Formula2,
   Gt,
   Lmdh,
