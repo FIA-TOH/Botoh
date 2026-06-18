@@ -15,6 +15,7 @@ interface User {
   driverNumber?: number | null;
   teamId?: string | null;
   teamName?: string | null;
+  teamFullName?: string | null;
   teamTag?: string | null;
   teamEmoji?: string | null;
   teamColor?: string | null;
@@ -25,6 +26,7 @@ interface User {
 export interface TeamMembership {
   teamId: string;
   teamName: string;
+  teamFullName?: string | null;
   teamTag: string;
   teamEmoji?: string | null;
   teamColor: string;

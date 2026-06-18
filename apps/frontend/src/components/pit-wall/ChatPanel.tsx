@@ -57,7 +57,7 @@ export function ChatPanel({
         backgroundColor: '#1E1E1E',
         outline: '8px solid #FF232B',
       }}
-      className="p-4"
+      className="min-w-0 p-4"
     >
       <div className="h-full flex flex-col gap-3">
 
@@ -68,7 +68,9 @@ export function ChatPanel({
             py-4
             flex-1
             overflow-y-auto
+            overflow-x-hidden
             min-h-0
+            min-w-0
             max-h-64
           "
           style={{
@@ -169,11 +171,12 @@ export function ChatPanel({
               return (
                 <div
                   key={index}
-                  className="text-sm"
+                  className="min-w-0 text-sm break-words"
                   style={{
                     paddingLeft: '12px',
                     paddingRight: '12px',
                     marginBottom: '4px',
+                    overflowWrap: 'anywhere',
                   }}
                 >
                   <span
@@ -185,7 +188,13 @@ export function ChatPanel({
                     {msg.player}:
                   </span>
 
-                  <span className="text-gray-200 ml-1">
+                  <span
+                    className="text-gray-200 ml-1"
+                    style={{
+                      overflowWrap: 'anywhere',
+                      wordBreak: 'break-word',
+                    }}
+                  >
                     {msg.message}
                   </span>
                 </div>

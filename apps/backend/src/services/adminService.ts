@@ -53,6 +53,7 @@ export interface DriverWalletInput {
 
 export interface ScuderiaInput {
   name: string;
+  fullName?: string | null;
   tag: string;
   emoji?: string | null;
   color: string;
@@ -87,12 +88,24 @@ export interface TeamCircuitBoxInput {
   y: number;
 }
 
+export interface CircuitTeamBoxInput {
+  teamId: string;
+  x?: number | null;
+  y?: number | null;
+}
+
 export interface TeamSponsorInput {
   sponsorId: string;
   category: 'title_sponsor' | 'main_partner' | 'official_partner' | 'minor_sponsor' | 'personal_sponsor';
   contractRacesRemaining: number;
   initialReward: number;
   rewardPerRace: number;
+}
+
+export interface SponsorMarketReviewInput {
+  sponsorId: string;
+  category: SponsorContractCategory;
+  initialReward: number;
 }
 
 export interface SponsorMissionInput {
@@ -129,6 +142,13 @@ const RACE_MISSION_DIFFICULTY_WEIGHTS: Record<number, { difficulty: RaceMissionD
   3: [{ difficulty: 'easy', chance: 0.15 }, { difficulty: 'medium', chance: 0.55 }, { difficulty: 'hard', chance: 0.3 }],
   4: [{ difficulty: 'easy', chance: 0.1 }, { difficulty: 'medium', chance: 0.4 }, { difficulty: 'hard', chance: 0.4 }, { difficulty: 'insane', chance: 0.1 }],
   5: [{ difficulty: 'easy', chance: 0.05 }, { difficulty: 'medium', chance: 0.3 }, { difficulty: 'hard', chance: 0.5 }, { difficulty: 'insane', chance: 0.15 }],
+};
+const SPONSOR_CATEGORY_LIMITS: Record<SponsorContractCategory, number> = {
+  title_sponsor: 1,
+  main_partner: 2,
+  official_partner: 4,
+  minor_sponsor: 8,
+  personal_sponsor: 4,
 };
 
 export interface SponsorInput {
@@ -731,13 +751,6 @@ class AdminService {
     category: SponsorContractCategory,
     currentTeamSponsorId?: string,
   ) {
-    const limits: Record<SponsorContractCategory, number> = {
-      title_sponsor: 1,
-      main_partner: 2,
-      official_partner: 4,
-      minor_sponsor: 8,
-      personal_sponsor: 4,
-    };
     const occupied = await client.query(
       `SELECT slot_number
        FROM team_sponsors
@@ -747,8 +760,75 @@ class AdminService {
       [teamId, category, currentTeamSponsorId ?? null],
     );
     const used = new Set(occupied.rows.map((row: any) => Number(row.slot_number)));
-    return Array.from({ length: limits[category] }, (_, index) => index + 1)
+    return Array.from({ length: SPONSOR_CATEGORY_LIMITS[category] }, (_, index) => index + 1)
       .find((slot) => !used.has(slot)) ?? null;
+  }
+
+  private async assignTeamSponsor(
+    client: { query: (sql: string, params?: any[]) => Promise<any> },
+    scuderiaId: string,
+    input: TeamSponsorInput,
+  ) {
+    const sponsor = await client.query(
+      'SELECT id, name FROM sponsors WHERE id = $1',
+      [input.sponsorId],
+    );
+    if (!sponsor.rows[0]) {
+      return { success: false, message: 'Sponsor not found' };
+    }
+
+    const existing = await client.query(
+      'SELECT id FROM team_sponsors WHERE team_id = $1 AND sponsor_id = $2',
+      [scuderiaId, input.sponsorId],
+    );
+    if (existing.rows[0]) {
+      return { success: false, message: 'Sponsor already assigned to scuderia' };
+    }
+
+    const slotNumber = await this.findAvailableSponsorSlot(client, scuderiaId, input.category);
+    if (!slotNumber) {
+      return { success: false, message: 'Sponsor category is full' };
+    }
+
+    const result = await client.query(
+      `INSERT INTO team_sponsors (
+        team_id, sponsor_id, category, slot_number,
+        contract_races_remaining, initial_reward, reward_per_race
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+      RETURNING id`,
+      [
+        scuderiaId,
+        input.sponsorId,
+        input.category,
+        slotNumber,
+        input.contractRacesRemaining,
+        input.initialReward,
+        input.rewardPerRace,
+      ],
+    );
+
+    await client.query(
+      `UPDATE teams
+       SET cash_total = cash_total + $1,
+           sponsor_income_per_race = COALESCE(
+             (
+               SELECT SUM(reward_per_race)
+               FROM team_sponsors
+               WHERE team_id = $2
+             ),
+             0
+           ),
+           updated_at = NOW()
+       WHERE id = $2`,
+      [input.initialReward, scuderiaId],
+    );
+    await client.query(
+      `INSERT INTO team_financial_history (team_id, amount, entry_type, reason, source)
+       VALUES ($1, $2, 'income', $3, 'sponsor')`,
+      [scuderiaId, input.initialReward, sponsor.rows[0].name],
+    );
+
+    return { success: true, teamSponsor: result.rows[0] };
   }
 
   private async upsertTeamDriver(
@@ -1185,7 +1265,7 @@ class AdminService {
   async listScuderias() {
     const result = await query(`
       SELECT
-        teams.id, teams.name, teams.tag, teams.emoji, teams.color, teams.logo_url AS "logoUrl",
+        teams.id, teams.name, COALESCE(teams.full_name, teams.name) AS "fullName", teams.tag, teams.emoji, teams.color, teams.logo_url AS "logoUrl",
         teams.category,
         teams.is_junior_team AS "isJuniorTeam",
         teams.parent_team_id AS "parentTeamId",
@@ -1395,6 +1475,7 @@ class AdminService {
       const result = await client.query(
         `INSERT INTO teams (
           name,
+          full_name,
           tag,
           emoji,
           color,
@@ -1417,11 +1498,11 @@ class AdminService {
           created_at,
           updated_at
         )
-         VALUES ($1, $2, $3, $4, $5, $6, $7, CASE WHEN $6 THEN 5 ELSE 0 END, CASE WHEN $6 THEN 5 ELSE 0 END, 0, 0, COALESCE($8, 50), COALESCE($9, 1),
-           COALESCE($10, 1), COALESCE($11, 1), COALESCE($12, 1), $13, $13, $14, $15, NOW(), NOW())
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, CASE WHEN $7 THEN 5 ELSE 0 END, CASE WHEN $7 THEN 5 ELSE 0 END, 0, 0, COALESCE($9, 50), COALESCE($10, 1),
+           COALESCE($11, 1), COALESCE($12, 1), COALESCE($13, 1), $14, $14, $15, $16, NOW(), NOW())
          RETURNING id`,
         [
-          input.name, input.tag.toUpperCase(), emoji, input.color,
+          input.name, input.fullName?.trim() || input.name, input.tag.toUpperCase(), emoji, input.color,
           junior.category, junior.isJuniorTeam, junior.parentTeamId,
           input.momentoComercial ?? null, input.prestigio ?? null, input.agressividade ?? null,
           input.popularidade ?? null, input.tecnica ?? null, input.nacionalidades ?? null,
@@ -1454,28 +1535,29 @@ class AdminService {
 
     return transaction(async (client) => {
       const result = await client.query(
-        `UPDATE teams
+       `UPDATE teams
        SET name = $1,
-           tag = $2,
-           emoji = $3,
-           color = $4,
-           category = $5,
-           is_junior_team = $6,
-           parent_team_id = $7,
-           momento_comercial = COALESCE($8, momento_comercial),
-           prestigio = COALESCE($9, prestigio),
-           agressividade = COALESCE($10, agressividade),
-           popularidade = COALESCE($11, popularidade),
-           tecnica = COALESCE($12, tecnica),
-           manual_nacionalidades = COALESCE($13, manual_nacionalidades),
-           nacionalidades = COALESCE($13, nacionalidades),
-           setores = COALESCE($14, setores),
-           logo_url = COALESCE($15, logo_url),
+           full_name = $2,
+           tag = $3,
+           emoji = $4,
+           color = $5,
+           category = $6,
+           is_junior_team = $7,
+           parent_team_id = $8,
+           momento_comercial = COALESCE($9, momento_comercial),
+           prestigio = COALESCE($10, prestigio),
+           agressividade = COALESCE($11, agressividade),
+           popularidade = COALESCE($12, popularidade),
+           tecnica = COALESCE($13, tecnica),
+           manual_nacionalidades = COALESCE($14, manual_nacionalidades),
+           nacionalidades = COALESCE($14, nacionalidades),
+           setores = COALESCE($15, setores),
+           logo_url = COALESCE($16, logo_url),
            updated_at = NOW()
-       WHERE id = $16
+       WHERE id = $17
        RETURNING id`,
         [
-          input.name, input.tag.toUpperCase(), emoji, input.color,
+          input.name, input.fullName?.trim() || input.name, input.tag.toUpperCase(), emoji, input.color,
           junior.category, junior.isJuniorTeam, junior.parentTeamId,
           input.momentoComercial ?? null, input.prestigio ?? null, input.agressividade ?? null,
           input.popularidade ?? null, input.tecnica ?? null, input.nacionalidades ?? null,
@@ -1565,13 +1647,36 @@ class AdminService {
        ORDER BY circuits.simple_name ASC`,
       [scuderiaId],
     );
+    const sponsorMarketReviews = await query(
+      `SELECT
+        review.id,
+        review.sponsor_id AS "sponsorId",
+        sponsor.name AS "sponsorName",
+        sponsor.logo_url AS "sponsorLogoUrl",
+        review.category,
+        review.initial_reward AS "initialReward",
+        review.created_at AS "createdAt"
+       FROM sponsor_market_reviews review
+       JOIN sponsors sponsor ON sponsor.id = review.sponsor_id
+       WHERE review.team_id = $1
+         AND review.status = 'pending'
+       ORDER BY review.created_at DESC`,
+      [scuderiaId],
+    );
 
     return {
       ...garage,
+      name: garage.fullName || garage.name,
       circuitBoxes: boxes.rows.map((box) => ({
         ...box,
         x: Number(box.x),
         y: Number(box.y),
+      })),
+      sponsorMarketReviews: sponsorMarketReviews.rows.map((review) => ({
+        ...review,
+        initialReward: Number(review.initialReward ?? 0),
+        rewardPerRace: 0,
+        contractRacesRemaining: 12,
       })),
     };
   }
@@ -1625,19 +1730,118 @@ class AdminService {
   }
 
   async addTeamCircuitBox(scuderiaId: string, input: TeamCircuitBoxInput) {
-    const result = await query(
-      `INSERT INTO team_circuit_boxes (team_id, circuit_id, x, y, created_at, updated_at)
-       VALUES ($1, $2, $3, $4, NOW(), NOW())
-       ON CONFLICT (team_id, circuit_id)
-       DO UPDATE SET
-         x = EXCLUDED.x,
-         y = EXCLUDED.y,
-         updated_at = NOW()
-       RETURNING id`,
-      [scuderiaId, input.circuitId, input.x, input.y],
-    );
+    const result = await transaction(async (client) => {
+      const saved = await client.query(
+        `INSERT INTO team_circuit_boxes (team_id, circuit_id, x, y, created_at, updated_at)
+         VALUES ($1, $2, $3, $4, NOW(), NOW())
+         ON CONFLICT (team_id, circuit_id)
+         DO UPDATE SET
+           x = EXCLUDED.x,
+           y = EXCLUDED.y,
+           updated_at = NOW()
+         RETURNING id`,
+        [scuderiaId, input.circuitId, input.x, input.y],
+      );
+
+      await client.query(
+        `INSERT INTO team_circuit_boxes (team_id, circuit_id, x, y, created_at, updated_at)
+         SELECT id, $2, $3, $4, NOW(), NOW()
+         FROM teams
+         WHERE parent_team_id = $1
+           AND is_junior_team = true
+         ON CONFLICT (team_id, circuit_id)
+         DO UPDATE SET
+           x = EXCLUDED.x,
+           y = EXCLUDED.y,
+           updated_at = NOW()`,
+        [scuderiaId, input.circuitId, input.x, input.y],
+      );
+
+      return saved;
+    });
 
     return { success: true, circuitBox: result.rows[0] };
+  }
+
+  async listCircuitTeamBoxes(circuitId: string) {
+    const circuit = await queryOne<{ id: string; simpleName: string; fullName: string }>(
+      `SELECT id, simple_name AS "simpleName", full_name AS "fullName"
+       FROM circuits
+       WHERE id = $1`,
+      [circuitId],
+    );
+    if (!circuit) return { success: false, message: 'Circuit not found' };
+
+    const result = await query(
+      `SELECT
+        teams.id AS "teamId",
+        teams.name AS "teamName",
+        COALESCE(teams.full_name, teams.name) AS "teamFullName",
+        teams.category,
+        teams.is_junior_team AS "isJuniorTeam",
+        teams.parent_team_id AS "parentTeamId",
+        COALESCE(parent_team.full_name, parent_team.name) AS "parentTeamName",
+        direct_box.id AS "boxId",
+        COALESCE(direct_box.x, parent_box.x) AS x,
+        COALESCE(direct_box.y, parent_box.y) AS y,
+        direct_box.id IS NULL AND parent_box.id IS NOT NULL AS inherited
+       FROM teams
+       LEFT JOIN teams parent_team ON parent_team.id = teams.parent_team_id
+       LEFT JOIN team_circuit_boxes direct_box
+         ON direct_box.team_id = teams.id
+        AND direct_box.circuit_id = $1
+       LEFT JOIN team_circuit_boxes parent_box
+         ON parent_box.team_id = teams.parent_team_id
+        AND parent_box.circuit_id = $1
+       ORDER BY COALESCE(teams.category, 'formula_1') ASC, teams.name ASC`,
+      [circuitId],
+    );
+
+    return {
+      success: true,
+      circuit,
+      boxes: result.rows.map((row) => ({
+        ...row,
+        x: row.x === null || row.x === undefined ? null : Number(row.x),
+        y: row.y === null || row.y === undefined ? null : Number(row.y),
+      })),
+    };
+  }
+
+  async saveCircuitTeamBoxes(circuitId: string, boxes: CircuitTeamBoxInput[]) {
+    const circuit = await queryOne<{ id: string }>('SELECT id FROM circuits WHERE id = $1', [circuitId]);
+    if (!circuit) return { success: false, message: 'Circuit not found' };
+
+    await transaction(async (client) => {
+      for (const box of boxes) {
+        if (!box.teamId || box.x === null || box.x === undefined || box.y === null || box.y === undefined) continue;
+        await client.query(
+          `INSERT INTO team_circuit_boxes (team_id, circuit_id, x, y, created_at, updated_at)
+           VALUES ($1, $2, $3, $4, NOW(), NOW())
+           ON CONFLICT (team_id, circuit_id)
+           DO UPDATE SET
+             x = EXCLUDED.x,
+             y = EXCLUDED.y,
+             updated_at = NOW()`,
+          [box.teamId, circuitId, box.x, box.y],
+        );
+        await client.query(
+          `INSERT INTO team_circuit_boxes (team_id, circuit_id, x, y, created_at, updated_at)
+           SELECT id, $2, $3, $4, NOW(), NOW()
+           FROM teams
+           WHERE parent_team_id = $1
+             AND is_junior_team = true
+           ON CONFLICT (team_id, circuit_id)
+           DO UPDATE SET
+             x = EXCLUDED.x,
+             y = EXCLUDED.y,
+             updated_at = NOW()`,
+          [box.teamId, circuitId, box.x, box.y],
+        );
+      }
+    });
+
+    return { success: true };
   }
 
   async removeTeamCircuitBox(scuderiaId: string, boxId: string) {
@@ -1946,7 +2150,7 @@ class AdminService {
               ORDER BY related_team.name
             )
             FROM (
-              SELECT DISTINCT contracted_team.id, contracted_team.name
+              SELECT DISTINCT contracted_team.id, COALESCE(contracted_team.full_name, contracted_team.name) AS name
               FROM team_sponsors related_contract
               JOIN teams contracted_team ON contracted_team.id = related_contract.team_id
               WHERE related_contract.sponsor_id = sponsors.id
@@ -2132,7 +2336,7 @@ class AdminService {
     const team = await queryOne<MarketTeamProfile>(
       `SELECT
         id,
-        name,
+        COALESCE(full_name, name) AS name,
         prestigio,
         agressividade,
         popularidade,
@@ -2145,8 +2349,8 @@ class AdminService {
     );
     if (!team) return { success: false, message: 'Scuderia not found' };
 
-    const assignedSponsors = await query<{ tipo: string | null; setor: string | null; category: string }>(
-      `SELECT s.tipo, s.setor, ts.category
+    const assignedSponsors = await query<{ name: string; tipo: string | null; setor: string | null; category: SponsorContractCategory }>(
+      `SELECT s.name, s.tipo, s.setor, ts.category
        FROM team_sponsors ts
        JOIN sponsors s ON s.id = ts.sponsor_id
        WHERE ts.team_id = $1`,
@@ -2158,23 +2362,33 @@ class AdminService {
         || normalizeSponsorCategory(sponsor.tipo) === 'title_sponsor',
     );
     const normalizeMarketText = (value: string | null | undefined) => value?.trim().toLocaleLowerCase() ?? '';
-    const assignedTypes = new Set(
-      assignedSponsors.rows
-        .map((sponsor) => normalizeMarketText(sponsor.tipo))
-        .filter(Boolean),
-    );
-    const assignedSectors = new Set(
-      assignedSponsors.rows
-        .map((sponsor) => normalizeMarketText(sponsor.setor))
-        .filter(Boolean),
-    );
+    const assignedCategoryCounts = assignedSponsors.rows.reduce<Record<string, number>>((counts, sponsor) => {
+      const category = sponsor.category || normalizeSponsorCategory(sponsor.tipo);
+      if (category) counts[category] = (counts[category] ?? 0) + 1;
+      return counts;
+    }, {});
     const getCaveats = (sponsor: Pick<MarketSponsorProfile, 'tipo' | 'setor'>) => {
-      const caveats: ('setor_repetido' | 'tipo_repetido')[] = [];
+      const caveats: {
+        type: 'setor_repetido' | 'tipo_repetido';
+        sector?: string | null;
+        companies?: string[];
+      }[] = [];
       const sector = normalizeMarketText(sponsor.setor);
-      const type = normalizeMarketText(sponsor.tipo);
+      const category = normalizeSponsorCategory(sponsor.tipo);
+      const sectorMatches = assignedSponsors.rows.filter(
+        (assigned) => sector && normalizeMarketText(assigned.setor) === sector,
+      );
 
-      if (sector && assignedSectors.has(sector)) caveats.push('setor_repetido');
-      if (type && assignedTypes.has(type)) caveats.push('tipo_repetido');
+      if (sectorMatches.length > 0) {
+        caveats.push({
+          type: 'setor_repetido',
+          sector: sponsor.setor,
+          companies: sectorMatches.map((assigned) => assigned.name),
+        });
+      }
+      if (category && (assignedCategoryCounts[category] ?? 0) >= SPONSOR_CATEGORY_LIMITS[category]) {
+        caveats.push({ type: 'tipo_repetido' });
+      }
 
       return caveats;
     };
@@ -2204,11 +2418,11 @@ class AdminService {
           WHERE related_contract.sponsor_id = s.id
         ) AS "scuderiasRelacionadas",
         ARRAY(
-          SELECT related_team.name
+          SELECT COALESCE(related_team.full_name, related_team.name)
           FROM team_sponsors related_contract
           JOIN teams related_team ON related_team.id = related_contract.team_id
           WHERE related_contract.sponsor_id = s.id
-          ORDER BY related_team.name
+          ORDER BY COALESCE(related_team.full_name, related_team.name)
         ) AS "relatedTeamNames"
        FROM sponsors s
        WHERE NOT EXISTS (
@@ -2260,7 +2474,8 @@ class AdminService {
         valorContrato: calculateContractValue(category, selected.sponsor, team),
         exigencia: drawSponsorRequirement(category, hasTitleSponsor),
         candidateCount: candidates.length,
-        ressalvas: getCaveats(selected.sponsor),
+        caveats: getCaveats(selected.sponsor),
+        ressalvas: getCaveats(selected.sponsor).map((caveat) => caveat.type),
       });
     }
 
@@ -2274,84 +2489,114 @@ class AdminService {
     };
   }
 
-  async addTeamSponsor(scuderiaId: string, input: TeamSponsorInput) {
-    return transaction(async (client) => {
-      const sponsor = await client.query(
-        'SELECT id, name FROM sponsors WHERE id = $1',
-        [input.sponsorId],
-      );
-      if (!sponsor.rows[0]) {
-        return { success: false, message: 'Sponsor not found' };
-      }
+  async createSponsorMarketReview(scuderiaId: string, input: SponsorMarketReviewInput) {
+    const category = normalizeSponsorCategory(input.category);
+    if (!category) return { success: false, message: 'Sponsor category is invalid' };
 
-      const existing = await client.query(
+    const [team, sponsor, assigned, pending] = await Promise.all([
+      queryOne<{ id: string }>('SELECT id FROM teams WHERE id = $1', [scuderiaId]),
+      queryOne<{ id: string }>('SELECT id FROM sponsors WHERE id = $1', [input.sponsorId]),
+      queryOne<{ id: string }>(
         'SELECT id FROM team_sponsors WHERE team_id = $1 AND sponsor_id = $2',
         [scuderiaId, input.sponsorId],
-      );
-      if (existing.rows[0]) {
-        return { success: false, message: 'Sponsor already assigned to scuderia' };
-      }
+      ),
+      queryOne<{ id: string }>(
+        `SELECT id
+         FROM sponsor_market_reviews
+         WHERE team_id = $1
+           AND sponsor_id = $2
+           AND status = 'pending'`,
+        [scuderiaId, input.sponsorId],
+      ),
+    ]);
 
-      const limits = {
-        title_sponsor: 1,
-        main_partner: 2,
-        official_partner: 4,
-        minor_sponsor: 8,
-        personal_sponsor: 4,
-      };
-      const occupiedSlots = await client.query(
-        `SELECT slot_number
-         FROM team_sponsors
-         WHERE team_id = $1 AND category = $2
-         ORDER BY slot_number ASC`,
-        [scuderiaId, input.category],
-      );
-      if (occupiedSlots.rows.length >= limits[input.category]) {
-        return { success: false, message: 'Sponsor category is full' };
-      }
-      const usedSlots = new Set(occupiedSlots.rows.map((row: any) => Number(row.slot_number)));
-      const slotNumber = Array.from({ length: limits[input.category] }, (_, index) => index + 1)
-        .find((slot) => !usedSlots.has(slot));
+    if (!team) return { success: false, message: 'Scuderia not found' };
+    if (!sponsor) return { success: false, message: 'Sponsor not found' };
+    if (assigned) return { success: false, message: 'Sponsor already assigned to scuderia' };
+    if (pending) return { success: false, message: 'Sponsor proposal already under review' };
 
-      const result = await client.query(
-        `INSERT INTO team_sponsors (
-          team_id, sponsor_id, category, slot_number,
-          contract_races_remaining, initial_reward, reward_per_race
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7)
-        RETURNING id`,
-        [
-          scuderiaId,
-          input.sponsorId,
-          input.category,
-          slotNumber,
-          input.contractRacesRemaining,
-          input.initialReward,
-          input.rewardPerRace,
-        ],
+    const result = await query(
+      `INSERT INTO sponsor_market_reviews (
+        team_id,
+        sponsor_id,
+        category,
+        initial_reward,
+        status,
+        created_at
+      ) VALUES ($1, $2, $3, $4, 'pending', NOW())
+      RETURNING id`,
+      [scuderiaId, input.sponsorId, category, Math.max(0, Number(input.initialReward ?? 0))],
+    );
+
+    return { success: true, review: result.rows[0] };
+  }
+
+  async approveSponsorMarketReview(reviewId: string) {
+    return transaction(async (client) => {
+      const reviewResult = await client.query(
+        `SELECT
+          id,
+          team_id,
+          sponsor_id,
+          category,
+          initial_reward,
+          status
+         FROM sponsor_market_reviews
+         WHERE id = $1
+         FOR UPDATE`,
+        [reviewId],
       );
+      const review = reviewResult.rows[0];
+      if (!review) return { success: false, message: 'Sponsor proposal not found' };
+      if (review.status !== 'pending') return { success: false, message: 'Sponsor proposal already reviewed' };
+
+      const result = await this.assignTeamSponsor(client, review.team_id, {
+        sponsorId: review.sponsor_id,
+        category: review.category,
+        contractRacesRemaining: 12,
+        initialReward: Number(review.initial_reward ?? 0),
+        rewardPerRace: 0,
+      });
+      if (!result.success) return result;
 
       await client.query(
-        `UPDATE teams
-         SET cash_total = cash_total + $1,
-             sponsor_income_per_race = COALESCE(
-               (
-                 SELECT SUM(reward_per_race)
-                 FROM team_sponsors
-                 WHERE team_id = $2
-               ),
-               0
-             ),
-             updated_at = NOW()
-         WHERE id = $2`,
-        [input.initialReward, scuderiaId],
-      );
-      await client.query(
-        `INSERT INTO team_financial_history (team_id, amount, entry_type, reason, source)
-         VALUES ($1, $2, 'income', $3, 'sponsor')`,
-        [scuderiaId, input.initialReward, sponsor.rows[0].name],
+        `UPDATE sponsor_market_reviews
+         SET status = 'approved',
+             approved_at = NOW()
+         WHERE id = $1`,
+        [reviewId],
       );
 
-      return { success: true, teamSponsor: result.rows[0] };
+      return { success: true, teamSponsor: result.teamSponsor };
+    });
+  }
+
+  async declineSponsorMarketReview(reviewId: string) {
+    const result = await query(
+      `UPDATE sponsor_market_reviews
+       SET status = 'cancelled'
+       WHERE id = $1
+         AND status = 'pending'
+       RETURNING id`,
+      [reviewId],
+    );
+
+    if (!result.rows[0]) {
+      const existing = await queryOne<{ id: string }>(
+        'SELECT id FROM sponsor_market_reviews WHERE id = $1',
+        [reviewId],
+      );
+      return existing
+        ? { success: false, message: 'Sponsor proposal already reviewed' }
+        : { success: false, message: 'Sponsor proposal not found' };
+    }
+
+    return { success: true };
+  }
+
+  async addTeamSponsor(scuderiaId: string, input: TeamSponsorInput) {
+    return transaction(async (client) => {
+      return this.assignTeamSponsor(client, scuderiaId, input);
     });
   }
 
@@ -2360,13 +2605,6 @@ class AdminService {
     if (!existing) {
       return { success: false, message: 'Team sponsor not found' };
     }
-    const limits = {
-      title_sponsor: 1,
-      main_partner: 2,
-      official_partner: 4,
-      minor_sponsor: 8,
-      personal_sponsor: 4,
-    };
     const occupiedSlots = await query(
       `SELECT slot_number
        FROM team_sponsors
@@ -2374,11 +2612,11 @@ class AdminService {
        ORDER BY slot_number ASC`,
       [existing.team_id, input.category, teamSponsorId],
     );
-    if (occupiedSlots.rows.length >= limits[input.category]) {
+    if (occupiedSlots.rows.length >= SPONSOR_CATEGORY_LIMITS[input.category]) {
       return { success: false, message: 'Sponsor category is full' };
     }
     const usedSlots = new Set(occupiedSlots.rows.map((row) => Number(row.slot_number)));
-    const slotNumber = Array.from({ length: limits[input.category] }, (_, index) => index + 1)
+    const slotNumber = Array.from({ length: SPONSOR_CATEGORY_LIMITS[input.category] }, (_, index) => index + 1)
       .find((slot) => !usedSlots.has(slot));
 
     return transaction(async (client) => {

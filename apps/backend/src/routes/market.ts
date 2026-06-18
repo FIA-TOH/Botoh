@@ -32,7 +32,8 @@ router.get('/scuderias', authMiddleware, async (req: AuthRequest, res: Response)
       query(
       `SELECT
         teams.id,
-        teams.name,
+        COALESCE(teams.full_name, teams.name) AS name,
+        teams.name AS "shortName",
         teams.tag,
         COALESCE(teams.category, 'formula_1') AS category,
         teams.color,
@@ -62,7 +63,7 @@ router.get('/scuderias', authMiddleware, async (req: AuthRequest, res: Response)
        FROM teams
        LEFT JOIN team_drivers ON team_drivers.team_id = teams.id
        GROUP BY teams.id
-       ORDER BY teams.name ASC`,
+       ORDER BY COALESCE(teams.full_name, teams.name) ASC`,
       ),
       query(
         `SELECT
@@ -90,7 +91,8 @@ router.get('/scuderias', authMiddleware, async (req: AuthRequest, res: Response)
            SELECT json_agg(
              json_build_object(
                'teamId', teams.id,
-               'teamName', teams.name,
+               'teamName', COALESCE(teams.full_name, teams.name),
+               'teamShortName', teams.name,
                'teamCategory', COALESCE(teams.category, 'formula_1'),
                'driverCategory', team_drivers.category,
                'teamColor', teams.color

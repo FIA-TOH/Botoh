@@ -71,6 +71,7 @@ export interface Team {
 export interface TeamGarage {
   id: string;
   name: string;
+  fullName: string;
   tag: string;
   color: string;
   category: 'formula_1' | 'formula_2';
@@ -212,12 +213,13 @@ class GarageService {
       `SELECT
         teams.id,
         teams.name,
+        COALESCE(teams.full_name, teams.name) AS "fullName",
         teams.tag,
         teams.color,
         teams.category,
         teams.is_junior_team AS "isJuniorTeam",
         teams.parent_team_id AS "parentTeamId",
-        parent_team.name AS "parentTeamName",
+        COALESCE(parent_team.full_name, parent_team.name) AS "parentTeamName",
         CASE
           WHEN teams.parent_team_id IS NULL THEN NULL
           ELSE (

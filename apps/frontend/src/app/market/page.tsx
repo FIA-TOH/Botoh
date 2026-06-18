@@ -12,6 +12,7 @@ import { useTranslations } from '@/i18n';
 interface MarketScuderia {
   id: string;
   name: string;
+  shortName?: string | null;
   tag: string;
   category: 'formula_1' | 'formula_2';
   color: string;
@@ -54,6 +55,7 @@ interface MarketPilot {
   contracts: {
     teamId: string;
     teamName: string;
+    teamShortName?: string | null;
     teamCategory: 'formula_1' | 'formula_2';
     driverCategory: 'starter' | 'reserve';
     teamColor: string | null;
@@ -394,14 +396,15 @@ export default function MarketPage() {
   }
 
   function renderScuderiaLogo(scuderia: MarketScuderia, className: string) {
+    const assetName = scuderia.shortName || scuderia.name;
     return (
       <img
-        src={scuderia.logoUrl || getLocalScuderiaLogoPath(scuderia.name)}
+        src={scuderia.logoUrl || getLocalScuderiaLogoPath(assetName)}
         alt=""
         className={className}
         onError={(event) => {
           const image = event.currentTarget;
-          const fallback = getLocalScuderiaLogoPath(scuderia.name);
+          const fallback = getLocalScuderiaLogoPath(assetName);
 
           if (scuderia.logoUrl && !image.src.endsWith(fallback)) {
             image.src = fallback;
@@ -956,7 +959,7 @@ export default function MarketPage() {
             >
               {managedTeams.map((team) => (
                 <option key={team.teamId} value={team.teamId}>
-                  {team.teamName}
+                  {team.teamFullName?.trim() || team.teamName}
                 </option>
               ))}
             </select>

@@ -28,7 +28,7 @@ export function LogsPanel({
 
   return (
     <div
-      className="p-4"
+      className="min-w-0 p-4"
       style={{
         gridArea: 'logs',
         backgroundColor: '#1E1E1E',
@@ -40,8 +40,10 @@ export function LogsPanel({
         className="
           py-4
           overflow-y-auto
+          overflow-x-hidden
           max-h-64
           min-h-[260px]
+          min-w-0
         "
         style={{
           border: '2px solid #FFF',
@@ -142,7 +144,10 @@ export function LogsPanel({
           logs.map((log, index) => (
             <div
               key={index}
-              className="text-sm px-3 mb-1"
+              className="min-w-0 text-sm px-3 mb-1 break-words"
+              style={{
+                overflowWrap: 'anywhere',
+              }}
             >
               <span className="text-red-500 font-semibold">
                 {'>'}
@@ -152,6 +157,8 @@ export function LogsPanel({
                 className="ml-1"
                 style={{
                   color: colorNumberToHex(log.color),
+                  overflowWrap: 'anywhere',
+                  wordBreak: 'break-word',
                 }}
               >
                 {typeof log.message === 'string'

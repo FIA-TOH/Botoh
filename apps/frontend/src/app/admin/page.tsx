@@ -10,6 +10,8 @@ import {
   EconomicScuderia,
   RaceMissionGenerationResult,
   SponsorCatalogItem,
+  SponsorContractCategory,
+  SponsorMarketProposal,
   SponsorMarketResult,
   SponsorMarketSection,
 } from '@/components/admin/SponsorMarketSection';
@@ -60,6 +62,19 @@ interface Circuit {
   fullName: string;
   createdAt: string;
 }
+interface CircuitTeamBox {
+  teamId: string;
+  teamName: string;
+  teamFullName: string;
+  category: 'formula_1' | 'formula_2';
+  isJuniorTeam: boolean;
+  parentTeamId: string | null;
+  parentTeamName: string | null;
+  boxId: string | null;
+  x: number | null;
+  y: number | null;
+  inherited: boolean;
+}
 interface TeamGarageManage {
   id: string; name: string; carName: string; cashTotal: number; climateCostPerRace: number;
   pitCrewCostPerRace: number; salaryCostPerRace: number; sponsorIncomePerRace: number;
@@ -76,6 +91,7 @@ interface TeamGarageManage {
     salaryPerRace: number;
   }[];
   sponsors: TeamSponsor[];
+  sponsorMarketReviews: SponsorMarketReview[];
   circuitBoxes: TeamCircuitBox[];
 }
 interface TeamCircuitBox {
@@ -90,6 +106,17 @@ interface TeamSponsor {
   id: string; sponsorId?: string; name: string; category: string; slotNumber: number;
   contractRacesRemaining?: number; initialReward?: number; rewardPerRace?: number;
   seasonMissions: Mission[]; raceMissions: Mission[];
+}
+interface SponsorMarketReview {
+  id: string;
+  sponsorId: string;
+  sponsorName: string;
+  sponsorLogoUrl: string | null;
+  category: SponsorContractCategory;
+  initialReward: number;
+  rewardPerRace: number;
+  contractRacesRemaining: number;
+  createdAt: string;
 }
 interface Mission { id: string; title: string; description?: string | null; reward: number; racesToComplete?: number }
 interface RaceProgressAlert {
@@ -146,6 +173,7 @@ interface UserFormData {
 
 interface ScuderiaFormData {
   name: string;
+  fullName: string;
   tag: string;
   emoji: string;
   color: string;
@@ -175,6 +203,7 @@ const EMPTY_USER_FORM: UserFormData = {
 
 const EMPTY_SCUDERIA_FORM: ScuderiaFormData = {
   name: '',
+  fullName: '',
   tag: '',
   emoji: '',
   color: '#FFFFFF',
@@ -320,12 +349,18 @@ export default function AdminPage() {
   const [editingSponsorId, setEditingSponsorId] = useState<string | null>(null);
   const [circuitForm, setCircuitForm] = useState({ simpleName: '', fullName: '' });
   const [editingCircuitId, setEditingCircuitId] = useState<string | null>(null);
+  const [circuitBoxesModal, setCircuitBoxesModal] = useState<Circuit | null>(null);
+  const [circuitTeamBoxes, setCircuitTeamBoxes] = useState<CircuitTeamBox[]>([]);
+  const [loadingCircuitTeamBoxes, setLoadingCircuitTeamBoxes] = useState(false);
+  const [savingCircuitTeamBoxes, setSavingCircuitTeamBoxes] = useState(false);
   const [boxForm, setBoxForm] = useState({ circuitId: '', x: '', y: '' });
   const [teamSponsorForm, setTeamSponsorForm] = useState({
     sponsorId: '', category: 'title_sponsor',
     contractRacesRemaining: '', initialReward: '', rewardPerRace: '',
   });
   const [editingTeamSponsorId, setEditingTeamSponsorId] = useState<string | null>(null);
+  const [approvingSponsorReviewId, setApprovingSponsorReviewId] = useState<string | null>(null);
+  const [decliningSponsorReviewId, setDecliningSponsorReviewId] = useState<string | null>(null);
   const financialHistoryRef = React.useRef<HTMLDivElement | null>(null);
   const [missionModal, setMissionModal] = useState<{
     sponsor: TeamSponsor;
@@ -558,6 +593,7 @@ export default function AdminPage() {
     setEditingScuderiaId(scuderia.id);
     setScuderiaForm({
       name: scuderia.name,
+      fullName: scuderia.fullName ?? scuderia.name,
       tag: scuderia.tag,
       emoji: scuderia.emoji ?? '',
       color: scuderia.color,
@@ -700,6 +736,8 @@ export default function AdminPage() {
           headers: getAuthHeaders(),
           body: JSON.stringify({
             ...scuderiaForm,
+            name: scuderiaForm.name.trim(),
+            fullName: scuderiaForm.fullName.trim() || scuderiaForm.name.trim(),
             emoji: scuderiaForm.emoji.trim(),
             logoUrl: scuderiaForm.logoUrl || null,
             isJuniorTeam: scuderiaForm.category === 'formula_2' && scuderiaForm.isJuniorTeam,
@@ -1085,6 +1123,65 @@ export default function AdminPage() {
     setEditingCircuitId(circuit.id);
     setCircuitForm({ simpleName: circuit.simpleName, fullName: circuit.fullName });
   }
+
+  async function openCircuitBoxes(circuit: Circuit) {
+    setCircuitBoxesModal(circuit);
+    setCircuitTeamBoxes([]);
+    setLoadingCircuitTeamBoxes(true);
+    try {
+      const response = await fetch(apiUrl(`/api/admin/circuits/${circuit.id}/boxes`), {
+        headers: getAuthHeaders(),
+      });
+      const data = await response.json();
+      if (!data.success) {
+        showSnackbar(data.message || t.admin.actionFailed, 'error');
+        setCircuitBoxesModal(null);
+        return;
+      }
+      setCircuitTeamBoxes(data.boxes ?? []);
+    } finally {
+      setLoadingCircuitTeamBoxes(false);
+    }
+  }
+
+  function updateCircuitTeamBox(teamId: string, field: 'x' | 'y', value: string) {
+    setCircuitTeamBoxes((current) => current.map((box) => (
+      box.teamId === teamId
+        ? { ...box, [field]: value.trim() === '' ? null : Number(value) }
+        : box
+    )));
+  }
+
+  async function saveCircuitTeamBoxes(event: React.FormEvent) {
+    event.preventDefault();
+    if (!circuitBoxesModal) return;
+
+    setSavingCircuitTeamBoxes(true);
+    try {
+      const response = await fetch(apiUrl(`/api/admin/circuits/${circuitBoxesModal.id}/boxes`), {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({
+          boxes: circuitTeamBoxes
+            .filter((box) => box.x !== null && box.y !== null)
+            .map((box) => ({ teamId: box.teamId, x: box.x, y: box.y })),
+        }),
+      });
+      const data = await response.json();
+      if (!data.success) {
+        showSnackbar(data.message || t.admin.actionFailed, 'error');
+        return;
+      }
+      showSnackbar(t.admin.actionCompleted, 'success');
+      await openCircuitBoxes(circuitBoxesModal);
+      if (managingScuderia) {
+        await refreshManagedGarage();
+      }
+    } finally {
+      setSavingCircuitTeamBoxes(false);
+    }
+  }
+
   async function deleteCircuit(circuitId: string) {
     const response = await fetch(apiUrl(`/api/admin/circuits/${circuitId}`), {
       method: 'DELETE',
@@ -1160,6 +1257,66 @@ export default function AdminPage() {
       return null;
     }
     return data.marketResult;
+  }
+
+  async function sendSponsorProposalToReview(teamId: string, proposal: SponsorMarketProposal) {
+    const response = await fetch(apiUrl(`/api/admin/scuderias/${teamId}/sponsor-market/reviews`), {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({
+        sponsorId: proposal.sponsor.id,
+        category: proposal.category,
+        initialReward: proposal.valorContrato.valorFinal,
+      }),
+    });
+    const data = await response.json();
+    if (!data.success) {
+      showSnackbar(data.message || t.admin.actionFailed, 'error');
+      return false;
+    }
+    showSnackbar(t.admin.sponsorProposalSentToReview, 'success');
+    if (managingScuderia?.id === teamId) {
+      await refreshManagedGarage();
+    }
+    return true;
+  }
+
+  async function approveSponsorMarketReview(reviewId: string) {
+    setApprovingSponsorReviewId(reviewId);
+    try {
+      const response = await fetch(apiUrl(`/api/admin/sponsor-market/reviews/${reviewId}/approve`), {
+        method: 'POST',
+        headers: getAuthHeaders(),
+      });
+      const data = await response.json();
+      if (!data.success) {
+        showSnackbar(data.message || t.admin.actionFailed, 'error');
+        return;
+      }
+      showSnackbar(t.admin.sponsorProposalApproved, 'success');
+      await Promise.all([refreshManagedGarage(), refreshAdminViews()]);
+    } finally {
+      setApprovingSponsorReviewId(null);
+    }
+  }
+
+  async function declineSponsorMarketReview(reviewId: string) {
+    setDecliningSponsorReviewId(reviewId);
+    try {
+      const response = await fetch(apiUrl(`/api/admin/sponsor-market/reviews/${reviewId}/decline`), {
+        method: 'POST',
+        headers: getAuthHeaders(),
+      });
+      const data = await response.json();
+      if (!data.success) {
+        showSnackbar(data.message || t.admin.actionFailed, 'error');
+        return;
+      }
+      showSnackbar(t.admin.sponsorProposalDeclined, 'success');
+      await refreshManagedGarage();
+    } finally {
+      setDecliningSponsorReviewId(null);
+    }
   }
 
   async function generateRaceMissions(teamIds: string[]) {
@@ -1658,6 +1815,9 @@ export default function AdminPage() {
                           <button className="mr-2 rounded bg-gray-600 px-3 py-1" onClick={() => startEditCircuit(circuit)}>
                             {t.admin.edit}
                           </button>
+                          <button className="mr-2 rounded bg-blue-700 px-3 py-1" onClick={() => openCircuitBoxes(circuit)}>
+                            {t.admin.editSpawnpoints}
+                          </button>
                           <button className="rounded bg-red-700 px-3 py-1" onClick={() => deleteCircuit(circuit.id)}>
                             {t.admin.remove}
                           </button>
@@ -1731,6 +1891,7 @@ export default function AdminPage() {
           onScuderiaDraftChange={updateScuderiaDraft}
           onScuderiaSave={saveScuderiaDraft}
           onGenerateMarket={generateSponsorMarketRound}
+          onSendProposalToReview={sendSponsorProposalToReview}
           onGenerateRaceMissions={generateRaceMissions}
         />
       </div>
@@ -2294,6 +2455,51 @@ export default function AdminPage() {
               </details>
             </section>
             <section className="mt-6">
+              <h3 className="mb-3 font-bold">{t.admin.sponsorProposalsInReview}</h3>
+              <div className="mb-5 space-y-2">
+                {managedGarage.sponsorMarketReviews.map((review) => (
+                  <div key={review.id} className="rounded bg-gray-700 p-3">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <div className="flex min-w-0 items-center gap-3">
+                        {review.sponsorLogoUrl && <img src={review.sponsorLogoUrl} alt="" className="h-10 w-10 object-contain" />}
+                        <div className="min-w-0">
+                          <p className="truncate font-semibold">{review.sponsorName}</p>
+                          <p className="text-sm text-gray-300">
+                            {t.admin.contractType}: {t.admin.contractTypes[review.category]}
+                            {' - '}
+                            {t.admin.initialReward}: {review.initialReward}
+                            {' - '}
+                            {t.admin.rewardPerRace}: {review.rewardPerRace}
+                            {' - '}
+                            {t.admin.contractDuration}: {review.contractRacesRemaining} {t.garage.races}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          type="button"
+                          disabled={approvingSponsorReviewId === review.id || decliningSponsorReviewId === review.id}
+                          className="rounded bg-emerald-700 px-3 py-2 font-semibold hover:bg-emerald-600 disabled:cursor-wait disabled:bg-gray-600"
+                          onClick={() => approveSponsorMarketReview(review.id)}
+                        >
+                          {approvingSponsorReviewId === review.id ? t.common.loading : t.admin.approveSponsorProposal}
+                        </button>
+                        <button
+                          type="button"
+                          disabled={approvingSponsorReviewId === review.id || decliningSponsorReviewId === review.id}
+                          className="rounded bg-rose-700 px-3 py-2 font-semibold hover:bg-rose-600 disabled:cursor-wait disabled:bg-gray-600"
+                          onClick={() => declineSponsorMarketReview(review.id)}
+                        >
+                          {decliningSponsorReviewId === review.id ? t.common.loading : t.admin.declineSponsorProposal}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                {managedGarage.sponsorMarketReviews.length === 0 && (
+                  <p className="rounded bg-gray-700 p-3 text-sm text-gray-300">{t.admin.noSponsorProposalsInReview}</p>
+                )}
+              </div>
               <h3 className="mb-3 font-bold">{t.garage.sponsors}</h3>
               <form onSubmit={saveTeamSponsor} className="mb-4 grid gap-2 md:grid-cols-3">
                 <select required className="rounded bg-gray-700 p-2" value={teamSponsorForm.sponsorId} onChange={(e) => setTeamSponsorForm((v) => ({ ...v, sponsorId: e.target.value }))} disabled={Boolean(editingTeamSponsorId)}>
@@ -2399,6 +2605,81 @@ export default function AdminPage() {
         </div>
       )}
 
+      {circuitBoxesModal && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 p-4">
+          <form onSubmit={saveCircuitTeamBoxes} className="max-h-[calc(100vh-2rem)] w-full max-w-4xl overflow-y-auto rounded-lg bg-gray-800 p-6">
+            <div className="mb-4 flex items-start justify-between gap-4">
+              <div>
+                <h2 className="text-xl font-bold">{t.admin.editSpawnpoints}</h2>
+                <p className="text-sm text-gray-300">{circuitBoxesModal.simpleName} - {circuitBoxesModal.fullName}</p>
+              </div>
+              <button type="button" onClick={() => setCircuitBoxesModal(null)}>X</button>
+            </div>
+            {loadingCircuitTeamBoxes ? (
+              <p className="rounded bg-gray-700 p-4">{t.common.loading}</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[720px] text-left text-sm">
+                  <thead className="text-gray-300">
+                    <tr>
+                      <th className="py-2">{t.admin.scuderia}</th>
+                      <th className="py-2">{t.admin.scuderiaCategory}</th>
+                      <th className="py-2">{t.admin.coordinateX}</th>
+                      <th className="py-2">{t.admin.coordinateY}</th>
+                      <th className="py-2">{t.admin.status}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {circuitTeamBoxes.map((box) => (
+                      <tr key={box.teamId} className="border-t border-gray-700">
+                        <td className="py-3 pr-3">
+                          <p className="font-semibold">{box.teamFullName || box.teamName}</p>
+                          {box.isJuniorTeam && box.parentTeamName && (
+                            <p className="text-xs text-gray-400">{t.admin.parentScuderia}: {box.parentTeamName}</p>
+                          )}
+                        </td>
+                        <td className="py-3 pr-3">
+                          {box.category === 'formula_2' ? t.admin.formula2 : t.admin.formula1}
+                        </td>
+                        <td className="py-3 pr-3">
+                          <input
+                            type="number"
+                            step="0.01"
+                            className="w-28 rounded bg-gray-700 p-2"
+                            value={box.x ?? ''}
+                            onChange={(event) => updateCircuitTeamBox(box.teamId, 'x', event.target.value)}
+                          />
+                        </td>
+                        <td className="py-3 pr-3">
+                          <input
+                            type="number"
+                            step="0.01"
+                            className="w-28 rounded bg-gray-700 p-2"
+                            value={box.y ?? ''}
+                            onChange={(event) => updateCircuitTeamBox(box.teamId, 'y', event.target.value)}
+                          />
+                        </td>
+                        <td className="py-3 text-gray-300">
+                          {box.inherited ? t.admin.inheritedFromParent : box.boxId ? t.admin.saved : t.admin.notConfigured}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+            <div className="mt-5 flex gap-3">
+              <button className="flex-1 rounded bg-purple-600 py-2 disabled:bg-purple-500" disabled={savingCircuitTeamBoxes || loadingCircuitTeamBoxes}>
+                {savingCircuitTeamBoxes ? t.admin.saving : t.admin.save}
+              </button>
+              <button type="button" className="flex-1 rounded bg-gray-600 py-2" onClick={() => setCircuitBoxesModal(null)}>
+                {t.admin.cancel}
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
       {sponsorModalOpen && (
         <SponsorFormModal
           labels={t.admin}
@@ -2418,13 +2699,25 @@ export default function AdminPage() {
             <h2 className="text-2xl font-bold mb-4">{editingScuderiaId ? t.admin.editScuderia : t.admin.createScuderia}</h2>
 
             <label className="block mb-4">
-              <span className="block text-sm mb-2">{t.admin.name}</span>
+              <span className="block text-sm mb-2">{t.admin.shortScuderiaName}</span>
               <input
                 className="w-full bg-gray-700 rounded-lg px-4 py-2"
                 value={scuderiaForm.name}
                 onChange={(event) => setScuderiaForm((prev) => ({ ...prev, name: event.target.value }))}
                 minLength={2}
                 maxLength={100}
+                required
+              />
+            </label>
+
+            <label className="block mb-4">
+              <span className="block text-sm mb-2">{t.admin.officialScuderiaName}</span>
+              <input
+                className="w-full bg-gray-700 rounded-lg px-4 py-2"
+                value={scuderiaForm.fullName}
+                onChange={(event) => setScuderiaForm((prev) => ({ ...prev, fullName: event.target.value }))}
+                minLength={2}
+                maxLength={140}
                 required
               />
             </label>

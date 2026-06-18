@@ -27,7 +27,7 @@ body {
 }
 
 .pit-wall-main-grid {
-  grid-template-columns: 200px 12fr 7fr;
+  grid-template-columns: 200px minmax(0, 12fr) minmax(0, 7fr);
   grid-template-rows: 7fr 5fr;
   grid-template-areas:
     "players map chat"

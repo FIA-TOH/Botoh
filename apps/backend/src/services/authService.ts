@@ -13,6 +13,7 @@ export interface User {
   driverNumber: number | null;
   teamId: string | null;
   teamName: string | null;
+  teamFullName: string | null;
   teamTag: string | null;
   teamEmoji: string | null;
   teamColor: string | null;
@@ -24,6 +25,7 @@ export interface User {
   teamMemberships: {
     teamId: string;
     teamName: string;
+    teamFullName: string;
     teamTag: string | null;
     teamEmoji: string | null;
     teamColor: string | null;
@@ -81,7 +83,7 @@ class AuthService {
   private selectTeamForLogin(
     user: User,
     teamTag?: string | null,
-  ): Pick<User, 'teamId' | 'teamName' | 'teamTag' | 'teamEmoji' | 'teamColor' | 'pitLevel' | 'weatherLevel' | 'driverCategory'> | null {
+  ): Pick<User, 'teamId' | 'teamName' | 'teamFullName' | 'teamTag' | 'teamEmoji' | 'teamColor' | 'pitLevel' | 'weatherLevel' | 'driverCategory'> | null {
     const memberships = Array.isArray(user.teamMemberships) ? user.teamMemberships : [];
     const normalizedTeamTag = teamTag?.trim().toUpperCase();
 
@@ -95,6 +97,7 @@ class AuthService {
       return {
         teamId: selectedMembership.teamId,
         teamName: selectedMembership.teamName,
+        teamFullName: selectedMembership.teamFullName,
         teamTag: selectedMembership.teamTag,
         teamEmoji: selectedMembership.teamEmoji,
         teamColor: selectedMembership.teamColor,
@@ -113,6 +116,7 @@ class AuthService {
       return {
         teamId: fallbackMembership.teamId,
         teamName: fallbackMembership.teamName,
+        teamFullName: fallbackMembership.teamFullName,
         teamTag: fallbackMembership.teamTag,
         teamEmoji: fallbackMembership.teamEmoji,
         teamColor: fallbackMembership.teamColor,
@@ -125,6 +129,7 @@ class AuthService {
     return {
       teamId: user.teamId,
       teamName: user.teamName,
+      teamFullName: user.teamFullName,
       teamTag: user.teamTag,
       teamEmoji: user.teamEmoji,
       teamColor: user.teamColor,
@@ -138,11 +143,18 @@ class AuthService {
     if (!teamId || !circuitFullName?.trim()) return null;
 
     const box = await queryOne<{ x: string | number; y: string | number }>(
-      `SELECT team_circuit_boxes.x, team_circuit_boxes.y
-       FROM team_circuit_boxes
-       JOIN circuits ON circuits.id = team_circuit_boxes.circuit_id
-       WHERE team_circuit_boxes.team_id = $1
-         AND LOWER(circuits.full_name) = LOWER($2)
+      `SELECT COALESCE(direct_box.x, parent_box.x) AS x,
+              COALESCE(direct_box.y, parent_box.y) AS y
+       FROM teams
+       JOIN circuits ON LOWER(circuits.full_name) = LOWER($2)
+       LEFT JOIN team_circuit_boxes direct_box
+         ON direct_box.team_id = teams.id
+        AND direct_box.circuit_id = circuits.id
+       LEFT JOIN team_circuit_boxes parent_box
+         ON parent_box.team_id = teams.parent_team_id
+        AND parent_box.circuit_id = circuits.id
+       WHERE teams.id = $1
+         AND (direct_box.id IS NOT NULL OR parent_box.id IS NOT NULL)
        LIMIT 1`,
       [teamId, circuitFullName.trim()],
     );
@@ -158,10 +170,19 @@ class AuthService {
     if (!teamId) return {};
 
     const result = await query(
-      `SELECT circuits.full_name AS "fullName", team_circuit_boxes.x, team_circuit_boxes.y
-       FROM team_circuit_boxes
-       JOIN circuits ON circuits.id = team_circuit_boxes.circuit_id
-       WHERE team_circuit_boxes.team_id = $1`,
+      `SELECT circuits.full_name AS "fullName",
+              COALESCE(direct_box.x, parent_box.x) AS x,
+              COALESCE(direct_box.y, parent_box.y) AS y
+       FROM teams
+       JOIN circuits ON true
+       LEFT JOIN team_circuit_boxes direct_box
+         ON direct_box.team_id = teams.id
+        AND direct_box.circuit_id = circuits.id
+       LEFT JOIN team_circuit_boxes parent_box
+         ON parent_box.team_id = teams.parent_team_id
+        AND parent_box.circuit_id = circuits.id
+       WHERE teams.id = $1
+         AND (direct_box.id IS NOT NULL OR parent_box.id IS NOT NULL)`,
       [teamId],
     );
 
@@ -225,6 +246,7 @@ class AuthService {
           u.driver_number AS "driverNumber",
           COALESCE(primary_team.id, legacy_team.id) AS "teamId",
           COALESCE(primary_team.name, legacy_team.name) AS "teamName",
+          COALESCE(primary_team.full_name, legacy_team.full_name, primary_team.name, legacy_team.name) AS "teamFullName",
           COALESCE(primary_team.tag, legacy_team.tag) AS "teamTag",
           COALESCE(primary_team.emoji, legacy_team.emoji) AS "teamEmoji",
           COALESCE(primary_team.color, legacy_team.color) AS "teamColor",
@@ -237,7 +259,7 @@ class AuthService {
         FROM users u
         LEFT JOIN teams legacy_team ON u.team_id = legacy_team.id
         LEFT JOIN LATERAL (
-          SELECT t.id, t.name, t.tag, t.emoji, t.color, COALESCE(t.category, 'formula_1') AS team_category, t.pit_crew_level, t.climate_monitoring_level, COALESCE(td.category, utm.driver_category) AS driver_category
+          SELECT t.id, t.name, COALESCE(t.full_name, t.name) AS full_name, t.tag, t.emoji, t.color, COALESCE(t.category, 'formula_1') AS team_category, t.pit_crew_level, t.climate_monitoring_level, COALESCE(td.category, utm.driver_category) AS driver_category
           FROM (
             SELECT
               direct.user_id,
@@ -287,6 +309,7 @@ class AuthService {
             json_build_object(
               'teamId', t.id,
               'teamName', t.name,
+              'teamFullName', COALESCE(t.full_name, t.name),
               'teamTag', t.tag,
               'teamEmoji', t.emoji,
               'teamColor', t.color,
@@ -373,6 +396,7 @@ class AuthService {
           u.driver_number AS "driverNumber",
           COALESCE(primary_team.id, legacy_team.id) AS "teamId",
           COALESCE(primary_team.name, legacy_team.name) AS "teamName",
+          COALESCE(primary_team.full_name, legacy_team.full_name, primary_team.name, legacy_team.name) AS "teamFullName",
           COALESCE(primary_team.tag, legacy_team.tag) AS "teamTag",
           COALESCE(primary_team.emoji, legacy_team.emoji) AS "teamEmoji",
           COALESCE(primary_team.color, legacy_team.color) AS "teamColor",
@@ -385,7 +409,7 @@ class AuthService {
         FROM users u
         LEFT JOIN teams legacy_team ON u.team_id = legacy_team.id
         LEFT JOIN LATERAL (
-          SELECT t.id, t.name, t.tag, t.emoji, t.color, COALESCE(t.category, 'formula_1') AS team_category, t.pit_crew_level, t.climate_monitoring_level, COALESCE(td.category, utm.driver_category) AS driver_category
+          SELECT t.id, t.name, COALESCE(t.full_name, t.name) AS full_name, t.tag, t.emoji, t.color, COALESCE(t.category, 'formula_1') AS team_category, t.pit_crew_level, t.climate_monitoring_level, COALESCE(td.category, utm.driver_category) AS driver_category
           FROM (
             SELECT
               direct.user_id,
@@ -435,6 +459,7 @@ class AuthService {
             json_build_object(
               'teamId', t.id,
               'teamName', t.name,
+              'teamFullName', COALESCE(t.full_name, t.name),
               'teamTag', t.tag,
               'teamEmoji', t.emoji,
               'teamColor', t.color,
