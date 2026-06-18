@@ -147,6 +147,10 @@ const scuderiaValidation = [
   body('name')
     .isLength({ min: 2, max: 100 })
     .withMessage('Scuderia name must be between 2 and 100 characters'),
+  body('fullName')
+    .optional({ nullable: true })
+    .isLength({ min: 2, max: 140 })
+    .withMessage('Scuderia full name must be between 2 and 140 characters'),
   body('tag')
     .isLength({ min: 3, max: 3 })
     .withMessage('Scuderia abbreviation must be exactly 3 characters')
@@ -540,6 +544,32 @@ router.put('/circuits/:id', param('id').isUUID(), circuitValidation, async (req:
   }
 });
 
+router.get('/circuits/:id/boxes', param('id').isUUID(), async (req: AuthRequest, res: Response) => {
+  if (handleValidation(req, res)) return;
+  const result = await adminService.listCircuitTeamBoxes(req.params.id);
+  return res.status(result.success ? 200 : 404).json({
+    ...result,
+    message: translateMessage((result as { message?: string }).message, getRequestLanguage(req)),
+  });
+});
+
+router.put(
+  '/circuits/:id/boxes',
+  param('id').isUUID(),
+  body('boxes').isArray(),
+  body('boxes.*.teamId').isUUID(),
+  body('boxes.*.x').optional({ nullable: true }).isFloat(),
+  body('boxes.*.y').optional({ nullable: true }).isFloat(),
+  async (req: AuthRequest, res: Response) => {
+    if (handleValidation(req, res)) return;
+    const result = await adminService.saveCircuitTeamBoxes(req.params.id, req.body.boxes ?? []);
+    return res.status(result.success ? 200 : 400).json({
+      ...result,
+      message: translateMessage((result as { message?: string }).message, getRequestLanguage(req)),
+    });
+  },
+);
+
 router.delete('/circuits/:id', param('id').isUUID(), async (req: AuthRequest, res: Response) => {
   if (handleValidation(req, res)) return;
   const result = await adminService.deleteCircuit(req.params.id);
@@ -643,6 +673,40 @@ router.delete('/sponsors/:id', param('id').isUUID(), async (req: AuthRequest, re
 router.post('/scuderias/:id/sponsor-market', param('id').isUUID(), async (req: AuthRequest, res: Response) => {
   if (handleValidation(req, res)) return;
   const result = await adminService.generateSponsorMarketRound(req.params.id);
+  return res.status(result.success ? 200 : 400).json({
+    ...result,
+    message: translateMessage((result as { message?: string }).message, getRequestLanguage(req)),
+  });
+});
+
+router.post(
+  '/scuderias/:id/sponsor-market/reviews',
+  param('id').isUUID(),
+  body('sponsorId').isUUID(),
+  body('category').isIn(['title_sponsor', 'main_partner', 'official_partner', 'minor_sponsor', 'personal_sponsor']),
+  body('initialReward').isFloat({ min: 0 }),
+  async (req: AuthRequest, res: Response) => {
+    if (handleValidation(req, res)) return;
+    const result = await adminService.createSponsorMarketReview(req.params.id, req.body);
+    return res.status(result.success ? 201 : 400).json({
+      ...result,
+      message: translateMessage((result as { message?: string }).message, getRequestLanguage(req)),
+    });
+  },
+);
+
+router.post('/sponsor-market/reviews/:id/approve', param('id').isUUID(), async (req: AuthRequest, res: Response) => {
+  if (handleValidation(req, res)) return;
+  const result = await adminService.approveSponsorMarketReview(req.params.id);
+  return res.status(result.success ? 200 : 400).json({
+    ...result,
+    message: translateMessage((result as { message?: string }).message, getRequestLanguage(req)),
+  });
+});
+
+router.post('/sponsor-market/reviews/:id/decline', param('id').isUUID(), async (req: AuthRequest, res: Response) => {
+  if (handleValidation(req, res)) return;
+  const result = await adminService.declineSponsorMarketReview(req.params.id);
   return res.status(result.success ? 200 : 400).json({
     ...result,
     message: translateMessage((result as { message?: string }).message, getRequestLanguage(req)),

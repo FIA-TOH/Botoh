@@ -102,6 +102,7 @@ export function applyTargetAudienceChange<T extends SponsorAudienceForm>(
 export interface EconomicScuderia {
   id: string;
   name: string;
+  fullName?: string | null;
   tag: string;
   emoji: string;
   color: string;
@@ -158,6 +159,11 @@ export interface SponsorMarketProposal {
     | 'none';
   candidateCount: number;
   ressalvas?: ('setor_repetido' | 'tipo_repetido')[];
+  caveats?: {
+    type: 'setor_repetido' | 'tipo_repetido';
+    sector?: string | null;
+    companies?: string[];
+  }[];
 }
 
 export interface SponsorMarketResult {
@@ -260,6 +266,9 @@ interface Labels {
   caveats: string;
   noCaveats: string;
   caveatLabels: Record<'setor_repetido' | 'tipo_repetido', string>;
+  caveatSectorDetail: string;
+  sendToReview: string;
+  sentToReview: string;
   baseValue: string;
   uncappedValue: string;
   budgetMultiplier: string;
@@ -293,6 +302,7 @@ interface Props {
   onScuderiaDraftChange: (scuderia: EconomicScuderia) => void;
   onScuderiaSave: (scuderia: EconomicScuderia) => Promise<void>;
   onGenerateMarket: (teamId: string) => Promise<SponsorMarketResult | null>;
+  onSendProposalToReview: (teamId: string, proposal: SponsorMarketProposal) => Promise<boolean>;
   onGenerateRaceMissions: (teamIds: string[]) => Promise<RaceMissionGenerationResult[]>;
 }
 
@@ -317,6 +327,7 @@ export function SponsorMarketSection({
   onScuderiaDraftChange,
   onScuderiaSave,
   onGenerateMarket,
+  onSendProposalToReview,
   onGenerateRaceMissions,
 }: Props) {
   const [selectedScuderiaIds, setSelectedScuderiaIds] = useState<string[]>([]);
@@ -324,6 +335,8 @@ export function SponsorMarketSection({
   const [generatingRaceMissions, setGeneratingRaceMissions] = useState(false);
   const [marketResults, setMarketResults] = useState<SponsorMarketResult[]>([]);
   const [raceMissionResults, setRaceMissionResults] = useState<RaceMissionGenerationResult[]>([]);
+  const [reviewLoadingKey, setReviewLoadingKey] = useState<string | null>(null);
+  const [reviewedProposalKeys, setReviewedProposalKeys] = useState<Record<string, boolean>>({});
   const sponsorPagination = usePagination(sponsors);
   const scuderiaPagination = usePagination(scuderias);
   const sponsorSlots = [
@@ -399,8 +412,29 @@ export function SponsorMarketSection({
   }
 
   function proposalCaveats(proposal: SponsorMarketProposal) {
+    if (proposal.caveats?.length) {
+      return proposal.caveats.map((caveat) => {
+        if (caveat.type === 'setor_repetido') {
+          return `${labels.caveatLabels[caveat.type]}: ${labels.caveatSectorDetail} ${caveat.sector ?? '---'} (${caveat.companies?.join(', ') || '---'})`;
+        }
+        return labels.caveatLabels[caveat.type];
+      }).join(', ');
+    }
     if (!proposal.ressalvas?.length) return labels.noCaveats;
     return proposal.ressalvas.map((caveat) => labels.caveatLabels[caveat]).join(', ');
+  }
+
+  async function sendProposalToReview(teamId: string, proposal: SponsorMarketProposal) {
+    const key = `${teamId}-${proposal.sponsor.id}-${proposal.category}`;
+    setReviewLoadingKey(key);
+    try {
+      const success = await onSendProposalToReview(teamId, proposal);
+      if (success) {
+        setReviewedProposalKeys((current) => ({ ...current, [key]: true }));
+      }
+    } finally {
+      setReviewLoadingKey(null);
+    }
   }
 
   return (
@@ -600,7 +634,11 @@ export function SponsorMarketSection({
                   </header>
                   {result.proposals.length === 0 ? (
                     <p className="rounded bg-gray-800 p-4 text-gray-300">{labels.noProposalsReceived}</p>
-                  ) : result.proposals.map((proposal, index) => (
+                  ) : result.proposals.map((proposal, index) => {
+                    const reviewKey = `${result.team.id}-${proposal.sponsor.id}-${proposal.category}`;
+                    const wasSentToReview = Boolean(reviewedProposalKeys[reviewKey]);
+
+                    return (
                     <section key={`${proposal.sponsor.id}-${index}`} className="mb-3 rounded bg-gray-800 p-3 last:mb-0">
                       <header className="mb-3 flex items-center gap-3">
                         {proposal.sponsor.logoUrl && <img src={proposal.sponsor.logoUrl} alt="" className="h-12 w-12 object-contain" />}
@@ -622,6 +660,14 @@ export function SponsorMarketSection({
                         <p><strong>{labels.caveats}:</strong> {proposalCaveats(proposal)}</p>
                         <p><strong>{labels.proposalReason}:</strong> {proposalReason(proposal)}</p>
                       </div>
+                      <button
+                        type="button"
+                        disabled={reviewLoadingKey === reviewKey || wasSentToReview}
+                        onClick={() => sendProposalToReview(result.team.id, proposal)}
+                        className="mb-3 rounded bg-emerald-700 px-3 py-2 text-sm font-semibold disabled:cursor-not-allowed disabled:bg-gray-600"
+                      >
+                        {wasSentToReview ? labels.sentToReview : labels.sendToReview}
+                      </button>
                       <details className="text-sm">
                         <summary className="cursor-pointer font-semibold">{labels.scores} / {labels.multipliers}</summary>
                         <div className="mt-3 grid gap-1 sm:grid-cols-2">
@@ -638,7 +684,8 @@ export function SponsorMarketSection({
                         </div>
                       </details>
                     </section>
-                  ))}
+                  );
+                  })}
                 </article>
               ))}
             </div>

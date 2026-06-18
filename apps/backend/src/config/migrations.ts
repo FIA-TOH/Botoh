@@ -9,6 +9,7 @@ class MigrationService {
       CREATE TABLE IF NOT EXISTS teams (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         name VARCHAR(100) NOT NULL UNIQUE,
+        full_name VARCHAR(140),
         tag VARCHAR(3) NOT NULL UNIQUE,
         emoji VARCHAR(8) NOT NULL DEFAULT '',
         color VARCHAR(7) NOT NULL DEFAULT '#FFFFFF',
@@ -22,6 +23,8 @@ class MigrationService {
     `);
 
     await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS tag VARCHAR(3)');
+    await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS full_name VARCHAR(140)');
+    await query("UPDATE teams SET full_name = name WHERE full_name IS NULL OR TRIM(full_name) = ''");
     await query("ALTER TABLE teams ADD COLUMN IF NOT EXISTS emoji VARCHAR(8) NOT NULL DEFAULT ''");
     await query("ALTER TABLE teams ADD COLUMN IF NOT EXISTS color VARCHAR(7) NOT NULL DEFAULT '#FFFFFF'");
     await query('ALTER TABLE teams ADD COLUMN IF NOT EXISTS budget NUMERIC DEFAULT 0');
@@ -393,6 +396,22 @@ class MigrationService {
     await query('ALTER TABLE team_sponsors DROP CONSTRAINT IF EXISTS team_sponsors_source_check');
     await query("ALTER TABLE team_sponsors ADD CONSTRAINT team_sponsors_source_check CHECK (source IN ('manual', 'personal_sponsor'))");
     await query('CREATE UNIQUE INDEX IF NOT EXISTS team_sponsors_team_sponsor_unique ON team_sponsors(team_id, sponsor_id)');
+    await query(`
+      CREATE TABLE IF NOT EXISTS sponsor_market_reviews (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        team_id UUID NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
+        sponsor_id UUID NOT NULL REFERENCES sponsors(id) ON DELETE CASCADE,
+        category VARCHAR(30) NOT NULL CHECK (
+          category IN ('title_sponsor', 'main_partner', 'official_partner', 'minor_sponsor', 'personal_sponsor')
+        ),
+        initial_reward NUMERIC NOT NULL DEFAULT 0 CHECK (initial_reward >= 0),
+        status VARCHAR(20) NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'cancelled')),
+        created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+        approved_at TIMESTAMP NULL
+      )
+    `);
+    await query('CREATE INDEX IF NOT EXISTS sponsor_market_reviews_team_status_idx ON sponsor_market_reviews(team_id, status, created_at DESC)');
+    await query('CREATE UNIQUE INDEX IF NOT EXISTS sponsor_market_reviews_pending_unique ON sponsor_market_reviews(team_id, sponsor_id) WHERE status = \'pending\'');
     await query("DELETE FROM team_sponsors WHERE source = 'personal_sponsor'");
     await query(`
       INSERT INTO team_sponsors (

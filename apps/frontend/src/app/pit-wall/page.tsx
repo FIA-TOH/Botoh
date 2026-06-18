@@ -20,6 +20,10 @@ import { TeamInfoPanel } from '../../components/pit-wall/TeamInfoPanel';
 import { RaceInsightsGrid } from '../../components/pit-wall/RaceInsightsGrid';
 import { useTranslations } from '@/i18n';
 
+function getTeamDisplayName(membership: { teamName: string; teamFullName?: string | null }) {
+  return membership.teamFullName?.trim() || membership.teamName;
+}
+
 export default function PitWallPage() {
   const { isAuthenticated, user } = useAuth();
   const { t } = useTranslations();
@@ -224,11 +228,11 @@ export default function PitWallPage() {
                     )}
 
                     {hasMissingLogo ? (
-                      membership.teamName
+                      getTeamDisplayName(membership)
                     ) : (
                       <img
                         src={logoSrc}
-                        alt={membership.teamName}
+                        alt={getTeamDisplayName(membership)}
                         className={`h-20 max-w-52 object-contain ${hasLoadedLogo ? '' : 'absolute invisible'}`}
                         onLoad={() =>
                           setLoadedTeamLogos((current) => ({

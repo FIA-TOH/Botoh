@@ -11,6 +11,7 @@ import { apiUrl } from '@/config/api';
 
 interface TeamGarageData {
   id: string;
+  fullName?: string | null;
   category: 'formula_1' | 'formula_2';
   isJuniorTeam: boolean;
   parentTeamId: string | null;
@@ -112,6 +113,7 @@ export default function GaragePage() {
   const selectedMembership =
     eligibleMemberships.find((membership) => membership.teamId === selectedTeamId)
     ?? null;
+  const selectedTeamDisplayName = teamGarage?.fullName?.trim() || (selectedMembership ? getTeamDisplayName(selectedMembership) : '');
   const canManageGarage = Boolean(
     selectedMembership?.roles.includes('team_principal')
     || selectedMembership?.roles.includes('team_assistant'),
@@ -524,6 +526,10 @@ export default function GaragePage() {
     return labels[category] ?? category;
   }
 
+  function getTeamDisplayName(membership: { teamName: string; teamFullName?: string | null }) {
+    return membership.teamFullName?.trim() || membership.teamName;
+  }
+
   function normalizeAssetName(value: string) {
     return value
       .normalize('NFD')
@@ -653,11 +659,11 @@ export default function GaragePage() {
                     )}
 
                     {selectedTeamLoadingId === membership.teamId ? null : hasMissingLogo ? (
-                      membership.teamName
+                      getTeamDisplayName(membership)
                     ) : (
                       <img
                         src={logoSrc}
-                        alt={membership.teamName}
+                        alt={getTeamDisplayName(membership)}
                         className={`h-20 max-w-52 object-contain ${hasLoadedLogo ? '' : 'absolute invisible'}`}
                         onLoad={() =>
                           setLoadedTeamLogos((current) => ({
@@ -755,7 +761,7 @@ export default function GaragePage() {
             <section className="flex min-h-full flex-col border-8 border-[#FF0000] bg-[#1E1E1E] p-4">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h1 className="text-2xl font-bold uppercase">{selectedMembership.teamName}</h1>
+                <h1 className="text-2xl font-bold uppercase">{selectedTeamDisplayName}</h1>
                 <FinanceLine label={t.garage.cash} value={cashTotal} />
                 <FinanceLine label={t.garage.netPerRace} value={netPerRace} />
                 <FinanceLine label={t.garage.expensesPerRace} value={expensesPerRace} colored={false} />
