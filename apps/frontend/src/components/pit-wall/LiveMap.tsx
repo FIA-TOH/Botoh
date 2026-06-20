@@ -73,6 +73,7 @@ export function LiveMap({
   const [smoothedPositions, setSmoothedPositions] = React.useState<
     Record<number, { x: number; y: number }>
   >({});
+  const [hoveredPlayerId, setHoveredPlayerId] = React.useState<number | null>(null);
   const [mapZoom, setMapZoom] = React.useState(1);
   const [mapPan, setMapPan] = React.useState({ x: 0, y: 0 });
   const targetsRef = React.useRef<Record<number, { x: number; y: number }>>({});
@@ -101,6 +102,10 @@ export function LiveMap({
   const runningPlayers = React.useMemo(
     () => players.filter((player) => player.team === Teams.RUNNERS),
     [players],
+  );
+  const hoveredPlayer = React.useMemo(
+    () => runningPlayers.find((player) => player.id === hoveredPlayerId) ?? null,
+    [hoveredPlayerId, runningPlayers],
   );
 
   // =========================================
@@ -446,6 +451,30 @@ export function LiveMap({
     }
   };
 
+  const getPlayerMapPosition = React.useCallback((player: PlayerPositionData) => (
+    smoothedPositions[player.id]
+    || targetsRef.current[player.id]
+    || convertHaxballToSvg(player.position.x, player.position.y)
+  ), [convertHaxballToSvg, smoothedPositions]);
+
+  const hoveredTooltipPosition = React.useMemo(() => {
+    if (!hoveredPlayer || !containerRef.current || mapDimensions.width <= 0 || mapDimensions.height <= 0) {
+      return null;
+    }
+
+    const container = containerRef.current;
+    const mapPosition = getPlayerMapPosition(hoveredPlayer);
+    const mapLeft = (container.clientWidth - mapDimensions.width) / 2;
+    const mapTop = (container.clientHeight - mapDimensions.height) / 2;
+    const pointX = (mapPosition.x / 100) * mapDimensions.width;
+    const pointY = (mapPosition.y / 100) * mapDimensions.height;
+
+    return {
+      left: mapLeft + mapPan.x + ((pointX - mapDimensions.width / 2) * mapZoom) + mapDimensions.width / 2,
+      top: mapTop + mapPan.y + ((pointY - mapDimensions.height / 2) * mapZoom) + mapDimensions.height / 2,
+    };
+  }, [getPlayerMapPosition, hoveredPlayer, mapDimensions.height, mapDimensions.width, mapPan.x, mapPan.y, mapZoom]);
+
   // =========================================
   // RENDER
   // =========================================
@@ -708,9 +737,7 @@ export function LiveMap({
               ? '#FFFFFF'
               : '#000000';
 
-            const smoothPosition = smoothedPositions[player.id]
-              || targetsRef.current[player.id]
-              || convertHaxballToSvg(player.position.x, player.position.y);
+            const smoothPosition = getPlayerMapPosition(player);
 
             const mapX = smoothPosition.x;
             const mapY = smoothPosition.y;
@@ -721,29 +748,44 @@ export function LiveMap({
                 key={player.id}
                 className={`
                   absolute
-                  w-2
-                  h-2
-                  ${isSecondDriverOfScuderia ? '' : 'rounded-full'}
+                  h-6
+                  w-6
+                  cursor-help
                 `}
                 style={{
                   left: `${mapX}%`,
                   top: `${mapY}%`,
                   transform: 'translate(-50%, -50%)',
-                  backgroundColor: carColor,
-                  border: `1px solid ${borderColor}`,
-
-                  boxShadow: player.admin
-                    ? '0 0 5px rgba(147, 51, 234, 0.8)'
-                    : 'none',
+                  pointerEvents: 'auto',
                 }}
-                title={`
-                  ${player.name}
-                  (
-                    ${Math.round(player.position.x)},
-                    ${Math.round(player.position.y)}
-                  )
-                `}
-              />
+                onMouseEnter={() => setHoveredPlayerId(player.id)}
+                onMouseLeave={() => setHoveredPlayerId((current) => (current === player.id ? null : current))}
+                onFocus={() => setHoveredPlayerId(player.id)}
+                onBlur={() => setHoveredPlayerId((current) => (current === player.id ? null : current))}
+                onPointerDown={(event) => event.stopPropagation()}
+                tabIndex={0}
+                aria-label={player.name}
+              >
+                <span
+                  className={`
+                    absolute
+                    left-1/2
+                    top-1/2
+                    h-2
+                    w-2
+                    -translate-x-1/2
+                    -translate-y-1/2
+                    ${isSecondDriverOfScuderia ? '' : 'rounded-full'}
+                  `}
+                  style={{
+                    backgroundColor: carColor,
+                    border: `1px solid ${borderColor}`,
+                    boxShadow: player.admin
+                      ? '0 0 5px rgba(147, 51, 234, 0.8)'
+                      : 'none',
+                  }}
+                />
+              </div>
 
             );
           })}
@@ -751,6 +793,36 @@ export function LiveMap({
         </div>
 
       </div>
+
+      {hoveredPlayer && hoveredTooltipPosition && (
+        <div
+          className="
+            pointer-events-none
+            absolute
+            z-40
+            max-w-48
+            -translate-x-1/2
+            -translate-y-[calc(100%+10px)]
+            rounded
+            border
+            border-white/20
+            bg-black/85
+            px-2.5
+            py-1.5
+            text-center
+            text-xs
+            font-bold
+            text-white
+            shadow-xl
+          "
+          style={{
+            left: hoveredTooltipPosition.left,
+            top: hoveredTooltipPosition.top,
+          }}
+        >
+          <span className="block truncate">{hoveredPlayer.name}</span>
+        </div>
+      )}
 
     </div>
   );

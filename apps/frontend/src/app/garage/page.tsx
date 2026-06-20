@@ -11,6 +11,7 @@ import { apiUrl } from '@/config/api';
 
 interface TeamGarageData {
   id: string;
+  name: string;
   fullName?: string | null;
   category: 'formula_1' | 'formula_2';
   isJuniorTeam: boolean;
@@ -123,8 +124,9 @@ export default function GaragePage() {
       selectedMembership.teamName.trim().toLowerCase(),
     )}.png`
     : null;
+  const selectedTeamAssetName = teamGarage?.name?.trim() || selectedMembership?.teamName || '';
   const selectedCarSrc = selectedMembership
-    ? `/img/scuderia/cars/${normalizeAssetName(selectedMembership.teamName)}.png`
+    ? `/img/scuderia/cars/${normalizeAssetName(selectedTeamAssetName)}.png`
     : '/img/scuderia/cars/default.png';
   const selectedLogoKey = selectedMembership?.teamId ?? '';
   const selectedLogoIsMissing = selectedLogoKey

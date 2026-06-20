@@ -119,7 +119,7 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   imolaTeste: [999.999, "undefined", trackNameMapping["imolaTeste"]],
   miamiSeasonTres: [92.918, "Rodri", "Miami by Rodri - NewgenV3"],
   bahrainSeasonTres: [44.999, "Ximb", trackNameMapping["bahrainSeasonTres"]],
-  sepangSeasonTres: [49.65, "Lib Wallard ", trackNameMapping["sepangSeasonTres"]],
+  sepangSeasonTres: [59.45, "Splinter", trackNameMapping["sepangSeasonTres"]],
 };
 
 export const getAbbreviatedTrackName = (
