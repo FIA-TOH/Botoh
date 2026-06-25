@@ -55,14 +55,14 @@ const FLAG_HEADER_CONFIG = {
     backgroundColor: '#000000',
   },
   SAFETY: {
-    title: 'SAFETY',
-    subtitle: 'CAR',
+    title: 'SAFETY CAR',
+    subtitle: '',
     color: '#000000',
     backgroundColor: '#FFC919',
   },
   VIRTUAL_SAFETY: {
-    title: 'VIRTUAL',
-    subtitle: 'SAFETY CAR',
+    title: 'VSC',
+    subtitle: '',
     color: '#000000',
     backgroundColor: '#FFC919',
   },
@@ -75,8 +75,19 @@ function formatSessionTime(seconds: number): string {
     0,
     Math.floor(seconds)
   );
+  const hours = Math.floor(safeSeconds / 3600);
   const minutes = Math.floor(safeSeconds / 60);
   const remainingSeconds = safeSeconds % 60;
+
+  if (hours > 0) {
+    const remainingMinutes = Math.floor((safeSeconds % 3600) / 60);
+
+    return `${hours}:${remainingMinutes
+      .toString()
+      .padStart(2, '0')}:${remainingSeconds
+      .toString()
+      .padStart(2, '0')}`;
+  }
 
   return `${minutes}:${remainingSeconds
     .toString()
@@ -156,9 +167,15 @@ export function PlayersPanel({
   const isQualifyingSession =
     raceSession?.sessionType === 'qualy'
     || raceSession?.sessionType === 'hard_qualy';
+  const isTimingStandingsSession =
+    isQualifyingSession
+    || raceSession?.sessionType === 'training';
+  const shouldShowSectorBars =
+    isTimingStandingsSession
+    || raceSession?.sessionType === 'training';
 
   const sortedDrivers = [...drivers].sort((a, b) => {
-    if (isQualifyingSession) {
+    if (isTimingStandingsSession) {
       const aTime = a.bestTime ? lapTimeToMs(a.bestTime) : Number.POSITIVE_INFINITY;
       const bTime = b.bestTime ? lapTimeToMs(b.bestTime) : Number.POSITIVE_INFINITY;
 
@@ -187,14 +204,14 @@ export function PlayersPanel({
       );
   });
 
-  const displayedDrivers = isQualifyingSession
+  const displayedDrivers = isTimingStandingsSession
     ? sortedDrivers.map((driver, index) => ({
         ...driver,
         position: driver.bestTime ? index + 1 : null,
       }))
     : sortedDrivers;
 
-  const qualifyingLeader = isQualifyingSession
+  const timingLeader = isTimingStandingsSession
     ? displayedDrivers.find((driver) => !!driver.bestTime)
     : undefined;
 
@@ -221,12 +238,12 @@ export function PlayersPanel({
     }
 
     if (
-      isQualifyingSession
+      isTimingStandingsSession
     ) {
       const driverLapTime =
         driver.bestTime
 
-      if (qualifyingLeader?.name === driver.name) {
+      if (timingLeader?.name === driver.name) {
         return driverLapTime ?? t.players.noTime;
       }
 
@@ -235,7 +252,7 @@ export function PlayersPanel({
       }
 
       const leaderLapTime =
-        qualifyingLeader?.bestTime
+        timingLeader?.bestTime
 
       if (
         leaderLapTime
@@ -254,10 +271,6 @@ export function PlayersPanel({
       }
 
       return t.players.noTime;
-    }
-
-    if (raceSession?.sessionType === 'training') {
-      return driver.bestTime ?? t.players.noTime;
     }
 
     return driver.gapToLeader;
@@ -308,6 +321,13 @@ export function PlayersPanel({
           visibleFlag as keyof typeof FLAG_HEADER_CONFIG
         ]
       : null;
+  const shouldShowRaceLaps =
+    raceSession?.sessionType === 'race'
+    && (
+      visibleFlag === 'YELLOW'
+      || visibleFlag === 'SAFETY'
+      || visibleFlag === 'VIRTUAL_SAFETY'
+    );
 
   const isTimedSession =
     raceSession?.sessionType === 'qualy'
@@ -316,6 +336,9 @@ export function PlayersPanel({
   const sessionTimeLeft = formatSessionTime(
     (raceSession?.totalTime ?? 0)
     - (raceSession?.currentTimePassed ?? 0)
+  );
+  const trainingElapsedTime = formatSessionTime(
+    raceSession?.currentTimePassed ?? 0
   );
   const isQualyOvertime =
     isTimedSession
@@ -346,14 +369,29 @@ export function PlayersPanel({
         }}
       >
         <div className="min-w-0 flex-1 lg:flex-none">
-          <div className="truncate text-xl font-bold leading-none lg:text-4xl">
+          <div
+            className={
+              visibleFlag === 'SAFETY'
+                ? 'truncate text-lg font-bold leading-none lg:text-3xl'
+                : 'truncate text-xl font-bold leading-none lg:text-4xl'
+            }
+          >
             {flagHeader?.title
               ?? raceSession?.sessionType?.toUpperCase()
               ?? 'RACE'}
           </div>
 
           <div className="truncate text-sm font-bold leading-tight lg:text-xl">
-            {flagHeader ? (
+            {shouldShowRaceLaps ? (
+              <>
+                {t.players.lap}{' '}
+                <strong>
+                  {raceSession?.currentLap ?? 0}
+                </strong>
+                /
+                {raceSession?.totalLaps ?? 0}
+              </>
+            ) : flagHeader ? (
               flagHeader.subtitle
             ) : isQualyOvertime ? (
               <span className="text-red-500">
@@ -361,6 +399,8 @@ export function PlayersPanel({
               </span>
             ) : isTimedSession ? (
               sessionTimeLeft
+            ) : raceSession?.sessionType === 'training' ? (
+              trainingElapsedTime
             ) : (
               <>
                 {t.players.lap}{' '}
@@ -383,7 +423,7 @@ export function PlayersPanel({
 
       {/* CONTENT */}
       {!isCollapsed && (
-      <div className="relative max-h-[min(58vh,460px)] min-h-[240px] overflow-y-auto px-1.5 lg:max-h-none lg:min-h-[400px] lg:overflow-visible lg:px-2">
+      <div className="group/pit-drivers relative max-h-[min(58vh,460px)] min-h-[240px] overflow-y-auto px-1.5 lg:max-h-none lg:min-h-[400px] lg:overflow-visible lg:px-2">
 
         {/* LOADING */}
         {loading && (
@@ -540,6 +580,7 @@ export function PlayersPanel({
                     driver={driver}
                     isOut={raceSession?.sessionType === 'race' && driver.isOut}
                     isFinished={raceSession?.sessionType === 'race' && driver.isFinished}
+                    showSectorBars={shouldShowSectorBars}
                     gapText={getGapText(
                       driver
                     )}

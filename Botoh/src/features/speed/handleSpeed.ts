@@ -2,6 +2,10 @@ import { playerList, PlayerInfo } from "../changePlayerState/playerList";
 import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
 import { vsc } from "../safetyCar/vsc";
 import { isSCActive, isPlayerLapped } from "../commands/flagsAndVSC/handleSCCommand";
+import {
+  getRaceControlState,
+  RaceControlState,
+} from "../commands/flagsAndVSC/raceControl";
 import { getRunningPlayers, vectorSpeed } from "../utils";
 import { calculateTotalGripMultiplier } from "./grip/calculateTotalGripMultiplier";
 import { applyPitAndVscRules } from "./pitAndVscRules";
@@ -17,6 +21,9 @@ export function controlPlayerSpeed(
   const playersAndDiscs = getPlayerAndDiscs(room);
 
   const playersRunning = getRunningPlayers(playersAndDiscs);
+  const raceControl = getRaceControlState();
+  const isYellowFlagActive = raceControl.flag === RaceControlState.YellowFlag;
+  const isNeutralized = vsc || isSCActive() || isYellowFlagActive;
 
   playersAndDiscsSubset.forEach(({ p, disc }) => {
     const playerInfo = playerList[p.id];
@@ -39,7 +46,7 @@ export function controlPlayerSpeed(
       playersRunning,
       currentTime,
       playerInfo,
-      vsc || isSCActive()
+      isNeutralized
     );
 
     const gripMultiplier = calculateTotalGripMultiplier(
@@ -58,7 +65,7 @@ export function controlPlayerSpeed(
       gripMultiplier,
       playerInfo,
       currentTime,
-      vsc || isSCActive(),
+      isNeutralized,
       isPlayerLapped(p.id)
     );
 

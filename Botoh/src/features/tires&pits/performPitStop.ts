@@ -9,6 +9,8 @@ import { handleAvatar, restoreTyreOrCar, Situacions } from "../changePlayerState
 import { resetPitState } from "./newPitSystem/newPitManager";
 import { getPlayerPitCrewLevel } from "./newPitSystem/pitReactionMultiplier";
 
+const MOVEMENT_CANCEL_GRACE_SECONDS = 0.5;
+
 export function performPitStop(
   room: RoomObject,
   byPlayer: PlayerObject,
@@ -47,6 +49,7 @@ export function performPitStop(
 
   delete playerState.pitTargetTires;
   delete playerState.pitInitialPos;
+  delete playerState.pitMovementValidationStartTime;
   delete playerState.pitSteps;
   playerState.inPitStop = false;
 
@@ -75,13 +78,20 @@ export function detectPitPerTick(
   const disc = room.getPlayerDiscProperties(pad.p.id);
   if (!disc) return;
 
+  const currentTime = room.getScores()?.time ?? 0;
+  const canValidateMovement =
+    currentTime - (state.pitMovementValidationStartTime ?? currentTime) >=
+    MOVEMENT_CANCEL_GRACE_SECONDS;
+
   if (
+    canValidateMovement &&
     Math.hypot(disc.x - state.pitInitialPos.x, disc.y - state.pitInitialPos.y) >
     0.3
   ) {
     state.pitCountdown = state.pitFailures?.totalTime;
     delete state.pitTargetTires;
     delete state.pitInitialPos;
+    delete state.pitMovementValidationStartTime;
     delete state.pitSteps;
     state.inPitStop = false;
     

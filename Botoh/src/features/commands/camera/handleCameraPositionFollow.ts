@@ -1,7 +1,33 @@
 import { sendErrorMessage, sendChatMessage, COLORS } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { setFollowPosition } from "../../cameraAndBall/cameraFollow";
+import {
+  gameMode,
+  GeneralGameMode,
+  generalGameMode,
+  GameMode,
+} from "../../changeGameState/changeGameModes";
+import { Teams } from "../../changeGameState/teams";
+import { getPlayersOrderedByQualiTime } from "../gameMode/qualy/playerTime";
 import { positionList } from "../gameMode/race/positionList";
+
+function getReferencePositionCount(room: RoomObject) {
+  if (generalGameMode === GeneralGameMode.GENERAL_RACE) {
+    return positionList.length;
+  }
+
+  if (
+    generalGameMode === GeneralGameMode.GENERAL_QUALY ||
+    gameMode === GameMode.TRAINING
+  ) {
+    const timedPlayersCount = getPlayersOrderedByQualiTime().length;
+    if (timedPlayersCount > 0) return timedPlayersCount;
+
+    return room.getPlayerList().filter((player) => player.team === Teams.RUNNERS).length;
+  }
+
+  return 0;
+}
 
 export function handleCameraPositionFollow(
   byPlayer?: PlayerObject,
@@ -32,7 +58,8 @@ export function handleCameraPositionFollow(
   }
 
   const pos = Number(args[0]);
-  if (isNaN(pos) || pos <= 0 || pos > positionList.length) {
+  const referencePositionCount = getReferencePositionCount(room);
+  if (isNaN(pos) || pos <= 0 || pos > referencePositionCount) {
     if (byPlayer) {
       room.sendAnnouncement(`Invalid position.`, byPlayer.id, COLORS.RED);
     }

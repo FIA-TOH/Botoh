@@ -79,10 +79,15 @@ export function updateFollowPlayerId(room: RoomObject) {
       if (index >= 0 && positionList[index]) {
         candidateId = positionList[index].id;
       }
-    } else if (generalGameMode === GeneralGameMode.GENERAL_QUALY) {
+    } else if (
+      generalGameMode === GeneralGameMode.GENERAL_QUALY ||
+      gameMode === GameMode.TRAINING
+    ) {
       const orderedList = getPlayersOrderedByQualiTime();
       if (index >= 0 && orderedList[index]) {
         candidateId = orderedList[index].id;
+      } else if (orderedList.length === 0 && index >= 0 && runningPlayers[index]) {
+        candidateId = runningPlayers[index].p.id;
       }
     }
 

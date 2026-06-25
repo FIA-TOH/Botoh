@@ -2,7 +2,7 @@ import { log } from "../discord/logger";
 import { getLeagueScuderia } from "../scuderias/scuderias";
 import { isScuderiaAvatarEnabled } from "../scuderias/scuderiaAvatar";
 import { Tires, tyresActivated } from "../tires&pits/tires";
-import { playerList } from "./playerList";
+import { getEffectiveLeagueScuderiaId, playerList } from "./playerList";
 
 export enum Situacions {
   ChangeTyre = "ChangeTyre",
@@ -76,7 +76,7 @@ export function getPlayerDefaultAvatar(playerId: number): string | null {
   if (!player) return null;
 
   if (isScuderiaAvatarEnabled()) {
-    const scuderia = getLeagueScuderia(player.leagueScuderia);
+    const scuderia = getLeagueScuderia(getEffectiveLeagueScuderiaId(player));
     return scuderia?.emoji || "??";
   }
 

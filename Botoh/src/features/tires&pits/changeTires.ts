@@ -1,6 +1,6 @@
 import { Teams } from "../changeGameState/teams";
 import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
-import { clearPreparedPitTire, playerList } from "../changePlayerState/playerList";
+import { playerList } from "../changePlayerState/playerList";
 import {
   sendErrorMessage,
   sendChatMessage,
@@ -45,7 +45,6 @@ export function changeTires(
   playerList[player.p.id].maxSpeed = TIRE_STARTING_SPEED[chosen];
   playerList[player.p.id].isTyreBlowed = false;
   if (chosen !== Tires.FLAT) {
-    clearPreparedPitTire(player.p.id, player.p.name);
     decideBlowoutPoint(player.p);
     if (pitTime > 1) {
       const isPitRecord = trySetBestPit(

@@ -234,6 +234,20 @@ const financeEntryValidation = [
     .isISO8601()
     .withMessage('Finance date must be a valid ISO date'),
 ];
+const commercialMomentumAdjustmentValidation = [
+  body('commercialMomentumDelta')
+    .isInt({ min: -100, max: 100 })
+    .withMessage('Commercial momentum adjustment is invalid'),
+  body('sponsorHappinessChanges')
+    .isArray()
+    .withMessage('Sponsor happiness changes must be an array'),
+  body('sponsorHappinessChanges.*.teamSponsorId')
+    .isUUID()
+    .withMessage('Team sponsor not found'),
+  body('sponsorHappinessChanges.*.happinessDelta')
+    .isInt({ min: -100, max: 100 })
+    .withMessage('Sponsor happiness adjustment is invalid'),
+];
 const carNameValidation = [body('carName').optional({ nullable: true }).isString().isLength({ max: 100 })];
 const teamSponsorValidation = [
   body('sponsorId').isUUID(),
@@ -483,6 +497,32 @@ router.post(
       return res.status(500).json({
         success: false,
         message: translateMessage('Failed to create finance entry', getRequestLanguage(req)),
+      });
+    }
+  },
+);
+
+router.post(
+  '/scuderias/:id/commercial-momentum',
+  param('id').isUUID().withMessage('Invalid scuderia id'),
+  commercialMomentumAdjustmentValidation,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      if (handleValidation(req, res)) return;
+
+      const result = await adminService.adjustScuderiaCommercialMomentum(req.params.id, req.body);
+      return res.status(result.success ? 200 : 404).json({
+        ...result,
+        message: translateMessage(
+          result.success ? 'Commercial momentum updated successfully' : result.message,
+          getRequestLanguage(req),
+        ),
+      });
+    } catch (error) {
+      console.error('Admin adjust commercial momentum error:', error);
+      return res.status(500).json({
+        success: false,
+        message: translateMessage('Failed to update commercial momentum', getRequestLanguage(req)),
       });
     }
   },

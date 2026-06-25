@@ -8,7 +8,7 @@ import {
 import { gameState } from "../changeGameState/gameState";
 import { Teams } from "../changeGameState/teams";
 import { playerList } from "../changePlayerState/playerList";
-import { getRunningPlayers, vectorSpeed } from "../utils";
+import { getRunningPlayers, inHitbox, vectorSpeed } from "../utils";
 import { sendAlertMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { deployVSCAutomatically } from "../safetyCar/vsc";
@@ -20,6 +20,8 @@ import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { vsc, vscTriggeredByPlayer } from "../safetyCar/vsc";
 import { isRealSafetyEnabled } from "../commands/flagsAndVSC/handleSafetyCommand";
 import { isSCActive } from "../commands/flagsAndVSC/handleSCCommand";
+import { ifInBoxZone } from "../tires&pits/pitLane";
+import { CIRCUITS, currentMapIndex } from "../zones/maps";
 
 interface PlayerActivity {
   lastActivityTime: number;
@@ -69,16 +71,67 @@ function getCurrentGameTime(room: RoomObject): number {
   return room.getScores()?.time || 0;
 }
 
-function shouldPauseAfkDetection(playerId: number): boolean {
+function isPlayerInBoxZone(player: PlayerObject, room: RoomObject): boolean {
+  const disc = room.getPlayerDiscProperties(player.id);
+  if (!disc || !room.getScores()) return false;
+
+  return ifInBoxZone({ p: player, disc }, room);
+}
+
+function wasPlayerLastKnownInBoxZone(playerId: number): boolean {
+  const previousPos = playerList[playerId]?.previousPos;
+  if (!previousPos || previousPos.x === null || previousPos.y === null) return false;
+
+  return inHitbox(
+    {
+      p: { id: playerId } as PlayerObject,
+      disc: {
+        x: previousPos.x,
+        y: previousPos.y,
+      } as DiscPropertiesObject,
+    },
+    CIRCUITS[currentMapIndex].info.boxLine,
+  );
+}
+
+function shouldPauseAfkDetection(
+  playerId: number,
+  room?: RoomObject,
+  player?: PlayerObject
+): boolean {
   const playerProps = playerList[playerId];
   if (!playerProps) return true;
 
-  if (playerProps.inPitlane) return true;
+  if (playerProps.inPitlane || playerProps.inPitStop) return true;
+  if (room && player && isPlayerInBoxZone(player, room)) return true;
   if (vsc || isSCActive()) return true;
   if (presentationLap) return true;
   if (gameState === "paused") return true;
   
   return false;
+}
+
+function resetPlayerAfkCounter(playerId: number, currentTime: number) {
+  const playerProps = playerList[playerId];
+
+  if (!playerActivities[playerId]) {
+    playerActivities[playerId] = {
+      lastActivityTime: currentTime,
+      lastWarningTime: 0,
+      warningSent: false,
+      vscActivated: false,
+      wasAfkWhenLeft: false,
+    };
+  }
+
+  playerActivities[playerId].lastActivityTime = currentTime;
+  playerActivities[playerId].lastWarningTime = 0;
+  playerActivities[playerId].warningSent = false;
+  playerActivities[playerId].vscActivated = false;
+
+  if (playerProps) {
+    playerProps.afkAlert = false;
+  }
 }
 
 function getAfkTimeout(): number {
@@ -136,6 +189,11 @@ export function updatePlayerActivity(player: PlayerObject, room?: RoomObject) {
 
   const playerId = player.id;
   const currentTime = room ? getCurrentGameTime(room) : 0;
+
+  if (room && shouldPauseAfkDetection(playerId, room, player)) {
+    resetPlayerAfkCounter(playerId, currentTime);
+    return;
+  }
   
   if (room && isPlayerMovingAtSpeed(playerId, room)) {
     const playerProps = playerList[playerId];
@@ -204,6 +262,16 @@ export function handlePlayerLeave(player: PlayerObject, room: RoomObject) {
   }
   
   if (!isRealSafetyEnabled()) {
+    clearPlayerAfkActivity(playerId);
+    return;
+  }
+
+  const playerProps = playerList[playerId];
+  if (
+    playerProps?.inPitlane ||
+    playerProps?.inPitStop ||
+    wasPlayerLastKnownInBoxZone(playerId)
+  ) {
     clearPlayerAfkActivity(playerId);
     return;
   }
@@ -301,7 +369,8 @@ export function afkKick(room: RoomObject) {
       continue;
     }
 
-    if (shouldPauseAfkDetection(playerId)) {
+    if (shouldPauseAfkDetection(playerId, room, player)) {
+      resetPlayerAfkCounter(playerId, currentGameTime);
       continue;
     }
 

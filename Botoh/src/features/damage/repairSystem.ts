@@ -4,6 +4,7 @@ import { sendAlertMessage, sendErrorMessage, sendSuccessMessage } from "../chat/
 import { MESSAGES } from "../chat/messages";
 import { isXKeyPressed } from "../utils/dampingValues";
 import { getPitReactionTimeScale } from "../tires&pits/newPitSystem/pitReactionMultiplier";
+import { ifInBoxZone } from "../tires&pits/pitLane";
 
 const MIN_REPAIR_TIME = 1.5;
 const MAX_REPAIR_TIME = 18;
@@ -13,6 +14,7 @@ const BASE_REPAIR_TIME = 1;
 const EARLY_REACTION_PENALTY = 3;
 const REACTION_TIMEOUT = 3;
 const REPAIR_CANCEL_DISTANCE = 0.3;
+const MOVEMENT_CANCEL_GRACE_SECONDS = 0.5;
 
 function roundSeconds(value: number) {
   return Math.round(value * 10) / 10;
@@ -77,6 +79,17 @@ export function handleFixCommand(
   const playerInfo = playerList[byPlayer.id];
   if (!playerInfo) return;
 
+  if (
+    room.getScores() &&
+    !ifInBoxZone(
+      { p: byPlayer, disc: room.getPlayerDiscProperties(byPlayer.id) },
+      room,
+    )
+  ) {
+    sendErrorMessage(room, MESSAGES.NOT_IN_BOXES(), byPlayer.id);
+    return;
+  }
+
   if (playerInfo.inPitStop) {
     sendErrorMessage(room, MESSAGES.REPAIR_IN_PIT_STOP(), byPlayer.id);
     return;
@@ -125,7 +138,12 @@ export function updateRepairSystemForPlayer(
   const repairState = playerInfo?.repairState;
   if (!playerInfo || !repairState) return;
 
+  const canValidateMovement =
+    !repairState.repairStartTime ||
+    currentTime - repairState.repairStartTime >= MOVEMENT_CANCEL_GRACE_SECONDS;
+
   if (
+    canValidateMovement &&
     (repairState.isWaitingForRepair || repairState.isRepairing) &&
     repairState.repairInitialPos &&
     Math.hypot(

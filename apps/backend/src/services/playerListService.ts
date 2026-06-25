@@ -1,5 +1,8 @@
 import { BotService } from './botService';
-import { playerList as botPlayerState } from '../../../../Botoh/src/features/changePlayerState/playerList';
+import {
+  LapSectorStatuses,
+  playerList as botPlayerState,
+} from '../../../../Botoh/src/features/changePlayerState/playerList';
 import { getLeagueScuderia } from '../../../../Botoh/src/features/scuderias/scuderias';
 import { Teams } from '../../../../Botoh/src/features/changeGameState/teams';
 import { Tires } from '../../../../Botoh/src/features/tires&pits/tires';
@@ -54,6 +57,7 @@ export interface PlayerData extends PlayerPositionData {
   lapTime: number;
   bestTime: string | null;
   bestSectorTimes: [string | null, string | null, string | null];
+  currentLapSectorStatus: LapSectorStatuses;
   tires: Tires;
   nextPitTires: Tires | null;
   wear: number;
@@ -356,6 +360,8 @@ export class PlayerListService {
         formatLapTime(state?.bestSectorTimes?.[1]),
         formatLapTime(state?.bestSectorTimes?.[2]),
       ] as [string | null, string | null, string | null],
+      currentLapSectorStatus:
+        state?.currentLapSectorStatus ?? ["none", "none", "none"],
       tires: state?.tires ?? Tires.SOFT,
       nextPitTires: state?.nextPitTires ?? null,
       wear: state?.wear ?? 0,
@@ -417,6 +423,8 @@ export class PlayerListService {
         formatLapTime(state?.bestSectorTimes?.[1]),
         formatLapTime(state?.bestSectorTimes?.[2]),
       ] as [string | null, string | null, string | null],
+      currentLapSectorStatus:
+        state?.currentLapSectorStatus ?? ["none", "none", "none"],
       tires: state?.tires ?? Tires.SOFT,
       nextPitTires: state?.nextPitTires ?? null,
       wear: state?.wear ?? 0,

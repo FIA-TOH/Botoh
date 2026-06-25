@@ -1,5 +1,6 @@
 import {
   PitsInfo,
+  getEffectiveLeagueScuderiaId,
   playerList,
   updatePlayerListRaceGaps,
   updatePlayerListPosition,
@@ -124,7 +125,7 @@ export function updatePositionList(
       lap: playerData.currentLap,
       active: true,
       currentSector: playerData.currentSector,
-      team: playerData.leagueScuderia,
+      team: getEffectiveLeagueScuderiaId(playerData),
     };
 
     if (playerPositionIndex !== -1) {

@@ -25,6 +25,10 @@ import { handlePresentationLapCommand } from "../gameState/handlePresentationLap
 import { handleRREnabledCommand } from "./handleRREnabledCommand";
 import { setScuderiaAvatar } from "../../scuderias/scuderiaAvatar";
 import { setTeamCircuitBoxesEnabled } from "../../teamBoxes/teamCircuitBoxes";
+import {
+  clearManualTeamSelections,
+  setTeamCommandEnabled,
+} from "../scuderia/handleSetScuderia";
 
 
 export function handleConfigCommand(
@@ -48,6 +52,26 @@ export function handleConfigCommand(
   }
 
   const configType = args[0].toLowerCase();
+  if (configType === "team") {
+    const shouldEnable = parseBooleanConfig(args[1]);
+    if (shouldEnable === null) {
+      sendErrorMessage(room, MESSAGES.TEAM_COMMAND_CONFIG_USAGE(), byPlayer.id);
+      return;
+    }
+
+    setTeamCommandEnabled(shouldEnable);
+    clearManualTeamSelections(room);
+    const message = MESSAGES.TEAM_COMMAND_CONFIG_SUCCESS(shouldEnable);
+    const playerLang = getPlayerLanguage(byPlayer.id);
+    room.sendAnnouncement(
+      message[playerLang as keyof typeof message],
+      byPlayer.id,
+      COLORS.GREEN,
+      "bold"
+    );
+    return;
+  }
+
   const validConfigs = ['ftoh', 'fh', 'haxbula', 'ftohpublic'];
 
   if (!validConfigs.includes(configType)) {
@@ -64,12 +88,19 @@ export function handleConfigCommand(
   } else if (configType === 'ftohpublic') {
     applyFTOHPublicConfig(room, byPlayer);
   }
+  clearManualTeamSelections(room);
 
   const message = MESSAGES.CONFIG_SUCCESS(configType);
   const playerLang = getPlayerLanguage(byPlayer.id);
   room.sendAnnouncement(message[playerLang as keyof typeof message], byPlayer.id, COLORS.GREEN, "bold");
 }
 
+function parseBooleanConfig(value?: string): boolean | null {
+  const normalizedValue = value?.toLowerCase();
+  if (normalizedValue === "true" || normalizedValue === "on") return true;
+  if (normalizedValue === "false" || normalizedValue === "off") return false;
+  return null;
+}
 
 function applyFTOHConfig(room: RoomObject, byPlayer: PlayerObject) {
   log(`FTOH configuration applied by ${byPlayer.name}`);
@@ -94,6 +125,7 @@ function applyFTOHConfig(room: RoomObject, byPlayer: PlayerObject) {
   handleRREnabledCommand(byPlayer, ["off"], room);
   setScuderiaAvatar(true);
   setTeamCircuitBoxesEnabled(true);
+  setTeamCommandEnabled(false);
 }
 
 
@@ -120,6 +152,7 @@ export function applyFTOHPublicConfig(room: RoomObject, byPlayer: PlayerObject) 
   handleRREnabledCommand(byPlayer, ["on"], room);
   setScuderiaAvatar(false);
   setTeamCircuitBoxesEnabled(false);
+  setTeamCommandEnabled(true);
 }
 
 function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {
@@ -145,6 +178,7 @@ function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {
   handleRREnabledCommand(byPlayer, ["on"], room);
   setScuderiaAvatar(false);
   setTeamCircuitBoxesEnabled(false);
+  setTeamCommandEnabled(true);
 }
 
 function applyHaxbulaConfig(room: RoomObject, byPlayer: PlayerObject) {
@@ -170,4 +204,5 @@ function applyHaxbulaConfig(room: RoomObject, byPlayer: PlayerObject) {
   handleRREnabledCommand(byPlayer, ["on"], room);
   setScuderiaAvatar(false);
   setTeamCircuitBoxesEnabled(false);
+  setTeamCommandEnabled(true);
 }

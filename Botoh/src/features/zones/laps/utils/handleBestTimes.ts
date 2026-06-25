@@ -1,5 +1,8 @@
 import { updateBestTime } from "../../../../circuits/bestTimes";
-import { playerList } from "../../../changePlayerState/playerList";
+import {
+  getEffectiveLeagueScuderiaId,
+  playerList,
+} from "../../../changePlayerState/playerList";
 import {
   COLORS,
   sendBestTimeEver,
@@ -31,7 +34,7 @@ export function handleBestTimes(
     sendBestTimeEver(room, MESSAGES.TRACK_RECORD(p.name, lapTime));
     playerData.sectorColour = COLORS.PURPLE;
     sendDiscordTrackRecord(p.name, lapTime);
-    updatePlayerTime(p.name, lapTime, p.id, playerData.leagueScuderia);
+    updatePlayerTime(p.name, lapTime, p.id, getEffectiveLeagueScuderiaId(playerData));
     return;
   }
 
@@ -49,7 +52,7 @@ export function handleBestTimes(
     playerData.bestTime = lapTime;
 
     broadcastLapTimeToPlayers(room, lapTime, p.name);
-    updatePlayerTime(p.name, lapTime, p.id, playerData.leagueScuderia);
+    updatePlayerTime(p.name, lapTime, p.id, getEffectiveLeagueScuderiaId(playerData));
   } else {
     const MAX_REASONABLE_LAP = 600; // 10 minutes
 

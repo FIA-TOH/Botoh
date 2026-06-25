@@ -1,4 +1,8 @@
-import { PlayerInfo, playerList } from "../../changePlayerState/playerList";
+import {
+  getEffectiveLeagueScuderiaId,
+  PlayerInfo,
+  playerList,
+} from "../../changePlayerState/playerList";
 import { getLeagueScuderia } from "../../scuderias/scuderias";
 import { vectorSpeed } from "../../utils";
 import { maxSpeedFromGrip } from "../getMaxSpeed";
@@ -89,9 +93,10 @@ export function engineGripCalc(
   player: PlayerObject,
   room: RoomObject
 ) {
-  if (!p.leagueScuderia) return grip;
+  const scuderiaId = getEffectiveLeagueScuderiaId(p);
+  if (!scuderiaId) return grip;
 
-  const scud = getLeagueScuderia(p.leagueScuderia);
+  const scud = getLeagueScuderia(scuderiaId);
   if (!scud || !scud.engine) return grip;
 
   const engine = scud.engine;

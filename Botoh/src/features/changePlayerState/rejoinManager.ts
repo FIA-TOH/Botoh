@@ -109,6 +109,7 @@ function clonePlayerInfoForRejoin(playerInfo: PlayerInfo): PlayerInfo {
     ...playerInfo,
     checkpointTimes: { ...playerInfo.checkpointTimes },
     bestSectorTimes: [...playerInfo.bestSectorTimes] as [number, number, number],
+    currentLapSectorStatus: [...playerInfo.currentLapSectorStatus] as PlayerInfo["currentLapSectorStatus"],
     sectorTime: [...playerInfo.sectorTime],
     alertSent: { ...playerInfo.alertSent },
     previousPos: { ...playerInfo.previousPos },

@@ -1,7 +1,32 @@
 import { sendErrorMessage, sendChatMessage, COLORS } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { setFollowPlayer } from "../../cameraAndBall/cameraFollow";
+import {
+  gameMode,
+  GeneralGameMode,
+  generalGameMode,
+  GameMode,
+} from "../../changeGameState/changeGameModes";
+import { Teams } from "../../changeGameState/teams";
+import { getPlayersOrderedByQualiTime } from "../gameMode/qualy/playerTime";
 import { log } from "../../discord/logger";
+
+function getTimedSessionPlayerByPosition(position: number, room: RoomObject) {
+  if (
+    generalGameMode !== GeneralGameMode.GENERAL_QUALY &&
+    gameMode !== GameMode.TRAINING
+  ) {
+    return null;
+  }
+
+  const timedPlayer = getPlayersOrderedByQualiTime()[position - 1];
+  if (!timedPlayer) {
+    return room.getPlayerList()
+      .filter((player) => player.team === Teams.RUNNERS)[position - 1] ?? null;
+  }
+
+  return room.getPlayer(timedPlayer.id) ?? null;
+}
 
 export function handleCameraPlayerFollow(
   byPlayer?: PlayerObject,
@@ -40,7 +65,8 @@ export function handleCameraPlayerFollow(
     return;
   }
 
-  const targetPlayer = room.getPlayer(playerId);
+  const targetPlayer =
+    room.getPlayer(playerId) ?? getTimedSessionPlayerByPosition(playerId, room);
   if (!targetPlayer) {
     if (byPlayer) {
       room.sendAnnouncement(
@@ -51,14 +77,14 @@ export function handleCameraPlayerFollow(
     return;
   }
 
-  setFollowPlayer(playerId);
+  setFollowPlayer(targetPlayer.id);
   if (byPlayer) {
     room.sendAnnouncement(
-      `Now following the player: ${targetPlayer.name} (ID: ${playerId}).`,
+      `Now following the player: ${targetPlayer.name} (ID: ${targetPlayer.id}).`,
       byPlayer.id,
       COLORS.GREEN
     );
   }
 
-  log(`[CameraFollow] Now following the player ID ${playerId}`);
+  log(`[CameraFollow] Now following the player ID ${targetPlayer.id}`);
 }

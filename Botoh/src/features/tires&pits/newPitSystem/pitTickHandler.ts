@@ -8,6 +8,8 @@ import { sendAlertMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { resetPitState } from "./newPitManager";
 
+const MOVEMENT_CANCEL_GRACE_SECONDS = 0.5;
+
 export function updateNewPitSystemForPlayer(
   p: PlayerObject,
   properties: DiscPropertiesObject,
@@ -26,10 +28,14 @@ export function updateNewPitSystemForPlayer(
   if (playerInfo.newPitState.isWaitingForPit) {
     const disc = room.getPlayerDiscProperties(p.id);
     if (!disc) return;
+
+    const pitStartTime = playerInfo.newPitState.pitStartTime ?? currentTime;
+    const canValidateMovement =
+      currentTime - pitStartTime >= MOVEMENT_CANCEL_GRACE_SECONDS;
     
     const isMoving = Math.hypot(disc.xspeed, disc.yspeed) > 0.5;
     
-    if (isMoving) {
+    if (canValidateMovement && isMoving) {
       resetPitState(p.id);
       
       restoreTyreOrCar(p.id, room);

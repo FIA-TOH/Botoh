@@ -13,6 +13,7 @@ export function createPlayerInfo(ip?: string, playerId?: number) {
     afk: false,
     afkAlert: false,
     leagueScuderia: null,
+    manualLeagueScuderia: null,
     didHardQualy: false,
     sandbagPenalty: 0,
 
@@ -33,6 +34,11 @@ export function createPlayerInfo(ip?: string, playerId?: number) {
       number,
       number,
       number,
+    ],
+    currentLapSectorStatus: ["none", "none", "none"] as [
+      "none",
+      "none",
+      "none",
     ],
     sectorColour: COLORS.WHITE,
 
@@ -218,6 +224,7 @@ export function resetPlayer(
   playerList[id].sectorChanged = false;
   playerList[id].sectorTime = [];
   playerList[id].sectorTimeCounter = 0;
+  playerList[id].currentLapSectorStatus = ["none", "none", "none"];
   playerList[id].sectorColour = COLORS.WHITE;
 
   playerList[id].lapsOnCurrentTire = -1;
@@ -249,6 +256,7 @@ export function resetPlayer(
     clearPreparedPitTire(id, player.name);
   }
   playerList[id].pitInitialPos = { x: 0, y: 0 };
+  playerList[id].pitMovementValidationStartTime = undefined;
   playerList[id].drs = false;
   playerList[id].speedEnabled = false;
   playerList[id].kers = 100;
