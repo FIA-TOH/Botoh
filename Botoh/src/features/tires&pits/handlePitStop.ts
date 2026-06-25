@@ -34,6 +34,7 @@ export function handlePitStop(
 
   const total = state.pitFailures?.totalTime ?? 0;
   state.pitCountdown = total;
+  state.pitMovementValidationStartTime = room.getScores()?.time ?? 0;
 
   state.pitSteps = buildPitSteps(state.pitFailures);
 

@@ -31,7 +31,7 @@ export function PlayerChat(room: RoomObject) {
 
     sendToWebsite(player, message);
 
-    const [rawCommand, ...args] = message.split(" ");
+    const [rawCommand, ...args] = message.trim().split(/\s+/);
     const command = rawCommand.toLowerCase();
 
     if (command[0] !== "!") {

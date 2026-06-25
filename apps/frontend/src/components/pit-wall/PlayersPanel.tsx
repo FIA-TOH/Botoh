@@ -55,14 +55,14 @@ const FLAG_HEADER_CONFIG = {
     backgroundColor: '#000000',
   },
   SAFETY: {
-    title: 'SAFETY',
-    subtitle: 'CAR',
+    title: 'SAFETY CAR',
+    subtitle: '',
     color: '#000000',
     backgroundColor: '#FFC919',
   },
   VIRTUAL_SAFETY: {
-    title: 'VIRTUAL',
-    subtitle: 'SAFETY CAR',
+    title: 'VSC',
+    subtitle: '',
     color: '#000000',
     backgroundColor: '#FFC919',
   },
@@ -75,8 +75,19 @@ function formatSessionTime(seconds: number): string {
     0,
     Math.floor(seconds)
   );
+  const hours = Math.floor(safeSeconds / 3600);
   const minutes = Math.floor(safeSeconds / 60);
   const remainingSeconds = safeSeconds % 60;
+
+  if (hours > 0) {
+    const remainingMinutes = Math.floor((safeSeconds % 3600) / 60);
+
+    return `${hours}:${remainingMinutes
+      .toString()
+      .padStart(2, '0')}:${remainingSeconds
+      .toString()
+      .padStart(2, '0')}`;
+  }
 
   return `${minutes}:${remainingSeconds
     .toString()
@@ -308,6 +319,13 @@ export function PlayersPanel({
           visibleFlag as keyof typeof FLAG_HEADER_CONFIG
         ]
       : null;
+  const shouldShowRaceLaps =
+    raceSession?.sessionType === 'race'
+    && (
+      visibleFlag === 'YELLOW'
+      || visibleFlag === 'SAFETY'
+      || visibleFlag === 'VIRTUAL_SAFETY'
+    );
 
   const isTimedSession =
     raceSession?.sessionType === 'qualy'
@@ -316,6 +334,9 @@ export function PlayersPanel({
   const sessionTimeLeft = formatSessionTime(
     (raceSession?.totalTime ?? 0)
     - (raceSession?.currentTimePassed ?? 0)
+  );
+  const trainingElapsedTime = formatSessionTime(
+    raceSession?.currentTimePassed ?? 0
   );
   const isQualyOvertime =
     isTimedSession
@@ -346,14 +367,29 @@ export function PlayersPanel({
         }}
       >
         <div className="min-w-0 flex-1 lg:flex-none">
-          <div className="truncate text-xl font-bold leading-none lg:text-4xl">
+          <div
+            className={
+              visibleFlag === 'SAFETY'
+                ? 'truncate text-lg font-bold leading-none lg:text-3xl'
+                : 'truncate text-xl font-bold leading-none lg:text-4xl'
+            }
+          >
             {flagHeader?.title
               ?? raceSession?.sessionType?.toUpperCase()
               ?? 'RACE'}
           </div>
 
           <div className="truncate text-sm font-bold leading-tight lg:text-xl">
-            {flagHeader ? (
+            {shouldShowRaceLaps ? (
+              <>
+                {t.players.lap}{' '}
+                <strong>
+                  {raceSession?.currentLap ?? 0}
+                </strong>
+                /
+                {raceSession?.totalLaps ?? 0}
+              </>
+            ) : flagHeader ? (
               flagHeader.subtitle
             ) : isQualyOvertime ? (
               <span className="text-red-500">
@@ -361,6 +397,8 @@ export function PlayersPanel({
               </span>
             ) : isTimedSession ? (
               sessionTimeLeft
+            ) : raceSession?.sessionType === 'training' ? (
+              trainingElapsedTime
             ) : (
               <>
                 {t.players.lap}{' '}

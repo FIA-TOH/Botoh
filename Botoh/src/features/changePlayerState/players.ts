@@ -250,6 +250,7 @@ export function resetPlayer(
     clearPreparedPitTire(id, player.name);
   }
   playerList[id].pitInitialPos = { x: 0, y: 0 };
+  playerList[id].pitMovementValidationStartTime = undefined;
   playerList[id].drs = false;
   playerList[id].speedEnabled = false;
   playerList[id].kers = 100;

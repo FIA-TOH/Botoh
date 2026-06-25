@@ -93,6 +93,7 @@ export interface PlayerInfo {
   pitTargetTires?: Tires;
   nextPitTires: Tires | null;
   pitInitialPos?: { x: number; y: number };
+  pitMovementValidationStartTime?: number;
   pitFailures?: PitResult;
   pitSteps?: PitStep[] | undefined;
   canLeavePitLane: boolean;
