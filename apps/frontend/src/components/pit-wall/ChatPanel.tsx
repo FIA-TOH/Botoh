@@ -21,6 +21,7 @@ interface Props {
   isConnected: boolean;
   isMuted?: boolean;
   recipientOptions: string[];
+  selectedRecipient: string;
   onSelectRecipient: (option: string) => void;
 
   loading?: boolean;
@@ -36,12 +37,15 @@ export function ChatPanel({
   isConnected,
   isMuted = false,
   recipientOptions,
+  selectedRecipient,
   onSelectRecipient,
   loading = false,
   error = null,
 }: Props) {
   const { t } = useTranslations();
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const isGlobalRecipient = selectedRecipient === t.chat.everyone;
+  const isGlobalChatBlocked = isMuted && isGlobalRecipient;
 
   useEffect(() => {
     const container = messagesContainerRef.current;
@@ -220,7 +224,7 @@ export function ChatPanel({
               loading ||
               !!error ||
               !isConnected ||
-              isMuted
+              isGlobalChatBlocked
             }
           />
 
@@ -232,7 +236,7 @@ export function ChatPanel({
               message.trim().startsWith('!') ||
               loading ||
               !!error ||
-              isMuted
+              isGlobalChatBlocked
             }
             className="px-3 py-2 !w-auto"
           >

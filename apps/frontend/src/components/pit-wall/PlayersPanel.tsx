@@ -211,9 +211,33 @@ export function PlayersPanel({
       }))
     : sortedDrivers;
 
-  const timingLeader = isTimingStandingsSession
-    ? displayedDrivers.find((driver) => !!driver.bestTime)
-    : undefined;
+  const timingGapByDriverId = new Map<number, string>();
+
+  if (isTimingStandingsSession) {
+    let previousTimedDriver: Driver | null = null;
+
+    displayedDrivers.forEach((driver) => {
+      if (!driver.bestTime) {
+        timingGapByDriverId.set(driver.id, t.players.noTime);
+        return;
+      }
+
+      if (!previousTimedDriver?.bestTime) {
+        timingGapByDriverId.set(driver.id, driver.bestTime);
+        previousTimedDriver = driver;
+        return;
+      }
+
+      const previousMs = lapTimeToMs(previousTimedDriver.bestTime);
+      const driverMs = lapTimeToMs(driver.bestTime);
+
+      timingGapByDriverId.set(
+        driver.id,
+        formatGap(Math.max(0, driverMs - previousMs)),
+      );
+      previousTimedDriver = driver;
+    });
+  }
 
   const getGapText = (driver: Driver) => {
 
@@ -240,37 +264,7 @@ export function PlayersPanel({
     if (
       isTimingStandingsSession
     ) {
-      const driverLapTime =
-        driver.bestTime
-
-      if (timingLeader?.name === driver.name) {
-        return driverLapTime ?? t.players.noTime;
-      }
-
-      if (!driverLapTime) {
-        return t.players.noTime;
-      }
-
-      const leaderLapTime =
-        timingLeader?.bestTime
-
-      if (
-        leaderLapTime
-        && driverLapTime
-      ) {
-
-        const leaderMs = lapTimeToMs(
-          leaderLapTime
-        );
-
-        const driverMs = lapTimeToMs(
-          driverLapTime
-        );
-
-        return formatGap(Math.max(0, driverMs - leaderMs));
-      }
-
-      return t.players.noTime;
+      return timingGapByDriverId.get(driver.id) ?? t.players.noTime;
     }
 
     return driver.gapToLeader;

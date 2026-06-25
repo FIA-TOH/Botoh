@@ -145,7 +145,7 @@ async function setupBackendCommunication() {
         const { sendRadioMessage, SOUNDS } = await import('../../../Botoh/src/features/chat/chat');
         const { mute_mode } = await import('../../../Botoh/src/features/chat/toggleMuteMode');
 
-        if (mute_mode) {
+        if (mute_mode && target.type === 'all') {
           respond?.({ success: false, code: 'chat_muted' });
           return;
         }
@@ -221,16 +221,20 @@ async function setupBackendCommunication() {
           sendRadioMessage(room, formattedMessage, recipient.id, pitWallMessageSound);
         });
 
-        if (target.type === 'all') {
-          const { sendChatMessageToWebsite } = await import('../../../Botoh/src/features/website/sendToWebsite');
-          sendChatMessageToWebsite({
-            player,
-            message,
-            timestamp: Date.now(),
-            color: null,
-            source: 'frontend',
-          });
-        }
+        const { sendChatMessageToWebsite } = await import('../../../Botoh/src/features/website/sendToWebsite');
+        const websiteChannelLabel =
+          target.type === 'team'
+            ? MESSAGES.CHAT_CHANNEL_TEAM().pt
+            : target.type === 'player'
+              ? MESSAGES.CHAT_CHANNEL_PRIVATE().pt
+              : null;
+        sendChatMessageToWebsite({
+          player,
+          message: websiteChannelLabel ? `[${websiteChannelLabel}] ${message}` : message,
+          timestamp: Date.now(),
+          color: null,
+          source: 'frontend',
+        });
 
         respond?.({ success: true });
       } else {

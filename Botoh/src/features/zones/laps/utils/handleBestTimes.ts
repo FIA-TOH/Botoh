@@ -62,7 +62,9 @@ export function handleBestTimes(
       bestTimeP > 0 &&
       bestTimeP < MAX_REASONABLE_LAP;
 
-    const differenceToBestTime = isValidBestTime ? lapTime - bestTimeP : 0;
+    const differenceToBestTime = isValidBestTime
+      ? Math.abs(lapTime - bestTimeP)
+      : 0;
 
     sendWorseTime(
       room,
