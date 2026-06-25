@@ -53,6 +53,7 @@ const trackNameMapping: { [key: string]: string } = {
   miamiSeasonTres: "Miami by Rodri - NewgenV3",
   bahrainSeasonTres: "Sakhir Bahrain International Circuit - By Ximb - NewgenV3",
   sepangSeasonTres: "Sepang F1 International Circuit - By Ximb - NewgenV3",
+  shangahiSeasonTres: "Shanghai International Circuit - By Ximb - NewgenV3",
 };
 
 export const bestTimes: { [key: string]: [number, string, string] } = {
@@ -119,7 +120,8 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   imolaTeste: [999.999, "undefined", trackNameMapping["imolaTeste"]],
   miamiSeasonTres: [92.918, "Rodri", "Miami by Rodri - NewgenV3"],
   bahrainSeasonTres: [44.999, "Ximb", trackNameMapping["bahrainSeasonTres"]],
-  sepangSeasonTres: [59.45, "Splinter", trackNameMapping["sepangSeasonTres"]],
+  sepangSeasonTres: [59.102, "Fominha", trackNameMapping["sepangSeasonTres"]],
+  shangahiSeasonTres: [53.000, "Splinter", trackNameMapping["shanghaiSeasonTres"]],
 };
 
 export const getAbbreviatedTrackName = (

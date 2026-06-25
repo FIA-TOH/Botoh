@@ -7,10 +7,6 @@ import { bestTimes } from "../bestTimes";
 import { Circuit, CircuitInfo, CircuitPhysics, Direction, SpecificDirection } from "../Circuit";
 
 const sepangSeasonTres_raw = readFileSync(join(__dirname, "sepangSeasonTres.hbs"), "utf-8");
-const sepangSeasonTres_json = JSON.parse(sepangSeasonTres_raw);
-
-
-
 
 const SEPANGSEASONTRES_INFO: CircuitInfo = {
   finishLine: {
