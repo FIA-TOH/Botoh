@@ -13,6 +13,7 @@ export function createPlayerInfo(ip?: string, playerId?: number) {
     afk: false,
     afkAlert: false,
     leagueScuderia: null,
+    manualLeagueScuderia: null,
     didHardQualy: false,
     sandbagPenalty: 0,
 

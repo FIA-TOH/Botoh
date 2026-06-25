@@ -167,6 +167,30 @@ export const MESSAGES = {
       configType: configType,
     }),
   }),
+  TEAM_COMMAND_CONFIG_USAGE: (): LocalizedMessageFunction => ({
+    en: en_messages.TEAM_COMMAND_CONFIG_USAGE,
+    es: es_messages.TEAM_COMMAND_CONFIG_USAGE,
+    fr: fr_messages.TEAM_COMMAND_CONFIG_USAGE,
+    tr: tr_messages.TEAM_COMMAND_CONFIG_USAGE,
+    pt: pt_messages.TEAM_COMMAND_CONFIG_USAGE,
+  }),
+  TEAM_COMMAND_CONFIG_SUCCESS: (enabled: boolean): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.TEAM_COMMAND_CONFIG_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+    es: replaceTemplateString(es_messages.TEAM_COMMAND_CONFIG_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+    fr: replaceTemplateString(fr_messages.TEAM_COMMAND_CONFIG_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+    tr: replaceTemplateString(tr_messages.TEAM_COMMAND_CONFIG_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+    pt: replaceTemplateString(pt_messages.TEAM_COMMAND_CONFIG_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+  }),
   PIT_MISSING_ARGUMENT: (): LocalizedMessageFunction => ({
     en: en_messages.PIT_MISSING_ARGUMENT,
     es: es_messages.PIT_MISSING_ARGUMENT,
@@ -1649,12 +1673,40 @@ export const MESSAGES = {
       tag: tag,
     }),
   }),
-  SCUDERIA_ERROR: (tag: string): LocalizedMessageFunction => ({
-    en: replaceTemplateString(en_messages.SCUDERIA_ERROR, { tag: tag }),
-    es: replaceTemplateString(es_messages.SCUDERIA_ERROR, { tag: tag }),
-    fr: replaceTemplateString(fr_messages.SCUDERIA_ERROR, { tag: tag }),
-    tr: replaceTemplateString(tr_messages.SCUDERIA_ERROR, { tag: tag }),
-    pt: replaceTemplateString(pt_messages.SCUDERIA_ERROR, { tag: tag }),
+  SCUDERIA_ERROR: (value: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.SCUDERIA_ERROR, { value: value }),
+    es: replaceTemplateString(es_messages.SCUDERIA_ERROR, { value: value }),
+    fr: replaceTemplateString(fr_messages.SCUDERIA_ERROR, { value: value }),
+    tr: replaceTemplateString(tr_messages.SCUDERIA_ERROR, { value: value }),
+    pt: replaceTemplateString(pt_messages.SCUDERIA_ERROR, { value: value }),
+  }),
+  TEAM_COMMAND_USAGE: (): LocalizedMessageFunction => ({
+    en: en_messages.TEAM_COMMAND_USAGE,
+    es: es_messages.TEAM_COMMAND_USAGE,
+    fr: fr_messages.TEAM_COMMAND_USAGE,
+    tr: tr_messages.TEAM_COMMAND_USAGE,
+    pt: pt_messages.TEAM_COMMAND_USAGE,
+  }),
+  TEAM_COMMAND_DISABLED: (): LocalizedMessageFunction => ({
+    en: en_messages.TEAM_COMMAND_DISABLED,
+    es: es_messages.TEAM_COMMAND_DISABLED,
+    fr: fr_messages.TEAM_COMMAND_DISABLED,
+    tr: tr_messages.TEAM_COMMAND_DISABLED,
+    pt: pt_messages.TEAM_COMMAND_DISABLED,
+  }),
+  SCUDERIA_REMOVED: (): LocalizedMessageFunction => ({
+    en: en_messages.SCUDERIA_REMOVED,
+    es: es_messages.SCUDERIA_REMOVED,
+    fr: fr_messages.SCUDERIA_REMOVED,
+    tr: tr_messages.SCUDERIA_REMOVED,
+    pt: pt_messages.SCUDERIA_REMOVED,
+  }),
+  SCUDERIA_REMOVE_EMPTY: (): LocalizedMessageFunction => ({
+    en: en_messages.SCUDERIA_REMOVE_EMPTY,
+    es: es_messages.SCUDERIA_REMOVE_EMPTY,
+    fr: fr_messages.SCUDERIA_REMOVE_EMPTY,
+    tr: tr_messages.SCUDERIA_REMOVE_EMPTY,
+    pt: pt_messages.SCUDERIA_REMOVE_EMPTY,
   }),
   LOGIN_USAGE: (): LocalizedMessageFunction => ({
     en: en_messages.LOGIN_USAGE,

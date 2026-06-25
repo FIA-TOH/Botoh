@@ -57,6 +57,7 @@ export interface PlayerInfo {
   afk: boolean;
   afkAlert: boolean;
   leagueScuderia: LeagueScuderiaId | null;
+  manualLeagueScuderia: LeagueScuderiaId | null;
   didHardQualy: boolean;
 
   sandbagPenalty: number;
@@ -306,4 +307,10 @@ export function updatePlayerListRaceGaps(
   if (player.gapToNext !== gapToNext) {
     player.gapToNext = gapToNext;
   }
+}
+
+export function getEffectiveLeagueScuderiaId(
+  player?: PlayerInfo | null,
+): LeagueScuderiaId | null {
+  return player?.manualLeagueScuderia ?? player?.leagueScuderia ?? null;
 }

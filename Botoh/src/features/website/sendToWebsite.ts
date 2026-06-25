@@ -1,4 +1,7 @@
-import { playerList } from "../changePlayerState/playerList";
+import {
+  getEffectiveLeagueScuderiaId,
+  playerList,
+} from "../changePlayerState/playerList";
 import { getLeagueScuderia } from "../scuderias/scuderias";
 import type { LocalizedMessageFunction } from "../chat/messages";
 
@@ -25,7 +28,7 @@ export function sendToWebsite(
   }
 
   const playerInfo = playerList[player.id];
-  const scuderia = getLeagueScuderia(playerInfo?.leagueScuderia);
+  const scuderia = getLeagueScuderia(getEffectiveLeagueScuderiaId(playerInfo));
 
   sendChatMessageToWebsite({
     player: player.name,

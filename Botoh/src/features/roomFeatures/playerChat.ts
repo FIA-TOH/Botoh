@@ -2,7 +2,11 @@ import { afkAdmins } from "../afk/afkAdmins";
 import { sendErrorMessage } from "../chat/chat";
 import { COMMANDS } from "../commands/handleCommands";
 import { MESSAGES } from "../chat/messages";
-import { PlayerInfo, playerList } from "../changePlayerState/playerList";
+import {
+  getEffectiveLeagueScuderiaId,
+  PlayerInfo,
+  playerList,
+} from "../changePlayerState/playerList";
 import { getLeagueScuderia } from "../scuderias/scuderias";
 import { log } from "../discord/logger";
 import { mute_mode } from "../chat/toggleMuteMode";
@@ -10,7 +14,7 @@ import { updatePlayerActivity } from "../afk/afk";
 import { sendToWebsite } from "../website/sendToWebsite";
 
 function getPlayerScuderia(playerInfo: PlayerInfo) {
-  return getLeagueScuderia(playerInfo.leagueScuderia);
+  return getLeagueScuderia(getEffectiveLeagueScuderiaId(playerInfo));
 }
 
 export function PlayerChat(room: RoomObject) {

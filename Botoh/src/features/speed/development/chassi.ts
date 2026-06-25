@@ -1,4 +1,8 @@
-import { PlayerInfo, playerList } from "../../changePlayerState/playerList";
+import {
+  getEffectiveLeagueScuderiaId,
+  PlayerInfo,
+  playerList,
+} from "../../changePlayerState/playerList";
 import { getLeagueScuderia } from "../../scuderias/scuderias";
 import { constants } from "../constants";
 
@@ -13,9 +17,10 @@ function calcAccelerationNerf(grip: number, accelerationNerf: number) {
 }
 
 export function chassiGripCalc(p: PlayerInfo, grip: number) {
-  if (!p.leagueScuderia) return grip;
+  const scuderiaId = getEffectiveLeagueScuderiaId(p);
+  if (!scuderiaId) return grip;
 
-  const scud = getLeagueScuderia(p.leagueScuderia);
+  const scud = getLeagueScuderia(scuderiaId);
   if (!scud || !scud.chassis) return grip;
 
   const chassis = scud.chassis;
@@ -27,9 +32,10 @@ export function chassiGripCalc(p: PlayerInfo, grip: number) {
 
 export function getPlayerSlipstreamBoost(player: PlayerObject) {
   const pInfo = playerList[player.id];
-  if (!pInfo.leagueScuderia) return constants.MAX_SLIPSTREAM;
+  const scuderiaId = getEffectiveLeagueScuderiaId(pInfo);
+  if (!scuderiaId) return constants.MAX_SLIPSTREAM;
 
-  const scud = getLeagueScuderia(pInfo.leagueScuderia);
+  const scud = getLeagueScuderia(scuderiaId);
   if (!scud || !scud.chassis) return constants.MAX_SLIPSTREAM;
 
   const nerf = scud.chassis.slipstreamNerf ?? 0;
