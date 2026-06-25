@@ -167,9 +167,15 @@ export function PlayersPanel({
   const isQualifyingSession =
     raceSession?.sessionType === 'qualy'
     || raceSession?.sessionType === 'hard_qualy';
+  const isTimingStandingsSession =
+    isQualifyingSession
+    || raceSession?.sessionType === 'training';
+  const shouldShowSectorBars =
+    isTimingStandingsSession
+    || raceSession?.sessionType === 'training';
 
   const sortedDrivers = [...drivers].sort((a, b) => {
-    if (isQualifyingSession) {
+    if (isTimingStandingsSession) {
       const aTime = a.bestTime ? lapTimeToMs(a.bestTime) : Number.POSITIVE_INFINITY;
       const bTime = b.bestTime ? lapTimeToMs(b.bestTime) : Number.POSITIVE_INFINITY;
 
@@ -198,14 +204,14 @@ export function PlayersPanel({
       );
   });
 
-  const displayedDrivers = isQualifyingSession
+  const displayedDrivers = isTimingStandingsSession
     ? sortedDrivers.map((driver, index) => ({
         ...driver,
         position: driver.bestTime ? index + 1 : null,
       }))
     : sortedDrivers;
 
-  const qualifyingLeader = isQualifyingSession
+  const timingLeader = isTimingStandingsSession
     ? displayedDrivers.find((driver) => !!driver.bestTime)
     : undefined;
 
@@ -232,12 +238,12 @@ export function PlayersPanel({
     }
 
     if (
-      isQualifyingSession
+      isTimingStandingsSession
     ) {
       const driverLapTime =
         driver.bestTime
 
-      if (qualifyingLeader?.name === driver.name) {
+      if (timingLeader?.name === driver.name) {
         return driverLapTime ?? t.players.noTime;
       }
 
@@ -246,7 +252,7 @@ export function PlayersPanel({
       }
 
       const leaderLapTime =
-        qualifyingLeader?.bestTime
+        timingLeader?.bestTime
 
       if (
         leaderLapTime
@@ -265,10 +271,6 @@ export function PlayersPanel({
       }
 
       return t.players.noTime;
-    }
-
-    if (raceSession?.sessionType === 'training') {
-      return driver.bestTime ?? t.players.noTime;
     }
 
     return driver.gapToLeader;
@@ -421,7 +423,7 @@ export function PlayersPanel({
 
       {/* CONTENT */}
       {!isCollapsed && (
-      <div className="relative max-h-[min(58vh,460px)] min-h-[240px] overflow-y-auto px-1.5 lg:max-h-none lg:min-h-[400px] lg:overflow-visible lg:px-2">
+      <div className="group/pit-drivers relative max-h-[min(58vh,460px)] min-h-[240px] overflow-y-auto px-1.5 lg:max-h-none lg:min-h-[400px] lg:overflow-visible lg:px-2">
 
         {/* LOADING */}
         {loading && (
@@ -578,6 +580,7 @@ export function PlayersPanel({
                     driver={driver}
                     isOut={raceSession?.sessionType === 'race' && driver.isOut}
                     isFinished={raceSession?.sessionType === 'race' && driver.isFinished}
+                    showSectorBars={shouldShowSectorBars}
                     gapText={getGapText(
                       driver
                     )}

@@ -32,6 +32,11 @@ export interface Driver {
   lapTime: number;
   bestTime: string | null;
   bestSectorTimes: [string | null, string | null, string | null];
+  currentLapSectorStatus: [
+    'none' | 'yellow' | 'green' | 'purple',
+    'none' | 'yellow' | 'green' | 'purple',
+    'none' | 'yellow' | 'green' | 'purple',
+  ];
   tires: Tires;
   nextPitTires: Tires | null;
   wear: number;

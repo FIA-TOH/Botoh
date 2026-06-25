@@ -1,4 +1,4 @@
-import { Driver } from '@/mocks/raceData';
+import { Driver, RaceSession } from '@/mocks/raceData';
 import { Tires } from '@/types/game';
 
 import { DriverHud } from './DriverHud';
@@ -8,6 +8,7 @@ interface Props {
   drivers?: Driver[];
   loggedUserTeam?: string | null;
   loggedUserTeamId?: string | null;
+  raceSession?: RaceSession | null;
   onPitCall?: (driver: Driver) => void;
   onPitTyrePrepare?: (driver: Driver, tyre: Tires | null) => void;
   loading?: boolean;
@@ -19,6 +20,7 @@ export function TeamInfoPanel({
   drivers = [],
   loggedUserTeam = null,
   loggedUserTeamId = null,
+  raceSession = null,
   onPitCall,
   onPitTyrePrepare,
   loading = false,
@@ -42,6 +44,10 @@ export function TeamInfoPanel({
 
   const driver1 = teamDrivers.find((driver) => driver.isFirstDriver);
   const driver2 = teamDrivers.find((driver) => !driver.isFirstDriver);
+  const showSectorBars =
+    raceSession?.sessionType === 'training'
+    || raceSession?.sessionType === 'qualy'
+    || raceSession?.sessionType === 'hard_qualy';
 
   return (
     <div
@@ -129,6 +135,7 @@ export function TeamInfoPanel({
             <DriverHud
               driver={driver1}
               align="left"
+              showSectorBars={showSectorBars}
               onPitCall={onPitCall}
               onPitTyrePrepare={onPitTyrePrepare}
             />
@@ -136,6 +143,7 @@ export function TeamInfoPanel({
             <DriverHud
               driver={driver2}
               align="right"
+              showSectorBars={showSectorBars}
               onPitCall={onPitCall}
               onPitTyrePrepare={onPitTyrePrepare}
             />

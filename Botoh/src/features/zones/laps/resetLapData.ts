@@ -6,6 +6,7 @@ import {
 } from "../../changeGameState/changeGameModes";
 import { PlayerInfo, playerList } from "../../changePlayerState/playerList";
 import { Tires } from "../../tires&pits/tires";
+import { scheduleCurrentLapSectorStatusReset } from "./trackBestSector";
 
 export function resetLapData(
   playerData: PlayerInfo,
@@ -27,4 +28,5 @@ export function resetLapData(
     playerList[playerId].totalTime;
   playerData.cuttedTrackOnThisLap = false;
   playerData.lastLapValid = true;
+  scheduleCurrentLapSectorStatusReset(playerId, playerData.currentLap);
 }

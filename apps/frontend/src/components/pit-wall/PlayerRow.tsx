@@ -4,12 +4,14 @@ import {
   getTireAbbr,
   getTireColor,
 } from '../../app/utils/race';
+import { SectorBars } from './SectorBars';
 
 interface Props {
   driver: Driver;
   gapText: string;
   isOut?: boolean;
   isFinished?: boolean;
+  showSectorBars?: boolean;
 }
 
 export function PlayerRow({
@@ -17,13 +19,17 @@ export function PlayerRow({
   gapText,
   isOut = false,
   isFinished = false,
+  showSectorBars = false,
 }: Props) {
   const textOpacity = isOut && !isFinished
     ? 0.5
     : 1;
+  const sectorStatuses: Driver['currentLapSectorStatus'] =
+    driver.currentLapSectorStatus ?? ['none', 'none', 'none'];
 
   return (
-    <div className="relative flex items-center justify-between py-px text-xs lg:py-0.5 lg:text-base">
+    <div className="relative py-px text-xs lg:py-0.5 lg:text-base">
+      <div className="flex items-center justify-between gap-1.5">
 
       {/* LEFT SIDE */}
       <div
@@ -48,15 +54,14 @@ export function PlayerRow({
         />
 
         {/* DRIVER NAME */}
-        <div className="truncate font-bold">
+        <div className="shrink-0 whitespace-nowrap font-bold">
           {driver.shortName}
         </div>
       </div>
 
       {/* RIGHT SIDE */}
       <div
-        className="flex items-center justify-end"
-        style={{ marginLeft: 'auto' }}
+        className="flex shrink-0 items-center justify-end"
       >
         <div
           className="grid grid-cols-[62px_20px] items-center font-bold lg:grid-cols-[88px_24px]"
@@ -83,6 +88,16 @@ export function PlayerRow({
           </span>
         </div>
       </div>
+      </div>
+
+      {showSectorBars && !isOut && !isFinished && (
+        <div className="ml-[1.65rem] hidden pr-[84px] group-hover/pit-drivers:block lg:ml-[1.9rem] lg:pr-[116px]">
+          <SectorBars
+            statuses={sectorStatuses}
+            barClassName="h-0.5"
+          />
+        </div>
+      )}
     </div>
   );
 }

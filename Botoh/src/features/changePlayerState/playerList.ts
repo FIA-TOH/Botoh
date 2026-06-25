@@ -19,6 +19,13 @@ type Direction = {
   y: number;
 };
 
+export type LapSectorStatus = "none" | "yellow" | "green" | "purple";
+export type LapSectorStatuses = [
+  LapSectorStatus,
+  LapSectorStatus,
+  LapSectorStatus,
+];
+
 export interface NewPitState {
   isWaitingForPit: boolean;
   pitStartTime?: number;
@@ -76,6 +83,7 @@ export interface PlayerInfo {
   sectorTime: number[];
   sectorTimeCounter: number;
   bestSectorTimes: [number, number, number];
+  currentLapSectorStatus: LapSectorStatuses;
   sectorColour: COLORS;
 
   tires: Tires;
@@ -208,11 +216,25 @@ export let idToAuth: { [id: number]: string } = {};
 
 export const playerList = new Proxy(actualPlayerList, {
   get(target, prop) {
-    return target[idToAuth[Number(prop)]];
+    if (typeof prop === "symbol") {
+      return Reflect.get(target, prop);
+    }
+
+    if (prop in target) {
+      return target[prop];
+    }
+
+    const auth = idToAuth[Number(prop)];
+    return auth ? target[auth] : undefined;
   },
 
   set(target, prop, newValue: PlayerInfo): boolean {
-    target[idToAuth[Number(prop)]] = newValue;
+    if (typeof prop === "symbol") {
+      return Reflect.set(target, prop, newValue);
+    }
+
+    const auth = idToAuth[Number(prop)];
+    target[auth ?? prop] = newValue;
     return true;
   },
 });

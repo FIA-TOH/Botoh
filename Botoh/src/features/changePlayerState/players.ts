@@ -35,6 +35,11 @@ export function createPlayerInfo(ip?: string, playerId?: number) {
       number,
       number,
     ],
+    currentLapSectorStatus: ["none", "none", "none"] as [
+      "none",
+      "none",
+      "none",
+    ],
     sectorColour: COLORS.WHITE,
 
     tires: Tires.SOFT,
@@ -219,6 +224,7 @@ export function resetPlayer(
   playerList[id].sectorChanged = false;
   playerList[id].sectorTime = [];
   playerList[id].sectorTimeCounter = 0;
+  playerList[id].currentLapSectorStatus = ["none", "none", "none"];
   playerList[id].sectorColour = COLORS.WHITE;
 
   playerList[id].lapsOnCurrentTire = -1;

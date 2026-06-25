@@ -13,12 +13,14 @@ import { DriverCircle } from './DriverCircle';
 import { TelemetryBar } from './TelemetryBar';
 import { Driver } from '@/mocks/raceData';
 import { useTranslations } from '@/i18n';
+import { SectorBars } from './SectorBars';
 
 interface Props {
   driver?: Driver;
   align: 'left' | 'right';
   onPitCall?: (driver: Driver) => void;
   onPitTyrePrepare?: (driver: Driver, tyre: Tires | null) => void;
+  showSectorBars?: boolean;
 }
 
 type PitTyreOption = 'none' | 'soft' | 'medium' | 'hard' | 'inter' | 'wet' | 'train';
@@ -141,6 +143,7 @@ export function DriverHud({
   align,
   onPitCall,
   onPitTyrePrepare,
+  showSectorBars = false,
 }: Props) {
   const [selectedPitTyre, setSelectedPitTyre] = useState<PitTyreOption>('none');
   const [isPitTyreModalOpen, setIsPitTyreModalOpen] = useState(false);
@@ -168,6 +171,7 @@ export function DriverHud({
 
   const info = (
     <div
+      className="min-w-0"
       style={{
         opacity: driverVisualOpacity,
       }}
@@ -180,6 +184,7 @@ export function DriverHud({
           flex
           items-center
           gap-2
+          min-w-0
           ${
             align === 'right'
               ? 'sm:justify-end'
@@ -187,7 +192,7 @@ export function DriverHud({
           }
         `}
       >
-        <span>
+        <span className="min-w-0 break-words">
           {driverName}
         </span>
 
@@ -203,6 +208,14 @@ export function DriverHud({
               driver.tires
             )}
           </span>
+        )}
+
+        {driver && showSectorBars && !isOut && (
+          <SectorBars
+            statuses={driver.currentLapSectorStatus}
+            barClassName="h-1.5"
+            className="min-w-[56px] max-w-[180px] sm:max-w-[220px]"
+          />
         )}
       </div>
 
@@ -445,7 +458,7 @@ export function DriverHud({
   );
 
   return (
-    <div className="flex flex-col">
+    <div className="flex min-w-0 flex-1 flex-col">
 
       {info}
 

@@ -24,6 +24,7 @@ export function handleClearCommand(
       Number.MAX_VALUE,
       Number.MAX_VALUE,
     ];
+    playerList[p.id].currentLapSectorStatus = ["none", "none", "none"];
   });
   log("Best record cleared by admin");
   room.sendAnnouncement("Record cleared", byPlayer.id, COLORS.GREEN);

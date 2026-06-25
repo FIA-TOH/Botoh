@@ -80,6 +80,8 @@ interface TeamGarageManage {
   pitCrewCostPerRace: number; salaryCostPerRace: number; sponsorIncomePerRace: number;
   category: 'formula_1' | 'formula_2'; isJuniorTeam: boolean; parentTeamId: string | null;
   climateMonitoringLevel: number; pitCrewLevel: number;
+  momentoComercial: number; prestigio: number; agressividade: number; popularidade: number; tecnica: number;
+  nacionalidades: string[] | null; setores: string[] | null;
   financialHistory: { id: string; amount: number; entryType: string; reason: string; occurredAt: string }[];
   drivers: {
     id: string;
@@ -105,6 +107,11 @@ interface TeamCircuitBox {
 interface TeamSponsor {
   id: string; sponsorId?: string; name: string; category: string; slotNumber: number;
   contractRacesRemaining?: number; initialReward?: number; rewardPerRace?: number;
+  nacionalidade: string | null; tipo: string | null; setor: string | null;
+  felicidade: number; prestigio: number; agressividade: number; focoEmMidia: number;
+  focoTecnico: number; nacionalismo: number; fidelidade: number; orcamento: number;
+  ambicao: number; publicoAlvo1: string | null; publicoAlvo2: string | null;
+  scuderiasRelacionadas: string[] | null;
   seasonMissions: Mission[]; raceMissions: Mission[];
 }
 interface SponsorMarketReview {
@@ -119,6 +126,20 @@ interface SponsorMarketReview {
   createdAt: string;
 }
 interface Mission { id: string; title: string; description?: string | null; reward: number; racesToComplete?: number }
+interface CommercialMomentumSponsorPreview {
+  teamSponsorId: string;
+  sponsorId?: string;
+  name: string;
+  currentHappiness: number;
+  suggestedDelta: number;
+  manualDelta: string;
+}
+interface CommercialMomentumPreview {
+  delta: number;
+  previousMomentum: number;
+  nextMomentum: number;
+  sponsors: CommercialMomentumSponsorPreview[];
+}
 interface RaceProgressAlert {
   id: string;
   entityType: 'driver_contract' | 'sponsor_contract' | 'season_mission';
@@ -262,6 +283,82 @@ function addUniqueNationality(current: string[], nextValue: string) {
   return exists ? current : [...current, next];
 }
 
+function clampNumber(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function calculateSponsorHappinessDelta(
+  team: TeamGarageManage,
+  sponsor: TeamSponsor,
+  commercialMomentumDelta: number,
+) {
+  if (commercialMomentumDelta === 0) return 0;
+
+  const previousMomentum = clampNumber(Number(team.momentoComercial ?? 0), 0, 100);
+  const teamNationalities = (team.nacionalidades ?? []).map(normalizeNationality);
+  const sponsorNationality = normalizeNationality(sponsor.nacionalidade ?? '');
+  const hasNationalityMatch =
+    Boolean(sponsorNationality)
+    && teamNationalities.includes(sponsorNationality);
+  const direction = commercialMomentumDelta > 0 ? 1 : -1;
+  const magnitude = Math.abs(commercialMomentumDelta);
+  const expectationPressure =
+    (sponsor.prestigio - team.prestigio) * 0.5
+    + sponsor.ambicao * 0.35
+    + sponsor.agressividade * 0.25;
+  const relationshipStability =
+    sponsor.fidelidade * 0.45
+    + (hasNationalityMatch ? 1 + sponsor.nacionalismo * 0.35 : 0);
+  const previousMomentumFactor = commercialMomentumDelta > 0
+    ? 1 + (50 - previousMomentum) / 140
+    : 1 + previousMomentum / 110;
+  const happinessFactor = commercialMomentumDelta > 0
+    ? 1 + (55 - sponsor.felicidade) / 180
+    : 1 + sponsor.felicidade / 160;
+  const sensitivity = clampNumber(
+    0.42
+    + expectationPressure * 0.09
+    - sponsor.fidelidade * 0.04
+    + (hasNationalityMatch ? -0.04 : sponsor.nacionalismo * 0.03),
+    0.18,
+    0.95,
+  );
+  const baseChange = magnitude * sensitivity * previousMomentumFactor * happinessFactor;
+  const relationshipBonus = commercialMomentumDelta > 0
+    ? relationshipStability * 0.6
+    : -relationshipStability * 0.45;
+  const delta = direction * baseChange + relationshipBonus;
+
+  return clampNumber(Math.round(delta), -100, 100);
+}
+
+function buildCommercialMomentumPreview(
+  team: TeamGarageManage,
+  delta: number,
+): CommercialMomentumPreview {
+  const previousMomentum = clampNumber(Number(team.momentoComercial ?? 0), 0, 100);
+  const nextMomentum = clampNumber(previousMomentum + delta, 0, 100);
+  const effectiveDelta = nextMomentum - previousMomentum;
+
+  return {
+    delta: effectiveDelta,
+    previousMomentum,
+    nextMomentum,
+    sponsors: team.sponsors.map((sponsor) => {
+      const suggestedDelta = calculateSponsorHappinessDelta(team, sponsor, effectiveDelta);
+
+      return {
+        teamSponsorId: sponsor.id,
+        sponsorId: sponsor.sponsorId,
+        name: sponsor.name,
+        currentHappiness: sponsor.felicidade,
+        suggestedDelta,
+        manualDelta: String(suggestedDelta),
+      };
+    }),
+  };
+}
+
 function createEmptyDriverWallet() {
   return {
     velocidade: '',
@@ -336,6 +433,9 @@ export default function AdminPage() {
   const [managingScuderia, setManagingScuderia] = useState<Scuderia | null>(null);
   const [managedGarage, setManagedGarage] = useState<TeamGarageManage | null>(null);
   const [financeForm, setFinanceForm] = useState({ amount: '', reason: '' });
+  const [commercialMomentumDeltaDraft, setCommercialMomentumDeltaDraft] = useState('');
+  const [commercialMomentumPreview, setCommercialMomentumPreview] = useState<CommercialMomentumPreview | null>(null);
+  const [savingCommercialMomentum, setSavingCommercialMomentum] = useState(false);
   const [carNameDraft, setCarNameDraft] = useState('');
   const [driverForm, setDriverForm] = useState({
     username: '',
@@ -781,6 +881,8 @@ export default function AdminPage() {
   }
   async function openManageScuderia(scuderia: Scuderia) {
     setManagingScuderia(scuderia);
+    setCommercialMomentumDeltaDraft('');
+    setCommercialMomentumPreview(null);
     const response = await fetch(apiUrl(`/api/admin/scuderias/${scuderia.id}/manage`), { headers: getAuthHeaders(), cache: 'no-store' });
     const data = await response.json();
     if (data.success) {
@@ -848,6 +950,66 @@ export default function AdminPage() {
     setFinanceForm({ amount: '', reason: '' });
     showSnackbar(t.admin.actionCompleted, 'success');
     await refreshAdminViews();
+  }
+  function openCommercialMomentumPreview() {
+    if (!managedGarage) return;
+    const delta = Number(commercialMomentumDeltaDraft.replace(',', '.'));
+    if (!Number.isFinite(delta)) {
+      showSnackbar(t.admin.commercialMomentumInvalidDelta, 'error');
+      return;
+    }
+
+    setCommercialMomentumPreview(
+      buildCommercialMomentumPreview(managedGarage, Math.trunc(delta)),
+    );
+  }
+  function updateCommercialMomentumSponsorDelta(teamSponsorId: string, manualDelta: string) {
+    setCommercialMomentumPreview((current) => current
+      ? {
+          ...current,
+          sponsors: current.sponsors.map((sponsor) =>
+            sponsor.teamSponsorId === teamSponsorId
+              ? { ...sponsor, manualDelta }
+              : sponsor,
+          ),
+        }
+      : current);
+  }
+  async function confirmCommercialMomentumAdjustment() {
+    if (!managingScuderia || !commercialMomentumPreview) return;
+
+    const sponsorHappinessChanges = commercialMomentumPreview.sponsors.map((sponsor) => ({
+      teamSponsorId: sponsor.teamSponsorId,
+      happinessDelta: Math.trunc(Number(sponsor.manualDelta.replace(',', '.'))),
+    }));
+
+    if (sponsorHappinessChanges.some((change) => !Number.isFinite(change.happinessDelta))) {
+      showSnackbar(t.admin.sponsorHappinessInvalidDelta, 'error');
+      return;
+    }
+
+    setSavingCommercialMomentum(true);
+    try {
+      const response = await fetch(apiUrl(`/api/admin/scuderias/${managingScuderia.id}/commercial-momentum`), {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({
+          commercialMomentumDelta: commercialMomentumPreview.delta,
+          sponsorHappinessChanges,
+        }),
+      });
+      const data = await response.json();
+      if (!data.success) throw new Error(data.message || t.admin.actionFailed);
+
+      setCommercialMomentumPreview(null);
+      setCommercialMomentumDeltaDraft('');
+      showSnackbar(t.admin.commercialMomentumUpdated, 'success');
+      await refreshAdminViews();
+    } catch (err) {
+      showSnackbar(err instanceof Error ? err.message : t.admin.actionFailed, 'error');
+    } finally {
+      setSavingCommercialMomentum(false);
+    }
   }
   const normalizedFinanceAmount = financeForm.amount.replace(',', '.');
   const financeAmountIsValid = /^-?\d+(?:[.,]\d+)?$/.test(financeForm.amount)
@@ -2278,6 +2440,33 @@ export default function AdminPage() {
                   <p>{t.admin.climateMonitoringLevel}: {managedGarage.climateMonitoringLevel}</p>
                   <p>{t.admin.pitCrewLevel}: {managedGarage.pitCrewLevel}</p>
                 </div>
+                <div className="mt-3 rounded bg-gray-900/50 p-3">
+                  <h4 className="mb-2 font-semibold">{t.admin.commercialMomentumManagement}</h4>
+                  <p className="mb-2 text-sm text-gray-300">
+                    {t.admin.currentCommercialMomentum}: {managedGarage.momentoComercial}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <input
+                      type="number"
+                      step="1"
+                      className="w-32 rounded bg-gray-700 p-2"
+                      value={commercialMomentumDeltaDraft}
+                      onChange={(event) => setCommercialMomentumDeltaDraft(event.target.value)}
+                      placeholder={t.admin.commercialMomentumDelta}
+                    />
+                    <button
+                      type="button"
+                      className="rounded bg-purple-600 px-3 py-2 font-semibold disabled:cursor-not-allowed disabled:bg-gray-600"
+                      disabled={!commercialMomentumDeltaDraft.trim()}
+                      onClick={openCommercialMomentumPreview}
+                    >
+                      {t.admin.previewCommercialMomentum}
+                    </button>
+                  </div>
+                  {managedGarage.sponsors.length === 0 && (
+                    <p className="mt-2 text-sm text-gray-400">{t.admin.noSponsorsForCommercialMomentum}</p>
+                  )}
+                </div>
                 <form onSubmit={submitFinance} className="mt-3 flex gap-2">
                   <input
                     inputMode="decimal"
@@ -2602,6 +2791,89 @@ export default function AdminPage() {
               <button className="rounded bg-purple-600 px-4 py-2">{t.admin.save}</button>
             </div>
           </form>
+        </div>
+      )}
+
+      {commercialMomentumPreview && (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/70 p-4">
+          <div className="max-h-[calc(100vh-2rem)] w-full max-w-3xl overflow-y-auto rounded-lg bg-gray-800 p-6">
+            <div className="mb-4 flex items-start justify-between gap-4">
+              <div>
+                <h2 className="text-xl font-bold">{t.admin.commercialMomentumPreview}</h2>
+                <p className="text-sm text-gray-300">
+                  {t.admin.commercialMomentum}: {commercialMomentumPreview.previousMomentum}
+                  {' -> '}
+                  {commercialMomentumPreview.nextMomentum}
+                  {' '}
+                  ({commercialMomentumPreview.delta >= 0 ? '+' : ''}{commercialMomentumPreview.delta})
+                </p>
+              </div>
+              <button type="button" onClick={() => setCommercialMomentumPreview(null)}>X</button>
+            </div>
+
+            <div className="space-y-3">
+              {commercialMomentumPreview.sponsors.length === 0 && (
+                <p className="rounded bg-gray-700 p-3 text-sm text-gray-300">
+                  {t.admin.noSponsorsForCommercialMomentum}
+                </p>
+              )}
+              {commercialMomentumPreview.sponsors.map((sponsor) => {
+                const manualDelta = Number(sponsor.manualDelta.replace(',', '.'));
+                const safeManualDelta = Number.isFinite(manualDelta) ? Math.trunc(manualDelta) : 0;
+                const nextHappiness = clampNumber(sponsor.currentHappiness + safeManualDelta, 0, 100);
+
+                return (
+                  <div key={sponsor.teamSponsorId} className="rounded bg-gray-700 p-3">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <div>
+                        <p className="font-semibold">{sponsor.name}</p>
+                        <p className="text-sm text-gray-300">
+                          {t.admin.happiness}: {sponsor.currentHappiness}
+                          {' -> '}
+                          {nextHappiness}
+                          {' '}
+                          ({safeManualDelta >= 0 ? '+' : ''}{safeManualDelta})
+                        </p>
+                        <p className="text-xs text-gray-400">
+                          {t.admin.suggestedChange}: {sponsor.suggestedDelta >= 0 ? '+' : ''}{sponsor.suggestedDelta}
+                        </p>
+                      </div>
+                      <label className="w-32 text-sm">
+                        <span className="mb-1 block">{t.admin.manualHappinessDelta}</span>
+                        <input
+                          type="number"
+                          step="1"
+                          className="w-full rounded bg-gray-800 p-2"
+                          value={sponsor.manualDelta}
+                          onChange={(event) =>
+                            updateCommercialMomentumSponsorDelta(sponsor.teamSponsorId, event.target.value)
+                          }
+                        />
+                      </label>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="mt-5 flex flex-wrap justify-end gap-2">
+              <button
+                type="button"
+                className="rounded bg-gray-600 px-4 py-2"
+                onClick={() => setCommercialMomentumPreview(null)}
+              >
+                {t.admin.cancel}
+              </button>
+              <button
+                type="button"
+                disabled={savingCommercialMomentum}
+                className="rounded bg-purple-600 px-4 py-2 font-semibold disabled:cursor-wait disabled:bg-gray-600"
+                onClick={confirmCommercialMomentumAdjustment}
+              >
+                {savingCommercialMomentum ? t.common.loading : t.admin.confirmCommercialMomentum}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

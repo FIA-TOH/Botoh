@@ -340,6 +340,7 @@ export default function PitWallPage() {
               drivers={drivers}
               loggedUserTeam={loggedUserTeam}
               loggedUserTeamId={selectedTeamId}
+              raceSession={playerList?.raceSession}
               onPitCall={async (driver) => {
                 const result = await sendPitCall(driver.name, driver.id, driver.auth);
                 showPitWallActionResult(result);

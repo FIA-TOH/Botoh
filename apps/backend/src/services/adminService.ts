@@ -108,6 +108,14 @@ export interface SponsorMarketReviewInput {
   initialReward: number;
 }
 
+export interface CommercialMomentumAdjustmentInput {
+  commercialMomentumDelta: number;
+  sponsorHappinessChanges: Array<{
+    teamSponsorId: string;
+    happinessDelta: number;
+  }>;
+}
+
 export interface SponsorMissionInput {
   title: string;
   description?: string | null;
@@ -1626,6 +1634,85 @@ class AdminService {
     });
 
     return { success: true, entry: result };
+  }
+
+  async adjustScuderiaCommercialMomentum(
+    scuderiaId: string,
+    input: CommercialMomentumAdjustmentInput,
+  ) {
+    const commercialMomentumDelta = Math.trunc(Number(input.commercialMomentumDelta));
+    const sponsorHappinessChanges = Array.isArray(input.sponsorHappinessChanges)
+      ? input.sponsorHappinessChanges.map((change) => ({
+          teamSponsorId: change.teamSponsorId,
+          happinessDelta: Math.trunc(Number(change.happinessDelta)),
+        }))
+      : [];
+
+    if (!Number.isFinite(commercialMomentumDelta) || commercialMomentumDelta < -100 || commercialMomentumDelta > 100) {
+      return { success: false, message: 'Commercial momentum adjustment is invalid' };
+    }
+
+    if (sponsorHappinessChanges.some((change) =>
+      !change.teamSponsorId
+      || !Number.isFinite(change.happinessDelta)
+      || change.happinessDelta < -100
+      || change.happinessDelta > 100
+    )) {
+      return { success: false, message: 'Sponsor happiness adjustment is invalid' };
+    }
+
+    const result = await transaction(async (client) => {
+      const teamResult = await client.query(
+        `UPDATE teams
+         SET momento_comercial = LEAST(100, GREATEST(0, momento_comercial + $1)),
+             updated_at = NOW()
+         WHERE id = $2
+         RETURNING id, momento_comercial AS "momentoComercial"`,
+        [commercialMomentumDelta, scuderiaId],
+      );
+
+      if (!teamResult.rows[0]) {
+        return null;
+      }
+
+      const sponsors = [];
+      for (const change of sponsorHappinessChanges) {
+        const sponsorResult = await client.query(
+          `UPDATE sponsors
+           SET felicidade = LEAST(100, GREATEST(0, sponsors.felicidade + $1)),
+               updated_at = NOW()
+           FROM team_sponsors
+           WHERE team_sponsors.id = $2
+             AND team_sponsors.team_id = $3
+             AND team_sponsors.sponsor_id = sponsors.id
+           RETURNING
+             team_sponsors.id AS "teamSponsorId",
+             sponsors.id AS "sponsorId",
+             sponsors.name,
+             sponsors.felicidade`,
+          [change.happinessDelta, change.teamSponsorId, scuderiaId],
+        );
+
+        if (sponsorResult.rows[0]) {
+          sponsors.push({
+            ...sponsorResult.rows[0],
+            felicidade: Number(sponsorResult.rows[0].felicidade),
+          });
+        }
+      }
+
+      return {
+        team: {
+          ...teamResult.rows[0],
+          momentoComercial: Number(teamResult.rows[0].momentoComercial),
+        },
+        sponsors,
+      };
+    });
+
+    return result
+      ? { success: true, ...result }
+      : { success: false, message: 'Scuderia not found' };
   }
 
   async getScuderiaManagement(scuderiaId: string) {
