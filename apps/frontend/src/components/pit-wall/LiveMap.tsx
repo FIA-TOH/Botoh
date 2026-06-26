@@ -8,6 +8,10 @@ import { useTranslations } from '@/i18n';
 interface Props {
   players: PlayerPositionData[];
   playerDetails: PlayerData[];
+  isWidget?: boolean;
+  interactive?: boolean;
+  maxFps?: number;
+  showGameStateOverlay?: boolean;
 }
 
 interface ViewBoxData {
@@ -52,6 +56,10 @@ function parseSvgViewBox(svgText: string): ViewBoxData | null {
 export function LiveMap({
   players,
   playerDetails,
+  isWidget = false,
+  interactive = true,
+  maxFps,
+  showGameStateOverlay = true,
 }: Props) {
   const { t } = useTranslations();
   const {
@@ -60,7 +68,7 @@ export function LiveMap({
     isRefreshing,
     refreshCurrentMap,
   } = useMapBackground();
-  const gameState = usePitWallGameState();
+  const gameState = usePitWallGameState(showGameStateOverlay && !isWidget);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
 
@@ -258,8 +266,20 @@ export function LiveMap({
   React.useEffect(() => {
     const SNAP_DISTANCE_PERCENT = 10;
     const TAU_MS = 140;
+    const minFrameMs = maxFps && maxFps > 0
+      ? 1000 / maxFps
+      : 0;
 
     const animate = (now: number) => {
+      if (
+        minFrameMs > 0
+        && lastFrameRef.current !== null
+        && now - lastFrameRef.current < minFrameMs
+      ) {
+        rafRef.current = window.requestAnimationFrame(animate);
+        return;
+      }
+
       const last = lastFrameRef.current ?? now;
       const dt = Math.max(0, now - last);
       lastFrameRef.current = now;
@@ -311,7 +331,7 @@ export function LiveMap({
       rafRef.current = null;
       lastFrameRef.current = null;
     };
-  }, []);
+  }, [maxFps]);
 
   React.useEffect(() => {
     panRef.current = mapPan;
@@ -485,12 +505,12 @@ export function LiveMap({
       style={{
         gridArea: 'map',
         backgroundColor: '#555555',
-        outline: '8px solid #FF232B',
+        outline: isWidget ? 'none' : '8px solid #FF232B',
         position: 'relative',
       }}
-      className="pit-wall-live-map"
+      className={`pit-wall-live-map ${isWidget ? 'h-full w-full' : ''}`}
     >
-      {gameState !== 'running' && (
+      {showGameStateOverlay && !isWidget && gameState !== 'running' && (
         <div
           className="
             absolute
@@ -519,18 +539,17 @@ export function LiveMap({
 
       <div
         ref={containerRef}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-        onTouchCancel={handleTouchEnd}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        onPointerCancel={handlePointerUp}
+        onTouchStart={interactive && !isWidget ? handleTouchStart : undefined}
+        onTouchMove={interactive && !isWidget ? handleTouchMove : undefined}
+        onTouchEnd={interactive && !isWidget ? handleTouchEnd : undefined}
+        onTouchCancel={interactive && !isWidget ? handleTouchEnd : undefined}
+        onPointerDown={interactive && !isWidget ? handlePointerDown : undefined}
+        onPointerMove={interactive && !isWidget ? handlePointerMove : undefined}
+        onPointerUp={interactive && !isWidget ? handlePointerUp : undefined}
+        onPointerCancel={interactive && !isWidget ? handlePointerUp : undefined}
         className="
           pit-wall-live-map-inner
           relative
-          rounded-lg
           mx-auto
           flex
           items-center
@@ -538,10 +557,12 @@ export function LiveMap({
         "
         style={{
           width: '100%',
+          height: isWidget ? '100%' : undefined,
           position: 'relative',
           overflow: 'hidden',
-          cursor: mapZoom > 1 ? 'grab' : 'default',
-          touchAction: 'none',
+          borderRadius: isWidget ? 0 : '0.5rem',
+          cursor: interactive && !isWidget && mapZoom > 1 ? 'grab' : 'default',
+          touchAction: interactive && !isWidget ? 'none' : 'auto',
           backgroundColor: backgroundUrl
             ? 'transparent'
             : '#374151',
@@ -590,6 +611,7 @@ export function LiveMap({
               }}
             >
               <span>{t.liveMap.missingMap}</span>
+              {!isWidget && (
               <button
                 type="button"
                 onClick={(event) => {
@@ -617,6 +639,7 @@ export function LiveMap({
                   ? t.liveMap.retryingMap
                   : t.liveMap.retryMap}
               </button>
+              )}
             </div>
           )}
 
@@ -750,21 +773,21 @@ export function LiveMap({
                   absolute
                   h-6
                   w-6
-                  cursor-help
+                  ${interactive && !isWidget ? 'cursor-help' : ''}
                 `}
                 style={{
                   left: `${mapX}%`,
                   top: `${mapY}%`,
                   transform: 'translate(-50%, -50%)',
-                  pointerEvents: 'auto',
+                  pointerEvents: interactive && !isWidget ? 'auto' : 'none',
                 }}
-                onMouseEnter={() => setHoveredPlayerId(player.id)}
-                onMouseLeave={() => setHoveredPlayerId((current) => (current === player.id ? null : current))}
-                onFocus={() => setHoveredPlayerId(player.id)}
-                onBlur={() => setHoveredPlayerId((current) => (current === player.id ? null : current))}
-                onPointerDown={(event) => event.stopPropagation()}
-                tabIndex={0}
-                aria-label={player.name}
+                onMouseEnter={interactive && !isWidget ? () => setHoveredPlayerId(player.id) : undefined}
+                onMouseLeave={interactive && !isWidget ? () => setHoveredPlayerId((current) => (current === player.id ? null : current)) : undefined}
+                onFocus={interactive && !isWidget ? () => setHoveredPlayerId(player.id) : undefined}
+                onBlur={interactive && !isWidget ? () => setHoveredPlayerId((current) => (current === player.id ? null : current)) : undefined}
+                onPointerDown={interactive && !isWidget ? (event) => event.stopPropagation() : undefined}
+                tabIndex={interactive && !isWidget ? 0 : undefined}
+                aria-label={interactive && !isWidget ? player.name : undefined}
               >
                 <span
                   className={`
@@ -794,7 +817,7 @@ export function LiveMap({
 
       </div>
 
-      {hoveredPlayer && hoveredTooltipPosition && (
+      {interactive && !isWidget && hoveredPlayer && hoveredTooltipPosition && (
         <div
           className="
             pointer-events-none

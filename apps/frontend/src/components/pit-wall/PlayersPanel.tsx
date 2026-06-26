@@ -21,6 +21,8 @@ interface Props {
   loading?: boolean;
 
   error?: string | null;
+  isWidget?: boolean;
+  interactive?: boolean;
 }
 
 const FLAG_HEADER_CONFIG = {
@@ -99,6 +101,8 @@ export function PlayersPanel({
   raceSession = null,
   loading = false,
   error = null,
+  isWidget = false,
+  interactive = true,
 }: Props) {
   const { t } = useTranslations();
   const [hoveredDriver, setHoveredDriver] =
@@ -160,6 +164,7 @@ export function PlayersPanel({
   }, []);
 
   const toggleMobilePanel = () => {
+    if (!interactive || isWidget) return;
     if (!window.matchMedia('(max-width: 1023px)').matches) return;
     setIsCollapsed((current) => !current);
   };
@@ -172,7 +177,7 @@ export function PlayersPanel({
     || raceSession?.sessionType === 'training';
   const shouldShowSectorBars =
     isTimingStandingsSession
-    || raceSession?.sessionType === 'training';
+    || raceSession?.sessionType === 'race';
 
   const sortedDrivers = [...drivers].sort((a, b) => {
     if (isTimingStandingsSession) {
@@ -211,9 +216,33 @@ export function PlayersPanel({
       }))
     : sortedDrivers;
 
-  const timingLeader = isTimingStandingsSession
-    ? displayedDrivers.find((driver) => !!driver.bestTime)
-    : undefined;
+  const timingGapByDriverId = new Map<number, string>();
+
+  if (isTimingStandingsSession) {
+    let previousTimedDriver: Driver | null = null;
+
+    displayedDrivers.forEach((driver) => {
+      if (!driver.bestTime) {
+        timingGapByDriverId.set(driver.id, t.players.noTime);
+        return;
+      }
+
+      if (!previousTimedDriver?.bestTime) {
+        timingGapByDriverId.set(driver.id, driver.bestTime);
+        previousTimedDriver = driver;
+        return;
+      }
+
+      const previousMs = lapTimeToMs(previousTimedDriver.bestTime);
+      const driverMs = lapTimeToMs(driver.bestTime);
+
+      timingGapByDriverId.set(
+        driver.id,
+        formatGap(Math.max(0, driverMs - previousMs)),
+      );
+      previousTimedDriver = driver;
+    });
+  }
 
   const getGapText = (driver: Driver) => {
 
@@ -240,37 +269,7 @@ export function PlayersPanel({
     if (
       isTimingStandingsSession
     ) {
-      const driverLapTime =
-        driver.bestTime
-
-      if (timingLeader?.name === driver.name) {
-        return driverLapTime ?? t.players.noTime;
-      }
-
-      if (!driverLapTime) {
-        return t.players.noTime;
-      }
-
-      const leaderLapTime =
-        timingLeader?.bestTime
-
-      if (
-        leaderLapTime
-        && driverLapTime
-      ) {
-
-        const leaderMs = lapTimeToMs(
-          leaderLapTime
-        );
-
-        const driverMs = lapTimeToMs(
-          driverLapTime
-        );
-
-        return formatGap(Math.max(0, driverMs - leaderMs));
-      }
-
-      return t.players.noTime;
+      return timingGapByDriverId.get(driver.id) ?? t.players.noTime;
     }
 
     return driver.gapToLeader;
@@ -348,7 +347,11 @@ export function PlayersPanel({
 
   return (
     <div
-      className="fixed right-3 top-3 z-40 h-fit w-[min(15.5rem,calc(100vw-1.5rem))] border-4 border-[#FF232B] px-0 py-0 text-sm lg:static lg:w-auto lg:border-0 lg:text-base lg:outline lg:outline-[8px] lg:outline-[#FF232B]"
+      className={
+        isWidget
+          ? 'h-full w-full border-0 px-0 py-0 text-base outline outline-[8px] outline-[#FF232B]'
+          : 'fixed right-3 top-3 z-40 h-fit w-[min(15.5rem,calc(100vw-1.5rem))] border-4 border-[#FF232B] px-0 py-0 text-sm lg:static lg:w-auto lg:border-0 lg:text-base lg:outline lg:outline-[8px] lg:outline-[#FF232B]'
+      }
       style={{
         gridArea: 'players',
         backgroundColor: '#1E1E1E',
@@ -357,7 +360,7 @@ export function PlayersPanel({
 
       {/* HEADER */}
       <div
-        className="flex cursor-pointer items-center justify-between gap-2 px-2 py-1.5 text-center lg:block lg:px-0 lg:py-2"
+        className={`flex items-center justify-between gap-2 px-2 py-1.5 text-center lg:block lg:px-0 lg:py-2 ${interactive && !isWidget ? 'cursor-pointer' : 'cursor-default'}`}
         onClick={toggleMobilePanel}
         style={{
           backgroundColor:
@@ -414,16 +417,24 @@ export function PlayersPanel({
           </div>
         </div>
 
+        {!isWidget && (
         <span className="flex h-7 w-7 shrink-0 items-center justify-center border-2 border-current text-base font-black leading-none lg:hidden">
           {isCollapsed ? '+' : '-'}
         </span>
+        )}
       </div>
 
       <div className="border-b border-white/80" />
 
       {/* CONTENT */}
       {!isCollapsed && (
-      <div className="group/pit-drivers relative max-h-[min(58vh,460px)] min-h-[240px] overflow-y-auto px-1.5 lg:max-h-none lg:min-h-[400px] lg:overflow-visible lg:px-2">
+      <div
+        className={
+          isWidget
+            ? 'group/pit-drivers relative h-[calc(100%-4.35rem)] min-h-0 overflow-hidden px-2'
+            : 'group/pit-drivers relative max-h-[min(58vh,460px)] min-h-[240px] overflow-y-auto px-1.5 lg:max-h-none lg:min-h-[400px] lg:overflow-visible lg:px-2'
+        }
+      >
 
         {/* LOADING */}
         {loading && (
@@ -524,7 +535,7 @@ export function PlayersPanel({
               {displayedDrivers.map((driver) => (
                 <div
                   key={`${driver.driverNumber}-${driver.name}`}
-                  onClick={(e) => {
+                  onClick={interactive && !isWidget ? (e) => {
                     setHoveredDriver((current) => (
                       current === driver.name ? null : driver.name
                     ));
@@ -542,8 +553,8 @@ export function PlayersPanel({
                           parentRect.top
                       );
                     }
-                  }}
-                  onMouseEnter={(e) => {
+                  } : undefined}
+                  onMouseEnter={interactive && !isWidget ? (e) => {
 
                     setHoveredDriver(
                       driver.name
@@ -562,9 +573,9 @@ export function PlayersPanel({
                           parentRect.top
                       );
                     }
-                  }}
+                  } : undefined}
 
-                  onMouseLeave={() => {
+                  onMouseLeave={interactive && !isWidget ? () => {
 
                     setHoveredDriver(
                       null
@@ -573,7 +584,7 @@ export function PlayersPanel({
                     setHoveredDriverPosition(
                       null
                     );
-                  }}
+                  } : undefined}
                 >
 
                   <PlayerRow
@@ -588,6 +599,7 @@ export function PlayersPanel({
                 </div>
               ))}
 
+              {interactive && !isWidget && (
               <HoverTooltip
                 visible={
                   !!hoveredDriver
@@ -599,6 +611,7 @@ export function PlayersPanel({
                   tooltipContent
                 }
               />
+              )}
             </>
           )}
       </div>

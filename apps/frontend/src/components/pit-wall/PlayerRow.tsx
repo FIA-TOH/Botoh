@@ -91,7 +91,7 @@ export function PlayerRow({
       </div>
 
       {showSectorBars && !isOut && !isFinished && (
-        <div className="ml-[1.65rem] hidden pr-[84px] group-hover/pit-drivers:block lg:ml-[1.9rem] lg:pr-[116px]">
+        <div className="ml-[1.65rem] pr-[84px] lg:ml-[1.9rem] lg:pr-[116px]">
           <SectorBars
             statuses={sectorStatuses}
             barClassName="h-0.5"
