@@ -13,8 +13,10 @@ export function AuthGate({ children }: Props) {
   const router = useRouter();
   const { isAuthenticated, isLoading } = useAuth();
   const isLoginPage = pathname === '/login';
+  const isPublicWidget = pathname.startsWith('/widgets');
 
   useLayoutEffect(() => {
+    if (isPublicWidget) return;
     if (isLoading) return;
 
     if (!isAuthenticated && !isLoginPage) {
@@ -25,7 +27,11 @@ export function AuthGate({ children }: Props) {
     if (isAuthenticated && isLoginPage) {
       router.replace('/');
     }
-  }, [isAuthenticated, isLoading, isLoginPage, router]);
+  }, [isAuthenticated, isLoading, isLoginPage, isPublicWidget, router]);
+
+  if (isPublicWidget) {
+    return children;
+  }
 
   if (isLoading) {
     return null;

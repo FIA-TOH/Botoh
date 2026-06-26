@@ -190,11 +190,16 @@ export function useCurrentMap(): CurrentMapData {
   return mapData;
 }
 
-export function usePitWallGameState(): PitWallGameState {
-  const { socket, isConnected } = useSocket();
+export function usePitWallGameState(enabled = true): PitWallGameState {
+  const { socket, isConnected } = useSocket({ autoConnect: enabled });
   const [gameState, setGameState] = useState<PitWallGameState>('running');
 
   useEffect(() => {
+    if (!enabled) {
+      setGameState('running');
+      return;
+    }
+
     let isCancelled = false;
 
     const applyGameState = (nextGameState: unknown) => {
@@ -244,7 +249,7 @@ export function usePitWallGameState(): PitWallGameState {
         socket.off('room:heartbeat', handleGameStateChange);
       }
     };
-  }, [socket, isConnected]);
+  }, [socket, isConnected, enabled]);
 
   return gameState;
 }
