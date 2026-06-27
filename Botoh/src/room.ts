@@ -1,3 +1,4 @@
+import "./env";
 import HaxballJS from "haxball.js";
 import { handleChangeMap } from "./features/zones/maps";
 import roomConfig from "../roomconfig.json";
