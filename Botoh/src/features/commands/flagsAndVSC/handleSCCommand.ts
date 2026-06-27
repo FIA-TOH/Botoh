@@ -9,6 +9,9 @@ import { getRunningPlayers } from "../../utils";
 import { Teams } from "../../changeGameState/teams";
 import { positionList } from "../gameMode/race/positionList";
 import { RaceControlState, setFlagState, setNeutralizationState } from "./raceControl";
+import { applyPlayerCollision } from "../../changePlayerState/playerCollision";
+import { ghostMode } from "../../changePlayerState/ghost";
+import { playerList } from "../../changePlayerState/playerList";
 
 let scActive = false;
 let scCountdownTimeout: NodeJS.Timeout | undefined;
@@ -66,6 +69,11 @@ export function handleSCCommand(
       const currentCircuit = CIRCUITS[currentMapIndex];
       if (currentCircuit?.info?.new_safetycar) {
         players.forEach(player => {
+          if (ghostMode || playerList[player.id]?.inPitlane) {
+            applyPlayerCollision(room, player.id);
+            return;
+          }
+
           room.setPlayerDiscProperties(player.id, { cGroup: room.CollisionFlags.red | room.CollisionFlags.blue | room.CollisionFlags.c2 });
         });
       }
@@ -198,7 +206,7 @@ export function handleSCCommand(
     const currentCircuit = CIRCUITS[currentMapIndex];
     if (currentCircuit?.info?.new_safetycar) {
       players.forEach(player => {
-        room.setPlayerDiscProperties(player.p.id, { cGroup: room.CollisionFlags.red });
+        applyPlayerCollision(room, player.p.id);
       });
     }
   } else {

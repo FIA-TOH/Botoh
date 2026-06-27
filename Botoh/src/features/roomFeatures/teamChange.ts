@@ -1,5 +1,5 @@
-import { ghostMode } from "../changePlayerState/ghost";
 import { playerList } from "../changePlayerState/playerList";
+import { applyPlayerCollision } from "../changePlayerState/playerCollision";
 import { resetPlayer } from "../changePlayerState/players";
 import { Teams } from "../changeGameState/teams";
 import {
@@ -57,10 +57,8 @@ export function TeamChange(room: RoomObject) {
       }
     }
 
-    if (ghostMode && changedPlayer.team === Teams.RUNNERS) {
-      room.setPlayerDiscProperties(changedPlayer.id, {
-        cGroup: room.CollisionFlags.c0 | room.CollisionFlags.redKO,
-      });
+    if (changedPlayer.team === Teams.RUNNERS) {
+      applyPlayerCollision(room, changedPlayer.id);
     }
   };
 }

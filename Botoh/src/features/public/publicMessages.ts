@@ -1,0 +1,88 @@
+import { LocalizedMessageFunction } from "../chat/messages";
+
+export const PUBLIC_MESSAGES = {
+  WELCOME_LOGIN_REQUIRED: (): LocalizedMessageFunction => ({
+    pt: "Faça login para poder correr e participar do campeonato. Não tem conta? Use !cadastro SENHA para se cadastrar.",
+    en: "Log in to race and join the championship. No account yet? Use !cadastro PASSWORD to register.",
+    es: "Inicia sesión para correr y participar en el campeonato. ¿No tienes cuenta? Usa !cadastro CONTRASEÑA para registrarte.",
+    fr: "Connectez-vous pour courir et participer au championnat. Pas de compte ? Utilisez !cadastro MOT_DE_PASSE pour vous inscrire.",
+    tr: "Yarışmak ve şampiyonaya katılmak için giriş yap. Hesabın yok mu? Kayıt olmak için !cadastro ŞİFRE kullan.",
+  }),
+  AUTH_WARNING: (seconds: number): LocalizedMessageFunction => ({
+    pt: `Você será expulso em ${seconds}s se não fizer login ou cadastro.`,
+    en: `You will be kicked in ${seconds}s if you do not log in or register.`,
+    es: `Serás expulsado en ${seconds}s si no inicias sesión o te registras.`,
+    fr: `Vous serez expulsé dans ${seconds}s si vous ne vous connectez pas ou ne vous inscrivez pas.`,
+    tr: `Giriş yapmaz veya kayıt olmazsan ${seconds}s içinde atılacaksın.`,
+  }),
+  AUTH_TIMEOUT_KICK: (): LocalizedMessageFunction => ({
+    pt: "Tempo esgotado: faça login ou cadastro para participar.",
+    en: "Time expired: log in or register to participate.",
+    es: "Tiempo agotado: inicia sesión o regístrate para participar.",
+    fr: "Temps écoulé : connectez-vous ou inscrivez-vous pour participer.",
+    tr: "Süre doldu: katılmak için giriş yap veya kayıt ol.",
+  }),
+  PASSWORD_REQUIRED_REGISTER: (): LocalizedMessageFunction => ({
+    pt: "Use !cadastro SENHA para criar sua conta pública.",
+    en: "Use !cadastro PASSWORD to create your public account.",
+    es: "Usa !cadastro CONTRASEÑA para crear tu cuenta pública.",
+    fr: "Utilisez !cadastro MOT_DE_PASSE pour créer votre compte public.",
+    tr: "Herkese açık hesabını oluşturmak için !cadastro ŞİFRE kullan.",
+  }),
+  PASSWORD_REQUIRED_LOGIN: (): LocalizedMessageFunction => ({
+    pt: "Use !login SENHA para entrar na sua conta pública.",
+    en: "Use !login PASSWORD to access your public account.",
+    es: "Usa !login CONTRASEÑA para entrar en tu cuenta pública.",
+    fr: "Utilisez !login MOT_DE_PASSE pour accéder à votre compte public.",
+    tr: "Herkese açık hesabına girmek için !login ŞİFRE kullan.",
+  }),
+  ALREADY_REGISTERED: (): LocalizedMessageFunction => ({
+    pt: "Você já tem uma conta pública. Use !login SENHA.",
+    en: "You already have a public account. Use !login PASSWORD.",
+    es: "Ya tienes una cuenta pública. Usa !login CONTRASEÑA.",
+    fr: "Vous avez déjà un compte public. Utilisez !login MOT_DE_PASSE.",
+    tr: "Zaten herkese açık bir hesabın var. !login ŞİFRE kullan.",
+  }),
+  REGISTER_SUCCESS: (): LocalizedMessageFunction => ({
+    pt: "Conta pública criada. Agora use !login SENHA para logar.",
+    en: "Public account created. Now use !login PASSWORD to log in.",
+    es: "Cuenta pública creada. Ahora usa !login CONTRASEÑA para iniciar sesión.",
+    fr: "Compte public créé. Utilisez maintenant !login MOT_DE_PASSE pour vous connecter.",
+    tr: "Herkese açık hesap oluşturuldu. Şimdi giriş yapmak için !login ŞİFRE kullan.",
+  }),
+  NOT_REGISTERED: (): LocalizedMessageFunction => ({
+    pt: "Você ainda não tem cadastro público. Use !cadastro SENHA.",
+    en: "You do not have a public account yet. Use !cadastro PASSWORD.",
+    es: "Todavía no tienes cuenta pública. Usa !cadastro CONTRASEÑA.",
+    fr: "Vous n'avez pas encore de compte public. Utilisez !cadastro MOT_DE_PASSE.",
+    tr: "Henüz herkese açık hesabın yok. !cadastro ŞİFRE kullan.",
+  }),
+  INCORRECT_PASSWORD: (): LocalizedMessageFunction => ({
+    pt: "Senha incorreta.",
+    en: "Incorrect password.",
+    es: "Contraseña incorrecta.",
+    fr: "Mot de passe incorrect.",
+    tr: "Şifre yanlış.",
+  }),
+  LOGIN_SUCCESS: (): LocalizedMessageFunction => ({
+    pt: "Login público feito com sucesso. Você já pode correr.",
+    en: "Public login successful. You can race now.",
+    es: "Inicio de sesión público exitoso. Ya puedes correr.",
+    fr: "Connexion publique réussie. Vous pouvez maintenant courir.",
+    tr: "Herkese açık giriş başarılı. Artık yarışabilirsin.",
+  }),
+  DATABASE_UNAVAILABLE: (): LocalizedMessageFunction => ({
+    pt: "O cadastro público está temporariamente indisponível. Tente novamente em instantes.",
+    en: "Public registration is temporarily unavailable. Please try again shortly.",
+    es: "El registro público no está disponible temporalmente. Inténtalo de nuevo en breve.",
+    fr: "L'inscription publique est temporairement indisponible. Réessayez dans un instant.",
+    tr: "Herkese açık kayıt geçici olarak kullanılamıyor. Lütfen kısa süre sonra tekrar dene.",
+  }),
+  LOGGED_PREFIX: (): LocalizedMessageFunction => ({
+    pt: "[Logado]",
+    en: "[Logged in]",
+    es: "[Conectado]",
+    fr: "[Connecté]",
+    tr: "[Giriş yapıldı]",
+  }),
+};

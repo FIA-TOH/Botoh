@@ -1,7 +1,10 @@
 import { COLORS } from "../chat/chat";
 import { log } from "../discord/logger";
 import { getPlayerAndDiscs } from "../playerFeatures/getPlayerAndDiscs";
-import { updatePlayerCollision } from "./updatePlayerCollision";
+import {
+  applyPlayersCollision,
+  setGhostCollisionMode,
+} from "./playerCollision";
 
 export let ghostMode = false;
 
@@ -11,16 +14,13 @@ export function setGhostMode(
   playerId?: number
 ) {
   ghostMode = enable;
+  setGhostCollisionMode(enable);
   const message = ghostMode ? "Ghost mode enabled" : "Ghost mode disabled";
   if (playerId) {
     log(message);
     room.sendAnnouncement(message, playerId, COLORS.GREEN);
   }
 
-  const collisionGroup = ghostMode
-    ? room.CollisionFlags.c0 | room.CollisionFlags.redKO
-    : room.CollisionFlags.red | room.CollisionFlags.redKO;
-
   const playersAndDiscs = getPlayerAndDiscs(room);
-  updatePlayerCollision(room, playersAndDiscs, collisionGroup);
+  applyPlayersCollision(room, playersAndDiscs);
 }

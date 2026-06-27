@@ -1,4 +1,5 @@
 import { Direction } from "../../circuits/Circuit";
+import { applyPlayerCollision } from "../changePlayerState/playerCollision";
 import { playerList } from "../changePlayerState/playerList";
 import { COLORS, sendErrorMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
@@ -46,6 +47,7 @@ export function moveToBox(
   }
 
   playerList[player.id].inPitlane = true;
+  applyPlayerCollision(room, player.id);
   room.setPlayerDiscProperties(player.id, {
     x: targetX,
     y: targetY,

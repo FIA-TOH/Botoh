@@ -32,6 +32,7 @@ import { PLAYER_LIMIT } from "../commands/adminThings/handleLimitPlayerQuantity"
 import { rejoinManager } from "../changePlayerState/rejoinManager";
 import { clearLoginStateIfUsernameChanged, rebalanceFirstDriverForTeam } from "../commands/login/handleLoginCommand";
 import { clearPlayerAvatarState } from "../changePlayerState/handleAvatar";
+import { handlePublicPlayerJoin, handlePublicPlayerLeave } from "../public/publicAuth";
 
 const HARD_QUALY_PASSWORD = "hardqualy";
 
@@ -198,9 +199,17 @@ export function PlayerJoin(room: RoomObject) {
     }
 
     WhatToDoWhenJoin(room, player);
+
+    if (!LEAGUE_MODE) {
+      handlePublicPlayerJoin(room, player);
+    }
   };
 
-  room.onPlayerLeave = function () {
+  room.onPlayerLeave = function (player) {
+    if (!LEAGUE_MODE) {
+      handlePublicPlayerLeave(player);
+    }
+
     const players = room.getPlayerList();
     if (gameMode === GameMode.HARD_QUALY && players.length === 0) {
       room.setPassword(null);

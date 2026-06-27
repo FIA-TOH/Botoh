@@ -234,6 +234,45 @@ async function setupBackendCommunication() {
           timestamp: Date.now(),
           color: null,
           source: 'frontend',
+          channel: target.type,
+          sender: {
+            username: player,
+          },
+          target: {
+            type: target.type,
+            ...(target.type === 'team'
+              ? {
+                  teamId: target.teamId ?? null,
+                  teamName: target.teamName ?? null,
+                  playerIds: Array.isArray(target.playerIds) ? target.playerIds : [],
+                  playerNames: Array.isArray(target.playerNames) ? target.playerNames : [],
+                  usernames: recipients
+                    .map((recipient: PlayerObject) => playerList[recipient.id]?.loggedUsername)
+                    .filter((username: unknown): username is string => typeof username === 'string' && username.trim().length > 0),
+                }
+              : {}),
+            ...(target.type === 'player'
+              ? {
+                  playerId: target.playerId ?? null,
+                  playerName: target.playerName ?? null,
+                  username: recipients
+                    .map((recipient: PlayerObject) => playerList[recipient.id]?.loggedUsername)
+                    .find((username: unknown): username is string => typeof username === 'string' && username.trim().length > 0) ?? null,
+                }
+              : {}),
+          },
+          recipients: recipients.map((recipient: PlayerObject) => {
+            const playerState = playerList[recipient.id];
+            const scuderia = getLeagueScuderia(playerState?.leagueScuderia);
+
+            return {
+              playerId: recipient.id,
+              playerName: recipient.name,
+              username: playerState?.loggedUsername ?? null,
+              teamId: playerState?.leagueScuderia ?? null,
+              teamName: scuderia?.name ?? null,
+            };
+          }),
         });
 
         respond?.({ success: true });
