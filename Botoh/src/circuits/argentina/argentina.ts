@@ -111,6 +111,7 @@ const ARGENTINA_INFO: CircuitInfo = {
   Angle: 90,
   Limit: 5,
   Votes: 0,
+  TireDegradationPercentage: 5,
 };
 
 export const ARGENTINA: Circuit = {

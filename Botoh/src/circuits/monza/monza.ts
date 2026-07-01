@@ -91,7 +91,7 @@ const MONZA_INFO: CircuitInfo = {
   Limit: 5,
   Votes: 0,
   pitSpeed: 0.97,
-  TireDegradationPercentage: -30,
+  TireDegradationPercentage: -20,
   CutDetectSegments: [
     {
       v0: [-936, 390],

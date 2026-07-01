@@ -99,6 +99,7 @@ const INTERLAGOS_INFO: CircuitInfo = {
   Angle: 90,
   Limit: 5,
   Votes: 0,
+  TireDegradationPercentage: 10,
 };
 
 export const INTERLAGOS: Circuit = {
