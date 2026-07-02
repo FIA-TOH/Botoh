@@ -91,7 +91,7 @@ const SPA_INFO: CircuitInfo = {
   Limit: 5,
   Votes: 0,
   pitSpeed: 0.97,
-  TireDegradationPercentage: -5,
+  TireDegradationPercentage: 10,
   CutDetectSegments: [
     {
       v0: [-3328, -1109],

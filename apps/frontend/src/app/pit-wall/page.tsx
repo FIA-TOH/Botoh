@@ -25,18 +25,13 @@ function getTeamDisplayName(membership: { teamName: string; teamFullName?: strin
 }
 
 export default function PitWallPage() {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, token, user } = useAuth();
   const { t } = useTranslations();
   const { snackbar, showSnackbar, closeSnackbar } = useAppSnackbar();
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const { playerList, playerPositions, error: playerListError } = usePlayerList();
-  const {
-    messages,
-    sendMessage,
-    isConnected: isChatConnected,
-  } = useChat();
   const { logs } = useLogs();
   const { sendPitCall, preparePitTyre } = usePitCall();
   const eligibleMemberships = useMemo(
@@ -55,6 +50,17 @@ export default function PitWallPage() {
     ? null
     : (eligibleMemberships.find((membership) => membership.teamId === selectedTeamId) ?? null);
   const loggedUserTeam = selectedMembership?.teamName ?? null;
+  const {
+    messages,
+    sendMessage,
+    isConnected: isChatConnected,
+  } = useChat({
+    token,
+    username: user?.username,
+    aliases: [user?.shortUsername],
+    teamId: selectedTeamId !== 'public' ? selectedTeamId : null,
+    teamName: loggedUserTeam,
+  });
   const authWeatherLevel = selectedMembership?.weatherLevel ?? 0;
   const [liveWeatherLevel, setLiveWeatherLevel] = useState<number | null>(null);
   const weatherChartLevel = liveWeatherLevel ?? authWeatherLevel;

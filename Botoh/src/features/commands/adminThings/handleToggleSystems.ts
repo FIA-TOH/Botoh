@@ -63,7 +63,11 @@ export function handleToggleSystems(
     return;
   }
 
-  if (boolean !== "on" && boolean !== "off") {
+  const isDamageModeArgument =
+    system === ToggleableSystems.DAMAGE &&
+    (boolean === "damage" || boolean === "log" || boolean === "false");
+
+  if (boolean !== "on" && boolean !== "off" && !isDamageModeArgument) {
     room.sendAnnouncement(
       `Correct use: !enable [system] [on|off]`,
       byPlayer.id,
@@ -167,13 +171,17 @@ export function handleToggleSystems(
       enableDebris(true);
     }
   } else if (system === ToggleableSystems.DAMAGE) {
-    if (boolean === "off") {
+    if (boolean === "off" || boolean === "false") {
       log(`Damage mode disabled by ${byPlayer.name}`);
       enableDamage(false);
       sendBlueMessage(room, MESSAGES.DAMAGE_DISABLED(), byPlayer.id);
+    } else if (boolean === "log") {
+      log(`Damage log mode enabled by ${byPlayer.name}`);
+      enableDamage("log");
+      sendBlueMessage(room, MESSAGES.DAMAGE_ENABLED(), byPlayer.id);
     } else {
       log(`Damage mode enabled by ${byPlayer.name}`);
-      enableDamage(true);
+      enableDamage("damage");
       sendBlueMessage(room, MESSAGES.DAMAGE_ENABLED(), byPlayer.id);
     }
   } else if (system === ToggleableSystems.SOFT_CUT_PENALTY) {

@@ -81,6 +81,19 @@ CREATE TABLE users (
     CONSTRAINT users_level_positive CHECK (level > 0)
 );
 
+-- Public room users. This is intentionally separated from league users,
+-- teams, garage and pitwall account data.
+CREATE TABLE public_users (
+    auth VARCHAR(255) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    last_login_at TIMESTAMP WITH TIME ZONE
+);
+
+CREATE INDEX public_users_name_idx ON public_users(LOWER(name));
+
 -- Upgrades Table
 CREATE TABLE upgrades (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

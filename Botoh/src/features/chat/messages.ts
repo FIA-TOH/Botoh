@@ -2218,6 +2218,20 @@ export const MESSAGES = {
       newDamage,
     }),
   }),
+  CRASH_WALL_WARNING: (): LocalizedMessageFunction => ({
+    en: en_messages.CRASH_WALL_WARNING,
+    es: es_messages.CRASH_WALL_WARNING,
+    fr: fr_messages.CRASH_WALL_WARNING,
+    tr: tr_messages.CRASH_WALL_WARNING,
+    pt: pt_messages.CRASH_WALL_WARNING,
+  }),
+  CRASH_WALL_INVALID_LAP: (): LocalizedMessageFunction => ({
+    en: en_messages.CRASH_WALL_INVALID_LAP,
+    es: es_messages.CRASH_WALL_INVALID_LAP,
+    fr: fr_messages.CRASH_WALL_INVALID_LAP,
+    tr: tr_messages.CRASH_WALL_INVALID_LAP,
+    pt: pt_messages.CRASH_WALL_INVALID_LAP,
+  }),
   DAMAGE_ENABLED: (): LocalizedMessageFunction => ({
     en: en_messages.DAMAGE_ENABLED,
     es: es_messages.DAMAGE_ENABLED,

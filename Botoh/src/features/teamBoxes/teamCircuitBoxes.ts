@@ -3,6 +3,7 @@ import {
   generalGameMode,
 } from "../changeGameState/changeGameModes";
 import { Teams } from "../changeGameState/teams";
+import { applyPlayerCollision } from "../changePlayerState/playerCollision";
 import { playerList } from "../changePlayerState/playerList";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 
@@ -29,6 +30,7 @@ export function movePlayerToTeamCircuitBox(player: PlayerObject, room: RoomObjec
   if (!coordinates) return false;
 
   playerInfo.inPitlane = true;
+  applyPlayerCollision(room, player.id);
   room.setPlayerDiscProperties(player.id, {
     x: coordinates.x,
     y: coordinates.y,

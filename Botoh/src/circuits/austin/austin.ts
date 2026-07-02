@@ -103,6 +103,7 @@ const AUSTIN_INFO: CircuitInfo = {
   Limit: 4,
   Votes: 0,
   pitSpeed: 0.97,
+  TireDegradationPercentage: 15,
   CutDetectSegments: [
     {
       v0: [-2522, 645],

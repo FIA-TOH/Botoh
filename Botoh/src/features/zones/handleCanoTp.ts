@@ -1,4 +1,5 @@
-import { ghostMode } from "../changePlayerState/ghost";
+import { applyPlayerCollision } from "../changePlayerState/playerCollision";
+import { playerList } from "../changePlayerState/playerList";
 import { updatePlayerCollision } from "../changePlayerState/updatePlayerCollision";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { constants } from "../speed/constants";
@@ -64,17 +65,14 @@ export function handleChangeCollisionPlayerCano(
   ) {
     if (
       inHitbox(player, canoEnteringChangeCGroupHitBox) &&
-      player.disc.radius != 5
+      player.disc.radius != 5 &&
+      !playerList[player.p.id]?.inPitlane
     ) {
       updatePlayerCollision(room, [player], room.CollisionFlags.c1);
     }
 
     if (inHitbox(player, canoLeavingChangeCGroupHitBox)) {
-      if (ghostMode) {
-        updatePlayerCollision(room, [player], room.CollisionFlags.c0);
-      } else {
-        updatePlayerCollision(room, [player], room.CollisionFlags.red);
-      }
+      applyPlayerCollision(room, player.p.id);
     }
   }
 }

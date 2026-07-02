@@ -638,6 +638,18 @@ class MigrationService {
     `);
     await query('CREATE INDEX IF NOT EXISTS team_circuit_boxes_team_idx ON team_circuit_boxes(team_id)');
     await query('CREATE INDEX IF NOT EXISTS team_circuit_boxes_circuit_idx ON team_circuit_boxes(circuit_id)');
+
+    await query(`
+      CREATE TABLE IF NOT EXISTS public_users (
+        auth VARCHAR(255) PRIMARY KEY,
+        name VARCHAR(100) NOT NULL,
+        password_hash VARCHAR(255) NOT NULL,
+        created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+        updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+        last_login_at TIMESTAMP NULL
+      )
+    `);
+    await query('CREATE INDEX IF NOT EXISTS public_users_name_idx ON public_users(LOWER(name))');
   }
 
   private async normalizeFacilityCosts(): Promise<void> {

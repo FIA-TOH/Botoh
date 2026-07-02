@@ -26,6 +26,7 @@ Uso:
 Exemplos:
   node generate-map-svg-cli.js imola
   node generate-map-svg-cli.js imola --transparent
+  node generate-map-svg-cli.js imola --bg-color "#555555"
   node generate-map-svg-cli.js monza --transparent --stroke-width 3
   node generate-map-svg-cli.js all --transparent
 
@@ -35,10 +36,13 @@ ${getAvailableMaps().map(map => `  - ${map}`).join('\n')}
 Opções:
   --transparent     Fundo transparente (padrão: #0a0a0a)
   --stroke-width N  Largura das linhas (padrão: 2)
+  --bg-color COLOR  Cor de fundo (ex: "#555555" ou transparent)
   --show-grid      Mostrar grade de fundo
   --show-center    Mostrar linhas centrais
   --show-bounds    Mostrar bounds do mapa
   --show-ids       Mostrar IDs dos segmentos
+  --show-vertices  Compatibilidade: vertices nao sao renderizados neste gerador
+  --no-vertices    Compatibilidade: vertices nao sao renderizados neste gerador
   --no-grid        Ocultar grade
   --no-center      Ocultar linhas centrais
   --no-bounds      Ocultar bounds
@@ -92,6 +96,7 @@ function parseArguments() {
   const targetMap = args[0];
   const options = {
     transparent: false,
+    backgroundColor: null,
     strokeWidth: 2,
     showGrid: false,
     showCenterLines: false,
@@ -107,6 +112,11 @@ function parseArguments() {
     switch (arg) {
       case '--transparent':
         options.transparent = true;
+        options.backgroundColor = null;
+        break;
+      case '--bg-color':
+        options.backgroundColor = args[++i] || null;
+        options.transparent = false;
         break;
       case '--stroke-width':
         options.strokeWidth = parseFloat(args[++i]) || 2;
@@ -131,6 +141,9 @@ function parseArguments() {
         break;
       case '--show-ids':
         options.showSegmentIds = true;
+        break;
+      case '--show-vertices':
+      case '--no-vertices':
         break;
       case '--padding':
         options.padding = parseFloat(args[++i]) || 0.1;
@@ -195,7 +208,7 @@ function generateSVGForMap(mapName, options) {
     
     // Configurar opções do SVG
     const svgOptions = {
-      backgroundColor: options.transparent ? 'transparent' : '#0a0a0a',
+      backgroundColor: options.backgroundColor || (options.transparent ? 'transparent' : '#0a0a0a'),
       gridColor: 'rgba(255,255,255,0.05)',
       centerLineColor: 'rgba(255,0,0,0.2)',
       showGrid: options.showGrid,
@@ -221,7 +234,7 @@ function generateSVGForMap(mapName, options) {
     fs.writeFileSync(outputPath, svgContent, 'utf8');
     
     console.log(`✅ SVG gerado: ${outputPath}`);
-    console.log(`🎨 Fundo: ${options.transparent ? 'transparente' : '#0a0a0a'}`);
+    console.log(`🎨 Fundo: ${svgOptions.backgroundColor}`);
     console.log(`🖊 Stroke: ${options.strokeWidth}px`);
     
     return {
@@ -278,8 +291,9 @@ function main() {
   try {
     const { targetMap, options } = parseArguments();
     
+    const backgroundColor = options.backgroundColor || (options.transparent ? 'transparente' : '#0a0a0a');
     console.log('🗺️ Gerador de SVG para Mapas Haxball');
-    console.log(`🎨 Fundo: ${options.transparent ? 'transparente' : '#0a0a0a'}`);
+    console.log(`🎨 Fundo: ${backgroundColor}`);
     console.log(`🖊 Stroke: ${options.strokeWidth}px`);
     console.log('');
     

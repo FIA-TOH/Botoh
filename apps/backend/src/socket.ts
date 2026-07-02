@@ -57,6 +57,27 @@ export function setupSocketHandlers(io: SocketIOServer) {
       botService.sendToBot('chat:send', data, callback);
     });
 
+    socket.on('chat:join', (data: {
+      token?: string;
+      aliases?: Array<string | null | undefined>;
+      teamId?: string | null;
+      teamName?: string | null;
+    }) => {
+      const token = data?.token;
+      if (!token) return;
+
+      const payload = authService.verifyToken(token);
+      if (!payload?.userId) return;
+
+      socket.data.chatVisibility = {
+        userId: payload.userId,
+        username: payload.username,
+        aliases: Array.isArray(data.aliases) ? data.aliases : [],
+        teamId: data.teamId ?? null,
+        teamName: data.teamName ?? null,
+      };
+    });
+
     socket.on('pit:call', (data, callback) => {
       botService.sendToBot('pit:call', data, callback);
     });

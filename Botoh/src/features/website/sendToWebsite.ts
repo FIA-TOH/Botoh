@@ -11,6 +11,10 @@ export interface WebsiteChatMessage {
   timestamp: number;
   color: number | null;
   source: "player" | "system" | "frontend";
+  channel?: "all" | "team" | "player";
+  sender?: WebsiteChatParticipant;
+  target?: WebsiteChatTarget;
+  recipients?: WebsiteChatParticipant[];
 }
 
 export interface WebsiteLogMessage {
@@ -18,6 +22,31 @@ export interface WebsiteLogMessage {
   timestamp: number;
   color: number | null;
 }
+
+export interface WebsiteChatParticipant {
+  playerId?: number;
+  playerName?: string | null;
+  username?: string | null;
+  teamId?: string | null;
+  teamName?: string | null;
+}
+
+export type WebsiteChatTarget =
+  | { type: "all" }
+  | {
+      type: "team";
+      teamId?: string | null;
+      teamName?: string | null;
+      playerIds?: number[];
+      playerNames?: string[];
+      usernames?: string[];
+    }
+  | {
+      type: "player";
+      playerId?: number | null;
+      playerName?: string | null;
+      username?: string | null;
+    };
 
 export function sendToWebsite(
   player: PlayerObject,

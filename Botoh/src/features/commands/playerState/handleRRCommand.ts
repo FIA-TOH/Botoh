@@ -4,10 +4,9 @@ import {
   generalGameMode,
   GeneralGameMode,
 } from "../../changeGameState/changeGameModes";
-import { ghostMode } from "../../changePlayerState/ghost";
+import { applyPlayerCollision } from "../../changePlayerState/playerCollision";
 import { playerList } from "../../changePlayerState/playerList";
 import { resetPlayer } from "../../changePlayerState/players";
-import { updatePlayerCollision } from "../../changePlayerState/updatePlayerCollision";
 import { sendErrorMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { getPlayerAndDiscs } from "../../playerFeatures/getPlayerAndDiscs";
@@ -46,7 +45,6 @@ export function handleRRAllCommand(room: RoomObject) {
       return;
     }
 
-    const pad = getPlayerAndDiscs(room).filter((p) => p.p.id === player.p.id);
     resetPlayer(player.p, room, player.p.id);
     resetPitState(player.p.id);
 
@@ -58,11 +56,7 @@ export function handleRRAllCommand(room: RoomObject) {
       playerList[player.p.id].wear = 20;
     }
 
-    if (ghostMode) {
-      updatePlayerCollision(room, pad, room.CollisionFlags.c0);
-    } else {
-      updatePlayerCollision(room, pad, room.CollisionFlags.red);
-    }
+    applyPlayerCollision(room, player.p.id);
 
     const position = RR_POSITION ?? CIRCUITS[currentMapIndex].info.lastPlace;
 
@@ -92,9 +86,6 @@ export function handleRRCommand(
     return;
   }
 
-  const playersAndDiscs = getPlayerAndDiscs(room);
-  const pad = playersAndDiscs.filter((p) => p.p.id === byPlayer.id);
-
   resetPlayer(byPlayer, room, byPlayer.id);
   resetPitState(byPlayer.id);
 
@@ -106,11 +97,7 @@ export function handleRRCommand(
     playerList[byPlayer.id].wear = 20;
   }
 
-  if (ghostMode) {
-    updatePlayerCollision(room, pad, room.CollisionFlags.c0);
-  } else {
-    updatePlayerCollision(room, pad, room.CollisionFlags.red);
-  }
+  applyPlayerCollision(room, byPlayer.id);
 
   const position = RR_POSITION ?? CIRCUITS[currentMapIndex].info.lastPlace;
 

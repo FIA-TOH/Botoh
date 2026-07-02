@@ -3,6 +3,7 @@ import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { CIRCUITS, currentMapIndex } from "../zones/maps";
 import { MESSAGES } from "../chat/messages";
 import { getPreparedPitTire, playerList } from "../changePlayerState/playerList";
+import { applyPlayerCollision } from "../changePlayerState/playerCollision";
 import { inHitbox, getRunningPlayers } from "../utils";
 import { handleExplainTyresCommand } from "../commands/tyres/handleExplainTyresCommand";
 import { generatePitResult } from "./pitStopFunctions";
@@ -54,6 +55,7 @@ export function handlePitlane(
 
       playerList[p.id].pits.pitsNumber += 1;
       playerList[p.id].inPitlane = true;
+      applyPlayerCollision(room, p.id);
       const preparedTyre = getPreparedPitTire(p.id, p.name);
       if (preparedTyre) {
         sendRadioMessage(
@@ -76,6 +78,7 @@ export function handlePitlane(
         return;
       }
       playerList[p.id].inPitlane = false;
+      applyPlayerCollision(room, p.id);
     }
   });
 }
