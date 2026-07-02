@@ -45,6 +45,10 @@ import {
   clearCutTrackStorage,
   sendAllCutsToDiscord,
 } from "../detectCut/cutsOfTracksStorage";
+import {
+  clearCrashWallLogs,
+  sendAllCrashWallLogsToDiscord,
+} from "../speed/crashWallLogStorage";
 import { resetDebrisUsedList } from "../debris/chooseOneDebris";
 import { clearPlayers } from "../commands/gameMode/qualy/playerTime";
 import { printAllTimes } from "../commands/gameMode/qualy/printAllTimes";
@@ -108,6 +112,7 @@ export function GameStop(room: RoomObject) {
           });
           handleRREnabledCommand(undefined, ["off"], room);
           sendAllCutsToDiscord();
+          sendAllCrashWallLogsToDiscord();
         } else if (gameMode == GameMode.TRAINING) {
           await sendQualiResultsToDiscord();
           printAllTimes(room);
@@ -127,6 +132,7 @@ export function GameStop(room: RoomObject) {
             resetPitState(player.id);
           });
           sendAllCutsToDiscord();
+          sendAllCrashWallLogsToDiscord();
           setTimeout(() => {
             sendDiscordMessage(room);
           }, 3000);
@@ -143,6 +149,7 @@ export function GameStop(room: RoomObject) {
     clearPlayerBuffAndNerfLists();
     clearRRPosition();
     clearCutTrackStorage();
+    clearCrashWallLogs();
     resetDebrisUsedList();
     resetSessionBestSectors();
     resetCurrentSessionLap();

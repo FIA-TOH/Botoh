@@ -190,6 +190,8 @@
   "CHAT_CHANNEL_PRIVATE": "Privado",
   "CRASH_WALL_DETECTED": "{{playerName}} toco el muro {{index}} a {{speed}} de velocidad.",
   "CAR_DAMAGE_TAKEN": "💥{{damageTaken}} de DAÑO! • 🏎️ {{newDamage}}/100",
+  "CRASH_WALL_WARNING": "💥 Tocaste una pared, reduce la velocidad para evitar una sancion.",
+  "CRASH_WALL_INVALID_LAP": "💥 Tocaste una pared, tu vuelta sera invalidada.",
   "DAMAGE_ENABLED": "Daños activados.",
   "DAMAGE_DISABLED": "Daños desactivados.",
   "TYRE_PUNCTURE_ENABLED": "Sistema de pinchazo aleatorio activado.",

@@ -43,6 +43,7 @@ export type CrashWallDetector = {
   v0: [number, number];
   v1: [number, number];
   curvatura: number;
+  doDamage?: boolean;
 };
 
 export type CutSegment = {

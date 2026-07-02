@@ -190,6 +190,8 @@
   "CHAT_CHANNEL_PRIVATE": "Private",
   "CRASH_WALL_DETECTED": "{{playerName}} touched wall {{index}} at {{speed}} speed.",
   "CAR_DAMAGE_TAKEN": "💥{{damageTaken}} DAMAGE! • 🏎️ {{newDamage}}/100",
+  "CRASH_WALL_WARNING": "💥 You hit a wall, slow down to avoid a penalty.",
+  "CRASH_WALL_INVALID_LAP": "💥 You hit a wall, your lap will be invalidated.",
   "DAMAGE_ENABLED": "Damage enabled.",
   "DAMAGE_DISABLED": "Damage disabled.",
   "TYRE_PUNCTURE_ENABLED": "Random tyre puncture system enabled.",

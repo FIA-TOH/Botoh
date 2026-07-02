@@ -190,6 +190,8 @@
   "CHAT_CHANNEL_PRIVATE": "Priv?",
   "CRASH_WALL_DETECTED": "{{playerName}} a touche le mur {{index}} a {{speed}} de vitesse.",
   "CAR_DAMAGE_TAKEN": "💥{{damageTaken}} de DEGATS! • 🏎️ {{newDamage}}/100",
+  "CRASH_WALL_WARNING": "💥 Vous avez touche un mur, ralentissez pour eviter une penalite.",
+  "CRASH_WALL_INVALID_LAP": "💥 Vous avez touche un mur, votre tour sera invalide.",
   "DAMAGE_ENABLED": "Degats actives.",
   "DAMAGE_DISABLED": "Degats desactives.",
   "TYRE_PUNCTURE_ENABLED": "Systeme de crevaison aleatoire active.",

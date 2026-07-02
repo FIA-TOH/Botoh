@@ -190,6 +190,8 @@
   "CHAT_CHANNEL_PRIVATE": "?zel",
   "CRASH_WALL_DETECTED": "{{playerName}} {{index}} duvarina {{speed}} hizla dokundu.",
   "CAR_DAMAGE_TAKEN": "💥{{damageTaken}} HASAR! • 🏎️ {{newDamage}}/100",
+  "CRASH_WALL_WARNING": "💥 Duvara carptin, ceza almamak icin hizini dusur.",
+  "CRASH_WALL_INVALID_LAP": "💥 Duvara carptin, turun gecersiz sayilacak.",
   "DAMAGE_ENABLED": "Hasar aktif.",
   "DAMAGE_DISABLED": "Hasar devre disi.",
   "TYRE_PUNCTURE_ENABLED": "Rastgele lastik delinmesi sistemi etkin.",

@@ -4,25 +4,42 @@ import { sendAlertMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
 import { playerList } from "../changePlayerState/playerList";
-import { vectorSpeed } from "../utils";
+import { formatRaceTime, vectorSpeed } from "../utils";
 import { getRaceControlState, RaceControlState } from "../commands/flagsAndVSC/raceControl";
+import { addCrashWallLog } from "./crashWallLogStorage";
+import {
+  GameMode,
+  gameMode,
+  GeneralGameMode,
+  generalGameMode,
+} from "../changeGameState/changeGameModes";
 
 type Point = [number, number];
 type Segment = [Point, Point];
+export type DamageMode = "damage" | "log" | false;
 
 const detectorSegmentsCache = new Map<string, Segment[]>();
 const playerTouchedCrashWallDetectors = new Map<number, Set<string>>();
 const previousPlayerSpeed = new Map<number, number>();
 const lastPlayerDamageAt = new Map<number, number>();
+const lastPlayerCrashWallLogAt = new Map<string, number>();
 const DAMAGE_COOLDOWN_MS = 1000;
+const CRASH_WALL_LOG_COOLDOWN_MS = 5000;
 const CRASH_DAMAGE_PER_SPEED = 0.28125;
 const CURVED_DETECTOR_STEP_DEGREES = 5;
 const CURVED_DETECTOR_EXTRA_RADIUS = 1;
 
+export let damageMode: DamageMode = false;
 export let damageEnabled = false;
 
-export function enableDamage(enable: boolean) {
-  damageEnabled = enable;
+export function enableDamage(mode: boolean | DamageMode) {
+  if (mode === true) {
+    damageMode = "damage";
+  } else {
+    damageMode = mode;
+  }
+
+  damageEnabled = damageMode !== false;
 }
 
 function isDamageSuspendedByRaceControl() {
@@ -185,6 +202,82 @@ function applyCrashDamage(playerId: number, impactSpeed: number) {
   };
 }
 
+function isPlayerProtectedFromCrashDamage(playerId: number) {
+  return playerList[playerId]?.inPitlane === true;
+}
+
+function shouldApplyDamage(detector: CrashWallDetector, playerId: number) {
+  if (isPlayerProtectedFromCrashDamage(playerId)) return false;
+  if (damageMode === "damage") return true;
+  if (damageMode === "log") return detector.doDamage === true;
+
+  return false;
+}
+
+function shouldLogCrashWall() {
+  return damageMode === "log";
+}
+
+function isQualyOrTrainingSession() {
+  return generalGameMode === GeneralGameMode.GENERAL_QUALY
+    || gameMode === GameMode.QUALY
+    || gameMode === GameMode.HARD_QUALY
+    || gameMode === GameMode.TRAINING;
+}
+
+function getCrashWallLogCooldownKey(playerId: number, detector: CrashWallDetector) {
+  return `${playerId}:${detector.index}`;
+}
+
+function shouldRegisterCrashWallLog(playerId: number, detector: CrashWallDetector) {
+  const now = Date.now();
+  const cooldownKey = getCrashWallLogCooldownKey(playerId, detector);
+  const lastLogAt = lastPlayerCrashWallLogAt.get(cooldownKey) ?? 0;
+
+  if (now - lastLogAt < CRASH_WALL_LOG_COOLDOWN_MS) return false;
+
+  lastPlayerCrashWallLogAt.set(cooldownKey, now);
+  return true;
+}
+
+function logCrashWallHit(
+  player: PlayerObject,
+  detector: CrashWallDetector,
+  room: RoomObject,
+) {
+  addCrashWallLog({
+    trackName: ACTUAL_CIRCUIT.info.name,
+    playerName: player.name,
+    wallIndex: detector.index,
+    crashTime: formatRaceTime(room.getScores()?.time ?? 0),
+    didDamage: detector.doDamage === true,
+  });
+}
+
+function notifyCrashWallLogHit(player: PlayerObject, room: RoomObject) {
+  handleAvatar(Situacions.CrashDamage, player, room);
+
+  if (isQualyOrTrainingSession()) {
+    playerList[player.id].lastLapValid = false;
+    sendAlertMessage(room, MESSAGES.CRASH_WALL_INVALID_LAP(), player.id);
+    return;
+  }
+
+  sendAlertMessage(room, MESSAGES.CRASH_WALL_WARNING(), player.id);
+}
+
+function handleCrashWallLogHit(
+  player: PlayerObject,
+  detector: CrashWallDetector,
+  room: RoomObject,
+) {
+  if (!shouldLogCrashWall()) return;
+  if (!shouldRegisterCrashWallLog(player.id, detector)) return;
+
+  logCrashWallHit(player, detector, room);
+  notifyCrashWallLogHit(player, room);
+}
+
 export function detectCrashWallDetectors(
   playersAndDiscs: { p: PlayerObject; disc: DiscPropertiesObject }[],
   room: RoomObject,
@@ -213,6 +306,9 @@ export function detectCrashWallDetectors(
 
       if (damageSuspended) {
         if (isTouching) {
+          if (!touchedSet.has(detectorTouchKey)) {
+            handleCrashWallLogHit(pad.p, detector, room);
+          }
           touchedSet.add(detectorTouchKey);
         } else {
           touchedSet.delete(detectorTouchKey);
@@ -222,9 +318,13 @@ export function detectCrashWallDetectors(
 
       if (isTouching && !touchedSet.has(detectorTouchKey)) {
         const speed = Math.max(currentSpeed, previousSpeed);
-        const damage = applyCrashDamage(pad.p.id, speed);
+        const canApplyDamage = shouldApplyDamage(detector, pad.p.id);
 
-        if (damage) {
+        handleCrashWallLogHit(pad.p, detector, room);
+
+        const damage = canApplyDamage ? applyCrashDamage(pad.p.id, speed) : null;
+
+        if (damage && damageMode === "damage") {
           sendAlertMessage(
             room,
             MESSAGES.CAR_DAMAGE_TAKEN(
@@ -238,6 +338,8 @@ export function detectCrashWallDetectors(
             playerList[pad.p.id].lastLapValid = false;
             handleAvatar(Situacions.CrashDamage, pad.p, room);
           }
+        } else if (damage && damage.damageTaken > 0) {
+          playerList[pad.p.id].lastLapValid = false;
         }
 
         touchedSet.add(detectorTouchKey);
