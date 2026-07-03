@@ -47,7 +47,7 @@ const MONACOPUBLIC_INFO: CircuitInfo = {
     },
     passingDirection: Direction.RIGHT,
   },
-  name: "Circuit de Monaco - By Ximb",
+  name: "Circuit de Monaco - By Ximb - Public",
   boxLine: {
     minX: 103,
     maxX: 954,
@@ -91,7 +91,7 @@ const MONACOPUBLIC_INFO: CircuitInfo = {
       monacoPublic_json.redSpawnPoints.length - 1
     ][1],
   },
-  BestTime: bestTimes.monaco,
+  BestTime: bestTimes.monacoPublic,
   MainColor: [0xd6001d, 0xd6001d, 0xffffff],
   AvatarColor: 0xffffff,
   Angle: 60,

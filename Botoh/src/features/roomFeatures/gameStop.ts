@@ -39,7 +39,7 @@ import {
 } from "../discord/logResults";
 import { gameStarted, setGameStarted } from "./gameTick";
 import { sendDiscordMessage } from "../discord/sendDiscordLink";
-import { clearRRPosition } from "../commands/adminThings/handleRRPositionCommand";
+import { clearRRPosition } from "../commands/adminThings/rrPositionState";
 import { rejoinManager } from "../changePlayerState/rejoinManager";
 import {
   clearCutTrackStorage,
@@ -54,11 +54,15 @@ import { clearPlayers } from "../commands/gameMode/qualy/playerTime";
 import { printAllTimes } from "../commands/gameMode/qualy/printAllTimes";
 import { printAllPositions } from "../commands/gameMode/race/printAllPositions";
 import { resetSessionBestSectors } from "../zones/laps/trackBestSector";
-import { resetCurrentSessionLap } from "../zones/laps";
+import { DEFAULT_LAPS, resetCurrentSessionLap } from "../zones/laps";
 import { resetSandbag } from "../commands/gameMode/battleRoyale.ts/handleSandbag";
 import { writeFileSync } from "fs";
 import { join } from "path";
 import { resetLapHistory } from "../zones/laps/lapHistory";
+import {
+  settlePublicQualyRanking,
+  settlePublicRaceChampionship,
+} from "../public/publicCompetition";
 
 let replayData: Uint8Array | null = null;
 
@@ -95,17 +99,22 @@ export function GameStop(room: RoomObject) {
 
     if (gameMode !== GameMode.WAITING) {
       if (gameStopedNaturally && !LEAGUE_MODE) {
-        PublicGameFlow(room);
+        if (room.getPlayerList().length > 0) {
+          await PublicGameFlow(room);
+        }
         changeGameStoppedNaturally(false);
       } else {
         handleGameStateChange(null, room);
         if (generalGameMode === GeneralGameMode.GENERAL_QUALY) {
           await sendQualiResultsToDiscord();
           printAllTimes(room);
+          if (!LEAGUE_MODE) {
+            await settlePublicQualyRanking(room);
+          }
           reorderPlayersInRoomRace(room);
           movePlayersToCorrectSide();
           changeGameMode(GameMode.RACE, room, { reloadStadium: false });
-          changeLaps("7", undefined, room);
+          changeLaps(String(DEFAULT_LAPS), undefined, room);
           resetPlayers(room);
           room.getPlayerList().forEach(player => {
             resetPitState(player.id);
@@ -126,6 +135,9 @@ export function GameStop(room: RoomObject) {
         } else {
           await sendRaceResultsToDiscord();
           printAllPositions(room);
+          if (!LEAGUE_MODE) {
+            await settlePublicRaceChampionship(room);
+          }
           movePlayersToCorrectSide();
           resetPlayers(room);
           room.getPlayerList().forEach(player => {

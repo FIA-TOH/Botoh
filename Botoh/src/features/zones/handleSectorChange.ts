@@ -17,6 +17,7 @@ import { inHitbox, getRunningPlayers } from "../utils";
 import { evaluateSector } from "./laps/trackBestSector";
 import { CIRCUITS, currentMapIndex } from "./maps";
 import { getIsGamePaused } from "../changeGameState/gameState";
+import { recordPublicSectorForPlayer } from "../public/publicCircuits";
 
 function serialize(number: number) {
   return parseFloat(number.toFixed(3));
@@ -115,6 +116,9 @@ export function checkPlayerSector(
         playerList[p.id].currentLap > 0
       ) {
         const result = evaluateSector(3, playerList[p.id].sectorTime[2], p.id);
+        if (playerList[p.id].lastLapValid !== false && !playerList[p.id].cuttedTrackOnThisLap) {
+          recordPublicSectorForPlayer(CIRCUITS[currentMapIndex].info.name, p, 3, playerList[p.id].sectorTime[2]);
+        }
         if (result.text) room.sendAnnouncement(result.text, p.id, result.color);
       }
     } else if (ifInSectorTwoChangeZone(pad, room)) {
@@ -132,6 +136,9 @@ export function checkPlayerSector(
         playerList[p.id].currentLap > 0
       ) {
         const result = evaluateSector(1, playerList[p.id].sectorTime[0], p.id);
+        if (playerList[p.id].lastLapValid !== false && !playerList[p.id].cuttedTrackOnThisLap) {
+          recordPublicSectorForPlayer(CIRCUITS[currentMapIndex].info.name, p, 1, playerList[p.id].sectorTime[0]);
+        }
         if (result.text) room.sendAnnouncement(result.text, p.id, result.color);
       }
 
@@ -153,6 +160,9 @@ export function checkPlayerSector(
         playerList[p.id].currentLap > 0
       ) {
         const result = evaluateSector(2, playerList[p.id].sectorTime[1], p.id);
+        if (playerList[p.id].lastLapValid !== false && !playerList[p.id].cuttedTrackOnThisLap) {
+          recordPublicSectorForPlayer(CIRCUITS[currentMapIndex].info.name, p, 2, playerList[p.id].sectorTime[1]);
+        }
         if (result.text) room.sendAnnouncement(result.text, p.id, result.color);
       }
 

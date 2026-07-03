@@ -46,7 +46,7 @@ const SUZUKAPUBLIC_INFO: CircuitInfo = {
     },
     passingDirection: Direction.RIGHT,
   },
-  name: "Suzuka International Circuit - By Ximb",
+  name: "Suzuka International Circuit - By Ximb - Public",
   boxLine: {
     minX: 928,
     maxX: 1968,
@@ -90,7 +90,7 @@ const SUZUKAPUBLIC_INFO: CircuitInfo = {
       suzukaPublic_json.redSpawnPoints.length - 1
     ][1],
   },
-  BestTime: bestTimes.suzuka,
+  BestTime: bestTimes.suzukaPublic,
   MainColor: [0xffffff],
   AvatarColor: 0xbc002d,
   Angle: 90,

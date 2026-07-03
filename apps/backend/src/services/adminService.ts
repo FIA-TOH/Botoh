@@ -123,13 +123,36 @@ export interface SponsorMissionInput {
   racesToComplete?: number;
 }
 
+export interface PublicUserAdminInput {
+  name: string;
+  rankingXp: number;
+  championshipPoints: number;
+  placementRacesRemaining: number;
+}
+
+export interface PublicCircuitAdminInput {
+  baseRecordTime?: number | null;
+  baseRecordDriver?: string | null;
+  recordLapTime?: number | null;
+  recordLapDriver?: string | null;
+  sector1RecordTime?: number | null;
+  sector1RecordDriver?: string | null;
+  sector2RecordTime?: number | null;
+  sector2RecordDriver?: string | null;
+  sector3RecordTime?: number | null;
+  sector3RecordDriver?: string | null;
+  playedCount: number;
+  voteCount: number;
+}
+
 type RaceMissionDifficulty = 'easy' | 'medium' | 'hard' | 'insane';
 
 const RACE_MISSION_GENERATOR_ID = 'race_mission_generator';
 const RACE_MISSION_GENERATION_CHANCES: Partial<Record<SponsorContractCategory, number>> = {
-  title_sponsor: 0.75,
-  main_partner: 0.5,
+  title_sponsor: 0.5625,
+  main_partner: 0.375,
 };
+const RACE_MISSION_EXTRA_CHANCE_MULTIPLIERS = [1, 0.75, 0.5];
 const RACE_MISSION_BASES: Partial<Record<SponsorContractCategory, number>> = {
   title_sponsor: 60000,
   main_partner: 35000,
@@ -535,6 +558,186 @@ class AdminService {
     return result.rows[0]
       ? { success: true }
       : { success: false, message: 'Personal sponsor not found' };
+  }
+
+  async getPublicHostDashboard() {
+    const [users, circuits, championship, rankings] = await Promise.all([
+      query(`
+        SELECT
+          pu.auth,
+          pu.name,
+          pu.created_at AS "createdAt",
+          pu.updated_at AS "updatedAt",
+          pu.last_login_at AS "lastLoginAt",
+          COALESCE(pdp.ranking_xp, 0) AS "rankingXp",
+          COALESCE(pdp.championship_points, 0) AS "championshipPoints",
+          COALESCE(pdp.placement_races_remaining, 5) AS "placementRacesRemaining",
+          COALESCE(pdp.placement_performance_sum, 0) AS "placementPerformanceSum",
+          COALESCE(pdp.placement_performance_count, 0) AS "placementPerformanceCount",
+          COALESCE(pdp.placement_ranking_applied, FALSE) AS "placementRankingApplied",
+          COALESCE(pdp.races_count, 0) AS "racesCount",
+          COALESCE(pdp.qualy_count, 0) AS "qualyCount",
+          COALESCE(circuit_stats.circuits_count, 0) AS "circuitsCount"
+        FROM public_users pu
+        LEFT JOIN public_driver_profiles pdp ON pdp.auth = pu.auth
+        LEFT JOIN (
+          SELECT auth, COUNT(*)::integer AS circuits_count
+          FROM public_driver_circuit_stats
+          GROUP BY auth
+        ) circuit_stats ON circuit_stats.auth = pu.auth
+        ORDER BY pu.name ASC
+      `),
+      query(`
+        SELECT
+          pc.track_name AS "trackName",
+          pc.base_record_time AS "baseRecordTime",
+          pc.base_record_driver AS "baseRecordDriver",
+          pc.record_lap_time AS "recordLapTime",
+          pc.record_lap_driver AS "recordLapDriver",
+          pc.sector1_record_time AS "sector1RecordTime",
+          pc.sector1_record_driver AS "sector1RecordDriver",
+          pc.sector2_record_time AS "sector2RecordTime",
+          pc.sector2_record_driver AS "sector2RecordDriver",
+          pc.sector3_record_time AS "sector3RecordTime",
+          pc.sector3_record_driver AS "sector3RecordDriver",
+          pc.played_count AS "playedCount",
+          pc.vote_count AS "voteCount",
+          pc.created_at AS "createdAt",
+          pc.updated_at AS "updatedAt",
+          COALESCE(stats.drivers_count, 0) AS "driversCount"
+        FROM public_circuits pc
+        LEFT JOIN (
+          SELECT track_name, COUNT(*)::integer AS drivers_count
+          FROM public_driver_circuit_stats
+          GROUP BY track_name
+        ) stats ON stats.track_name = pc.track_name
+        ORDER BY pc.played_count DESC, pc.track_name ASC
+      `),
+      query(`
+        SELECT
+          ROW_NUMBER() OVER (ORDER BY championship_points DESC, ranking_xp DESC, updated_at ASC)::integer AS position,
+          auth,
+          name,
+          championship_points AS "championshipPoints",
+          ranking_xp AS "rankingXp",
+          races_count AS "racesCount"
+        FROM public_driver_profiles
+        ORDER BY championship_points DESC, ranking_xp DESC, updated_at ASC
+      `),
+      query(`
+        SELECT
+          ROW_NUMBER() OVER (ORDER BY ranking_xp DESC, championship_points DESC, updated_at ASC)::integer AS position,
+          auth,
+          name,
+          ranking_xp AS "rankingXp",
+          championship_points AS "championshipPoints",
+          placement_races_remaining AS "placementRacesRemaining",
+          placement_performance_sum AS "placementPerformanceSum",
+          placement_performance_count AS "placementPerformanceCount",
+          placement_ranking_applied AS "placementRankingApplied",
+          qualy_count AS "qualyCount"
+        FROM public_driver_profiles
+        ORDER BY ranking_xp DESC, championship_points DESC, updated_at ASC
+      `),
+    ]);
+
+    return {
+      users: users.rows,
+      circuits: circuits.rows,
+      championship: championship.rows,
+      rankings: rankings.rows,
+    };
+  }
+
+  async updatePublicUser(auth: string, input: PublicUserAdminInput) {
+    const result = await transaction(async (client) => {
+      await client.query(
+        `UPDATE public_users
+         SET name = $2, updated_at = NOW()
+         WHERE auth = $1`,
+        [auth, input.name],
+      );
+
+      return client.query(
+        `INSERT INTO public_driver_profiles
+          (auth, name, ranking_xp, championship_points, placement_races_remaining)
+         VALUES ($1, $2, $3, $4, $5)
+         ON CONFLICT (auth)
+         DO UPDATE SET
+           name = EXCLUDED.name,
+           ranking_xp = EXCLUDED.ranking_xp,
+           championship_points = EXCLUDED.championship_points,
+           placement_races_remaining = EXCLUDED.placement_races_remaining,
+           updated_at = NOW()
+         RETURNING auth`,
+        [
+          auth,
+          input.name,
+          Math.max(0, Math.trunc(input.rankingXp)),
+          Math.max(0, Math.trunc(input.championshipPoints)),
+          Math.max(0, Math.trunc(input.placementRacesRemaining)),
+        ],
+      );
+    });
+
+    return result.rows[0]
+      ? { success: true }
+      : { success: false, message: 'Public user not found' };
+  }
+
+  async deletePublicUser(auth: string) {
+    const result = await query('DELETE FROM public_users WHERE auth = $1 RETURNING auth', [auth]);
+    return result.rows[0]
+      ? { success: true }
+      : { success: false, message: 'Public user not found' };
+  }
+
+  async updatePublicCircuit(trackName: string, input: PublicCircuitAdminInput) {
+    const result = await query(
+      `UPDATE public_circuits
+       SET
+         base_record_time = $2,
+         base_record_driver = $3,
+         record_lap_time = $4,
+         record_lap_driver = $5,
+         sector1_record_time = $6,
+         sector1_record_driver = $7,
+         sector2_record_time = $8,
+         sector2_record_driver = $9,
+         sector3_record_time = $10,
+         sector3_record_driver = $11,
+         played_count = $12,
+         vote_count = $13,
+         updated_at = NOW()
+       WHERE track_name = $1
+       RETURNING track_name`,
+      [
+        trackName,
+        input.baseRecordTime ?? null,
+        input.baseRecordDriver || null,
+        input.recordLapTime ?? null,
+        input.recordLapDriver || null,
+        input.sector1RecordTime ?? null,
+        input.sector1RecordDriver || null,
+        input.sector2RecordTime ?? null,
+        input.sector2RecordDriver || null,
+        input.sector3RecordTime ?? null,
+        input.sector3RecordDriver || null,
+        Math.max(0, Math.trunc(input.playedCount)),
+        Math.max(0, Math.trunc(input.voteCount)),
+      ],
+    );
+
+    return result.rows[0]
+      ? { success: true }
+      : { success: false, message: 'Public circuit not found' };
+  }
+
+  async deletePublicCircuit(trackName: string) {
+    const result = await query('DELETE FROM public_circuits WHERE track_name = $1 RETURNING track_name', [trackName]);
+    return result.rows[0]
+      ? { success: true }
+      : { success: false, message: 'Public circuit not found' };
   }
 
   private async replaceMemberships(
@@ -2816,6 +3019,7 @@ class AdminService {
       await client.query(
         `DELETE FROM team_sponsor_race_missions
          WHERE generated_by = $1
+           AND status = 'pending_review'
            AND team_sponsor_id IN (
              SELECT id
              FROM team_sponsors
@@ -2852,9 +3056,13 @@ class AdminService {
 
       for (const contract of contracts.rows) {
         const category = contract.category as SponsorContractCategory;
-        const chance = RACE_MISSION_GENERATION_CHANCES[category] ?? 0;
         const result = resultByTeamId.get(contract.team_id);
         if (!result) continue;
+
+        const baseChance = RACE_MISSION_GENERATION_CHANCES[category] ?? 0;
+        const extraMissionMultiplier = RACE_MISSION_EXTRA_CHANCE_MULTIPLIERS[result.missions.length]
+          ?? RACE_MISSION_EXTRA_CHANCE_MULTIPLIERS[RACE_MISSION_EXTRA_CHANCE_MULTIPLIERS.length - 1];
+        const chance = baseChance * extraMissionMultiplier;
 
         if (Math.random() > chance) {
           result.skipped.push({
@@ -2880,8 +3088,9 @@ class AdminService {
             description,
             reward,
             difficulty,
-            generated_by
-          ) VALUES ($1, $2, $3, $4, $5, $6)
+            generated_by,
+            status
+          ) VALUES ($1, $2, $3, $4, $5, $6, 'pending_review')
           RETURNING id`,
           [
             contract.team_sponsor_id,
@@ -2955,6 +3164,34 @@ class AdminService {
       : { success: false, message: 'Sponsor mission not found' };
   }
 
+  async reviewGeneratedRaceMission(missionId: string, outcome: 'approve' | 'reject') {
+    if (outcome === 'reject') {
+      const result = await query(
+        `DELETE FROM team_sponsor_race_missions
+         WHERE id = $1
+           AND status = 'pending_review'
+         RETURNING id`,
+        [missionId],
+      );
+      return result.rows[0]
+        ? { success: true }
+        : { success: false, message: 'Sponsor mission not found' };
+    }
+
+    const result = await query(
+      `UPDATE team_sponsor_race_missions
+       SET status = 'approved'
+       WHERE id = $1
+         AND status = 'pending_review'
+       RETURNING id`,
+      [missionId],
+    );
+
+    return result.rows[0]
+      ? { success: true }
+      : { success: false, message: 'Sponsor mission not found' };
+  }
+
   async resolveSponsorMission(missionId: string, type: 'race' | 'season', outcome: 'success' | 'failure') {
     return transaction(async (client) => {
       const table = type === 'race'
@@ -2968,7 +3205,8 @@ class AdminService {
           ts.team_id
          FROM ${table} m
          JOIN team_sponsors ts ON ts.id = m.team_sponsor_id
-         WHERE m.id = $1`,
+         WHERE m.id = $1
+           ${type === 'race' ? "AND m.status = 'approved'" : ''}`,
         [missionId],
       );
       const row = mission.rows[0];

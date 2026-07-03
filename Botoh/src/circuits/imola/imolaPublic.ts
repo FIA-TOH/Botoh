@@ -46,7 +46,7 @@ const IMOLAPUBLIC_INFO: CircuitInfo = {
     },
     passingDirection: Direction.LEFT,
   },
-  name: "Autodromo Imola - By Ximb",
+  name: "Autodromo Imola - By Ximb - Public",
   boxLine: {
     minX: -1068,
     maxX: -168,
@@ -90,7 +90,7 @@ const IMOLAPUBLIC_INFO: CircuitInfo = {
       imolaPublic_json.redSpawnPoints.length - 1
     ][1],
   },
-  BestTime: bestTimes.imola,
+  BestTime: bestTimes.imolaPublic,
   MainColor: [0x009246, 0xfffff1, 0xce2b37],
   AvatarColor: 0x000001,
   Angle: 0,

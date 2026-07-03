@@ -264,24 +264,47 @@ export const CIRCUIT_FILE_NAMES: string[] = LEAGUE_MODE
       "waitRoom.hbs",
     ]
   : [
-      "suzuka.hbs",
-      "melbourne.hbs",
-      "baku.hbs",
-      "spa.hbs",
-      "imola.hbs",
-      "nurburgring.hbs",
-      "shanghai.hbs",
-      "austin.hbs",
-      "monza.hbs",
-      "canada.hbs",
-      "sepang.hbs",
-      "valencia.hbs",
-      "monaco.hbs",
+      "suzukaPublic.hbs",
+      "melbournePublic.hbs",
+      "bakuPublic.hbs",
+      "spaPublic.hbs",
+      "imolaPublic.hbs",
+      "nurburgringPublic.hbs",
+      "shanghaiPublic.hbs",
+      "austinPublic.hbs",
+      "monzaPublic.hbs",
+      "canadaPublic.hbs",
+      "sepangPublic.hbs",
+      "valenciaPublic.hbs",
+      "monacoPublic.hbs",
       "waitRoom.hbs",
       "waitRoomQualy.hbs",
     ];
 
 export let currentMapIndex = 0;
+let lastPublicRaceMapIndex = 0;
+
+export function isPublicWaitingMapIndex(index = currentMapIndex): boolean {
+  if (LEAGUE_MODE) return false;
+
+  const circuitName = CIRCUITS[index]?.info?.name;
+  return circuitName === "Wait Room - By Ximb" || circuitName === "Wait Qualy Room - By Ximb";
+}
+
+export function getLastPublicRaceMapIndex(): number {
+  if (LEAGUE_MODE) return currentMapIndex;
+
+  if (
+    lastPublicRaceMapIndex < 0
+    || lastPublicRaceMapIndex >= CIRCUITS.length
+    || isPublicWaitingMapIndex(lastPublicRaceMapIndex)
+  ) {
+    return 0;
+  }
+
+  return lastPublicRaceMapIndex;
+}
+
 function handleMapError(room: RoomObject) {
   const admins = room.getPlayerList().filter((p) => p.admin);
 
@@ -301,6 +324,10 @@ export function handleChangeMap(index: number, room: RoomObject) {
 
   try {
     currentMapIndex = index;
+
+    if (!LEAGUE_MODE && !isPublicWaitingMapIndex(index)) {
+      lastPublicRaceMapIndex = index;
+    }
 
     room.setCustomStadium(CIRCUITS[currentMapIndex].map);
     emitPitWallMapChange(CIRCUIT_FILE_NAMES[currentMapIndex] || "unknown.hbs");

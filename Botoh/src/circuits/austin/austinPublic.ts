@@ -47,7 +47,7 @@ const AUSTINPUBLIC_INFO: CircuitInfo = {
     },
     passingDirection: Direction.DOWN,
   },
-  name: "United States Grand Prix - By Ximb",
+  name: "United States Grand Prix - By Ximb - Public",
   boxLine: {
     minX: -2515,
     maxX: -2430,
@@ -103,7 +103,7 @@ const AUSTINPUBLIC_INFO: CircuitInfo = {
       austinPublic_json.redSpawnPoints.length - 1
     ][1],
   },
-  BestTime: bestTimes.austin,
+  BestTime: bestTimes.austinPublic,
   MainColor: [0xb31942, 0xffffff, 0xb31942],
   AvatarColor: 0x0a3161,
   Angle: 90,

@@ -344,6 +344,7 @@ class GarageService {
               )
               FROM team_sponsor_race_missions rm
               WHERE rm.team_sponsor_id = ts.id
+                AND rm.status = 'approved'
             ),
             '[]'::json
           ) AS "raceMissions"

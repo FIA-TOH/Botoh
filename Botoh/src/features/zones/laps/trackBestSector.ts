@@ -4,6 +4,11 @@ import {
 } from "../../changePlayerState/playerList";
 import { COLORS } from "../../chat/chat";
 import { serialize } from "../../utils";
+import { ACTUAL_CIRCUIT } from "../../roomFeatures/stadiumChange";
+import {
+  getPublicCircuitSectorRecordForTrack,
+  getPublicDriverBestSectorForTrack,
+} from "../../public/publicCircuits";
 
 type BestSectors = {
   1: number | null;
@@ -18,6 +23,10 @@ let sessionBestSectors: BestSectors = {
 };
 
 const pendingSectorStatusResetByPlayerId = new Map<number, NodeJS.Timeout>();
+
+function isValidReferenceTime(value: number | null | undefined) {
+  return typeof value === "number" && Number.isFinite(value) && value > 0 && value < 999;
+}
 
 export function resetSessionBestSectors() {
   sessionBestSectors = {
@@ -115,8 +124,22 @@ export function evaluateSector(
     playerData.currentLapSectorStatus = ["none", "none", "none"];
   }
 
-  const playerBest = playerData.bestSectorTimes[sectorIndex - 1];
+  const sessionPlayerBest = playerData.bestSectorTimes[sectorIndex - 1];
   const sessionBest = sessionBestSectors[sectorIndex];
+  const publicBest = ACTUAL_CIRCUIT?.info?.name
+    ? getPublicCircuitSectorRecordForTrack(ACTUAL_CIRCUIT.info.name, sectorIndex)
+    : null;
+  const publicPlayerBest = ACTUAL_CIRCUIT?.info?.name
+    ? getPublicDriverBestSectorForTrack(ACTUAL_CIRCUIT.info.name, playerId, sectorIndex)
+    : null;
+  const playerBest = isValidReferenceTime(publicPlayerBest)
+    ? publicPlayerBest
+    : sessionPlayerBest;
+  const bestReference =
+    publicBest !== null && sessionBest !== null
+      ? Math.min(publicBest, sessionBest)
+      : publicBest ?? sessionBest;
+  const hasHistoricalPersonalReference = isValidReferenceTime(publicPlayerBest);
   const isCurrentLapValid =
     playerData.lastLapValid !== false && !playerData.cuttedTrackOnThisLap;
 
@@ -137,7 +160,10 @@ export function evaluateSector(
   // -------------------------
   // 1️⃣ Check Session Record
   // -------------------------
-  if (sessionBest === null || sectorTime < sessionBest) {
+  if (
+    (bestReference === null && !hasHistoricalPersonalReference) ||
+    (bestReference !== null && sectorTime < bestReference)
+  ) {
     sessionBestSectors[sectorIndex] = sectorTime;
     playerData.bestSectorTimes[sectorIndex - 1] = sectorTime;
     updateCurrentLapSectorStatus(sectorIndex, playerId, "purple");
@@ -155,8 +181,8 @@ export function evaluateSector(
   // -------------------------
   // 2️⃣ Check Personal Best
   // -------------------------
-  if (playerBest === null || sectorTime < playerBest) {
-    const deltaRecord = serialize(sectorTime - sessionBest);
+  if (!isValidReferenceTime(playerBest) || sectorTime < playerBest) {
+    const deltaRecord = bestReference === null ? 0 : serialize(sectorTime - bestReference);
 
     playerData.bestSectorTimes[sectorIndex - 1] = sectorTime;
     updateCurrentLapSectorStatus(sectorIndex, playerId, "green");
@@ -176,8 +202,12 @@ export function evaluateSector(
   // -------------------------
   // 3️⃣ Worse than PB
   // -------------------------
+  if (sectorTime < sessionPlayerBest) {
+    playerData.bestSectorTimes[sectorIndex - 1] = sectorTime;
+  }
+
   const deltaPB = serialize(sectorTime - playerBest);
-  const deltaRecord = serialize(sectorTime - sessionBest);
+  const deltaRecord = bestReference === null ? 0 : serialize(sectorTime - bestReference);
   updateCurrentLapSectorStatus(sectorIndex, playerId, "yellow");
 
   if (deltaPB <= 0.2) {

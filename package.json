@@ -7,9 +7,15 @@
     "apps/*"
   ],
   "scripts": {
-    "dev": "npm run room:local",
+    "dev": "node scripts/run-room-local.js",
+    "dev:public": "node scripts/run-room-local.js --public",
+    "dev:league": "node scripts/run-room-local.js --league",
     "room:local": "node scripts/run-room-local.js",
+    "room:public": "node scripts/run-room-local.js --public",
+    "room:league": "node scripts/run-room-local.js --league",
     "pitwall:local": "node scripts/run-room-local.js --no-frontend",
+    "pitwall:public": "node scripts/run-room-local.js --no-frontend --public",
+    "pitwall:league": "node scripts/run-room-local.js --no-frontend --league",
     "room:remote": "npm run dev:bot:remote",
     "dev:backend": "npm run dev --workspace=apps/backend",
     "dev:bot": "npm run dev --workspace=apps/bot",

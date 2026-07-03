@@ -17,7 +17,7 @@ const SPAPUBLIC_INFO: CircuitInfo = {
     },
     passingDirection: Direction.LEFT,
   },
-  name: "Spa-Francorchamps - By Ximb",
+  name: "Spa-Francorchamps - By Ximb - Public",
   sectorOne: {
     bounds: {
       minX: -2963,

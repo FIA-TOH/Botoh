@@ -12,7 +12,7 @@ import { setCurrentWeatherToInitialData, startWeatherMonitoring } from "../weath
 import { sendInitialWeatherAnnouncement } from "../weather/rain/weatherReportAnnouncer";
 import { resetBestPit } from "../tires&pits/trackBestPit";
 import { resetBestLap } from "../zones/laps/trackBestLap";
-import { clearRRPosition } from "../commands/adminThings/handleRRPositionCommand";
+import { clearRRPosition } from "../commands/adminThings/rrPositionState";
 import { decideBlowoutPoint } from "../tires&pits/tireBlowManager";
 import { Teams } from "../changeGameState/teams";
 import { positionList } from "../commands/gameMode/race/positionList";
@@ -21,6 +21,8 @@ import { playerList } from "../changePlayerState/playerList";
 import { initializeLeagueStartAFKDetection } from "../afk/leagueStartAFKDetection";
 import { resetLapHistory } from "../zones/laps/lapHistory";
 import { movePlayerToTeamCircuitBox } from "../teamBoxes/teamCircuitBoxes";
+import { applyPublicCircuitRRPosition } from "../public/publicCircuitRR";
+import { ACTUAL_CIRCUIT } from "./stadiumChange";
 
 export function GameStart(room: RoomObject) {
   room.onGameStart = function (byPlayer) {
@@ -59,7 +61,13 @@ export function GameStart(room: RoomObject) {
     resetBestLap();
     resetLapHistory();
     resetBestPit();
-    clearRRPosition();
+    if (LEAGUE_MODE) {
+      clearRRPosition();
+    } else if (ACTUAL_CIRCUIT) {
+      applyPublicCircuitRRPosition(ACTUAL_CIRCUIT).catch((error) => {
+        console.error("[gameStart] failed to apply public RR position:", error);
+      });
+    }
     resetSafetyCarActivationForRace();
 
     setCameraAuto();

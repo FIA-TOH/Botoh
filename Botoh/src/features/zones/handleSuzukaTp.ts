@@ -5,11 +5,16 @@ import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { constants } from "../speed/constants";
 import { inHitbox } from "../utils";
 
-const suzukaTunnelHitBox = {
-  minX: -581,
-  maxX: -463,
-  minY: 755,
-  maxY: 899,
+const SUZUKA_CIRCUIT_NAMES = new Set([
+  "Suzuka International Circuit - By Ximb",
+  "Suzuka International Circuit - By Ximb - Public",
+]);
+
+const suzukaTpHitBox = {
+  minX: -372,
+  maxX: 82,
+  minY: 978,
+  maxY: 1010,
 };
 
 const suzukaEnteringTunnelHitBox = {
@@ -40,75 +45,68 @@ const suzukaLeavingChangeCGroupHitBox = {
   maxY: 755,
 };
 
+function isSuzukaCircuitActive(room: RoomObject) {
+  return (
+    room.getScores().time > 0 &&
+    SUZUKA_CIRCUIT_NAMES.has(ACTUAL_CIRCUIT.info.name)
+  );
+}
+
 export function handleSuzukaTp(
   player: { p: PlayerObject; disc: DiscPropertiesObject },
-  room: RoomObject
+  room: RoomObject,
 ) {
-  if (
-    room.getScores().time > 0 &&
-    ACTUAL_CIRCUIT.info.name === "Suzuka International Circuit - By Ximb" &&
-    inHitbox(player, {
-      minX: -372,
-      maxX: 82,
-      minY: 978,
-      maxY: 1010,
-    })
-  ) {
-    room.setPlayerDiscProperties(player.p.id, {
-      y: 710,
-      x: player.p.position.x - 385,
-    });
+  if (!isSuzukaCircuitActive(room) || !inHitbox(player, suzukaTpHitBox)) {
+    return;
   }
+
+  room.setPlayerDiscProperties(player.p.id, {
+    y: 710,
+    x: player.p.position.x - 385,
+  });
 }
+
 export function handleChangePlayerSizeSuzuka(
   player: { p: PlayerObject; disc: DiscPropertiesObject },
-  room: RoomObject
+  room: RoomObject,
 ) {
-  if (
-    room.getScores().time > 0 &&
-    ACTUAL_CIRCUIT.info.name === "Suzuka International Circuit - By Ximb"
-  ) {
-    if (
-      inHitbox(player, suzukaEnteringTunnelHitBox) &&
-      player.disc.radius != 5
-    ) {
-      room.setPlayerDiscProperties(player.p.id, {
-        radius: 5,
-      });
-    }
+  if (!isSuzukaCircuitActive(room)) {
+    return;
+  }
 
-    if (
-      inHitbox(player, suzukaLeavingTunnelHitBox) &&
-      player.disc.radius === 5
-    ) {
-      room.setPlayerDiscProperties(player.p.id, {
-        radius: constants.DEFAULT_PLAYER_RADIUS,
-      });
-    }
+  if (inHitbox(player, suzukaEnteringTunnelHitBox) && player.disc.radius != 5) {
+    room.setPlayerDiscProperties(player.p.id, {
+      radius: 5,
+    });
+  }
+
+  if (inHitbox(player, suzukaLeavingTunnelHitBox) && player.disc.radius === 5) {
+    room.setPlayerDiscProperties(player.p.id, {
+      radius: constants.DEFAULT_PLAYER_RADIUS,
+    });
   }
 }
 
 export function handleChangeCollisionPlayerSuzuka(
   player: { p: PlayerObject; disc: DiscPropertiesObject },
-  room: RoomObject
+  room: RoomObject,
 ) {
-  if (
-    room.getScores().time > 0 &&
-    ACTUAL_CIRCUIT.info.name === "Suzuka International Circuit - By Ximb"
-  ) {
-    if (
-      inHitbox(player, suzukaEnteringChangeCGroupHitBox) &&
-      player.disc.radius != 5 &&
-      !playerList[player.p.id]?.inPitlane
-    ) {
-      updatePlayerCollision(room, [player], room.CollisionFlags.c1);
-    }
+  if (!isSuzukaCircuitActive(room)) {
+    return;
+  }
 
-    if (
-      inHitbox(player, suzukaLeavingChangeCGroupHitBox) &&
-      player.disc.radius === 5
-    ) {
-      applyPlayerCollision(room, player.p.id);
-    }
+  if (
+    inHitbox(player, suzukaEnteringChangeCGroupHitBox) &&
+    player.disc.radius != 5 &&
+    !playerList[player.p.id]?.inPitlane
+  ) {
+    updatePlayerCollision(room, [player], room.CollisionFlags.c1);
+  }
+
+  if (
+    inHitbox(player, suzukaLeavingChangeCGroupHitBox) &&
+    player.disc.radius === 5
+  ) {
+    applyPlayerCollision(room, player.p.id);
   }
 }

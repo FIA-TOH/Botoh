@@ -23,9 +23,17 @@ export function handleBestTimes(
   lapTime: number,
   circuitBestTime: number,
   isFastestLapRace: boolean,
+  personalBestReference?: number | null,
 ) {
   const playerData = playerList[p.id];
-  const bestTimeP = serialize(playerData.bestTime);
+  const hasPersonalBestReference =
+    typeof personalBestReference === "number" &&
+    Number.isFinite(personalBestReference) &&
+    personalBestReference > 0 &&
+    personalBestReference < 999;
+  const bestTimeP = hasPersonalBestReference
+    ? serialize(personalBestReference)
+    : serialize(playerData.bestTime);
 
   if (playerData.lastLapValid && lapTime < circuitBestTime) {
     updateBestTime(ACTUAL_CIRCUIT.info.name, lapTime, p.name);
@@ -38,7 +46,11 @@ export function handleBestTimes(
     return;
   }
 
-  if (playerData.lastLapValid && isFastestLapRace) {
+  if (
+    playerData.lastLapValid &&
+    isFastestLapRace &&
+    (!hasPersonalBestReference || lapTime < bestTimeP)
+  ) {
     sendBestTimeRace(room, MESSAGES.FASTEST_LAP(p.name, lapTime));
     playerData.sectorColour = COLORS.PINK;
   }
@@ -54,6 +66,11 @@ export function handleBestTimes(
     broadcastLapTimeToPlayers(room, lapTime, p.name);
     updatePlayerTime(p.name, lapTime, p.id, getEffectiveLeagueScuderiaId(playerData));
   } else {
+    if (playerData.lastLapValid && lapTime < playerData.bestTime) {
+      playerData.bestTime = lapTime;
+      updatePlayerTime(p.name, lapTime, p.id, getEffectiveLeagueScuderiaId(playerData));
+    }
+
     const MAX_REASONABLE_LAP = 600; // 10 minutes
 
     const isValidBestTime =

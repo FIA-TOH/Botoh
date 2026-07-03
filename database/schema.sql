@@ -94,6 +94,105 @@ CREATE TABLE public_users (
 
 CREATE INDEX public_users_name_idx ON public_users(LOWER(name));
 
+CREATE TABLE public_driver_profiles (
+  auth VARCHAR(255) PRIMARY KEY REFERENCES public_users(auth) ON DELETE CASCADE,
+  name VARCHAR(100) NOT NULL,
+  ranking_xp INTEGER NOT NULL DEFAULT 0,
+  championship_points INTEGER NOT NULL DEFAULT 0,
+  placement_races_remaining INTEGER NOT NULL DEFAULT 5,
+  placement_performance_sum NUMERIC(10, 6) NOT NULL DEFAULT 0,
+  placement_performance_count INTEGER NOT NULL DEFAULT 0,
+  placement_ranking_applied BOOLEAN NOT NULL DEFAULT FALSE,
+  races_count INTEGER NOT NULL DEFAULT 0,
+  qualy_count INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE public_ranking_events (
+  id BIGSERIAL PRIMARY KEY,
+  auth VARCHAR(255) NOT NULL REFERENCES public_users(auth) ON DELETE CASCADE,
+  player_name VARCHAR(100) NOT NULL,
+  track_name VARCHAR(150) NOT NULL,
+  lap_time NUMERIC(10, 3) NOT NULL,
+  track_record NUMERIC(10, 3) NOT NULL,
+  xp_delta INTEGER NOT NULL,
+  xp_after INTEGER NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE public_championship_events (
+  id BIGSERIAL PRIMARY KEY,
+  auth VARCHAR(255) NOT NULL REFERENCES public_users(auth) ON DELETE CASCADE,
+  player_name VARCHAR(100) NOT NULL,
+  track_name VARCHAR(150) NOT NULL,
+  position INTEGER NOT NULL,
+  players_count INTEGER NOT NULL,
+  average_ranking_xp NUMERIC(10, 2) NOT NULL,
+  points_delta INTEGER NOT NULL,
+  points_after INTEGER NOT NULL,
+  ranking_xp_at_race INTEGER NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE public_placement_events (
+  id BIGSERIAL PRIMARY KEY,
+  auth VARCHAR(255) NOT NULL REFERENCES public_users(auth) ON DELETE CASCADE,
+  player_name VARCHAR(100) NOT NULL,
+  track_name VARCHAR(150) NOT NULL,
+  lap_time NUMERIC(10, 3) NOT NULL,
+  track_record NUMERIC(10, 3) NOT NULL,
+  performance_percent NUMERIC(10, 6) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX public_driver_profiles_points_idx ON public_driver_profiles(championship_points DESC);
+CREATE INDEX public_driver_profiles_ranking_idx ON public_driver_profiles(ranking_xp DESC);
+CREATE INDEX public_ranking_events_auth_idx ON public_ranking_events(auth, created_at DESC);
+CREATE INDEX public_championship_events_auth_idx ON public_championship_events(auth, created_at DESC);
+CREATE INDEX public_placement_events_auth_idx ON public_placement_events(auth, performance_percent ASC);
+
+CREATE TABLE public_circuits (
+  track_name VARCHAR(150) PRIMARY KEY,
+  base_record_time NUMERIC(10, 3) NULL,
+  base_record_driver VARCHAR(100) NULL,
+  record_lap_time NUMERIC(10, 3) NULL,
+  record_lap_driver VARCHAR(100) NULL,
+  sector1_record_time NUMERIC(10, 3) NULL,
+  sector1_record_driver VARCHAR(100) NULL,
+  sector2_record_time NUMERIC(10, 3) NULL,
+  sector2_record_driver VARCHAR(100) NULL,
+  sector3_record_time NUMERIC(10, 3) NULL,
+  sector3_record_driver VARCHAR(100) NULL,
+  rr_position_x NUMERIC(10, 3) NULL,
+  rr_position_y NUMERIC(10, 3) NULL,
+  played_count INTEGER NOT NULL DEFAULT 0,
+  vote_count INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE public_driver_circuit_stats (
+  auth VARCHAR(255) NOT NULL REFERENCES public_users(auth) ON DELETE CASCADE,
+  track_name VARCHAR(150) NOT NULL REFERENCES public_circuits(track_name) ON DELETE CASCADE,
+  name VARCHAR(100) NOT NULL,
+  races_count INTEGER NOT NULL DEFAULT 0,
+  best_position INTEGER NULL,
+  position_sum INTEGER NOT NULL DEFAULT 0,
+  position_count INTEGER NOT NULL DEFAULT 0,
+  best_lap_time NUMERIC(10, 3) NULL,
+  best_sector1_time NUMERIC(10, 3) NULL,
+  best_sector2_time NUMERIC(10, 3) NULL,
+  best_sector3_time NUMERIC(10, 3) NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  PRIMARY KEY (auth, track_name)
+);
+
+CREATE INDEX public_circuits_played_idx ON public_circuits(played_count DESC);
+CREATE INDEX public_circuits_votes_idx ON public_circuits(vote_count DESC);
+CREATE INDEX public_driver_circuit_stats_track_idx ON public_driver_circuit_stats(track_name);
+
 -- Upgrades Table
 CREATE TABLE upgrades (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

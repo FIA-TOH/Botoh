@@ -20,7 +20,7 @@ const MONZAPUBLIC_INFO: CircuitInfo = {
     },
     passingDirection: Direction.LEFT,
   },
-  name: "Autodromo Nazionale di Monza - By Ximb",
+  name: "Autodromo Nazionale di Monza - By Ximb - Public",
   sectorOne: {
     bounds: {
       minX: 1313,
@@ -91,7 +91,7 @@ const MONZAPUBLIC_INFO: CircuitInfo = {
       monzaPublic_json.redSpawnPoints.length - 1
     ][1],
   },
-  BestTime: bestTimes.monza,
+  BestTime: bestTimes.monzaPublic,
   MainColor: [0x009246, 0xffffff, 0xce2b37],
   AvatarColor: 0x000001,
   Angle: 0,

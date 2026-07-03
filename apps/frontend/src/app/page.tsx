@@ -33,6 +33,11 @@ function ProtectedHome() {
     router.push('/admin');
   };
 
+  const handlePublicHostAdminClick = () => {
+    setLoadingButton('host-publico-admin');
+    router.push('/host-publico-admin');
+  };
+
   const handleLogout = () => {
     logout();
   };
@@ -66,6 +71,7 @@ function ProtectedHome() {
           <FtohHeader
             onLogout={handleLogout}
             onAdminClick={handleAdminClick}
+            onPublicHostAdminClick={handlePublicHostAdminClick}
             align="right"
           />
         </div>

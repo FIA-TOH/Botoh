@@ -242,6 +242,11 @@ interface Labels {
   raceMissionsGenerated: string;
   noRaceMissionsGenerated: string;
   raceMissionSkipped: string;
+  raceMissionPendingReview: string;
+  raceMissionApproved: string;
+  raceMissionRejected: string;
+  approveRaceMission: string;
+  rejectRaceMission: string;
   difficulty: string;
   raceMissionDifficulties: Record<RaceMissionDifficulty, string>;
   proposalOrigin: string;
@@ -304,6 +309,7 @@ interface Props {
   onGenerateMarket: (teamId: string) => Promise<SponsorMarketResult | null>;
   onSendProposalToReview: (teamId: string, proposal: SponsorMarketProposal) => Promise<boolean>;
   onGenerateRaceMissions: (teamIds: string[]) => Promise<RaceMissionGenerationResult[]>;
+  onReviewGeneratedRaceMission: (missionId: string, outcome: 'approve' | 'reject') => Promise<boolean>;
 }
 
 function clampInput(value: string, min: number, max: number) {
@@ -329,12 +335,15 @@ export function SponsorMarketSection({
   onGenerateMarket,
   onSendProposalToReview,
   onGenerateRaceMissions,
+  onReviewGeneratedRaceMission,
 }: Props) {
   const [selectedScuderiaIds, setSelectedScuderiaIds] = useState<string[]>([]);
   const [generating, setGenerating] = useState(false);
   const [generatingRaceMissions, setGeneratingRaceMissions] = useState(false);
   const [marketResults, setMarketResults] = useState<SponsorMarketResult[]>([]);
   const [raceMissionResults, setRaceMissionResults] = useState<RaceMissionGenerationResult[]>([]);
+  const [reviewedRaceMissionStatus, setReviewedRaceMissionStatus] = useState<Record<string, 'approved' | 'rejected'>>({});
+  const [reviewingRaceMissionId, setReviewingRaceMissionId] = useState<string | null>(null);
   const [reviewLoadingKey, setReviewLoadingKey] = useState<string | null>(null);
   const [reviewedProposalKeys, setReviewedProposalKeys] = useState<Record<string, boolean>>({});
   const sponsorPagination = usePagination(sponsors);
@@ -386,8 +395,24 @@ export function SponsorMarketSection({
     setGeneratingRaceMissions(true);
     try {
       setRaceMissionResults(await onGenerateRaceMissions(selectedScuderiaIds));
+      setReviewedRaceMissionStatus({});
     } finally {
       setGeneratingRaceMissions(false);
+    }
+  }
+
+  async function reviewGeneratedRaceMission(missionId: string, outcome: 'approve' | 'reject') {
+    setReviewingRaceMissionId(missionId);
+    try {
+      const success = await onReviewGeneratedRaceMission(missionId, outcome);
+      if (success) {
+        setReviewedRaceMissionStatus((current) => ({
+          ...current,
+          [missionId]: outcome === 'approve' ? 'approved' : 'rejected',
+        }));
+      }
+    } finally {
+      setReviewingRaceMissionId(null);
     }
   }
 
@@ -705,7 +730,11 @@ export function SponsorMarketSection({
                         <p className="rounded bg-gray-800 p-3 text-sm text-gray-300">{labels.noRaceMissionsGenerated}</p>
                       ) : (
                         <div className="space-y-2">
-                          {result.missions.map((mission) => (
+                          {result.missions.map((mission) => {
+                            const reviewStatus = reviewedRaceMissionStatus[mission.missionId];
+                            const isReviewing = reviewingRaceMissionId === mission.missionId;
+
+                            return (
                             <div key={mission.missionId} className="rounded bg-gray-800 p-3 text-sm">
                               <div className="flex flex-wrap items-center justify-between gap-2">
                                 <span className="font-semibold">{mission.sponsorName}</span>
@@ -714,8 +743,38 @@ export function SponsorMarketSection({
                               <p className="mt-1 text-gray-300">
                                 {labels.contractTypes[mission.category]} · {labels.difficulty}: {labels.raceMissionDifficulties[mission.difficulty]}
                               </p>
+                              <div className="mt-3 flex flex-wrap items-center gap-2">
+                                <span className="text-xs text-gray-400">
+                                  {reviewStatus === 'approved'
+                                    ? labels.raceMissionApproved
+                                    : reviewStatus === 'rejected'
+                                      ? labels.raceMissionRejected
+                                      : labels.raceMissionPendingReview}
+                                </span>
+                                {!reviewStatus && (
+                                  <>
+                                    <button
+                                      type="button"
+                                      disabled={isReviewing}
+                                      onClick={() => reviewGeneratedRaceMission(mission.missionId, 'approve')}
+                                      className="rounded bg-emerald-700 px-3 py-1 font-semibold disabled:bg-gray-600"
+                                    >
+                                      {labels.approveRaceMission}
+                                    </button>
+                                    <button
+                                      type="button"
+                                      disabled={isReviewing}
+                                      onClick={() => reviewGeneratedRaceMission(mission.missionId, 'reject')}
+                                      className="rounded bg-rose-700 px-3 py-1 font-semibold disabled:bg-gray-600"
+                                    >
+                                      {labels.rejectRaceMission}
+                                    </button>
+                                  </>
+                                )}
+                              </div>
                             </div>
-                          ))}
+                            );
+                          })}
                         </div>
                       )}
                       {result.skipped.length > 0 && (

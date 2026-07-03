@@ -19,7 +19,7 @@ export const GARAGE_FACILITY_ECONOMY: {
   sponsorTerminationPenaltyMultiplier: 1.5,
   facilities: {
     climate: {
-      buildCost: 250000,
+      buildCost: 500000,
       upgradeCostByTargetLevel: {
         1: 500000,
         2: 850000,
@@ -44,7 +44,7 @@ export const GARAGE_FACILITY_ECONOMY: {
       },
     },
     pitCrew: {
-      buildCost: 300000,
+      buildCost: 700000,
       upgradeCostByTargetLevel: {
         1: 700000,
         2: 1100000,

@@ -131,6 +131,29 @@ const circuitValidation = [
     .withMessage('Circuit full name is invalid'),
 ];
 
+const publicHostUserValidation = [
+  body('name').isString().trim().isLength({ min: 1, max: 100 }).withMessage('Public user name is invalid'),
+  body('rankingXp').isInt({ min: 0 }).withMessage('Ranking XP is invalid'),
+  body('championshipPoints').isInt({ min: 0 }).withMessage('Championship points are invalid'),
+  body('placementRacesRemaining').isInt({ min: 0, max: 100 }).withMessage('Placement races is invalid'),
+];
+
+const optionalPublicTime = { nullable: true };
+const publicHostCircuitValidation = [
+  body('baseRecordTime').optional(optionalPublicTime).isFloat({ min: 0 }).withMessage('Base record is invalid'),
+  body('baseRecordDriver').optional(optionalPublicTime).isString().isLength({ max: 100 }).withMessage('Base record driver is invalid'),
+  body('recordLapTime').optional(optionalPublicTime).isFloat({ min: 0 }).withMessage('Lap record is invalid'),
+  body('recordLapDriver').optional(optionalPublicTime).isString().isLength({ max: 100 }).withMessage('Lap record driver is invalid'),
+  body('sector1RecordTime').optional(optionalPublicTime).isFloat({ min: 0 }).withMessage('Sector record is invalid'),
+  body('sector1RecordDriver').optional(optionalPublicTime).isString().isLength({ max: 100 }).withMessage('Sector record driver is invalid'),
+  body('sector2RecordTime').optional(optionalPublicTime).isFloat({ min: 0 }).withMessage('Sector record is invalid'),
+  body('sector2RecordDriver').optional(optionalPublicTime).isString().isLength({ max: 100 }).withMessage('Sector record driver is invalid'),
+  body('sector3RecordTime').optional(optionalPublicTime).isFloat({ min: 0 }).withMessage('Sector record is invalid'),
+  body('sector3RecordDriver').optional(optionalPublicTime).isString().isLength({ max: 100 }).withMessage('Sector record driver is invalid'),
+  body('playedCount').isInt({ min: 0 }).withMessage('Played count is invalid'),
+  body('voteCount').isInt({ min: 0 }).withMessage('Vote count is invalid'),
+];
+
 const teamCircuitBoxValidation = [
   body('circuitId')
     .isUUID()
@@ -795,6 +818,102 @@ router.delete('/sponsor-missions/:type/:id', param('id').isUUID(), param('type')
   const result = await adminService.removeSponsorMission(req.params.id, req.params.type as 'race' | 'season');
   return res.status(result.success ? 200 : 404).json(result);
 });
+
+router.get('/public-host', async (req: AuthRequest, res: Response) => {
+  try {
+    const dashboard = await adminService.getPublicHostDashboard();
+    return res.json({ success: true, ...dashboard });
+  } catch (error) {
+    console.error('Admin public host dashboard error:', error);
+    return res.status(500).json({
+      success: false,
+      message: translateMessage('Failed to load public host', getRequestLanguage(req)),
+    });
+  }
+});
+
+router.put('/public-host/users/:auth', publicHostUserValidation, async (req: AuthRequest, res: Response) => {
+  try {
+    if (handleValidation(req, res)) return;
+    const result = await adminService.updatePublicUser(decodeURIComponent(req.params.auth), req.body);
+    return res.status(result.success ? 200 : 404).json({
+      ...result,
+      message: translateMessage(result.success ? 'Public user updated successfully' : result.message, getRequestLanguage(req)),
+    });
+  } catch (error) {
+    console.error('Admin update public user error:', error);
+    return res.status(500).json({
+      success: false,
+      message: translateMessage('Failed to update public user', getRequestLanguage(req)),
+    });
+  }
+});
+
+router.delete('/public-host/users/:auth', async (req: AuthRequest, res: Response) => {
+  try {
+    const result = await adminService.deletePublicUser(decodeURIComponent(req.params.auth));
+    return res.status(result.success ? 200 : 404).json({
+      ...result,
+      message: translateMessage(result.success ? 'Public user deleted successfully' : result.message, getRequestLanguage(req)),
+    });
+  } catch (error) {
+    console.error('Admin delete public user error:', error);
+    return res.status(500).json({
+      success: false,
+      message: translateMessage('Failed to delete public user', getRequestLanguage(req)),
+    });
+  }
+});
+
+router.put('/public-host/circuits/:trackName', publicHostCircuitValidation, async (req: AuthRequest, res: Response) => {
+  try {
+    if (handleValidation(req, res)) return;
+    const result = await adminService.updatePublicCircuit(decodeURIComponent(req.params.trackName), req.body);
+    return res.status(result.success ? 200 : 404).json({
+      ...result,
+      message: translateMessage(result.success ? 'Public circuit updated successfully' : result.message, getRequestLanguage(req)),
+    });
+  } catch (error) {
+    console.error('Admin update public circuit error:', error);
+    return res.status(500).json({
+      success: false,
+      message: translateMessage('Failed to update public circuit', getRequestLanguage(req)),
+    });
+  }
+});
+
+router.delete('/public-host/circuits/:trackName', async (req: AuthRequest, res: Response) => {
+  try {
+    const result = await adminService.deletePublicCircuit(decodeURIComponent(req.params.trackName));
+    return res.status(result.success ? 200 : 404).json({
+      ...result,
+      message: translateMessage(result.success ? 'Public circuit deleted successfully' : result.message, getRequestLanguage(req)),
+    });
+  } catch (error) {
+    console.error('Admin delete public circuit error:', error);
+    return res.status(500).json({
+      success: false,
+      message: translateMessage('Failed to delete public circuit', getRequestLanguage(req)),
+    });
+  }
+});
+
+router.post(
+  '/sponsor-missions/race/:id/review',
+  param('id').isUUID(),
+  body('outcome').isIn(['approve', 'reject']),
+  async (req: AuthRequest, res: Response) => {
+    if (handleValidation(req, res)) return;
+    const result = await adminService.reviewGeneratedRaceMission(
+      req.params.id,
+      req.body.outcome,
+    );
+    return res.status(result.success ? 200 : 404).json({
+      ...result,
+      message: translateMessage((result as { message?: string }).message, getRequestLanguage(req)),
+    });
+  },
+);
 
 router.post(
   '/sponsor-missions/:type/:id/resolve',

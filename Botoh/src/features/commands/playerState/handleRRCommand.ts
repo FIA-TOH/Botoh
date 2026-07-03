@@ -14,7 +14,7 @@ import { constants } from "../../speed/constants";
 import { getRunningPlayers } from "../../utils";
 import { CIRCUITS, currentMapIndex } from "../../zones/maps";
 import { rrEnabled } from "../adminThings/handleRREnabledCommand";
-import { RR_POSITION } from "../adminThings/handleRRPositionCommand";
+import { RR_POSITION } from "../adminThings/rrPositionState";
 import { resetPitState } from "../../tires&pits/newPitSystem/newPitManager";
 
 export function moveToRRPosition(player: PlayerObject, room: RoomObject) {

@@ -22,7 +22,7 @@ const SEPANGPUBLIC_INFO: CircuitInfo = {
     },
     passingDirection: Direction.LEFT,
   },
-  name: "Sepang F1 International Circuit - By Ximb",
+  name: "Sepang F1 International Circuit - By Ximb - Public",
   sectorOne: {
     bounds: {
       minX: 102,
@@ -105,7 +105,7 @@ const SEPANGPUBLIC_INFO: CircuitInfo = {
       sepangPublic_json.redSpawnPoints.length - 1
     ][1],
   },
-  BestTime: bestTimes.sepang,
+  BestTime: bestTimes.sepangPublic,
   MainColor: [0xc70000, 0x000080, 0xffffff],
   AvatarColor: 0xffd800,
   Angle: 0,
