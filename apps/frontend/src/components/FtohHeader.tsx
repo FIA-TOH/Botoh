@@ -9,6 +9,7 @@ import { NotificationBell } from './NotificationBell';
 interface FtohHeaderProps {
   onLogout?: () => void;
   onAdminClick?: () => void;
+  onPublicHostAdminClick?: () => void;
   showBackButton?: boolean;
   onBackClick?: () => void;
   backText?: string | null;
@@ -18,6 +19,7 @@ interface FtohHeaderProps {
 export function FtohHeader({
   onLogout,
   onAdminClick,
+  onPublicHostAdminClick,
   showBackButton = false,
   onBackClick,
   backText,
@@ -32,6 +34,12 @@ export function FtohHeader({
       {user?.role === 'admin' && onAdminClick && (
         <FtohButton onClick={onAdminClick} className="!w-auto px-3 py-2 text-xs sm:px-6 sm:py-3 sm:text-base">
           {t.common.admin}
+        </FtohButton>
+      )}
+
+      {user?.role === 'admin' && onPublicHostAdminClick && (
+        <FtohButton onClick={onPublicHostAdminClick} className="!w-auto px-3 py-2 text-xs sm:px-6 sm:py-3 sm:text-base">
+          {t.common.publicHostAdmin}
         </FtohButton>
       )}
 

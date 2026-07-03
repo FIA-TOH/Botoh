@@ -44,7 +44,7 @@ const BAKUPUBLIC_INFO: CircuitInfo = {
     },
     passingDirection: Direction.DOWN,
   },
-  name: "Baku City Circuit - By Ximb",
+  name: "Baku City Circuit - By Ximb - Public",
   boxLine: {
     minX: 0,
     maxX: 1100,

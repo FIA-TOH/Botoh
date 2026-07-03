@@ -550,11 +550,18 @@ class MigrationService {
     await query('ALTER TABLE team_sponsor_race_missions ADD COLUMN IF NOT EXISTS description TEXT');
     await query('ALTER TABLE team_sponsor_race_missions ADD COLUMN IF NOT EXISTS difficulty VARCHAR(20)');
     await query("ALTER TABLE team_sponsor_race_missions ADD COLUMN IF NOT EXISTS generated_by VARCHAR(60)");
+    await query("ALTER TABLE team_sponsor_race_missions ADD COLUMN IF NOT EXISTS status VARCHAR(20) NOT NULL DEFAULT 'approved'");
     await query('ALTER TABLE team_sponsor_race_missions DROP CONSTRAINT IF EXISTS team_sponsor_race_missions_difficulty_check');
     await query(`
       ALTER TABLE team_sponsor_race_missions
       ADD CONSTRAINT team_sponsor_race_missions_difficulty_check
       CHECK (difficulty IS NULL OR difficulty IN ('easy', 'medium', 'hard', 'insane'))
+    `);
+    await query('ALTER TABLE team_sponsor_race_missions DROP CONSTRAINT IF EXISTS team_sponsor_race_missions_status_check');
+    await query(`
+      ALTER TABLE team_sponsor_race_missions
+      ADD CONSTRAINT team_sponsor_race_missions_status_check
+      CHECK (status IN ('pending_review', 'approved'))
     `);
 
     await query(`
@@ -650,6 +657,116 @@ class MigrationService {
       )
     `);
     await query('CREATE INDEX IF NOT EXISTS public_users_name_idx ON public_users(LOWER(name))');
+
+    await query(`
+      CREATE TABLE IF NOT EXISTS public_driver_profiles (
+        auth VARCHAR(255) PRIMARY KEY REFERENCES public_users(auth) ON DELETE CASCADE,
+        name VARCHAR(100) NOT NULL,
+        ranking_xp INTEGER NOT NULL DEFAULT 0,
+        championship_points INTEGER NOT NULL DEFAULT 0,
+        placement_races_remaining INTEGER NOT NULL DEFAULT 5,
+        placement_performance_sum NUMERIC(10, 6) NOT NULL DEFAULT 0,
+        placement_performance_count INTEGER NOT NULL DEFAULT 0,
+        placement_ranking_applied BOOLEAN NOT NULL DEFAULT FALSE,
+        races_count INTEGER NOT NULL DEFAULT 0,
+        qualy_count INTEGER NOT NULL DEFAULT 0,
+        created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+        updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+      )
+    `);
+    await query('ALTER TABLE public_driver_profiles ADD COLUMN IF NOT EXISTS placement_performance_sum NUMERIC(10, 6) NOT NULL DEFAULT 0');
+    await query('ALTER TABLE public_driver_profiles ADD COLUMN IF NOT EXISTS placement_performance_count INTEGER NOT NULL DEFAULT 0');
+    await query('ALTER TABLE public_driver_profiles ADD COLUMN IF NOT EXISTS placement_ranking_applied BOOLEAN NOT NULL DEFAULT FALSE');
+    await query(`
+      CREATE TABLE IF NOT EXISTS public_ranking_events (
+        id BIGSERIAL PRIMARY KEY,
+        auth VARCHAR(255) NOT NULL REFERENCES public_users(auth) ON DELETE CASCADE,
+        player_name VARCHAR(100) NOT NULL,
+        track_name VARCHAR(150) NOT NULL,
+        lap_time NUMERIC(10, 3) NOT NULL,
+        track_record NUMERIC(10, 3) NOT NULL,
+        xp_delta INTEGER NOT NULL,
+        xp_after INTEGER NOT NULL,
+        created_at TIMESTAMP NOT NULL DEFAULT NOW()
+      )
+    `);
+    await query(`
+      CREATE TABLE IF NOT EXISTS public_championship_events (
+        id BIGSERIAL PRIMARY KEY,
+        auth VARCHAR(255) NOT NULL REFERENCES public_users(auth) ON DELETE CASCADE,
+        player_name VARCHAR(100) NOT NULL,
+        track_name VARCHAR(150) NOT NULL,
+        position INTEGER NOT NULL,
+        players_count INTEGER NOT NULL,
+        average_ranking_xp NUMERIC(10, 2) NOT NULL,
+        points_delta INTEGER NOT NULL,
+        points_after INTEGER NOT NULL,
+        ranking_xp_at_race INTEGER NOT NULL,
+        created_at TIMESTAMP NOT NULL DEFAULT NOW()
+      )
+    `);
+    await query(`
+      CREATE TABLE IF NOT EXISTS public_placement_events (
+        id BIGSERIAL PRIMARY KEY,
+        auth VARCHAR(255) NOT NULL REFERENCES public_users(auth) ON DELETE CASCADE,
+        player_name VARCHAR(100) NOT NULL,
+        track_name VARCHAR(150) NOT NULL,
+        lap_time NUMERIC(10, 3) NOT NULL,
+        track_record NUMERIC(10, 3) NOT NULL,
+        performance_percent NUMERIC(10, 6) NOT NULL,
+        created_at TIMESTAMP NOT NULL DEFAULT NOW()
+      )
+    `);
+    await query('CREATE INDEX IF NOT EXISTS public_driver_profiles_points_idx ON public_driver_profiles(championship_points DESC)');
+    await query('CREATE INDEX IF NOT EXISTS public_driver_profiles_ranking_idx ON public_driver_profiles(ranking_xp DESC)');
+    await query('CREATE INDEX IF NOT EXISTS public_ranking_events_auth_idx ON public_ranking_events(auth, created_at DESC)');
+    await query('CREATE INDEX IF NOT EXISTS public_championship_events_auth_idx ON public_championship_events(auth, created_at DESC)');
+    await query('CREATE INDEX IF NOT EXISTS public_placement_events_auth_idx ON public_placement_events(auth, performance_percent ASC)');
+
+    await query(`
+      CREATE TABLE IF NOT EXISTS public_circuits (
+        track_name VARCHAR(150) PRIMARY KEY,
+        base_record_time NUMERIC(10, 3) NULL,
+        base_record_driver VARCHAR(100) NULL,
+        record_lap_time NUMERIC(10, 3) NULL,
+        record_lap_driver VARCHAR(100) NULL,
+        sector1_record_time NUMERIC(10, 3) NULL,
+        sector1_record_driver VARCHAR(100) NULL,
+        sector2_record_time NUMERIC(10, 3) NULL,
+        sector2_record_driver VARCHAR(100) NULL,
+        sector3_record_time NUMERIC(10, 3) NULL,
+        sector3_record_driver VARCHAR(100) NULL,
+        rr_position_x NUMERIC(10, 3) NULL,
+        rr_position_y NUMERIC(10, 3) NULL,
+        played_count INTEGER NOT NULL DEFAULT 0,
+        vote_count INTEGER NOT NULL DEFAULT 0,
+        created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+        updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+      )
+    `);
+    await query('ALTER TABLE public_circuits ADD COLUMN IF NOT EXISTS rr_position_x NUMERIC(10, 3) NULL');
+    await query('ALTER TABLE public_circuits ADD COLUMN IF NOT EXISTS rr_position_y NUMERIC(10, 3) NULL');
+    await query(`
+      CREATE TABLE IF NOT EXISTS public_driver_circuit_stats (
+        auth VARCHAR(255) NOT NULL REFERENCES public_users(auth) ON DELETE CASCADE,
+        track_name VARCHAR(150) NOT NULL REFERENCES public_circuits(track_name) ON DELETE CASCADE,
+        name VARCHAR(100) NOT NULL,
+        races_count INTEGER NOT NULL DEFAULT 0,
+        best_position INTEGER NULL,
+        position_sum INTEGER NOT NULL DEFAULT 0,
+        position_count INTEGER NOT NULL DEFAULT 0,
+        best_lap_time NUMERIC(10, 3) NULL,
+        best_sector1_time NUMERIC(10, 3) NULL,
+        best_sector2_time NUMERIC(10, 3) NULL,
+        best_sector3_time NUMERIC(10, 3) NULL,
+        created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+        updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+        PRIMARY KEY (auth, track_name)
+      )
+    `);
+    await query('CREATE INDEX IF NOT EXISTS public_circuits_played_idx ON public_circuits(played_count DESC)');
+    await query('CREATE INDEX IF NOT EXISTS public_circuits_votes_idx ON public_circuits(vote_count DESC)');
+    await query('CREATE INDEX IF NOT EXISTS public_driver_circuit_stats_track_idx ON public_driver_circuit_stats(track_name)');
   }
 
   private async normalizeFacilityCosts(): Promise<void> {

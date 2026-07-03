@@ -20,7 +20,7 @@ const NURBURGRINGPUBLIC_INFO: CircuitInfo = {
     },
     passingDirection: Direction.RIGHT,
   },
-  name: "Aramco Grosser Preis der Eifel - By Ximb",
+  name: "Aramco Grosser Preis der Eifel - By Ximb - Public",
   sectorOne: {
     bounds: {
       minX: -654,
@@ -91,7 +91,7 @@ const NURBURGRINGPUBLIC_INFO: CircuitInfo = {
       nurburgringPublic_json.redSpawnPoints.length - 1
     ][1],
   },
-  BestTime: bestTimes.nurburgring,
+  BestTime: bestTimes.nurburgringPublic,
   MainColor: [0x000001, 0xdd0000, 0xffce00],
   AvatarColor: 0xffffff,
   Angle: 90,

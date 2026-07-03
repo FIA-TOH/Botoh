@@ -47,7 +47,7 @@ const CANADAPUBLIC_INFO: CircuitInfo = {
     },
     passingDirection: Direction.RIGHT,
   },
-  name: "Circuit Gilles Villeneuve - By Ximb",
+  name: "Circuit Gilles Villeneuve - By Ximb - Public",
   boxLine: {
     minX: -2720,
     maxX: -1885,
@@ -91,7 +91,7 @@ const CANADAPUBLIC_INFO: CircuitInfo = {
       canadaPublic_json.redSpawnPoints.length - 1
     ][1],
   },
-  BestTime: bestTimes.canada,
+  BestTime: bestTimes.canadaPublic,
   MainColor: [0xd6001d, 0xffffff, 0xd6001d],
   AvatarColor: 0x000001,
   Angle: 90,

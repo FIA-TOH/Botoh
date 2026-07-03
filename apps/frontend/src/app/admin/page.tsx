@@ -1497,6 +1497,25 @@ export default function AdminPage() {
     return data.raceMissionResults;
   }
 
+  async function reviewGeneratedRaceMission(missionId: string, outcome: 'approve' | 'reject') {
+    const response = await fetch(apiUrl(`/api/admin/sponsor-missions/race/${missionId}/review`), {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ outcome }),
+    });
+    const data: { success: boolean; message?: string } = await response.json();
+    if (!data.success) {
+      showSnackbar(data.message || t.admin.actionFailed, 'error');
+      return false;
+    }
+    showSnackbar(
+      outcome === 'approve' ? t.admin.raceMissionApproved : t.admin.raceMissionRejected,
+      'success',
+    );
+    await refreshAdminViews();
+    return true;
+  }
+
   async function saveTeamSponsor(event: React.FormEvent) {
     event.preventDefault();
     if (!managingScuderia) return;
@@ -2055,6 +2074,7 @@ export default function AdminPage() {
           onGenerateMarket={generateSponsorMarketRound}
           onSendProposalToReview={sendSponsorProposalToReview}
           onGenerateRaceMissions={generateRaceMissions}
+          onReviewGeneratedRaceMission={reviewGeneratedRaceMission}
         />
       </div>
 

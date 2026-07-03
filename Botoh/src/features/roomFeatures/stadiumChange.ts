@@ -5,6 +5,12 @@ import { MESSAGES } from "../chat/messages";
 import { Teams } from "../changeGameState/teams";
 import { log } from "../discord/logger";
 import { loadCutSegmentsFromCircuit } from "../detectCut/detectCut";
+import { LEAGUE_MODE } from "../hostLeague/leagueMode";
+import {
+  hydratePublicDriverCircuitStatsForRoom,
+  syncPublicCircuitOnMapLoad,
+} from "../public/publicCircuits";
+import { isPublicWaitingMapIndex } from "../zones/maps";
 
 export let ACTUAL_CIRCUIT: Circuit;
 
@@ -20,6 +26,10 @@ export function StadiumChange(room: RoomObject) {
     if (c) {
       loadCutSegmentsFromCircuit(c);
       ACTUAL_CIRCUIT = c;
+      if (!LEAGUE_MODE && !isPublicWaitingMapIndex()) {
+        syncPublicCircuitOnMapLoad(c);
+        hydratePublicDriverCircuitStatsForRoom(c.info.name, room);
+      }
     }
 
     if (

@@ -47,7 +47,7 @@ const VALENCIAPUBLIC_INFO: CircuitInfo = {
     },
     passingDirection: Direction.LEFT,
   },
-  name: "Valencia Street Circuit - By Ximb",
+  name: "Valencia Street Circuit - By Ximb - Public",
   boxLine: {
     minX: 87,
     maxX: 162,

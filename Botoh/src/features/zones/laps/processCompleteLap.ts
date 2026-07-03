@@ -18,6 +18,11 @@ import { InvalidateLap } from "../../detectCut/invalidateLap";
 import { log } from "../../discord/logger";
 import { GeneralGameMode, generalGameMode } from "../../changeGameState/changeGameModes";
 import { recordLap } from "./lapHistory";
+import {
+  getPublicCircuitLapRecordForTrack,
+  getPublicDriverBestLapForTrack,
+  recordPublicLapForPlayer,
+} from "../../public/publicCircuits";
 
 export function processCompletedLap(
   pad: { p: PlayerObject; disc: DiscPropertiesObject },
@@ -40,8 +45,11 @@ export function processCompletedLap(
   InvalidateLap(playerData, room, p);
   recordLap(p.id, lapTime, playerData.lastLapValid ?? true);
 
+  const publicCircuitBestTime = getPublicCircuitLapRecordForTrack(ACTUAL_CIRCUIT.info.name);
+  const publicDriverBestTime = getPublicDriverBestLapForTrack(ACTUAL_CIRCUIT.info.name, p.id);
   const circuitBestTime = getBestTime(ACTUAL_CIRCUIT.info.name);
   if (!circuitBestTime) return log("No circuit best time found");
+  const effectiveCircuitBestTime = publicCircuitBestTime ?? circuitBestTime[0];
   const isFastestLapRace = trySetBestLap(
     p.name,
     lapTime,
@@ -49,7 +57,22 @@ export function processCompletedLap(
     playerData.lastLapValid ?? true
   );
 
-  handleBestTimes(room, p, lapTime, circuitBestTime[0], isFastestLapRace);
+  handleBestTimes(
+    room,
+    p,
+    lapTime,
+    effectiveCircuitBestTime,
+    isFastestLapRace,
+    publicDriverBestTime,
+  );
+
+  if (playerData.lastLapValid) {
+    recordPublicLapForPlayer(ACTUAL_CIRCUIT.info.name, p, lapTime, [
+      playerData.sectorTime[0] ?? null,
+      playerData.sectorTime[1] ?? null,
+      playerData.sectorTime[2] ?? null,
+    ]);
+  }
 
   handleHardQualiAttempts(room, p, lapTime, playerData);
 

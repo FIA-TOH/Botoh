@@ -4,6 +4,8 @@ import {
 } from "../../../changeGameState/changeGameModes";
 import { sendErrorMessage } from "../../../chat/chat";
 import { MESSAGES } from "../../../chat/messages";
+import { changeLaps } from "../../adminThings/handleChangeLaps";
+import { DEFAULT_LAPS } from "../../../zones/laps";
 
 export function handleRModeCommand(
   byPlayer: PlayerObject,
@@ -20,5 +22,6 @@ export function handleRModeCommand(
     return;
   }
 
+  changeLaps(String(DEFAULT_LAPS), undefined, room);
   changeGameMode(GameMode.RACE, room);
 }

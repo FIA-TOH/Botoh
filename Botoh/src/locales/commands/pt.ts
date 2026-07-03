@@ -427,6 +427,7 @@ export default function pt_commands(
     "!imode": handleIndyModeCommand,
     "!flag": handleFlagCommand,
     "!votar": handleVoteCommand,
+    "!vota": handleVoteCommand,
     "!clear": handleClearCommand,
     "!record": handleRecordCommand,
     "!adjust": handleAjustPlayerCommand,

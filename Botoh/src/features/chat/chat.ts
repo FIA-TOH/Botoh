@@ -52,7 +52,7 @@ export function sendMessage(
   font?: FONTS,
   sound?: SOUNDS,
 ) {
-  if (toPlayerID) {
+  if (toPlayerID !== undefined) {
     const language = getPlayerLanguage(toPlayerID);
     room.sendAnnouncement(message[language], toPlayerID, color, font, sound);
   } else {
@@ -73,8 +73,15 @@ export function sendMessage(
 export function sendCyanMessage(
   room: RoomObject,
   message: LocalizedMessageFunction,
+  toPlayerID?: number,
   sound?: SOUNDS,
 ) {
+  if (toPlayerID !== undefined) {
+    const language = getPlayerLanguage(toPlayerID);
+    room.sendAnnouncement(message[language], toPlayerID, COLORS.CYAN, FONTS.BOLD, sound);
+    return;
+  }
+
   room.getPlayerList().forEach((player) => {
     const language = getPlayerLanguage(player.id);
     room.sendAnnouncement(message[language], player.id, COLORS.CYAN, FONTS.BOLD, sound);

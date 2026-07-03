@@ -23,6 +23,7 @@ import {
   GameMode,
   generalGameMode,
   GeneralGameMode,
+  changeGameMode,
 } from "../changeGameState/changeGameModes";
 import { log } from "../discord/logger";
 import { checkRunningPlayers } from "../changeGameState/publicGameFlow/startStopGameFlow";
@@ -31,8 +32,12 @@ import { sendDiscordGeneralChatQualy } from "../discord/discord";
 import { PLAYER_LIMIT } from "../commands/adminThings/handleLimitPlayerQuantity";
 import { rejoinManager } from "../changePlayerState/rejoinManager";
 import { clearLoginStateIfUsernameChanged, rebalanceFirstDriverForTeam } from "../commands/login/handleLoginCommand";
-import { clearPlayerAvatarState } from "../changePlayerState/handleAvatar";
+import {
+  clearPlayerAvatarState,
+  restorePlayerPersistentAvatar,
+} from "../changePlayerState/handleAvatar";
 import { handlePublicPlayerJoin, handlePublicPlayerLeave } from "../public/publicAuth";
+import { getLastPublicRaceMapIndex, handleChangeMap, isPublicWaitingMapIndex } from "../zones/maps";
 
 const HARD_QUALY_PASSWORD = "hardqualy";
 
@@ -198,10 +203,18 @@ export function PlayerJoin(room: RoomObject) {
         }, 100);
     }
 
+    if (!LEAGUE_MODE && players.length === 1) {
+      if (isPublicWaitingMapIndex()) {
+        handleChangeMap(getLastPublicRaceMapIndex(), room);
+      }
+      changeGameMode(GameMode.QUALY, room, { reloadStadium: false });
+    }
+
     WhatToDoWhenJoin(room, player);
 
     if (!LEAGUE_MODE) {
       handlePublicPlayerJoin(room, player);
+      restorePlayerPersistentAvatar(player.id, room);
     }
   };
 

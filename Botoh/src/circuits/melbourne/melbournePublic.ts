@@ -24,7 +24,7 @@ const MELBOURNEPUBLIC_INFO: CircuitInfo = {
     },
     passingDirection: Direction.LEFT,
   },
-  name: "Albert-Park Melbourne Circuit - By Ximb",
+  name: "Melbourne Circuit - By Ximb - Public",
   sectorOne: {
     bounds: {
       minX: 75,
@@ -95,7 +95,7 @@ const MELBOURNEPUBLIC_INFO: CircuitInfo = {
       melbournePublic_json.redSpawnPoints.length - 1
     ][1],
   },
-  BestTime: bestTimes.melbourne,
+  BestTime: bestTimes.melbournePublic,
   MainColor: [0x023286, 0x023286, 0x023286],
   AvatarColor: 0xffffff,
   Angle: 90,

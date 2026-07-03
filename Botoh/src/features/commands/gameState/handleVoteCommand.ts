@@ -5,6 +5,8 @@ import {
 import { playerList } from "../../changePlayerState/playerList";
 import { sendErrorMessage, sendSuccessMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
+import { LEAGUE_MODE } from "../../hostLeague/leagueMode";
+import { registerPublicCircuitVote } from "../../public/publicCircuits";
 
 export function handleVoteCommand(
   byPlayer: PlayerObject,
@@ -13,6 +15,7 @@ export function handleVoteCommand(
 ) {
   if (!isOnVoteSession) {
     sendErrorMessage(room, MESSAGES.NOT_VOTE(), byPlayer.id);
+    return;
   }
   if (playerList[byPlayer.id]?.voted) {
     sendErrorMessage(room, MESSAGES.ALREADY_VOTE(), byPlayer.id);
@@ -31,6 +34,9 @@ export function handleVoteCommand(
     if (selectedCircuit.info) {
       selectedCircuit.info.Votes =
         (selectedCircuit.info.Votes ? selectedCircuit.info.Votes : 0) + 1;
+      if (!LEAGUE_MODE) {
+        registerPublicCircuitVote(selectedCircuit.info.name);
+      }
     }
     if (playerList[byPlayer.id]) {
       playerList[byPlayer.id].voted = true;

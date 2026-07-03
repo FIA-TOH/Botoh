@@ -34,6 +34,13 @@ export function voteSession(room: RoomObject) {
   resetVotes(players);
 }
 
+export function cancelVoteSession(room: RoomObject) {
+  isOnVoteSession = false;
+  selectedCircuits = [];
+  clearLockedWinner();
+  resetVotes(room.getPlayerList());
+}
+
 export function changeMapBasedOnVote(
   room: RoomObject,
   dontAnnouceVotes?: boolean

@@ -47,7 +47,7 @@ const SHANGHAIPUBLIC_INFO: CircuitInfo = {
     },
     passingDirection: Direction.UP,
   },
-  name: "Shanghai International Circuit - By Ximb",
+  name: "Shanghai International Circuit - By Ximb - Public",
   boxLine: {
     minX: -610,
     maxX: 390,
@@ -91,7 +91,7 @@ const SHANGHAIPUBLIC_INFO: CircuitInfo = {
       shanghaiPublic_json.redSpawnPoints.length - 1
     ][1],
   },
-  BestTime: bestTimes.shanghai,
+  BestTime: bestTimes.shanghaiPublic,
   MainColor: [0xd6001d],
   AvatarColor: 0xfae100,
   Angle: 90,

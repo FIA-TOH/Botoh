@@ -1,4 +1,6 @@
 import { log } from "../discord/logger";
+import { LEAGUE_MODE } from "../hostLeague/leagueMode";
+import { getPublicRankAvatarByPlayerId } from "../public/publicAuth";
 import { getLeagueScuderia } from "../scuderias/scuderias";
 import { isScuderiaAvatarEnabled } from "../scuderias/scuderiaAvatar";
 import { Tires, tyresActivated } from "../tires&pits/tires";
@@ -78,6 +80,10 @@ export function getPlayerDefaultAvatar(playerId: number): string | null {
   if (isScuderiaAvatarEnabled()) {
     const scuderia = getLeagueScuderia(getEffectiveLeagueScuderiaId(player));
     return scuderia?.emoji || "??";
+  }
+
+  if (!LEAGUE_MODE) {
+    return getPublicRankAvatarByPlayerId(playerId);
   }
 
   return player.pubAvatar ?? null;

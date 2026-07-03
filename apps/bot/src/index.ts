@@ -1,7 +1,13 @@
 ﻿// Import and run the complete Botoh bot
 import * as dotenv from 'dotenv';
-dotenv.config({ path: '../../.env' });
-dotenv.config({ path: '../../Botoh/.env' });
+import path from 'path';
+
+[
+  path.resolve(process.cwd(), '.env'),
+  path.resolve(process.cwd(), 'Botoh/.env'),
+  path.resolve(__dirname, '../../../.env'),
+  path.resolve(__dirname, '../../../Botoh/.env'),
+].forEach((envPath) => dotenv.config({ path: envPath }));
 
 // Add backend communication to existing Botoh bot
 import { io } from 'socket.io-client';
@@ -83,6 +89,11 @@ async function setupBackendCommunication() {
   
   socket.on('connect', () => {
     console.log(`Botoh bot connected to backend: ${backendWsUrl}`);
+    import('../../../Botoh/src/features/public/publicServiceStatus')
+      .then(({ setPublicBackendOnline }) => setPublicBackendOnline(true))
+      .catch((error) => {
+        console.error('Failed to mark public backend as online:', error);
+      });
     socket.emit('register:bot', {
       token: process.env.BOT_SOCKET_TOKEN || undefined,
     });
@@ -96,6 +107,19 @@ async function setupBackendCommunication() {
 
   socket.on('connect_error', (error) => {
     console.error('Botoh bot failed to connect to backend:', error.message);
+    import('../../../Botoh/src/features/public/publicServiceStatus')
+      .then(({ setPublicBackendOnline }) => setPublicBackendOnline(false))
+      .catch((statusError) => {
+        console.error('Failed to mark public backend as offline:', statusError);
+      });
+  });
+
+  socket.on('disconnect', () => {
+    import('../../../Botoh/src/features/public/publicServiceStatus')
+      .then(({ setPublicBackendOnline }) => setPublicBackendOnline(false))
+      .catch((error) => {
+        console.error('Failed to mark public backend as offline:', error);
+      });
   });
 
   socket.on('room:requestCurrentMap', async (data: { reason?: string } | undefined, respond?: (response: any) => void) => {

@@ -54,13 +54,29 @@ function parseEnvFile(filePath) {
 }
 
 const rootEnv = parseEnvFile(path.resolve(process.cwd(), '.env'));
+const inheritedLeagueMode = process.env.LEAGUE_MODE ?? rootEnv.LEAGUE_MODE;
+const explicitMode = process.argv.includes('--public') || process.argv.includes('--pub')
+  ? 'public'
+  : process.argv.includes('--league')
+    ? 'league'
+    : null;
+const leagueMode = explicitMode
+  ? explicitMode === 'league'
+  : inheritedLeagueMode === undefined
+    ? true
+    : inheritedLeagueMode === 'true';
 const childEnv = {
   ...rootEnv,
   ...process.env,
   NODE_ENV: 'development',
+  LEAGUE_MODE: String(leagueMode),
 };
 
 const includeFrontend = !process.argv.includes('--no-frontend');
+
+process.stdout.write(
+  `[room:local] Mode: ${childEnv.LEAGUE_MODE === 'true' ? 'League' : 'Public'}\n`,
+);
 
 const commands = [
   ['backend', ['run', 'dev:backend'], { PORT: childEnv.PORT || '3001' }],

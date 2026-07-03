@@ -16,9 +16,12 @@ import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import {
   handlePublicLoginCommand,
   handlePublicRegisterCommand,
+  handlePublicStatsCommand,
   isPublicUserLoggedIn,
   sendPublicLoggedChat,
 } from "../public/publicAuth";
+import { isOnVoteSession } from "../changeGameState/vote/vote";
+import { handleVoteCommand } from "../commands/gameState/handleVoteCommand";
 
 function getPlayerScuderia(playerInfo: PlayerInfo) {
   return getLeagueScuderia(getEffectiveLeagueScuderiaId(playerInfo));
@@ -41,6 +44,20 @@ export function PlayerChat(room: RoomObject) {
     const [rawCommand, ...args] = message.trim().split(/\s+/);
     const command = rawCommand.toLowerCase();
 
+    if (
+      isOnVoteSession &&
+      /^\d+$/.test(message.trim()) &&
+      !playerList[player.id]?.voted
+    ) {
+      handleVoteCommand(player, [message.trim()], room);
+      return false;
+    }
+
+    if (command === "!vota") {
+      handleVoteCommand(player, args, room);
+      return false;
+    }
+
     if (!LEAGUE_MODE && (command === "!cadastro" || command === "!cadastrar")) {
       handlePublicRegisterCommand(player, args, room);
       return false;
@@ -48,6 +65,11 @@ export function PlayerChat(room: RoomObject) {
 
     if (!LEAGUE_MODE && command === "!login") {
       handlePublicLoginCommand(player, args, room);
+      return false;
+    }
+
+    if (!LEAGUE_MODE && (command === "!stats" || command === "!me")) {
+      handlePublicStatsCommand(player, room);
       return false;
     }
 
