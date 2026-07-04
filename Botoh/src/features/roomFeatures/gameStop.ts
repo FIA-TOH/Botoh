@@ -22,7 +22,7 @@ import {
 } from "../changeGameState/changeGameModes";
 
 import { reorderPlayersInRoomRace } from "../movePlayers/reorderPlayersInRoom";
-import { timerController } from "../utils";
+import { delay, timerController } from "../utils";
 import { stopWeatherMonitoring } from "../weather/weatherManager";
 
 import { log } from "../discord/logger";
@@ -60,6 +60,7 @@ import { writeFileSync } from "fs";
 import { join } from "path";
 import { resetLapHistory } from "../zones/laps/lapHistory";
 import {
+  sendDeferredPublicCompetitionNotifications,
   settlePublicQualyRanking,
   settlePublicRaceChampionship,
 } from "../public/publicCompetition";
@@ -106,10 +107,14 @@ export function GameStop(room: RoomObject) {
       } else {
         handleGameStateChange(null, room);
         if (generalGameMode === GeneralGameMode.GENERAL_QUALY) {
+          const qualyNotifications = !LEAGUE_MODE
+            ? await settlePublicQualyRanking(room, { deferMessages: true })
+            : [];
           await sendQualiResultsToDiscord();
           printAllTimes(room);
           if (!LEAGUE_MODE) {
-            await settlePublicQualyRanking(room);
+            await delay(2);
+            sendDeferredPublicCompetitionNotifications(room, qualyNotifications);
           }
           reorderPlayersInRoomRace(room);
           movePlayersToCorrectSide();
@@ -133,10 +138,14 @@ export function GameStop(room: RoomObject) {
           });
           handleRREnabledCommand(undefined, ["off"], room);
         } else {
+          const raceNotifications = !LEAGUE_MODE
+            ? await settlePublicRaceChampionship(room, { deferMessages: true })
+            : [];
           await sendRaceResultsToDiscord();
           printAllPositions(room);
           if (!LEAGUE_MODE) {
-            await settlePublicRaceChampionship(room);
+            await delay(2);
+            sendDeferredPublicCompetitionNotifications(room, raceNotifications);
           }
           movePlayersToCorrectSide();
           resetPlayers(room);

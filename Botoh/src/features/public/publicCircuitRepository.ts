@@ -179,10 +179,20 @@ export async function upsertPublicCircuit(input: {
      VALUES ($1, $2, $3, $2, $3, $4)
      ON CONFLICT (track_name)
      DO UPDATE SET
-       base_record_time = COALESCE(public_circuits.base_record_time, EXCLUDED.base_record_time),
-       base_record_driver = COALESCE(public_circuits.base_record_driver, EXCLUDED.base_record_driver),
-       record_lap_time = COALESCE(public_circuits.record_lap_time, EXCLUDED.record_lap_time),
-       record_lap_driver = COALESCE(public_circuits.record_lap_driver, EXCLUDED.record_lap_driver),
+       base_record_time = COALESCE(EXCLUDED.base_record_time, public_circuits.base_record_time),
+       base_record_driver = COALESCE(EXCLUDED.base_record_driver, public_circuits.base_record_driver),
+       record_lap_time = CASE
+         WHEN public_circuits.record_lap_time IS NULL THEN EXCLUDED.record_lap_time
+         WHEN public_circuits.record_lap_time = public_circuits.base_record_time
+           AND EXCLUDED.base_record_time IS NOT NULL THEN EXCLUDED.record_lap_time
+         ELSE public_circuits.record_lap_time
+       END,
+       record_lap_driver = CASE
+         WHEN public_circuits.record_lap_time IS NULL THEN EXCLUDED.record_lap_driver
+         WHEN public_circuits.record_lap_time = public_circuits.base_record_time
+           AND EXCLUDED.base_record_driver IS NOT NULL THEN EXCLUDED.record_lap_driver
+         ELSE public_circuits.record_lap_driver
+       END,
        played_count = public_circuits.played_count + $4,
        updated_at = NOW()
      RETURNING *`,

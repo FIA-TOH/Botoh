@@ -65,6 +65,71 @@ function optionalNumber(value: string) {
   return Number(trimmed.replace(',', '.'));
 }
 
+function getPublicRankBadge(rankingXp: number, placementRacesRemaining = 0) {
+  if (placementRacesRemaining > 0) {
+    return {
+      label: 'Rookie',
+      emoji: '⚪',
+      className: 'border-gray-500 bg-gray-800 text-gray-100',
+    };
+  }
+
+  if (rankingXp >= 2600) {
+    return {
+      label: 'Formula 1',
+      emoji: '👑',
+      className: 'border-yellow-300 bg-yellow-500/15 text-yellow-200',
+    };
+  }
+
+  if (rankingXp >= 1600) {
+    return {
+      label: 'Formula 2',
+      emoji: '⭐',
+      className: 'border-sky-300 bg-sky-500/15 text-sky-200',
+    };
+  }
+
+  if (rankingXp >= 900) {
+    return {
+      label: 'Formula 3',
+      emoji: '🔷',
+      className: 'border-blue-300 bg-blue-500/15 text-blue-200',
+    };
+  }
+
+  if (rankingXp >= 350) {
+    return {
+      label: 'Formula 4',
+      emoji: '🟢',
+      className: 'border-green-300 bg-green-500/15 text-green-200',
+    };
+  }
+
+  return {
+    label: 'Kart',
+    emoji: '🟥',
+    className: 'border-red-300 bg-red-500/15 text-red-200',
+  };
+}
+
+function PublicRankBadge({
+  rankingXp,
+  placementRacesRemaining = 0,
+}: {
+  rankingXp: number;
+  placementRacesRemaining?: number;
+}) {
+  const rank = getPublicRankBadge(rankingXp, placementRacesRemaining);
+
+  return (
+    <span className={`inline-flex min-w-[112px] items-center justify-center gap-1 rounded border px-2 py-1 text-xs font-semibold ${rank.className}`}>
+      <span aria-hidden="true">{rank.emoji}</span>
+      <span>{rank.label}</span>
+    </span>
+  );
+}
+
 export default function PublicHostAdminPage() {
   const { isLoading, isAuthenticated, user, logout } = useAuth();
   const { t } = useTranslations();
@@ -109,6 +174,8 @@ export default function PublicHostAdminPage() {
 
   const usersPagination = usePagination(filteredPublicUsers);
   const circuitsPagination = usePagination(filteredPublicCircuits);
+  const championshipPagination = usePagination(publicChampionship);
+  const rankingsPagination = usePagination(publicRankings);
 
   async function loadPublicHostData() {
     setLoadingData(true);
@@ -525,27 +592,35 @@ export default function PublicHostAdminPage() {
                   <tr>
                     <th className="py-2">#</th>
                     <th className="py-2">{t.admin.username}</th>
+                    <th className="py-2">{t.admin.publicRank}</th>
                     <th className="py-2">{t.admin.championshipPoints}</th>
                     <th className="py-2">{t.admin.races}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {publicChampionship.map((standing) => (
+                  {championshipPagination.rows.map((standing) => (
                     <tr key={standing.auth} className="border-t border-gray-800">
                       <td className="py-3 font-bold">{standing.position}</td>
                       <td className="py-3">{standing.name}</td>
+                      <td className="py-3">
+                        <PublicRankBadge
+                          rankingXp={standing.rankingXp}
+                          placementRacesRemaining={standing.placementRacesRemaining}
+                        />
+                      </td>
                       <td className="py-3">{standing.championshipPoints}</td>
                       <td className="py-3">{standing.racesCount ?? 0}</td>
                     </tr>
                   ))}
                   {!loadingData && publicChampionship.length === 0 && (
                     <tr>
-                      <td className="py-5 text-gray-400" colSpan={4}>{t.admin.noPublicChampionshipFound}</td>
+                      <td className="py-5 text-gray-400" colSpan={5}>{t.admin.noPublicChampionshipFound}</td>
                     </tr>
                   )}
                 </tbody>
               </table>
             </div>
+            <PaginationControls labels={t.admin} {...championshipPagination} />
           </section>
 
           <section className="rounded-lg bg-gray-900 p-5 shadow-xl">
@@ -556,27 +631,35 @@ export default function PublicHostAdminPage() {
                   <tr>
                     <th className="py-2">#</th>
                     <th className="py-2">{t.admin.username}</th>
+                    <th className="py-2">{t.admin.publicRank}</th>
                     <th className="py-2">{t.admin.rankingXp}</th>
                     <th className="py-2">{t.admin.qualys}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {publicRankings.map((standing) => (
+                  {rankingsPagination.rows.map((standing) => (
                     <tr key={standing.auth} className="border-t border-gray-800">
                       <td className="py-3 font-bold">{standing.position}</td>
                       <td className="py-3">{standing.name}</td>
+                      <td className="py-3">
+                        <PublicRankBadge
+                          rankingXp={standing.rankingXp}
+                          placementRacesRemaining={standing.placementRacesRemaining}
+                        />
+                      </td>
                       <td className="py-3">{standing.rankingXp}</td>
                       <td className="py-3">{standing.qualyCount ?? 0}</td>
                     </tr>
                   ))}
                   {!loadingData && publicRankings.length === 0 && (
                     <tr>
-                      <td className="py-5 text-gray-400" colSpan={4}>{t.admin.noPublicRankingsFound}</td>
+                      <td className="py-5 text-gray-400" colSpan={5}>{t.admin.noPublicRankingsFound}</td>
                     </tr>
                   )}
                 </tbody>
               </table>
             </div>
+            <PaginationControls labels={t.admin} {...rankingsPagination} />
           </section>
         </div>
       </div>

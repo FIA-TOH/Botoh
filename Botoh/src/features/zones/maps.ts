@@ -96,6 +96,7 @@ import { BAHRAINSEASONTRES } from "../../circuits/bahrain/bahrainSeasonTres";
 import { SEPANGSEASONTRES } from "../../circuits/sepang/sepangSeasonTres";
 import { SHANGHAISEASONTRES } from "../../circuits/shanghai/shanghaiSeasonTres";
 import { KYALAMISEASONTRES } from "../../circuits/kyalami/kyalamiSeasonTres";
+import { MIAMIPUBLIC } from "../../circuits/miami/miamiSeasonPublic";
 
 
 // import {DAYTONA} from "../circuits/daytona/daytona";
@@ -178,6 +179,9 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
       SEPANGPUBLIC,
       VALENCIAPUBLIC,
       MONACOPUBLIC,
+      BAHRAINPUBLIC,
+      MIAMIPUBLIC,
+      SILVERSTONEPUBLIC,
       WAITROOM,
       WAITROOMQUALY,
     ];
@@ -277,6 +281,9 @@ export const CIRCUIT_FILE_NAMES: string[] = LEAGUE_MODE
       "sepangPublic.hbs",
       "valenciaPublic.hbs",
       "monacoPublic.hbs",
+      "bahrainPublic.hbs",
+      "miamipublic.hbs",
+      "silverstonePublic.hbs",
       "waitRoom.hbs",
       "waitRoomQualy.hbs",
     ];
