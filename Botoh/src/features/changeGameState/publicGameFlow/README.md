@@ -11,19 +11,19 @@ Fluxo usado quando `generalGameMode` esta em `GENERAL_RACE`.
 | 0s | Envia resultado da corrida para o Discord. |
 | 0s | Mostra posicoes finais no Haxball. |
 | 0s | Reseta players e reordena pela posicao final da corrida. |
-| 0s | Muda para `WAITING`, carrega `Wait Room - By Ximb` e inicia o jogo. |
-| 1s | Processa pontos do campeonato publico e envia para cada piloto quanto ganhou, total, posicao e gap no campeonato. |
-| 5s | Inicia sessao de votacao de circuito. |
-| 15s | Envia mensagem do Discord no chat. |
-| 25s | Se pneus estiverem ativos, muta/libera chat via comando de mute e explica pneus. |
-| 30s | Se pneus estiverem ativos, explica ERS. |
-| 35s | Se pneus estiverem ativos, anuncia proxima sessao em 15s. |
-| 25s | Se pneus nao estiverem ativos, explica ERS sem mutar o chat. |
-| 35s | Se pneus nao estiverem ativos, anuncia proxima sessao em 15s. Esses 10s compensam o tempo que ficaria mutado no fluxo com pneus. |
-| 38s | Se pneus estiverem ativos, alterna mute novamente. Sem pneus, o chat permanece aberto. |
-| 50s | Fecha e trava o vencedor da votacao. |
-| 50s | Para o jogo atual naturalmente. |
-| 51s | Carrega o circuito vencedor, reseta players e inicia a proxima sessao. |
+| 2s | Envia para cada piloto os pontos ganhos, total, posicao e gap no campeonato. |
+| 5s | Muda para `WAITING`, carrega `Wait Room - By Ximb` e inicia o jogo. |
+| 6s | Inicia sessao de votacao de circuito. |
+| 16s | Envia mensagem do Discord no chat. |
+| 26s | Se pneus estiverem ativos, muta/libera chat via comando de mute e explica pneus. |
+| 31s | Se pneus estiverem ativos, explica ERS. |
+| 36s | Se pneus estiverem ativos, anuncia proxima sessao em 15s. |
+| 26s | Se pneus nao estiverem ativos, explica ERS sem mutar o chat. |
+| 36s | Se pneus nao estiverem ativos, anuncia proxima sessao em 15s. Esses 10s compensam o tempo que ficaria mutado no fluxo com pneus. |
+| 39s | Se pneus estiverem ativos, alterna mute novamente. Sem pneus, o chat permanece aberto. |
+| 51s | Fecha e trava o vencedor da votacao. |
+| 51s | Para o jogo atual naturalmente. |
+| 52s | Carrega o circuito vencedor, reseta players e inicia a proxima sessao. |
 
 Depois disso:
 
@@ -32,8 +32,8 @@ Depois disso:
 
 Tempo total aproximado:
 
-- Com pneus ativos: `51s` ate a proxima sessao iniciar.
-- Sem pneus ativos: `51s` ate a proxima sessao iniciar.
+- Com pneus ativos: `52s` ate a proxima sessao iniciar.
+- Sem pneus ativos: `52s` ate a proxima sessao iniciar.
 
 ## Quando a classificacao termina
 
@@ -46,29 +46,29 @@ Fluxo usado quando `generalGameMode` esta em `GENERAL_QUALY`.
 | 0s | Reordena players para corrida. |
 | 0s | Move players para o lado correto. |
 | 0s | Reseta players. |
-| 0s | Muda para `WAITING`, carrega `Wait Qualy Room - By Ximb` e inicia o jogo. |
-| 1s | Processa XP/ranking publico da qualy e envia para cada piloto quanto ganhou/perdeu, total, ranking atual e mudanca de ranking quando acontecer. |
-| 5s | Envia mensagem do Discord no chat. |
-| 15s | Se pneus estiverem ativos, muta/libera chat via comando de mute e explica pneus. |
-| 20s | Se pneus estiverem ativos, explica ERS. |
-| 25s | Se pneus estiverem ativos, anuncia corrida em 5s. |
-| 15s | Se pneus nao estiverem ativos, explica ERS sem mutar o chat. |
-| 25s | Se pneus nao estiverem ativos, anuncia corrida em 5s. Esses 10s compensam o tempo que ficaria mutado no fluxo com pneus. |
-| 25s | Se pneus estiverem ativos, alterna mute novamente logo apos o anuncio. Sem pneus, o chat permanece aberto. |
-| 30s | Para o jogo atual naturalmente. |
-| 31s | Define voltas para `DEFAULT_LAPS`, entra em `RACE`, carrega o mapa da votacao e inicia a corrida. |
+| 2s | Envia para cada piloto XP/ranking da qualy, total, ranking atual e mudanca de ranking quando acontecer. |
+| 5s | Muda para `WAITING`, carrega `Wait Qualy Room - By Ximb` e inicia o jogo. |
+| 6s | Envia mensagem do Discord no chat. |
+| 16s | Se pneus estiverem ativos, muta/libera chat via comando de mute e explica pneus. |
+| 21s | Se pneus estiverem ativos, explica ERS. |
+| 26s | Se pneus estiverem ativos, anuncia corrida em 5s. |
+| 16s | Se pneus nao estiverem ativos, explica ERS sem mutar o chat. |
+| 26s | Se pneus nao estiverem ativos, anuncia corrida em 5s. Esses 10s compensam o tempo que ficaria mutado no fluxo com pneus. |
+| 26s | Se pneus estiverem ativos, alterna mute novamente logo apos o anuncio. Sem pneus, o chat permanece aberto. |
+| 31s | Para o jogo atual naturalmente. |
+| 32s | Define voltas para `DEFAULT_LAPS`, entra em `RACE`, carrega o mapa da votacao e inicia a corrida. |
 
 Tempo total aproximado:
 
-- Com pneus ativos: `31s` ate a corrida iniciar.
-- Sem pneus ativos: `31s` ate a corrida iniciar.
+- Com pneus ativos: `32s` ate a corrida iniciar.
+- Sem pneus ativos: `32s` ate a corrida iniciar.
 
 ## Quando aparecem pontos e XP
 
-O salvamento de progresso acontece no inicio do fluxo de fim de sessao, antes de limpar os dados dos jogadores e antes de entrar no mapa de espera. Os avisos privados ficam guardados e sao enviados 1 segundo depois que o host entra no mapa de espera.
+O salvamento de progresso acontece no inicio do fluxo de fim de sessao, antes de limpar os dados dos jogadores. Os avisos privados ficam guardados e sao enviados 2 segundos depois que o Haxball termina de mostrar os resultados da sessao.
 
-- Pontos do campeonato: `settlePublicRaceChampionship(room, { deferMessages: true })` roda ainda na pista da corrida, antes de `resetPlayers`. A mensagem privada e enviada 1 segundo depois em `Wait Room - By Ximb`.
-- XP de ranking: `settlePublicQualyRanking(room, { deferMessages: true })` roda ainda na pista da qualy, antes de `resetPlayers`. A mensagem privada e enviada 1 segundo depois em `Wait Qualy Room - By Ximb`.
+- Pontos do campeonato: `settlePublicRaceChampionship(room, { deferMessages: true })` roda ainda na pista da corrida, antes de `printAllPositions`. A mensagem privada e enviada 2 segundos depois de mostrar as posicoes.
+- XP de ranking: `settlePublicQualyRanking(room, { deferMessages: true })` roda ainda na pista da qualy, antes de `printAllTimes`. A mensagem privada e enviada 2 segundos depois de mostrar os tempos.
 
 ## Pausa saudavel quando a sala fica vazia
 

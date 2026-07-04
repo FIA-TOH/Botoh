@@ -47,7 +47,7 @@ const SILVERSTONEPUBLIC_INFO: CircuitInfo = {
     },
     passingDirection: Direction.LEFT,
   },
-  name: "Silverstone Circuit - By Ximb",
+  name: "Silverstone Circuit - By Ximb - Public",
   boxLine: {
     minX: -2202,
     maxX: -1300,
@@ -91,7 +91,7 @@ const SILVERSTONEPUBLIC_INFO: CircuitInfo = {
       silverstonePublic_json.redSpawnPoints.length - 1
     ][1],
   },
-  BestTime: bestTimes.silverstone,
+  BestTime: bestTimes.silverstonePublic,
   MainColor: [0x023286, 0x023286, 0xff0000],
   AvatarColor: 0xffffff,
   Angle: 60,

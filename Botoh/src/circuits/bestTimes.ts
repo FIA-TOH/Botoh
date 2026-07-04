@@ -69,6 +69,9 @@ const trackNameMapping: { [key: string]: string } = {
   sepangPublic: "Sepang F1 International Circuit - By Ximb - Public",
   valenciaPublic: "Valencia Street Circuit - By Ximb - Public",
   monacoPublic: "Circuit de Monaco - By Ximb - Public",
+  bahreinPublic: "Bahrain International Circuit - By Ximb - Public",
+  miamiPublic: "Miami International Autodrome - By Ximb - Public",
+  silverstonePublic: "Silverstone Circuit - By Ximb - Public",
 };
 
 export const bestTimes: { [key: string]: [number, string, string] } = {
@@ -139,19 +142,22 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   shangahiSeasonTres: [52.552, "Splinter", trackNameMapping["shanghaiSeasonTres"]],
   kyalamiSeasonTres: [53.700, "undefined", trackNameMapping["kyalamiSeasonTres"]],
 
-  suzukaPublic: [47.000, "undefined", trackNameMapping["suzukaPublic"]],
-  melbournePublic: [32.500, "undefined", trackNameMapping["melbournePublic"]],
-  bakuPublic: [54.500, "undefined", trackNameMapping["bakuPublic"]],
-  spaPublic: [65.500, "undefined", trackNameMapping["spaPublic"]],
+  suzukaPublic: [47.000, "Ximb", trackNameMapping["suzukaPublic"]],
+  melbournePublic: [32.500, "Ximb", trackNameMapping["melbournePublic"]],
+  bakuPublic: [54.500, "Ximb", trackNameMapping["bakuPublic"]],
+  spaPublic: [65.500, "Ximb", trackNameMapping["spaPublic"]],
   imolaPublic: [46.429 , "Danny", trackNameMapping["imolaPublic"]],
-  nurburgringPublic: [46.500, "undefined", trackNameMapping["nurburgringPublic"]],
-  shanghaiPublic: [2.000, "undefined", trackNameMapping["shanghaiPublic"]],
-  austinPublic: [59.000, "undefined", trackNameMapping["austinPublic"]],
-  monzaPublic: [52.000, "undefined", trackNameMapping["monzaPublic"]],
-  canadaPublic: [44.300, "undefined", trackNameMapping["canadaPublic"]],
-  sepangPublic: [2.000, "undefined", trackNameMapping["sepangPublic"]],
-  valenciaPublic: [52.500, "undefined", trackNameMapping["valenciaPublic"]],
-  monacoPublic: [42.000, "undefined", trackNameMapping["monacoPublic"]],
+  nurburgringPublic: [46.500, "Ximb", trackNameMapping["nurburgringPublic"]],
+  shanghaiPublic: [52.552, "Splinter", trackNameMapping["shanghaiPublic"]],
+  austinPublic: [59.000, "Ximb", trackNameMapping["austinPublic"]],
+  monzaPublic: [52.000, "Ximb", trackNameMapping["monzaPublic"]],
+  canadaPublic: [44.300, "Ximb", trackNameMapping["canadaPublic"]],
+  sepangPublic: [59.101, "Fominha", trackNameMapping["sepangPublic"]],
+  valenciaPublic: [52.500, "Ximb", trackNameMapping["valenciaPublic"]],
+  monacoPublic: [42.000, "Ximb", trackNameMapping["monacoPublic"]],
+  bahrainPublic: [43.871, "Nava", trackNameMapping["bahrainPublic"]],
+  miamiPublic: [49.795, "Danny", trackNameMapping["miamiPublic"]],
+  silverstonePublic: [49.500, "Ximb", trackNameMapping["silverstonePublic"]],
 };
 
 export const getAbbreviatedTrackName = (

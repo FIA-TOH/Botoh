@@ -160,11 +160,13 @@ async function runRaceToNextSessionFlow(room: RoomObject) {
     deferMessages: true,
   });
   showRaceResults(room);
-  enterWaitingRoom(room, getCircuitIndexByName(WAIT_ROOM_NAME));
-  if (!(await waitIfPlayersRemain(room, 1))) return;
+  if (!(await waitIfPlayersRemain(room, 2))) return;
 
   sendDeferredPublicCompetitionNotifications(room, raceNotifications);
-  if (!(await waitIfPlayersRemain(room, 4))) return;
+  if (!(await waitIfPlayersRemain(room, 3))) return;
+
+  enterWaitingRoom(room, getCircuitIndexByName(WAIT_ROOM_NAME));
+  if (!(await waitIfPlayersRemain(room, 1))) return;
 
   voteSession(room);
   if (!(await waitIfPlayersRemain(room, 10))) return;
@@ -189,11 +191,13 @@ async function runQualyToRaceFlow(room: RoomObject) {
     deferMessages: true,
   });
   showQualyResults(room);
-  enterWaitingRoom(room, getCircuitIndexByName(WAIT_QUALY_ROOM_NAME));
-  if (!(await waitIfPlayersRemain(room, 1))) return;
+  if (!(await waitIfPlayersRemain(room, 2))) return;
 
   sendDeferredPublicCompetitionNotifications(room, qualyNotifications);
-  if (!(await waitIfPlayersRemain(room, 4))) return;
+  if (!(await waitIfPlayersRemain(room, 3))) return;
+
+  enterWaitingRoom(room, getCircuitIndexByName(WAIT_QUALY_ROOM_NAME));
+  if (!(await waitIfPlayersRemain(room, 1))) return;
 
   if (!(await sendPublicRoomInfo(room))) return;
 
