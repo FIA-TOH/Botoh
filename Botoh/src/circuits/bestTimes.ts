@@ -69,6 +69,7 @@ const trackNameMapping: { [key: string]: string } = {
   balaton_haxmaps: "Balaton Park Circuit by Liberty from HaxMaps",
   hemmingsen: "Hemmingsen-banen by Rodri",
   brazzaville: "Brazzaville",
+  estoril: "Autódromo Fernanda Pires da Silva (Estoril) By Nanoseb",
 };
 
 export const bestTimes: { [key: string]: [number, string, string] } = {
@@ -161,7 +162,8 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   river: [999.99, "undefined", "Circuito Antonio V. Liberti by New Era"],
   balaton_haxmaps: [999.99, "undefined", "Balaton Park Circuit by Liberty from HaxMaps"],
   hemmingsen: [999.99, "undefined", "Hemmingsen-banen by Rodri"],
-  brazzaville: [999.99, "undefined", "Brazzaville"]
+  brazzaville: [999.99, "undefined", "Brazzaville"],
+  estoril: [999.99, "undefined", "Autódromo Fernanda Pires da Silva (Estoril) By Nanoseb"],
 };
 export const getAbbreviatedTrackName = (
   fullTrackName: string,

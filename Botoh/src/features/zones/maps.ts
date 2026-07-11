@@ -108,6 +108,7 @@ import { RIVER } from "../../circuits/argentina/river";
 import { BALATON_HAXMAPS } from "../../circuits/balaton/balaton_haxmaps";
 import { HEMMINGSEN } from "../../circuits/hemmingsen_banen/hemmingsen";
 import { BRAZZAVILLE } from "../../circuits/brazzaville/brazzaville";
+import { ESTORIL } from "../../circuits/estoril/estoril";
 // import {DAYTONA} from "../circuits/daytona/daytona";
 // import {BARCELONA} from "../circuits/barcelona/barcelona";
 // import {MACAU} from "../circuits/macau/macau";
@@ -185,6 +186,7 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
       BALATON_HAXMAPS,
       HEMMINGSEN,
       BRAZZAVILLE,
+      ESTORIL,
       PODIUM,
       WAITROOM,
     ]
