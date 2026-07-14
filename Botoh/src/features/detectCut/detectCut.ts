@@ -42,10 +42,11 @@ export function loadCutSegmentsFromCircuit(circuit: Circuit) {
   if (circuit.info.CutDetectSegments?.length) {
     cutSegments = circuit.info.CutDetectSegments.map(
       (seg: any, index: number) => ({
-        index,
+        index: seg.index ?? index,
         penalty: decidePenalty(seg),
         v0: [seg.v0[0], seg.v0[1]],
         v1: [seg.v1[0], seg.v1[1]],
+        isLeavingPit: Boolean(seg.isLeavingPit),
       })
     );
   }
@@ -62,10 +63,18 @@ export function loadCutSegmentsFromCircuit(circuit: Circuit) {
           penalty: decidePenalty(seg),
           v0: [v0.x, v0.y] as [number, number],
           v1: [v1.x, v1.y] as [number, number],
+          isLeavingPit: Boolean(seg.isLeavingPit),
         };
       })
       .filter(Boolean) as CutSegment[];
   }
+}
+
+function isPlayerOnLapAfterPit(playerId: number) {
+  const player = playerList[playerId];
+  if (!player || player.lastPitlaneLap == null) return false;
+
+  return player.currentLap === player.lastPitlaneLap + 1;
 }
 
 function pointToSegmentDistance(
@@ -116,6 +125,10 @@ export function detectCut(
   const lastSet = playerLastSegment.get(playerId)!;
 
   for (const seg of cutSegments) {
+    if (seg.isLeavingPit && isPlayerOnLapAfterPit(playerId)) {
+      continue;
+    }
+
     const distSq = pointToSegmentDistance(
       pad.disc.x,
       pad.disc.y,

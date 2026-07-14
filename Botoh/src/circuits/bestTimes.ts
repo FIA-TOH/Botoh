@@ -55,6 +55,7 @@ const trackNameMapping: { [key: string]: string } = {
   sepangSeasonTres: "Sepang F1 International Circuit - By Ximb - NewgenV3",
   shangahiSeasonTres: "Shanghai International Circuit - By Ximb - NewgenV3",
   kyalamiSeasonTres: "Kyalami Grand Prix Circuit By Ximb and Nanoseb - NewgenV3",
+  monacoSeasonTres: "Circuit de Monaco - By Ximb - NewgenV3",
 
   suzukaPublic: "Suzuka International Circuit - By Ximb - Public",
   melbournePublic: "Melbourne Circuit - By Ximb - Public",
@@ -141,6 +142,7 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   sepangSeasonTres: [59.102, "Fominha", trackNameMapping["sepangSeasonTres"]],
   shangahiSeasonTres: [52.552, "Splinter", trackNameMapping["shanghaiSeasonTres"]],
   kyalamiSeasonTres: [53.700, "undefined", trackNameMapping["kyalamiSeasonTres"]],
+  monacoSeasonTres: [42.000, "Ximb", trackNameMapping["monacoSeasonTres"]],
 
   suzukaPublic: [47.000, "Ximb", trackNameMapping["suzukaPublic"]],
   melbournePublic: [32.500, "Ximb", trackNameMapping["melbournePublic"]],

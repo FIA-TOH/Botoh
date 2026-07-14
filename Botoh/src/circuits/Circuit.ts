@@ -51,6 +51,7 @@ export type CutSegment = {
   penalty: number;
   v0: [number, number];
   v1: [number, number];
+  isLeavingPit?: boolean;
 };
 
 export interface CircuitInfo {

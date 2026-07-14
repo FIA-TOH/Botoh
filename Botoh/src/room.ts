@@ -104,9 +104,6 @@ export const roomPromise: Promise<any> = HaxballJS().then((HBInit: any) => {
   room.setScoreLimit(0);
   room.setTimeLimit(0);
   room.setTeamsLock(true);
-  handleChangeMap(0, room);
-
-  sendDiscordLink(room, 3);
 
   GameStart(room);
   GameStop(room);
@@ -117,6 +114,10 @@ export const roomPromise: Promise<any> = HaxballJS().then((HBInit: any) => {
   StadiumChange(room);
   TeamChange(room);
   PlayerActivity(room);
+
+  handleChangeMap(0, room);
+
+  sendDiscordLink(room, 3);
 
   room.onGamePause = function (byPlayer: any) {
     byPlayer == null
