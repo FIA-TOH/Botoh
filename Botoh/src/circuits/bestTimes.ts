@@ -74,6 +74,10 @@ const trackNameMapping: { [key: string]: string } = {
   miamiPublic: "Miami by Rodri - Public",
   silverstonePublic: "Silverstone Circuit - By Ximb - Public",
   kyalamiPublic: "Kyalami Grand Prix Circuit By Ximb and Nanoseb - Public",
+  sochiPublic: "Sochi Autodrom - By Ximb - Public",
+  istanbulPublic: "İstanbul Park - By Ximb - Public",
+  interlagosPublic: "Autodromo Interlagos - By Ximb - Public",
+  argentinaPublic: "Autodromo Oscar Alfredo Galvez - By Ximb - Public",
 };
 
 export const bestTimes: { [key: string]: [number, string, string] } = {
@@ -162,6 +166,10 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   miamiPublic: [49.795, "Danny", trackNameMapping["miamiPublic"]],
   silverstonePublic: [49.500, "Ximb", trackNameMapping["silverstonePublic"]],
   kyalamiPublic: [53.489, "Splinter", trackNameMapping["kyalamiPublic"]],
+  sochiPublic: [47.800, "undefined", trackNameMapping["sochiPublic"]],
+  istanbulPublic: [42.000, "undefined", trackNameMapping["istanbulPublic"]],
+  interlagosPublic: [42.900, "undefined ColaSplinter", trackNameMapping["interlagosPublic"]],
+  argentinaPublic: [51.000, "undefined", trackNameMapping["argentinaPublic"]],
 };
 
 export const getAbbreviatedTrackName = (

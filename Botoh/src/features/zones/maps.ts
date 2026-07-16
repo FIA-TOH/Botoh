@@ -99,6 +99,7 @@ import { KYALAMISEASONTRES } from "../../circuits/kyalami/kyalamiSeasonTres";
 import { MIAMIPUBLIC } from "../../circuits/miami/miamiPublic";
 import { MONACOSEASONTRES } from "../../circuits/monaco/monacoSeasonTres";
 import { KYALAMIPUBLIC } from "../../circuits/kyalami/kyalamiPublic";
+import { INTERLAGOSPUBLIC } from "../../circuits/interlagos/interlagosPublic";
 
 
 // import {DAYTONA} from "../circuits/daytona/daytona";
@@ -186,17 +187,17 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
       MIAMIPUBLIC,
       SILVERSTONEPUBLIC,
       KYALAMIPUBLIC,
+      SOCHIPUBLIC,
+      ISTANBULPUBLIC,
+      INTERLAGOSPUBLIC,
+      ARGENTINAPUBLIC,
       WAITROOM,
       WAITROOMQUALY,
     ];
 
-     // SILVERSTONEPUBLIC,
-      // BAHRAINPUBLIC,
-      // SOCHIPUBLIC,
+     
       // PAUL_RICARDPUBLIC,
-      // ISTANBULPUBLIC,
-      // INTERLAGOS,
-      // ARGENTINAPUBLIC,
+     
       // MARINA_BAYPUBLIC,
       // JEDDAHPUBLIC,
       // ABU_DHABIPUBLIC,
@@ -290,6 +291,10 @@ export const CIRCUIT_FILE_NAMES: string[] = LEAGUE_MODE
       "miamipublic.hbs",
       "silverstonePublic.hbs",
       "kyalamiPublic.hbs",
+      "sochiPublic.hbs",
+      "istanbulPublic.hbs",
+      "interlagosPublic.hbs",
+      "argentinaPublic.hbs",
       "waitRoom.hbs",
       "waitRoomQualy.hbs",
     ];

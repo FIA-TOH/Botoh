@@ -22,7 +22,7 @@ const SOCHIPUBLIC_INFO: CircuitInfo = {
     },
     passingDirection: Direction.LEFT,
   },
-  name: "Sochi Autodrom - By Ximb",
+  name: "Sochi Autodrom - By Ximb - Public",
   sectorOne: {
     bounds: {
       minX: 2001,
@@ -93,7 +93,7 @@ const SOCHIPUBLIC_INFO: CircuitInfo = {
       sochiPublic_json.redSpawnPoints.length - 1
     ][1],
   },
-  BestTime: bestTimes.sochi,
+  BestTime: bestTimes.sochiPublic,
   MainColor: [0xffffff, 0x000080, 0xdd0000],
   AvatarColor: 0xffe817,
   Angle: 90,
