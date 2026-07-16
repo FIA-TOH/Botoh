@@ -55,6 +55,14 @@ const roomName = LEAGUE_MODE
   : envName === "haxbula"
     ? haxbulaPublicName
     : publicName;
+const publicMaxPlayers = 20;
+const roomMaxPlayers = LEAGUE_MODE ? maxPlayers : publicMaxPlayers;
+const leagueRoomPassword =
+  getOptionalEnvValue("LEAGUE_ROOM_PASSWORD") ||
+  getOptionalEnvValue("ROOM_PASSWORD") ||
+  roomPassword ||
+  "ftoh";
+const activeRoomPassword = LEAGUE_MODE ? leagueRoomPassword : undefined;
 
 function getGeo() {
   const geoEnv = process.env.HAXBALL_GEO;
@@ -78,9 +86,9 @@ export const roomPromise: Promise<any> = HaxballJS().then((HBInit: any) => {
   const room = HBInit({
     roomName: roomName,
     noPlayer: true,
-    public: !LEAGUE_MODE,
-    maxPlayers: maxPlayers,
-    password: roomPassword ?? undefined,
+    public: true,
+    maxPlayers: roomMaxPlayers,
+    password: activeRoomPassword,
     token:
       roomConfigSecure.token,
     geo: getGeo(),
@@ -95,8 +103,8 @@ export const roomPromise: Promise<any> = HaxballJS().then((HBInit: any) => {
       roomLink: link,
       leagueMode: LEAGUE_MODE,
       envName,
-      maxPlayers,
-      public: !LEAGUE_MODE,
+      maxPlayers: roomMaxPlayers,
+      public: true,
     });
     console.log("\u{1F3C1} Room link:", link);
   };

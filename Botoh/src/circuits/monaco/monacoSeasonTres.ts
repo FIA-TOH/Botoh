@@ -90,7 +90,7 @@ const MONACOSEASONTRES_INFO: CircuitInfo = {
   Limit: 5,
   Votes: 0,
   pitSpeed: 0.97,
-  TireDegradationPercentage: -40,
+  TireDegradationPercentage: -50,
   physicsType: CircuitPhysics.WEC_NEWGEN,
   pitGap: 21,
   new_safetycar: true,
