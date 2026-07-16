@@ -96,7 +96,9 @@ import { BAHRAINSEASONTRES } from "../../circuits/bahrain/bahrainSeasonTres";
 import { SEPANGSEASONTRES } from "../../circuits/sepang/sepangSeasonTres";
 import { SHANGHAISEASONTRES } from "../../circuits/shanghai/shanghaiSeasonTres";
 import { KYALAMISEASONTRES } from "../../circuits/kyalami/kyalamiSeasonTres";
-import { MIAMIPUBLIC } from "../../circuits/miami/miamiSeasonPublic";
+import { MIAMIPUBLIC } from "../../circuits/miami/miamiPublic";
+import { MONACOSEASONTRES } from "../../circuits/monaco/monacoSeasonTres";
+import { KYALAMIPUBLIC } from "../../circuits/kyalami/kyalamiPublic";
 
 
 // import {DAYTONA} from "../circuits/daytona/daytona";
@@ -115,6 +117,7 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
     SEPANGSEASONTRES,
     SHANGHAISEASONTRES,
     KYALAMISEASONTRES,
+    MONACOSEASONTRES,
       IMOLA,
       SUZUKA,
       MELBOURNE,
@@ -182,6 +185,7 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
       BAHRAINPUBLIC,
       MIAMIPUBLIC,
       SILVERSTONEPUBLIC,
+      KYALAMIPUBLIC,
       WAITROOM,
       WAITROOMQUALY,
     ];
@@ -217,6 +221,7 @@ export const CIRCUIT_FILE_NAMES: string[] = LEAGUE_MODE
       "sepangSeasonTres.hbs",
       "shanghaiSeasonTres.hbs",
       "kyalamiSeasonTres.hbs",
+      "monacoSeasonTres.hbs",
       "imola.hbs",
       "suzuka.hbs",
       "melbourne.hbs",
@@ -284,6 +289,7 @@ export const CIRCUIT_FILE_NAMES: string[] = LEAGUE_MODE
       "bahrainPublic.hbs",
       "miamipublic.hbs",
       "silverstonePublic.hbs",
+      "kyalamiPublic.hbs",
       "waitRoom.hbs",
       "waitRoomQualy.hbs",
     ];

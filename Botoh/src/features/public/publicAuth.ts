@@ -1,6 +1,10 @@
 import { sendAlertMessage, sendCyanMessage, sendErrorMessage, sendSuccessMessage } from "../chat/chat";
 import { getPlayerLanguage } from "../chat/messages";
 import { idToAuth } from "../changePlayerState/playerList";
+import {
+  GeneralGameMode,
+  generalGameMode,
+} from "../changeGameState/changeGameModes";
 import { Teams } from "../changeGameState/teams";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { kickPlayer } from "../utils";
@@ -53,6 +57,13 @@ function hasPublicDatabaseConfig() {
 
 function arePublicAuthServicesOnline() {
   return isPublicBackendOnline() && hasPublicDatabaseConfig();
+}
+
+function isPublicRaceInProgress(room: RoomObject) {
+  return (
+    generalGameMode === GeneralGameMode.GENERAL_RACE &&
+    (room.getScores()?.time ?? 0) > 0
+  );
 }
 
 function getPublicAuth(player: PlayerObject): string | null {
@@ -369,7 +380,10 @@ export async function handlePublicLoginCommand(
       });
     }
 
-    room.setPlayerTeam(player.id, Teams.RUNNERS);
+    room.setPlayerTeam(
+      player.id,
+      isPublicRaceInProgress(room) ? Teams.SPECTATORS : Teams.RUNNERS,
+    );
     sendSuccessMessage(room, PUBLIC_MESSAGES.LOGIN_SUCCESS(), player.id);
     const profile = await ensurePublicCompetitionProfile(auth, player.name);
     const currentRank = getPublicRankName(

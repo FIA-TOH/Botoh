@@ -1,5 +1,5 @@
-import { sendChatMessage } from "../../chat/chat";
-import { MESSAGES } from "../../chat/messages";
+import { COLORS, FONTS, SOUNDS } from "../../chat/chat";
+import { getPlayerLanguage, MESSAGES } from "../../chat/messages";
 import { CIRCUITS } from "../../zones/maps";
 
 const HAXBALL_MSG_LIMIT = 250;
@@ -13,12 +13,13 @@ export function handleMapsCommand(
     return `[${i.toString().padStart(2, "0")}] ${c.info.name}`;
   });
 
-  const fullText = mapsList.join("\n");
+  const language = getPlayerLanguage(byPlayer.id);
+  const fullText = MESSAGES.LIST_MAPS(mapsList.join("\n"))[language];
 
   const chunks: string[] = [];
   let currentChunk = "";
 
-  for (const line of mapsList) {
+  for (const line of fullText.split("\n")) {
     if ((currentChunk + "\n" + line).length > HAXBALL_MSG_LIMIT) {
       chunks.push(currentChunk);
       currentChunk = line;
@@ -28,7 +29,13 @@ export function handleMapsCommand(
   }
   if (currentChunk) chunks.push(currentChunk);
 
-  chunks.forEach((chunk, idx) => {
-    sendChatMessage(room, MESSAGES.LIST_MAPS(chunk), byPlayer.id);
+  chunks.forEach((chunk) => {
+    room.sendAnnouncement(
+      chunk,
+      byPlayer.id,
+      COLORS.WHITE,
+      FONTS.NORMAL,
+      SOUNDS.CHAT,
+    );
   });
 }

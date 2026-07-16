@@ -55,6 +55,7 @@ const trackNameMapping: { [key: string]: string } = {
   sepangSeasonTres: "Sepang F1 International Circuit - By Ximb - NewgenV3",
   shangahiSeasonTres: "Shanghai International Circuit - By Ximb - NewgenV3",
   kyalamiSeasonTres: "Kyalami Grand Prix Circuit By Ximb and Nanoseb - NewgenV3",
+  monacoSeasonTres: "Circuit de Monaco - By Ximb - NewgenV3",
 
   suzukaPublic: "Suzuka International Circuit - By Ximb - Public",
   melbournePublic: "Melbourne Circuit - By Ximb - Public",
@@ -69,9 +70,10 @@ const trackNameMapping: { [key: string]: string } = {
   sepangPublic: "Sepang F1 International Circuit - By Ximb - Public",
   valenciaPublic: "Valencia Street Circuit - By Ximb - Public",
   monacoPublic: "Circuit de Monaco - By Ximb - Public",
-  bahreinPublic: "Bahrain International Circuit - By Ximb - Public",
-  miamiPublic: "Miami International Autodrome - By Ximb - Public",
+  bahreinPublic: "Sakhir Bahrain International Circuit - By Ximb - Public",
+  miamiPublic: "Miami by Rodri - Public",
   silverstonePublic: "Silverstone Circuit - By Ximb - Public",
+  kyalamiPublic: "Kyalami Grand Prix Circuit By Ximb and Nanoseb - Public",
 };
 
 export const bestTimes: { [key: string]: [number, string, string] } = {
@@ -140,7 +142,8 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   bahrainSeasonTres: [44.999, "Ximb", trackNameMapping["bahrainSeasonTres"]],
   sepangSeasonTres: [59.102, "Fominha", trackNameMapping["sepangSeasonTres"]],
   shangahiSeasonTres: [52.552, "Splinter", trackNameMapping["shanghaiSeasonTres"]],
-  kyalamiSeasonTres: [53.700, "undefined", trackNameMapping["kyalamiSeasonTres"]],
+  kyalamiSeasonTres: [53.489, "Splinter", trackNameMapping["kyalamiSeasonTres"]],
+  monacoSeasonTres: [42.000, "Ximb", trackNameMapping["monacoSeasonTres"]],
 
   suzukaPublic: [47.000, "Ximb", trackNameMapping["suzukaPublic"]],
   melbournePublic: [32.500, "Ximb", trackNameMapping["melbournePublic"]],
@@ -155,9 +158,10 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   sepangPublic: [59.101, "Fominha", trackNameMapping["sepangPublic"]],
   valenciaPublic: [52.500, "Ximb", trackNameMapping["valenciaPublic"]],
   monacoPublic: [42.000, "Ximb", trackNameMapping["monacoPublic"]],
-  bahrainPublic: [43.871, "Nava", trackNameMapping["bahrainPublic"]],
+  bahreinPublic: [43.871, "Nava", trackNameMapping["bahreinPublic"]],
   miamiPublic: [49.795, "Danny", trackNameMapping["miamiPublic"]],
   silverstonePublic: [49.500, "Ximb", trackNameMapping["silverstonePublic"]],
+  kyalamiPublic: [53.489, "Splinter", trackNameMapping["kyalamiPublic"]],
 };
 
 export const getAbbreviatedTrackName = (

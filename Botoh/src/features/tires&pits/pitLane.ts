@@ -54,6 +54,7 @@ export function handlePitlane(
       }
 
       playerList[p.id].pits.pitsNumber += 1;
+      playerList[p.id].lastPitlaneLap = playerList[p.id].currentLap;
       playerList[p.id].inPitlane = true;
       applyPlayerCollision(room, p.id);
       const preparedTyre = getPreparedPitTire(p.id, p.name);

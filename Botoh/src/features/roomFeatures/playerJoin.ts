@@ -40,9 +40,24 @@ import { handlePublicPlayerJoin, handlePublicPlayerLeave } from "../public/publi
 import { getLastPublicRaceMapIndex, handleChangeMap, isPublicWaitingMapIndex } from "../zones/maps";
 
 const HARD_QUALY_PASSWORD = "hardqualy";
+const PUBLIC_AFK_CLEANUP_THRESHOLD = 18;
 
 function getPlayerShortName(name: string) {
   return name.slice(0, 3).toUpperCase();
+}
+
+function kickPublicAfkPlayersIfNeeded(room: RoomObject) {
+  if (LEAGUE_MODE) return;
+
+  const players = room.getPlayerList();
+  if (players.length < PUBLIC_AFK_CLEANUP_THRESHOLD) return;
+
+  players.forEach((roomPlayer) => {
+    if (roomPlayer.admin) return;
+    if (!playerList[roomPlayer.id]?.afk) return;
+
+    room.kickPlayer(roomPlayer.id, "AFK", false);
+  });
 }
 
 function hasInvalidLeagueNameCharacters(name: string) {
@@ -157,6 +172,7 @@ export function PlayerJoin(room: RoomObject) {
       playerList[player.id] = createPlayerInfo(ip, player.id);
       playerList[player.id].pubAvatar = getRandomCarEmoji();
     }
+    kickPublicAfkPlayersIfNeeded(room);
 
     const existingTeamId = playerList[player.id]?.leagueScuderia;
     clearLoginStateIfUsernameChanged(player);

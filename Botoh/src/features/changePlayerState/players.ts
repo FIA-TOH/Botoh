@@ -50,6 +50,7 @@ export function createPlayerInfo(ip?: string, playerId?: number) {
     gripCounter: 0,
 
     inPitlane: false,
+    lastPitlaneLap: null,
     inPitStop: false,
     boxAlert: false,
     pits: {
@@ -234,6 +235,7 @@ export function resetPlayer(
   playerList[id].gripCounter = 0;
 
   playerList[id].inPitlane = false;
+  playerList[id].lastPitlaneLap = null;
   playerList[id].inPitStop = false;
   playerList[id].boxAlert = false;
   playerList[id].pitFailures = undefined;

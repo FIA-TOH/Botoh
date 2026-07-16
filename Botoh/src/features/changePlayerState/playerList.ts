@@ -94,6 +94,7 @@ export interface PlayerInfo {
   gripCounter: number;
 
   inPitlane: boolean;
+  lastPitlaneLap: number | null;
   inPitStop: boolean;
   boxAlert: boolean | number;
   pits: PitsInfo;

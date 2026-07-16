@@ -50,6 +50,10 @@ function isDamageSuspendedByRaceControl() {
     || raceControl.neutralization === RaceControlState.VirtualSafetyCar;
 }
 
+function isSafetyCarActive() {
+  return getRaceControlState().neutralization === RaceControlState.SafetyCar;
+}
+
 function clampCurvature(curvatura: number): number {
   return Math.max(-359, Math.min(359, curvatura));
 }
@@ -283,6 +287,11 @@ export function detectCrashWallDetectors(
   room: RoomObject,
 ) {
   if (!damageEnabled) return;
+  if (isSafetyCarActive()) {
+    playerTouchedCrashWallDetectors.clear();
+    previousPlayerSpeed.clear();
+    return;
+  }
 
   const detectors = ACTUAL_CIRCUIT?.info?.CrashWallDetector;
   if (!detectors?.length) return;

@@ -88,7 +88,7 @@ const BAKUPUBLIC_INFO: CircuitInfo = {
       bakuPublic_json.redSpawnPoints.length - 1
     ][1],
   },
-  BestTime: bestTimes.baku,
+  BestTime: bestTimes.bakuPublic,
   MainColor: [0x00b5e2, 0xef3340, 0x509e2f],
   AvatarColor: 0xffffff,
   Angle: 90,

@@ -1,6 +1,6 @@
 import { Circuit } from "../../circuits/Circuit";
 import { sendErrorMessage } from "../chat/chat";
-import { handleChangeMap, CIRCUITS } from "../zones/maps";
+import { handleChangeMap, CIRCUITS, currentMapIndex } from "../zones/maps";
 import { MESSAGES } from "../chat/messages";
 import { Teams } from "../changeGameState/teams";
 import { log } from "../discord/logger";
@@ -14,6 +14,29 @@ import { isPublicWaitingMapIndex } from "../zones/maps";
 
 export let ACTUAL_CIRCUIT: Circuit;
 
+function getMapName(circuit: Circuit) {
+  try {
+    return JSON.parse(circuit.map)?.name;
+  } catch {
+    return null;
+  }
+}
+
+function resolveLoadedCircuit(newStadiumName: string) {
+  const currentCircuit = CIRCUITS[currentMapIndex];
+  if (
+    currentCircuit &&
+    (
+      currentCircuit.info.name === newStadiumName ||
+      getMapName(currentCircuit) === newStadiumName
+    )
+  ) {
+    return currentCircuit;
+  }
+
+  return CIRCUITS.find((circuit) => circuit.info.name === newStadiumName);
+}
+
 export function StadiumChange(room: RoomObject) {
   room.onStadiumChange = function (newStadiumName, byPlayer) {
     if (byPlayer !== null) {
@@ -22,7 +45,7 @@ export function StadiumChange(room: RoomObject) {
     }
     log("New circuit loaded: ", newStadiumName);
 
-    let c = CIRCUITS.find((x) => x.info.name == newStadiumName);
+    let c = resolveLoadedCircuit(newStadiumName);
     if (c) {
       loadCutSegmentsFromCircuit(c);
       ACTUAL_CIRCUIT = c;
