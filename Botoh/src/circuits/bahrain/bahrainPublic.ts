@@ -84,12 +84,8 @@ const BAHRAINPUBLIC_INFO: CircuitInfo = {
   ],
   checkpoints: [],
   lastPlace: {
-    x: bahrainPublic_json.redSpawnPoints[
-      bahrainPublic_json.redSpawnPoints.length - 1
-    ][0],
-    y: bahrainPublic_json.redSpawnPoints[
-      bahrainPublic_json.redSpawnPoints.length - 1
-    ][1],
+    x: 2331,
+    y: 241,
   },
   BestTime: bestTimes.bahreinPublic,
   MainColor: [0xffffff, 0xe90018, 0xe90018],

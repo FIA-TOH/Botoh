@@ -81,12 +81,8 @@ const SPAPUBLIC_INFO: CircuitInfo = {
   ],
   checkpoints: [],
   lastPlace: {
-    x: spaPublic_json.redSpawnPoints[
-      spaPublic_json.redSpawnPoints.length - 1
-    ][0],
-    y: spaPublic_json.redSpawnPoints[
-      spaPublic_json.redSpawnPoints.length - 1
-    ][1],
+    x: -452,
+    y: -796,
   },
   BestTime: bestTimes.spaPublic,
   MainColor: [0x000001, 0xfae042, 0xed2939],
@@ -213,7 +209,7 @@ const SPAPUBLIC_INFO: CircuitInfo = {
     },
     {
       v0: [-1148, -470],
-      v1: [-388, -801],
+      v1: [-154, -666],
       index: 241,
       penalty: 5,
     },

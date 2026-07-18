@@ -80,8 +80,8 @@ const KYALAMIPUBLIC_INFO: CircuitInfo = {
   ],
   checkpoints: [],
   lastPlace: {
-    x: -838,
-    y: 1272,
+    x: -1986,
+    y: 1559,
   },
   BestTime: bestTimes.kyalamiPublic,
   MainColor: [0xE03C31, 0x007749, 0x001489],

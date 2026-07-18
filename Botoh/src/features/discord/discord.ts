@@ -4,9 +4,18 @@ import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { getTimestamp } from "../utils";
 
+const DEFAULT_PUBLIC_HOST_ANNOUNCEMENT_URL =
+  "https://discord.com/api/webhooks/coloque-o-webhook-do-anuncio-publico-aqui";
+const PUBLIC_HOST_ANNOUNCEMENT_GIF_URL =
+  process.env.PUBLIC_HOST_ANNOUNCEMENT_GIF_URL ||
+  "https://media.giphy.com/media/WsVrXzqcHiYme38VSG/giphy.gif";
+
 const getDiscordWebhooks = () => ({
   PUBLIC_CHAT_URL: process.env.DISCORD_PUBLIC_CHAT_URL || "",
   PUBLIC_LOG_URL: process.env.DISCORD_PUBLIC_LOG_URL || "",
+  PUBLIC_HOST_ANNOUNCEMENT_URL:
+    process.env.DISCORD_PUBLIC_HOST_ANNOUNCEMENT_URL ||
+    DEFAULT_PUBLIC_HOST_ANNOUNCEMENT_URL,
   PUBLIC_REPLAY_URL: process.env.DISCORD_PUBLIC_REPLAY_URL || "",
   LEAGUE_CHAT_URL: process.env.DISCORD_LEAGUE_CHAT_URL || "",
   LEAGUE_LOG_URL: process.env.DISCORD_LEAGUE_LOG_URL || "",
@@ -26,6 +35,15 @@ function splitMessage(msg: string, size = 2000): string[] {
   }
   return chunks;
 }
+
+function isConfiguredWebhookUrl(url: string) {
+  return (
+    url.startsWith("https://discord.com/api/webhooks/") &&
+    !url.includes("your-") &&
+    !url.includes("coloque-o-webhook")
+  );
+}
+
 function stripCodeBlock(message: string) {
   const trimmed = message.trim();
   if (!trimmed.startsWith("```") || !trimmed.endsWith("```")) {
@@ -144,6 +162,42 @@ export function sendDiscordChat(message: string) {
     );
   } catch (err) {
     console.error("❌ [sendDiscordChat ERROR]:", err);
+  }
+}
+
+export function sendDiscordPublicHostAnnouncement(
+  playerCount: number,
+  roomLink: string,
+) {
+  try {
+    const webhooks = getDiscordWebhooks();
+    const webhookUrl = webhooks.PUBLIC_HOST_ANNOUNCEMENT_URL;
+
+    if (!isConfiguredWebhookUrl(webhookUrl)) {
+      console.warn(
+        "⚠️ [Discord SKIPPED] (PUBLIC_HOST_ANNOUNCEMENT): webhook not configured",
+      );
+      return;
+    }
+
+    const embed = {
+      username: "FTOH Public",
+      embeds: [
+        {
+          color: 0xff1e1e,
+          title: "🏎️🔥 O host público está enchendo!",
+          description:
+            `Tem **${playerCount} pilotos online agora** no FTOH Public.\n\n` +
+            `Entra na pista: ${roomLink}`,
+          image: { url: PUBLIC_HOST_ANNOUNCEMENT_GIF_URL },
+          footer: { text: getTimestamp() },
+        },
+      ],
+    };
+
+    safeSend(webhookUrl, embed, "PUBLIC_HOST_ANNOUNCEMENT");
+  } catch (err) {
+    console.error("❌ [sendDiscordPublicHostAnnouncement ERROR]:", err);
   }
 }
 
