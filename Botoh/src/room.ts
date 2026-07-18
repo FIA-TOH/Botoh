@@ -26,6 +26,7 @@ import { log } from "./features/discord/logger";
 import { applyFTOHPublicConfig } from "./features/commands/adminThings/handleConfigCommand";
 import { BOT_PLAYER } from "./features/utils/mockPlayer";
 import { emitPitWallRoomOpened } from "./features/integrations/pitWallSync";
+import { setPublicHostAnnouncementRoomLink } from "./features/public/publicHostAnnouncement";
 
 function getOptionalEnvValue(name: string) {
   const value = process.env[name]?.trim();
@@ -97,6 +98,7 @@ export const roomPromise: Promise<any> = HaxballJS().then((HBInit: any) => {
   room.onRoomLink = function (link: any) {
     if (!LEAGUE_MODE) {
       applyFTOHPublicConfig(room, BOT_PLAYER);
+      setPublicHostAnnouncementRoomLink(link);
     }
     emitPitWallRoomOpened({
       roomName,

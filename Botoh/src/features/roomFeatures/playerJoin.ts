@@ -37,6 +37,7 @@ import {
   restorePlayerPersistentAvatar,
 } from "../changePlayerState/handleAvatar";
 import { handlePublicPlayerJoin, handlePublicPlayerLeave } from "../public/publicAuth";
+import { trackPublicHostPlayerCount } from "../public/publicHostAnnouncement";
 import { getLastPublicRaceMapIndex, handleChangeMap, isPublicWaitingMapIndex } from "../zones/maps";
 
 const HARD_QUALY_PASSWORD = "hardqualy";
@@ -231,6 +232,7 @@ export function PlayerJoin(room: RoomObject) {
     if (!LEAGUE_MODE) {
       handlePublicPlayerJoin(room, player);
       restorePlayerPersistentAvatar(player.id, room);
+      trackPublicHostPlayerCount(room);
     }
   };
 

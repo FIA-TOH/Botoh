@@ -23,6 +23,7 @@ import { sendDiscordGeneralChatQualy } from "../discord/discord";
 import { rejoinManager } from "../changePlayerState/rejoinManager";
 import { rebalanceFirstDriverForTeam } from "../commands/login/handleLoginCommand";
 import { clearPlayerAvatarState } from "../changePlayerState/handleAvatar";
+import { trackPublicHostPlayerCount } from "../public/publicHostAnnouncement";
 
 export function PlayerLeave(room: RoomObject) {
   room.onPlayerLeave = function (player) {
@@ -71,6 +72,7 @@ export function PlayerLeave(room: RoomObject) {
       }
     } else {
       checkRunningPlayers(room);
+      trackPublicHostPlayerCount(room);
     }
 
     for (let i = 0; i < lapPositions.length; i++) {
