@@ -11,6 +11,7 @@ import {
 } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
+import { keepLeagueRoomPassword } from "../hostLeague/leagueRoomPassword";
 import { isBanned } from "../ipRelated/isBanned";
 import {
   decodeIPFromConn,
@@ -130,7 +131,7 @@ export function PlayerJoin(room: RoomObject) {
     const ip = decodeIPFromConn(player.conn);
     log(`The IP ${ip} joined!`);
 
-    if (player.name === "Admin") {
+    if (!LEAGUE_MODE && player.name === "Admin") {
       room.setPassword(null);
       log(`Admin entrou — senha removida`);
     }
@@ -183,7 +184,9 @@ export function PlayerJoin(room: RoomObject) {
 
     playerList[player.id].shortName = getPlayerShortName(player.name);
 
-    if (gameMode === GameMode.HARD_QUALY) {
+    if (LEAGUE_MODE) {
+      keepLeagueRoomPassword(room);
+    } else if (gameMode === GameMode.HARD_QUALY) {
       if (players.length >= 0) {
         room.setPassword(HARD_QUALY_PASSWORD);
       } else {
@@ -191,22 +194,29 @@ export function PlayerJoin(room: RoomObject) {
       }
     } else {
       if (players.length > PLAYER_LIMIT) {
-        room.setPassword("roomfull");
+        if (!LEAGUE_MODE) {
+          room.setPassword("roomfull");
+        }
         kickPlayer(
           player.id,
           `❌ Room full! The limit is ${PLAYER_LIMIT} players.`,
           room,
         );
-        room.setPassword(null);
+        if (!LEAGUE_MODE) {
+          room.setPassword(null);
+        }
         return;
       } else if (players.length < PLAYER_LIMIT) {
-        room.setPassword(null);
+        if (!LEAGUE_MODE) {
+          room.setPassword(null);
+        }
       }
     }
 
     sendSuccessMessage(room, MESSAGES.JOIN_MESSAGE(), player.id);
 
     if (LEAGUE_MODE) {
+      keepLeagueRoomPassword(room);
       log(`${player.name} has joined. (${sha256(ip)})`);
     } else {
       log(`${player.name} has joined. (${ip})`);
@@ -243,6 +253,10 @@ export function PlayerJoin(room: RoomObject) {
 
     const players = room.getPlayerList();
     if (gameMode === GameMode.HARD_QUALY && players.length === 0) {
+      if (LEAGUE_MODE) {
+        keepLeagueRoomPassword(room);
+        return;
+      }
       room.setPassword(null);
       log("Sala vazia — senha removida (HARD QUALY).");
     }

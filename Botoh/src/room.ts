@@ -5,7 +5,6 @@ import {
   leagueName,
   maxPlayers,
   publicName,
-  roomPassword,
   haxbulaLeagueName,
   haxbulaPublicName,
 } from "../roomconfig.json";
@@ -27,6 +26,7 @@ import { applyFTOHPublicConfig } from "./features/commands/adminThings/handleCon
 import { BOT_PLAYER } from "./features/utils/mockPlayer";
 import { emitPitWallRoomOpened } from "./features/integrations/pitWallSync";
 import { setPublicHostAnnouncementRoomLink } from "./features/public/publicHostAnnouncement";
+import { getLeagueRoomPassword } from "./features/hostLeague/leagueRoomPassword";
 
 function getOptionalEnvValue(name: string) {
   const value = process.env[name]?.trim();
@@ -58,12 +58,7 @@ const roomName = LEAGUE_MODE
     : publicName;
 const publicMaxPlayers = 20;
 const roomMaxPlayers = LEAGUE_MODE ? maxPlayers : publicMaxPlayers;
-const leagueRoomPassword =
-  getOptionalEnvValue("LEAGUE_ROOM_PASSWORD") ||
-  getOptionalEnvValue("ROOM_PASSWORD") ||
-  roomPassword ||
-  "ftoh";
-const activeRoomPassword = LEAGUE_MODE ? leagueRoomPassword : undefined;
+const activeRoomPassword = LEAGUE_MODE ? getLeagueRoomPassword() : undefined;
 
 function getGeo() {
   const geoEnv = process.env.HAXBALL_GEO;

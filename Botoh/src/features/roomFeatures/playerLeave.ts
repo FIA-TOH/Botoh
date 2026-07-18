@@ -24,6 +24,7 @@ import { rejoinManager } from "../changePlayerState/rejoinManager";
 import { rebalanceFirstDriverForTeam } from "../commands/login/handleLoginCommand";
 import { clearPlayerAvatarState } from "../changePlayerState/handleAvatar";
 import { trackPublicHostPlayerCount } from "../public/publicHostAnnouncement";
+import { keepLeagueRoomPassword } from "../hostLeague/leagueRoomPassword";
 
 export function PlayerLeave(room: RoomObject) {
   room.onPlayerLeave = function (player) {
@@ -85,7 +86,11 @@ export function PlayerLeave(room: RoomObject) {
     }
     if (gameMode === GameMode.HARD_QUALY) {
       if (room.getPlayerList().length <= 1) {
-        room.setPassword(null);
+        if (LEAGUE_MODE) {
+          keepLeagueRoomPassword(room);
+        } else {
+          room.setPassword(null);
+        }
       }
       playerObj.didHardQualy = true;
 
