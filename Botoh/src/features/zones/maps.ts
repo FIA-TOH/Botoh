@@ -100,6 +100,7 @@ import { MIAMIPUBLIC } from "../../circuits/miami/miamiPublic";
 import { MONACOSEASONTRES } from "../../circuits/monaco/monacoSeasonTres";
 import { KYALAMIPUBLIC } from "../../circuits/kyalami/kyalamiPublic";
 import { INTERLAGOSPUBLIC } from "../../circuits/interlagos/interlagosPublic";
+import { BARCELONASEASONTRES } from "../../circuits/barcelona/barcelonaSeasonTres";
 
 
 // import {DAYTONA} from "../circuits/daytona/daytona";
@@ -119,6 +120,7 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
     SHANGHAISEASONTRES,
     KYALAMISEASONTRES,
     MONACOSEASONTRES,
+    BARCELONASEASONTRES,
       IMOLA,
       SUZUKA,
       MELBOURNE,
@@ -223,6 +225,7 @@ export const CIRCUIT_FILE_NAMES: string[] = LEAGUE_MODE
       "shanghaiSeasonTres.hbs",
       "kyalamiSeasonTres.hbs",
       "monacoSeasonTres.hbs",
+      "barcelonaSeasonTres.hbs",
       "imola.hbs",
       "suzuka.hbs",
       "melbourne.hbs",
