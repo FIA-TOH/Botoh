@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { queryOne, query } from '../config/database';
 import config from '../config/environment';
+import systemSettingsService from './systemSettingsService';
 
 export interface User {
   id: string;
@@ -78,6 +79,25 @@ class AuthService {
       '28P01',
       '57P01',
     ].includes(code ?? '');
+  }
+
+  private async withEffectiveFacilityLevels<T extends {
+    pitLevel: number | null;
+    weatherLevel: number | null;
+    teamMemberships: Array<{ pitLevel: number | null; weatherLevel: number | null }>;
+  }>(user: T): Promise<T> {
+    const financialSystemEnabled = await systemSettingsService.isFinancialSystemEnabled();
+
+    return {
+      ...user,
+      pitLevel: systemSettingsService.getEffectiveFacilityLevel(user.pitLevel, financialSystemEnabled),
+      weatherLevel: systemSettingsService.getEffectiveFacilityLevel(user.weatherLevel, financialSystemEnabled),
+      teamMemberships: (user.teamMemberships ?? []).map((membership) => ({
+        ...membership,
+        pitLevel: systemSettingsService.getEffectiveFacilityLevel(membership.pitLevel, financialSystemEnabled),
+        weatherLevel: systemSettingsService.getEffectiveFacilityLevel(membership.weatherLevel, financialSystemEnabled),
+      })),
+    };
   }
 
   private selectTeamForLogin(
@@ -372,7 +392,7 @@ class AuthService {
         [username]
       );
 
-      return user;
+      return user ? await this.withEffectiveFacilityLevels(user) : null;
     } catch (error) {
       console.error('Error finding user:', error);
       if (throwOnError) {
@@ -524,7 +544,7 @@ class AuthService {
 
       // Remove password hash before returning
       const { password_hash, ...userWithoutPassword } = user;
-      return userWithoutPassword;
+      return this.withEffectiveFacilityLevels(userWithoutPassword);
     } catch (error) {
       console.error('Error finding user by ID:', error);
       return null;

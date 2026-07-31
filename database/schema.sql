@@ -8,6 +8,17 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TYPE USER_ROLE AS ENUM ('admin', 'manager', 'driver');
 CREATE TYPE UPGRADE_CATEGORY AS ENUM ('engine', 'aerodynamics', 'chassis', 'electronics');
 
+-- System Settings
+CREATE TABLE system_settings (
+    key VARCHAR(120) PRIMARY KEY,
+    value TEXT NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO system_settings (key, value)
+VALUES ('financial_system_enabled', 'true')
+ON CONFLICT (key) DO NOTHING;
+
 -- Teams Table
 CREATE TABLE teams (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

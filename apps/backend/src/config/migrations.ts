@@ -6,6 +6,20 @@ class MigrationService {
     await query('CREATE EXTENSION IF NOT EXISTS pgcrypto');
 
     await query(`
+      CREATE TABLE IF NOT EXISTS system_settings (
+        key VARCHAR(120) PRIMARY KEY,
+        value TEXT NOT NULL,
+        updated_at TIMESTAMP DEFAULT NOW()
+      )
+    `);
+
+    await query(`
+      INSERT INTO system_settings (key, value)
+      VALUES ('financial_system_enabled', 'true')
+      ON CONFLICT (key) DO NOTHING
+    `);
+
+    await query(`
       CREATE TABLE IF NOT EXISTS teams (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         name VARCHAR(100) NOT NULL UNIQUE,

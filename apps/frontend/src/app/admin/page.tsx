@@ -149,6 +149,10 @@ interface RaceProgressAlert {
   createdAt: string;
 }
 
+interface FinancialSystemStatus {
+  enabled: boolean;
+}
+
 type TeamMembershipRole = 'team_principal' | 'team_assistant' | 'driver' | 'engineer';
 type ScuderiaFilter = 'formula_1' | 'formula_2' | 'starter_available' | 'reserve_available';
 
@@ -418,6 +422,8 @@ export default function AdminPage() {
   const [circuitsSearch, setCircuitsSearch] = useState('');
   const [raceProgressAlerts, setRaceProgressAlerts] = useState<RaceProgressAlert[]>([]);
   const [raceProgressLoading, setRaceProgressLoading] = useState(false);
+  const [financialSystem, setFinancialSystem] = useState<FinancialSystemStatus | null>(null);
+  const [financialSystemLoading, setFinancialSystemLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(false);
 
   const [userModalOpen, setUserModalOpen] = useState(false);
@@ -606,12 +612,13 @@ export default function AdminPage() {
     setLoadingData(true);
 
     try {
-      const [usersResponse, scuderiasResponse, sponsorsResponse, circuitsResponse, raceAlertsResponse] = await Promise.all([
+      const [usersResponse, scuderiasResponse, sponsorsResponse, circuitsResponse, raceAlertsResponse, financialSystemResponse] = await Promise.all([
         fetch(apiUrl('/api/admin/users'), { headers: getAuthHeaders() }),
         fetch(apiUrl('/api/admin/scuderias'), { headers: getAuthHeaders() }),
         fetch(apiUrl('/api/admin/sponsors'), { headers: getAuthHeaders() }),
         fetch(apiUrl('/api/admin/circuits'), { headers: getAuthHeaders() }),
         fetch(apiUrl('/api/admin/race-progress/alerts'), { headers: getAuthHeaders(), cache: 'no-store' }),
+        fetch(apiUrl('/api/admin/financial-system'), { headers: getAuthHeaders(), cache: 'no-store' }),
       ]);
 
       const usersData = await usersResponse.json();
@@ -619,6 +626,7 @@ export default function AdminPage() {
       const sponsorsData = await sponsorsResponse.json();
       const circuitsData = await circuitsResponse.json();
       const raceAlertsData = await raceAlertsResponse.json();
+      const financialSystemData = await financialSystemResponse.json();
 
       if (!usersData.success) throw new Error(usersData.message || t.admin.loadUsersFailed);
       if (!scuderiasData.success) throw new Error(scuderiasData.message || t.admin.loadScuderiasFailed);
@@ -628,6 +636,7 @@ export default function AdminPage() {
       if (sponsorsData.success) setSponsorCatalog(sponsorsData.sponsors);
       if (circuitsData.success) setCircuits(circuitsData.circuits);
       if (raceAlertsData.success) setRaceProgressAlerts(raceAlertsData.alerts);
+      if (financialSystemData.success) setFinancialSystem(financialSystemData.financialSystem);
     } catch (err) {
       showSnackbar(err instanceof Error ? err.message : t.admin.loadDataFailed, 'error');
     } finally {
@@ -918,6 +927,29 @@ export default function AdminPage() {
       showSnackbar(err instanceof Error ? err.message : t.admin.actionFailed, 'error');
     } finally {
       setRaceProgressLoading(false);
+    }
+  }
+
+  async function toggleFinancialSystem() {
+    if (!financialSystem) return;
+    setFinancialSystemLoading(true);
+
+    try {
+      const response = await fetch(apiUrl('/api/admin/financial-system'), {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ enabled: !financialSystem.enabled }),
+      });
+      const data = await response.json();
+      if (!data.success) throw new Error(data.message || t.admin.actionFailed);
+
+      setFinancialSystem(data.financialSystem);
+      showSnackbar(t.admin.financialSystemUpdated, 'success');
+      if (managingScuderia) await refreshManagedGarage();
+    } catch (err) {
+      showSnackbar(err instanceof Error ? err.message : t.admin.actionFailed, 'error');
+    } finally {
+      setFinancialSystemLoading(false);
     }
   }
   async function clearRaceProgressAlerts() {
@@ -1617,7 +1649,27 @@ export default function AdminPage() {
               >
                 {t.admin.rollbackRace}
               </button>
+              <button
+                type="button"
+                disabled={!financialSystem || financialSystemLoading}
+                onClick={toggleFinancialSystem}
+                className={`rounded-lg px-4 py-2 font-semibold disabled:cursor-not-allowed disabled:bg-gray-600 ${
+                  financialSystem?.enabled ? 'bg-sky-700 hover:bg-sky-600' : 'bg-rose-700 hover:bg-rose-600'
+                }`}
+                title={t.admin.financialSystemDescription}
+              >
+                {financialSystem?.enabled
+                  ? t.admin.disableFinancialSystem
+                  : t.admin.enableFinancialSystem}
+              </button>
             </div>
+            <p className="mt-2 text-sm text-gray-400">
+              {!financialSystem
+                ? t.admin.financialSystemLoading
+                : financialSystem.enabled
+                  ? t.admin.financialSystemEnabled
+                  : t.admin.financialSystemDisabled}
+            </p>
           </div>
 
           <div className="text-right">

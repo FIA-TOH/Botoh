@@ -17,6 +17,7 @@ import {
   SponsorContractCategory,
 } from '../config/sponsorMarket';
 import { getFacilityCostPerRace } from '../config/facilityEconomy';
+import systemSettingsService from './systemSettingsService';
 
 export type TeamMembershipRole = 'team_principal' | 'team_assistant' | 'driver' | 'engineer';
 
@@ -213,6 +214,16 @@ export interface AdminDriverInput {
 }
 
 class AdminService {
+  async getFinancialSystemStatus() {
+    return {
+      enabled: await systemSettingsService.isFinancialSystemEnabled(),
+    };
+  }
+
+  async updateFinancialSystemStatus(enabled: boolean) {
+    return systemSettingsService.setFinancialSystemEnabled(enabled);
+  }
+
   async listUsers() {
     const result = await query(`
       SELECT
@@ -2172,6 +2183,7 @@ class AdminService {
   async progressRace(direction: RaceProgressDirection) {
     const step = direction === 'advance' ? -1 : 1;
     const financeMultiplier = direction === 'advance' ? 1 : -1;
+    const financialSystemEnabled = await systemSettingsService.isFinancialSystemEnabled();
 
     return transaction(async (client) => {
       const teams = await client.query(
@@ -2192,7 +2204,7 @@ class AdminService {
         const climateCost = Number(team.climate_cost_per_race);
         const pitCrewCost = Number(team.pit_crew_cost_per_race);
         const salaryCost = Number(team.salary_cost_per_race);
-        const net = sponsorIncome - climateCost - pitCrewCost - salaryCost;
+        const net = financialSystemEnabled ? sponsorIncome - climateCost - pitCrewCost - salaryCost : 0;
         const cashDelta = net * financeMultiplier;
 
         await client.query(

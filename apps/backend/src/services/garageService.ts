@@ -14,6 +14,7 @@ import {
   getFacilitySellValue,
   getFacilityUpgradeCost,
 } from '../config/facilityEconomy';
+import systemSettingsService from './systemSettingsService';
 import {
   calculateDriverMarketScore,
   getMinimumSalaryFromMarketScore,
@@ -86,6 +87,7 @@ export interface TeamGarage {
   sponsorIncomePerRace: number;
   climateMonitoringLevel: number;
   pitCrewLevel: number;
+  financialSystemEnabled: boolean;
   carName: string;
   momentoComercial: number;
   prestigio: number;
@@ -260,6 +262,16 @@ class GarageService {
 
     if (!team) return null;
 
+    const financialSystemEnabled = await systemSettingsService.isFinancialSystemEnabled();
+    const effectiveClimateLevel = systemSettingsService.getEffectiveFacilityLevel(
+      team.climateMonitoringLevel,
+      financialSystemEnabled,
+    );
+    const effectivePitCrewLevel = systemSettingsService.getEffectiveFacilityLevel(
+      team.pitCrewLevel,
+      financialSystemEnabled,
+    );
+
     const [drivers, sponsors, financialHistory] = await Promise.all([
       query(
         `SELECT
@@ -371,6 +383,11 @@ class GarageService {
 
     return {
       ...team,
+      climateMonitoringLevel: effectiveClimateLevel,
+      pitCrewLevel: effectivePitCrewLevel,
+      climateCostPerRace: financialSystemEnabled ? Number(team.climateCostPerRace) : 0,
+      pitCrewCostPerRace: financialSystemEnabled ? Number(team.pitCrewCostPerRace) : 0,
+      financialSystemEnabled,
       drivers: drivers.rows.map((driver: any) => {
         if (!driver.userId) return { ...driver, minimumSalary: 0 };
 
@@ -402,6 +419,10 @@ class GarageService {
     facility: GarageFacility,
     action: 'upgrade' | 'sell',
   ) {
+    if (!(await systemSettingsService.isFinancialSystemEnabled())) {
+      return { success: false, message: 'Financial system is disabled' };
+    }
+
     const levelColumn = facility === 'climate' ? 'climate_monitoring_level' : 'pit_crew_level';
     const costColumn = facility === 'climate' ? 'climate_cost_per_race' : 'pit_crew_cost_per_race';
     const label = facility === 'climate' ? 'Climate monitoring' : 'Pit crew';
@@ -1481,6 +1502,8 @@ class GarageService {
   }
 
   async recordStandardRaceFinancialEntries(teamId: string, raceId?: string): Promise<void> {
+    if (!(await systemSettingsService.isFinancialSystemEnabled())) return;
+
     const team = await queryOne(
       `SELECT
         climate_cost_per_race,
