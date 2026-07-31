@@ -397,6 +397,12 @@ const raceProgressValidation = [
     .isIn(['advance', 'rollback'])
     .withMessage('Race progress direction is invalid'),
 ];
+const financialSystemValidation = [
+  body('enabled')
+    .isBoolean()
+    .toBoolean()
+    .withMessage('Financial system status is invalid'),
+];
 
 function handleValidation(req: AuthRequest, res: Response) {
   const errors = validationResult(req);
@@ -411,6 +417,38 @@ function handleValidation(req: AuthRequest, res: Response) {
 }
 
 router.use(authMiddleware, requireAdmin);
+
+router.get('/financial-system', async (req: AuthRequest, res: Response) => {
+  try {
+    const financialSystem = await adminService.getFinancialSystemStatus();
+    return res.json({ success: true, financialSystem });
+  } catch (error) {
+    console.error('Admin financial system status error:', error);
+    return res.status(500).json({
+      success: false,
+      message: translateMessage('Failed to load financial system status', getRequestLanguage(req)),
+    });
+  }
+});
+
+router.put('/financial-system', financialSystemValidation, async (req: AuthRequest, res: Response) => {
+  try {
+    if (handleValidation(req, res)) return;
+
+    const financialSystem = await adminService.updateFinancialSystemStatus(Boolean(req.body.enabled));
+    return res.json({
+      success: true,
+      financialSystem,
+      message: translateMessage('Financial system updated successfully', getRequestLanguage(req)),
+    });
+  } catch (error) {
+    console.error('Admin financial system update error:', error);
+    return res.status(500).json({
+      success: false,
+      message: translateMessage('Failed to update financial system status', getRequestLanguage(req)),
+    });
+  }
+});
 
 router.get('/users', async (req: AuthRequest, res: Response) => {
   try {

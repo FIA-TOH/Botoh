@@ -107,7 +107,10 @@ router.post('/teams/:teamId/facility', authMiddleware, [
       req.body.facility,
       req.body.action,
     );
-    return res.status(result.success ? 200 : 400).json(result);
+    return res.status(result.success ? 200 : 400).json({
+      ...result,
+      message: translateMessage(result.message, getRequestLanguage(req)),
+    });
   } catch (error) {
     console.error('Update facility error:', error);
     return res.status(500).json({
