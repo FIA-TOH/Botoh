@@ -44,7 +44,7 @@ export const constants = {
   TYRES_BLOWED: 0.0007, // Grip reduction when tire is blown (increased for testing)
   // ===============================
   SANDBAG_PENALTY: 0.002,
-  TOTAL_DAMAGE_PENALTY: 0.002, // Penalty for 100 damage
+  TOTAL_DAMAGE_PENALTY: 0.001, // Penalty for 100 damage
   DAMAGE_PENALTY_EXPONENT: 2, // Higher values make low damage less punishing while keeping 100 damage unchanged
 };
 
