@@ -22,10 +22,12 @@ export function getPitAndVscGravity(
   if (playerInfo.inPitlane) {
     limiter = ACTUAL_CIRCUIT.info.pitSpeed ?? constants.DEFAULT_PIT_SPEED;
   } else if (vsc && !isLapped) {
-    limiter =
+    const defaultNeutralizedSpeed =
       gameMode === GameMode.INDY
         ? constants.SAFETY_CAR_INDY_SPEED
         : constants.SAFETY_CAR_SPEED;
+
+    limiter = ACTUAL_CIRCUIT.info.pitSpeed ?? defaultNeutralizedSpeed;
   }
 
   const { xspeed: x, yspeed: y } = disc;

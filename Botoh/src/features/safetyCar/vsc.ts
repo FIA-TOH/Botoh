@@ -6,6 +6,7 @@ export let vscExtended = false;
 export let vscTriggeredByPlayer: number | undefined;
 import { clearPlayerAfkActivity, isPlayerMovingAtComeBackSpeed } from "../afk/afk";
 import { Teams } from "../changeGameState/teams";
+import { getEffectiveLeagueScuderiaId, playerList } from "../changePlayerState/playerList";
 import {
   RaceControlState,
   setNeutralizationState,
@@ -42,6 +43,21 @@ export function clearVSCTriggerPlayer(playerId: number) {
   if (vscTriggeredByPlayer === playerId) {
     vscTriggeredByPlayer = undefined;
   }
+}
+
+export function isPitStopBlockedByVSCForPlayer(playerId: number): boolean {
+  if (!vsc || vscTriggeredByPlayer === undefined) return false;
+
+  const triggeringScuderiaId = getEffectiveLeagueScuderiaId(
+    playerList[vscTriggeredByPlayer],
+  );
+  const playerScuderiaId = getEffectiveLeagueScuderiaId(playerList[playerId]);
+
+  return (
+    triggeringScuderiaId !== null &&
+    playerScuderiaId !== null &&
+    playerScuderiaId === triggeringScuderiaId
+  );
 }
 
 export function checkVSCDuration(room: any) {

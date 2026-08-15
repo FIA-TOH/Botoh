@@ -3,7 +3,7 @@ import { playerList } from "../../changePlayerState/playerList";
 import { isPitNewSystemEnabled } from "./newPitManager";
 import { handlePitStop } from "../handlePitStop";
 import { handleAvatar, restoreTyreOrCar, Situacions } from "../../changePlayerState/handleAvatar";
-import { PitResult } from "../pitStopFunctions";
+import { MAX_REACTION_PIT_TIME, PitResult } from "../pitStopFunctions";
 import { sendAlertMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
 import { resetPitState } from "./newPitManager";
@@ -76,14 +76,14 @@ export function updateNewPitSystemForPlayer(
 
     
     const timeoutPitResult: PitResult = {
-      totalTime: 15.0,
+      totalTime: MAX_REACTION_PIT_TIME,
       errorType: "heavy",
       tyres: [Math.floor(Math.random() * 4)],
-      perTyreTimes: [3.5, 4.0, 3.8, 3.7]
+      perTyreTimes: [1.5, 1.5, 1.5, 1.5]
     };
     
     playerList[p.id].pitFailures = timeoutPitResult;
-    playerList[p.id].pitCountdown = 15.0;
+    playerList[p.id].pitCountdown = MAX_REACTION_PIT_TIME;
     
     playerInfo.newPitState.pKeyPressed = true;
     playerInfo.newPitState.isWaitingForPit = false;

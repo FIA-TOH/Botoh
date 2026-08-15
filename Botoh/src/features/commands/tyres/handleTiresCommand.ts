@@ -11,6 +11,7 @@ import { Tires, tyresActivated } from "../../tires&pits/tires";
 import { isPitNewSystemEnabled, startNewPitSequence } from "../../tires&pits/newPitSystem/newPitManager";
 import { isPlayerRepairing } from "../../damage/repairSystem";
 import { getPreparedPitTire, playerList } from "../../changePlayerState/playerList";
+import { isPitStopBlockedByVSCForPlayer } from "../../safetyCar/vsc";
 
 export function handleTiresCommand(
   byPlayer: PlayerObject,
@@ -75,6 +76,11 @@ export function handleTiresCommand(
 
     if (gameMode !== GameMode.TRAINING && tiresKey === Tires.TRAIN) {
       sendErrorMessage(room, MESSAGES.INVALID_TIRES(), byPlayer.id);
+      return;
+    }
+
+    if (isPitStopBlockedByVSCForPlayer(byPlayer.id)) {
+      sendErrorMessage(room, MESSAGES.VSC_TEAM_PIT_STOP_BLOCKED(), byPlayer.id);
       return;
     }
 

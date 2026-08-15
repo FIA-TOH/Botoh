@@ -3,7 +3,8 @@ import { getLeagueScuderia } from "../../scuderias/scuderias";
 
 const DEFAULT_REACTION_TIME_MULTIPLIER = 5;
 const BASE_LIGHT_ERROR_TIME = 3;
-const BASE_HEAVY_ERROR_TIME = 6.1;
+const BASE_HEAVY_ERROR_TIME = 6;
+const MAX_HEAVY_ERROR_TIME = 6;
 
 export const PIT_REACTION_TIME_MULTIPLIER_BY_LEVEL = {
   0: 9,
@@ -43,7 +44,7 @@ export function getPitErrorTimeThresholds(playerId: number): {
 
   return {
     light: BASE_LIGHT_ERROR_TIME * levelScale,
-    heavy: BASE_HEAVY_ERROR_TIME * levelScale,
+    heavy: Math.min(BASE_HEAVY_ERROR_TIME * levelScale, MAX_HEAVY_ERROR_TIME),
   };
 }
 

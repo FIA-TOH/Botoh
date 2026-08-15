@@ -2,13 +2,24 @@ import { playerList } from "../changePlayerState/playerList";
 import { randomInRange } from "../utils";
 import {
   getPitErrorTimeThresholds,
-  getPitReactionTimeMultiplier,
+  getPitReactionTimeScale,
 } from "./newPitSystem/pitReactionMultiplier";
 
 type PitTimeEntry = {
   time: number;
   prob: number;
 };
+
+export const MIN_REACTION_PIT_TIME = 2.0;
+export const MAX_REACTION_PIT_TIME = 6.0;
+
+const PIT_REACTION_TIME_CURVE: PitTimeEntry[] = [
+  { time: 0.2, prob: 2.0 },
+  { time: 0.5, prob: 3.0 },
+  { time: 0.8, prob: 4.0 },
+  { time: 1.0, prob: 5.0 },
+  { time: 2.0, prob: MAX_REACTION_PIT_TIME },
+];
 
 export type PitResult = {
   totalTime: number;
@@ -46,6 +57,31 @@ function buildPitErrorTyres(errorType: PitResult["errorType"]): number[] {
   return tyres;
 }
 
+function calculateReactionPitTime(playerId: number, reactionTime: number): number {
+  const reactionScale = getPitReactionTimeScale(playerId);
+  const adjustedReactionTime = reactionTime * reactionScale;
+
+  if (adjustedReactionTime <= PIT_REACTION_TIME_CURVE[0].time) {
+    return MIN_REACTION_PIT_TIME;
+  }
+
+  for (let i = 0; i < PIT_REACTION_TIME_CURVE.length - 1; i++) {
+    const start = PIT_REACTION_TIME_CURVE[i];
+    const end = PIT_REACTION_TIME_CURVE[i + 1];
+
+    if (adjustedReactionTime <= end.time) {
+      const ratio = (adjustedReactionTime - start.time) / (end.time - start.time);
+      const pitTime = start.prob + (end.prob - start.prob) * ratio;
+      return Math.max(
+        MIN_REACTION_PIT_TIME,
+        Math.min(MAX_REACTION_PIT_TIME, Math.round(pitTime * 100) / 100)
+      );
+    }
+  }
+
+  return MAX_REACTION_PIT_TIME;
+}
+
 const PIT_TABLE: PitTimeEntry[] = [
   { time: 1.6, prob: 0.5 },
   { time: 1.8, prob: 2 },
@@ -66,10 +102,7 @@ const PIT_TABLE: PitTimeEntry[] = [
 export function generatePitCountdown(playerId?: number): number {
   if (playerId && playerList[playerId]?.newPitState?.isPitNewEnabled && playerList[playerId].newPitState.reactionTime) {
     const reactionTime = playerList[playerId].newPitState.reactionTime;
-    const emojiDelayTime = playerList[playerId]?.newPitState?.emojiDelayTime || 0;
-    const reactionTimeMultiplier = getPitReactionTimeMultiplier(playerId);
-    const pitTime = reactionTime * reactionTimeMultiplier + 2 - emojiDelayTime;
-    return Math.max(2.0, Math.min(15.0, Math.round(pitTime * 100) / 100));
+    return calculateReactionPitTime(playerId, reactionTime);
   }
 
   const totalProb = PIT_TABLE.reduce((acc, entry) => acc + entry.prob, 0);
@@ -154,9 +187,7 @@ export function generatePitResultFromReaction(playerId: number): PitResult {
     return generatePitResult({ id: playerId } as PlayerObject);
   }
 
-  const emojiDelayTime = playerList[playerId]?.newPitState?.emojiDelayTime || 0;
-  const reactionTimeMultiplier = getPitReactionTimeMultiplier(playerId);
-  const totalTime = Math.max(2.0, Math.min(15.0, Math.round((reactionTime * reactionTimeMultiplier + 2 - emojiDelayTime) * 100) / 100));
+  const totalTime = calculateReactionPitTime(playerId, reactionTime);
   playerList[playerId].pitCountdown = totalTime;
 
   const errorType = getPitErrorType(totalTime, playerId);

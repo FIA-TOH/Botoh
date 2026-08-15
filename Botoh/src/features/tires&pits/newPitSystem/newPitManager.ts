@@ -2,7 +2,9 @@ import { handleAvatar, Situacions } from "../../changePlayerState/handleAvatar";
 import { playerList } from "../../changePlayerState/playerList";
 import { Tires } from "../tires";
 import { isXKeyPressed } from "../../utils/dampingValues";
-import { generatePitResultFromReaction, PitResult } from "../pitStopFunctions";
+import { generatePitResultFromReaction, MAX_REACTION_PIT_TIME, PitResult } from "../pitStopFunctions";
+import { sendAlertMessage } from "../../chat/chat";
+import { MESSAGES } from "../../chat/messages";
 
 export let isPitNewEnabled = false;
 
@@ -58,14 +60,16 @@ export function handlePitKeyPress(playerId: number, properties: DiscPropertiesOb
     if (!playerInfo.newPitState.pitEmojiShowTime) {
       
       const penaltyPitResult: PitResult = {
-        totalTime: 7.0,
-        errorType: "light",
+        totalTime: MAX_REACTION_PIT_TIME,
+        errorType: "heavy",
         tyres: [Math.floor(Math.random() * 4)],
-        perTyreTimes: [1.4, 1.8, 1.7, 2.1]
+        perTyreTimes: [1.5, 1.5, 1.5, 1.5]
       };
       
       playerList[playerId].pitFailures = penaltyPitResult;
-      playerList[playerId].pitCountdown = 7.0;
+      playerList[playerId].pitCountdown = MAX_REACTION_PIT_TIME;
+
+      sendAlertMessage(room, MESSAGES.PIT_REACTION_TOO_EARLY(), playerId);
       
       playerInfo.newPitState.pKeyPressed = true;
       playerInfo.newPitState.isWaitingForPit = false;

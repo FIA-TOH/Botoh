@@ -97,6 +97,12 @@ export function calculateTotalDrift(tireType: TireType, sector: number, currentT
       wetness = currentWeather.wetS3;
       break;
   }
+
+  if (tireType === TireType.DRY) {
+    wetness = Math.min(wetness, 30);
+  } else if (tireType === TireType.INTER) {
+    wetness = Math.min(wetness, 80);
+  }
   
   if (!shouldCalculateDrift(wetness)) {
     return 0;

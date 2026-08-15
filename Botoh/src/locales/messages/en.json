@@ -68,6 +68,8 @@
   "NOW_SHOWING_AVATAR": "Now showing avatar",
   "NOT_RUNNER": "You are not a runner",
   "NOT_IN_BOXES": "You are not in the boxes",
+  "VSC_TEAM_PIT_STOP_BLOCKED": "⛔ Your team caused this VSC and cannot pit while it is active.",
+  "PIT_REACTION_TOO_EARLY": "⚠️ You reacted before the lightning appeared. Pit stop started with the maximum penalty.",
   "NOT_IMPLEMENTED_TIRES": "Tires are not implemented yet",
   "INVALID_TIRES": "Invalid tires. Correct usage is !tires <s|m|h>",
   "NO_PREPARED_PIT_TYRE": "⚠️ No tyre is prepared for this stop. Use !tyres <s|m|h|i|w|t>.",
