@@ -81,6 +81,19 @@ function getPlayerSectorWet(playerId: number): number {
   }
 }
 
+function capWetForTyre(tyres: Tires, wetPercent: number): number {
+  switch (tyres) {
+    case Tires.SOFT:
+    case Tires.MEDIUM:
+    case Tires.HARD:
+      return Math.min(wetPercent, 30);
+    case Tires.INTER:
+      return Math.min(wetPercent, 80);
+    default:
+      return wetPercent;
+  }
+}
+
 function calculateInterGripForWet(wetPercent: number): number {
   if (wetPercent <= 0) {
     return increaseGripPenalty(
@@ -158,22 +171,22 @@ export function calculateGripForDryConditions(
   if (laps >= 15) {
     switch (tyres) {
       case "SOFT": {
-        const sectorWet = getPlayerSectorWet(playerId);
+        const sectorWet = capWetForTyre(tyres, getPlayerSectorWet(playerId));
         const gripLoss = calculateDryTyreGripLoss(sectorWet);
         return calculateGripMultiplier(wear, norm, GRIP_BASE_VALUES.SOFT_LATE_LAPS_INITIAL - gripLoss, GRIP_BASE_VALUES.SOFT_LATE_LAPS_FINAL);
       }
       case "MEDIUM": {
-        const sectorWet = getPlayerSectorWet(playerId);
+        const sectorWet = capWetForTyre(tyres, getPlayerSectorWet(playerId));
         const gripLoss = calculateDryTyreGripLoss(sectorWet);
         return calculateGripMultiplier(wear, norm, GRIP_BASE_VALUES.MEDIUM_LATE_LAPS_INITIAL - gripLoss, GRIP_BASE_VALUES.MEDIUM_LATE_LAPS_FINAL);
       }
       case "HARD": {
-        const sectorWet = getPlayerSectorWet(playerId);
+        const sectorWet = capWetForTyre(tyres, getPlayerSectorWet(playerId));
         const gripLoss = calculateDryTyreGripLoss(sectorWet);
         return calculateGripMultiplier(wear, norm, GRIP_BASE_VALUES.HARD_LATE_LAPS_INITIAL - gripLoss, GRIP_BASE_VALUES.HARD_LATE_LAPS_FINAL);
       }
       case "INTER": {
-        const sectorWet = getPlayerSectorWet(playerId);
+        const sectorWet = capWetForTyre(tyres, getPlayerSectorWet(playerId));
         const dynamicGrip = calculateInterGripForWet(sectorWet);
         return calculateGripMultiplier(wear, norm, dynamicGrip, GRIP_BASE_VALUES.INTER_LATE_LAPS_FINAL);
       }
@@ -190,22 +203,22 @@ export function calculateGripForDryConditions(
   } else {
     switch (tyres) {
       case "SOFT": {
-        const sectorWet = getPlayerSectorWet(playerId);
+        const sectorWet = capWetForTyre(tyres, getPlayerSectorWet(playerId));
         const gripLoss = calculateDryTyreGripLoss(sectorWet);
         return calculateGripMultiplier(wear, norm, GRIP_BASE_VALUES.SOFT_EARLY_LAPS_INITIAL - gripLoss, GRIP_BASE_VALUES.SOFT_EARLY_LAPS_FINAL);
       }
       case "MEDIUM": {
-        const sectorWet = getPlayerSectorWet(playerId);
+        const sectorWet = capWetForTyre(tyres, getPlayerSectorWet(playerId));
         const gripLoss = calculateDryTyreGripLoss(sectorWet);
         return calculateGripMultiplier(wear, norm, GRIP_BASE_VALUES.MEDIUM_EARLY_LAPS_INITIAL - gripLoss, GRIP_BASE_VALUES.MEDIUM_EARLY_LAPS_FINAL);
       }
       case "HARD": {
-        const sectorWet = getPlayerSectorWet(playerId);
+        const sectorWet = capWetForTyre(tyres, getPlayerSectorWet(playerId));
         const gripLoss = calculateDryTyreGripLoss(sectorWet);
         return calculateGripMultiplier(wear, norm, GRIP_BASE_VALUES.HARD_EARLY_LAPS_INITIAL - gripLoss, GRIP_BASE_VALUES.HARD_EARLY_LAPS_FINAL);
       }
       case "INTER": {
-        const sectorWet = getPlayerSectorWet(playerId);
+        const sectorWet = capWetForTyre(tyres, getPlayerSectorWet(playerId));
         const dynamicGrip = calculateInterGripForWet(sectorWet);
         return calculateGripMultiplier(wear, norm, dynamicGrip, GRIP_BASE_VALUES.INTER_EARLY_LAPS_FINAL);
       }

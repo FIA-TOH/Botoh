@@ -38,6 +38,12 @@ export function calculateDriftPenalty(
       wetness = currentWeather.wetS3;
       break;
   }
+
+  if (tyres === Tires.SOFT || tyres === Tires.MEDIUM || tyres === Tires.HARD) {
+    wetness = Math.min(wetness, 30);
+  } else if (tyres === Tires.INTER) {
+    wetness = Math.min(wetness, 80);
+  }
   
   if (wetness <= 0) return 0;
   
