@@ -3,6 +3,8 @@ import { playerList } from "../../changePlayerState/playerList";
 import { Tires } from "../tires";
 import { isXKeyPressed } from "../../utils/dampingValues";
 import { generatePitResultFromReaction, MAX_REACTION_PIT_TIME, PitResult } from "../pitStopFunctions";
+import { sendAlertMessage } from "../../chat/chat";
+import { MESSAGES } from "../../chat/messages";
 
 export let isPitNewEnabled = false;
 
@@ -66,6 +68,8 @@ export function handlePitKeyPress(playerId: number, properties: DiscPropertiesOb
       
       playerList[playerId].pitFailures = penaltyPitResult;
       playerList[playerId].pitCountdown = MAX_REACTION_PIT_TIME;
+
+      sendAlertMessage(room, MESSAGES.PIT_REACTION_TOO_EARLY(), playerId);
       
       playerInfo.newPitState.pKeyPressed = true;
       playerInfo.newPitState.isWaitingForPit = false;
