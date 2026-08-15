@@ -66,6 +66,7 @@
   "NOW_SHOWING_AVATAR": "Agora exibindo avatar",
   "NOT_RUNNER": "Você não é um piloto",
   "NOT_IN_BOXES": "Você não está nos boxes",
+  "VSC_TEAM_PIT_STOP_BLOCKED": "⛔ Sua equipe causou este VSC e não pode fazer pit stop enquanto ele estiver ativo.",
   "NOT_IMPLEMENTED_TIRES": "Pneus ainda não implementados",
   "INVALID_TIRES": "Pneus inválidos. Uso correto é !tires <s|m|h>",
   "NO_PREPARED_PIT_TYRE": "⚠️ Nenhum pneu preparado para esta parada. Use !tyres <s|m|h|i|w|t>.",

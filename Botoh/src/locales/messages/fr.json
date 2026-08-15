@@ -68,6 +68,7 @@
   "NOW_SHOWING_AVATAR": "Votre avatar a bien été réinitialisé",
   "NOT_RUNNER": "Vous ne participez pas à la course",
   "NOT_IN_BOXES": "Vous n'êtes pas aux standes",
+  "VSC_TEAM_PIT_STOP_BLOCKED": "⛔ Votre équipe a causé cette VSC et ne peut pas s'arrêter aux stands tant qu'elle est active.",
   "NOT_IMPLEMENTED_TIRES": "Le système de pneus n'a pas encore été implémenté",
   "INVALID_TIRES": "Pneus invalides. L'utilisation correcte est !pneus <s|m|h>",
   "NO_PREPARED_PIT_TYRE": "⚠️ Aucun pneu n'est préparé pour cet arrêt. Utilisez !tyres <s|m|h|i|w|t>.",

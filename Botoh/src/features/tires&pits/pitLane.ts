@@ -10,6 +10,7 @@ import { generatePitResult } from "./pitStopFunctions";
 import { Teams } from "../changeGameState/teams";
 import { isPitNewSystemEnabled } from "./newPitSystem/newPitManager";
 import { Tires, tyresActivated } from "./tires";
+import { isPitStopBlockedByVSCForPlayer } from "../safetyCar/vsc";
 
 const PREPARED_TYRE_LABELS: Record<Tires, string> = {
   [Tires.SOFT]: "Soft",
@@ -57,8 +58,11 @@ export function handlePitlane(
       playerList[p.id].lastPitlaneLap = playerList[p.id].currentLap;
       playerList[p.id].inPitlane = true;
       applyPlayerCollision(room, p.id);
+      const isPitBlockedByVSC = isPitStopBlockedByVSCForPlayer(p.id);
       const preparedTyre = getPreparedPitTire(p.id, p.name);
-      if (preparedTyre) {
+      if (isPitBlockedByVSC) {
+        sendErrorMessage(room, MESSAGES.VSC_TEAM_PIT_STOP_BLOCKED(), p.id);
+      } else if (preparedTyre) {
         sendRadioMessage(
           room,
           MESSAGES.PREPARED_PIT_TYRE_ON_ENTRY(PREPARED_TYRE_LABELS[preparedTyre]),

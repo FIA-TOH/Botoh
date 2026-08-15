@@ -417,6 +417,13 @@ export const MESSAGES = {
     tr: tr_messages.NOT_IN_BOXES,
     pt: pt_messages.NOT_IN_BOXES,
   }),
+  VSC_TEAM_PIT_STOP_BLOCKED: (): LocalizedMessageFunction => ({
+    en: en_messages.VSC_TEAM_PIT_STOP_BLOCKED,
+    es: es_messages.VSC_TEAM_PIT_STOP_BLOCKED,
+    fr: fr_messages.VSC_TEAM_PIT_STOP_BLOCKED,
+    tr: tr_messages.VSC_TEAM_PIT_STOP_BLOCKED,
+    pt: pt_messages.VSC_TEAM_PIT_STOP_BLOCKED,
+  }),
   NOT_IMPLEMENTED_TIRES: (): LocalizedMessageFunction => ({
     en: en_messages.NOT_IMPLEMENTED_TIRES,
     es: es_messages.NOT_IMPLEMENTED_TIRES,

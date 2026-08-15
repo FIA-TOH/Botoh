@@ -4,6 +4,7 @@ import { MESSAGES } from "../chat/messages";
 import { performPitStop } from "./performPitStop";
 import { Tires } from "./tires";
 import { buildPitSteps, emitPitMessage } from "./pitMessaging";
+import { isPitStopBlockedByVSCForPlayer } from "../safetyCar/vsc";
 
 export function handlePitStop(
   room: RoomObject,
@@ -11,6 +12,11 @@ export function handlePitStop(
   tiresKey: Tires
 ) {
   const state = playerList[byPlayer.id];
+
+  if (isPitStopBlockedByVSCForPlayer(byPlayer.id)) {
+    sendAlertMessage(room, MESSAGES.VSC_TEAM_PIT_STOP_BLOCKED(), byPlayer.id);
+    return;
+  }
 
   state.inPitStop = true;
 
