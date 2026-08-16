@@ -223,7 +223,7 @@ DirectionChangerDetector: [
     v1: [-4337, -905],
     index: "000005",
     direction: SpecificDirection.UP,
-    force: 0.4,
+    force: 0.3,
     sector: 2,
   },
   {
