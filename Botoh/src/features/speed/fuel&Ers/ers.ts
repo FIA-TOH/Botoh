@@ -58,7 +58,9 @@ function handleERS(
 ) {
   if (room.getScores()?.time > 0) {
     if (isXKeyPressed(properties.damping)) {
-      handleAvatar(Situacions.Ers, p, room);
+      if (!playerInfo.inPitlane) {
+        handleAvatar(Situacions.Ers, p, room);
+      }
       if (playerInfo.kers > 0) {
         playerInfo.kers -= 100 / (ERS_DURATION_SECONDS * 60);
         if (playerInfo.kers < 0) playerInfo.kers = 0;
