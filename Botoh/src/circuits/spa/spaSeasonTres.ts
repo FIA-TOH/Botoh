@@ -98,7 +98,7 @@ const SPASEASONTRES_INFO: CircuitInfo = {
   TireDegradationPercentage: -5,
   CutDetectSegments: [
   { v0: [-1349, -1948], v1: [-1263, -1921], index: 257, penalty: 5 },
-  { v0: [-910, -2058], v1: [-915, -1746], index: 259, penalty: 5 },
+  { v0: [-910, -2007], v1: [-915, -1746], index: 259, penalty: 5 },
   { v0: [-490, -2041], v1: [-313, -1963], index: 261, penalty: 5 },
   { v0: [3234, -1598], v1: [3600, -1852], index: 263, penalty: 5 },
   { v0: [3150, -1855], v1: [3100, -1833], index: 265, penalty: 5 },
