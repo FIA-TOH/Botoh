@@ -22,10 +22,10 @@ export const constants = {
   // Slipstream
   // ===============================
   // When change MAX_SLIPSTREAM, change the max speed pressing X in Indianapolis too
-  MAX_SLIPSTREAM: 0.000255, // Max of speed gains with full slipstream
-  RESIDUAL_SLIPSTREAM_TIME: 2.2, // How much time does it take to the slipstream to end
-  SLIPSTREAM_RESIDUAL_VALUE: 0.000255 * 0.2, // How much powerfull is the slipstream when you are closer
-  SLIPSTREAM_ACTIVATION_DISTANCE: 600, // The distance you have to be to the slipstream start to act
+  MAX_SLIPSTREAM: 0.000200, // Max of speed gains with full slipstream
+  RESIDUAL_SLIPSTREAM_TIME: 3, // How much time does it take to the slipstream to end
+  SLIPSTREAM_RESIDUAL_VALUE: 0.000200 * 0.2, // How much powerfull is the slipstream when you are closer
+  SLIPSTREAM_ACTIVATION_DISTANCE: 400, // The distance you have to be to the slipstream start to act
   SLIPSTREAM_LATERAL_TOLERANCE: 38, // The width of the slipstream effects
   // MAX_DIRTY_AIR: 0.0001,
   // DIRTY_AIR_DEFAULT: 0,
