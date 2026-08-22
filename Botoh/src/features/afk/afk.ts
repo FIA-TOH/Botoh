@@ -22,6 +22,7 @@ import { isRealSafetyEnabled } from "../commands/flagsAndVSC/handleSafetyCommand
 import { isSCActive } from "../commands/flagsAndVSC/handleSCCommand";
 import { ifInBoxZone } from "../tires&pits/pitLane";
 import { CIRCUITS, currentMapIndex } from "../zones/maps";
+import { getRaceControlState, RaceControlState } from "../commands/flagsAndVSC/raceControl";
 
 interface PlayerActivity {
   lastActivityTime: number;
@@ -31,14 +32,26 @@ interface PlayerActivity {
   wasAfkWhenLeft: boolean;
 }
 
+interface RealSafetyMovementSample {
+  x: number;
+  y: number;
+  time: number;
+}
+
 const playerActivities: { [key: number]: PlayerActivity } = {};
+const realSafetyMovementSamples: { [key: number]: RealSafetyMovementSample } = {};
 let safetyCarActivatedForAfkLeave = false;
 
 const MIN_SPEED_FOR_ACTIVITY = 20;
 const MIN_SPEED_FOR_ACTIVITY_FOR_COME_BACK = 5;
+const REAL_SAFETY_AFK_CONFIG = {
+  PROGRESS_WINDOW_SECONDS: 1,
+  MIN_DISTANCE_FOR_ACTIVITY: 6,
+} as const;
 
 export function clearPlayerAfkActivity(playerId: number) {
   delete playerActivities[playerId];
+  delete realSafetyMovementSamples[playerId];
 
   const playerProps = playerList[playerId];
   if (playerProps) {
@@ -105,6 +118,7 @@ function shouldPauseAfkDetection(
   if (playerProps.inPitlane || playerProps.inPitStop) return true;
   if (room && player && isPlayerInBoxZone(player, room)) return true;
   if (vsc || isSCActive()) return true;
+  if (isYellowFlagActive()) return true;
   if (presentationLap) return true;
   if (gameState === "paused") return true;
   
@@ -113,6 +127,7 @@ function shouldPauseAfkDetection(
 
 function resetPlayerAfkCounter(playerId: number, currentTime: number) {
   const playerProps = playerList[playerId];
+  delete realSafetyMovementSamples[playerId];
 
   if (!playerActivities[playerId]) {
     playerActivities[playerId] = {
@@ -174,6 +189,46 @@ export function isPlayerMovingAtComeBackSpeed(playerId: number, room: RoomObject
     room,
     MIN_SPEED_FOR_ACTIVITY_FOR_COME_BACK
   );
+}
+
+function isPlayerMakingRealSafetyProgress(
+  playerId: number,
+  room: RoomObject,
+  currentTime: number,
+): boolean {
+  const disc = room.getPlayerDiscProperties(playerId);
+  if (!disc) return false;
+
+  const previousSample = realSafetyMovementSamples[playerId];
+  if (!previousSample) {
+    realSafetyMovementSamples[playerId] = {
+      x: disc.x,
+      y: disc.y,
+      time: currentTime,
+    };
+    return true;
+  }
+
+  const elapsed = currentTime - previousSample.time;
+  if (elapsed < REAL_SAFETY_AFK_CONFIG.PROGRESS_WINDOW_SECONDS) {
+    return true;
+  }
+
+  const distance = Math.hypot(disc.x - previousSample.x, disc.y - previousSample.y);
+  if (distance >= REAL_SAFETY_AFK_CONFIG.MIN_DISTANCE_FOR_ACTIVITY) {
+    realSafetyMovementSamples[playerId] = {
+      x: disc.x,
+      y: disc.y,
+      time: currentTime,
+    };
+    return true;
+  }
+
+  return false;
+}
+
+function isYellowFlagActive(): boolean {
+  return getRaceControlState().flag === RaceControlState.YellowFlag;
 }
 
 export function updatePlayerActivity(player: PlayerObject, room?: RoomObject) {
@@ -248,6 +303,7 @@ export function resetAllAfkCounters(room: RoomObject) {
       playerActivities[playerId].warningSent = false;
       playerActivities[playerId].lastWarningTime = 0;
       playerActivities[playerId].vscActivated = false;
+      delete realSafetyMovementSamples[playerId];
       playerProps.afkAlert = false;
     }
   });
@@ -275,11 +331,16 @@ export function handlePlayerLeave(player: PlayerObject, room: RoomObject) {
     clearPlayerAfkActivity(playerId);
     return;
   }
-  
+
   if (vsc && vscTriggeredByPlayer === playerId) {
     const { clearVSCTriggerPlayer } = require("../safetyCar/vsc");
     clearVSCTriggerPlayer(playerId);
     resetAllAfkCounters(room);
+    clearPlayerAfkActivity(playerId);
+    return;
+  }
+
+  if (vsc || isSCActive() || isYellowFlagActive() || presentationLap || gameState === "paused") {
     clearPlayerAfkActivity(playerId);
     return;
   }
@@ -356,7 +417,7 @@ export function afkKick(room: RoomObject) {
     return;
   }
 
-  if (vsc || isSCActive()) {
+  if (vsc || isSCActive() || isYellowFlagActive()) {
     resetAllAfkCounters(room);
     return;
   }
@@ -388,7 +449,7 @@ export function afkKick(room: RoomObject) {
     const afkDuration = currentGameTime - activity.lastActivityTime;
 
     const isMoving = isRealSafetyEnabled()
-      ? isPlayerMovingAtComeBackSpeed(playerId, room)
+      ? isPlayerMakingRealSafetyProgress(playerId, room, currentGameTime)
       : isPlayerMovingAtSpeed(playerId, room);
 
     if (isMoving) {
