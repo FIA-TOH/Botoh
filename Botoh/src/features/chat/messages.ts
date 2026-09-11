@@ -2260,6 +2260,44 @@ export const MESSAGES = {
     tr: tr_messages.DAMAGE_DISABLED,
     pt: pt_messages.DAMAGE_DISABLED,
   }),
+  TOGGLE_SYSTEM_NOT_FOUND: (system: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.TOGGLE_SYSTEM_NOT_FOUND, {
+      system,
+    }),
+    es: replaceTemplateString(es_messages.TOGGLE_SYSTEM_NOT_FOUND, {
+      system,
+    }),
+    fr: replaceTemplateString(fr_messages.TOGGLE_SYSTEM_NOT_FOUND, {
+      system,
+    }),
+    tr: replaceTemplateString(tr_messages.TOGGLE_SYSTEM_NOT_FOUND, {
+      system,
+    }),
+    pt: replaceTemplateString(pt_messages.TOGGLE_SYSTEM_NOT_FOUND, {
+      system,
+    }),
+  }),
+  TOGGLE_SYSTEM_VALID_OPTIONS: (): LocalizedMessageFunction => ({
+    en: en_messages.TOGGLE_SYSTEM_VALID_OPTIONS,
+    es: es_messages.TOGGLE_SYSTEM_VALID_OPTIONS,
+    fr: fr_messages.TOGGLE_SYSTEM_VALID_OPTIONS,
+    tr: tr_messages.TOGGLE_SYSTEM_VALID_OPTIONS,
+    pt: pt_messages.TOGGLE_SYSTEM_VALID_OPTIONS,
+  }),
+  CRASH_WALL_SLOWDOWN_ENABLED: (): LocalizedMessageFunction => ({
+    en: en_messages.CRASH_WALL_SLOWDOWN_ENABLED,
+    es: es_messages.CRASH_WALL_SLOWDOWN_ENABLED,
+    fr: fr_messages.CRASH_WALL_SLOWDOWN_ENABLED,
+    tr: tr_messages.CRASH_WALL_SLOWDOWN_ENABLED,
+    pt: pt_messages.CRASH_WALL_SLOWDOWN_ENABLED,
+  }),
+  CRASH_WALL_SLOWDOWN_DISABLED: (): LocalizedMessageFunction => ({
+    en: en_messages.CRASH_WALL_SLOWDOWN_DISABLED,
+    es: es_messages.CRASH_WALL_SLOWDOWN_DISABLED,
+    fr: fr_messages.CRASH_WALL_SLOWDOWN_DISABLED,
+    tr: tr_messages.CRASH_WALL_SLOWDOWN_DISABLED,
+    pt: pt_messages.CRASH_WALL_SLOWDOWN_DISABLED,
+  }),
   TYRE_PUNCTURE_ENABLED: (): LocalizedMessageFunction => ({
     en: en_messages.TYRE_PUNCTURE_ENABLED,
     es: es_messages.TYRE_PUNCTURE_ENABLED,

@@ -1,6 +1,7 @@
 import { calculateGripMultiplierForConditions } from "../grip/multiplierConditions";
 import { PlayerInfo } from "../../changePlayerState/playerList";
 import { constants } from "../constants";
+import { isCrashWallSlowdownActive } from "../crashWallDetector";
 
 export function calculateTotalGripMultiplier(
   p: PlayerObject,
@@ -44,6 +45,9 @@ export function calculateTotalGripMultiplier(
   }
   if (playerInfo.isTyreBlowed) {
     gripMultiplier -= constants.TYRES_BLOWED;
+  }
+  if (isCrashWallSlowdownActive(p.id)) {
+    gripMultiplier -= constants.CRASH_WALL_SLOWDOWN_PENALTY;
   }
 
   const carDamage = Math.max(0, Math.min(100, playerInfo.carDamage ?? 0));

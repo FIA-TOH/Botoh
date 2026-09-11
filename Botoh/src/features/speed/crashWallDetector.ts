@@ -23,8 +23,10 @@ const playerTouchedCrashWallDetectors = new Map<number, Set<string>>();
 const previousPlayerSpeed = new Map<number, number>();
 const lastPlayerDamageAt = new Map<number, number>();
 const lastPlayerCrashWallLogAt = new Map<string, number>();
+const playerCrashWallSlowdownUntil = new Map<number, number>();
 const DAMAGE_COOLDOWN_MS = 1000;
 const CRASH_WALL_LOG_COOLDOWN_MS = 5000;
+const CRASH_WALL_SLOWDOWN_DURATION_MS = 3000;
 const CRASH_DAMAGE_PER_SPEED = 0.28125;
 const CURVED_DETECTOR_STEP_DEGREES = 5;
 const CURVED_DETECTOR_EXTRA_RADIUS = 1;
@@ -32,6 +34,7 @@ const CRASH_WALL_DETECTION_RADIUS_REDUCTION = 1;
 
 export let damageMode: DamageMode = false;
 export let damageEnabled = false;
+export let crashWallSlowdownEnabled = false;
 
 export function enableDamage(mode: boolean | DamageMode) {
   if (mode === true) {
@@ -41,6 +44,18 @@ export function enableDamage(mode: boolean | DamageMode) {
   }
 
   damageEnabled = damageMode !== false;
+}
+
+export function enableCrashWallSlowdown(enabled: boolean) {
+  crashWallSlowdownEnabled = enabled;
+
+  if (!enabled) {
+    playerCrashWallSlowdownUntil.clear();
+  }
+}
+
+export function shouldDetectCrashWallDetectors() {
+  return damageEnabled || crashWallSlowdownEnabled;
 }
 
 function isDamageSuspendedByRaceControl() {
@@ -223,6 +238,27 @@ function shouldLogCrashWall() {
   return damageMode === "log";
 }
 
+function applyCrashWallSlowdown(playerId: number) {
+  if (!crashWallSlowdownEnabled) return;
+
+  playerCrashWallSlowdownUntil.set(
+    playerId,
+    Date.now() + CRASH_WALL_SLOWDOWN_DURATION_MS,
+  );
+}
+
+export function isCrashWallSlowdownActive(playerId: number) {
+  const slowdownUntil = playerCrashWallSlowdownUntil.get(playerId);
+  if (!slowdownUntil) return false;
+
+  if (Date.now() <= slowdownUntil) {
+    return true;
+  }
+
+  playerCrashWallSlowdownUntil.delete(playerId);
+  return false;
+}
+
 function isQualyOrTrainingSession() {
   return generalGameMode === GeneralGameMode.GENERAL_QUALY
     || gameMode === GameMode.QUALY
@@ -287,10 +323,11 @@ export function detectCrashWallDetectors(
   playersAndDiscs: { p: PlayerObject; disc: DiscPropertiesObject }[],
   room: RoomObject,
 ) {
-  if (!damageEnabled) return;
+  if (!shouldDetectCrashWallDetectors()) return;
   if (isSafetyCarActive()) {
     playerTouchedCrashWallDetectors.clear();
     previousPlayerSpeed.clear();
+    playerCrashWallSlowdownUntil.clear();
     return;
   }
 
@@ -330,6 +367,7 @@ export function detectCrashWallDetectors(
         const speed = Math.max(currentSpeed, previousSpeed);
         const canApplyDamage = shouldApplyDamage(detector, pad.p.id);
 
+        applyCrashWallSlowdown(pad.p.id);
         handleCrashWallLogHit(pad.p, detector, room);
 
         const damage = canApplyDamage ? applyCrashDamage(pad.p.id, speed) : null;

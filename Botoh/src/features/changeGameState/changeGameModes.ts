@@ -7,6 +7,7 @@ import { qualiTime, raceTime } from "../commands/gameMode/qualy/qualiMode";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 
 import { enableGas, enableSlipstream } from "../speed/handleSlipstream";
+import { enableCrashWallSlowdown } from "../speed/crashWallDetector";
 import { enableTyres } from "../tires&pits/tires";
 import { laps } from "../zones/laps";
 import { CIRCUITS, currentMapIndex } from "../zones/maps";
@@ -93,6 +94,7 @@ export function changeGeneralGameMode(newGeneralMode: GeneralGameMode) {
 function handleQualyMode(room: RoomObject) {
   enableGas(false);
   enableSlipstream(false);
+  enableCrashWallSlowdown(false);
   setGhostMode(room, true);
   handleRREnabledCommand(undefined, ["on"], room);
   if(LEAGUE_MODE) {
@@ -105,6 +107,7 @@ function handleQualyMode(room: RoomObject) {
 function handleTrainingMode(room: RoomObject) {
   enableGas(false);
   enableSlipstream(false);
+  enableCrashWallSlowdown(false);
   setGhostMode(room, true);
   handleRREnabledCommand(undefined, ["on"], room);
   changeLaps("999", undefined, room);
@@ -116,19 +119,19 @@ function handleTrainingMode(room: RoomObject) {
 }
 
 function handleIndyMode(room: RoomObject) {
-  enableGas(true);
-  enableSlipstream(false);
+  enableGas(false);
+  enableSlipstream(true);
+  enableCrashWallSlowdown(true);
   setGhostMode(room, false);
   handleRREnabledCommand(undefined, ["off"], room);
-  if(LEAGUE_MODE) {
-    enableTyres(true);
-  }
+  enableTyres(false);
   changeGeneralGameMode(GeneralGameMode.GENERAL_RACE);
 }
 
 function handleRaceMode(room: RoomObject) {
   enableGas(false);
   enableSlipstream(true);
+  enableCrashWallSlowdown(false);
   setGhostMode(room, false);
   handleRREnabledCommand(undefined, ["off"], room);
   if(LEAGUE_MODE) {
@@ -141,6 +144,7 @@ function handleRaceMode(room: RoomObject) {
 function handleWaintingRoom(room: RoomObject) {
   enableGas(false);
   enableSlipstream(false);
+  enableCrashWallSlowdown(false);
   setGhostMode(room, false);
   handleRREnabledCommand(undefined, ["off"], room);
   enableTyres(false);
@@ -152,6 +156,7 @@ function handleHardQualyMode(room: RoomObject) {
 
   enableGas(false);
   enableSlipstream(false);
+  enableCrashWallSlowdown(false);
   setGhostMode(room, false);
   handleRREnabledCommand(undefined, ["off"], room);
   enableTyres(false);
@@ -162,6 +167,7 @@ function handleHardQualyMode(room: RoomObject) {
 function handleBattleRoyaleMode(room: RoomObject) {
   enableGas(false);
   enableSlipstream(true);
+  enableCrashWallSlowdown(false);
   setGhostMode(room, false);
   handleRREnabledCommand(undefined, ["off"], room);
   enableTyres(false);
