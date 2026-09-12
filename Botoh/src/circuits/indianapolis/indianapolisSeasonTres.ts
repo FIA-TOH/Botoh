@@ -49,10 +49,10 @@ const INDIANAPOLISSEASONTRES_INFO: CircuitInfo = {
     passingDirection: Direction.RIGHT,
   },
   boxLine: {
-    minX: -1724,
-    maxX: 453,
-    minY: -312,
-    maxY: -144,
+    minX: -3295,
+    maxX: -3295,
+    minY: -382,
+    maxY: -382,
   },
   pitlaneStart: {
     minX: -1776,
