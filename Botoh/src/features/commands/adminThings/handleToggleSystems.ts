@@ -7,7 +7,7 @@ import {
   enableSoftCutPenalty,
 } from "../../detectCut/enableCutPenalty";
 import { log } from "../../discord/logger";
-import { enableDamage } from "../../speed/crashWallDetector";
+import { enableCrashWallSlowdown, enableDamage } from "../../speed/crashWallDetector";
 import { enableErs, enableErsPenalty } from "../../speed/fuel&Ers/ers";
 import { enableGas, enableSlipstream } from "../../speed/handleSlipstream";
 import { setBlowoutTyresActivated } from "../../tires&pits/tireBlowManager";
@@ -26,6 +26,7 @@ export enum ToggleableSystems {
   CUT_PENALTY = "cut_penalty",
   DEBRIS = "debris",
   DAMAGE = "damage",
+  CRASH_WALL_SLOWDOWN = "crash_wall_slowdown",
   SOFT_CUT_PENALTY = "soft_cut_penalty",
 }
 
@@ -53,13 +54,15 @@ export function handleToggleSystems(
     system !== ToggleableSystems.CUT_PENALTY &&
     system !== ToggleableSystems.DEBRIS &&
     system !== ToggleableSystems.DAMAGE &&
+    system !== ToggleableSystems.CRASH_WALL_SLOWDOWN &&
     system !== ToggleableSystems.SOFT_CUT_PENALTY
   ) {
-    room.sendAnnouncement(`System "${args[0]}" does not exist.`, byPlayer.id, COLORS.RED);
-    room.sendAnnouncement(
-      `Try "slipstream", "tyres", "gas", "ghost", "rr", "tyres_blowout", "ers", "cut_penalty", "debris", "damage", "soft_cut_penalty" or "ers_penalty".`,
-      byPlayer.id, COLORS.YELLOW
+    sendErrorMessage(
+      room,
+      MESSAGES.TOGGLE_SYSTEM_NOT_FOUND(args[0] ?? ""),
+      byPlayer.id,
     );
+    sendBlueMessage(room, MESSAGES.TOGGLE_SYSTEM_VALID_OPTIONS(), byPlayer.id);
     return;
   }
 
@@ -183,6 +186,16 @@ export function handleToggleSystems(
       log(`Damage mode enabled by ${byPlayer.name}`);
       enableDamage("damage");
       sendBlueMessage(room, MESSAGES.DAMAGE_ENABLED(), byPlayer.id);
+    }
+  } else if (system === ToggleableSystems.CRASH_WALL_SLOWDOWN) {
+    if (boolean === "off") {
+      log(`Crash wall slowdown disabled by ${byPlayer.name}`);
+      enableCrashWallSlowdown(false);
+      sendBlueMessage(room, MESSAGES.CRASH_WALL_SLOWDOWN_DISABLED(), byPlayer.id);
+    } else {
+      log(`Crash wall slowdown enabled by ${byPlayer.name}`);
+      enableCrashWallSlowdown(true);
+      sendBlueMessage(room, MESSAGES.CRASH_WALL_SLOWDOWN_ENABLED(), byPlayer.id);
     }
   } else if (system === ToggleableSystems.SOFT_CUT_PENALTY) {
     if (boolean === "off") {

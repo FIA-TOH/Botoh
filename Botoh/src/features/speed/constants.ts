@@ -46,6 +46,7 @@ export const constants = {
   SANDBAG_PENALTY: 0.001,
   TOTAL_DAMAGE_PENALTY: 0.001, // Penalty for 100 damage
   DAMAGE_PENALTY_EXPONENT: 2, // Higher values make low damage less punishing while keeping 100 damage unchanged
+  CRASH_WALL_SLOWDOWN_PENALTY: 0.002,
 };
 
 export function changeConstant(key: keyof typeof constants, value: number) {

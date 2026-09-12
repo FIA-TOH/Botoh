@@ -8,7 +8,7 @@ import { getRunningPlayers } from '../utils';
 import handleTireWear from '../tires&pits/handleTireWear';
 import { playerList } from '../changePlayerState/playerList';
 import { getPlayerAndDiscs } from '../playerFeatures/getPlayerAndDiscs';
-import { damageEnabled, detectCrashWallDetectors } from '../speed/crashWallDetector';
+import { detectCrashWallDetectors, shouldDetectCrashWallDetectors } from '../speed/crashWallDetector';
 import { detectDirectionChangers } from '../speed/directionChanger';
 import {
   handleChangeCollisionPlayerSuzuka,
@@ -55,7 +55,7 @@ export function GameTick(room: RoomObject) {
     if (gameMode !== GameMode.WAITING) {
       handlePitlane(playersAndDiscs, room);
       detectDirectionChangers(playersAndDiscs, room);
-      if (damageEnabled) {
+      if (shouldDetectCrashWallDetectors()) {
         detectCrashWallDetectors(playersAndDiscs, room);
       }
       distributeSpeed(playersAndDiscs, room);
