@@ -70,6 +70,7 @@ const trackNameMapping: { [key: string]: string } = {
   hemmingsen: "Hemmingsen-banen by Rodri",
   brazzaville: "Brazzaville",
   estoril: "Autódromo Fernanda Pires da Silva (Estoril) By Nanoseb",
+  tigre: "Circuito Nacional El Tigre By Nanoseb",
 };
 
 export const bestTimes: { [key: string]: [number, string, string] } = {
@@ -164,6 +165,7 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   hemmingsen: [999.99, "undefined", "Hemmingsen-banen by Rodri"],
   brazzaville: [999.99, "undefined", "Brazzaville"],
   estoril: [999.99, "undefined", "Autódromo Fernanda Pires da Silva (Estoril) By Nanoseb"],
+  tigre: [999.99, "undefined", "Circuito Nacional El Tigre By Nanoseb"],
 };
 export const getAbbreviatedTrackName = (
   fullTrackName: string,
