@@ -4,6 +4,7 @@ export let vscDuration: number | undefined;
 export let vscAutoDeployed = false;
 export let vscExtended = false;
 export let vscTriggeredByPlayer: number | undefined;
+let shouldRollSafetyCarAfterVSC = false;
 import { clearPlayerAfkActivity, isPlayerMovingAtComeBackSpeed } from "../afk/afk";
 import { Teams } from "../changeGameState/teams";
 import { getEffectiveLeagueScuderiaId, playerList } from "../changePlayerState/playerList";
@@ -23,6 +24,7 @@ export function deployVSCAutomatically(room: any, playerId?: number) {
   vscDuration = 10 + Math.random() * 5;
   vscAutoDeployed = true;
   vscTriggeredByPlayer = playerId;
+  shouldRollSafetyCarAfterVSC = false;
   
   const scores = room.getScores();
   if (scores) {
@@ -34,6 +36,29 @@ export function deployVSCAutomatically(room: any, playerId?: number) {
   const { resetAllAfkCounters } = require("../afk/afk");
   resetAllAfkCounters(room);
   
+  const { sendYellowMessage } = require("../chat/chat");
+  const { MESSAGES } = require("../chat/messages");
+  sendYellowMessage(room, MESSAGES.VSC_DEPLOYED());
+}
+
+export function deployVSCForPlayerLeave(room: any) {
+  if (vsc) return;
+
+  vscDuration = 8 + Math.random() * 10;
+  vscAutoDeployed = true;
+  vscTriggeredByPlayer = undefined;
+  shouldRollSafetyCarAfterVSC = true;
+
+  const scores = room.getScores();
+  if (scores) {
+    vscStartTime = scores.time;
+  }
+
+  changeVSC();
+
+  const { resetAllAfkCounters } = require("../afk/afk");
+  resetAllAfkCounters(room);
+
   const { sendYellowMessage } = require("../chat/chat");
   const { MESSAGES } = require("../chat/messages");
   sendYellowMessage(room, MESSAGES.VSC_DEPLOYED());
@@ -85,12 +110,20 @@ export function checkVSCDuration(room: any) {
       clearPlayerAfkActivity(vscTriggeredByPlayer);
     }
     
+    const shouldDeploySafetyCar =
+      shouldRollSafetyCarAfterVSC && Math.random() < 0.25;
+
     changeVSC();
-    
-    const { sendGreenMessage } = require("../chat/chat");
-    const { MESSAGES } = require("../chat/messages");
-    sendGreenMessage(room, MESSAGES.GREEN_FLAG());
-    sendGreenMessage(room, MESSAGES.GREEN_FLAG_TWO());
+
+    if (shouldDeploySafetyCar) {
+      const { handleSCCommand } = require("../commands/flagsAndVSC/handleSCCommand");
+      handleSCCommand(undefined, ["on"], room);
+    } else {
+      const { sendGreenMessage } = require("../chat/chat");
+      const { MESSAGES } = require("../chat/messages");
+      sendGreenMessage(room, MESSAGES.GREEN_FLAG());
+      sendGreenMessage(room, MESSAGES.GREEN_FLAG_TWO());
+    }
 
     const { resetAllAfkCounters } = require("../afk/afk");
     resetAllAfkCounters(room);
@@ -100,6 +133,7 @@ export function checkVSCDuration(room: any) {
     vscDuration = undefined;
     vscExtended = false;
     vscTriggeredByPlayer = undefined;
+    shouldRollSafetyCarAfterVSC = false;
   }
 }
 
@@ -118,4 +152,5 @@ export function resetVSCState() {
   vscDuration = undefined;
   vscExtended = false;
   vscTriggeredByPlayer = undefined;
+  shouldRollSafetyCarAfterVSC = false;
 }

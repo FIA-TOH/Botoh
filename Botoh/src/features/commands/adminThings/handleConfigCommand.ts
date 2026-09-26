@@ -30,6 +30,13 @@ import {
   setTeamCommandEnabled,
 } from "../scuderia/handleSetScuderia";
 
+export type ActiveConfigType = "ftoh" | "fh" | "haxbula" | "ftohpublic" | null;
+
+let activeConfigType: ActiveConfigType = null;
+
+export function getActiveConfigType(): ActiveConfigType {
+  return activeConfigType;
+}
 
 export function handleConfigCommand(
   byPlayer: PlayerObject,
@@ -103,6 +110,7 @@ function parseBooleanConfig(value?: string): boolean | null {
 }
 
 function applyFTOHConfig(room: RoomObject, byPlayer: PlayerObject) {
+  activeConfigType = "ftoh";
   log(`FTOH configuration applied by ${byPlayer.name}`);
   handleSafetyCommand(byPlayer, ["on"], room);
   handleRModeCommand(byPlayer, [], room);
@@ -130,6 +138,7 @@ function applyFTOHConfig(room: RoomObject, byPlayer: PlayerObject) {
 
 
 export function applyFTOHPublicConfig(room: RoomObject, byPlayer: PlayerObject) {
+  activeConfigType = "ftohpublic";
   log(`FTOH Public configuration applied by ${byPlayer.name}`);
   handleSafetyCommand(byPlayer, ["off"], room);
   handleRModeCommand(byPlayer, [], room);
@@ -156,6 +165,7 @@ export function applyFTOHPublicConfig(room: RoomObject, byPlayer: PlayerObject) 
 }
 
 function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {
+  activeConfigType = "fh";
   log(`FH configuration applied by ${byPlayer.name}`);
   handleSafetyCommand(byPlayer, ["off"], room);
   handleRModeCommand(byPlayer, [], room);
@@ -182,6 +192,7 @@ function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {
 }
 
 function applyHaxbulaConfig(room: RoomObject, byPlayer: PlayerObject) {
+  activeConfigType = "haxbula";
   log(`Haxbula configuration applied by ${byPlayer.name}`);
   handleSafetyCommand(byPlayer, ["off"], room);
   handleRModeCommand(byPlayer, [], room);

@@ -11,7 +11,7 @@ import { playerList } from "../changePlayerState/playerList";
 import { getRunningPlayers, inHitbox, vectorSpeed } from "../utils";
 import { sendAlertMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
-import { deployVSCAutomatically } from "../safetyCar/vsc";
+import { deployVSCAutomatically, deployVSCForPlayerLeave } from "../safetyCar/vsc";
 import { handleSCCommand } from "../commands/flagsAndVSC/handleSCCommand";
 import { presentationLap } from "../commands/gameState/handlePresentationLapCommand";
 import { chooseOneDebris } from "../debris/chooseOneDebris";
@@ -23,6 +23,7 @@ import { isSCActive } from "../commands/flagsAndVSC/handleSCCommand";
 import { ifInBoxZone } from "../tires&pits/pitLane";
 import { CIRCUITS, currentMapIndex } from "../zones/maps";
 import { getRaceControlState, RaceControlState } from "../commands/flagsAndVSC/raceControl";
+import { getActiveConfigType } from "../commands/adminThings/handleConfigCommand";
 
 interface PlayerActivity {
   lastActivityTime: number;
@@ -341,6 +342,18 @@ export function handlePlayerLeave(player: PlayerObject, room: RoomObject) {
   }
 
   if (vsc || isSCActive() || isYellowFlagActive() || presentationLap || gameState === "paused") {
+    clearPlayerAfkActivity(playerId);
+    return;
+  }
+
+  if (
+    player.team === Teams.RUNNERS &&
+    getActiveConfigType() === "ftoh" &&
+    generalGameMode === GeneralGameMode.GENERAL_RACE &&
+    gameState === "running" &&
+    (room.getScores()?.time ?? 0) > 0
+  ) {
+    deployVSCForPlayerLeave(room);
     clearPlayerAfkActivity(playerId);
     return;
   }
