@@ -85,6 +85,7 @@ const trackNameMapping: { [key: string]: string } = {
   bakuSeasonTres: "Baku City Circuit - By Ximb - NewGenV3",
   indianapolisSeasonTres: "Indianapolis Motor Speedway - By Ximb - 2026",
   austinSeasonTres: "United States Grand Prix - By Ximb - NewGenV3",
+  argentinaSeasonTres: "Autodromo Oscar Alfredo Galvez - By Ximb - NewGenV3",
 };
 
 export const bestTimes: { [key: string]: [number, string, string] } = {
@@ -162,6 +163,7 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   bakuSeasonTres: [54.400, "Splinter", trackNameMapping["bakuSeasonTres"]],
   indianapolisSeasonTres: [30.500, "Gabriel Schumacchio", trackNameMapping["indianapolisSeasonTres"]],
   austinSeasonTres: [63.100, "Ximb", trackNameMapping["austinSeasonTres"]],
+  argentinaSeasonTres: [51.200, "Ximb", trackNameMapping["argentinaSeasonTres"]],
 
   suzukaPublic: [46.700, "Splinter", trackNameMapping["suzukaPublic"]],
   melbournePublic: [32.330, "Danny", trackNameMapping["melbournePublic"]],
