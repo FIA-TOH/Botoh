@@ -48,6 +48,7 @@ const trackNameMapping: { [key: string]: string } = {
   austin_crespo: "Austin by Crespo",
   sexcano: "Cano Sexcuit by Rodri",
   meersburg: "Meersburg by Splinter",
+    shiryu: "Shiryu Dragao by Rodri",
   imolaSeasonTres: "Autodromo Imola - By Ximb - NewgenV3",
   imolaTeste: "Autodromo Imola - By Ximb - Teste",
   miamiSeasonTres: "Miami by Rodri - NewgenV3",
@@ -64,7 +65,8 @@ const trackNameMapping: { [key: string]: string } = {
   indianapolisSeasonTres: "Indianapolis Motor Speedway - By Ximb - 2026",
   austinSeasonTres: "United States Grand Prix - By Ximb - NewGenV3",
   argentinaSeasonTres: "Autodromo Oscar Alfredo Galvez - By Ximb - NewGenV3",
-  shiryu: "Shiryu Dragao by Rodri",
+  interlagosSeasonTres: "Autodromo Interlagos - By Ximb - NewGenV3",
+
   waitRoomEvent: "Wait Room - By Ximb - Event",
 
   suzukaPublic: "Suzuka International Circuit - By Ximb - Public",
@@ -166,6 +168,7 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
   indianapolisSeasonTres: [30.500, "Gabriel Schumacchio", trackNameMapping["indianapolisSeasonTres"]],
   austinSeasonTres: [63.100, "Ximb", trackNameMapping["austinSeasonTres"]],
   argentinaSeasonTres: [51.200, "Ximb", trackNameMapping["argentinaSeasonTres"]],
+  interlagosSeasonTres: [43.000, "Ximb", trackNameMapping["interlagosSeasonTres"]],
   waitRoomEvent: [7.500, "Ximb", "waitRoomEvent"],
   shiryu: [30.700, "Rodri", "Shiryu Dragao by Rodri"],
 
