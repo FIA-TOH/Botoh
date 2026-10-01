@@ -18,6 +18,7 @@ import { evaluateSector } from "./laps/trackBestSector";
 import { CIRCUITS, currentMapIndex } from "./maps";
 import { getIsGamePaused } from "../changeGameState/gameState";
 import { recordPublicSectorForPlayer } from "../public/publicCircuits";
+import { areBlueFlagsEnabled } from "../commands/flagsAndVSC/blueFlags";
 
 function serialize(number: number) {
   return parseFloat(number.toFixed(3));
@@ -174,6 +175,8 @@ export function checkPlayerSector(
 }
 
 export function checkBlueFlag(p: PlayerObject, room: RoomObject) {
+  if (!areBlueFlagsEnabled()) return;
+
   const playerInfo = positionList.find((entry) => entry.name === p.name);
   if (!playerInfo) return;
 

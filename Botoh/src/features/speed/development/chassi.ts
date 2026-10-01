@@ -3,6 +3,7 @@ import {
   PlayerInfo,
   playerList,
 } from "../../changePlayerState/playerList";
+import { isScuderiaDevelopmentEnabled } from "../../scuderias/scuderiaDevelopment";
 import { getLeagueScuderia } from "../../scuderias/scuderias";
 import { constants } from "../constants";
 
@@ -17,6 +18,8 @@ function calcAccelerationNerf(grip: number, accelerationNerf: number) {
 }
 
 export function chassiGripCalc(p: PlayerInfo, grip: number) {
+  if (!isScuderiaDevelopmentEnabled()) return grip;
+
   const scuderiaId = getEffectiveLeagueScuderiaId(p);
   if (!scuderiaId) return grip;
 
@@ -31,6 +34,8 @@ export function chassiGripCalc(p: PlayerInfo, grip: number) {
 }
 
 export function getPlayerSlipstreamBoost(player: PlayerObject) {
+  if (!isScuderiaDevelopmentEnabled()) return constants.MAX_SLIPSTREAM;
+
   const pInfo = playerList[player.id];
   const scuderiaId = getEffectiveLeagueScuderiaId(pInfo);
   if (!scuderiaId) return constants.MAX_SLIPSTREAM;

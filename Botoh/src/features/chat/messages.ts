@@ -167,6 +167,93 @@ export const MESSAGES = {
       configType: configType,
     }),
   }),
+  EVENT_MISSING_ARGUMENT: (events: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.EVENT_MISSING_ARGUMENT, { events }),
+    es: replaceTemplateString(es_messages.EVENT_MISSING_ARGUMENT, { events }),
+    fr: replaceTemplateString(fr_messages.EVENT_MISSING_ARGUMENT, { events }),
+    tr: replaceTemplateString(tr_messages.EVENT_MISSING_ARGUMENT, { events }),
+    pt: replaceTemplateString(pt_messages.EVENT_MISSING_ARGUMENT, { events }),
+  }),
+  EVENT_INVALID_ARGUMENT: (
+    eventName: string,
+    events: string,
+  ): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.EVENT_INVALID_ARGUMENT, {
+      eventName,
+      events,
+    }),
+    es: replaceTemplateString(es_messages.EVENT_INVALID_ARGUMENT, {
+      eventName,
+      events,
+    }),
+    fr: replaceTemplateString(fr_messages.EVENT_INVALID_ARGUMENT, {
+      eventName,
+      events,
+    }),
+    tr: replaceTemplateString(tr_messages.EVENT_INVALID_ARGUMENT, {
+      eventName,
+      events,
+    }),
+    pt: replaceTemplateString(pt_messages.EVENT_INVALID_ARGUMENT, {
+      eventName,
+      events,
+    }),
+  }),
+  EVENT_SUCCESS: (eventName: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.EVENT_SUCCESS, { eventName }),
+    es: replaceTemplateString(es_messages.EVENT_SUCCESS, { eventName }),
+    fr: replaceTemplateString(fr_messages.EVENT_SUCCESS, { eventName }),
+    tr: replaceTemplateString(tr_messages.EVENT_SUCCESS, { eventName }),
+    pt: replaceTemplateString(pt_messages.EVENT_SUCCESS, { eventName }),
+  }),
+  BLUE_FLAGS_USAGE: (): LocalizedMessageFunction => ({
+    en: en_messages.BLUE_FLAGS_USAGE,
+    es: es_messages.BLUE_FLAGS_USAGE,
+    fr: fr_messages.BLUE_FLAGS_USAGE,
+    tr: tr_messages.BLUE_FLAGS_USAGE,
+    pt: pt_messages.BLUE_FLAGS_USAGE,
+  }),
+  BLUE_FLAGS_SUCCESS: (enabled: boolean): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.BLUE_FLAGS_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+    es: replaceTemplateString(es_messages.BLUE_FLAGS_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+    fr: replaceTemplateString(fr_messages.BLUE_FLAGS_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+    tr: replaceTemplateString(tr_messages.BLUE_FLAGS_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+    pt: replaceTemplateString(pt_messages.BLUE_FLAGS_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+  }),
+  TYRE_WEAR_USAGE: (): LocalizedMessageFunction => ({
+    en: en_messages.TYRE_WEAR_USAGE,
+    es: es_messages.TYRE_WEAR_USAGE,
+    fr: fr_messages.TYRE_WEAR_USAGE,
+    tr: tr_messages.TYRE_WEAR_USAGE,
+    pt: pt_messages.TYRE_WEAR_USAGE,
+  }),
+  TYRE_WEAR_SUCCESS: (enabled: boolean): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.TYRE_WEAR_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+    es: replaceTemplateString(es_messages.TYRE_WEAR_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+    fr: replaceTemplateString(fr_messages.TYRE_WEAR_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+    tr: replaceTemplateString(tr_messages.TYRE_WEAR_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+    pt: replaceTemplateString(pt_messages.TYRE_WEAR_SUCCESS, {
+      enabled: enabled.toString(),
+    }),
+  }),
   TEAM_COMMAND_CONFIG_USAGE: (): LocalizedMessageFunction => ({
     en: en_messages.TEAM_COMMAND_CONFIG_USAGE,
     es: es_messages.TEAM_COMMAND_CONFIG_USAGE,

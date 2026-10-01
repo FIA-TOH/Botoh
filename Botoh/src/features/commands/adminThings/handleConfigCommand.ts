@@ -24,7 +24,10 @@ import { setManageTyresEnabled } from "./handleManageTyresCommand";
 import { handlePresentationLapCommand } from "../gameState/handlePresentationLapCommand";
 import { handleRREnabledCommand } from "./handleRREnabledCommand";
 import { setScuderiaAvatar } from "../../scuderias/scuderiaAvatar";
+import { setScuderiaDevelopmentEnabled } from "../../scuderias/scuderiaDevelopment";
 import { setTeamCircuitBoxesEnabled } from "../../teamBoxes/teamCircuitBoxes";
+import { setBlueFlagsEnabled } from "../flagsAndVSC/blueFlags";
+import { setTyreWearEnabled } from "../../tires&pits/handleTireWear";
 import {
   clearManualTeamSelections,
   setTeamCommandEnabled,
@@ -116,6 +119,7 @@ function applyFTOHConfig(room: RoomObject, byPlayer: PlayerObject) {
   handleRModeCommand(byPlayer, [], room);
   enableSlipstream(true);
   enableTyres(true);
+  setTyreWearEnabled(true);
   setRaceTyresInQualyEnabled(true);
   enableGas(false);
   setGhostMode(room, false);
@@ -132,7 +136,9 @@ function applyFTOHConfig(room: RoomObject, byPlayer: PlayerObject) {
   setManageTyresEnabled(false);
   handleRREnabledCommand(byPlayer, ["off"], room);
   setScuderiaAvatar(true);
+  setScuderiaDevelopmentEnabled(true);
   setTeamCircuitBoxesEnabled(true);
+  setBlueFlagsEnabled(true);
   setTeamCommandEnabled(false);
 }
 
@@ -144,6 +150,7 @@ export function applyFTOHPublicConfig(room: RoomObject, byPlayer: PlayerObject) 
   handleRModeCommand(byPlayer, [], room);
   enableSlipstream(true);
   enableTyres(false);
+  setTyreWearEnabled(true);
   setRaceTyresInQualyEnabled(false);
   enableGas(false);
   setGhostMode(room, false);
@@ -160,7 +167,9 @@ export function applyFTOHPublicConfig(room: RoomObject, byPlayer: PlayerObject) 
   setManageTyresEnabled(false);
   handleRREnabledCommand(byPlayer, ["on"], room);
   setScuderiaAvatar(false);
+  setScuderiaDevelopmentEnabled(true);
   setTeamCircuitBoxesEnabled(false);
+  setBlueFlagsEnabled(true);
   setTeamCommandEnabled(true);
 }
 
@@ -171,6 +180,7 @@ function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {
   handleRModeCommand(byPlayer, [], room);
   enableSlipstream(true);
   enableTyres(true);
+  setTyreWearEnabled(true);
   setRaceTyresInQualyEnabled(false);
   enableGas(false);
   setGhostMode(room, false);
@@ -187,7 +197,9 @@ function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {
   setManageTyresEnabled(false);
   handleRREnabledCommand(byPlayer, ["on"], room);
   setScuderiaAvatar(false);
+  setScuderiaDevelopmentEnabled(true);
   setTeamCircuitBoxesEnabled(false);
+  setBlueFlagsEnabled(true);
   setTeamCommandEnabled(true);
 }
 
@@ -198,6 +210,7 @@ function applyHaxbulaConfig(room: RoomObject, byPlayer: PlayerObject) {
   handleRModeCommand(byPlayer, [], room);
   enableSlipstream(false);
   enableTyres(false);
+  setTyreWearEnabled(true);
   setRaceTyresInQualyEnabled(false);
   enableGas(false);
   setGhostMode(room, true);
@@ -214,6 +227,8 @@ function applyHaxbulaConfig(room: RoomObject, byPlayer: PlayerObject) {
   setManageTyresEnabled(false);
   handleRREnabledCommand(byPlayer, ["on"], room);
   setScuderiaAvatar(false);
+  setScuderiaDevelopmentEnabled(true);
   setTeamCircuitBoxesEnabled(false);
+  setBlueFlagsEnabled(true);
   setTeamCommandEnabled(true);
 }

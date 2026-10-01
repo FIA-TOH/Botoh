@@ -5,6 +5,11 @@ import { laps } from "../../zones/laps";
 
 export let minPit = 0;
 
+export function setMinimumPitStops(minPitStops: number): void {
+  minPit = minPitStops;
+  defineMinimumPitStops(minPit);
+}
+
 export function handleSetMinimumPit(
   byPlayer: PlayerObject,
   args: string[],
@@ -48,6 +53,6 @@ export function handleSetMinimumPit(
     return;
   }
 
-  defineMinimumPitStops(minPit);
+  setMinimumPitStops(minPit);
   room.sendAnnouncement(`Now the minimum pit stops is ${minPit}`, byPlayer.id, COLORS.GREEN);
 }
