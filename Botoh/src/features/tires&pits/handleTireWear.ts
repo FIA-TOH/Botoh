@@ -25,6 +25,15 @@ import { constants } from "../speed/constants";
 import { currentWeather } from "../weather/currentWeather";
 
 const DRY_TRACK_WET_TYRE_WEAR_MULTIPLIER = 2;
+let tyreWearEnabled = true;
+
+export function setTyreWearEnabled(enabled: boolean): void {
+  tyreWearEnabled = enabled;
+}
+
+export function isTyreWearEnabled(): boolean {
+  return tyreWearEnabled;
+}
 
 function getPlayerSectorWeather(playerId: number) {
   const sector = playerList[playerId]?.currentSector || 1;
@@ -54,6 +63,11 @@ export default function HandleTireWear(player: PlayerObject, room: RoomObject) {
   const p = playerList[player.id];
   const currentTime = room.getScores().time;
   if (!p.lastCheckTime) p.lastCheckTime = currentTime;
+
+  if (!tyreWearEnabled) {
+    p.lastCheckTime = currentTime;
+    return;
+  }
 
   if (presentationLap || vsc || isSCActive() || p.inPitlane) {
     p.lastCheckTime = currentTime;

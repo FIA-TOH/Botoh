@@ -3,6 +3,7 @@ import {
   PlayerInfo,
   playerList,
 } from "../../changePlayerState/playerList";
+import { isScuderiaDevelopmentEnabled } from "../../scuderias/scuderiaDevelopment";
 import { getLeagueScuderia } from "../../scuderias/scuderias";
 import { vectorSpeed } from "../../utils";
 import { maxSpeedFromGrip } from "../getMaxSpeed";
@@ -93,6 +94,8 @@ export function engineGripCalc(
   player: PlayerObject,
   room: RoomObject
 ) {
+  if (!isScuderiaDevelopmentEnabled()) return grip;
+
   const scuderiaId = getEffectiveLeagueScuderiaId(p);
   if (!scuderiaId) return grip;
 

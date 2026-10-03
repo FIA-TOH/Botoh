@@ -240,7 +240,8 @@ function createSafetyCarDriver(room: RoomObject) {
       x: spawnPoint.x,
       y: spawnPoint.y,
       xspeed: 0,
-      yspeed: 0
+      yspeed: 0,
+      cGroup: room.CollisionFlags.c2
     });
   }
   

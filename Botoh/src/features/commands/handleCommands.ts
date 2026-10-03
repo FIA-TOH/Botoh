@@ -79,6 +79,9 @@ import { handlePitCommand } from "./adminThings/handlePitCommand";
 import { handleScuderiaAvatarCommand } from "./adminThings/handleScuderiaAvatarCommand";
 import { handleLoginCommand } from "./login/handleLoginCommand";
 import { handleSeeLoginCommand } from "./adminThings/handleSeeLoginCommand";
+import { handleEventCommand } from "./events/handleEventCommand";
+import { handleBlueFlagsCommand } from "./flagsAndVSC/handleBlueFlagsCommand";
+import { handleTyreWearCommand } from "./tyres/handleTyreWearCommand";
 
 export type CommandFunction = (
   handleAdminCommand: (
@@ -635,13 +638,32 @@ export const COMMANDS_BY_LANGUAGE = importCommandsByLanguage({
   pt: pt_commands,
 });
 
-export const COMMANDS: Commands = importCommands(
-  en_commands,
-  es_commands,
-  fr_commands,
-  tr_commands,
-  pt_commands,
-);
+Object.values(COMMANDS_BY_LANGUAGE).forEach((commands) => {
+  commands["!event"] = handleEventCommand;
+  commands["!evento"] = handleEventCommand;
+  commands["!blue_flags"] = handleBlueFlagsCommand;
+  commands["!bandeiras_azuis"] = handleBlueFlagsCommand;
+  commands["!tyre_wear"] = handleTyreWearCommand;
+  commands["!tire_wear"] = handleTyreWearCommand;
+  commands["!desgaste_pneus"] = handleTyreWearCommand;
+});
+
+export const COMMANDS: Commands = {
+  ...importCommands(
+    en_commands,
+    es_commands,
+    fr_commands,
+    tr_commands,
+    pt_commands,
+  ),
+  "!event": handleEventCommand,
+  "!evento": handleEventCommand,
+  "!blue_flags": handleBlueFlagsCommand,
+  "!bandeiras_azuis": handleBlueFlagsCommand,
+  "!tyre_wear": handleTyreWearCommand,
+  "!tire_wear": handleTyreWearCommand,
+  "!desgaste_pneus": handleTyreWearCommand,
+};
 
 
 

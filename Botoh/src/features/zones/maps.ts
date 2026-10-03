@@ -108,6 +108,9 @@ import { BAKUSEASONTRES } from "../../circuits/baku/bakuSeasonTres";
 import { INDIANAPOLISSEASONTRES } from "../../circuits/indianapolis/indianapolisSeasonTres";
 import { AUSTINSEASONTRES } from "../../circuits/austin/austinSeasonTres";
 import { ARGENTINASEASONTRES } from "../../circuits/argentina/argentinaSeasonTres";
+import { WAITROOMEVENT } from "../../circuits/waitRoom/waitRoomEvent";
+import { SHIRYU } from "../../circuits/shiryu/shiryu";
+import { INTERLAGOSSEASONTRES } from "../../circuits/interlagos/interlagosSeasonTres";
 
 
 // import {DAYTONA} from "../circuits/daytona/daytona";
@@ -135,6 +138,8 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
     INDIANAPOLISSEASONTRES,
     AUSTINSEASONTRES,
     ARGENTINASEASONTRES,
+    INTERLAGOSSEASONTRES,
+    WAITROOMEVENT,
       IMOLA,
       SUZUKA,
       MELBOURNE,
@@ -181,6 +186,7 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
       RIVADAVIA,
       SEXCANO,
       MEERSBURG,
+          SHIRYU,
       INDIANAPOLIS,
       PODIUM,
       WAITROOM,
@@ -247,6 +253,8 @@ export const CIRCUIT_FILE_NAMES: string[] = LEAGUE_MODE
       "indianapolisSeasonTres.hbs",
       "austinSeasonTres.hbs",
       "argentinaSeasonTres.hbs",
+      "interlagosSeasonTres.hbs",
+      "waitRoomEvent.hbs",
       "imola.hbs",
       "suzuka.hbs",
       "melbourne.hbs",
@@ -293,6 +301,7 @@ export const CIRCUIT_FILE_NAMES: string[] = LEAGUE_MODE
       "rivadavia.hbs",
       "sexcano.hbs",
       "meersburg.hbs",
+      "shiryu.hbs",
       "indianapolis.hbs",
       "podium.hbs",
       "waitRoom.hbs",
