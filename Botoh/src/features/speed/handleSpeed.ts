@@ -11,6 +11,7 @@ import { calculateTotalGripMultiplier } from "./grip/calculateTotalGripMultiplie
 import { applyPitAndVscRules } from "./pitAndVscRules";
 import { calculateSlipstreamEffect } from "./slipstream/slipstreamUtils";
 import { getDirectionChangerGravity } from "./directionChanger";
+import { getCategoryGravity } from "./categoryGravity";
 
 export function controlPlayerSpeed(
   playersAndDiscsSubset: { p: PlayerObject; disc: DiscPropertiesObject }[],
@@ -78,9 +79,10 @@ export function controlPlayerSpeed(
       room
     );
 
+    const categoryGravity = getCategoryGravity(playerInfo, disc);
     room.setPlayerDiscProperties(p.id, {
-      xgravity: baseGravity.xgravity + directionChangerGravity.x,
-      ygravity: baseGravity.ygravity + directionChangerGravity.y,
+      xgravity: baseGravity.xgravity + directionChangerGravity.x + categoryGravity.x,
+      ygravity: baseGravity.ygravity + directionChangerGravity.y + categoryGravity.y,
     });
 
     playerList[p.id] = playerInfo;

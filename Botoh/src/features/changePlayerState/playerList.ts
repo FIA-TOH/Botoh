@@ -58,7 +58,10 @@ export interface XKeyState {
   lastCheckTime: number;
 }
 
+export type PlayerCategory = "hyper" | "gt" | null;
+
 export interface PlayerInfo {
+  category: PlayerCategory;
   ip: string;
   isInTheRoom: boolean;
   afk: boolean;

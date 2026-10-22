@@ -12,6 +12,7 @@ import { enableTyres } from "../tires&pits/tires";
 import { laps } from "../zones/laps";
 import { CIRCUITS, currentMapIndex } from "../zones/maps";
 import { log } from "../discord/logger";
+import { setWECModeEnabled } from "./wecMode";
 
 export enum GameMode {
   RACE = "race",
@@ -32,8 +33,9 @@ export enum GeneralGameMode {
 export let gameMode: GameMode = GameMode.RACE;
 export let generalGameMode: GeneralGameMode = GeneralGameMode.GENERAL_RACE;
 
-type ChangeGameModeOptions = {
+export type ChangeGameModeOptions = {
   reloadStadium?: boolean;
+  preserveWEC?: boolean;
 };
 
 export function changeGameMode(
@@ -41,6 +43,7 @@ export function changeGameMode(
   room: RoomObject,
   options: ChangeGameModeOptions = {},
 ) {
+  if (!options.preserveWEC) setWECModeEnabled(false, room);
   gameMode = newMode;
   const timeLimit = newMode === GameMode.QUALY ? qualiTime : raceTime;
   const shouldReloadStadium = options.reloadStadium ?? true;

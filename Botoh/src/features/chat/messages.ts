@@ -24,6 +24,34 @@ function replaceTemplateString(
 }
 
 export const MESSAGES = {
+  CATEGORY_USAGE: (): LocalizedMessageFunction => ({
+    en: en_messages.CATEGORY_USAGE,
+    es: es_messages.CATEGORY_USAGE,
+    fr: fr_messages.CATEGORY_USAGE,
+    tr: tr_messages.CATEGORY_USAGE,
+    pt: pt_messages.CATEGORY_USAGE,
+  }),
+  CATEGORY_WEC_ONLY: (): LocalizedMessageFunction => ({
+    en: en_messages.CATEGORY_WEC_ONLY,
+    es: es_messages.CATEGORY_WEC_ONLY,
+    fr: fr_messages.CATEGORY_WEC_ONLY,
+    tr: tr_messages.CATEGORY_WEC_ONLY,
+    pt: pt_messages.CATEGORY_WEC_ONLY,
+  }),
+  CATEGORY_CLEARED: (): LocalizedMessageFunction => ({
+    en: en_messages.CATEGORY_CLEARED,
+    es: es_messages.CATEGORY_CLEARED,
+    fr: fr_messages.CATEGORY_CLEARED,
+    tr: tr_messages.CATEGORY_CLEARED,
+    pt: pt_messages.CATEGORY_CLEARED,
+  }),
+  CATEGORY_DEFINED: (category: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.CATEGORY_DEFINED, { category }),
+    es: replaceTemplateString(es_messages.CATEGORY_DEFINED, { category }),
+    fr: replaceTemplateString(fr_messages.CATEGORY_DEFINED, { category }),
+    tr: replaceTemplateString(tr_messages.CATEGORY_DEFINED, { category }),
+    pt: replaceTemplateString(pt_messages.CATEGORY_DEFINED, { category }),
+  }),
   CHANGE_MAP_SUCCESS: (mapName: string): LocalizedMessageFunction => ({
     en: replaceTemplateString(en_messages.CHANGE_MAP_SUCCESS, {
       mapName: mapName,
