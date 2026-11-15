@@ -12,6 +12,8 @@ import { enableTyres } from "../tires&pits/tires";
 import { laps } from "../zones/laps";
 import { CIRCUITS, currentMapIndex } from "../zones/maps";
 import { log } from "../discord/logger";
+import { setWECModeEnabled } from "./wecMode";
+import { WEC_RACE_DURATION_SECONDS } from "./wecRace";
 
 export enum GameMode {
   RACE = "race",
@@ -32,8 +34,9 @@ export enum GeneralGameMode {
 export let gameMode: GameMode = GameMode.RACE;
 export let generalGameMode: GeneralGameMode = GeneralGameMode.GENERAL_RACE;
 
-type ChangeGameModeOptions = {
+export type ChangeGameModeOptions = {
   reloadStadium?: boolean;
+  preserveWEC?: boolean;
 };
 
 export function changeGameMode(
@@ -41,8 +44,9 @@ export function changeGameMode(
   room: RoomObject,
   options: ChangeGameModeOptions = {},
 ) {
+  if (!options.preserveWEC) setWECModeEnabled(false, room);
   gameMode = newMode;
-  const timeLimit = newMode === GameMode.QUALY ? qualiTime : raceTime;
+  const timeLimit = options.preserveWEC ? 0 : newMode === GameMode.QUALY ? qualiTime : raceTime;
   const shouldReloadStadium = options.reloadStadium ?? true;
   room.setTimeLimit(timeLimit);
 
@@ -62,7 +66,7 @@ export function changeGameMode(
       result = handleWaintingRoom(room);
       break;
     case GameMode.RACE:
-      result = handleRaceMode(room);
+      result = handleRaceMode(room, options.preserveWEC);
       break;
     case GameMode.HARD_QUALY:
       result = handleHardQualyMode(room);
@@ -128,7 +132,7 @@ function handleIndyMode(room: RoomObject) {
   changeGeneralGameMode(GeneralGameMode.GENERAL_RACE);
 }
 
-function handleRaceMode(room: RoomObject) {
+function handleRaceMode(room: RoomObject, wecPreset = false) {
   enableGas(false);
   enableSlipstream(true);
   enableCrashWallSlowdown(false);
@@ -137,7 +141,7 @@ function handleRaceMode(room: RoomObject) {
   if(LEAGUE_MODE) {
     enableTyres(true);
   }
-  sendSuccessMessage(room, MESSAGES.TIME_TO_RACE(laps));
+  sendSuccessMessage(room, wecPreset ? MESSAGES.WEC_RACE_FORMAT(WEC_RACE_DURATION_SECONDS) : MESSAGES.TIME_TO_RACE(laps));
   changeGeneralGameMode(GeneralGameMode.GENERAL_RACE);
 }
 

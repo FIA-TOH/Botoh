@@ -1,5 +1,5 @@
 import { DEFAULT_LANGUAGE } from "../chat/language";
-import { clearPreparedPitTire, playerList, idToAuth } from "../changePlayerState/playerList";
+import { clearPreparedPitTire, playerList, idToAuth, PlayerCategory } from "../changePlayerState/playerList";
 import { handleAvatar, Situacions } from "./handleAvatar";
 import { Tires, TIRE_STARTING_SPEED } from "../tires&pits/tires";
 import { gameMode, GameMode } from "../changeGameState/changeGameModes";
@@ -8,6 +8,7 @@ import { rejoinManager } from "./rejoinManager";
 
 export function createPlayerInfo(ip?: string, playerId?: number) {
   return {
+    category: null as PlayerCategory,
     ip: ip || "Not Available",
     isInTheRoom: true,
     afk: false,

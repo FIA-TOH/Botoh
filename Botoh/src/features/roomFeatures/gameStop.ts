@@ -1,4 +1,7 @@
 import { handleGameStateChange } from "../changeGameState/gameState";
+import { resetWECRace } from "../changeGameState/wecRace";
+import { resetBankingTracking } from "../speed/banking";
+import { setTimeout, clearTimeout } from "../changeGameState/raceTimers";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { resetPlayers } from "../changePlayerState/players";
 import { clearAllPreparedPitTires } from "../changePlayerState/playerList";
@@ -69,6 +72,8 @@ let replayData: Uint8Array | null = null;
 
 export function GameStop(room: RoomObject) {
   room.onGameStop = async function (byPlayer) {
+    resetWECRace();
+    resetBankingTracking();
     stopWeatherMonitoring();
     clearAllPreparedPitTires();
 

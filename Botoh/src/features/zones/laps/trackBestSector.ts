@@ -3,6 +3,7 @@ import {
   playerList,
 } from "../../changePlayerState/playerList";
 import { COLORS } from "../../chat/chat";
+import { setTimeout, clearTimeout } from "../../changeGameState/raceTimers";
 import { serialize } from "../../utils";
 import { ACTUAL_CIRCUIT } from "../../roomFeatures/stadiumChange";
 import {
@@ -24,7 +25,7 @@ let sessionBestSectors: BestSectors = {
 
 const pendingSectorStatusResetByPlayerId = new Map<number, NodeJS.Timeout>();
 
-function isValidReferenceTime(value: number | null | undefined) {
+function isValidReferenceTime(value: number | null | undefined): value is number {
   return typeof value === "number" && Number.isFinite(value) && value > 0 && value < 999;
 }
 

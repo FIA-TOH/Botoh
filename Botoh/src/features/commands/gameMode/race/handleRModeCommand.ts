@@ -1,5 +1,6 @@
 import {
   changeGameMode,
+  ChangeGameModeOptions,
   GameMode,
 } from "../../../changeGameState/changeGameModes";
 import { sendErrorMessage } from "../../../chat/chat";
@@ -10,7 +11,8 @@ import { DEFAULT_LAPS } from "../../../zones/laps";
 export function handleRModeCommand(
   byPlayer: PlayerObject,
   args: string[],
-  room: RoomObject
+  room: RoomObject,
+  options: ChangeGameModeOptions = {},
 ) {
   if (!byPlayer.admin) {
     sendErrorMessage(room, MESSAGES.NON_EXISTENT_COMMAND(), byPlayer.id);
@@ -23,5 +25,5 @@ export function handleRModeCommand(
   }
 
   changeLaps(String(DEFAULT_LAPS), undefined, room);
-  changeGameMode(GameMode.RACE, room);
+  changeGameMode(GameMode.RACE, room, options);
 }

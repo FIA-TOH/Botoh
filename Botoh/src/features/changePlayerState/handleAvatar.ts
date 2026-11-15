@@ -1,4 +1,5 @@
 import { log } from "../discord/logger";
+import { setTimeout, clearTimeout, clearInterval } from "../changeGameState/raceTimers";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { getPublicRankAvatarByPlayerId } from "../public/publicAuth";
 import { getLeagueScuderia } from "../scuderias/scuderias";
@@ -18,6 +19,7 @@ export enum Situacions {
   NeedPit = "NeedPit",
   BlowoutWarning = "BlowoutWarning",
   Direction = "Direction",
+  Category = "Category",
   Sandbag = "Sandbag",
   SafetyCar = "SafetyCar",
   LappedCar = "LappedCar",
@@ -52,6 +54,7 @@ const SITUATION_PRIORITY: Record<Situacions, number> = {
   [Situacions.NeedPit]: 5,
   [Situacions.Ers]: 4,
   [Situacions.Speed]: 3,
+  [Situacions.Category]: 2.5,
   [Situacions.Sandbag]: 2,
   [Situacions.ChangeTyre]: 1,
   [Situacions.SafetyCar]: 8,
@@ -72,6 +75,12 @@ const playerTimers: Record<
 > = {};
 
 const SANDBAG_PENALTY_AVATAR = "🐢";
+const CATEGORY_AVATAR = { gt: "🚗", hyper: "🏎️" };
+
+function getPlayerCategoryAvatar(playerId: number): string | null {
+  const category = playerList[playerId]?.category;
+  return category ? CATEGORY_AVATAR[category] : null;
+}
 
 export function getPlayerDefaultAvatar(playerId: number): string | null {
   const player = playerList[playerId];
@@ -104,6 +113,9 @@ function shouldShowTireAvatar(playerId: number): boolean {
 function getPlayerRestoredAvatar(playerId: number): string | null {
   const player = playerList[playerId];
   if (!player) return null;
+
+  const categoryAvatar = getPlayerCategoryAvatar(playerId);
+  if (categoryAvatar) return categoryAvatar;
 
   if (player.sandbagPenalty && player.sandbagPenalty > 0) {
     return SANDBAG_PENALTY_AVATAR;
@@ -257,6 +269,10 @@ const situationHandlers: Record<
     room.setPlayerAvatar(player.id, null);
   },
 
+  [Situacions.Category]: (player, room) => {
+    restoreTyreOrCar(player.id, room);
+  },
+
   [Situacions.Sandbag]: (player, room) => {
     room.setPlayerAvatar(player.id, "🐢");
   },
@@ -350,6 +366,10 @@ export function handleAvatar(
   }
 
   const current = currentSituacion[player.id] ?? Situacions.Null;
+
+  if (situacion === Situacions.Sandbag && getPlayerCategoryAvatar(player.id)) {
+    situacion = Situacions.Category;
+  }
 
   if (
     situacion !== Situacions.ChangeTyre &&

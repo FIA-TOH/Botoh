@@ -6,7 +6,7 @@ export function registerLapPosition(
   currentLap: number,
   lapTime: number
 ): number {
-  return lapPositions[lapIndex].push({
+  return (lapPositions[lapIndex] ??= []).push({
     id: p.id,
     name: p.name,
     currentLap,

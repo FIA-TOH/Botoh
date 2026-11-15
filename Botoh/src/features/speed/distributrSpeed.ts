@@ -1,6 +1,8 @@
 import { controlPlayerSpeed } from "./handleSpeed";
 import { getRunningPlayers } from "../utils";
 import { playerList } from "../changePlayerState/playerList";
+import { isBankingEnabled } from "./banking";
+import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 let nextPlayerIndex = 0;
 let accumulated = 0;
 
@@ -11,6 +13,13 @@ export function distributeSpeed(
   const players = getRunningPlayers(playersAndDiscs);
   const totalPlayers = players.length;
   if (totalPlayers === 0) return;
+
+  // Banking depends on precise position/heading at entry and exit. Updating
+  // only ~2 times/sec would leave stale gravity for hundreds of milliseconds.
+  if (isBankingEnabled() && ACTUAL_CIRCUIT?.info.bankingZones?.length) {
+    controlPlayerSpeed(players, room);
+    return;
+  }
 
   const ticksPerSecond = 60;
   const minTicksPerPlayer = 3;

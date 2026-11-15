@@ -1,4 +1,6 @@
 import { handleGameStateChange } from "../changeGameState/gameState";
+import { resetWECRace } from "../changeGameState/wecRace";
+import { resetBankingTracking } from "../speed/banking";
 import { laps } from "../zones/laps";
 import { resetPlayer } from "../changePlayerState/players";
 import { finishList, lapPositions } from "../zones/laps/handleLapChange";
@@ -26,6 +28,8 @@ import { ACTUAL_CIRCUIT } from "./stadiumChange";
 
 export function GameStart(room: RoomObject) {
   room.onGameStart = function (byPlayer) {
+    resetWECRace();
+    resetBankingTracking();
     byPlayer == null
       ? log(`Game started`)
       : log(`Game started by ${byPlayer.name}`);
@@ -82,6 +86,7 @@ export function GameStart(room: RoomObject) {
     });
     finishList.splice(0, finishList.length);
     positionList.splice(0, positionList.length);
+    lapPositions.length = 0;
     for (let i = 0; i < laps; i++) {
       lapPositions[i] = [];
     }

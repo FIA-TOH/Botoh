@@ -2,6 +2,7 @@ import { COLORS, sendErrorMessage } from "../../chat/chat";
 import { MESSAGES, getPlayerLanguage } from "../../chat/messages";
 import { setGhostMode } from "../../changePlayerState/ghost";
 import { getGameState } from "../../changeGameState/gameState";
+import { isWECModeEnabled, setWECModeEnabled } from "../../changeGameState/wecMode";
 import { enableDebris } from "../../debris/enableDebris";
 import {
   enableCutPenalty,
@@ -9,7 +10,7 @@ import {
   setZeroRaceCutSpeedPenaltyEnabled,
 } from "../../detectCut/enableCutPenalty";
 import { log } from "../../discord/logger";
-import { enableDamage } from "../../speed/crashWallDetector";
+import { enableCrashWallSlowdown, enableDamage } from "../../speed/crashWallDetector";
 import { enableErs, enableErsPenalty } from "../../speed/fuel&Ers/ers";
 import { enableGas, enableSlipstream } from "../../speed/handleSlipstream";
 import { setBlowoutTyresActivated } from "../../tires&pits/tireBlowManager";
@@ -33,11 +34,12 @@ import {
   setTeamCommandEnabled,
 } from "../scuderia/handleSetScuderia";
 
-export type ActiveConfigType = "ftoh" | "fh" | "haxbula" | "ftohpublic" | null;
+export type ActiveConfigType = "ftoh" | "fh" | "haxbula" | "ftohpublic" | "wec" | null;
 
 let activeConfigType: ActiveConfigType = null;
 
 export function getActiveConfigType(): ActiveConfigType {
+  if (activeConfigType === "wec" && !isWECModeEnabled()) return null;
   return activeConfigType;
 }
 
@@ -62,6 +64,10 @@ export function handleConfigCommand(
   }
 
   const configType = args[0].toLowerCase();
+  if (configType === "wec" && room.getScores() !== null) {
+    sendErrorMessage(room, MESSAGES.ALREADY_STARTED(), byPlayer.id);
+    return;
+  }
   if (configType === "team") {
     const shouldEnable = parseBooleanConfig(args[1]);
     if (shouldEnable === null) {
@@ -82,7 +88,7 @@ export function handleConfigCommand(
     return;
   }
 
-  const validConfigs = ['ftoh', 'fh', 'haxbula', 'ftohpublic'];
+  const validConfigs = ['ftoh', 'fh', 'haxbula', 'ftohpublic', 'wec'];
 
   if (!validConfigs.includes(configType)) {
     sendErrorMessage(room, MESSAGES.CONFIG_INVALID_ARGUMENT(), byPlayer.id);
@@ -97,6 +103,8 @@ export function handleConfigCommand(
     applyHaxbulaConfig(room, byPlayer);
   } else if (configType === 'ftohpublic') {
     applyFTOHPublicConfig(room, byPlayer);
+  } else if (configType === 'wec') {
+    applyWECConfig(room, byPlayer);
   }
   clearManualTeamSelections(room);
 
@@ -112,7 +120,41 @@ function parseBooleanConfig(value?: string): boolean | null {
   return null;
 }
 
+function applyWECConfig(room: RoomObject, byPlayer: PlayerObject) {
+  activeConfigType = "wec";
+  log(`WEC configuration applied by ${byPlayer.name}`);
+  // Set the race session first, then override its defaults with the WEC preset.
+  handleRModeCommand(byPlayer, [], room, { preserveWEC: true });
+  setWECModeEnabled(true, room);
+  handleSafetyCommand(byPlayer, ["on"], room);
+  enableSlipstream(true);
+  enableTyres(false);
+  setTyreWearEnabled(false);
+  setRaceTyresInQualyEnabled(false);
+  enableGas(false);
+  setGhostMode(room, false);
+  handlePresentationLapCommand(undefined, ["off"], room);
+  setBlowoutTyresActivated(false);
+  enableErs(true);
+  enableErsPenalty(false);
+  enableDebris(false);
+  enableDamage("log");
+  enableCrashWallSlowdown(false);
+  enableCutPenalty(true);
+  setZeroRaceCutSpeedPenaltyEnabled(true);
+  enableSoftCutPenalty(false, room);
+  handlePitCommand(byPlayer, ["new"], room);
+  setManageTyresEnabled(false);
+  handleRREnabledCommand(byPlayer, ["off"], room);
+  setScuderiaAvatar(false);
+  setScuderiaDevelopmentEnabled(false);
+  setTeamCircuitBoxesEnabled(false);
+  setBlueFlagsEnabled(false);
+  setTeamCommandEnabled(false);
+}
+
 function applyFTOHConfig(room: RoomObject, byPlayer: PlayerObject) {
+  setWECModeEnabled(false, room);
   activeConfigType = "ftoh";
   log(`FTOH configuration applied by ${byPlayer.name}`);
   handleSafetyCommand(byPlayer, ["on"], room);
@@ -144,6 +186,7 @@ function applyFTOHConfig(room: RoomObject, byPlayer: PlayerObject) {
 
 
 export function applyFTOHPublicConfig(room: RoomObject, byPlayer: PlayerObject) {
+  setWECModeEnabled(false, room);
   activeConfigType = "ftohpublic";
   log(`FTOH Public configuration applied by ${byPlayer.name}`);
   handleSafetyCommand(byPlayer, ["off"], room);
@@ -174,6 +217,7 @@ export function applyFTOHPublicConfig(room: RoomObject, byPlayer: PlayerObject) 
 }
 
 function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {
+  setWECModeEnabled(false, room);
   activeConfigType = "fh";
   log(`FH configuration applied by ${byPlayer.name}`);
   handleSafetyCommand(byPlayer, ["off"], room);
@@ -204,6 +248,7 @@ function applyFHConfig(room: RoomObject, byPlayer: PlayerObject) {
 }
 
 function applyHaxbulaConfig(room: RoomObject, byPlayer: PlayerObject) {
+  setWECModeEnabled(false, room);
   activeConfigType = "haxbula";
   log(`Haxbula configuration applied by ${byPlayer.name}`);
   handleSafetyCommand(byPlayer, ["off"], room);

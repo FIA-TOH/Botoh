@@ -1,5 +1,8 @@
 import HaxballJS from "haxball.js";
-import { handleChangeMap } from "./features/zones/maps";
+import { handleChangeMap, CIRCUITS, CIRCUIT_FILE_NAMES, currentMapIndex } from "./features/zones/maps";
+import { findDayNightVariants, installDayNightCycle, DEFAULT_DAY_NIGHT_MINUTES } from "./features/changeGameState/dayNightCycle";
+import { isWECModeEnabled } from "./features/changeGameState/wecMode";
+import { playerList } from "./features/changePlayerState/playerList";
 import roomConfig from "../roomconfig.json";
 import {
   leagueName,
@@ -139,6 +142,15 @@ export const roomPromise: Promise<any> = HaxballJS().then((HBInit: any) => {
     
     handleGameStateChange("running", room);
   };
+
+  installDayNightCycle(room, {
+    enabled: isWECModeEnabled,
+    circuit: () => CIRCUITS[currentMapIndex],
+    variants: () => findDayNightVariants(CIRCUITS, CIRCUIT_FILE_NAMES, currentMapIndex),
+    players: playerList,
+    intervalMinutes: Number(process.env.WEC_DAY_NIGHT_MINUTES ?? DEFAULT_DAY_NIGHT_MINUTES),
+    error: (error) => console.error("[WEC day/night]", error),
+  });
 
   return room;
 });

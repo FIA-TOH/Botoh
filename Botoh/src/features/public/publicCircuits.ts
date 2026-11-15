@@ -39,7 +39,7 @@ function getCachedPublicDriverCircuitStats(auth: string, trackName: string) {
   return driverCircuitStatsCache.get(getDriverCircuitStatsCacheKey(auth, trackName)) ?? null;
 }
 
-function isValidTime(value: number | null | undefined) {
+function isValidTime(value: number | null | undefined): value is number {
   return typeof value === "number" && Number.isFinite(value) && value > 0 && value < 999;
 }
 

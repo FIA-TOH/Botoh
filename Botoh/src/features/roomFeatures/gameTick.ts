@@ -1,4 +1,6 @@
 import { endRaceSession } from '../changeGameState/EndRaceSession';
+import { isWECModeEnabled } from '../changeGameState/wecMode';
+import { updateWECRaceClock } from '../changeGameState/wecRaceAnnouncements';
 import { distributeSpeed } from '../speed/distributrSpeed';
 import { updateErs } from '../speed/fuel&Ers/ers';
 import { checkPlayerSector } from '../zones/handleSectorChange';
@@ -44,6 +46,8 @@ export function GameTick(room: RoomObject) {
   room.onGameTick = function () {
     const playersAndDiscs = getPlayerAndDiscs(room);
     const players = getRunningPlayers(playersAndDiscs);
+
+    if (isWECModeEnabled()) updateWECRaceClock(room);
 
     endRaceSession(playersAndDiscs, room);
     updateErs(playersAndDiscs, room);

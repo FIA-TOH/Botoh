@@ -1,4 +1,5 @@
 import { sha256 } from "js-sha256";
+import { resetBankingTracking } from "../speed/banking";
 import { afkAdmins } from "../afk/afkAdmins";
 import { lapPositions } from "../zones/laps/handleLapChange";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
@@ -28,6 +29,7 @@ import { keepLeagueRoomPassword } from "../hostLeague/leagueRoomPassword";
 
 export function PlayerLeave(room: RoomObject) {
   room.onPlayerLeave = function (player) {
+    resetBankingTracking(player.id);
     clearPlayerAvatarState(player.id);
     if (player.admin) delete afkAdmins[player.id];
     handlePlayerLeave(player, room);

@@ -1,4 +1,5 @@
 import { Circuit, CutSegment } from "../../circuits/Circuit";
+import { isWECModeEnabled } from "../changeGameState/wecMode";
 import {
   generalGameMode,
   GeneralGameMode,
@@ -143,8 +144,8 @@ export function detectCut(
       if (!softCutPenalty) {
         let realPeanlty = decidePenalty(seg);
         if (
-          zeroRaceCutSpeedPenaltyEnabled &&
-          generalGameMode === GeneralGameMode.GENERAL_RACE
+          isWECModeEnabled() || (zeroRaceCutSpeedPenaltyEnabled &&
+          generalGameMode === GeneralGameMode.GENERAL_RACE)
         ) {
           realPeanlty = 0;
         } else if (
