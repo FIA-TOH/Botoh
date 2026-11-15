@@ -16,6 +16,9 @@ let backendSocket: any = null;
 let room: any = null;
 let roomHeartbeatInterval: NodeJS.Timeout | null = null;
 
+// Temporarily disabled while the backend is offline. Set to true to reconnect.
+const BACKEND_COMMUNICATION_ENABLED = false;
+
 const LOCAL_BACKEND_WS_URL = 'http://localhost:3001';
 
 function isRemoteMode() {
@@ -442,7 +445,9 @@ async function setupBackendCommunication() {
   return socket;
 }
 
-setupBackendCommunication();
+if (BACKEND_COMMUNICATION_ENABLED) {
+  setupBackendCommunication();
+}
 
 process.on("beforeExit", (code) => {
   console.error("beforeExit with code:", code);
@@ -462,7 +467,7 @@ process.on("SIGTERM", () => {
 
 // Import and run the full Botoh bot
 async function main() {
-  console.log(`🔧 Starting complete Botoh bot with backend integration`);
+  console.log(`🔧 Starting complete Botoh bot (backend ${BACKEND_COMMUNICATION_ENABLED ? 'enabled' : 'disabled'})`);
   
   // Import the original Botoh entry point
   const { roomPromise } = await import('../../../Botoh/src/room');
@@ -470,9 +475,10 @@ async function main() {
   
   // Set room globally for player list service
   (global as any).room = room;
-  emitRoomHeartbeat();
-
-  roomHeartbeatInterval = setInterval(emitRoomHeartbeat, 30000);
+  if (BACKEND_COMMUNICATION_ENABLED) {
+    emitRoomHeartbeat();
+    roomHeartbeatInterval = setInterval(emitRoomHeartbeat, 30000);
+  }
   
   // Start player list broadcasting after room is ready
   if (backendSocket) {
@@ -492,7 +498,7 @@ async function main() {
     playerListService.startBroadcasting();
   }
   
-  console.log(`✅ Complete Botoh bot started with backend communication`);
+  console.log(`✅ Complete Botoh bot started (backend ${BACKEND_COMMUNICATION_ENABLED ? 'enabled' : 'disabled'})`);
 }
 
 main().catch((err) => {
