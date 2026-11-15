@@ -41,6 +41,9 @@ const trackNameMapping: { [key: string]: string } = {
   barcelona: "Circuit de Barcelona-Catalunya by Rodri",
   daytona: "24H Daytona edited by Rodri&Samusca",
   lemansnight: "Le Mans Circuit - Night - By Rodri and Ximb",
+  lemansday: "Le Mans Circuit - Day - By Rodri and Ximb",
+  daytohnawecnight: "Daytohna 24hs Night by Rodri&Samusca&Ximb",
+  daytohnawecday: "Daytohna 24hs Day by Rodri&Samusca&Ximb",
   cano: "Circuito Urbano de La Villa Cano - By Ximb",
   virginia: "Virginia International Raceway by DavidMC49",
   tandil: "Tandil City by Metilazo",
@@ -140,7 +143,10 @@ export const bestTimes: { [key: string]: [number, string, string] } = {
     "Circuit de Barcelona-Catalunya by Rodri",
   ],
   daytona: [81.234, "Rodri&Samusca", "24H Daytona edited by Rodri&Samusca"],
-  lemansnight: [10.000, "undefined", "Le Mans Circuit - Night - By Rodri and Ximb"],
+  lemansnight: [100.000, "undefined", "Le Mans Circuit - Night - By Rodri and Ximb"],
+  lemansday: [100.000, "undefined", "Le Mans Circuit - Day - By Rodri and Ximb"],
+  daytohnawecnight: [40.000, "undefined", "Daytohna 24hs Night by Rodri&Samusca&Ximb"],
+  daytohnawecday: [40.000, "undefined", "Daytohna 24hs Day by Rodri&Samusca&Ximb"],
 
   cano: [
     49.764,

@@ -1,4 +1,5 @@
 import { log } from "../discord/logger";
+import { setTimeout, clearTimeout, clearInterval } from "../changeGameState/raceTimers";
 import { LEAGUE_MODE } from "../hostLeague/leagueMode";
 import { getPublicRankAvatarByPlayerId } from "../public/publicAuth";
 import { getLeagueScuderia } from "../scuderias/scuderias";

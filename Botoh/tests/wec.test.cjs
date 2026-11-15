@@ -157,7 +157,7 @@ test("category is self-selected, validated, preserved on reset and cleared to nu
   assert.equal(app.messages.at(-1).key, "CATEGORY_WEC_ONLY");
 });
 
-test("leaving WEC through any session mode clears every category and disables the command", () => {
+test("leaving WEC clears categories and allows new selections only in training", () => {
   for (const mode of ["race", "qualy", "training", "indy", "waiting", "hard_qualy", "battle_royale"]) {
     const app = setup();
     app.apply();
@@ -168,7 +168,8 @@ test("leaving WEC through any session mode clears every category and disables th
     for (const player of Object.values(app.players)) assert.equal(player.category, null, mode);
     assert.equal(app.config.getActiveConfigType(), null, mode);
     app.setCategory("gt");
-    assert.equal(app.messages.at(-1).key, "CATEGORY_WEC_ONLY", mode);
+    if (mode === "training") assert.equal(app.players[2].category, "gt");
+    else assert.equal(app.messages.at(-1).key, "CATEGORY_WEC_ONLY", mode);
     app.apply();
     app.setCategory("hyper");
     assert.equal(app.players[2].category, "hyper", mode);
@@ -207,4 +208,93 @@ test("reapplying WEC preserves categories and keeps the command enabled", () => 
   assert.equal(app.config.getActiveConfigType(), "wec");
   app.setCategory("hyper");
   assert.equal(app.players[2].category, "hyper");
+});
+
+test("WEC uses timed-race messaging, disables the native time limit and clears timed state on mode exit", () => {
+  const app = setup();
+  app.apply();
+  assert.equal(app.state.timeLimit, 0);
+  assert.equal(app.messages.filter((m) => m.key === "WEC_RACE_FORMAT").length, 1);
+  assert.equal(app.messages.some((m) => m.key === "TIME_TO_RACE"), false);
+  const race = app.load("features/changeGameState/wecRace.ts");
+  race.updateWECRaceTime(2400);
+  race.crossWECFinishLine(2, true);
+  app.load("features/changeGameState/changeGameModes.ts").changeGameMode("training", app.room);
+  assert.equal(race.getWECRaceState().timeExpired, false);
+  assert.equal(race.getWECRaceState().finalLapStarted, false);
+});
+
+test("training permits GT, Hyper and clear for ordinary drivers and retains the category through player reset", () => {
+  const app = setup();
+  const modes = app.load("features/changeGameState/changeGameModes.ts");
+  modes.changeGameMode(modes.GameMode.TRAINING, app.room);
+  app.setCategory("gt");
+  assert.equal(app.players[2].category, "gt");
+  app.setCategory("hyper");
+  assert.equal(app.players[2].category, "hyper");
+  app.playerModule.resetPlayer(app.driver, app.room, app.driver.id);
+  assert.equal(app.players[2].category, "hyper");
+  app.setCategory("clear");
+  assert.equal(app.players[2].category, null);
+  app.setCategory("gt");
+  modes.changeGameMode(modes.GameMode.RACE, app.room);
+  assert.equal(app.players[2].category, null);
+  app.setCategory("hyper");
+  assert.equal(app.players[2].category, null);
+  assert.equal(app.messages.at(-1).key, "CATEGORY_WEC_ONLY");
+});
+
+test("admin can set WEC duration before choosing WEC and it survives session resets", () => {
+  const app = setup();
+  const command = app.load("features/commands/gameMode/wec/handleWECTimeCommand.ts");
+  const race = app.load("features/changeGameState/wecRace.ts");
+  command.handleWECTimeCommand(app.admin, ["300"], app.room);
+  assert.equal(race.WEC_RACE_DURATION_SECONDS, 300);
+  assert.equal(app.messages.at(-1).key, "WEC_RACE_FORMAT");
+  assert.equal(app.messages.at(-1).args[0], 300);
+  app.apply();
+  assert.equal(app.messages.find((m) => m.key === "WEC_RACE_FORMAT").args[0], 300);
+  race.resetWECRace();
+  assert.equal(race.WEC_RACE_DURATION_SECONDS, 300);
+  assert.equal(race.getWECRemainingTime(0).minutes, 5);
+  assert.equal(race.updateWECRaceTime(299), false);
+  assert.equal(race.updateWECRaceTime(300), true);
+  assert.equal(race.crossWECFinishLine(2, true).finish, false);
+  assert.equal(race.crossWECFinishLine(2, true).isWinner, true);
+  command.handleWECTimeCommand(app.admin, ["2400"], app.room);
+  assert.equal(race.WEC_RACE_DURATION_SECONDS, 2400);
+  assert.equal(race.getWECRaceState().timeExpired, false);
+});
+
+test("WEC duration rejects non-admins, running/paused changes and invalid values without mutation", () => {
+  const app = setup();
+  const command = app.load("features/commands/gameMode/wec/handleWECTimeCommand.ts");
+  const race = app.load("features/changeGameState/wecRace.ts");
+  command.handleWECTimeCommand(app.driver, ["300"], app.room);
+  assert.equal(app.messages.at(-1).key, "ADMIN_ONLY");
+  for (const args of [["0"], ["-5"], ["1.5"], ["Infinity"], ["NaN"], ["1e3"], ["9007199254740992"], ["300", "extra"]]) {
+    command.handleWECTimeCommand(app.admin, args, app.room);
+    assert.equal(app.messages.at(-1).key, "WEC_TIME_USAGE");
+    assert.equal(race.WEC_RACE_DURATION_SECONDS, 2400);
+  }
+  for (const paused of [false, true]) {
+    app.start(paused);
+    command.handleWECTimeCommand(app.admin, ["300"], app.room);
+    assert.equal(app.messages.at(-1).key, "ALREADY_STARTED");
+    assert.equal(race.WEC_RACE_DURATION_SECONDS, 2400);
+  }
+});
+
+test("WEC duration query is read-only even while a race is running", () => {
+  const app = setup();
+  const command = app.load("features/commands/gameMode/wec/handleWECTimeCommand.ts");
+  const race = app.load("features/changeGameState/wecRace.ts");
+  command.handleWECTimeCommand(app.admin, ["750"], app.room);
+  race.updateWECRaceTime(120);
+  app.start();
+  command.handleWECTimeCommand(app.admin, [], app.room);
+  assert.equal(app.messages.at(-1).key, "WEC_RACE_FORMAT");
+  assert.equal(app.messages.at(-1).args[0], 750);
+  assert.equal(race.getWECRaceState().elapsed, 120);
+  assert.equal(race.WEC_RACE_DURATION_SECONDS, 750);
 });

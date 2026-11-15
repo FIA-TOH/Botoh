@@ -1,4 +1,5 @@
 import { Teams } from "../../changeGameState/teams";
+import { setTimeout } from "../../changeGameState/raceTimers";
 import { playerList } from "../../changePlayerState/playerList";
 import { sendSuccessMessage, sendAlertMessage } from "../../chat/chat";
 import { MESSAGES } from "../../chat/messages";
@@ -7,6 +8,7 @@ import { LEAGUE_MODE } from "../../hostLeague/leagueMode";
 import { getPlayerAndDiscs } from "../../playerFeatures/getPlayerAndDiscs";
 import { getRunningPlayers, timerController } from "../../utils";
 import { lapPositions, finishList } from "./handleLapChange";
+import { isWECModeEnabled } from "../../changeGameState/wecMode";
 
 const SECONDS_AFTER_FIRST_END = 30;
 
@@ -17,7 +19,7 @@ export function handleRaceFinish(
   isWinner: boolean,
 ) {
   const playersAndDiscs = getPlayerAndDiscs(room);
-  const fullTime =
+  const fullTime = isWECModeEnabled() ? room.getScores().time :
     lapPositions.reduce((acc, curr) => {
       const time = curr.find((c) => c.id === p.id)?.time ?? 0;
       return acc + time;
@@ -35,7 +37,8 @@ export function handleRaceFinish(
   updatePositionList(getRunningPlayers(playersAndDiscs), room, p.id);
   room.setPlayerTeam(p.id, Teams.SPECTATORS);
 
-  if (isWinner && !LEAGUE_MODE) {
+  // WEC finishers, including lapped GT cars, must reach the line naturally.
+  if (isWinner && !LEAGUE_MODE && !isWECModeEnabled()) {
     sendAlertMessage(room, MESSAGES.SECONDS_TO_FINISH(SECONDS_AFTER_FIRST_END));
     timerController.positionTimer = setTimeout(() => {
       getRunningPlayers(playersAndDiscs).forEach((fp) =>

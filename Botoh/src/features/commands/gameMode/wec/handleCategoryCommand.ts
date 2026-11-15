@@ -3,13 +3,14 @@ import { handleAvatar, Situacions } from "../../../changePlayerState/handleAvata
 import { sendErrorMessage, sendSuccessMessage } from "../../../chat/chat";
 import { MESSAGES } from "../../../chat/messages";
 import { isWECModeEnabled } from "../../../changeGameState/wecMode";
+import { gameMode, GameMode } from "../../../changeGameState/changeGameModes";
 
 export function handleCategoryCommand(
   byPlayer: PlayerObject,
   args: string[],
   room: RoomObject,
 ) {
-  if (!isWECModeEnabled()) {
+  if (!isWECModeEnabled() && gameMode !== GameMode.TRAINING) {
     sendErrorMessage(room, MESSAGES.CATEGORY_WEC_ONLY(), byPlayer.id);
     return;
   }

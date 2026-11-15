@@ -1,5 +1,6 @@
 import { playerList } from "../changePlayerState/playerList";
 import { handleAvatar, Situacions } from "../changePlayerState/handleAvatar";
+import { resetWECRace } from "./wecRace";
 
 let wecModeEnabled = false;
 
@@ -10,6 +11,7 @@ export function isWECModeEnabled(): boolean {
 export function setWECModeEnabled(enabled: boolean, room: RoomObject): void {
   wecModeEnabled = enabled;
   if (enabled) return;
+  resetWECRace();
 
   const clearedPlayers = new Set<number>();
   Object.entries(playerList).forEach(([id, player]) => {

@@ -24,6 +24,56 @@ function replaceTemplateString(
 }
 
 export const MESSAGES = {
+  BANKING_USAGE: (): LocalizedMessageFunction => ({
+    en: en_messages.BANKING_USAGE, es: es_messages.BANKING_USAGE,
+    fr: fr_messages.BANKING_USAGE, tr: tr_messages.BANKING_USAGE, pt: pt_messages.BANKING_USAGE,
+  }),
+  BANKING_CONFIG_USAGE: (fields: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.BANKING_CONFIG_USAGE, { fields }),
+    es: replaceTemplateString(es_messages.BANKING_CONFIG_USAGE, { fields }),
+    fr: replaceTemplateString(fr_messages.BANKING_CONFIG_USAGE, { fields }),
+    tr: replaceTemplateString(tr_messages.BANKING_CONFIG_USAGE, { fields }),
+    pt: replaceTemplateString(pt_messages.BANKING_CONFIG_USAGE, { fields }),
+  }),
+  BANKING_STATUS: (enabled: boolean, settings: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.BANKING_STATUS, { state: enabled ? "on" : "off", settings }),
+    es: replaceTemplateString(es_messages.BANKING_STATUS, { state: enabled ? "on" : "off", settings }),
+    fr: replaceTemplateString(fr_messages.BANKING_STATUS, { state: enabled ? "on" : "off", settings }),
+    tr: replaceTemplateString(tr_messages.BANKING_STATUS, { state: enabled ? "on" : "off", settings }),
+    pt: replaceTemplateString(pt_messages.BANKING_STATUS, { state: enabled ? "on" : "off", settings }),
+  }),
+  WEC_TIME_USAGE: (): LocalizedMessageFunction => ({
+    en: en_messages.WEC_TIME_USAGE, es: es_messages.WEC_TIME_USAGE,
+    fr: fr_messages.WEC_TIME_USAGE, tr: tr_messages.WEC_TIME_USAGE, pt: pt_messages.WEC_TIME_USAGE,
+  }),
+  WEC_RACE_FORMAT: (seconds: number): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.WEC_RACE_FORMAT, { seconds: String(seconds), minutes: String(Math.floor(seconds / 60)), remainder: String(seconds % 60) }),
+    es: replaceTemplateString(es_messages.WEC_RACE_FORMAT, { seconds: String(seconds), minutes: String(Math.floor(seconds / 60)), remainder: String(seconds % 60) }),
+    fr: replaceTemplateString(fr_messages.WEC_RACE_FORMAT, { seconds: String(seconds), minutes: String(Math.floor(seconds / 60)), remainder: String(seconds % 60) }),
+    tr: replaceTemplateString(tr_messages.WEC_RACE_FORMAT, { seconds: String(seconds), minutes: String(Math.floor(seconds / 60)), remainder: String(seconds % 60) }),
+    pt: replaceTemplateString(pt_messages.WEC_RACE_FORMAT, { seconds: String(seconds), minutes: String(Math.floor(seconds / 60)), remainder: String(seconds % 60) }),
+  }),
+  WEC_24_HOURS_COMPLETED: (): LocalizedMessageFunction => ({
+    en: en_messages.WEC_24_HOURS_COMPLETED,
+    es: es_messages.WEC_24_HOURS_COMPLETED,
+    fr: fr_messages.WEC_24_HOURS_COMPLETED,
+    tr: tr_messages.WEC_24_HOURS_COMPLETED,
+    pt: pt_messages.WEC_24_HOURS_COMPLETED,
+  }),
+  WEC_FINAL_LAP: (playerName: string): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.WEC_FINAL_LAP, { playerName }),
+    es: replaceTemplateString(es_messages.WEC_FINAL_LAP, { playerName }),
+    fr: replaceTemplateString(fr_messages.WEC_FINAL_LAP, { playerName }),
+    tr: replaceTemplateString(tr_messages.WEC_FINAL_LAP, { playerName }),
+    pt: replaceTemplateString(pt_messages.WEC_FINAL_LAP, { playerName }),
+  }),
+  WEC_TIME_REMAINING: (minutes: number, seconds: number): LocalizedMessageFunction => ({
+    en: replaceTemplateString(en_messages.WEC_TIME_REMAINING, { minutes: String(minutes), seconds: String(seconds) }),
+    es: replaceTemplateString(es_messages.WEC_TIME_REMAINING, { minutes: String(minutes), seconds: String(seconds) }),
+    fr: replaceTemplateString(fr_messages.WEC_TIME_REMAINING, { minutes: String(minutes), seconds: String(seconds) }),
+    tr: replaceTemplateString(tr_messages.WEC_TIME_REMAINING, { minutes: String(minutes), seconds: String(seconds) }),
+    pt: replaceTemplateString(pt_messages.WEC_TIME_REMAINING, { minutes: String(minutes), seconds: String(seconds) }),
+  }),
   CATEGORY_USAGE: (): LocalizedMessageFunction => ({
     en: en_messages.CATEGORY_USAGE,
     es: es_messages.CATEGORY_USAGE,

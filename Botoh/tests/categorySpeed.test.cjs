@@ -6,6 +6,7 @@ const { test } = require("node:test");
 const ts = require("typescript");
 
 function setup() {
+  const modules = new Map();
   const data = { category: "gt", inPitStop: false };
   const p = { id: 1 };
   const disc = { xspeed: 3, yspeed: -4 };
@@ -21,36 +22,58 @@ function setup() {
     "../commands/flagsAndVSC/raceControl": { getRaceControlState: () => ({}), RaceControlState: { YellowFlag: "yellow" } },
     "../utils": { getRunningPlayers: (players) => players, vectorSpeed: Math.hypot },
     "./grip/calculateTotalGripMultiplier": { calculateTotalGripMultiplier: () => 1 },
-    "./pitAndVscRules": { applyPitAndVscRules: () => base },
+    "./pitAndVscRules": { getPitAndVscGravity: () => base },
     "./slipstream/slipstreamUtils": { calculateSlipstreamEffect: () => ({ effectiveSlipstream: 0 }) },
     "./directionChanger": { getDirectionChangerGravity: () => direction },
+    "../roomFeatures/stadiumChange": { ACTUAL_CIRCUIT: { info: {} } },
   };
   function load(filename) {
+    if (modules.has(filename)) return modules.get(filename);
     const exports = {};
+    modules.set(filename, exports);
     const source = ts.transpileModule(fs.readFileSync(path.resolve(__dirname, "../src/features/speed", filename), "utf8"), {
       compilerOptions: { module: ts.ModuleKind.CommonJS },
     }).outputText;
     vm.runInNewContext(source, { exports, require: (request) => {
       if (request === "./categoryGravity") return load("categoryGravity.ts");
+      if (request === "./constants") return load("constants.ts");
+      if (request === "./banking") return load("banking.ts");
       assert.ok(dependencies[request], request);
       return dependencies[request];
     } });
     return exports;
   }
   const speed = load("handleSpeed.ts");
-  return { data, disc, base, direction, tick: () => { speed.controlPlayerSpeed([{ p, disc }], room); return result; } };
+  return { data, disc, base, direction,
+    setResistance: (value) => load("constants.ts").changeConstant("GT_EXTRA_RESISTANCE", value),
+    tick: () => { speed.controlPlayerSpeed([{ p, disc }], room); return result; } };
 }
 
 test("GT adds proportional resistance against movement while preserving other gravity sources", () => {
   const app = setup();
   let gravity = app.tick();
-  assert.ok(Math.abs(gravity.xgravity - (-0.03 + 0.02 - 0.003)) < 1e-12);
-  assert.ok(Math.abs(gravity.ygravity - (0.04 - 0.01 + 0.004)) < 1e-12);
+  assert.ok(Math.abs(gravity.xgravity - (-0.03 + 0.02 - 0.0069)) < 1e-12);
+  assert.ok(Math.abs(gravity.ygravity - (0.04 - 0.01 + 0.0092)) < 1e-12);
   app.disc.xspeed = -3;
   app.disc.yspeed = 4;
   gravity = app.tick();
-  assert.ok(Math.abs(gravity.xgravity - (-0.03 + 0.02 + 0.003)) < 1e-12);
-  assert.ok(Math.abs(gravity.ygravity - (0.04 - 0.01 - 0.004)) < 1e-12);
+  assert.ok(Math.abs(gravity.xgravity - (-0.03 + 0.02 + 0.0069)) < 1e-12);
+  assert.ok(Math.abs(gravity.ygravity - (0.04 - 0.01 - 0.0092)) < 1e-12);
+});
+
+test("changing GT_EXTRA_RESISTANCE at runtime affects the next speed update", () => {
+  const app = setup();
+  app.tick();
+  app.setResistance(0.003);
+  let gravity = app.tick();
+  assert.ok(Math.abs(gravity.xgravity - (-0.03 + 0.02 - 0.009)) < 1e-12);
+  app.setResistance(0.0023);
+  gravity = app.tick();
+  assert.ok(Math.abs(gravity.xgravity - (-0.03 + 0.02 - 0.0069)) < 1e-12);
+  app.data.category = "hyper";
+  app.setResistance(0.01);
+  gravity = app.tick();
+  assert.equal(gravity.xgravity, app.base.xgravity + app.direction.x);
 });
 
 test("Hyper, cleared categories and stationary GT add no resistance", () => {

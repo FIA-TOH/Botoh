@@ -1,6 +1,5 @@
 import { PlayerInfo } from "../changePlayerState/playerList";
-
-const GT_EXTRA_RESISTANCE = 0.003;
+import { constants } from "./constants";
 
 export function getCategoryGravity(
   player: Pick<PlayerInfo, "category">,
@@ -9,7 +8,7 @@ export function getCategoryGravity(
   if (player.category !== "gt") return { x: 0, y: 0 };
 
   return {
-    x: -disc.xspeed * GT_EXTRA_RESISTANCE,
-    y: -disc.yspeed * GT_EXTRA_RESISTANCE,
+    x: -disc.xspeed * constants.GT_EXTRA_RESISTANCE,
+    y: -disc.yspeed * constants.GT_EXTRA_RESISTANCE,
   };
 }

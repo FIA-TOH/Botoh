@@ -8,10 +8,12 @@ import {
 } from "../commands/flagsAndVSC/raceControl";
 import { getRunningPlayers, vectorSpeed } from "../utils";
 import { calculateTotalGripMultiplier } from "./grip/calculateTotalGripMultiplier";
-import { applyPitAndVscRules } from "./pitAndVscRules";
+import { getPitAndVscGravity } from "./pitAndVscRules";
 import { calculateSlipstreamEffect } from "./slipstream/slipstreamUtils";
 import { getDirectionChangerGravity } from "./directionChanger";
 import { getCategoryGravity } from "./categoryGravity";
+import { getBankingGravity } from "./banking";
+import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 
 export function controlPlayerSpeed(
   playersAndDiscsSubset: { p: PlayerObject; disc: DiscPropertiesObject }[],
@@ -59,10 +61,9 @@ export function controlPlayerSpeed(
       room
     );
 
-    const baseGravity = applyPitAndVscRules(
+    const baseGravity = getPitAndVscGravity(
       p,
       disc,
-      room,
       gripMultiplier,
       playerInfo,
       currentTime,
@@ -80,9 +81,13 @@ export function controlPlayerSpeed(
     );
 
     const categoryGravity = getCategoryGravity(playerInfo, disc);
+    const bankingGravity = getBankingGravity(ACTUAL_CIRCUIT?.info.bankingZones, disc,
+      isNeutralized || raceControl.flag === RaceControlState.RedFlag || playerInfo.inPitlane
+      || playerInfo.inPitStop || playerInfo.repairState?.isRepairing || playerInfo.repairState?.isWaitingForRepair
+      || (playerInfo.cutPenaltyEndTime !== undefined && currentTime <= playerInfo.cutPenaltyEndTime), p.id);
     room.setPlayerDiscProperties(p.id, {
-      xgravity: baseGravity.xgravity + directionChangerGravity.x + categoryGravity.x,
-      ygravity: baseGravity.ygravity + directionChangerGravity.y + categoryGravity.y,
+      xgravity: baseGravity.xgravity + directionChangerGravity.x + categoryGravity.x + bankingGravity.x,
+      ygravity: baseGravity.ygravity + directionChangerGravity.y + categoryGravity.y + bankingGravity.y,
     });
 
     playerList[p.id] = playerInfo;

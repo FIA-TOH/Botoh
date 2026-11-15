@@ -3,6 +3,9 @@ import { processIfMinimumPitStopsMet } from "../../../../tires&pits/minimumPit";
 import { laps } from "../../../laps";
 import { currentWeather } from "../../../../weather/currentWeather";
 import { COLORS, FONTS } from "../../../../chat/chat";
+import { MESSAGES, getPlayerLanguage } from "../../../../chat/messages";
+import { isWECModeEnabled } from "../../../../changeGameState/wecMode";
+import { getWECRemainingTime } from "../../../../changeGameState/wecRace";
 
 export function notifyCurrentLapAndPitInfo(
   p: PlayerObject,
@@ -11,8 +14,11 @@ export function notifyCurrentLapAndPitInfo(
 ) {
   const data = playerList[p.id];
   let combinedInfo = [];
+  const remaining = getWECRemainingTime(room.getScores()?.time ?? 0);
 
-  combinedInfo.push(`Lap ${currentLap}/${laps}`);
+  combinedInfo.push(isWECModeEnabled()
+    ? MESSAGES.WEC_TIME_REMAINING(remaining.minutes, remaining.seconds)[getPlayerLanguage(p.id)]
+    : `Lap ${currentLap}/${laps}`);
 
   //No more need for this message
   // if (data.tires && data.wear !== undefined) {
@@ -37,5 +43,7 @@ export function notifyCurrentLapAndPitInfo(
   const finalMessage = combinedInfo.join(' | ');
   room.sendAnnouncement(finalMessage, p.id, COLORS.CYAN, FONTS.NORMAL);
 
-  processIfMinimumPitStopsMet(p, currentLap, laps, data.pits.pitsNumber, room);
+  if (!isWECModeEnabled()) {
+    processIfMinimumPitStopsMet(p, currentLap, laps, data.pits.pitsNumber, room);
+  }
 }

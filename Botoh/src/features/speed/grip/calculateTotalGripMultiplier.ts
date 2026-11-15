@@ -2,6 +2,7 @@ import { calculateGripMultiplierForConditions } from "../grip/multiplierConditio
 import { PlayerInfo } from "../../changePlayerState/playerList";
 import { constants } from "../constants";
 import { isCrashWallSlowdownActive } from "../crashWallDetector";
+import { isWECModeEnabled } from "../../changeGameState/wecMode";
 
 export function calculateTotalGripMultiplier(
   p: PlayerObject,
@@ -33,6 +34,7 @@ export function calculateTotalGripMultiplier(
   }
 
   if (
+    !isWECModeEnabled() &&
     playerInfo.cutPenaltyEndTime && 
     playerInfo.cutPenaltyMultiplier &&
     currentTime <= playerInfo.cutPenaltyEndTime

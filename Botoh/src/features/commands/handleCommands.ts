@@ -74,7 +74,9 @@ import { handleSandbagCommand } from "./gameMode/battleRoyale.ts/handleSandbagCo
 import { handleDefineRain } from "./weather/handleDefineRain";
 import { handleSetNewWeatherId } from "./weather/handleSetNewWeatherId";
 import { handleConfigCommand } from "./adminThings/handleConfigCommand";
+import { handleBankingCommand, handleBankingSetCommand } from "./adminThings/handleBankingCommand";
 import { handleCategoryCommand } from "./gameMode/wec/handleCategoryCommand";
+import { handleWECTimeCommand } from "./gameMode/wec/handleWECTimeCommand";
 import { handleManageTyresCommand } from "./adminThings/handleManageTyresCommand";
 import { handlePitCommand } from "./adminThings/handlePitCommand";
 import { handleScuderiaAvatarCommand } from "./adminThings/handleScuderiaAvatarCommand";
@@ -640,6 +642,9 @@ export const COMMANDS_BY_LANGUAGE = importCommandsByLanguage({
 });
 
 Object.values(COMMANDS_BY_LANGUAGE).forEach((commands) => {
+  commands["!wec_time"] = handleWECTimeCommand;
+  commands["!banking"] = handleBankingCommand;
+  commands["!banking_set"] = handleBankingSetCommand;
   commands["!gamemode"] = handleConfigCommand;
   commands["!category"] = handleCategoryCommand;
   commands["!event"] = handleEventCommand;
@@ -652,6 +657,9 @@ Object.values(COMMANDS_BY_LANGUAGE).forEach((commands) => {
 });
 
 export const COMMANDS: Commands = {
+  "!wec_time": handleWECTimeCommand,
+  "!banking": handleBankingCommand,
+  "!banking_set": handleBankingSetCommand,
   "!gamemode": handleConfigCommand,
   "!category": handleCategoryCommand,
   ...importCommands(

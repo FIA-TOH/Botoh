@@ -7,6 +7,7 @@ import { join } from "path";
 const lemansnight_raw = readFileSync(join(__dirname, "lemansnight.hbs"), "utf-8");
 
 const LEMANSNIGHT_INFO: CircuitInfo = {
+  hasDayNightCycle: false,
   finishLine: {
     bounds: {
       minX: -4765,

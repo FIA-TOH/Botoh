@@ -112,6 +112,9 @@ import { WAITROOMEVENT } from "../../circuits/waitRoom/waitRoomEvent";
 import { SHIRYU } from "../../circuits/shiryu/shiryu";
 import { INTERLAGOSSEASONTRES } from "../../circuits/interlagos/interlagosSeasonTres";
 import { LEMANSNIGHT } from "../../circuits/le_mans/lemansnight";
+import { LEMANSDAY } from "../../circuits/le_mans/lemansday";
+import { DAYTOHNAWECNIGHT } from "../../circuits/daytona/daytohnawecnight";
+import { DAYTOHNAWECDAY } from "../../circuits/daytona/daytohnawecday";
 
 
 // import {DAYTONA} from "../circuits/daytona/daytona";
@@ -190,6 +193,9 @@ export const CIRCUITS: Circuit[] = LEAGUE_MODE
           SHIRYU,
       INDIANAPOLIS,
       LEMANSNIGHT,
+      LEMANSDAY,
+      DAYTOHNAWECNIGHT,
+      DAYTOHNAWECDAY,
       PODIUM,
       WAITROOM,
     ]
@@ -306,6 +312,9 @@ export const CIRCUIT_FILE_NAMES: string[] = LEAGUE_MODE
       "shiryu.hbs",
       "indianapolis.hbs",
       "lemansnight.hbs",
+        "lemansday.hbs",
+      "daytohnawecnight.hbs",
+      "daytohnawecday.hbs",
       "podium.hbs",
       "waitRoom.hbs",
     ]

@@ -12,6 +12,7 @@ import { RaceControlState, setFlagState, setNeutralizationState } from "./raceCo
 import { applyPlayerCollision } from "../../changePlayerState/playerCollision";
 import { ghostMode } from "../../changePlayerState/ghost";
 import { playerList } from "../../changePlayerState/playerList";
+import { setTimeout, clearTimeout, setInterval, clearInterval } from "../../changeGameState/raceTimers";
 
 let scActive = false;
 let scCountdownTimeout: NodeJS.Timeout | undefined;

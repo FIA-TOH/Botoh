@@ -6,7 +6,10 @@ import {
 } from "../../changeGameState/changeGameModes";
 import { Teams } from "../../changeGameState/teams";
 import { playerList } from "../../changePlayerState/playerList";
-import { sendSuccessMessage, sendBlueMessage } from "../../chat/chat";
+import { sendSuccessMessage, sendBlueMessage, sendAlertMessage } from "../../chat/chat";
+import { isWECModeEnabled } from "../../changeGameState/wecMode";
+import { crossWECFinishLine } from "../../changeGameState/wecRace";
+import { updateWECRaceClock } from "../../changeGameState/wecRaceAnnouncements";
 import { MESSAGES } from "../../chat/messages";
 import { handleHardQualyEnd } from "../../commands/gameMode/qualy/hardQualyFunctions";
 import { qualiTime } from "../../commands/gameMode/qualy/qualiMode";
@@ -64,6 +67,28 @@ function handleRaceLap(
         sendBlueMessage(room, MESSAGES.LAPPED_REMAINING_LAPS(p.name, newDeficit));
       }
     }
+  }
+
+  if (isWECModeEnabled()) {
+    updateWECRaceClock(room);
+    // At a crossing the driver's lap has just incremented. A running car
+    // already on that lap (or beyond it) is ahead; spectators/retirees are not.
+    const isLeader = !playerAndDiscs.some(({ p: other, disc }) =>
+      other.id !== p.id && other.team === Teams.RUNNERS && disc &&
+      (playerList[other.id]?.currentLap ?? 0) >= currentLap,
+    );
+    const result = crossWECFinishLine(p.id, isLeader);
+    setCurrentSessionLap(currentLap);
+    if (result.finalLapStarted) {
+      sendAlertMessage(room, MESSAGES.WEC_FINAL_LAP(p.name));
+    }
+    if (result.finish) {
+      handleRaceFinish(p, room, lapTime, result.isWinner);
+    } else {
+      notifyCurrentLapAndPitInfo(p, room, currentLap);
+      notifyPositionOrLeaders(p, room, lapIndex, position, currentLap, playerAndDiscs);
+    }
+    return;
   }
 
   if (currentLap <= laps) {

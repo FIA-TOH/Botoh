@@ -8,6 +8,7 @@ import {
   generalGameMode,
 } from "./changeGameModes";
 import { changeGameStoppedNaturally } from "./gameStopeedNaturally";
+import { isWECModeEnabled } from "./wecMode";
 
 export function endRaceSession(
   playersAndDiscs: { p: PlayerObject; disc: DiscPropertiesObject }[],
@@ -27,6 +28,7 @@ export function endRaceSession(
     ((generalGameMode === GeneralGameMode.GENERAL_QUALY &&
       scores?.time > qualiTime * 60) ||
       (generalGameMode === GeneralGameMode.GENERAL_RACE &&
+        !isWECModeEnabled() &&
         scores?.time > raceTime * 60));
 
   if (shouldStopForNoPlayers || shouldStopForTimeLimit) {

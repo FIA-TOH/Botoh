@@ -54,7 +54,18 @@ export type CutSegment = {
   isLeavingPit?: boolean;
 };
 
+export type BankingZone = {
+  id: string;
+  baseArc: { v0: [number, number]; v1: [number, number]; curve: number };
+  detectors: { v0: [number, number]; v1: [number, number] }[];
+  maxDrag?: number;
+  falloffDistance?: number;
+  exponent?: number;
+};
+
 export interface CircuitInfo {
+  bankingZones?: BankingZone[];
+  hasDayNightCycle?: boolean;
   finishLine: DirectedHitboxBounds;
   name: string;
   boxLine: HitboxBounds;

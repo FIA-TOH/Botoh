@@ -1,4 +1,5 @@
 import { CrashWallDetector } from "../../circuits/Circuit";
+import { raceTimers } from "../changeGameState/raceTimers";
 import { ACTUAL_CIRCUIT } from "../roomFeatures/stadiumChange";
 import { sendAlertMessage } from "../chat/chat";
 import { MESSAGES } from "../chat/messages";
@@ -204,7 +205,7 @@ function applyCrashDamage(playerId: number, impactSpeed: number) {
   const playerInfo = playerList[playerId];
   if (!playerInfo) return null;
 
-  const now = Date.now();
+  const now = raceTimers.now();
   const lastDamageAt = lastPlayerDamageAt.get(playerId) ?? 0;
   if (now - lastDamageAt < DAMAGE_COOLDOWN_MS) return null;
 
@@ -243,7 +244,7 @@ function applyCrashWallSlowdown(playerId: number) {
 
   playerCrashWallSlowdownUntil.set(
     playerId,
-    Date.now() + CRASH_WALL_SLOWDOWN_DURATION_MS,
+    raceTimers.now() + CRASH_WALL_SLOWDOWN_DURATION_MS,
   );
 }
 
@@ -251,7 +252,7 @@ export function isCrashWallSlowdownActive(playerId: number) {
   const slowdownUntil = playerCrashWallSlowdownUntil.get(playerId);
   if (!slowdownUntil) return false;
 
-  if (Date.now() <= slowdownUntil) {
+  if (raceTimers.now() <= slowdownUntil) {
     return true;
   }
 
@@ -271,7 +272,7 @@ function getCrashWallLogCooldownKey(playerId: number, detector: CrashWallDetecto
 }
 
 function shouldRegisterCrashWallLog(playerId: number, detector: CrashWallDetector) {
-  const now = Date.now();
+  const now = raceTimers.now();
   const cooldownKey = getCrashWallLogCooldownKey(playerId, detector);
   const lastLogAt = lastPlayerCrashWallLogAt.get(cooldownKey) ?? 0;
 

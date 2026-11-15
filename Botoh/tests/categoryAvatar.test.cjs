@@ -31,6 +31,11 @@ function setup() {
   }
   const playerState = { playerList: { 1: data }, getEffectiveLeagueScuderiaId: () => "team" };
   const dependencies = {
+    "../changeGameState/raceTimers": {
+      setTimeout: (callback) => { const id = ++nextTimer; timers.set(id, callback); return id; },
+      clearTimeout: (id) => timers.delete(id),
+      clearInterval: (id) => timers.delete(id),
+    },
     "../discord/logger": { log() {} },
     "../hostLeague/leagueMode": { LEAGUE_MODE: true },
     "../public/publicAuth": { getPublicRankAvatarByPlayerId: () => "🏅" },
@@ -49,6 +54,7 @@ function setup() {
     "../../../chat/chat": { sendErrorMessage() {}, sendSuccessMessage() {} },
     "../../../chat/messages": { MESSAGES: new Proxy({}, { get: () => () => ({}) }) },
     "../../../changeGameState/wecMode": { isWECModeEnabled: () => true },
+    "../../../changeGameState/changeGameModes": { gameMode: "race", GameMode: { TRAINING: "training" } },
   };
   const command = load("features/commands/gameMode/wec/handleCategoryCommand.ts", (name) => {
     assert.ok(categoryDependencies[name], name);
